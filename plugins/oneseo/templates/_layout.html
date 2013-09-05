@@ -1,0 +1,37 @@
+{% extends "_layouts/cp" %}
+
+{% set title = craft.OneSeo.name %}
+
+{% set crumbs = [
+  { label: craft.oneseo.name, url: url('oneseo/fallbacks') }
+] %}
+
+{% set content %}
+  
+  {{ body }}
+
+  <br/>
+  <footer class="bsd-branding">
+    <p>
+      Powered by <a href="http://barrelstrengthdesign.com" target="_blank">{{ craft.oneseo.name }}</a> {{ craft.oneseo.version }} | 
+      Designed by <a href="http://barrelstrengthdesign.com" target="_blank">(Barrel Strength)</a>
+    </p>
+  </footer>
+
+{% endset %}
+
+{% set brandCss %}
+  footer.bsd-branding {
+    bottom:10px;
+    color:#999;
+    font-size:11px;
+    position:absolute;
+    right:30px;
+  }
+  footer.bsd-branding a {
+    color:#999;
+    font-weight:bold;
+  }
+{% endset %}
+
+{% includeCss brandCss %}

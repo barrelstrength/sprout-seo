@@ -1,0 +1,13 @@
+{% from "_includes/forms" import selectField %}
+
+{# 
+	FieldType settings dropdown
+#}
+{{ selectField({
+	id: name,
+	name: name,
+	label: label,
+	instructions: instructions,
+	options: settings.fallbackTemplates,
+	value: value
+}) }}

@@ -1,0 +1,299 @@
+{% extends "oneseo/_layout" %}
+{% set centered = true %}
+
+{% set title %}
+	New Fallback Template - {{ craft.OneSeo.name }}
+{% endset %}
+
+{% set tabs = {
+		template: { 
+      label: "Template Settings"|t,
+      url: '#fallback-main'
+    },
+    main: { 
+      label: "Basic Info"|t,
+      url: '#fallback-basic'
+    },
+    publishinfo:    { 
+      label: "Robots"|t,
+      url: '#fallback-robots'
+    },
+    location:    { 
+      label: "Location"|t,
+      url: '#fallback-location'
+    },
+    facebook:    { 
+      label: "Facebook"|t,
+      url: '#fallback-facebook'
+    }
+} %}
+
+{% import "_includes/forms" as forms %}
+
+{% if craft.oneSeo.fallbackId is defined %}
+	{% set fallbackId = craft.oneSeo.fallbackId %}
+{% else %}
+	{% set fallbackId = null %}
+{% endif %}
+
+{% set fallback = craft.oneSeo.getFallbackById(fallbackId) %}
+
+{% set body %}
+
+<form method="post" action="" accept-charset="UTF-8">
+	<input type="hidden" name="action" value="oneseo/seoData/saveFallbacks">
+	<input type="hidden" name="redirect" value="oneseo/fallbacks">
+
+	<input type="hidden" name="fallback[id]" value="{{ fallbackId }}">
+
+<div id="fallback-main">
+	
+	{{ forms.textField({
+		label: "Template Name"|t,
+		instructions: "Human readable template name"|t,
+		name: 'fallback[name]',
+		value: fallback.name,
+		errors: "",
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Template Short Name"|t,
+		instructions: "Short name you will use to refer to your template in the code"|t,
+		name: 'fallback[handle]',
+		value: fallback.handle,
+		errors: "",
+		required: true
+	}) }}
+
+</div>
+
+<div id="fallback-basic" class="hidden">
+	
+	{{ forms.textField({
+		label: "Title"|t,
+		name: 'fallback[title]',
+		instructions: "The Title will appear in your browser tab, and as the primary Heading in your search results"|t,
+		value: fallback.title,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Description"|t,
+		instructions: "A 140 word description of your content which will appear as the description in your search results."|t,
+		name: 'fallback[description]',
+		value: fallback.description,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Keywords"|t,
+		instructions: "A list of keywords that describe your content"|t,
+		name: 'fallback[keywords]',
+		value: fallback.keywords,
+		errors: "",
+		required: false
+	}) }}
+
+</div>
+
+<div id="fallback-robots" class="hidden">
+
+	{{ forms.textField({
+		label: "Canonical URL"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[canonical]',
+		value: fallback.canonical,
+		errors: "",
+		required: false
+	}) }}
+
+	{% set robotsOptionsBasic = {
+		'noindex' : 'noindex',
+		'nofollow' : 'nofollow'
+	} %}
+
+	<h3>Robots - Basic</h3>
+	{{ forms.checkboxGroup({
+		label: "Robots - Basic"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[robots]',
+		options: robotsOptionsBasic,
+		errors: "",
+		required: false
+	}) }}
+
+	{% set robotsOptionsAdvanced = {
+		'noarchive' : 'noarchive',
+		'nosnippet' : 'nosnippet',
+		'noimageindex' : 'noimageindex',
+		'noodp' : 'noodp',
+		'noydir' : 'noydir'
+	} %}
+
+	<h3>Robots - Advanced</h3>
+	{{ forms.checkboxGroup({
+		label: "Robots - Advanced"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[robots]',
+		options: robotsOptionsAdvanced,
+		errors: "",
+		required: false
+	}) }}
+
+</div>
+
+<div id="fallback-location" class="hidden">
+	{{ forms.textField({
+		label: "Region"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[region]',
+		value: fallback.region,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Placename"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[placename]',
+		value: fallback.placename,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Latitude"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[latitude]',
+		value: fallback.latitude,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Longitude"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[longitude]',
+		value: fallback.longitude,
+		errors: "",
+		required: false
+	}) }}
+</div>
+
+<div id="fallback-facebook" class="hidden">
+	{{ forms.textField({
+		label: "Open Graph Title"|t,
+		instructions: "Optional. Advanced settings. og:title"|t,
+		name: 'fallback[ogTitle]',
+		value: fallback.ogTitle,
+		errors: "",
+		required: false
+	}) }}
+
+	{% set ogTypesOptions = {
+		'' : 'Select Open Graph Type...',
+		'website' : 'Website',
+		'article' :	'Article',
+		'place' :	'Place',
+		'profile' :	'Profile',
+		'object' :	'Object',
+		'book' : 'Book',
+		'books.author' : 'Books Author',
+		'books.book' : 'Books Book',
+		'books.genre' : 'Books Genre',
+		'music.song' : 'Music Song',
+		'music.radio_station' : 'Music Radio Station',
+		'music.playlist' : 'Music Playlist',
+		'music.album' : 'Music Album',
+		'video.other' :	'Video Other',
+		'video.tv_show' :	'Video TV Show',
+		'video.movie' : 'Video Movie',
+		'video.episode' :	'Video Episode',
+		'fitness.unit' : 'Fitness Unit',
+		'fitness.course' : 'Fitness Course'
+	} %}
+
+	{{ forms.selectField({
+		label: "Open Graph Type"|t,
+		instructions: "Optional. Advanced settings. og:title"|t,
+		name: 'fallback[ogType]',
+		options: ogTypesOptions,
+		value: fallback.ogType,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph URL"|t,
+		instructions: "Optional. Advanced settings. og:title"|t,
+		name: 'fallback[ogUrl]',
+		value: fallback.ogUrl,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Image"|t,
+		instructions: "Optional. Advanced settings. og:image"|t,
+		name: 'fallback[ogImage]',
+		value: fallback.ogImage,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Site Name"|t,
+		instructions: "Optional. Advanced settings. og:site_name"|t,
+		name: 'fallback[ogSiteName]',
+		value: fallback.ogSiteName,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Description"|t,
+		instructions: "Optional. Advanced settings. og:title"|t,
+		name: 'fallback[ogDescription]',
+		value: fallback.ogDescription,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Audio"|t,
+		instructions: "Optional. Advanced settings. og:title"|t,
+		name: 'fallback[ogAudio]',
+		value: fallback.ogAudio,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Video"|t,
+		instructions: "Optional. Advanced settings. og:title"|t,
+		name: 'fallback[ogVideo]',
+		value: fallback.ogVideo,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Locale"|t,
+		instructions: "Optional. Advanced settings. og:title"|t,
+		name: 'fallback[ogLocale]',
+		value: fallback.ogLocale,
+		errors: "",
+		required: false
+	}) }}
+</div>
+
+<div class="buttons">
+	<input class="btn submit" type="submit" value="Save Template">
+</div>
+
+</form>
+
+{% endset %}
