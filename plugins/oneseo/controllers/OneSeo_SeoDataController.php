@@ -27,19 +27,19 @@ class OneSeo_SeoDataController extends BaseController
         $attributes = craft()->request->getPost('fallback');
         $model->setAttributes($attributes);
 
-        if (craft()->oneSeo->saveFallbackInfo($model)) {
+        if (craft()->oneSeo->saveFallbackInfo($model))
+        {
+			craft()->userSession->setNotice(Craft::t('Item saved.'));
+			$this->redirectToPostedUrl();
+        } 
 
-            craft()->userSession->setNotice(Craft::t('Item saved.'));
-
-            $this->redirectToPostedUrl();
-
-        } else {
-
-            craft()->userSession->setError(Craft::t("Couldn't save."));
-
-            $this->redirectToPostedUrl();
-            // return $this->renderRequestedTemplate(array('ingredient' => $model));
-        }
+        
+        craft()->userSession->setError(Craft::t("Couldn't save."));
+        
+        // Send the field back to the template
+        craft()->urlManager->setRouteVariables(array(
+        	'fallback' => $model
+        ));
 
     }
 
