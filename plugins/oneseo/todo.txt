@@ -1,3 +1,16 @@
+XML SITEMAP
+------------------------------------------------------------
+Build out a sitemap tool.
+Allow ability to build out sitemap around tool like Structure (Can also double as front end sitmap)
+Sitemap Module (build, step by step)
+Crawler - just search site and create automatically.
+
+http://googlesitemapgenerator.googlecode.com/svn/trunk/doc/gsg-intro.html
+
+PINGS
+------------------------------------------------------------
+Is it worth adding a ping service to One SEO?
+
 
 SETTINGS
 - Fix Selected Value of Robots Fields
