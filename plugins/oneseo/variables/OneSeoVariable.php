@@ -281,4 +281,9 @@ class OneSeoVariable
       return $fallbackId;
   }
 
+  public function getAllSections()
+  { 
+    return craft()->sections->getAllSections();
+  }
+
 }

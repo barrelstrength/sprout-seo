@@ -40,6 +40,39 @@ class OneSeoPlugin extends BasePlugin
         return true;
     }
 
+    public function init()
+    {
+        craft()->on('entries.saveEntry', array($this, 'onSaveEntry'));
+        craft()->on('content.saveContent', array($this, 'onSaveContent'));
+
+        // Consider adding support for Global Pages
+        // craft()->on('globals.saveGlobalContent', array($this, 'onSaveGlobalContent'));
+
+        // Consider adding support for File Galleries, or are these handled in the 
+        // section content?  Somebody could have a file gallery without a section
+        // craft()->on('assets.saveFileContent', array($this, 'onSaveFileContent'));
+
+    }
+
+    public function onSaveEntry(Event $event)
+    {
+        // @TODO
+        // Test and see if the Section Entry being saved belongs to 
+        // a Section that we want to ping for.
+        // Get Sitemap URL
+        // Call ping function
+    }
+
+    public function onSaveContent(Event $event)
+    {
+        // @TODO
+        // Test and see if the Section Entry being saved belongs to 
+        // a Section that we want to ping for.
+        // Get Sitemap
+        // Call ping function
+    }
+
+
     protected function defineSettings()
     {
         return array(

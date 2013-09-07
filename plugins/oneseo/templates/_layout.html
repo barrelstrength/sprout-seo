@@ -3,8 +3,22 @@
 {% set title = craft.OneSeo.name %}
 
 {% set crumbs = [
-  { label: craft.oneseo.name, url: url('oneseo/fallbacks') }
+  { 
+    label: craft.oneseo.name, 
+    url: url('oneseo/fallbacks') 
+  }
 ] %}
+
+{% set tabs = {
+    fallbacks: { 
+      label: "Templates"|t,
+      url: cpUrl('oneseo/fallbacks')
+    },
+    sitemap: { 
+      label: "Sitemap"|t,
+      url: cpUrl('oneseo/sitemap')
+    }
+} %}
 
 {% set content %}
   
