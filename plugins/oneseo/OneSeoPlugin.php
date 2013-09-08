@@ -22,7 +22,7 @@ class OneSeoPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '1.0';
+        return '0.6.0';
     }
 
     public function getDeveloper()
