@@ -257,7 +257,7 @@ class OneSeoVariable
   public function getFallbackById($id)
   {
       if ($fallback = craft()->oneSeo->getFallbackById($id)) {
-          $return = $fallback->getAttributes();
+          $return = $fallback;
       } else {
           $return = new OneSeo_SeoDataModel();
       }
