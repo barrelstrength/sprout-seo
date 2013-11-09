@@ -22,7 +22,7 @@ class OneSeoPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '1.0';
+        return '0.6.0';
     }
 
     public function getDeveloper()
@@ -78,6 +78,7 @@ class OneSeoPlugin extends BasePlugin
         return array(
             'pluginNameOverride'  => AttributeType::String,
             'appendSiteName'      => AttributeType::Bool,
+            'customGlobalValue'   => AttributeType::String,
             'seoDivider'          => AttributeType::String,
         );
     }

@@ -33,17 +33,6 @@ class OneSeoVariable
     public function define($overrideInfo)
     {
 
-    // by default don't append anything to the end of our title
-    $this->siteInfo = "";
-
-    // set our divider
-    $divider = craft()->plugins->getPlugin('oneseo')->getSettings()->seoDivider;
-
-    // create the string we will append to the end of our title if we should
-    if (craft()->plugins->getPlugin('oneseo')->getSettings()->appendSiteName) {
-      $this->siteInfo = " " . $divider . " " . Craft::getInfo('siteName');
-    }
-
     // Setup all of our SEO Metadata Arrays
     $entryOverrides = new OneSeo_SeoDataModel; // Top Priority
     $codeOverrides  = new OneSeo_SeoDataModel; // Second Priority
@@ -127,7 +116,7 @@ class OneSeoVariable
 
           // Title tag
           case 'title':
-            $output .= "\t<title>$value".$this->siteInfo."</title>\n";
+            $output .= "\t<title>$value</title>\n";
             break;
 
           // Open Graph Tags
@@ -157,11 +146,38 @@ class OneSeoVariable
     return new \Twig_Markup($output, craft()->templates->getTwig()->getCharset());
   }
 
+  public function _appendGlobalTitle()
+  {
+    // set our divider
+    $divider = craft()->plugins->getPlugin('oneseo')->getSettings()->seoDivider;
+
+    // by default don't append anything to the end of our title
+    $this->siteInfo = "";
+
+    // create the string we will append to the end of our title if we should
+    if ($customGlobalValue = craft()->plugins->getPlugin('oneseo')->getSettings()->customGlobalValue)
+    {
+      // Append our global value to the end of the title
+      $this->siteInfo = " " . $divider . " " . $customGlobalValue;
+    }
+    elseif (craft()->plugins->getPlugin('oneseo')->getSettings()->appendSiteName) 
+    {
+      $this->siteInfo = " " . $divider . " " . Craft::getInfo('siteName');
+    }
+    else
+    {
+      // nothing
+    }
+
+    return $this->siteInfo;
+  }
+
 
   public function _prioritizeMetaValues($entryOverrides, $codeOverrides, $fallbacks)
   {
 
     $metaValues = array();
+    $appendSiteInfo = "";
 
     // Loop through the entry override model
     // @TODO - make sure we loop through a defined model... we may not have an
@@ -174,7 +190,15 @@ class OneSeoVariable
         $metaValues[$key] = $value;
       } elseif ($codeOverrides->getAttribute($key)) {
         $metaValues[$key] = $codeOverrides[$key];
+
+        // Since we are doing a code override, let's see if we need to adjust our title
+        if ($key == 'title') {
+          $appendSiteInfo = $this->_appendGlobalTitle();
+          $metaValues[$key] .= $appendSiteInfo;
+        }
+
       } elseif (isset($fallbacks->handle)) {
+        // if we don't any overrides, let's just use our fallback
         $metaValues[$key] = $fallbacks->getAttribute($key);
       } else {
         // We got nuthin'
@@ -257,7 +281,7 @@ class OneSeoVariable
   public function getFallbackById($id)
   {
       if ($fallback = craft()->oneSeo->getFallbackById($id)) {
-          $return = $fallback->getAttributes();
+          $return = $fallback;
       } else {
           $return = new OneSeo_SeoDataModel();
       }

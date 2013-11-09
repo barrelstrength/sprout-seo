@@ -20,6 +20,15 @@
   errors: ''  
 }) }}
 
+{{ forms.textField({
+  label: "Custom Global Value"|t,
+  id: 'customGlobalValue',
+  name: 'customGlobalValue',
+  instructions: "If you add a value here, we will override the Site Name and append this value to the end of each of your meta titles."|t,
+  value: settings.customGlobalValue,
+  errors: ''  
+}) }}
+
 {{ forms.selectField({
   label: 'Select the character that will be used between Title segments'|t,
   id: 'seoDivider',

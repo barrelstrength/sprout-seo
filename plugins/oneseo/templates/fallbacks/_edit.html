@@ -36,12 +36,14 @@
 	{% set fallbackId = null %}
 {% endif %}
 
-{% set fallback = craft.oneSeo.getFallbackById(fallbackId) %}
+{% if fallback is not defined %}
+	{% set fallback = craft.oneSeo.getFallbackById(fallbackId) %}
+{% endif %}
 
 {% set body %}
 
 <form method="post" action="" accept-charset="UTF-8">
-	<input type="hidden" name="action" value="oneseo/seoData/saveFallbacks">
+	<input type="hidden" name="action" value="oneSeo/seoData/saveFallbacks"> 
 	<input type="hidden" name="redirect" value="oneseo/fallbacks">
 
 	<input type="hidden" name="fallback[id]" value="{{ fallbackId }}">
@@ -53,7 +55,7 @@
 		instructions: "Human readable template name"|t,
 		name: 'fallback[name]',
 		value: fallback.name,
-		errors: "",
+		errors: (fallback is defined ? fallback.getErrors('name') : null) ,
 		required: true
 	}) }}
 
@@ -62,7 +64,7 @@
 		instructions: "Short name you will use to refer to your template in the code"|t,
 		name: 'fallback[handle]',
 		value: fallback.handle,
-		errors: "",
+		errors: (fallback is defined ? fallback.getErrors('handle') : null) ,
 		required: true
 	}) }}
 
