@@ -45,6 +45,7 @@ class OneSeoPlugin extends BasePlugin
         return array(
             'pluginNameOverride'  => AttributeType::String,
             'appendSiteName'      => AttributeType::Bool,
+            'customGlobalValue'   => AttributeType::String,
             'seoDivider'          => AttributeType::String,
         );
     }
