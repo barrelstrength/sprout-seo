@@ -1,26 +1,26 @@
 {% import "_includes/forms" as forms %}
 
-{% includeCssResource "oneseo/css/fields.css" %}
+{% includeCssResource "sproutseo/css/fields.css" %}
 
-<div class="oneseo-box">
+<div class="sproutseo-box">
 
   {{ forms.textField({
     label: "Title",
-    name: "oneseo_fields[title]",
+    name: "sproutseo_fields[title]",
     value: values.title
   }) }}
 
   {{ forms.textField({
     label: "Description",
     instructions: "This text will appear in the search results describing the individual page for this content.  Length: 160 words.",
-    name: "oneseo_fields[description]",
+    name: "sproutseo_fields[description]",
     value: values.description
   }) }}
 
   {{ forms.textField({
     label: "Keywords",
     instructions: 'A comma-seprated list of key words or phrases that describe this content',
-    name: "oneseo_fields[keywords]",
+    name: "sproutseo_fields[keywords]",
     value: values.keywords
   }) }}
 

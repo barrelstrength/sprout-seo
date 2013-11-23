@@ -3,7 +3,7 @@ namespace Craft;
 
 require_once( dirname(__FILE__) . "/helpers/BSDPluginHelper.php" );
 
-class OneSeoPlugin extends BasePlugin
+class SproutSeoPlugin extends BasePlugin
 {
     public function getName()
     {
@@ -11,7 +11,7 @@ class OneSeoPlugin extends BasePlugin
         // we will use it in several addons.
 
         // The plugin name
-        $pluginName = Craft::t('One SEO');
+        $pluginName = Craft::t('Sprout SEO');
 
         // @TODO - Can we find a way to move this to the BSDPluginHelper function?
         // I can't seem to pass an object or find the object we are working with.
@@ -85,7 +85,7 @@ class OneSeoPlugin extends BasePlugin
 
     public function getSettingsHtml()
     {
-        return craft()->templates->render('oneseo/_settings/settings', array(
+        return craft()->templates->render('sproutseo/_settings/settings', array(
             'settings' => $this->getSettings()
         ));
     }
@@ -96,11 +96,11 @@ class OneSeoPlugin extends BasePlugin
     public function hookRegisterCpRoutes()
     {
         return array(
-            'oneseo\/fallbacks\/new' =>
-            'oneseo/fallbacks/_edit',
+            'sproutseo\/fallbacks\/new' =>
+            'sproutseo/fallbacks/_edit',
 
-            'oneseo\/fallbacks\/(?P<fallbackId>\d+)' =>
-            'oneseo/fallbacks/_edit',
+            'sproutseo\/fallbacks\/(?P<fallbackId>\d+)' =>
+            'sproutseo/fallbacks/_edit',
         );
     }
 

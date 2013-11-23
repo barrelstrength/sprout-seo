@@ -1,22 +1,22 @@
 {% extends "_layouts/cp" %}
 
-{% set title = craft.OneSeo.name %}
+{% set title = craft.SproutSeo.name %}
 
 {% set crumbs = [
   { 
-    label: craft.oneseo.name, 
-    url: url('oneseo/fallbacks') 
+    label: craft.sproutseo.name, 
+    url: url('sproutseo/fallbacks') 
   }
 ] %}
 
 {% set tabs = {
     fallbacks: { 
       label: "Templates"|t,
-      url: cpUrl('oneseo/fallbacks')
+      url: cpUrl('sproutseo/fallbacks')
     },
     sitemap: { 
       label: "Sitemap"|t,
-      url: cpUrl('oneseo/sitemap')
+      url: cpUrl('sproutseo/sitemap')
     }
 } %}
 
@@ -27,7 +27,7 @@
   <br/>
   <footer class="bsd-branding">
     <p>
-      Powered by <a href="http://barrelstrengthdesign.com" target="_blank">{{ craft.oneseo.name }}</a> {{ craft.oneseo.version }} | 
+      Powered by <a href="http://barrelstrengthdesign.com" target="_blank">{{ craft.sproutseo.name }}</a> {{ craft.sproutseo.version }} | 
       Designed by <a href="http://barrelstrengthdesign.com" target="_blank">(Barrel Strength)</a>
     </p>
   </footer>

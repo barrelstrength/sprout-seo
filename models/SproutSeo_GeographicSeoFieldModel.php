@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class OneSeo_GeographicSeoFieldModel extends BaseModel
+class SproutSeo_GeographicSeoFieldModel extends BaseModel
 {
 
     protected function defineAttributes()

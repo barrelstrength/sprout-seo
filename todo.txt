@@ -9,7 +9,7 @@ http://googlesitemapgenerator.googlecode.com/svn/trunk/doc/gsg-intro.html
 
 PINGS
 ------------------------------------------------------------
-Is it worth adding a ping service to One SEO?
+Is it worth adding a ping service to Sprout SEO?
 
 
 SETTINGS
@@ -18,10 +18,10 @@ SETTINGS
 	If we do this, can we pull in what will be displaying there as placeholder="" text so that there is no doubt what will display to the end user if they don't want to override?
 
 FIELDTYPES
-- One SEO Basic
-- One SEO Robots
-- One SEO Location
-- One SEO Facebook Open Graph 
+- Sprout SEO Basic
+- Sprout SEO Robots
+- Sprout SEO Location
+- Sprout SEO Facebook Open Graph 
 
 ALso have a "SEO Template" field type where a person could select which SEO Fallback Template to use on a page.  This would just be a drop down of the items added in the Fallback area.
 
@@ -50,9 +50,9 @@ IMPROVE TEMPLATE CASCADE
 
 Maybe we can have the "layouts" default to the first section in the URL, and if we want something more specfic, we can override that.
 
-So, when the page /blog/post loads, One SEO will check for the "template_name" value, if it doesn't find one, it will then check for a template named "blog" and if that is not present, it will fall back to "default", which will be the one required SEO template.
+So, when the page /blog/post loads, Sprout SEO will check for the "template_name" value, if it doesn't find one, it will then check for a template named "blog" and if that is not present, it will fall back to "default", which will be the one required SEO template.
 
-Can I create an OneSEO FieldType that just stores an ID of a separate ONESEO table I've created?  And then whenever an entry is saved, that seo_id is updated and all the fields in that other table are updated?
+Can I create an Sprout SEO FieldType that just stores an ID of a separate SproutSEO table I've created?  And then whenever an entry is saved, that seo_id is updated and all the fields in that other table are updated?
 
 ------------------------------------------------------------
 

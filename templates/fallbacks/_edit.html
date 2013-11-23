@@ -1,8 +1,8 @@
-{% extends "oneseo/_layout" %}
+{% extends "sproutseo/_layout" %}
 {% set centered = true %}
 
 {% set title %}
-	New Fallback Template - {{ craft.OneSeo.name }}
+	New Fallback Template - {{ craft.SproutSeo.name }}
 {% endset %}
 
 {% set tabs = {
@@ -30,21 +30,21 @@
 
 {% import "_includes/forms" as forms %}
 
-{% if craft.oneSeo.fallbackId is defined %}
-	{% set fallbackId = craft.oneSeo.fallbackId %}
+{% if craft.sproutSeo.fallbackId is defined %}
+	{% set fallbackId = craft.sproutSeo.fallbackId %}
 {% else %}
 	{% set fallbackId = null %}
 {% endif %}
 
 {% if fallback is not defined %}
-	{% set fallback = craft.oneSeo.getFallbackById(fallbackId) %}
+	{% set fallback = craft.sproutSeo.getFallbackById(fallbackId) %}
 {% endif %}
 
 {% set body %}
 
 <form method="post" action="" accept-charset="UTF-8">
-	<input type="hidden" name="action" value="oneSeo/seoData/saveFallbacks"> 
-	<input type="hidden" name="redirect" value="oneseo/fallbacks">
+	<input type="hidden" name="action" value="sproutSeo/seoData/saveFallbacks"> 
+	<input type="hidden" name="redirect" value="sproutseo/fallbacks">
 
 	<input type="hidden" name="fallback[id]" value="{{ fallbackId }}">
 

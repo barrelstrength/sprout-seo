@@ -1,30 +1,30 @@
 {% import "_includes/forms" as forms %}
 
-{% includeCssResource "oneseo/css/fields.css" %}
+{% includeCssResource "sproutseo/css/fields.css" %}
 
-<div class="oneseo-box">
+<div class="sproutseo-box">
 
   {{ forms.textField({
     label: "Region",
-    name: "oneseo_fields[region]",
+    name: "sproutseo_fields[region]",
     value: values.region
   }) }}
 
   {{ forms.textField({
     label: "Placename",
-    name: "oneseo_fields[placename]",
+    name: "sproutseo_fields[placename]",
     value: values.placename
   }) }}
 
   {{ forms.textField({
     label: "Longitude",
-    name: "oneseo_fields[longitude]",
+    name: "sproutseo_fields[longitude]",
     value: values.longitude
   }) }}
 
   {{ forms.textField({
     label: "Latitude",
-    name: "oneseo_fields[latitude]",
+    name: "sproutseo_fields[latitude]",
     value: values.latitude
   }) }}
 

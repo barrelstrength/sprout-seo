@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class OneSeoService extends BaseApplicationComponent
+class SproutSeoService extends BaseApplicationComponent
 {
     protected $seoDataRecord;
     protected $seoOverrideRecord;
@@ -10,12 +10,12 @@ class OneSeoService extends BaseApplicationComponent
     {
         $this->seoDataRecord = $seoDataRecord;
         if (is_null($this->seoDataRecord)) {
-            $this->seoDataRecord = OneSeo_OneSeoFallbacksRecord::model();
+            $this->seoDataRecord = SproutSeo_SproutSeoFallbacksRecord::model();
         }
 
         $this->seoOverrideRecord = $seoOverrideRecord;
         if (is_null($this->seoOverrideRecord)) {
-            $this->seoOverrideRecord = OneSeo_OneSeoOverridesRecord::model();
+            $this->seoOverrideRecord = SproutSeo_SproutSeoOverridesRecord::model();
         }
 
     }
@@ -24,11 +24,11 @@ class OneSeoService extends BaseApplicationComponent
      * Get a new blank item
      *
      * @param  array               $attributes
-     * @return OneSeo_SeoDataModel
+     * @return SproutSeo_SeoDataModel
      */
     public function newModel($attributes = array())
     {
-        $model = new OneSeo_SeoDataModel();
+        $model = new SproutSeo_SeoDataModel();
         $model->setAttributes($attributes);
 
         return $model;
@@ -43,7 +43,7 @@ class OneSeoService extends BaseApplicationComponent
     {
         $records = $this->seoDataRecord->findAll(array('order'=>'name'));
 
-        return OneSeo_SeoDataModel::populateModels($records, 'id');
+        return SproutSeo_SeoDataModel::populateModels($records, 'id');
     }
 
     /**
@@ -55,7 +55,7 @@ class OneSeoService extends BaseApplicationComponent
     public function getFallbackById($id)
     {
         if ($record = $this->seoDataRecord->findByPk($id)) {
-            return OneSeo_SeoDataModel::populateModel($record);
+            return SproutSeo_SeoDataModel::populateModel($record);
         }
     }
 
@@ -64,11 +64,11 @@ class OneSeoService extends BaseApplicationComponent
 
         $query = craft()->db->createCommand()
                     ->select('*')
-                    ->from('oneseo_fallbacks')
+                    ->from('sproutseo_fallbacks')
                     ->where('handle=:handle', array(':handle'=> $handle))
                     ->queryRow();
 
-        $model = OneSeo_SeoDataModel::populateModel($query);
+        $model = SproutSeo_SeoDataModel::populateModel($query);
 
         $model->robots = ($model->robots) ? $this->prepRobots($model->robots) : null;
 
@@ -83,7 +83,7 @@ class OneSeoService extends BaseApplicationComponent
         }
     }
 
-    public function saveFallbackInfo(OneSeo_SeoDataModel &$model)
+    public function saveFallbackInfo(SproutSeo_SeoDataModel &$model)
     {
 
        if ($id = $model->getAttribute('id')) {
@@ -117,7 +117,7 @@ class OneSeoService extends BaseApplicationComponent
     public function getOverrideById($id)
     {
         if ($record = $this->seoOverrideRecord->findByPk($id)) {
-            return OneSeo_OverridesModel::populateModel($record);
+            return SproutSeo_OverridesModel::populateModel($record);
         }
     }
 
@@ -125,11 +125,11 @@ class OneSeoService extends BaseApplicationComponent
     {
         $query = craft()->db->createCommand()
                    ->select('*')
-                   ->from('oneseo_overrides')
+                   ->from('sproutseo_overrides')
                    ->where('entryId = :entryId', array(':entryId' => $entryId))
                    ->queryRow();
 
-        return OneSeo_OverridesModel::populateModel($query);
+        return SproutSeo_OverridesModel::populateModel($query);
 
     }
 
@@ -137,17 +137,17 @@ class OneSeoService extends BaseApplicationComponent
     {
         $query = craft()->db->createCommand()
                    ->select('id, title, description, keywords')
-                   ->from('oneseo_overrides')
+                   ->from('sproutseo_overrides')
                    ->where('entryId = :entryId', array(':entryId' => $entryId))
                    ->queryRow();
 
        if (isset($query)) 
        {
-            return OneSeo_BasicSeoFieldModel::populateModel($query);
+            return SproutSeo_BasicSeoFieldModel::populateModel($query);
         }
         else
         {
-            return new OneSeo_BasicSeoFieldModel;
+            return new SproutSeo_BasicSeoFieldModel;
         }
 
     }
@@ -156,17 +156,17 @@ class OneSeoService extends BaseApplicationComponent
     {
         $query = craft()->db->createCommand()
                    ->select('region, placename, longitude, latitude')
-                   ->from('oneseo_overrides')
+                   ->from('sproutseo_overrides')
                    ->where('entryId = :entryId', array(':entryId' => $entryId))
                    ->queryRow();
 
        if (isset($query)) 
        {
-            return OneSeo_GeographicSeoFieldModel::populateModel($query);
+            return SproutSeo_GeographicSeoFieldModel::populateModel($query);
         }
         else
         {
-            return new OneSeo_GeographicSeoFieldModel;
+            return new SproutSeo_GeographicSeoFieldModel;
         }
 
     }
@@ -175,17 +175,17 @@ class OneSeoService extends BaseApplicationComponent
     {
         $query = craft()->db->createCommand()
                    ->select('canonical, robots')
-                   ->from('oneseo_overrides')
+                   ->from('sproutseo_overrides')
                    ->where('entryId = :entryId', array(':entryId' => $entryId))
                    ->queryRow();
 
        if (isset($query)) 
        {
-            return OneSeo_RobotsSeoFieldModel::populateModel($query);
+            return SproutSeo_RobotsSeoFieldModel::populateModel($query);
         }
         else
         {
-            return new OneSeo_RobotsSeoFieldModel;
+            return new SproutSeo_RobotsSeoFieldModel;
         }
 
     }
@@ -193,13 +193,13 @@ class OneSeoService extends BaseApplicationComponent
     public function createOverride($attributes)
     {
         craft()->db->createCommand()
-                       ->insert('oneseo_overrides', $attributes);
+                       ->insert('sproutseo_overrides', $attributes);
     }
 
     public function updateOverride($id, $attributes)
     {
         craft()->db->createCommand()
-        ->update('oneseo_overrides',
+        ->update('sproutseo_overrides',
             $attributes,
             'id = :id', array(':id' => $id)
         );
@@ -208,7 +208,7 @@ class OneSeoService extends BaseApplicationComponent
 
     public function deleteOverrideById($id = null)
     {
-        $record = new OneSeo_OneSeoOverridesRecord;
+        $record = new SproutSeo_SproutSeoOverridesRecord;
             
         // @TODO is this the right way to do this?  Would this actually return
         // true or false?
@@ -227,7 +227,7 @@ class OneSeoService extends BaseApplicationComponent
      */
     public function deleteFallback($id = null)
     {
-        $record = new OneSeo_OneSeoFallbacksRecord;
+        $record = new SproutSeo_SproutSeoFallbacksRecord;
         return $record->deleteByPk($id);
     }
 

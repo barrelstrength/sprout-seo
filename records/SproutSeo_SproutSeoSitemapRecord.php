@@ -1,11 +1,11 @@
 <?php
 namespace Craft;
 
-class OneSeo_OneSeoSitemapRecord extends BaseRecord
+class SproutSeo_SproutSeoSitemapRecord extends BaseRecord
 {
     public function getTableName()
     {
-        return 'oneseo_sitemap';
+        return 'sproutseo_sitemap';
     }
 
     public function defineAttributes()

@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class OneSeo_GeographicSeoFieldType extends BaseFieldType
+class SproutSeo_RobotsSeoFieldType extends BaseFieldType
 {
     /**
      * FieldType name
@@ -10,7 +10,7 @@ class OneSeo_GeographicSeoFieldType extends BaseFieldType
      */
     public function getName()
     {
-        return Craft::t('SEO: Geographic');
+        return Craft::t('SEO: Robots');
     }
 
     /**
@@ -32,58 +32,60 @@ class OneSeo_GeographicSeoFieldType extends BaseFieldType
      * Performs any additional actions after the element has been saved.
      */
     public function onAfterElementSave()
-    {
+    {   
         // Make sure we are actually submitting our field
-        if ( ! isset($_POST['oneseo_fields'])) return;
-
+        if ( ! isset($_POST['sproutseo_fields'])) return;
+        
         // Determine our entryId
         $entryId = (isset($_POST['entryId']))
             ? $_POST['entryId']
             : $this->element->id;
 
         // get any overrides for this entry
-        $model = craft()->oneSeo->getOverrideByEntryId($entryId);
+        $model = craft()->sproutSeo->getOverrideByEntryId($entryId);
         
-        // Test to see if we have any values in our One SEO fields
-        $saveOneSeoFields = false;
-        foreach ($_POST['oneseo_fields'] as $key => $value) {
+        // Test to see if we have any values in our Sprout SEO fields
+        $saveSproutSeoFields = false;
+        foreach ($_POST['sproutseo_fields'] as $key => $value) {
             if ($value) 
             {
-                $saveOneSeoFields = true;
+                $saveSproutSeoFields = true;
                 continue;
             }
         }
 
-        // If we don't have any values in our One SEO fields
+        // If we don't have any values in our Sprout SEO fields
         // don't add a record to the database
         // but if a record already exists, we also should delete it.
-        if ( ! $saveOneSeoFields )
+        if ( ! $saveSproutSeoFields )
         {
             // Remove record since it is now blank
             if ($model->id)
             {
-                craft()->oneSeo->deleteOverrideById($model->id);
+                craft()->sproutSeo->deleteOverrideById($model->id);
             }
             
             return;
         }
 
         
-        // Add the entry ID to the field data we will submit for One SEO
+        $_POST['sproutseo_fields']['robots'] = craft()->sproutSeo->prepRobotsArray($_POST['sproutseo_fields']['robots']);
+        
+        // Add the entry ID to the field data we will submit for Sprout SEO
         $attributes['entryId'] = $entryId;
         
-        // Grab all the other One SEO fields.
-        $attributes = array_merge($attributes, $_POST['oneseo_fields']);
+        // Grab all the other Sprout SEO fields.
+        $attributes = array_merge($attributes, $_POST['sproutseo_fields']);
 
         // If our override entry exists update it, 
         // if not create it
         if ($model->entryId) 
         {
-            craft()->oneSeo->updateOverride($model->id, $attributes);
+            craft()->sproutSeo->updateOverride($model->id, $attributes);
         } 
         else 
         {
-            craft()->oneSeo->createOverride($attributes);
+            craft()->sproutSeo->createOverride($attributes);
         }
 
     }
@@ -102,18 +104,20 @@ class OneSeo_GeographicSeoFieldType extends BaseFieldType
         $entryId = craft()->request->getSegment(3);
 
         // @TODO - Make this into a Model
-        // $values = new OneSeo_BasicSeoFieldModel;
+        // $values = new SproutSeo_BasicSeoFieldModel;
 
-        $values = craft()->oneSeo->getGeographicSeoFeildsByEntryId($entryId);
+        $values = craft()->sproutSeo->getRobotsSeoFeildsByEntryId($entryId);
 
+        $values->robots = explode(',', $values->robots);
+        
         // Cleanup the namespace around the $name handle
         $name = str_replace("fields[", "", $name);
         $name = rtrim($name, "]");
 
-        $name = "oneseo_fields[$name]";
+        $name = "sproutseo_fields[$name]";
         // $value = $values['title'];
 
-        return craft()->templates->render('oneseo/_fields/geo', array(
+        return craft()->templates->render('sproutseo/_fields/robots', array(
             'name'	     => $name,
             // 'value'      => $value,
             'values'     => $values

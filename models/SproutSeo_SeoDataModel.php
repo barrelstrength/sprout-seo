@@ -1,18 +1,15 @@
 <?php
 namespace Craft;
 
-class OneSeo_OneSeoFallbacksRecord extends BaseRecord
+class SproutSeo_SeoDataModel extends BaseModel
 {
-    public function getTableName()
-    {
-        return 'oneseo_fallbacks';
-    }
 
     protected function defineAttributes()
     {
         return array(
-            'name'           => array(AttributeType::String, 'required' => true),
-            'handle'         => array(AttributeType::String, 'required' => true),
+            'id'             => array(AttributeType::Number),
+            'name'           => array(AttributeType::String),
+            'handle'         => array(AttributeType::String),
             'title'          => array(AttributeType::String),
             'description'    => array(AttributeType::String),
             'keywords'       => array(AttributeType::String),
@@ -20,6 +17,7 @@ class OneSeo_OneSeoFallbacksRecord extends BaseRecord
             'canonical'      => array(AttributeType::String),
             'region'         => array(AttributeType::String),
             'placename'      => array(AttributeType::String),
+            'position'       => array(AttributeType::String),
             'latitude'       => array(AttributeType::String),
             'longitude'      => array(AttributeType::String),
             'ogTitle'        => array(AttributeType::String),
@@ -33,25 +31,5 @@ class OneSeo_OneSeoFallbacksRecord extends BaseRecord
             'ogLocale'       => array(AttributeType::String),
         );
     }
-
-    public function defineIndexes()
-    {
-        return array(
-            array('columns' => array('name', 'handle'), 'unique' => true),
-        );
-    }
-
-    /**
-     * Create a new instance of the current class. This allows us to
-     * properly unit test our service layer.
-     *
-     * @return BaseRecord
-     */
-    public function create()
-    {
-        $class = get_class($this);
-        $record = new $class();
-
-        return $record;
-    }
+    
 }

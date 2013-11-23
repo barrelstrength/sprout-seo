@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class OneSeoVariable
+class SproutSeoVariable
 {
     /**
      * Plugin Name
@@ -12,14 +12,14 @@ class OneSeoVariable
      */
     public function getName()
     {
-      $plugin = craft()->plugins->getPlugin('oneseo');
+      $plugin = craft()->plugins->getPlugin('sproutseo');
 
       return $plugin->getName();
     }
 
     public function getVersion()
     {
-      $plugin = craft()->plugins->getPlugin('oneseo');
+      $plugin = craft()->plugins->getPlugin('sproutseo');
 
       return $plugin->getVersion();
     }
@@ -37,16 +37,16 @@ class OneSeoVariable
     $this->siteInfo = "";
 
     // set our divider
-    $divider = craft()->plugins->getPlugin('oneseo')->getSettings()->seoDivider;
+    $divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
     // create the string we will append to the end of our title if we should
-    if (craft()->plugins->getPlugin('oneseo')->getSettings()->appendSiteName) {
+    if (craft()->plugins->getPlugin('sproutseo')->getSettings()->appendSiteName) {
       $this->siteInfo = " " . $divider . " " . Craft::getInfo('siteName');
     }
 
     // Setup all of our SEO Metadata Arrays
-    $entryOverrides = new OneSeo_SeoDataModel; // Top Priority
-    $codeOverrides  = new OneSeo_SeoDataModel; // Second Priority
+    $entryOverrides = new SproutSeo_SeoDataModel; // Top Priority
+    $codeOverrides  = new SproutSeo_SeoDataModel; // Second Priority
     $fallbacks      = array(); // Lowest Priority
 
 
@@ -56,7 +56,7 @@ class OneSeoVariable
     // If our code references a fallback template, create our fallback array
     // If no fallback template is mentioned, we have an empty array
     if ($templateHandle = $overrideInfo['template']) {
-       $fallbacks = craft()->oneSeo->getFallbackByTemplateHandle($templateHandle);
+       $fallbacks = craft()->sproutSeo->getFallbackByTemplateHandle($templateHandle);
 
        // Remove our template so we can assign the rest of our info to the codeOverride
        // array and have it match up nicely.
@@ -72,7 +72,7 @@ class OneSeoVariable
     // see if this entry has any Entry Overrides.
     if (isset($overrideInfo['id'])) {
       // query for override array
-      $entryOverrides = craft()->oneSeo->getOverrideByEntryId($overrideInfo['id']);
+      $entryOverrides = craft()->sproutSeo->getOverrideByEntryId($overrideInfo['id']);
 
       unset($overrideInfo['id']);
     }
@@ -84,13 +84,13 @@ class OneSeoVariable
     // If we have any more values that were set in our template
     // let's store them as code overrides.
     if ( ! empty($overrideInfo)) {
-      $codeOverrides = OneSeo_SeoDataModel::populateModel($overrideInfo);
+      $codeOverrides = SproutSeo_SeoDataModel::populateModel($overrideInfo);
     }
 
     // @TODO - this is temporary, figure out the best syntax for 'Robots' values 
     // and update this to accomodate both the Fallback and Code override situations
     $codeOverrides->robots = ($codeOverrides->robots)
-      ? craft()->oneSeo->prepRobotsArray($codeOverrides->robots)
+      ? craft()->sproutSeo->prepRobotsArray($codeOverrides->robots)
       : null;
     
 
@@ -232,7 +232,7 @@ class OneSeoVariable
   {
     $fallbacks = array();
 
-    $record = craft()->oneSeo->getAllFallbacks();
+    $record = craft()->sproutSeo->getAllFallbacks();
 
     $i = 0;
 
@@ -256,10 +256,10 @@ class OneSeoVariable
    */
   public function getFallbackById($id)
   {
-      if ($fallback = craft()->oneSeo->getFallbackById($id)) {
+      if ($fallback = craft()->sproutSeo->getFallbackById($id)) {
           $return = $fallback->getAttributes();
       } else {
-          $return = new OneSeo_SeoDataModel();
+          $return = new SproutSeo_SeoDataModel();
       }
 
       return $return;

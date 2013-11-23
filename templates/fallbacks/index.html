@@ -1,4 +1,4 @@
-{% extends "oneseo/_layout" %}
+{% extends "sproutseo/_layout" %}
 {% import "_includes/forms" as forms %}
 
 {% set body %}
@@ -15,10 +15,10 @@
 		<th width="70%"></th>
 		<td class="thin"></td>
 	</thead>
-	{% set fallbacks = craft.oneSeo.allFallbacks %}
+	{% set fallbacks = craft.sproutSeo.allFallbacks %}
 
 	{% if fallbacks is empty %}
-		<tr id="no-oneseo-results">
+		<tr id="no-sproutseo-results">
 			<td colspan="4">No results found.</td>
 		</tr>
 	{% else %}	
@@ -42,7 +42,7 @@
 </table>
 
 <div class="buttons">
-	<a class="btn submit add icon" href="{{ url('oneseo/fallbacks/new') }}">New Fallback Template</a>
+	<a class="btn submit add icon" href="{{ url('sproutseo/fallbacks/new') }}">New Fallback Template</a>
 </div>
 
 {% endset %}
@@ -50,13 +50,13 @@
 {% set js %}
 	new Craft.AdminTable({
 		tableSelector: '#fallbacks',
-		deleteAction: 'oneseo/seoData/deleteFallbacks',
+		deleteAction: 'sproutseo/seoData/deleteFallbacks',
 		onDeleteObject: function(id)
 		{
 			if($('#fallbacks').find('tbody').find('tr').size() == 0)
 			{
 				$('#fallbacks').show();
-				$('#fallbacks').find('tbody').html('<tr id="no-oneseo-results"><td colspan="4">No results found.</td></tr>');
+				$('#fallbacks').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4">No results found.</td></tr>');
 			}
 		}
 	});

@@ -1,4 +1,4 @@
-{% extends "oneseo/_layout" %}
+{% extends "sproutseo/_layout" %}
 {% import "_includes/forms" as forms %}
 
 {% set body %}
@@ -24,7 +24,7 @@
 	</thead>
 	<tbody>
 
-	{% for section in craft.oneseo.allSections %}
+	{% for section in craft.sproutseo.allSections %}
 
 		<tr>
 			<td><strong>{{ section.name }}</strong></td>
@@ -95,10 +95,10 @@
 	</tbody>
 </table>
 
-<div class="buttons"><a class="btn submit add icon small" style="background-color: blue;" href="{{ url('oneseo/fallbacks/new') }}">New Standalone Page</a>
+<div class="buttons"><a class="btn submit add icon small" style="background-color: blue;" href="{{ url('sproutseo/fallbacks/new') }}">New Standalone Page</a>
 </div>
 
-<div class="buttons"><a class="btn submit icon" href="{{ url('oneseo/fallbacks/new') }}">Save Sitemap</a>
+<div class="buttons"><a class="btn submit icon" href="{{ url('sproutseo/fallbacks/new') }}">Save Sitemap</a>
 </div>
 
 </form>

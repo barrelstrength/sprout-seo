@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class OneSeo_OverridesModel extends BaseModel
+class SproutSeo_OverridesModel extends BaseModel
 {
 
     protected function defineAttributes()

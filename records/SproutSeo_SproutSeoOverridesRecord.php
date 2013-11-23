@@ -1,11 +1,11 @@
 <?php
 namespace Craft;
 
-class OneSeo_OneSeoOverridesRecord extends BaseRecord
+class SproutSeo_SproutSeoOverridesRecord extends BaseRecord
 {
     public function getTableName()
     {
-        return 'oneseo_overrides';
+        return 'sproutseo_overrides';
     }
 
     public function defineAttributes()
