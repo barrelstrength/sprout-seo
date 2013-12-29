@@ -9,6 +9,9 @@
   }
 ] %}
 
+{# Only display these tabs at the top level #}
+{% if craft.request.getSegment(3) == "" %}
+
 {% set tabs = {
     fallbacks: { 
       label: "Templates"|t,
@@ -20,8 +23,11 @@
     }
 } %}
 
+{% endif %}
+
+
 {% set content %}
-  
+
   {{ body }}
 
   <br/>
