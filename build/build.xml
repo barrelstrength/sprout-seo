@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Patrol" default="release">
+    <property name="pluginVersion" value="v0.6.0" />
+
+    <target name="release">
+        <echo msg="Preparing release distro..." />
+        <zip destfile="sprountseo.${pluginVersion}.zip">
+            <fileset dir="../../">
+                <include name="sproutseo/" />
+                <exclude name="sproutseo/build/" />
+                <exclude name="sproutseo/tests/" />
+                <exclude name="sproutseo/.git/" />
+                <exclude name="sproutseo/.idea/" />
+                <exclude name="sproutseo/.gitignore" />
+                <exclude name="sproutseo/todo.txt" />
+            </fileset>
+        </zip>
+        <echo msg="Release .zip has been created!" />
+    </target>
+
+</project>
