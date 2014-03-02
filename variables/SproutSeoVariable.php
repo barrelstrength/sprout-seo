@@ -25,12 +25,12 @@ class SproutSeoVariable
     }
 
     /**
-     * Define our SEO Meta Tag Output
+     * Output our SEO Meta Tags
      * 
      * @param  [type] $overrideInfo [description]
      * @return [type]               [description]
      */
-    public function define($overrideInfo)
+    public function optimize($overrideInfo)
     {
 
     // by default don't append anything to the end of our title
@@ -63,6 +63,14 @@ class SproutSeoVariable
        // @TODO - may need to move this outside this if statement, or include other
        // values that aren't part of the seo metadata model
        unset($overrideInfo['template']);
+    }
+
+    /**
+     * @DEPRECATED - Now use optimize()
+     */
+    public function define($overrideInfo)
+    {
+      return $this->optimize($overrideInfo);
     }
 
     // PREPARE ENTRY OVERRIDES
