@@ -3,35 +3,35 @@ namespace Craft;
 
 class SproutSeoVariable
 {
-    /**
-     * Plugin Name
-     * Make your plugin name available as a variable
-     * in your templates as {{ craft.YourPlugin.name }}
-     *
-     * @return string
-     */
-    public function getName()
-    {
-      $plugin = craft()->plugins->getPlugin('sproutseo');
+  /**
+   * Plugin Name
+   * Make your plugin name available as a variable
+   * in your templates as {{ craft.YourPlugin.name }}
+   *
+   * @return string
+   */
+  public function getName()
+  {
+    $plugin = craft()->plugins->getPlugin('sproutseo');
 
-      return $plugin->getName();
-    }
+    return $plugin->getName();
+  }
 
-    public function getVersion()
-    {
-      $plugin = craft()->plugins->getPlugin('sproutseo');
+  public function getVersion()
+  {
+    $plugin = craft()->plugins->getPlugin('sproutseo');
 
-      return $plugin->getVersion();
-    }
+    return $plugin->getVersion();
+  }
 
-    /**
-     * Output our SEO Meta Tags
-     * 
-     * @param  [type] $overrideInfo [description]
-     * @return [type]               [description]
-     */
-    public function optimize($overrideInfo)
-    {
+  /**
+   * Output our SEO Meta Tags
+   * 
+   * @param  [type] $overrideInfo [description]
+   * @return [type]               [description]
+   */
+  public function optimize($overrideInfo)
+  {
 
     // by default don't append anything to the end of our title
     $this->siteInfo = "";
@@ -63,14 +63,6 @@ class SproutSeoVariable
        // @TODO - may need to move this outside this if statement, or include other
        // values that aren't part of the seo metadata model
        unset($overrideInfo['template']);
-    }
-
-    /**
-     * @DEPRECATED - Now use optimize()
-     */
-    public function define($overrideInfo)
-    {
-      return $this->optimize($overrideInfo);
     }
 
     // PREPARE ENTRY OVERRIDES
@@ -228,6 +220,15 @@ class SproutSeoVariable
     }
 
     return $meta;
+  }
+
+
+  /**
+   * @DEPRECATED - Now use optimize()
+   */
+  public function define($overrideInfo)
+  {
+    return $this->optimize($overrideInfo);
   }
 
 

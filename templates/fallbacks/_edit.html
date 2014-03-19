@@ -55,7 +55,7 @@
 		instructions: "Human readable template name"|t,
 		name: 'fallback[name]',
 		value: fallback.name,
-		errors: (fallback is defined ? fallback.getErrors('name') : null) ,
+		errors: '',
 		required: true
 	}) }}
 
@@ -64,7 +64,7 @@
 		instructions: "Short name you will use to refer to your template in the code"|t,
 		name: 'fallback[handle]',
 		value: fallback.handle,
-		errors: (fallback is defined ? fallback.getErrors('handle') : null) ,
+		errors: '',
 		required: true
 	}) }}
 
