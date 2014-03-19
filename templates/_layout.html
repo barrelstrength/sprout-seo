@@ -10,7 +10,7 @@
 ] %}
 
 {# Only display these tabs at the top level #}
-{# {% if craft.request.getSegment(3) == "" %}
+{% if craft.request.getSegment(3) == "" %}
 
 {% set tabs = {
     fallbacks: { 
@@ -19,11 +19,11 @@
     },
     sitemap: { 
       label: "Sitemap"|t,
-      url: cpUrl('sproutseo/sitemap')
+      url: cpUrl('sproutseo/sitemap'),
     }
 } %}
 
-{% endif %} #}
+{% endif %}
 
 
 {% set content %}
