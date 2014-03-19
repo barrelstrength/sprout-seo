@@ -50,7 +50,7 @@
 {% set js %}
 	new Craft.AdminTable({
 		tableSelector: '#fallbacks',
-		deleteAction: 'sproutseo/seoData/deleteFallbacks',
+		deleteAction: 'sproutSeo/seoData/deleteFallbacks',
 		onDeleteObject: function(id)
 		{
 			if($('#fallbacks').find('tbody').find('tr').size() == 0)
