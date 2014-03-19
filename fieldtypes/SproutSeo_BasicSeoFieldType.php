@@ -33,8 +33,9 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
      */
     public function onAfterElementSave()
     {
+ 
         // Make sure we are actually submitting our field
-        if ( ! isset($_POST['sproutseo_fields'])) return;
+        if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
 
         // Determine our entryId
         $entryId = (isset($_POST['entryId']))
@@ -46,7 +47,7 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
         
         // Test to see if we have any values in our Sprout SEO fields
         $saveSproutSeoFields = false;
-        foreach ($_POST['sproutseo_fields'] as $key => $value) {
+        foreach ($_POST['fields']['sproutseo_fields'] as $key => $value) {
             if ($value) 
             {
                 $saveSproutSeoFields = true;
@@ -73,7 +74,7 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
         $attributes['entryId'] = $entryId;
         
         // Grab all the other Sprout SEO fields.
-        $attributes = array_merge($attributes, $_POST['sproutseo_fields']);
+        $attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
 
         // If our override entry exists update it, 
         // if not create it
@@ -115,7 +116,6 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
 
         return craft()->templates->render('sproutseo/_fields/input', array(
             'name'	     => $name,
-            // 'value'      => $value,
             'values'     => $values
         ));
     }
