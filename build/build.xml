@@ -2,33 +2,26 @@
 
 <project name="Sprout SEO" default="build">
 
-    <property name="jsPath" value="../resources/js/" />
     <property name="cssPath" value="../resources/css/" />
-    <property name="minPath" value="../resources/" />
     <property name="pluginFileName" value="SproutSeo" />
     <property name="pluginName" value="sproutseo" />
-    <property name="pluginVersion" value="0.6.0.1" />
+    <property name="pluginVersion" value="0.6.1" />
 
     <target name="clean">
         <echo msg="Running cleaning task..." />
-        <delete file="${minPath}${pluginName}.min.js" verbose="false" failonerror="false" />
-        <delete file="${minPath}${pluginName}.min.css" verbose="false" failonerror="false" />
+        <delete file="${cssPath}${pluginName}.min.css" verbose="false" failonerror="false" />
     </target>
 
     <target name="concatenate" depends="clean">
         <echo msg="Combining JS and CSS..." />
-        <append destfile="${minPath}${pluginName}.min.js">
-            <filelist dir="${jsPath}" listfile="js.txt" />
-        </append>
-        <append destfile="${minPath}${pluginName}.min.css">
+        <append destfile="${cssPath}${pluginName}.min.css">
             <filelist dir="${cssPath}" listfile="css.txt" />
         </append>
     </target>
 
     <target name="minify" depends="concatenate">
         <echo msg="Minifying combined sources..." />
-        <exec command="java -jar YUI2.4.8.jar ${minPath}${pluginName}.js -o ${minPath}${pluginName}.js" />
-        <exec command="java -jar YUI2.4.8.jar ${minPath}${pluginName}.css -o ${minPath}${pluginName}.css" />
+        <exec command="java -jar YUI2.4.8.jar ${cssPath}${pluginName}.css -o ${cssPath}${pluginName}.css" />
     </target>
 
     <target name="build" depends="minify">
@@ -41,8 +34,6 @@
             <fileset dir="../../">
                 <include name="${pluginName}/" />
                 <exclude name="${pluginName}/build/" />
-                <exclude name="${pluginName}/resources/css/" />
-                <exclude name="${pluginName}/resources/js/" />
                 <exclude name="${pluginName}/.git/" />
                 <exclude name="${pluginName}/.gitignore" />
                 <exclude name="${pluginName}/.idea/" />
