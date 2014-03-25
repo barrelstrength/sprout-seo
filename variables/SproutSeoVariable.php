@@ -36,12 +36,14 @@ class SproutSeoVariable
     // by default don't append anything to the end of our title
     $this->siteInfo = "";
 
-    // set our divider
     $divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
+    $appendSiteName = craft()->plugins->getPlugin('sproutseo')->getSettings()->appendSiteName;
+    $customGlobalValue = craft()->plugins->getPlugin('sproutseo')->getSettings()->customGlobalValue;
 
     // create the string we will append to the end of our title if we should
-    if (craft()->plugins->getPlugin('sproutseo')->getSettings()->appendSiteName) {
-      $this->siteInfo = " " . $divider . " " . Craft::getInfo('siteName');
+    if ($appendSiteName) 
+    {
+      $this->siteInfo = " " . $divider . " " . ($customGlobalValue ? $customGlobalValue : Craft::getInfo('siteName'));
     }
 
     // Setup all of our SEO Metadata Arrays
