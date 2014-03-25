@@ -19,7 +19,7 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.6.1';
+		return '0.6.2';
 	}
 
 	public function getDeveloper()
