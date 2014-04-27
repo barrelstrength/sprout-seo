@@ -25,7 +25,7 @@
 		{% for fallback in fallbacks %}
 		<tr id="results" data-id="{{ fallback.id }}" data-name="{{ fallback.name|t }}">
 			<td>
-				<a href="{{ fallback.editUrl }}">
+				<a href="{{ url('sproutseo/fallbacks/' ~ fallback.id) }}">
 					<strong>{{ fallback.name }}</strong>
 				</a>
 			</td>
