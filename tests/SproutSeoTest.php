@@ -42,7 +42,7 @@ class SproutSeoTest extends BaseTest
 	public function testNewModel()
 	{
 		// Dummy test since $this->sproutSeoService->newModel() is not currently testable
-		$this->assertTrue(true);
+		$this->assertTrue(false);
 	}
 
 	/*
