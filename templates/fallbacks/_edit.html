@@ -105,7 +105,6 @@
 
 	{{ forms.textField({
 		label: "Canonical URL"|t,
-		instructions: "Optional. Advanced settings."|t,
 		name: 'fallback[canonical]',
 		value: fallback.canonical,
 		errors: "",
@@ -120,7 +119,6 @@
 	<h3>Robots - Basic</h3>
 	{{ forms.checkboxGroup({
 		label: "Robots - Basic"|t,
-		instructions: "Optional. Advanced settings."|t,
 		name: 'fallback[robots]',
 		options: robotsOptionsBasic,
 		errors: "",
@@ -138,7 +136,6 @@
 	<h3>Robots - Advanced</h3>
 	{{ forms.checkboxGroup({
 		label: "Robots - Advanced"|t,
-		instructions: "Optional. Advanced settings."|t,
 		name: 'fallback[robots]',
 		options: robotsOptionsAdvanced,
 		errors: "",
@@ -150,7 +147,6 @@
 <div id="fallback-location" class="hidden">
 	{{ forms.textField({
 		label: "Region"|t,
-		instructions: "Optional. Advanced settings."|t,
 		name: 'fallback[region]',
 		value: fallback.region,
 		errors: "",
@@ -159,7 +155,6 @@
 
 	{{ forms.textField({
 		label: "Placename"|t,
-		instructions: "Optional. Advanced settings."|t,
 		name: 'fallback[placename]',
 		value: fallback.placename,
 		errors: "",
@@ -168,7 +163,6 @@
 
 	{{ forms.textField({
 		label: "Latitude"|t,
-		instructions: "Optional. Advanced settings."|t,
 		name: 'fallback[latitude]',
 		value: fallback.latitude,
 		errors: "",
@@ -177,7 +171,6 @@
 
 	{{ forms.textField({
 		label: "Longitude"|t,
-		instructions: "Optional. Advanced settings."|t,
 		name: 'fallback[longitude]',
 		value: fallback.longitude,
 		errors: "",
@@ -188,7 +181,6 @@
 <div id="fallback-facebook" class="hidden">
 	{{ forms.textField({
 		label: "Open Graph Title"|t,
-		instructions: "Optional. Advanced settings. og:title"|t,
 		name: 'fallback[ogTitle]',
 		value: fallback.ogTitle,
 		errors: "",
@@ -220,7 +212,6 @@
 
 	{{ forms.selectField({
 		label: "Open Graph Type"|t,
-		instructions: "Optional. Advanced settings. og:title"|t,
 		name: 'fallback[ogType]',
 		options: ogTypesOptions,
 		value: fallback.ogType,
@@ -230,7 +221,6 @@
 
 	{{ forms.textField({
 		label: "Open Graph URL"|t,
-		instructions: "Optional. Advanced settings. og:title"|t,
 		name: 'fallback[ogUrl]',
 		value: fallback.ogUrl,
 		errors: "",
@@ -239,7 +229,6 @@
 
 	{{ forms.textField({
 		label: "Open Graph Image"|t,
-		instructions: "Optional. Advanced settings. og:image"|t,
 		name: 'fallback[ogImage]',
 		value: fallback.ogImage,
 		errors: "",
@@ -248,7 +237,6 @@
 
 	{{ forms.textField({
 		label: "Open Graph Site Name"|t,
-		instructions: "Optional. Advanced settings. og:site_name"|t,
 		name: 'fallback[ogSiteName]',
 		value: fallback.ogSiteName,
 		errors: "",
@@ -257,7 +245,6 @@
 
 	{{ forms.textField({
 		label: "Open Graph Description"|t,
-		instructions: "Optional. Advanced settings. og:title"|t,
 		name: 'fallback[ogDescription]',
 		value: fallback.ogDescription,
 		errors: "",
@@ -266,7 +253,6 @@
 
 	{{ forms.textField({
 		label: "Open Graph Audio"|t,
-		instructions: "Optional. Advanced settings. og:title"|t,
 		name: 'fallback[ogAudio]',
 		value: fallback.ogAudio,
 		errors: "",
@@ -275,7 +261,6 @@
 
 	{{ forms.textField({
 		label: "Open Graph Video"|t,
-		instructions: "Optional. Advanced settings. og:title"|t,
 		name: 'fallback[ogVideo]',
 		value: fallback.ogVideo,
 		errors: "",
@@ -284,7 +269,6 @@
 
 	{{ forms.textField({
 		label: "Open Graph Locale"|t,
-		instructions: "Optional. Advanced settings. og:title"|t,
 		name: 'fallback[ogLocale]',
 		value: fallback.ogLocale,
 		errors: "",
