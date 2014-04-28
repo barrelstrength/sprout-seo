@@ -42,24 +42,24 @@ class SproutSeoVariable
   }
 
   /**
-   * Get all Fallback Templates
+   * Get all Templates
    * 
    * @return [type] [description]
    */
-  public function allFallbacks()
+  public function allTemplates()
   {
-    return craft()->sproutSeo->getAllFallbacks();
+    return craft()->sproutSeo->getAllTemplates();
   }
 
   /**
-   * Get a specific fallback. If no fallback is found, returns null
+   * Get a specific template. If no template is found, returns null
    *
    * @param  int   $id
    * @return mixed
    */
-  public function getFallbackById($id)
+  public function getTemplateById($id)
   {
-    return craft()->sproutSeo->getFallbackById($id);
+    return craft()->sproutSeo->getTemplateById($id);
   }
 
   /**
