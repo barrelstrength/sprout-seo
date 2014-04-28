@@ -1,0 +1,299 @@
+{% extends "sproutseo/_layout" %}
+{% set centered = true %}
+
+{% set title %}
+	New Template - {{ craft.SproutSeo.name }}
+{% endset %}
+
+{% set tabs = {
+		template: { 
+      label: "Template Settings"|t,
+      url: '#template-main'
+    },
+    main: { 
+      label: "Basic Info"|t,
+      url: '#template-basic'
+    },
+    publishinfo:    { 
+      label: "Robots"|t,
+      url: '#template-robots'
+    },
+    location:    { 
+      label: "Location"|t,
+      url: '#template-location'
+    },
+    facebook:    { 
+      label: "Facebook"|t,
+      url: '#template-facebook'
+    }
+} %}
+
+{% import "_includes/forms" as forms %}
+
+{% if templateId is not defined %}
+	{% set templateId = null %}
+{% endif %}
+
+{% if template is not defined %}
+	{% set template = craft.sproutSeo.getTemplateById(templateId) %}
+{% endif %}
+
+{% set body %}
+
+<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
+	<input type="hidden" name="action" value="sproutSeo/seoData/saveTemplates"> 
+	<input type="hidden" name="redirect" value="sproutseo/templates">
+
+	<input type="hidden" name="template_fields[id]" value="{{ templateId }}">
+
+<div id="template-main">
+	
+	{{ forms.textField({
+		label: "Template Name"|t,
+		instructions: "Human readable template name"|t,
+		name: 'template_fields[name]',
+		value: template.name,
+		errors: '',
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Template Short Name"|t,
+		instructions: "Short name you will use to refer to your template in the code"|t,
+		name: 'template_fields[handle]',
+		value: template.handle,
+		errors: '',
+		required: true
+	}) }}
+
+</div>
+
+<div id="template-basic" class="hidden">
+	
+	{{ forms.textField({
+		label: "Title"|t,
+		name: 'template_fields[title]',
+		instructions: "The Title will appear in your browser tab, and as the primary Heading in your search results"|t,
+		value: template.title,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Description"|t,
+		instructions: "A 140 word description of your content which will appear as the description in your search results."|t,
+		name: 'template_fields[description]',
+		value: template.description,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Keywords"|t,
+		instructions: "A list of keywords that describe your content"|t,
+		name: 'template_fields[keywords]',
+		value: template.keywords,
+		errors: "",
+		required: false
+	}) }}
+
+</div>
+
+<div id="template-robots" class="hidden">
+
+	{{ forms.textField({
+		label: "Canonical URL"|t,
+		name: 'template_fields[canonical]',
+		value: template.canonical,
+		errors: "",
+		required: false
+	}) }}
+
+	<h3>Robots - Basic</h3>
+
+	{% macro isSelected(target, string) %}
+		{% if target in string %}checked="checked"{% endif %}
+	{% endmacro %}
+	{% import _self as radio %}
+
+	
+	<div>
+			<label>
+				<input type="checkbox" value="noindex" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noindex', template.robots) }}> noindex
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="nofollow" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('nofollow', template.robots) }}> nofollow
+			</label>
+	</div>
+
+	<h3>Robots - Advanced</h3>
+
+	<div>
+			<label>
+				<input type="checkbox" value="noarchive" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noarchive', template.robots) }}> noarchive
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('nosnippet', template.robots) }}> nosnippet
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="noimageindex" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noimageindex', template.robots) }}> noimageindex
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="noodp" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noodp', template.robots) }}> noodp
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="noydir" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noydir', template.robots) }}> noydir
+			</label>
+	</div>
+
+</div>
+
+<div id="template-location" class="hidden">
+	{{ forms.textField({
+		label: "Region"|t,
+		name: 'template_fields[region]',
+		value: template.region,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Placename"|t,
+		name: 'template_fields[placename]',
+		value: template.placename,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Latitude"|t,
+		name: 'template_fields[latitude]',
+		value: template.latitude,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Longitude"|t,
+		name: 'template_fields[longitude]',
+		value: template.longitude,
+		errors: "",
+		required: false
+	}) }}
+</div>
+
+<div id="template-facebook" class="hidden">
+	{{ forms.textField({
+		label: "Open Graph Title"|t,
+		name: 'template_fields[ogTitle]',
+		value: template.ogTitle,
+		errors: "",
+		required: false
+	}) }}
+
+	{% set ogTypesOptions = {
+		'' : 'Select Open Graph Type...',
+		'website' : 'Website',
+		'article' :	'Article',
+		'place' :	'Place',
+		'profile' :	'Profile',
+		'object' :	'Object',
+		'book' : 'Book',
+		'books.author' : 'Books Author',
+		'books.book' : 'Books Book',
+		'books.genre' : 'Books Genre',
+		'music.song' : 'Music Song',
+		'music.radio_station' : 'Music Radio Station',
+		'music.playlist' : 'Music Playlist',
+		'music.album' : 'Music Album',
+		'video.other' :	'Video Other',
+		'video.tv_show' :	'Video TV Show',
+		'video.movie' : 'Video Movie',
+		'video.episode' :	'Video Episode',
+		'fitness.unit' : 'Fitness Unit',
+		'fitness.course' : 'Fitness Course'
+	} %}
+
+	{{ forms.selectField({
+		label: "Open Graph Type"|t,
+		name: 'template_fields[ogType]',
+		options: ogTypesOptions,
+		value: template.ogType,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph URL"|t,
+		name: 'template_fields[ogUrl]',
+		value: template.ogUrl,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Image"|t,
+		name: 'template_fields[ogImage]',
+		value: template.ogImage,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Site Name"|t,
+		name: 'template_fields[ogSiteName]',
+		value: template.ogSiteName,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Description"|t,
+		name: 'template_fields[ogDescription]',
+		value: template.ogDescription,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Audio"|t,
+		name: 'template_fields[ogAudio]',
+		value: template.ogAudio,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Video"|t,
+		name: 'template_fields[ogVideo]',
+		value: template.ogVideo,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Open Graph Locale"|t,
+		name: 'template_fields[ogLocale]',
+		value: template.ogLocale,
+		errors: "",
+		required: false
+	}) }}
+</div>
+
+<div class="buttons">
+	<input class="btn submit" type="submit" value="Save Template">
+</div>
+
+</form>
+
+{% endset %}

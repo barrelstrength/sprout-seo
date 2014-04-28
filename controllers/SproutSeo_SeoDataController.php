@@ -4,30 +4,29 @@ namespace Craft;
 class SproutSeo_SeoDataController extends BaseController
 {
     /**
-     * Save Fallback Info to the Datbase
+     * Save Template Info to the Datbase
      * 
      * @return mixed Return to Page
      */
-    public function actionSaveFallbacks()
+    public function actionSaveTemplates()
     {
         $this->requirePostRequest();
 
         $id = false; // we assume have a new item now
 
         $model = craft()->sproutSeo->newModel($id);
-
-        $fallback = craft()->request->getPost('fallback');
+        
+        $templateFields = craft()->request->getPost('template_fields');
 
         // Convert Checkbox Array into comma-delimited String
-        if (isset($fallback['robots']))
+        if (isset($templateFields['robots']))
         {
-            $fallback['robots'] = craft()->sproutSeo->prepRobots($fallback['robots']);
+            $templateFields['robots'] = craft()->sproutSeo->prepRobotsForDb($templateFields['robots']);
         }
 
-        $attributes = craft()->request->getPost('fallback');
-        $model->setAttributes($attributes);
+        $model->setAttributes($templateFields);
 
-        if (craft()->sproutSeo->saveFallbackInfo($model))
+        if (craft()->sproutSeo->saveTemplateInfo($model))
         {
 			craft()->userSession->setNotice(Craft::t('Item saved.'));
 			$this->redirectToPostedUrl();
@@ -38,18 +37,18 @@ class SproutSeo_SeoDataController extends BaseController
         
         // Send the field back to the template
         craft()->urlManager->setRouteVariables(array(
-        	'fallback' => $model
+        	'template' => $model
         ));
 
     }
 
-    public function actionDeleteFallbacks()
+    public function actionDeleteTemplates()
     {
     	$this->requirePostRequest();
     	$this->requireAjaxRequest();
     		
     	$this->returnJson(array(
-    			'success' => craft()->sproutSeo->deleteFallback(craft()->request->getRequiredPost('id')) >= 0 ? true : false));
+    			'success' => craft()->sproutSeo->deleteTemplate(craft()->request->getRequiredPost('id')) >= 0 ? true : false));
     }
 
 }

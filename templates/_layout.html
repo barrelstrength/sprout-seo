@@ -5,7 +5,7 @@
 {% set crumbs = [
   { 
     label: craft.sproutseo.name, 
-    url: url('sproutseo/fallbacks') 
+    url: url('sproutseo/templates') 
   }
 ] %}
 
@@ -13,9 +13,9 @@
 {% if craft.request.getSegment(3) == "" %}
 
 {% set tabs = {
-    fallbacks: { 
+    templates: { 
       label: "Templates"|t,
-      url: cpUrl('sproutseo/fallbacks')
+      url: cpUrl('sproutseo/templates')
     },
     sitemap: { 
       label: "Sitemap"|t,

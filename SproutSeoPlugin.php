@@ -19,7 +19,7 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.6.1';
+		return '0.6.3';
 	}
 
 	public function getDeveloper()
@@ -85,11 +85,11 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/fallbacks/new' =>
-			'sproutseo/fallbacks/_edit',
+			'sproutseo/templates/new' =>
+			'sproutseo/templates/_edit',
 
-			'sproutseo/fallbacks/(?P<fallbackId>\d+)' =>
-			'sproutseo/fallbacks/_edit',
+			'sproutseo/templates/(?P<templateId>\d+)' =>
+			'sproutseo/templates/_edit',
 		);
 	}
 
