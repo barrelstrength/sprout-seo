@@ -2,57 +2,57 @@
 {% set centered = true %}
 
 {% set title %}
-	New Fallback Template - {{ craft.SproutSeo.name }}
+	New Template - {{ craft.SproutSeo.name }}
 {% endset %}
 
 {% set tabs = {
 		template: { 
       label: "Template Settings"|t,
-      url: '#fallback-main'
+      url: '#template-main'
     },
     main: { 
       label: "Basic Info"|t,
-      url: '#fallback-basic'
+      url: '#template-basic'
     },
     publishinfo:    { 
       label: "Robots"|t,
-      url: '#fallback-robots'
+      url: '#template-robots'
     },
     location:    { 
       label: "Location"|t,
-      url: '#fallback-location'
+      url: '#template-location'
     },
     facebook:    { 
       label: "Facebook"|t,
-      url: '#fallback-facebook'
+      url: '#template-facebook'
     }
 } %}
 
 {% import "_includes/forms" as forms %}
 
-{% if fallbackId is not defined %}
-	{% set fallbackId = null %}
+{% if templateId is not defined %}
+	{% set templateId = null %}
 {% endif %}
 
-{% if fallback is not defined %}
-	{% set fallback = craft.sproutSeo.getFallbackById(fallbackId) %}
+{% if template is not defined %}
+	{% set template = craft.sproutSeo.getTemplateById(templateId) %}
 {% endif %}
 
 {% set body %}
 
 <form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
-	<input type="hidden" name="action" value="sproutSeo/seoData/saveFallbacks"> 
-	<input type="hidden" name="redirect" value="sproutseo/fallbacks">
+	<input type="hidden" name="action" value="sproutSeo/seoData/saveTemplates"> 
+	<input type="hidden" name="redirect" value="sproutseo/templates">
 
-	<input type="hidden" name="fallback[id]" value="{{ fallbackId }}">
+	<input type="hidden" name="template_fields[id]" value="{{ templateId }}">
 
-<div id="fallback-main">
+<div id="template-main">
 	
 	{{ forms.textField({
 		label: "Template Name"|t,
 		instructions: "Human readable template name"|t,
-		name: 'fallback[name]',
-		value: fallback.name,
+		name: 'template_fields[name]',
+		value: template.name,
 		errors: '',
 		required: true
 	}) }}
@@ -60,21 +60,21 @@
 	{{ forms.textField({
 		label: "Template Short Name"|t,
 		instructions: "Short name you will use to refer to your template in the code"|t,
-		name: 'fallback[handle]',
-		value: fallback.handle,
+		name: 'template_fields[handle]',
+		value: template.handle,
 		errors: '',
 		required: true
 	}) }}
 
 </div>
 
-<div id="fallback-basic" class="hidden">
+<div id="template-basic" class="hidden">
 	
 	{{ forms.textField({
 		label: "Title"|t,
-		name: 'fallback[title]',
+		name: 'template_fields[title]',
 		instructions: "The Title will appear in your browser tab, and as the primary Heading in your search results"|t,
-		value: fallback.title,
+		value: template.title,
 		errors: "",
 		required: false
 	}) }}
@@ -82,8 +82,8 @@
 	{{ forms.textField({
 		label: "Description"|t,
 		instructions: "A 140 word description of your content which will appear as the description in your search results."|t,
-		name: 'fallback[description]',
-		value: fallback.description,
+		name: 'template_fields[description]',
+		value: template.description,
 		errors: "",
 		required: false
 	}) }}
@@ -91,96 +91,112 @@
 	{{ forms.textField({
 		label: "Keywords"|t,
 		instructions: "A list of keywords that describe your content"|t,
-		name: 'fallback[keywords]',
-		value: fallback.keywords,
+		name: 'template_fields[keywords]',
+		value: template.keywords,
 		errors: "",
 		required: false
 	}) }}
 
 </div>
 
-<div id="fallback-robots" class="hidden">
+<div id="template-robots" class="hidden">
 
 	{{ forms.textField({
 		label: "Canonical URL"|t,
-		name: 'fallback[canonical]',
-		value: fallback.canonical,
+		name: 'template_fields[canonical]',
+		value: template.canonical,
 		errors: "",
 		required: false
 	}) }}
-
-	{% set robotsOptionsBasic = {
-		'noindex' : 'noindex',
-		'nofollow' : 'nofollow'
-	} %}
 
 	<h3>Robots - Basic</h3>
-	{{ forms.checkboxGroup({
-		label: "Robots - Basic"|t,
-		name: 'fallback[robots]',
-		options: robotsOptionsBasic,
-		errors: "",
-		required: false
-	}) }}
 
-	{% set robotsOptionsAdvanced = {
-		'noarchive' : 'noarchive',
-		'nosnippet' : 'nosnippet',
-		'noimageindex' : 'noimageindex',
-		'noodp' : 'noodp',
-		'noydir' : 'noydir'
-	} %}
+	{% macro isSelected(target, string) %}
+		{% if target in string %}checked="checked"{% endif %}
+	{% endmacro %}
+	{% import _self as radio %}
+
+	
+	<div>
+			<label>
+				<input type="checkbox" value="noindex" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noindex', template.robots) }}> noindex
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="nofollow" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('nofollow', template.robots) }}> nofollow
+			</label>
+	</div>
 
 	<h3>Robots - Advanced</h3>
-	{{ forms.checkboxGroup({
-		label: "Robots - Advanced"|t,
-		name: 'fallback[robots]',
-		options: robotsOptionsAdvanced,
-		errors: "",
-		required: false
-	}) }}
+
+	<div>
+			<label>
+				<input type="checkbox" value="noarchive" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noarchive', template.robots) }}> noarchive
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('nosnippet', template.robots) }}> nosnippet
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="noimageindex" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noimageindex', template.robots) }}> noimageindex
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="noodp" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noodp', template.robots) }}> noodp
+			</label>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="noydir" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noydir', template.robots) }}> noydir
+			</label>
+	</div>
 
 </div>
 
-<div id="fallback-location" class="hidden">
+<div id="template-location" class="hidden">
 	{{ forms.textField({
 		label: "Region"|t,
-		name: 'fallback[region]',
-		value: fallback.region,
+		name: 'template_fields[region]',
+		value: template.region,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Placename"|t,
-		name: 'fallback[placename]',
-		value: fallback.placename,
+		name: 'template_fields[placename]',
+		value: template.placename,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Latitude"|t,
-		name: 'fallback[latitude]',
-		value: fallback.latitude,
+		name: 'template_fields[latitude]',
+		value: template.latitude,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Longitude"|t,
-		name: 'fallback[longitude]',
-		value: fallback.longitude,
+		name: 'template_fields[longitude]',
+		value: template.longitude,
 		errors: "",
 		required: false
 	}) }}
 </div>
 
-<div id="fallback-facebook" class="hidden">
+<div id="template-facebook" class="hidden">
 	{{ forms.textField({
 		label: "Open Graph Title"|t,
-		name: 'fallback[ogTitle]',
-		value: fallback.ogTitle,
+		name: 'template_fields[ogTitle]',
+		value: template.ogTitle,
 		errors: "",
 		required: false
 	}) }}
@@ -210,65 +226,65 @@
 
 	{{ forms.selectField({
 		label: "Open Graph Type"|t,
-		name: 'fallback[ogType]',
+		name: 'template_fields[ogType]',
 		options: ogTypesOptions,
-		value: fallback.ogType,
+		value: template.ogType,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Open Graph URL"|t,
-		name: 'fallback[ogUrl]',
-		value: fallback.ogUrl,
+		name: 'template_fields[ogUrl]',
+		value: template.ogUrl,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Open Graph Image"|t,
-		name: 'fallback[ogImage]',
-		value: fallback.ogImage,
+		name: 'template_fields[ogImage]',
+		value: template.ogImage,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Open Graph Site Name"|t,
-		name: 'fallback[ogSiteName]',
-		value: fallback.ogSiteName,
+		name: 'template_fields[ogSiteName]',
+		value: template.ogSiteName,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Open Graph Description"|t,
-		name: 'fallback[ogDescription]',
-		value: fallback.ogDescription,
+		name: 'template_fields[ogDescription]',
+		value: template.ogDescription,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Open Graph Audio"|t,
-		name: 'fallback[ogAudio]',
-		value: fallback.ogAudio,
+		name: 'template_fields[ogAudio]',
+		value: template.ogAudio,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Open Graph Video"|t,
-		name: 'fallback[ogVideo]',
-		value: fallback.ogVideo,
+		name: 'template_fields[ogVideo]',
+		value: template.ogVideo,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Open Graph Locale"|t,
-		name: 'fallback[ogLocale]',
-		value: fallback.ogLocale,
+		name: 'template_fields[ogLocale]',
+		value: template.ogLocale,
 		errors: "",
 		required: false
 	}) }}

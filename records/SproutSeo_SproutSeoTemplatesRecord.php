@@ -1,11 +1,11 @@
 <?php
 namespace Craft;
 
-class SproutSeo_SproutSeoFallbacksRecord extends BaseRecord
+class SproutSeo_SproutSeoTemplatesRecord extends BaseRecord
 {
     public function getTableName()
     {
-        return 'sproutseo_fallbacks';
+        return 'sproutseo_templates';
     }
 
     protected function defineAttributes()

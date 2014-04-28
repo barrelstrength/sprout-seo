@@ -11,7 +11,7 @@ class SproutSeoService extends BaseApplicationComponent
 	{
 		$this->seoDataRecord = $seoDataRecord;
 		if (is_null($this->seoDataRecord)) {
-			$this->seoDataRecord = SproutSeo_SproutSeoFallbacksRecord::model();
+			$this->seoDataRecord = SproutSeo_SproutSeoTemplatesRecord::model();
 		}
 
 		$this->seoOverrideRecord = $seoOverrideRecord;
@@ -36,11 +36,11 @@ class SproutSeoService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all Fallbacks from the database.
+	 * Get all Templates from the database.
 	 *
 	 * @return array
 	 */
-	public function getAllFallbacks()
+	public function getAllTemplates()
 	{
 		$records = $this->seoDataRecord->findAll(array('order'=>'name'));
 
@@ -48,14 +48,15 @@ class SproutSeoService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get a specific Fallbacks from the database based on ID. If no Fallbacks exists, null is returned.
+	 * Get a specific Templates from the database based on ID. If no Templates exists, null is returned.
 	 *
 	 * @param  int   $id
 	 * @return mixed
 	 */
-	public function getFallbackById($id)
+	public function getTemplateById($id)
 	{
-		if ($record = $this->seoDataRecord->findByPk($id)) {
+		if ($record = $this->seoDataRecord->findByPk($id)) 
+		{
 			return SproutSeo_SeoDataModel::populateModel($record);
 		}
 		else 
@@ -64,18 +65,18 @@ class SproutSeoService extends BaseApplicationComponent
     }
 	}
 
-	public function getFallbackByTemplateHandle($handle)
+	public function getTemplateByTemplateHandle($handle)
 	{
 
 		$query = craft()->db->createCommand()
 					->select('*')
-					->from('sproutseo_fallbacks')
+					->from('sproutseo_templates')
 					->where('handle=:handle', array(':handle'=> $handle))
 					->queryRow();
 
 		$model = SproutSeo_SeoDataModel::populateModel($query);
 
-		$model->robots = ($model->robots) ? $this->prepRobots($model->robots) : null;
+		$model->robots = ($model->robots) ? $this->prepRobotsForSettings($model->robots) : null;
 
 
 		if ($model->latitude && $model->longitude)
@@ -88,12 +89,12 @@ class SproutSeoService extends BaseApplicationComponent
 		}
 	}
 
-	public function saveFallbackInfo(SproutSeo_SeoDataModel &$model)
+	public function saveTemplateInfo(SproutSeo_SeoDataModel &$model)
 	{
 
 	   if ($id = $model->getAttribute('id')) {
 			if (null === ($record = $this->seoDataRecord->findByPk($id))) {
-				throw new Exception(Craft::t('Can\'t find fallback with ID "{id}"', array('id' => $id)));
+				throw new Exception(Craft::t('Can\'t find template with ID "{id}"', array('id' => $id)));
 			}
 		} else {
 			$record = $this->seoDataRecord->create();
@@ -225,39 +226,15 @@ class SproutSeoService extends BaseApplicationComponent
 	}
 	
 	/**
-	 * Deletes a fallback
+	 * Deletes a template
 	 *
 	 * @param int 
 	 * @return bool
 	 */
-	public function deleteFallback($id = null)
+	public function deleteTemplate($id = null)
 	{
-		$record = new SproutSeo_SproutSeoFallbacksRecord;
+		$record = new SproutSeo_SproutSeoTemplatesRecord;
 		return $record->deleteByPk($id);
-	}
-
-	public function prepRobots($robotsArray)
-	{
-		$robotsArray = json_decode($robotsArray);
-		
-		if(empty($robotsArray))
-		{
-			return '';
-		}
-		
-		foreach ($robotsArray as $key => $value) 
-		{
-			if ($key == 0)
-			{
-				$robots = $value;
-			}                
-			else
-		   {
-				$robots .= "," . $value;
-			}
-		}
-
-		return $robots;
 	}
 
 	public function optimize($overrideInfo)
@@ -278,16 +255,16 @@ class SproutSeoService extends BaseApplicationComponent
 		// Setup all of our SEO Metadata Arrays
 		$entryOverrides = new SproutSeo_SeoDataModel; // Top Priority
 		$codeOverrides  = new SproutSeo_SeoDataModel; // Second Priority
-		$fallbacks      = array(); // Lowest Priority
+		$templates      = array(); // Lowest Priority
 
 
-		// PREPARE FALLBACKS
+		// PREPARE Templates
 		// ------------------------------------------------------------
 
-		// If our code references a fallback template, create our fallback array
-		// If no fallback template is mentioned, we have an empty array
+		// If our code references a template template, create our template array
+		// If no template template is mentioned, we have an empty array
 		if ($templateHandle = $overrideInfo['template']) {
-		   $fallbacks = craft()->sproutSeo->getFallbackByTemplateHandle($templateHandle);
+		   $templates = craft()->sproutSeo->getTemplateByTemplateHandle($templateHandle);
 
 		   // Remove our template so we can assign the rest of our info to the codeOverride
 		   // array and have it match up nicely.
@@ -319,9 +296,9 @@ class SproutSeoService extends BaseApplicationComponent
 		}
 
 		// @TODO - this is temporary, figure out the best syntax for 'Robots' values 
-		// and update this to accomodate both the Fallback and Code override situations
+		// and update this to accomodate both the On-page and Code override situations
 		$codeOverrides->robots = ($codeOverrides->robots)
-		  ? craft()->sproutSeo->prepRobotsArray($codeOverrides->robots)
+		  ? $codeOverrides->robots
 		  : null;
 		
 
@@ -331,8 +308,8 @@ class SproutSeoService extends BaseApplicationComponent
 		// and select the highest ranking item to output.
 		//
 		// 1) Entry Override
-		// 2) Template Override
-		// 3) Fallback Template
+		// 2) On-Page Override
+		// 3) Template
 		// 4) Blank
 
 		// Once we have added all the content we need to be outputting
@@ -344,7 +321,7 @@ class SproutSeoService extends BaseApplicationComponent
 		// so we want to simplify the front end code to a single function
 		// and wrangle what we need to here.
 
-		$metaValues = $this->_prioritizeMetaValues($entryOverrides, $codeOverrides, $fallbacks);
+		$metaValues = $this->_prioritizeMetaValues($entryOverrides, $codeOverrides, $templates);
 		
 		$output = "\n";
 		$openGraphPattern = '/^og:/';
@@ -389,7 +366,7 @@ class SproutSeoService extends BaseApplicationComponent
 		return $output;
 	}
 
-	private function _prioritizeMetaValues($entryOverrides, $codeOverrides, $fallbacks)
+	private function _prioritizeMetaValues($entryOverrides, $codeOverrides, $templates)
 	{
 
 	  $metaValues = array();
@@ -398,22 +375,22 @@ class SproutSeoService extends BaseApplicationComponent
 	  // @TODO - make sure we loop through a defined model... we may not have an
 	  // entry override model each time... or maybe we can just define it so its
 	  // blank nomatter what.  We really just need to know we are looping through
-	  // the samme model for each of the levels of overrides or fallbacks
+	  // the samme model for each of the levels of overrides or templates
 	  foreach ($entryOverrides->getAttributes() as $key => $value) {
 
 	    if ($entryOverrides->getAttribute($key)) {
 	      $metaValues[$key] = $value;
 	    } elseif ($codeOverrides->getAttribute($key)) {
 	      $metaValues[$key] = $codeOverrides[$key];
-	    } elseif (isset($fallbacks->handle)) {
-	      $metaValues[$key] = $fallbacks->getAttribute($key);
+	    } elseif (isset($templates->handle)) {
+	      $metaValues[$key] = $templates->getAttribute($key);
 	    } else {
 	      // We got nuthin'
 	      $metaValues[$key] = '';
 	    }
 	  }
 
-	  // Unset general fallback info
+	  // Unset general template info
 	  unset($metaValues['id']);
 	  unset($metaValues['entryId']);
 	  unset($metaValues['name']);
@@ -453,41 +430,13 @@ class SproutSeoService extends BaseApplicationComponent
 	  return $meta;
 	}
 
-	/**
-	 * Prepare our robots array from the code overrides
-	 * on the page.
-	 *
-	 * robots: {
-	 *  noindex: true,
-	 *  nofollow: true
-	 * }
-	 * 
-	 * @param  [type] $robotsArray [description]
-	 * @return [type]              [description]
-	 */
-	public function prepRobotsArray($robotsArray)
+	public function prepRobotsForDb($robotsArray)
 	{
-		if (!$robotsArray OR !is_array($robotsArray)) return;
-		
-		$i = 0;
-		foreach ($robotsArray as $key => $value) {
-
-			if ($value)
-			{
-				if ($i == 0)
-				{
-					$robots = $value;
-				}                
-				else
-				{
-					$robots .= "," . $value;
-				}
-			}
-
-			$i++;
-		}
-
-		return $robots;
+		return StringHelper::arrayToString($robotsArray);
 	}
 
+	public function prepRobotsForSettings($robotsString)
+	{
+		return ArrayHelper::stringToArray($robotsString);
+	}
 }

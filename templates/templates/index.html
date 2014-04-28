@@ -1,0 +1,64 @@
+{% extends "sproutseo/_layout" %}
+{% import "_includes/forms" as forms %}
+
+{% set body %}
+
+<style>
+.included-fields {
+	color: #999;
+}
+</style>
+<table class="data" id="templates">
+	<thead>
+		<th width="15%">Name</th>
+		<th width="15%">Handle</th>
+		<th width="70%"></th>
+		<td class="thin"></td>
+	</thead>
+	{% set templates = craft.sproutSeo.allTemplates %}
+
+	{% if templates is empty %}
+		<tr id="no-sproutseo-results">
+			<td colspan="4">No results found.</td>
+		</tr>
+	{% else %}	
+		{% for template in templates %}
+		<tr id="results" data-id="{{ template.id }}" data-name="{{ template.name|t }}">
+			<td>
+				<a href="{{ url('sproutseo/templates/' ~ template.id) }}">
+					<strong>{{ template.name }}</strong>
+				</a>
+			</td>
+			<td><code>{{ template.handle }}</code></td>
+			<td class="included-fields">
+				
+			</td>
+			<td class="thin">
+				<a class="delete icon" title="Delete"></a>
+			</td>
+		</tr>
+		{% endfor %}	
+	{% endif %}
+</table>
+
+<div class="buttons">
+	<a class="btn submit add icon" href="{{ url('sproutseo/templates/new') }}">New Template</a>
+</div>
+
+{% endset %}
+
+{% set js %}
+	new Craft.AdminTable({
+		tableSelector: '#templates',
+		deleteAction: 'sproutSeo/seoData/deleteTemplates',
+		onDeleteObject: function(id)
+		{
+			if($('#templates').find('tbody').find('tr').size() == 0)
+			{
+				$('#templates').show();
+				$('#templates').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4">No results found.</td></tr>');
+			}
+		}
+	});
+{% endset %}
+{% includeJs js %}
