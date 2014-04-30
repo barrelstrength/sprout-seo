@@ -72,4 +72,36 @@ class SproutSeoVariable
     return craft()->sections->getAllSections();
   }
 
+  /**
+   * Get all Sections for our Sitemap settings.
+   *
+   * @return array of Sections
+   */
+  public function getAllSectionsWithUrls()
+  { 
+    return craft()->sproutSeo->getAllSectionsWithUrls();
+  }
+
+  public function getSitemap()
+  {
+    $sitemap = craft()->sproutSeo->getSitemap();
+
+    return new \Twig_Markup($sitemap, craft()->templates->getTwig()->getCharset());
+  }
+
+  public function getSitemapData()
+  {
+    $sitemap = craft()->db->createCommand()
+                      ->select('*')
+                      ->from('sproutseo_sitemap')
+                      ->where('enabled = :enabled', array('enabled' => 1))
+                      ->queryAll();
+echo "<pre>";
+print_r($sitemap);
+echo "</pre>";
+die('fin');
+
+    return $sitemap;
+  }
+
 }

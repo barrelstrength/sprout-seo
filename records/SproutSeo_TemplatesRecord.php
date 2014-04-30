@@ -1,17 +1,18 @@
 <?php
 namespace Craft;
 
-class SproutSeo_SproutSeoOverridesRecord extends BaseRecord
+class SproutSeo_TemplatesRecord extends BaseRecord
 {
     public function getTableName()
     {
-        return 'sproutseo_overrides';
+        return 'sproutseo_templates';
     }
 
-    public function defineAttributes()
+    protected function defineAttributes()
     {
         return array(
-            'entryId'        => array(AttributeType::Number, 'required' => true),
+            'name'           => array(AttributeType::String, 'required' => true),
+            'handle'         => array(AttributeType::String, 'required' => true),
             'title'          => array(AttributeType::String),
             'description'    => array(AttributeType::String),
             'keywords'       => array(AttributeType::String),
@@ -36,7 +37,21 @@ class SproutSeo_SproutSeoOverridesRecord extends BaseRecord
     public function defineIndexes()
     {
         return array(
-            array('columns' => array('entryId'), 'unique' => true),
+            array('columns' => array('name', 'handle'), 'unique' => true),
         );
+    }
+
+    /**
+     * Create a new instance of the current class. This allows us to
+     * properly unit test our service layer.
+     *
+     * @return BaseRecord
+     */
+    public function create()
+    {
+        $class = get_class($this);
+        $record = new $class();
+
+        return $record;
     }
 }

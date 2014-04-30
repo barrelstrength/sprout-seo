@@ -5,18 +5,24 @@ class SproutSeoService extends BaseApplicationComponent
 {
 	protected $seoDataRecord;
 	protected $seoOverrideRecord;
+	protected $sitemapRecord;
 	protected $siteInfo;
 
-	public function __construct($seoDataRecord = null, $seoOverrideRecord = null)
+	public function __construct($seoDataRecord = null, $seoOverrideRecord = null, $sitemapRecord = null)
 	{
 		$this->seoDataRecord = $seoDataRecord;
 		if (is_null($this->seoDataRecord)) {
-			$this->seoDataRecord = SproutSeo_SproutSeoTemplatesRecord::model();
+			$this->seoDataRecord = SproutSeo_TemplatesRecord::model();
 		}
 
 		$this->seoOverrideRecord = $seoOverrideRecord;
 		if (is_null($this->seoOverrideRecord)) {
-			$this->seoOverrideRecord = SproutSeo_SproutSeoOverridesRecord::model();
+			$this->seoOverrideRecord = SproutSeo_OverridesRecord::model();
+		}
+
+		$this->sitemapRecord = $sitemapRecord;
+		if (is_null($this->sitemapRecord)) {
+			$this->sitemapRecord = SproutSeo_SitemapRecord::model();
 		}
 
 	}
@@ -214,7 +220,7 @@ class SproutSeoService extends BaseApplicationComponent
 
 	public function deleteOverrideById($id = null)
 	{
-		$record = new SproutSeo_SproutSeoOverridesRecord;
+		$record = new SproutSeo_OverridesRecord;
 			
 		// @TODO is this the right way to do this?  Would this actually return
 		// true or false?
@@ -233,7 +239,7 @@ class SproutSeoService extends BaseApplicationComponent
 	 */
 	public function deleteTemplate($id = null)
 	{
-		$record = new SproutSeo_SproutSeoTemplatesRecord;
+		$record = new SproutSeo_TemplatesRecord;
 		return $record->deleteByPk($id);
 	}
 
@@ -428,6 +434,136 @@ class SproutSeoService extends BaseApplicationComponent
 	  }
 
 	  return $meta;
+	}
+
+
+	public function saveSitemap(SproutSeo_SitemapModel $attributes)
+	{
+		
+		$row = craft()->db->createCommand()
+								 ->select('*')
+								 ->from('sproutseo_sitemap')
+								 ->where('sectionId=:sectionId',array(':sectionId'=>$attributes->sectionId))
+								 ->queryRow();
+		
+		$row['sectionId'] = $attributes->sectionId;
+		$row['url'] = $attributes->url;
+		$row['priority'] = $attributes->priority;
+		$row['changeFrequency'] = $attributes->changeFrequency;
+		$row['enabled'] = ($attributes->enabled == 'true') ? 1 : 0;
+		$row['ping'] = ($attributes->ping == 'true') ? 1 : 0;
+		$row['dateUpdated'] = DateTimeHelper::currentTimeForDb();
+		$row['uid'] = StringHelper::UUID();
+
+		if (isset($row['id']))
+		{	
+			$result = craft()->db->createCommand()
+						 ->update('sproutseo_sitemap', $row, 'id = :id', array(':id' => $row['id']));			
+		}
+		else
+		{
+			$row['dateCreated'] = DateTimeHelper::currentTimeForDb();
+			craft()->db->createCommand()->insert('sproutseo_sitemap', $row);
+		}
+
+		return true;
+								 
+		// if (is_null($id)) 
+		// {
+		// 	// $record = $this->sitemapRecord->create();			
+		// 	// $record->setAttributes($attributes->getAttributes(), false);
+		// }
+		// else
+		// {	
+		// 	$record = $this->sitemapRecord->create();
+			
+		// 	$record->setAttributes($attributes->getAttributes(), false);
+		// }
+
+		// if ($record->save()) 
+		// {
+		// 	return true;
+		// } 
+		// else 
+		// {	
+		// 	$attributes->addErrors($record->getErrors());
+		// 	return false;
+		// }
+	}
+
+	public function getSitemap()
+	{
+		$sections = craft()->sproutSeo->getAllSectionsWithUrls();
+		
+		// $singles = array();
+		// $channelsAndStructures = array();
+
+		// foreach ($sections as $key => $section) 
+		// {
+		// 	if ($section->type == 'single') 
+		// 	{
+		// 		array_push($singles, $section);
+		// 	}
+
+		// 	if ($section->type != 'single' and $section->hasUrls) 
+		// 	{
+		// 		array_push($channelsAndStructures, $section);
+		// 	}
+		// }
+
+		$sitemap = '<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>';
+
+		foreach ($singles as $key => $section) 
+		{
+			$sitemap .= '<loc>http://www.example.com/</loc>
+									 <lastmod>2005-01-01</lastmod>
+									 <changefreq>monthly</changefreq>
+      						 <priority>0.8</priority>';
+		}
+   
+  	$sitemap .= '</url></urlset>';
+
+		return $sitemap;
+	}
+
+	public function getAllSectionsWithUrls()
+	{
+		// @TODO - Probably can do this with a SitemapSettingsModel
+		$sectionData = array();
+
+		// Get all of our Sections
+		$sections = craft()->sections->getAllSections();
+
+		// Get all of the Sitemap Settings regarding our Sections
+		$sitemapSettings = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_sitemap')
+			->queryAll();
+
+		// Loop through the sections and
+		// 1) Remove any sections without URLs
+		foreach ($sections as $key => $section) 
+		{
+			if (!$section->hasUrls) 
+			{
+				// remove sections without URLs
+				unset($sections[$key]);
+			}
+
+			$sectionData[$section->id] = $section->getAttributes();			
+		}
+
+		// 2) Add Sitemap data to any sectionIds that match
+		foreach ($sitemapSettings as $key => $settings) 
+		{	
+			if (array_key_exists($settings['sectionId'], $sectionData)) 
+			{
+				$sectionData[$settings['sectionId']]['settings'] = $settings;
+			}
+		}
+
+		return $sectionData;
 	}
 
 	public function prepRobotsForDb($robotsArray)
