@@ -114,17 +114,17 @@
 	{% macro isSelected(target, string) %}
 		{% if target in string %}checked="checked"{% endif %}
 	{% endmacro %}
-	{% import _self as radio %}
+	{% import _self as checkbox %}
 
 	
 	<div>
 			<label>
-				<input type="checkbox" value="noindex" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noindex', template.robots) }}> noindex
+				<input type="checkbox" value="noindex" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noindex', template.robots) }}> noindex
 			</label>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="nofollow" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('nofollow', template.robots) }}> nofollow
+				<input type="checkbox" value="nofollow" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('nofollow', template.robots) }}> nofollow
 			</label>
 	</div>
 
@@ -132,27 +132,27 @@
 
 	<div>
 			<label>
-				<input type="checkbox" value="noarchive" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noarchive', template.robots) }}> noarchive
+				<input type="checkbox" value="noarchive" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noarchive', template.robots) }}> noarchive
 			</label>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('nosnippet', template.robots) }}> nosnippet
+				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('nosnippet', template.robots) }}> nosnippet
 			</label>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="noimageindex" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noimageindex', template.robots) }}> noimageindex
+				<input type="checkbox" value="noimageindex" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noimageindex', template.robots) }}> noimageindex
 			</label>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="noodp" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noodp', template.robots) }}> noodp
+				<input type="checkbox" value="noodp" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noodp', template.robots) }}> noodp
 			</label>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="noydir" id="" class="checkbox" name="template_fields[robots][]" {{ radio.isSelected('noydir', template.robots) }}> noydir
+				<input type="checkbox" value="noydir" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noydir', template.robots) }}> noydir
 			</label>
 	</div>
 
