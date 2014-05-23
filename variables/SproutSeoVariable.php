@@ -3,7 +3,6 @@ namespace Craft;
 
 class SproutSeoVariable
 {
-
   public function getName()
   {
     $plugin = craft()->plugins->getPlugin('sproutseo');
@@ -16,6 +15,26 @@ class SproutSeoVariable
     $plugin = craft()->plugins->getPlugin('sproutseo');
 
     return $plugin->getVersion();
+  }
+
+
+  public function meta(array $meta = array())
+  {
+    if (count($meta)) 
+    {
+      // This is our setter
+      craft()->sproutSeo->updateMeta($meta);
+    }
+    else
+    {
+      // This is our getter
+      $overrideInfo = craft()->sproutSeo->getMeta();
+      
+      // Output the metadata as pre-defined HTML
+      $output = craft()->sproutSeo->optimize($overrideInfo);
+
+      return new \Twig_Markup($output, craft()->templates->getTwig()->getCharset());
+    }
   }
 
   /**
@@ -79,29 +98,14 @@ class SproutSeoVariable
    */
   public function getAllSectionsWithUrls()
   { 
-    return craft()->sproutSeo->getAllSectionsWithUrls();
+    return craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
   }
 
   public function getSitemap()
   {
-    $sitemap = craft()->sproutSeo->getSitemap();
+    $sitemap = craft()->sproutSeo_sitemap->getSitemap();
 
     return new \Twig_Markup($sitemap, craft()->templates->getTwig()->getCharset());
-  }
-
-  public function getSitemapData()
-  {
-    $sitemap = craft()->db->createCommand()
-                      ->select('*')
-                      ->from('sproutseo_sitemap')
-                      ->where('enabled = :enabled', array('enabled' => 1))
-                      ->queryAll();
-echo "<pre>";
-print_r($sitemap);
-echo "</pre>";
-die('fin');
-
-    return $sitemap;
   }
 
 }
