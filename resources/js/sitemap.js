@@ -10,9 +10,14 @@ Craft.SproutSeoSitemap = Garnish.Base.extend(
 	{
 		this.$checkboxes = $('.sitemap-settings input[type="checkbox"]');
 		this.$selectDropdowns = $('.sitemap-settings select');
+		this.$textInputs = $('.sitemap-settings input[type="text"]');
 
 		this.addListener(this.$checkboxes, 'change', 'onChange');
 		this.addListener(this.$selectDropdowns, 'change', 'onChange');
+
+		// Need to adjust this to handle ids for each new row, Sections
+		// only work for the pre-defined sections
+		// this.addListener(this.$textInputs, 'change', 'onChange');
 	},
 
 	onChange: function(ev)
