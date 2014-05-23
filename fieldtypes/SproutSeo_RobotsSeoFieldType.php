@@ -117,7 +117,7 @@ class SproutSeo_RobotsSeoFieldType extends BaseFieldType
         $name = "sproutseo_fields[$name]";
         // $value = $values['title'];
 
-        return craft()->templates->render('sproutseo/_fields/robots', array(
+        return craft()->templates->render('sproutseo/_cp/fields/robots', array(
             'name'	     => $name,
             // 'value'      => $value,
             'values'     => $values
