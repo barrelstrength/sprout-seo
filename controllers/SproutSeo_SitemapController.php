@@ -21,7 +21,7 @@ class SproutSeo_SitemapController extends BaseController
 
 		$model = SproutSeo_SitemapModel::populateModel($sitemapSettings);
 		
-		$success = craft()->sproutSeo->saveSitemap($model);
+		$success = craft()->sproutSeo_sitemap->saveSitemap($model);
 		$this->returnJson(array('success' => $success));
 
 	}
