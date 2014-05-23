@@ -114,7 +114,7 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
         $name = "sproutseo_fields[$name]";
         // $value = $values['title'];
 
-        return craft()->templates->render('sproutseo/_fields/input', array(
+        return craft()->templates->render('sproutseo/_cp/fields/input', array(
             'name'	     => $name,
             'values'     => $values
         ));
