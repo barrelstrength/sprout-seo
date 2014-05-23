@@ -61,22 +61,17 @@ class SproutSeoPlugin extends BasePlugin
 		// Call ping function
 	}
 
-
 	protected function defineSettings()
 	{
+		// We are managing our settings on the CP Tab but storing them 
+		// in the plugin table so in order to use getSettings() we need
+		// these defined here (I think)
 		return array(
 			'pluginNameOverride'  => AttributeType::String,
 			'appendSiteName'      => AttributeType::Bool,
 			'customGlobalValue'   => AttributeType::String,
 			'seoDivider'          => AttributeType::String,
 		);
-	}
-
-	public function getSettingsHtml()
-	{
-		return craft()->templates->render('sproutseo/_settings/settings', array(
-			'settings' => $this->getSettings()
-		));
 	}
 
 	/**
@@ -90,7 +85,9 @@ class SproutSeoPlugin extends BasePlugin
 
 			'sproutseo/templates/(?P<templateId>\d+)' =>
 			'sproutseo/templates/_edit',
+
+			'sproutseo/settings' =>
+			array('action' => 'sproutSeo/settings/settingsIndex')
 		);
 	}
-
 }
