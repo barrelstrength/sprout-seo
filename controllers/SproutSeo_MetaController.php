@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_SeoDataController extends BaseController
+class SproutSeo_MetaController extends BaseController
 {
     /**
      * Save Template Info to the Datbase
@@ -14,19 +14,19 @@ class SproutSeo_SeoDataController extends BaseController
 
         $id = false; // we assume have a new item now
 
-        $model = craft()->sproutSeo->newModel($id);
+        $model = craft()->sproutSeo_meta->newModel($id);
         
         $templateFields = craft()->request->getPost('template_fields');
 
         // Convert Checkbox Array into comma-delimited String
         if (isset($templateFields['robots']))
         {
-            $templateFields['robots'] = craft()->sproutSeo->prepRobotsForDb($templateFields['robots']);
+            $templateFields['robots'] = craft()->sproutSeo_meta->prepRobotsForDb($templateFields['robots']);
         }
 
         $model->setAttributes($templateFields);
 
-        if (craft()->sproutSeo->saveTemplateInfo($model))
+        if (craft()->sproutSeo_meta->saveTemplateInfo($model))
         {
 			craft()->userSession->setNotice(Craft::t('Item saved.'));
 			$this->redirectToPostedUrl();
@@ -48,7 +48,7 @@ class SproutSeo_SeoDataController extends BaseController
     	$this->requireAjaxRequest();
     		
     	$this->returnJson(array(
-    			'success' => craft()->sproutSeo->deleteTemplate(craft()->request->getRequiredPost('id')) >= 0 ? true : false));
+    			'success' => craft()->sproutSeo_meta->deleteTemplate(craft()->request->getRequiredPost('id')) >= 0 ? true : false));
     }
 
 }

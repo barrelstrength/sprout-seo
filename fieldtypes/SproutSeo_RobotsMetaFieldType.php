@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_BasicSeoFieldType extends BaseFieldType
+class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 {
     /**
      * FieldType name
@@ -10,7 +10,7 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
      */
     public function getName()
     {
-        return Craft::t('SEO: Basic');
+        return Craft::t('Meta: Robots');
     }
 
     /**
@@ -32,18 +32,17 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
      * Performs any additional actions after the element has been saved.
      */
     public function onAfterElementSave()
-    {
- 
+    {   
         // Make sure we are actually submitting our field
         if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
-
+        
         // Determine our entryId
         $entryId = (isset($_POST['entryId']))
             ? $_POST['entryId']
             : $this->element->id;
 
         // get any overrides for this entry
-        $model = craft()->sproutSeo->getOverrideByEntryId($entryId);
+        $model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
         
         // Test to see if we have any values in our Sprout SEO fields
         $saveSproutSeoFields = false;
@@ -63,12 +62,14 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
             // Remove record since it is now blank
             if ($model->id)
             {
-                craft()->sproutSeo->deleteOverrideById($model->id);
+                craft()->sproutSeo_meta->deleteOverrideById($model->id);
             }
             
             return;
         }
 
+        
+        $_POST['fields']['sproutseo_fields']['robots'] = craft()->sproutSeo_meta->prepRobotsArray($_POST['fields']['sproutseo_fields']['robots']);
         
         // Add the entry ID to the field data we will submit for Sprout SEO
         $attributes['entryId'] = $entryId;
@@ -80,11 +81,11 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
         // if not create it
         if ($model->entryId) 
         {
-            craft()->sproutSeo->updateOverride($model->id, $attributes);
+            craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
         } 
         else 
         {
-            craft()->sproutSeo->createOverride($attributes);
+            craft()->sproutSeo_meta->createOverride($attributes);
         }
 
     }
@@ -104,9 +105,11 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
 
         // @TODO - Make this into a Model
         // $values = new SproutSeo_BasicSeoFieldModel;
-        
-        $values = craft()->sproutSeo->getBasicSeoFeildsByEntryId($entryId);
 
+        $values = craft()->sproutSeo_meta->getRobotsSeoFeildsByEntryId($entryId);
+
+        $values->robots = explode(',', $values->robots);
+        
         // Cleanup the namespace around the $name handle
         $name = str_replace("fields[", "", $name);
         $name = rtrim($name, "]");
@@ -114,8 +117,9 @@ class SproutSeo_BasicSeoFieldType extends BaseFieldType
         $name = "sproutseo_fields[$name]";
         // $value = $values['title'];
 
-        return craft()->templates->render('sproutseo/_cp/fields/input', array(
+        return craft()->templates->render('sproutseo/_cp/fields/robots', array(
             'name'	     => $name,
+            // 'value'      => $value,
             'values'     => $values
         ));
     }

@@ -3,35 +3,51 @@ namespace Craft;
 
 class SproutSeoVariable
 {
+  protected $plugin;
+
+  public function __construct()
+  {
+    $this->plugin = craft()->plugins->getPlugin('sproutseo');
+  }
+
+  ## ------------------------------------------------------------
+  ## General Variables
+  ## ------------------------------------------------------------
+  
   public function getName()
   {
-    $plugin = craft()->plugins->getPlugin('sproutseo');
-
-    return $plugin->getName();
+    return $this->plugin->getName();
   }
 
   public function getVersion()
   {
-    $plugin = craft()->plugins->getPlugin('sproutseo');
-
-    return $plugin->getVersion();
+    return $this->plugin->getVersion();
   }
 
+  ## ------------------------------------------------------------
+  ## Meta Variables (Front-end)
+  ## ------------------------------------------------------------
 
+  /**
+   * Set and Get SEO Meta data in our templates
+   * 
+   * @param  array  $meta Array of supported meta values
+   * @return [type]       [description]
+   */
   public function meta(array $meta = array())
   {
     if (count($meta)) 
     {
       // This is our setter
-      craft()->sproutSeo->updateMeta($meta);
+      craft()->sproutSeo_meta->updateMeta($meta);
     }
     else
     {
       // This is our getter
-      $overrideInfo = craft()->sproutSeo->getMeta();
+      $overrideInfo = craft()->sproutSeo_meta->getMeta();
       
       // Output the metadata as pre-defined HTML
-      $output = craft()->sproutSeo->optimize($overrideInfo);
+      $output = craft()->sproutSeo_meta->optimize($overrideInfo);
 
       return new \Twig_Markup($output, craft()->templates->getTwig()->getCharset());
     }
@@ -45,7 +61,7 @@ class SproutSeoVariable
    */
   public function optimize($overrideInfo)
   {
-    $output = craft()->sproutSeo->optimize($overrideInfo);
+    $output = craft()->sproutSeo_meta->optimize($overrideInfo);
 
     return new \Twig_Markup($output, craft()->templates->getTwig()->getCharset());
   }
@@ -60,6 +76,10 @@ class SproutSeoVariable
     return $this->optimize($overrideInfo);
   }
 
+  ## ------------------------------------------------------------
+  ## Meta Variables (Control Panel)
+  ## ------------------------------------------------------------
+
   /**
    * Get all Templates
    * 
@@ -67,7 +87,7 @@ class SproutSeoVariable
    */
   public function allTemplates()
   {
-    return craft()->sproutSeo->getAllTemplates();
+    return craft()->sproutSeo_meta->getAllTemplates();
   }
 
   /**
@@ -78,8 +98,23 @@ class SproutSeoVariable
    */
   public function getTemplateById($id)
   {
-    return craft()->sproutSeo->getTemplateById($id);
+    return craft()->sproutSeo_meta->getTemplateById($id);
   }
+
+  ## ------------------------------------------------------------
+  ## Sitemap Variables (Front-end)
+  ## ------------------------------------------------------------
+
+  public function getSitemap()
+  {
+    $sitemap = craft()->sproutSeo_sitemap->getSitemap();
+
+    return new \Twig_Markup($sitemap, craft()->templates->getTwig()->getCharset());
+  }
+
+  ## ------------------------------------------------------------
+  ## Sitemap Variables (Control Panel)
+  ## ------------------------------------------------------------
 
   /**
    * Get all Sections for our Sitemap settings.
@@ -99,13 +134,6 @@ class SproutSeoVariable
   public function getAllSectionsWithUrls()
   { 
     return craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
-  }
-
-  public function getSitemap()
-  {
-    $sitemap = craft()->sproutSeo_sitemap->getSitemap();
-
-    return new \Twig_Markup($sitemap, craft()->templates->getTwig()->getCharset());
   }
 
 }

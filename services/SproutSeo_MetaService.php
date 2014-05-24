@@ -1,20 +1,20 @@
 <?php
 namespace Craft;
 
-class SproutSeoService extends BaseApplicationComponent
+class SproutSeo_MetaService extends BaseApplicationComponent
 {
-	protected $seoDataRecord;
+	protected $metaRecord;
 	protected $seoOverrideRecord;
 	protected $sitemapRecord;
 	protected $siteInfo;
 
 	protected $sproutmeta = array();
 
-	public function __construct($seoDataRecord = null, $seoOverrideRecord = null, $sitemapRecord = null)
+	public function __construct($metaRecord = null, $seoOverrideRecord = null, $sitemapRecord = null)
 	{
-		$this->seoDataRecord = $seoDataRecord;
-		if (is_null($this->seoDataRecord)) {
-			$this->seoDataRecord = SproutSeo_TemplatesRecord::model();
+		$this->metaRecord = $metaRecord;
+		if (is_null($this->metaRecord)) {
+			$this->metaRecord = SproutSeo_TemplatesRecord::model();
 		}
 
 		$this->seoOverrideRecord = $seoOverrideRecord;
@@ -26,20 +26,17 @@ class SproutSeoService extends BaseApplicationComponent
 		if (is_null($this->sitemapRecord)) {
 			$this->sitemapRecord = SproutSeo_SitemapRecord::model();
 		}
-
-		// $this->sproutmeta = new SproutSeo_SeoDataModel();
-
 	}
 
 	/**
 	 * Get a new blank item
 	 *
 	 * @param  array               $attributes
-	 * @return SproutSeo_SeoDataModel
+	 * @return SproutSeo_MetaModel
 	 */
 	public function newModel($attributes = array())
 	{
-		$model = new SproutSeo_SeoDataModel();
+		$model = new SproutSeo_MetaModel();
 		$model->setAttributes($attributes);
 
 		return $model;
@@ -52,9 +49,9 @@ class SproutSeoService extends BaseApplicationComponent
 	 */
 	public function getAllTemplates()
 	{
-		$records = $this->seoDataRecord->findAll(array('order'=>'name'));
+		$records = $this->metaRecord->findAll(array('order'=>'name'));
 
-		return SproutSeo_SeoDataModel::populateModels($records, 'id');
+		return SproutSeo_MetaModel::populateModels($records, 'id');
 	}
 
 	/**
@@ -65,13 +62,13 @@ class SproutSeoService extends BaseApplicationComponent
 	 */
 	public function getTemplateById($id)
 	{
-		if ($record = $this->seoDataRecord->findByPk($id)) 
+		if ($record = $this->metaRecord->findByPk($id)) 
 		{
-			return SproutSeo_SeoDataModel::populateModel($record);
+			return SproutSeo_MetaModel::populateModel($record);
 		}
 		else 
 		{
-    	return new SproutSeo_SeoDataModel();
+    	return new SproutSeo_MetaModel();
     }
 	}
 
@@ -84,7 +81,7 @@ class SproutSeoService extends BaseApplicationComponent
 					->where('handle=:handle', array(':handle'=> $handle))
 					->queryRow();
 
-		$model = SproutSeo_SeoDataModel::populateModel($query);
+		$model = SproutSeo_MetaModel::populateModel($query);
 
 		$model->robots = ($model->robots) ? $this->prepRobotsForSettings($model->robots) : null;
 
@@ -99,15 +96,15 @@ class SproutSeoService extends BaseApplicationComponent
 		}
 	}
 
-	public function saveTemplateInfo(SproutSeo_SeoDataModel &$model)
+	public function saveTemplateInfo(SproutSeo_MetaModel &$model)
 	{
 
 	   if ($id = $model->getAttribute('id')) {
-			if (null === ($record = $this->seoDataRecord->findByPk($id))) {
+			if (null === ($record = $this->metaRecord->findByPk($id))) {
 				throw new Exception(Craft::t('Can\'t find template with ID "{id}"', array('id' => $id)));
 			}
 		} else {
-			$record = $this->seoDataRecord->create();
+			$record = $this->metaRecord->create();
 		}
 
 		// @TODO passing 'false' here allows us to save unsafe attributes
@@ -259,12 +256,12 @@ class SproutSeoService extends BaseApplicationComponent
 		// create the string we will append to the end of our title if we should
 		if ($appendSiteName) 
 		{
-		  $this->siteInfo = " " . $divider . " " . ($customGlobalValue ? $customGlobalValue : Craft::getInfo('siteName'));
+		  $this->siteInfo = " " . $divider . " " . ($customGlobalValue ? $customGlobalValue : craft()->getInfo('siteName'));
 		}
 
 		// Setup all of our SEO Metadata Arrays
-		$entryOverrides = new SproutSeo_SeoDataModel; // Top Priority
-		$codeOverrides  = new SproutSeo_SeoDataModel; // Second Priority
+		$entryOverrides = new SproutSeo_MetaModel; // Top Priority
+		$codeOverrides  = new SproutSeo_MetaModel; // Second Priority
 		$templates      = array(); // Lowest Priority
 
 
@@ -277,7 +274,7 @@ class SproutSeoService extends BaseApplicationComponent
 		{
 
 			$templateHandle = $overrideInfo['template'];
-			$templates = craft()->sproutSeo->getTemplateByTemplateHandle($templateHandle);
+			$templates = craft()->sproutSeo_meta->getTemplateByTemplateHandle($templateHandle);
 
 			// Remove our template so we can assign the rest of our info to the codeOverride
 			// array and have it match up nicely.
@@ -293,7 +290,7 @@ class SproutSeoService extends BaseApplicationComponent
 		// see if this entry has any Entry Overrides.
 		if (isset($overrideInfo['id'])) {
 		  // query for override array
-		  $entryOverrides = craft()->sproutSeo->getOverrideByEntryId($overrideInfo['id']);
+		  $entryOverrides = craft()->sproutSeo_meta->getOverrideByEntryId($overrideInfo['id']);
 
 		  unset($overrideInfo['id']);
 		}
@@ -305,7 +302,7 @@ class SproutSeoService extends BaseApplicationComponent
 		// If we have any more values that were set in our template
 		// let's store them as code overrides.
 		if ( ! empty($overrideInfo)) {
-		  $codeOverrides = SproutSeo_SeoDataModel::populateModel($overrideInfo);
+		  $codeOverrides = SproutSeo_MetaModel::populateModel($overrideInfo);
 		}
 
 		// @TODO - this is temporary, figure out the best syntax for 'Robots' values 
