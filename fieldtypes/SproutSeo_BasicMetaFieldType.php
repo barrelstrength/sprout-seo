@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_GeographicSeoFieldType extends BaseFieldType
+class SproutSeo_BasicMetaFieldType extends BaseFieldType
 {
     /**
      * FieldType name
@@ -10,7 +10,7 @@ class SproutSeo_GeographicSeoFieldType extends BaseFieldType
      */
     public function getName()
     {
-        return Craft::t('SEO: Geographic');
+        return Craft::t('Meta: Basic');
     }
 
     /**
@@ -33,6 +33,7 @@ class SproutSeo_GeographicSeoFieldType extends BaseFieldType
      */
     public function onAfterElementSave()
     {
+ 
         // Make sure we are actually submitting our field
         if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
 
@@ -42,7 +43,7 @@ class SproutSeo_GeographicSeoFieldType extends BaseFieldType
             : $this->element->id;
 
         // get any overrides for this entry
-        $model = craft()->sproutSeo->getOverrideByEntryId($entryId);
+        $model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
         
         // Test to see if we have any values in our Sprout SEO fields
         $saveSproutSeoFields = false;
@@ -62,7 +63,7 @@ class SproutSeo_GeographicSeoFieldType extends BaseFieldType
             // Remove record since it is now blank
             if ($model->id)
             {
-                craft()->sproutSeo->deleteOverrideById($model->id);
+                craft()->sproutSeo_meta->deleteOverrideById($model->id);
             }
             
             return;
@@ -79,11 +80,11 @@ class SproutSeo_GeographicSeoFieldType extends BaseFieldType
         // if not create it
         if ($model->entryId) 
         {
-            craft()->sproutSeo->updateOverride($model->id, $attributes);
+            craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
         } 
         else 
         {
-            craft()->sproutSeo->createOverride($attributes);
+            craft()->sproutSeo_meta->createOverride($attributes);
         }
 
     }
@@ -103,10 +104,8 @@ class SproutSeo_GeographicSeoFieldType extends BaseFieldType
 
         // @TODO - Make this into a Model
         // $values = new SproutSeo_BasicSeoFieldModel;
-
-        $values = craft()->sproutSeo->getGeographicSeoFeildsByEntryId($entryId);
-
-
+        
+        $values = craft()->sproutSeo_meta->getBasicSeoFeildsByEntryId($entryId);
 
         // Cleanup the namespace around the $name handle
         $name = str_replace("fields[", "", $name);
@@ -115,9 +114,8 @@ class SproutSeo_GeographicSeoFieldType extends BaseFieldType
         $name = "sproutseo_fields[$name]";
         // $value = $values['title'];
 
-        return craft()->templates->render('sproutseo/_cp/fields/geo', array(
+        return craft()->templates->render('sproutseo/_cp/fields/input', array(
             'name'	     => $name,
-            // 'value'      => $value,
             'values'     => $values
         ));
     }

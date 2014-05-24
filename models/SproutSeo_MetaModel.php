@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_SeoDataModel extends BaseModel
+class SproutSeo_MetaModel extends BaseModel
 {
 
     protected function defineAttributes()

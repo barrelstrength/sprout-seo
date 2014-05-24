@@ -7,14 +7,9 @@ class SproutSeoPlugin extends BasePlugin
 {
 	public function getName()
 	{
-		// The plugin name
 		$pluginName = Craft::t('Sprout SEO');
-
-		// @TODO - Can we find a way to move this to the BSDPluginHelper function?
-		// I can't seem to pass an object or find the object we are working with.
-		$pluginClassHandle = $this->getClassHandle(__CLASS__);
-
-		return BSDPluginHelper::getPluginName($pluginName, $pluginClassHandle);
+		
+		return BSDPluginHelper::getPluginName($this, $pluginName);
 	}
 
 	public function getVersion()

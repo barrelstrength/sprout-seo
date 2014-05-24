@@ -50,7 +50,7 @@
 {% set js %}
 	new Craft.AdminTable({
 		tableSelector: '#templates',
-		deleteAction: 'sproutSeo/seoData/deleteTemplates',
+		deleteAction: 'sproutSeo/meta/deleteTemplates',
 		onDeleteObject: function(id)
 		{
 			if($('#templates').find('tbody').find('tr').size() == 0)
