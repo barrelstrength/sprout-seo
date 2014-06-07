@@ -8,13 +8,13 @@ class SproutSeoPlugin extends BasePlugin
 	public function getName()
 	{
 		$pluginName = Craft::t('Sprout SEO');
-		
+
 		return BSDPluginHelper::getPluginName($this, $pluginName);
 	}
 
 	public function getVersion()
 	{
-		return '0.6.32';
+		return '0.6.3';
 	}
 
 	public function getDeveloper()

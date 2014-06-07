@@ -1,9 +1,11 @@
 
-<h3>Your Sitemap Template</h3>
+<h2>Your Sitemap Template</h2>
+
 <p class="instructions">This is the template where your sitemap file will be saved.</p>
 <p><input type="text" style="width:96%;padding:10px;" name="sitemapTemplate" value="{{ settings.sitemapTemplate }}" placeholder="sitemap.xml"></p>
 
-<h3>Services to Ping</h3>
+
+<h2>Services to Ping</h2>
 
 {% set pingServices = {
   'ask': 'Ask.com',
@@ -17,4 +19,4 @@
   name: 'pingServices',
   options: pingServices,
   values: (settings.pingServices is defined ? settings.pingServices : '')
-})}}
+}) }}

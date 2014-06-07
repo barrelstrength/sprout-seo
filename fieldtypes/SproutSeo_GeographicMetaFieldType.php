@@ -101,12 +101,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
     {
         $entryId = craft()->request->getSegment(3);
 
-        // @TODO - Make this into a Model
-        // $values = new SproutSeo_BasicSeoFieldModel;
-
-        $values = craft()->sproutSeo_meta->getGeographicSeoFeildsByEntryId($entryId);
-
-
+        $values = craft()->sproutSeo_meta->getGeographicMetaFeildsByEntryId($entryId);
 
         // Cleanup the namespace around the $name handle
         $name = str_replace("fields[", "", $name);

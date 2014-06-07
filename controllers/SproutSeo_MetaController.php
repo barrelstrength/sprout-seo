@@ -14,7 +14,7 @@ class SproutSeo_MetaController extends BaseController
 
         $id = false; // we assume have a new item now
 
-        $model = craft()->sproutSeo_meta->newModel($id);
+        $model = craft()->sproutSeo_meta->newMetaModel($id);
         
         $templateFields = craft()->request->getPost('template_fields');
 

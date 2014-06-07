@@ -1,22 +1,4 @@
 
-{{ forms.checkboxField({
-  label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
-  id: 'appendSiteName',
-  name: 'appendSiteName',
-  instructions: "This will globally append the sitename to your meta title."|t,
-  checked: (settings.appendSiteName == 1 ? 1 : 0),
-  errors: ''  
-}) }}
-
-{{ forms.textField({
-  label: "Custom Global Value"|t,
-  id: 'customGlobalValue',
-  name: 'customGlobalValue',
-  instructions: "If you add a value here, we will override the Site Name and append this value to the end of each of your meta titles."|t,
-  value: settings.customGlobalValue,
-  errors: ''  
-}) }}
-
 {{ forms.selectField({
   label: 'Select the character that will be used between Title segments'|t,
   id: 'seoDivider',
