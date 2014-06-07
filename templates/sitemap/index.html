@@ -3,18 +3,8 @@
 
 {% set selectedTab = 'sitemap' %}
 
-{% set body %}
-
-<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
-	<input type="hidden" name="action" value="sproutSeo/sitemap/saveSitemap"> 
-	<input type="hidden" name="redirect" value="sproutseo/sitemap">
-
-<h3>Sections</h3>
-
-<p>All of your sections that have unique URLs are listed here.  Enable each section you want to include in your sitemap.</p>
-
 {% set priorityList = {
-	'1.0': '1.0 ↑ Highest',
+	'1.0': '1.0 ↑ Highest'|t,
 	'0.9': '0.9',
 	'0.8': '0.8',
 	'0.7': '0.7',
@@ -24,17 +14,17 @@
 	'0.3': '0.3',
 	'0.2': '0.2',
 	'0.1': '0.1',
-	'0.0': '0.0 ↓ Lowest'
+	'0.0': '0.0 ↓ Lowest'|t
 } %}
 
 {% set frequencyList = {
-	'always': 'Always',
-	'hourly': 'Hourly',
-	'daily': 'Daily',
-	'weekly': 'Weekly',
-	'monthly': 'Monthly',
-	'yearly': 'Yearly',
-	'never': 'Never'
+	'always': 'Always'|t,
+	'hourly': 'Hourly'|t,
+	'daily': 'Daily'|t,
+	'weekly': 'Weekly'|t,
+	'monthly': 'Monthly'|t,
+	'yearly': 'Yearly'|t,
+	'never': 'Never'|t
 } %}
 
 {% macro isSelected(target) %}
@@ -42,31 +32,60 @@
 {% endmacro %}
 {% import _self as checkbox %}
 
+{% set allSectionsWithUrls = craft.sproutSeo.getAllSectionsWithUrls() %}
+{% set customPages = craft.sproutSeo.getAllCustomPages() %}
 
-<table class="data fullwidth sitemap-settings shadow-box">
+{% set body %}
+
+<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
+	<input type="hidden" name="action" value="sproutSeo/sitemap/saveSitemap"> 
+	<input type="hidden" name="redirect" value="sproutseo/sitemap">
+
+<h2>Sections</h2>
+
+<table class="data fullwidth sitemap-settings">
 	<thead>
-		<th>Standalone Page URL</th>
-		<th>Priority</th>
-		<th>Change Frequency</th>
-		<th>Enabled</th>
-		<th>Ping on Save</th>
+		<th style="padding-left:9px;width:50%">{{ "Section"|t }} <span class="info">{{ "All of your sections that have unique URLs are listed here.  Enable each section you want to include in your sitemap."|t }}</span></th>
+		<th style="width:15%;">{{ "Priority"|t }} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span></th>
+		<th style="width:15%;">{{ "Change Frequency"|t }} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span></th>
+		<th style="width:8%;text-align: center;">{{ "Enabled"|t }} <span class="info">{{ "Make the content in this section appear in your sitemap."|t }}</span></th>
+		<th style="width:8%;text-align: center;">{{ "Ping on Save"|t }} <span class="info">{{ "Each time an entry in this section is saved, the services that you selected in your"|t }} <a href="{{ cpUrl('sproutseo/settings#settings-sitemap') }}">{{ "sitemap settings"|t }}</a> {{ "will be notified."|t }}</span></th>
+		<th class="thin"></th>
 	</thead>
 	<tbody>
 
-	{% for section in craft.sproutSeo.getAllSectionsWithUrls() %}
+	{% for section in allSectionsWithUrls %}
 
 		{% set sitemap = null %}
 		{% if section.settings is defined %}
 			{% set sitemap = section.settings %}
 		{% endif %}
 
-		<tr data-sectionid="{{ section.id }}">
+		{% if sitemap.id is defined %}
+			{% set sitemapId = sitemap.id %}
+		{% else %}
+		  {% set sitemapId = 'new-' ~ loop.index %}
+		{% endif %}
+
+		<tr data-rowid="{{ sitemapId }}">
 			<td>
-				<strong>{{ section.name }}</strong>
+				<strong style="display:inline-block;padding:7px 10px;">
+					{% if (sitemap.enabled is defined and sitemap.enabled == 1) %}
+						<span class="status live"></span>
+					{% else %}
+						<span class="status disabled"></span>
+					{% endif %}
+					{{ section.name }}
+
+					
+					<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
+					<input type="hidden" name="sitemap_fields[{{ sitemapId }}][sectionId]" value="{{ section.id }}">
+
+				</strong>
 			</td>
 			<td>
 				{{ forms.selectField({
-					name: 'sitemap_fields[' ~ section.id ~ '][priority]',
+					name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
 					options: priorityList,
 					value: (sitemap.priority is defined ? sitemap.priority : 0.5),
 					errors: "",
@@ -75,19 +94,20 @@
 			</td>
 			<td>
 				{{ forms.selectField({
-					name: 'sitemap_fields[' ~ section.id ~ '][changeFrequency]',
+					name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
 					options: frequencyList,
 					value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
 					errors: "",
 					required: false
 				}) }}
 			</td>
-			<td>
-				<input type="checkbox" name="sitemap_fields[{{ section.id }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
+			<td style="text-align: center;">
+				<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
 			</td>
-			<td>
-				<input type="checkbox" name="sitemap_fields[{{ section.id }}][ping]" {{ checkbox.isSelected((sitemap.ping is defined and sitemap.ping == 1) ? true : false) }}>
+			<td style="text-align: center;">
+				<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][ping]" {{ checkbox.isSelected((sitemap.ping is defined and sitemap.ping == 1) ? true : false) }} {% if (sitemap.enabled is defined and sitemap.enabled == 0) or (sitemap.enabled is not defined) %}disabled{% endif %}>
 			</td>
+			<td></td>
 		</tr>
 	
 	{% endfor %}
@@ -95,60 +115,128 @@
 	</tbody>
 </table>
 
+<br/>
+<h2>{{ "Custom Pages"|t }} </h2>
 
-<h3>Standalone Pages</h3>
-
-<p>If you have pages on your site that you want to include in your sitemap that are not dynamically generated by sections, you can manually create those sections here.</p>
-
-<div class="input">
-<table class="data fullwidth sitemap-settings editable shadow-box">
+<table class="data fullwidth sitemap-settings custom-pages">
 	<thead>
-		<th>Standalone Page URL</th>
-		<th>Priority</th>
-		<th>Change Frequency</th>
-		<th>Enabled</th>
-		<th>Delete</th>
+		<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+		<th style="width:15%;">{{ "Priority"|t }}</th>
+		<th style="width:15%;">{{ "Change Frequency"|t }}</th>
+		<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
+		<th style="width:8%;"></th>
+		<th class="thin"></th>
 	</thead>
 	<tbody>
-		<tr data-id="{{ (rowId is defined) ? rowId : "" }}">
-			<td><input type="text" name="sitemap_fields[custom1][url]" style="padding:5px;width:80%;" placeholder="{{ siteUrl }}yourCustomPage.html"></td>
+
+	{% if customPages|length %}
+		{% for page in customPages %}
+
+		<tr data-rowid="{{ page.id }}">
+			<td>
+				<div style="display:inline-block;padding:7px 0 7px 10px;">
+				{% if (page.enabled is defined and page.enabled == 1) %}
+					<span class="status live"></span>
+				{% else %}
+					<span class="status disabled"></span>
+				{% endif %}
+				</div>
+				
+				<input type="hidden" name="sitemap_fields[{{ page.id }}][id]" value="{{ page.id }}">
+
+				<input type="text" name="sitemap_fields[{{ page.id }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
+			</td>
 			<td>
 				{{ forms.selectField({
-					name: 'sitemap_fields[custom1][priority]',
+					name: 'sitemap_fields[' ~ page.id ~ '][priority]',
 					options: priorityList,
-					value: (sitemap.priority is defined ? sitemap.priority : 0.5),
+					value: (page.priority is defined ? page.priority : 0.5),
 					errors: "",
 					required: false
 				}) }}
 			</td>
 			<td>
 				{{ forms.selectField({
-					name: 'sitemap_fields[custom1][changeFrequency]',
+					name: 'sitemap_fields[' ~ page.id ~ '][changeFrequency]',
 					options: frequencyList,
-					value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
+					value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
 					errors: "",
 					required: false
 				}) }}
 			</td>
-			<td>
-				<input type="checkbox" name="sitemap_fields[custom1][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
+			<td style="text-align: center;">
+				<input type="checkbox" name="sitemap_fields[{{ page.id }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
 			</td>
+			<td></td>
 			<td>
 				<a class="delete icon" title="Delete"></a>
 			</td>
 		</tr>
+
+		{% endfor %}
+	{% else %}
+
+	    <tr data-rowid="{{ page.id }}">
+			<td>
+				<span class="status disabled"></span>
+				
+				<input type="text" name="sitemap_fields[new][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
+
+				<input type="hidden" name="sitemap_fields[new][id]" value="{{ page.id }}">
+
+			</td>
+			<td>
+				{{ forms.selectField({
+					name: 'sitemap_fields[new][priority]',
+					options: priorityList,
+					value: (page.priority is defined ? page.priority : 0.5),
+					errors: "",
+					required: false
+				}) }}
+			</td>
+			<td>
+				{{ forms.selectField({
+					name: 'sitemap_fields[new][changeFrequency]',
+					options: frequencyList,
+					value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
+					errors: "",
+					required: false
+				}) }}
+			</td>
+			<td style="text-align: center;">
+				<input type="checkbox" name="sitemap_fields[new][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
+			</td>
+			<td></td>
+			<td>
+				<a class="delete icon" title="Delete"></a>
+			</td>
+		</tr>
+
+	{% endif %}
+
 	</tbody>
 </table>
-<div class="btn add icon" tabindex="0">Add a row</div>
-</div>
+
+<div id="add-custom-page" class="btn add icon" style="margin-top:20px">{{ "Add Custom Page"|t }}</div>
 
 </form>
 
-
-<p>Priority: The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers.</p>
-
-<p>Frequency: The value "always" should be used to describe documents that change each time they are accessed. The value "never" should be used to describe archived URLs.</p>
-
+<style type="text/css">
+.sitemap-custom-url:focus {
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	padding: 6px 4px;
+	outline: none;
+}
+.sitemap-custom-url {
+	display: inline-block;
+	margin-left:-4px;
+	width: 85%;
+	border: none;
+	padding: 7px 5px;
+	background: #fff;
+	overflow: hidden;
+}
+</style>
 
 {% endset %}
 

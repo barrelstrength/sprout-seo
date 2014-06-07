@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_RobotsSeoFieldModel extends BaseModel
+class SproutSeo_RobotsMetaFieldModel extends BaseModel
 {
 
     protected function defineAttributes()

@@ -16,56 +16,51 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 	public function saveSitemap(SproutSeo_SitemapModel $attributes)
 	{
+		$row = array();
+		$isNew = false;
 		
-		$row = craft()->db->createCommand()
+		if (isset($attributes->id) && (substr( $attributes->id, 0, 3 ) === "new"))
+		{
+			$isNew = true;
+		}
+
+		if (!$isNew)
+		{
+			$row = craft()->db->createCommand()
 								 ->select('*')
 								 ->from('sproutseo_sitemap')
-								 ->where('sectionId=:sectionId',array(':sectionId'=>$attributes->sectionId))
+								 ->where('id=:id',array(':id'=>$attributes->id))
 								 ->queryRow();
-		
-		$row['sectionId'] = $attributes->sectionId;
-		$row['url'] = $attributes->url;
-		$row['priority'] = $attributes->priority;
-		$row['changeFrequency'] = $attributes->changeFrequency;
-		$row['enabled'] = ($attributes->enabled == 'true') ? 1 : 0;
-		$row['ping'] = ($attributes->ping == 'true') ? 1 : 0;
-		$row['dateUpdated'] = DateTimeHelper::currentTimeForDb();
-		$row['uid'] = StringHelper::UUID();
+		}
 
-		if (isset($row['id']))
+		$model = SproutSeo_SitemapModel::populateModel($row);
+
+		$model->id = (!$isNew) ? $attributes->id : null;
+		$model->sectionId = (isset($attributes->sectionId)) ? $attributes->sectionId : null;
+		$model->url = (isset($attributes->url)) ? $attributes->url : null;
+		$model->priority = $attributes->priority;
+		$model->changeFrequency = $attributes->changeFrequency;
+		$model->enabled = ($attributes->enabled == 'true') ? 1 : 0;
+		$model->ping = ($attributes->ping == 'true') ? 1 : 0;
+		$model->dateUpdated = DateTimeHelper::currentTimeForDb();
+		$model->uid = StringHelper::UUID();
+
+		if ($isNew)
 		{	
-			$result = craft()->db->createCommand()
-						 ->update('sproutseo_sitemap', $row, 'id = :id', array(':id' => $row['id']));			
+			$model->dateCreated = DateTimeHelper::currentTimeForDb();
+			craft()->db->createCommand()->insert('sproutseo_sitemap', $model->getAttributes());
+			
+			return craft()->db->lastInsertID;
 		}
 		else
-		{
-			$row['dateCreated'] = DateTimeHelper::currentTimeForDb();
-			craft()->db->createCommand()->insert('sproutseo_sitemap', $row);
+		{	
+			$result = craft()->db->createCommand()
+						 					 ->update('sproutseo_sitemap', 
+						 					 					$model->getAttributes(),
+						 					 					'id=:id', array(':id' => $model->id));
+
+			return $model->id;
 		}
-
-		return true;
-								 
-		// if (is_null($id)) 
-		// {
-		// 	// $record = $this->sitemapRecord->create();			
-		// 	// $record->setAttributes($attributes->getAttributes(), false);
-		// }
-		// else
-		// {	
-		// 	$record = $this->sitemapRecord->create();
-			
-		// 	$record->setAttributes($attributes->getAttributes(), false);
-		// }
-
-		// if ($record->save()) 
-		// {
-		// 	return true;
-		// } 
-		// else 
-		// {	
-		// 	$attributes->addErrors($record->getErrors());
-		// 	return false;
-		// }
 	}
 
 	public function getSitemap()
@@ -159,5 +154,17 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return $sectionData;
+	}
+
+	public function getAllCustomPages()
+	{
+		$customPages = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_sitemap')
+			->where('url IS NOT NULL')
+			->queryAll();
+			
+		return $customPages;
+		
 	}
 }

@@ -101,6 +101,11 @@ class SproutSeoVariable
     return craft()->sproutSeo_meta->getTemplateById($id);
   }
 
+  public function displayGlobalFallback($templateId = null)
+  {
+    return craft()->sproutSeo_meta->displayGlobalFallback($templateId);
+  }
+
   ## ------------------------------------------------------------
   ## Sitemap Variables (Front-end)
   ## ------------------------------------------------------------
@@ -134,6 +139,16 @@ class SproutSeoVariable
   public function getAllSectionsWithUrls()
   { 
     return craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
+  }
+
+  /**
+   * Get all Custom Pages for our Sitemap settings.
+   *
+   * @return array of Sections
+   */
+  public function getAllCustomPages()
+  { 
+    return craft()->sproutSeo_sitemap->getAllCustomPages();
   }
 
 }

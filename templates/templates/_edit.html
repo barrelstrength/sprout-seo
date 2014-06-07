@@ -25,6 +25,10 @@
     facebook:    { 
       label: "Facebook"|t,
       url: '#template-facebook'
+    },
+    twitter:    { 
+      label: "Twitter"|t,
+      url: '#template-twitter'
     }
 } %}
 
@@ -51,6 +55,7 @@
 	{{ forms.textField({
 		label: "Template Name"|t,
 		instructions: "Human readable template name"|t,
+		id: "name",
 		name: 'template_fields[name]',
 		value: template.name,
 		errors: '',
@@ -60,11 +65,23 @@
 	{{ forms.textField({
 		label: "Template Short Name"|t,
 		instructions: "Short name you will use to refer to your template in the code"|t,
+		id: "handle",
 		name: 'template_fields[handle]',
 		value: template.handle,
 		errors: '',
 		required: true
 	}) }}
+
+	{% set canBeGlobalFallback = craft.sproutSeo.displayGlobalFallback(templateId) %}
+
+	{% if canBeGlobalFallback %}
+		{{ forms.checkboxField({
+			label: "Use this template as my global fallback"|t,
+			id: 'global-fallback',
+			name: 'template_fields[globalFallback]',
+			checked: template.globalFallback
+		}) }}
+	{% endif %}
 
 </div>
 
@@ -77,6 +94,13 @@
 		value: template.title,
 		errors: "",
 		required: false
+	}) }}
+
+	{{ forms.checkboxField({
+	  label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
+	  name: 'template_fields[appendSiteName]',
+	  checked: (template.appendSiteName == 1 ? 1 : 0),
+	  errors: ''  
 	}) }}
 
 	{{ forms.textField({
@@ -101,14 +125,6 @@
 
 <div id="template-robots" class="hidden">
 
-	{{ forms.textField({
-		label: "Canonical URL"|t,
-		name: 'template_fields[canonical]',
-		value: template.canonical,
-		errors: "",
-		required: false
-	}) }}
-
 	<h3>Robots - Basic</h3>
 
 	{% macro isSelected(target, string) %}
@@ -121,40 +137,55 @@
 			<label>
 				<input type="checkbox" value="noindex" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noindex', template.robots) }}> noindex
 			</label>
+			<span class="info">I don't want this page to be indexed by search engines</span>
 	</div>
 	<div>
 			<label>
 				<input type="checkbox" value="nofollow" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('nofollow', template.robots) }}> nofollow
 			</label>
+			<span class="info">I don't want search engines to follow links on this page</span>
 	</div>
 
 	<h3>Robots - Advanced</h3>
+
+	{# Consider adding a link or posting a help article in our docs to clarify these:
+	http://tech4sky.com/noodp-noarchive-nosnippet-noydir-meta-tag #}
 
 	<div>
 			<label>
 				<input type="checkbox" value="noarchive" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noarchive', template.robots) }}> noarchive
 			</label>
-	</div>
-	<div>
-			<label>
-				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('nosnippet', template.robots) }}> nosnippet
-			</label>
+			<span class="info">I don't want search engines to provide archived versions of this page to users</span>
 	</div>
 	<div>
 			<label>
 				<input type="checkbox" value="noimageindex" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noimageindex', template.robots) }}> noimageindex
 			</label>
+			<span class="info">I don't want images on this page to be indexed by search engines</span>
+	</div>
+	<div>
+			<label>
+				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('nosnippet', template.robots) }}> nosnippet
+			</label>
+			<span class="info">I don't want Google to cache this page or display a description below the page in search results</span>
 	</div>
 	<div>
 			<label>
 				<input type="checkbox" value="noodp" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noodp', template.robots) }}> noodp
 			</label>
+			<span class="info">I don't want Google to use the Open Directory Project (ODP) description for this page. I want Google to use the description on the website.</span>
 	</div>
 	<div>
 			<label>
 				<input type="checkbox" value="noydir" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noydir', template.robots) }}> noydir
 			</label>
+			<span class="info">I don't want Bing or Yahoo! to use the Yahoo! Directory titles and descriptions for this page.  I want Bing and Yahoo! to use the titles and descriptions on the website.</span>
 	</div>
+
+	<h3>Canonical URL</h3>
+
+	<p style="width:50%;">Canonical URL will default to the URL of the current page.  Canonical URL cannot be overriden at the template level, however, it can be override with on-page or entry-specific overrides.</p>
+
 
 </div>
 
@@ -193,6 +224,7 @@
 </div>
 
 <div id="template-facebook" class="hidden">
+
 	{{ forms.textField({
 		label: "Open Graph Title"|t,
 		name: 'template_fields[ogTitle]',
@@ -288,6 +320,59 @@
 		errors: "",
 		required: false
 	}) }}
+
+</div>
+
+<div id="template-twitter" class="hidden">
+
+	<h3>Twitter Summary Card</h3>
+	<input type="hidden" name="twitterCard" value="summary" />
+
+	{{ forms.textField({
+		label: "Twitter Site"|t,
+		name: 'template_fields[twitterSite]',
+		instructions: '@username for the website used in the card footer.',
+		value: template.twitterSite,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Twitter Creator"|t,
+		instructions: '@username for the content creator / author.',
+		name: 'template_fields[twitterCreator]',
+		value: template.twitterCreator,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Twitter Title"|t,
+		instructions: 'Title should be concise and will be truncated at 70 characters.',
+		name: 'template_fields[twitterTitle]',
+		value: template.twitterTitle,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textareaField({
+		label: "Twitter Description"|t,
+		instructions: 'Description text will be truncated at the word to 200 characters.',
+		name: 'template_fields[twitterDescription]',
+		value: template.twitterDescription,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Twitter Image"|t,
+		instructions: 'The image must be a minimum size of 120x120px. Images larger than 120x120px will be resized and cropped square based on its longest dimension. Images must be less than 1MB in size.',
+		name: 'template_fields[twitterImage]',
+		value: template.twitterImage,
+		errors: "",
+		required: false
+	}) }}
+
 </div>
 
 <div class="buttons">
@@ -297,3 +382,7 @@
 </form>
 
 {% endset %}
+
+{% if template.name is not defined or not template.handle %}
+	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
+{% endif %}

@@ -103,9 +103,9 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
         $entryId = craft()->request->getSegment(3);
 
         // @TODO - Make this into a Model
-        // $values = new SproutSeo_BasicSeoFieldModel;
+        // $values = new SproutSeo_BasicMetaFieldModel;
         
-        $values = craft()->sproutSeo_meta->getBasicSeoFeildsByEntryId($entryId);
+        $values = craft()->sproutSeo_meta->getBasicMetaFeildsByEntryId($entryId);
 
         // Cleanup the namespace around the $name handle
         $name = str_replace("fields[", "", $name);

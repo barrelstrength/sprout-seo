@@ -103,10 +103,7 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
     {
         $entryId = craft()->request->getSegment(3);
 
-        // @TODO - Make this into a Model
-        // $values = new SproutSeo_BasicSeoFieldModel;
-
-        $values = craft()->sproutSeo_meta->getRobotsSeoFeildsByEntryId($entryId);
+        $values = craft()->sproutSeo_meta->getRobotsMetaFeildsByEntryId($entryId);
 
         $values->robots = explode(',', $values->robots);
         
@@ -115,7 +112,6 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
         $name = rtrim($name, "]");
 
         $name = "sproutseo_fields[$name]";
-        // $value = $values['title'];
 
         return craft()->templates->render('sproutseo/_cp/fields/robots', array(
             'name'	     => $name,

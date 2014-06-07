@@ -7,6 +7,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	protected $seoOverrideRecord;
 	protected $sitemapRecord;
 	protected $siteInfo;
+	protected $divider;
 
 	protected $sproutmeta = array();
 
@@ -34,7 +35,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	 * @param  array               $attributes
 	 * @return SproutSeo_MetaModel
 	 */
-	public function newModel($attributes = array())
+	public function newMetaModel($attributes = array())
 	{
 		$model = new SproutSeo_MetaModel();
 		$model->setAttributes($attributes);
@@ -146,7 +147,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	}
 
-	public function getBasicSeoFeildsByEntryId($entryId)
+	public function getBasicMetaFeildsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
 				   ->select('id, title, description, keywords')
@@ -156,16 +157,16 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	   if (isset($query)) 
 	   {
-			return SproutSeo_BasicSeoFieldModel::populateModel($query);
+			return SproutSeo_BasicMetaFieldModel::populateModel($query);
 		}
 		else
 		{
-			return new SproutSeo_BasicSeoFieldModel;
+			return new SproutSeo_BasicMetaFieldModel;
 		}
 
 	}
 
-	public function getGeographicSeoFeildsByEntryId($entryId)
+	public function getGeographicMetaFeildsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
 				   ->select('region, placename, longitude, latitude')
@@ -175,16 +176,16 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	   if (isset($query)) 
 	   {
-			return SproutSeo_GeographicSeoFieldModel::populateModel($query);
+			return SproutSeo_GeographicMetaFieldModel::populateModel($query);
 		}
 		else
 		{
-			return new SproutSeo_GeographicSeoFieldModel;
+			return new SproutSeo_GeographicMetaFieldModel;
 		}
 
 	}
 
-	public function getRobotsSeoFeildsByEntryId($entryId)
+	public function getRobotsMetaFeildsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
 				   ->select('canonical, robots')
@@ -194,11 +195,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	   if (isset($query)) 
 	   {
-			return SproutSeo_RobotsSeoFieldModel::populateModel($query);
+			return SproutSeo_RobotsMetaFieldModel::populateModel($query);
 		}
 		else
 		{
-			return new SproutSeo_RobotsSeoFieldModel;
+			return new SproutSeo_RobotsMetaFieldModel;
 		}
 
 	}
@@ -249,16 +250,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// by default don't append anything to the end of our title
 		$this->siteInfo = "";
 
-		$divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
-		$appendSiteName = craft()->plugins->getPlugin('sproutseo')->getSettings()->appendSiteName;
-		$customGlobalValue = craft()->plugins->getPlugin('sproutseo')->getSettings()->customGlobalValue;
+		// Divider from settings
+		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
-		// create the string we will append to the end of our title if we should
-		if ($appendSiteName) 
-		{
-		  $this->siteInfo = " " . $divider . " " . ($customGlobalValue ? $customGlobalValue : craft()->getInfo('siteName'));
-		}
-
+		// If no divider exists, use a dash
+		$this->divider = ($this->divider) ? $this->divider : '-'; 
+		
 		// Setup all of our SEO Metadata Arrays
 		$entryOverrides = new SproutSeo_MetaModel; // Top Priority
 		$codeOverrides  = new SproutSeo_MetaModel; // Second Priority
@@ -276,6 +273,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$templateHandle = $overrideInfo['template'];
 			$templates = craft()->sproutSeo_meta->getTemplateByTemplateHandle($templateHandle);
 
+			// create the string we will append to the end of our title if we should
+			if (isset($templates->appendSiteName)) 
+			{
+			  $this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
+			}
+
 			// Remove our template so we can assign the rest of our info to the codeOverride
 			// array and have it match up nicely.
 			// @TODO - may need to move this outside this if statement, or include other
@@ -283,12 +286,22 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			unset($overrideInfo['template']);
 		}
 
+
+		// Set the default canonical URL to be the current URL
+		$scheme = ( isset($_SERVER['HTTPS'] ) ) ? "https://" : "http://" ;
+		$siteUrl = URI_SCHEME . $_SERVER['SERVER_NAME'];
+		$currentUrl = $siteUrl . craft()->request->url;
+		
+		$templates['canonical'] = $currentUrl;
+		
+
 		// PREPARE ENTRY OVERRIDES
 		// ------------------------------------------------------------
 
 		// If our code overrides include an ID, let's query the database and
 		// see if this entry has any Entry Overrides.
-		if (isset($overrideInfo['id'])) {
+		if (isset($overrideInfo['id'])) 
+		{
 		  // query for override array
 		  $entryOverrides = craft()->sproutSeo_meta->getOverrideByEntryId($overrideInfo['id']);
 
@@ -301,7 +314,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		// If we have any more values that were set in our template
 		// let's store them as code overrides.
-		if ( ! empty($overrideInfo)) {
+		if ( ! empty($overrideInfo)) 
+		{
 		  $codeOverrides = SproutSeo_MetaModel::populateModel($overrideInfo);
 		}
 
@@ -335,6 +349,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		
 		$output = "\n";
 		$openGraphPattern = '/^og:/';
+		$twitterPattern = '/^twitter:/';
 
 		foreach ($metaValues as $name => $value) 
 		{
@@ -353,6 +368,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				  case (preg_match($openGraphPattern, $name) ? true : false):
 					$output .= "\t<meta property='$name' content='$value' />\n";
 					break;
+
+					// Twitter Cards
+				  case (preg_match($twitterPattern, $name) ? true : false):
+					$output .= "\t<meta name='$name' content='$value'>\n";
+					break;					
 
 				  // Canonical URLs
 				  case 'canonical':
@@ -405,6 +425,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	  unset($metaValues['entryId']);
 	  unset($metaValues['name']);
 	  unset($metaValues['handle']);
+	  unset($metaValues['appendSiteName']);
+	  unset($metaValues['globalFallback']);
 
 	  // These values get combined and become: geo.position
 	  unset($metaValues['longitude']);
@@ -427,7 +449,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	    'ogDescription'  => 'og:description',
 	    'ogAudio'        => 'og:audio',
 	    'ogVideo'        => 'og:video',
-	    'ogLocale'       => 'og:locale'
+	    'ogLocale'       => 'og:locale',
+	    'twitterCard'    => 'twitter:card',
+	    'twitterSite'    => 'twitter:site',
+	    'twitterCreator' => 'twitter:creator',
+	    'twitterTitle'   => 'twitter:title',
+	    'twitterDescription' => 'twitter:description',
+	    'twitterImage'    => 'twitter:image'
 	  );
 
 	  // update our array to use the actual meta name="" parameter values
@@ -447,7 +475,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	public function updateMeta($meta)
 	{
-
 		if (count($meta)) 
     {
       foreach ($meta as $key => $value) 
@@ -456,14 +483,32 @@ class SproutSeo_MetaService extends BaseApplicationComponent
         $this->sproutmeta[$key] = $value;
       }
     }
-    
-    // craft()->templates->getTwig()->craft()->templates->getTwig()->getGlobals()['sproutmeta']()['sproutmeta'] = $this->sproutmeta;
+	}
 
-    // echo "<pre>";
-    // print_r(craft()->templates->getTwig()->getGlobals()['sproutmeta']);
-    // echo "</pre>";
-    // die('fin');
-    
+	public function getGlobalFallback()
+	{
+		return craft()->db->createCommand()
+									->select('*')
+									->from('sproutseo_templates')
+									->where('globalFallback=:globalFallback', array(':globalFallback' => 1))
+									->queryRow();
+	}
+
+	public function displayGlobalFallback($templateId = null)
+	{
+		$fallback = $this->getGlobalFallback();
+
+		$isGlobalFallback = ( isset($fallback['id']) && ($templateId == $fallback['id']) );
+		$noFallbackExists = !isset($fallback['id']);
+
+    if ($isGlobalFallback OR $noFallbackExists) 
+    {
+    	return true;
+    }
+    else
+    {
+    	return false;
+    }
 	}
 
 	public function prepRobotsForDb($robotsArray)

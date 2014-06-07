@@ -13,15 +13,21 @@ class SproutSeo_TemplatesRecord extends BaseRecord
         return array(
             'name'           => array(AttributeType::String, 'required' => true),
             'handle'         => array(AttributeType::String, 'required' => true),
+            'appendSiteName' => array(AttributeType::String),
+            'globalFallback' => array(AttributeType::Bool),
+            
             'title'          => array(AttributeType::String),
             'description'    => array(AttributeType::String),
             'keywords'       => array(AttributeType::String),
+
             'robots'         => array(AttributeType::String),
             'canonical'      => array(AttributeType::String),
+
             'region'         => array(AttributeType::String),
             'placename'      => array(AttributeType::String),
             'latitude'       => array(AttributeType::String),
             'longitude'      => array(AttributeType::String),
+
             'ogTitle'        => array(AttributeType::String),
             'ogType'         => array(AttributeType::String),
             'ogUrl'          => array(AttributeType::String),
@@ -31,6 +37,14 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             'ogAudio'        => array(AttributeType::String),
             'ogVideo'        => array(AttributeType::String),
             'ogLocale'       => array(AttributeType::String),
+
+            'twitterCard'    => array(AttributeType::String),
+            'twitterSite'    => array(AttributeType::String),
+            'ogDescription'  => array(AttributeType::String),
+            'twitterCreator' => array(AttributeType::String),
+            'twitterTitle'   => array(AttributeType::String),
+            'twitterDescription' => array(AttributeType::String),
+            'twitterImage'   => array(AttributeType::String),
         );
     }
 
