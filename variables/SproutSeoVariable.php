@@ -29,7 +29,7 @@ class SproutSeoVariable
   ## ------------------------------------------------------------
 
   /**
-   * Set and Get SEO Meta data in our templates
+   * Set SEO Meta data in our templates
    * 
    * @param  array  $meta Array of supported meta values
    * @return [type]       [description]
@@ -38,29 +38,31 @@ class SproutSeoVariable
   {
     if (count($meta)) 
     {
-      // This is our setter
       craft()->sproutSeo_meta->updateMeta($meta);
-    }
-    else
-    {
-      // This is our getter
-      $overrideInfo = craft()->sproutSeo_meta->getMeta();
-      
-      // Output the metadata as pre-defined HTML
-      $output = craft()->sproutSeo_meta->optimize($overrideInfo);
-
-      return new \Twig_Markup($output, craft()->templates->getTwig()->getCharset());
     }
   }
 
   /**
-   * Output our SEO Meta Tags
+   * Output our SEO Meta Tags, and provide fallbacks
    * 
    * @param  [type] $overrideInfo [description]
    * @return [type]               [description]
    */
-  public function optimize($overrideInfo)
+  public function optimize(array $meta = array())
   {
+    // @TODO - should optimize accept a fallback array?
+    // maybe just allow this to be set in the CP.
+    
+    if (count($meta))
+    {
+      // If an array is defined, add it to our meta array before we output anything
+      craft()->sproutSeo_meta->updateMeta($meta, true);
+    }
+
+    // This is our getter
+    $overrideInfo = craft()->sproutSeo_meta->getMeta();
+    
+    // Output the metadata as pre-defined HTML
     $output = craft()->sproutSeo_meta->optimize($overrideInfo);
 
     return new \Twig_Markup($output, craft()->templates->getTwig()->getCharset());
