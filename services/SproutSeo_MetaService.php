@@ -9,6 +9,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	protected $siteInfo;
 	protected $divider;
 
+	protected $fallbackMeta = array();
 	protected $sproutmeta = array();
 
 	public function __construct($metaRecord = null, $seoOverrideRecord = null, $sitemapRecord = null)
@@ -75,7 +76,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	public function getTemplateByTemplateHandle($handle)
 	{
-
 		$query = craft()->db->createCommand()
 					->select('*')
 					->from('sproutseo_templates')
@@ -86,41 +86,42 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		$model->robots = ($model->robots) ? $this->prepRobotsForSettings($model->robots) : null;
 
-
 		if ($model->latitude && $model->longitude)
 		{
 			$model->position = $model->latitude . ";" . $model->longitude;
 		}
 
-		if ($model->id) {
-			return $model;
-		}
+		return $model;
 	}
 
 	public function saveTemplateInfo(SproutSeo_MetaModel &$model)
 	{
 
-	   if ($id = $model->getAttribute('id')) {
-			if (null === ($record = $this->metaRecord->findByPk($id))) {
+	   if ($id = $model->getAttribute('id'))
+       {
+			if (null === ($record = $this->metaRecord->findByPk($id)))
+            {
 				throw new Exception(Craft::t('Can\'t find template with ID "{id}"', array('id' => $id)));
 			}
-		} else {
-			$record = $this->metaRecord->create();
-		}
+	   }
+       else
+       {
+           $record = $this->metaRecord->create();
+	   }
 
 		// @TODO passing 'false' here allows us to save unsafe attributes
 		// we should really update this to address validation better.
 		$record->setAttributes($model->getAttributes(), false);
 
-		if ($record->save()) {
-
+		if ($record->save())
+        {
 			// update id on model (for new records)
 			$model->setAttribute('id', $record->getAttribute('id'));
 
 			return true;
-
-		} else {
-
+		}
+        else
+        {
 			$model->addErrors($record->getErrors());
 
 			return false;
@@ -130,9 +131,14 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	public function getOverrideById($id)
 	{
-		if ($record = $this->seoOverrideRecord->findByPk($id)) {
+		if ($record = $this->seoOverrideRecord->findByPk($id))
+        {
 			return SproutSeo_OverridesModel::populateModel($record);
 		}
+        else
+        {
+            return false;
+        }
 	}
 
 	public function getOverrideByEntryId($entryId)
@@ -289,7 +295,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		// Set the default canonical URL to be the current URL
 		$scheme = ( isset($_SERVER['HTTPS'] ) ) ? "https://" : "http://" ;
-		$siteUrl = URI_SCHEME . $_SERVER['SERVER_NAME'];
+		$siteUrl = $scheme . $_SERVER['SERVER_NAME'];
 		$currentUrl = $siteUrl . craft()->request->url;
 		
 		$templates['canonical'] = $currentUrl;
@@ -406,15 +412,22 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	  // entry override model each time... or maybe we can just define it so its
 	  // blank nomatter what.  We really just need to know we are looping through
 	  // the samme model for each of the levels of overrides or templates
-	  foreach ($entryOverrides->getAttributes() as $key => $value) {
-
-	    if ($entryOverrides->getAttribute($key)) {
+	  foreach ($entryOverrides->getAttributes() as $key => $value)
+      {
+	    if ($entryOverrides->getAttribute($key))
+        {
 	      $metaValues[$key] = $value;
-	    } elseif ($codeOverrides->getAttribute($key)) {
+	    }
+        elseif ($codeOverrides->getAttribute($key))
+        {
 	      $metaValues[$key] = $codeOverrides[$key];
-	    } elseif (isset($templates->handle)) {
+	    }
+        elseif (isset($templates->handle))
+        {
 	      $metaValues[$key] = $templates->getAttribute($key);
-	    } else {
+	    }
+        else
+        {
 	      // We got nuthin'
 	      $metaValues[$key] = '';
 	    }
@@ -461,7 +474,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	  // update our array to use the actual meta name="" parameter values
 	  // as our index
 	  $meta = array();
-	  foreach ($metaValues as $name => $value) {
+	  foreach ($metaValues as $name => $value)
+      {
 	    $meta[$metaNames[$name]] = $value;
 	  }
 
@@ -473,16 +487,28 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		return $this->sproutmeta;
 	}
 
-	public function updateMeta($meta)
+	public function updateMeta($meta, $fallback = false)
 	{
-		if (count($meta)) 
-    {
-      foreach ($meta as $key => $value) 
-      {
-        // This is the setter
-        $this->sproutmeta[$key] = $value;
-      }
-    }
+		// @TODO - should updateMeta accept a fallback array?
+		// maybe just allow this to be set in the CP.
+		
+		if (!$fallback)
+		{
+			// add meta values to the global meta value
+			if (count($meta)) 
+			{
+			  foreach ($meta as $key => $value) 
+			  {
+			    // This is the setter
+			    $this->sproutmeta[$key] = $value;
+			  }
+			}
+		}
+		else
+		{
+			// merge the optimize fallback with the rest of our meta values
+			array_merge($meta, $this->sproutmeta);
+	  }
 	}
 
 	public function getGlobalFallback()
