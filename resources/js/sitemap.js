@@ -24,8 +24,8 @@ Craft.SproutSeoSitemap = Garnish.Base.extend(
 		this.$checkboxes = $('.sitemap-settings input[type="checkbox"]');
 		this.$selectDropdowns = $('.sitemap-settings select');
 
-		// This is most likely breaking the js
-		this.$customPageUrls = $('.sitemap-settings input.sitemap-custom-url');
+
+		// this.$customPageUrls = $('.sitemap-settings input.sitemap-custom-url');
 
 		// this.$addCustomPageButton = $('#add-custom-page');
 
@@ -67,37 +67,38 @@ Craft.SproutSeoSitemap = Garnish.Base.extend(
 		rowId = $(changedElement).closest('tr').data('rowid');
 
 		this.status = $('tr[data-rowid="'+rowId+'"] td span.status');
-		this.id = $('input[name="sitemap_fields['+rowId+'][id]').val();
-		this.sectionId = $('input[name="sitemap_fields['+rowId+'][sectionId]').val();
-		this.url = $('input[name="sitemap_fields['+rowId+'][url]').val();
-		this.priority = $('select[name="sitemap_fields['+rowId+'][priority]').val();
-		this.changeFrequency = $('select[name="sitemap_fields['+rowId+'][changeFrequency]').val();
-		this.enabled = $('input[name="sitemap_fields['+rowId+'][enabled]').is(":checked");
-		this.ping = $('input[name="sitemap_fields['+rowId+'][ping]').is(":checked");
+		// this.id = $('input[name="sitemap_fields['+rowId+'][id]"]').val();
+		this.id = $('input[name="sitemap_fields['+rowId+'][id]"]').val();
+		this.sectionId = $('input[name="sitemap_fields['+rowId+'][sectionId]"]').val();
+		this.url = $('input[name="sitemap_fields['+rowId+'][url]"]').val();
+		this.priority = $('select[name="sitemap_fields['+rowId+'][priority]"]').val();
+		this.changeFrequency = $('select[name="sitemap_fields['+rowId+'][changeFrequency]"]').val();
+		this.enabled = $('input[name="sitemap_fields['+rowId+'][enabled]"]').is(":checked");
+		this.ping = $('input[name="sitemap_fields['+rowId+'][ping]"]').is(":checked");
 
-		// console.log('new request');
-		// console.log(this.status);
-		// console.log(this.id);
-		// console.log(this.sectionId);
-		// console.log(this.url);
-		// console.log(this.priority);
-		// console.log(this.changeFrequency);
-		// console.log(this.enabled);
-		// console.log(this.ping);
-		// console.log('end request');
+		console.log('new request');
+		console.log(this.status);
+		console.log(this.id);
+		console.log(this.sectionId);
+		console.log(this.url);
+		console.log(this.priority);
+		console.log(this.changeFrequency);
+		console.log(this.enabled);
+		console.log(this.ping);
+		console.log('end request');
 
 		if (this.enabled)
 		{
 			this.status.removeClass('disabled');
 			this.status.addClass('live');
-			$('input[name="sitemap_fields['+rowId+'][ping]').attr("disabled", false);
+			$('input[name="sitemap_fields['+rowId+'][ping]"]').attr("disabled", false);
 		}
 		else
 		{
 			this.status.removeClass('live');
 			this.status.addClass('disabled');
-			$('input[name="sitemap_fields['+rowId+'][ping]').prop('checked', false);
-			$('input[name="sitemap_fields['+rowId+'][ping]').attr("disabled", true);
+			$('input[name="sitemap_fields['+rowId+'][ping]"]').prop('checked', false);
+			$('input[name="sitemap_fields['+rowId+'][ping]"]').attr("disabled", true);
 			this.ping = false;
 		}
 
@@ -117,14 +118,14 @@ Craft.SproutSeoSitemap = Garnish.Base.extend(
 				{
 					$(changedElement).closest('tr').data('rowid', response.lastInsertId);
 
-					$('input[name="sitemap_fields['+rowId+'][id]').attr('name', 'sitemap_fields['+response.lastInsertId+'][id]');
-					$('input[name="sitemap_fields['+response.lastInsertId+'][id]').val(response.lastInsertId);
-					$('input[name="sitemap_fields['+rowId+'][sectionId]').attr('name', 'sitemap_fields['+response.lastInsertId+'][sectionId]');
-					$('input[name="sitemap_fields['+rowId+'][url]').attr('name', 'sitemap_fields['+response.lastInsertId+'][url]');
-					$('select[name="sitemap_fields['+rowId+'][priority]').attr('name', 'sitemap_fields['+response.lastInsertId+'][priority]');
-					$('select[name="sitemap_fields['+rowId+'][changeFrequency]').attr('name', 'sitemap_fields['+response.lastInsertId+'][changeFrequency]');
-					$('input[name="sitemap_fields['+rowId+'][enabled]').attr('name', 'sitemap_fields['+response.lastInsertId+'][enabled]');
-					$('input[name="sitemap_fields['+rowId+'][ping]').attr('name', 'sitemap_fields['+response.lastInsertId+'][ping]');
+					$('input[name="sitemap_fields['+rowId+'][id]"]').attr('name', 'sitemap_fields['+response.lastInsertId+'][id]');
+					$('input[name="sitemap_fields['+response.lastInsertId+'][id]"]').val(response.lastInsertId);
+					$('input[name="sitemap_fields['+rowId+'][sectionId]"]').attr('name', 'sitemap_fields['+response.lastInsertId+'][sectionId]');
+					$('input[name="sitemap_fields['+rowId+'][url]"]').attr('name', 'sitemap_fields['+response.lastInsertId+'][url]');
+					$('select[name="sitemap_fields['+rowId+'][priority]"]').attr('name', 'sitemap_fields['+response.lastInsertId+'][priority]');
+					$('select[name="sitemap_fields['+rowId+'][changeFrequency]"]').attr('name', 'sitemap_fields['+response.lastInsertId+'][changeFrequency]');
+					$('input[name="sitemap_fields['+rowId+'][enabled]"]').attr('name', 'sitemap_fields['+response.lastInsertId+'][enabled]');
+					$('input[name="sitemap_fields['+rowId+'][ping]"]').attr('name', 'sitemap_fields['+response.lastInsertId+'][ping]');
 
 					Craft.cp.displayNotice(Craft.t("Sitemap setting saved."));
 				}
