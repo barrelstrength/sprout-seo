@@ -15,7 +15,7 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             'handle'         => array(AttributeType::String, 'required' => true),
             'appendSiteName' => array(AttributeType::String),
             'globalFallback' => array(AttributeType::Bool),
-            
+
             'title'          => array(AttributeType::String),
             'description'    => array(AttributeType::String),
             'keywords'       => array(AttributeType::String),
@@ -40,7 +40,6 @@ class SproutSeo_TemplatesRecord extends BaseRecord
 
             'twitterCard'    => array(AttributeType::String),
             'twitterSite'    => array(AttributeType::String),
-            'ogDescription'  => array(AttributeType::String),
             'twitterCreator' => array(AttributeType::String),
             'twitterTitle'   => array(AttributeType::String),
             'twitterDescription' => array(AttributeType::String),

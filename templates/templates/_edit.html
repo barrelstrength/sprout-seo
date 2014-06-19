@@ -6,27 +6,27 @@
 {% endset %}
 
 {% set tabs = {
-		template: { 
+		template: {
       label: "Template Settings"|t,
       url: '#template-main'
     },
-    main: { 
+    main: {
       label: "Basic Info"|t,
       url: '#template-basic'
     },
-    publishinfo:    { 
+    publishinfo:    {
       label: "Robots"|t,
       url: '#template-robots'
     },
-    location:    { 
+    location:    {
       label: "Location"|t,
       url: '#template-location'
     },
-    facebook:    { 
+    facebook:    {
       label: "Facebook"|t,
       url: '#template-facebook'
     },
-    twitter:    { 
+    twitter:    {
       label: "Twitter"|t,
       url: '#template-twitter'
     }
@@ -45,13 +45,13 @@
 {% set body %}
 
 <form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
-	<input type="hidden" name="action" value="sproutSeo/meta/saveTemplates"> 
+	<input type="hidden" name="action" value="sproutSeo/meta/saveTemplates">
 	<input type="hidden" name="redirect" value="sproutseo/templates">
 
 	<input type="hidden" name="template_fields[id]" value="{{ templateId }}">
 
 <div id="template-main">
-	
+
 	{{ forms.textField({
 		label: "Template Name"|t,
 		instructions: "Human readable template name"|t,
@@ -86,7 +86,7 @@
 </div>
 
 <div id="template-basic" class="hidden">
-	
+
 	{{ forms.textField({
 		label: "Title"|t,
 		name: 'template_fields[title]',
@@ -100,7 +100,7 @@
 	  label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
 	  name: 'template_fields[appendSiteName]',
 	  checked: (template.appendSiteName == 1 ? 1 : 0),
-	  errors: ''  
+	  errors: ''
 	}) }}
 
 	{{ forms.textField({
@@ -132,7 +132,7 @@
 	{% endmacro %}
 	{% import _self as checkbox %}
 
-	
+
 	<div>
 			<label>
 				<input type="checkbox" value="noindex" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noindex', template.robots) }}> noindex
@@ -325,8 +325,7 @@
 
 <div id="template-twitter" class="hidden">
 
-	<h3>Twitter Summary Card</h3>
-	<input type="hidden" name="twitterCard" value="summary" />
+	<h3>General Twitter Settings</h3>
 
 	{{ forms.textField({
 		label: "Twitter Site"|t,
@@ -373,6 +372,80 @@
 		required: false
 	}) }}
 
+	<hr />
+
+	{% set twitterCardOptions = {
+		'' : 'Select Twitter Card Style...',
+		'player' : 'Player',
+		'summary' : 'Summary',
+		'summary_large_image' : 'Summary Card with Large Image',
+	} %}
+
+	<h3>Twitter Card Type</h3>
+
+	{{ forms.selectField({
+		name: 'template_fields[twitterCard]',
+		options: twitterCardOptions,
+		value: (template.twitterCard is defined ? template.twitterCard : 'summary'),
+		value: template.twitterCard,
+		errors: "",
+		required: false
+	}) }}
+
+	<div class="instructions">
+		<p>Learn about twitter cards here: <a href="https://dev.twitter.com/docs/cards">https://dev.twitter.com/docs/cards</a></p>
+	</div>
+
+	<hr />
+
+	<div id="template-twitter-card-options">
+
+		<div class="summary hidden">
+			<h3>Summary</h3>
+
+			{{ forms.textField({
+				label: "Twitter Image"|t,
+				instructions: 'The image must be a minimum size of 120x120px. Images larger than 120x120px will be resized and cropped square based on its longest dimension. Images must be less than 1MB in size.',
+				name: 'template_fields[twitterImage]',
+				value: template.twitterImage,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Twitter Image"|t,
+				instructions: 'The image must be a minimum size of 120x120px. Images larger than 120x120px will be resized and cropped square based on its longest dimension. Images must be less than 1MB in size.',
+				name: 'template_fields[twitterImage]',
+				value: template.twitterImage,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Twitter Image"|t,
+				instructions: 'The image must be a minimum size of 120x120px. Images larger than 120x120px will be resized and cropped square based on its longest dimension. Images must be less than 1MB in size.',
+				name: 'template_fields[twitterImage]',
+				value: template.twitterImage,
+				errors: "",
+				required: false
+			}) }}
+
+		</div>
+
+		<div class="summary-large">
+			<h3>Summary Card with Large Image</h3>
+
+			<img src="{{ resourceUrl('sproutseo/img/twitter/web_summary_large.png') }}">
+
+		</div>
+
+		<div class="player hidden">
+			<h3>Summary</h3>
+
+		</div>
+
+	</div>
+
 </div>
 
 <div class="buttons">
@@ -386,3 +459,5 @@
 {% if template.name is not defined or not template.handle %}
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
 {% endif %}
+
+{% includeJsResource "sproutseo/js/template.js" %}

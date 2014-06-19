@@ -15,7 +15,7 @@
 
 	<h3>Create your first Default meta-data template.</h3>
 
-{% else %}	
+{% else %}
 
 <table class="data" id="templates">
 	<thead>
@@ -35,14 +35,14 @@
 		</td>
 		<td><code>{{ template.handle }}</code></td>
 		<td class="included-fields">
-			
+
 		</td>
 		<td class="thin">
 			<a class="delete icon" title="Delete"></a>
 		</td>
 	</tr>
 
-	{% endfor %}	
+	{% endfor %}
 
 </table>
 
@@ -67,5 +67,6 @@
 			}
 		}
 	});
+
 {% endset %}
 {% includeJs js %}
