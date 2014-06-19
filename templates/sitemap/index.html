@@ -174,43 +174,10 @@
 		</tr>
 
 		{% endfor %}
+
 	{% else %}
 
-	    <tr data-rowid="{{ page.id }}">
-			<td>
-				<span class="status disabled"></span>
-
-				<input type="text" name="sitemap_fields[new][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
-
-				<input type="hidden" name="sitemap_fields[new][id]" value="{{ page.id }}">
-
-			</td>
-			<td>
-				{{ forms.selectField({
-					name: 'sitemap_fields[new][priority]',
-					options: priorityList,
-					value: (page.priority is defined ? page.priority : 0.5),
-					errors: "",
-					required: false
-				}) }}
-			</td>
-			<td>
-				{{ forms.selectField({
-					name: 'sitemap_fields[new][changeFrequency]',
-					options: frequencyList,
-					value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
-					errors: "",
-					required: false
-				}) }}
-			</td>
-			<td style="text-align: center;">
-				<input type="checkbox" name="sitemap_fields[new][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
-			</td>
-			<td></td>
-			<td>
-				<a class="delete icon" title="Delete"></a>
-			</td>
-		</tr>
+	<p>There are currently no custom pages.</p>
 
 	{% endif %}
 
