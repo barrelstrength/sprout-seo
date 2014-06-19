@@ -67,10 +67,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	public function saveCustomPage(SproutSeo_SitemapModel $customPage)
-	{
-
-		craft()->db->createCommand()->insert('sproutseo_sitemap', $customPage->getAttributes());
-		return true;
+	{	
+		$result = craft()->db->createCommand()->insert('sproutseo_sitemap', $customPage->getAttributes());
+		
+		return $result;
 	}
 
 	public function getSitemap()
