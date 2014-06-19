@@ -62,15 +62,15 @@ class SproutSeo_SitemapController extends BaseController
 
 	// @TODO make it delete the custom pages
 
-		// public function actionDeleteCustomPage()
-		// {
-		//     $this->requirePostRequest();
-		//     $this->requireAjaxRequest();
-		//     die('hello');
-		//     $id = craft()->request->getRequiredPost('id');
-		//     craft()->sproutseo_sitemap->deleteCustomPageById($id);
-	//
-		//     $this->returnJson(array('success' => true));
-		// }
+	public function actionDeleteCustomPage()
+	{
+    $this->requirePostRequest();
+    $this->requireAjaxRequest();
+    
+    $id = craft()->request->getRequiredPost('id');
+    $result = craft()->sproutSeo_sitemap->deleteCustomPageById($id);
+
+    $this->returnJson(array('success' => $result));
+	}
 }
 

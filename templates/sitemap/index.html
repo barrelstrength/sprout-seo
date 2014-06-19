@@ -120,20 +120,20 @@
 
 	{% if customPages|length %}
 
-	<table class="data fullwidth sitemap-settings custom-pages">
+	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
 		<thead>
 			<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
 			<th style="width:15%;">{{ "Priority"|t }}</th>
 			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
 			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
-			<th style="width:8%;"></th>
+			{# <th style="width:8%;"></th> #}
 			<th class="thin"></th>
 		</thead>
 		<tbody>
 
 		{% for page in customPages %}
 
-		<tr data-rowid="{{ page.id }}">
+		<tr data-rowid="{{ page.id }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
 			<td>
 				<div style="display:inline-block;padding:7px 0 7px 10px;">
 				{% if (page.enabled is defined and page.enabled == 1) %}
@@ -168,7 +168,7 @@
 			<td style="text-align: center;">
 				<input type="checkbox" name="sitemap_fields[{{ page.id }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
 			</td>
-			<td></td>
+			{# <td></td> #}
 			<td>
 				<a class="delete icon" title="Delete"></a>
 			</td>
@@ -178,7 +178,7 @@
 
 	{% else %}
 
-	<p>There are currently no custom pages.</p>
+	<p>Add your first custom page.</p>
 
 	{% endif %}
 
@@ -215,6 +215,19 @@
 
 {% set js %}
 	new Craft.SproutSeoSitemap();
+
+	new Craft.AdminTable({
+		tableSelector: '#custom-pages',
+		deleteAction: 'sproutSeo/sitemap/deleteCustomPage',
+		onDeleteObject: function(id)
+		{
+			if($('#templates').find('tbody').find('tr').size() == 0)
+			{
+				$('#templates').show();
+				$('#templates').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4"><p>Add your first custom page.</p></td></tr>');
+			}
+		}
+	});
 {% endset %}
 
 {% includeJs js %}

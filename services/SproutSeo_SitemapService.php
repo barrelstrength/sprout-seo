@@ -178,9 +178,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 	}
 
-    public function deleteCustomPageById()
+    public function deleteCustomPageById($id)
     {
-        return $this->sproutSeo_sitemap->deleteByPk($id);
+    	$record = new SproutSeo_SitemapRecord;
+    	return $record->deleteByPk($id);
     }
 
 }
