@@ -118,18 +118,19 @@
 <br/>
 <h2>{{ "Custom Pages"|t }} </h2>
 
-<table class="data fullwidth sitemap-settings custom-pages">
-	<thead>
-		<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
-		<th style="width:15%;">{{ "Priority"|t }}</th>
-		<th style="width:15%;">{{ "Change Frequency"|t }}</th>
-		<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
-		<th style="width:8%;"></th>
-		<th class="thin"></th>
-	</thead>
-	<tbody>
-
 	{% if customPages|length %}
+
+	<table class="data fullwidth sitemap-settings custom-pages">
+		<thead>
+			<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+			<th style="width:15%;">{{ "Priority"|t }}</th>
+			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
+			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
+			<th style="width:8%;"></th>
+			<th class="thin"></th>
+		</thead>
+		<tbody>
+
 		{% for page in customPages %}
 
 		<tr data-rowid="{{ page.id }}">
