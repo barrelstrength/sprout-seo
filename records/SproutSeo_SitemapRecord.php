@@ -11,12 +11,31 @@ class SproutSeo_SitemapRecord extends BaseRecord
     public function defineAttributes()
     {
         return array(
-            'sectionId'       => array(AttributeType::Number),
-            'url'             => array(AttributeType::String),
-            'priority' => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
-            'changeFrequency'        => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
-            'enabled'         => array(AttributeType::Bool, 'default' => false, 'required' => true),
-            'ping'            => array(AttributeType::Bool, 'default' => false, 'required' => true),
+            'sectionId' => array(AttributeType::Number),
+            'url' => array(AttributeType::String),
+            'priority' => array(
+                AttributeType::Number,
+                'maxLength' => 2,
+                'decimals' => 1,
+                'default' => '0.5',
+                'required' => true
+            ),
+            'changeFrequency' => array(
+                AttributeType::String,
+                'maxLength' => 7,
+                'default' => 'weekly',
+                'required' => true
+            ),
+            'enabled' => array(
+                AttributeType::Bool,
+                'default' => false,
+                'required' => true
+            ),
+            'ping' => array(
+                AttributeType::Bool,
+                'default' => false,
+                'required' => true
+            ),
         );
     }
 
