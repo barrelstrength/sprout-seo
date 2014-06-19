@@ -56,7 +56,7 @@ class SproutSeo_SitemapController extends BaseController
 	}
 
 	// @TODO make it delete the custom pages
-	
+
     // public function actionDeleteCustomPage()
     // {
     //     $this->requirePostRequest();
