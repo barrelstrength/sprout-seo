@@ -41,7 +41,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function onSaveEntry(Event $event)
 	{
 		// @TODO
-		// Test and see if the Section Entry being saved belongs to 
+		// Test and see if the Section Entry being saved belongs to
 		// a Section that we want to ping for.
 		// Get Sitemap URL
 		// Call ping function
@@ -50,7 +50,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function onSaveContent(Event $event)
 	{
 		// @TODO
-		// Test and see if the Section Entry being saved belongs to 
+		// Test and see if the Section Entry being saved belongs to
 		// a Section that we want to ping for.
 		// Get Sitemap
 		// Call ping function
@@ -58,7 +58,7 @@ class SproutSeoPlugin extends BasePlugin
 
 	protected function defineSettings()
 	{
-		// We are managing our settings on the CP Tab but storing them 
+		// We are managing our settings on the CP Tab but storing them
 		// in the plugin table so in order to use getSettings() we need
 		// these defined here (I think)
 		return array(
@@ -80,6 +80,9 @@ class SproutSeoPlugin extends BasePlugin
 
 			'sproutseo/templates/(?P<templateId>\d+)' =>
 			'sproutseo/templates/_edit',
+
+			'sproutseo/sitemap/newPage' =>
+			'sproutseo/sitemap/_edit',
 
 			'sproutseo/settings' =>
 			array('action' => 'sproutSeo/settings/settingsIndex')

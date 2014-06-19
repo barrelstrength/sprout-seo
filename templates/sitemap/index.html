@@ -38,7 +38,7 @@
 {% set body %}
 
 <form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
-	<input type="hidden" name="action" value="sproutSeo/sitemap/saveSitemap"> 
+	<input type="hidden" name="action" value="sproutSeo/sitemap/saveSitemap">
 	<input type="hidden" name="redirect" value="sproutseo/sitemap">
 
 <h2>Sections</h2>
@@ -77,7 +77,7 @@
 					{% endif %}
 					{{ section.name }}
 
-					
+
 					<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
 					<input type="hidden" name="sitemap_fields[{{ sitemapId }}][sectionId]" value="{{ section.id }}">
 
@@ -109,7 +109,7 @@
 			</td>
 			<td></td>
 		</tr>
-	
+
 	{% endfor %}
 
 	</tbody>
@@ -118,18 +118,19 @@
 <br/>
 <h2>{{ "Custom Pages"|t }} </h2>
 
-<table class="data fullwidth sitemap-settings custom-pages">
-	<thead>
-		<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
-		<th style="width:15%;">{{ "Priority"|t }}</th>
-		<th style="width:15%;">{{ "Change Frequency"|t }}</th>
-		<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
-		<th style="width:8%;"></th>
-		<th class="thin"></th>
-	</thead>
-	<tbody>
-
 	{% if customPages|length %}
+
+	<table class="data fullwidth sitemap-settings custom-pages">
+		<thead>
+			<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+			<th style="width:15%;">{{ "Priority"|t }}</th>
+			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
+			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
+			<th style="width:8%;"></th>
+			<th class="thin"></th>
+		</thead>
+		<tbody>
+
 		{% for page in customPages %}
 
 		<tr data-rowid="{{ page.id }}">
@@ -141,7 +142,7 @@
 					<span class="status disabled"></span>
 				{% endif %}
 				</div>
-				
+
 				<input type="hidden" name="sitemap_fields[{{ page.id }}][id]" value="{{ page.id }}">
 
 				<input type="text" name="sitemap_fields[{{ page.id }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
@@ -174,50 +175,20 @@
 		</tr>
 
 		{% endfor %}
+
 	{% else %}
 
-	    <tr data-rowid="{{ page.id }}">
-			<td>
-				<span class="status disabled"></span>
-				
-				<input type="text" name="sitemap_fields[new][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
-
-				<input type="hidden" name="sitemap_fields[new][id]" value="{{ page.id }}">
-
-			</td>
-			<td>
-				{{ forms.selectField({
-					name: 'sitemap_fields[new][priority]',
-					options: priorityList,
-					value: (page.priority is defined ? page.priority : 0.5),
-					errors: "",
-					required: false
-				}) }}
-			</td>
-			<td>
-				{{ forms.selectField({
-					name: 'sitemap_fields[new][changeFrequency]',
-					options: frequencyList,
-					value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
-					errors: "",
-					required: false
-				}) }}
-			</td>
-			<td style="text-align: center;">
-				<input type="checkbox" name="sitemap_fields[new][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
-			</td>
-			<td></td>
-			<td>
-				<a class="delete icon" title="Delete"></a>
-			</td>
-		</tr>
+	<p>There are currently no custom pages.</p>
 
 	{% endif %}
 
 	</tbody>
 </table>
 
-<div id="add-custom-page" class="btn add icon" style="margin-top:20px">{{ "Add Custom Page"|t }}</div>
+<div class="buttons">
+	<a class="btn submit add icon" href="{{ url('sproutseo/sitemap/newPage') }}">New Custom Page</a>
+</div>
+
 
 </form>
 

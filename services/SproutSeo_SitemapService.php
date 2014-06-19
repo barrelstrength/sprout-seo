@@ -18,7 +18,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	{
 		$row = array();
 		$isNew = false;
-		
+
 		if (isset($attributes->id) && (substr( $attributes->id, 0, 3 ) === "new"))
 		{
 			$isNew = true;
@@ -27,10 +27,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		if (!$isNew)
 		{
 			$row = craft()->db->createCommand()
-								 ->select('*')
-								 ->from('sproutseo_sitemap')
-								 ->where('id=:id',array(':id'=>$attributes->id))
-								 ->queryRow();
+				->select('*')
+				->from('sproutseo_sitemap')
+				->where('id=:id',array(':id'=>$attributes->id))
+				->queryRow();
 		}
 
 		$model = SproutSeo_SitemapModel::populateModel($row);
@@ -46,41 +46,51 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$model->uid = StringHelper::UUID();
 
 		if ($isNew)
-		{	
+		{
 			$model->dateCreated = DateTimeHelper::currentTimeForDb();
 			craft()->db->createCommand()->insert('sproutseo_sitemap', $model->getAttributes());
-			
+
 			return craft()->db->lastInsertID;
 		}
 		else
-		{	
+		{
 			$result = craft()->db->createCommand()
-						 					 ->update('sproutseo_sitemap', 
-						 					 					$model->getAttributes(),
-						 					 					'id=:id', array(':id' => $model->id));
+				->update('sproutseo_sitemap',
+				$model->getAttributes(),
+				'id=:id', array(
+					':id' => $model->id
+				)
+			);
 
 			return $model->id;
 		}
 	}
 
+	public function saveCustomPage(SproutSeo_SitemapModel $customPage)
+	{
+
+		craft()->db->createCommand()->insert('sproutseo_sitemap', $customPage->getAttributes());
+		return true;
+	}
+
 	public function getSitemap()
 	{
 		// $sections = craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
-		
+
 		$enabledSections = craft()->db->createCommand()
                 ->select('*')
                 ->from('sproutseo_sitemap')
                 ->where('enabled = :enabled', array('enabled' => 1))
                 ->queryAll();
-		
+
 		// Begin sitemap
-		// @TODO - let's break out this code so that we can return the full sitemap, 
+		// @TODO - let's break out this code so that we can return the full sitemap,
 		// or just the data so that someone could build it on their own
 		$sitemap = '<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
 		// Loop through each of our enabled sections
-    foreach ($enabledSections as $key => $sitemapSettings) 
+    foreach ($enabledSections as $key => $sitemapSettings)
     {
 
     	// Grab all of the entries associated with that section
@@ -95,9 +105,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			            ->queryAll();
 
 			// Loop through each entry
-			foreach ($entries as $key => $entry) 
+			foreach ($entries as $key => $entry)
 			{
-				
+
 				$url = craft()->getSiteUrl() . $entry['uri'];
 
 				$sitemap .= '<url>';
@@ -108,7 +118,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	      $sitemap .= '</url>';
 
 			}
-			
+
     }
 
 		// End sitemap
@@ -133,21 +143,21 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		// Loop through the sections and
 		// 1) Remove any sections without URLs
-		foreach ($sections as $key => $section) 
+		foreach ($sections as $key => $section)
 		{
-			if (!$section->hasUrls) 
+			if (!$section->hasUrls)
 			{
 				// remove sections without URLs
 				unset($sections[$key]);
 			}
 
-			$sectionData[$section->id] = $section->getAttributes();			
+			$sectionData[$section->id] = $section->getAttributes();
 		}
 
 		// 2) Add Sitemap data to any sectionIds that match
-		foreach ($sitemapSettings as $key => $settings) 
-		{	
-			if (array_key_exists($settings['sectionId'], $sectionData)) 
+		foreach ($sitemapSettings as $key => $settings)
+		{
+			if (array_key_exists($settings['sectionId'], $sectionData))
 			{
 				$sectionData[$settings['sectionId']]['settings'] = $settings;
 			}
@@ -163,8 +173,14 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			->from('sproutseo_sitemap')
 			->where('url IS NOT NULL')
 			->queryAll();
-			
+
 		return $customPages;
-		
+
 	}
+
+    public function deleteCustomPageById()
+    {
+        return $this->sproutSeo_sitemap->deleteByPk($id);
+    }
+
 }
