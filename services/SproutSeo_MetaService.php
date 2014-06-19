@@ -413,21 +413,21 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	  // blank nomatter what.  We really just need to know we are looping through
 	  // the samme model for each of the levels of overrides or templates
 	  foreach ($entryOverrides->getAttributes() as $key => $value)
-      {
+    {
 	    if ($entryOverrides->getAttribute($key))
-        {
+      {
 	      $metaValues[$key] = $value;
 	    }
-        elseif ($codeOverrides->getAttribute($key))
-        {
+      elseif ($codeOverrides->getAttribute($key))
+      {
 	      $metaValues[$key] = $codeOverrides[$key];
 	    }
-        elseif (isset($templates->handle))
-        {
+      elseif (isset($templates->handle))
+      {
 	      $metaValues[$key] = $templates->getAttribute($key);
 	    }
-        else
-        {
+      else
+      {
 	      // We got nuthin'
 	      $metaValues[$key] = '';
 	    }

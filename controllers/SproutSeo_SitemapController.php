@@ -29,3 +29,4 @@ class SproutSeo_SitemapController extends BaseController
 
 	}
 }
+
