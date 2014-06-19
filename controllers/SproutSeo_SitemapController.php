@@ -69,3 +69,4 @@ class SproutSeo_SitemapController extends BaseController
     //     $this->returnJson(array('success' => true));
     // }
 }
+
