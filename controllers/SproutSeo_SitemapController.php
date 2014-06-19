@@ -47,6 +47,7 @@ class SproutSeo_SitemapController extends BaseController
         if (craft()->sproutSeo_sitemap->saveCustomPage($customPage))
         {
             craft()->userSession->setNotice(Craft::t('Custom page saved.'));
+			$this->redirectToPostedUrl();
         }
         else
         {
