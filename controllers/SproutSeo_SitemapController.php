@@ -37,36 +37,40 @@ class SproutSeo_SitemapController extends BaseController
 		// HAND OFF TO MODEL
 		$customPage = new SproutSeo_SitemapModel();
 
-        // ATTRIBUTES
-        $customPage->url     			= craft()->request->getPost('url');
-        $customPage->priority   	 	= craft()->request->getPost('priority');
-        $customPage->changeFrequency 	= craft()->request->getPost('changeFrequency');
+		// ATTRIBUTES
+		$customPage->url = craft()->request->getPost('url');
+		$customPage->priority = craft()->request->getPost('priority');
+		$customPage->changeFrequency 	= craft()->request->getPost('changeFrequency');
+		$customPage->enabled 	= craft()->request->getPost('enabled');
+		
+		// @TODO - maybe add these as defaults to the model?  We don't need this for the Custom URLs.
+		$customPage->ping = 0;
 
 		// SAVE CUSTOM PAGE - PASS TO SERVICE
 		// @TODO clean up
-        if (craft()->sproutSeo_sitemap->saveCustomPage($customPage))
-        {
-            craft()->userSession->setNotice(Craft::t('Custom page saved.'));
+		if (craft()->sproutSeo_sitemap->saveCustomPage($customPage))
+		{
+			craft()->userSession->setNotice(Craft::t('Custom page saved.'));
 			$this->redirectToPostedUrl();
-        }
-        else
-        {
-            craft()->userSession->setError(Craft::t('Couldn’t save custom page.'));
-        }
+		}
+		else
+		{
+			craft()->userSession->setError(Craft::t('Couldn’t save custom page.'));
+		}
 
 	}
 
 	// @TODO make it delete the custom pages
 
-    // public function actionDeleteCustomPage()
-    // {
-    //     $this->requirePostRequest();
-    //     $this->requireAjaxRequest();
-    //     die('hello');
-    //     $id = craft()->request->getRequiredPost('id');
-    //     craft()->sproutseo_sitemap->deleteCustomPageById($id);
+		// public function actionDeleteCustomPage()
+		// {
+		//     $this->requirePostRequest();
+		//     $this->requireAjaxRequest();
+		//     die('hello');
+		//     $id = craft()->request->getRequiredPost('id');
+		//     craft()->sproutseo_sitemap->deleteCustomPageById($id);
 	//
-    //     $this->returnJson(array('success' => true));
-    // }
+		//     $this->returnJson(array('success' => true));
+		// }
 }
 
