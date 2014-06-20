@@ -36,29 +36,20 @@ class SproutSeo_MetaModel extends BaseModel
             'ogVideo'        => array(AttributeType::String),
             'ogLocale'       => array(AttributeType::String),
 
+            // Store the Twitter Card Type
+            // @TODO convert to enum with the proper choices
             'twitterCard' => array(
                 AttributeType::String
             ),
 
-            // Generic on all cards
-            'twitterSite' => array(
-                AttributeType::String
-            ),
-            'twitterTitle' => array(
-                AttributeType::String
-            ),
-            'twitterCreator' => array(
-                AttributeType::String
-            ),
-            'twitterDescription' => array(
-                AttributeType::String
-            ),
-            'twitterImageSource' => array(
-                AttributeType::String
-            ),
-
             // Fields for Twitter Summary Card
+            'twitterSummarySite' => array(
+                AttributeType::String
+            ),
             'twitterSummaryTitle' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryCreator' => array(
                 AttributeType::String
             ),
             'twitterSummaryDescription' => array(
@@ -69,13 +60,19 @@ class SproutSeo_MetaModel extends BaseModel
             ),
 
             // Fields for Twitter Summary Large Image Card
+            'twitterSummaryLargeImageSite' => array(
+                AttributeType::String
+            ),
             'twitterSummaryLargeImageTitle' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryLargeImageCreator' => array(
                 AttributeType::String
             ),
             'twitterSummaryLargeImageDescription' => array(
                 AttributeType::String
             ),
-            'twitterSummaryLargeImage' => array(
+            'twitterSummaryCreator' => array(
                 AttributeType::String
             ),
             'twitterSummaryLargeImageImageSource' => array(
@@ -83,21 +80,36 @@ class SproutSeo_MetaModel extends BaseModel
             ),
 
             // Fields for Twitter Photo Card
+            'twitterPhotoSite' => array(
+                AttributeType::String
+            ),
             'twitterPhotoTitle' => array(
                 AttributeType::String,
+            ),
+            'twitterPhotoCreator' => array(
+                AttributeType::String
             ),
             'twitterPhotoImageSource' => array(
                 AttributeType::String,
             ),
 
             // Fields for Twitter Player Card
+            'twitterPlayerSite' => array(
+                AttributeType::String
+            ),
             'twitterPlayerTitle' => array(
                 AttributeType::String,
+            ),
+            'twitterPlayerCreator' => array(
+                AttributeType::String
             ),
             'twitterPlayerDescription' => array(
                 AttributeType::String,
             ),
             'twitterPlayerImageSource' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayer' => array(
                 AttributeType::String,
             ),
             'twitterPlayerStream' => array(
@@ -112,6 +124,7 @@ class SproutSeo_MetaModel extends BaseModel
             'twitterPlayerHeight' => array(
                 AttributeType::String,
             ),
+
         );
     }
 
