@@ -68,52 +68,16 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             ),
 
             // Fields for Twitter Summary Large Image Card
-            'twitterSummaryLargeImageSite' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryLargeImageTitle' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryLargeImageCreator' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryLargeImageDescription' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryCreator' => array(
-                AttributeType::String
-            ),
             'twitterSummaryLargeImageImageSource' => array(
                 AttributeType::String
             ),
 
             // Fields for Twitter Photo Card
-            'twitterPhotoSite' => array(
-                AttributeType::String
-            ),
-            'twitterPhotoTitle' => array(
-                AttributeType::String,
-            ),
-            'twitterPhotoCreator' => array(
-                AttributeType::String
-            ),
             'twitterPhotoImageSource' => array(
                 AttributeType::String,
             ),
 
             // Fields for Twitter Player Card
-            'twitterPlayerSite' => array(
-                AttributeType::String
-            ),
-            'twitterPlayerTitle' => array(
-                AttributeType::String,
-            ),
-            'twitterPlayerCreator' => array(
-                AttributeType::String
-            ),
-            'twitterPlayerDescription' => array(
-                AttributeType::String,
-            ),
             'twitterPlayerImageSource' => array(
                 AttributeType::String,
             ),
