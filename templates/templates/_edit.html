@@ -328,7 +328,7 @@
 	{% set twitterCardOptions = {
 		'' : 'Select Twitter Card Type...',
 		'summary' : 'Summary',
-		'summary_large_image' : 'Summary Card with Large Image',
+		'summary-large-image' : 'Summary Card with Large Image',
 		'player' : 'Player',
 	} %}
 
@@ -343,49 +343,51 @@
 		required: false
 	}) }}
 
-	<p>Learn about twitter cards here: <a href="https://dev.twitter.com/docs/cards">https://dev.twitter.com/docs/cards</a></p>
+	<p>Learn about twitter cards here: <a href="https://dev.twitter.com/docs/cards">https://dev.twitter.com/docs/cards</a>.</p>
 
 	<hr>
 
-	<div class="twitter-summary">
+	{{ forms.textField({
+		label: "Site"|t,
+		name: 'template_fields[twitterSummarySite]',
+		instructions: "The Twitter username of the owner of this card's domain.",
+		value: template.twitterSummarySite,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Creator"|t,
+		name: 'template_fields[twitterSummaryCreator]',
+		instructions: "If the content of this card was authored by someone, include their Twitter username here.",
+		value: template.twitterSummaryCreator,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Title"|t,
+		name: 'template_fields[twitterSummaryTitle]',
+		instructions: 'The title of your content as it should appear in the card.',
+		value: template.twitterSummaryTitle,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textareaField({
+		label: "Description"|t,
+		name: 'template_fields[twitterSummaryDescription]',
+		instructions: 'A description of the content in a maximum of 200 characters.',
+		value: template.twitterSummaryDescription,
+		errors: "",
+		required: false
+	}) }}
+
+	<hr>
+
+	<div id="twitter-summary" class="hidden">
 
 		<h2>Summary Card</h2>
-
-		{{ forms.textField({
-			label: "Site"|t,
-			name: 'template_fields[twitterSummarySite]',
-			instructions: "The Twitter username of the owner of this card's domain.",
-			value: template.twitterSummarySite,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Creator"|t,
-			name: 'template_fields[twitterSummaryCreator]',
-			instructions: "If the content of this card was authored by someone, include their Twitter username here.",
-			value: template.twitterSummaryCreator,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Title"|t,
-			name: 'template_fields[twitterSummaryTitle]',
-			instructions: 'The title of your content as it should appear in the card.',
-			value: template.twitterSummaryTitle,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textareaField({
-			label: "Description"|t,
-			name: 'template_fields[twitterSummaryDescription]',
-			instructions: 'A description of the content in a maximum of 200 characters.',
-			value: template.twitterSummaryDescription,
-			errors: "",
-			required: false
-		}) }}
 
 		{{ forms.textField({
 			label: "Image Source"|t,
@@ -400,7 +402,7 @@
 
 	</div>
 
-	<div class="twitter-summary-large-image">
+	<div id="twitter-summary-large-image" class="hidden">
 
 		<h2>Summary Card with Large Image</h2>
 
@@ -453,7 +455,7 @@
 
 	</div>
 
-	<div class="twitter-photo">
+	<div id="twitter-photo" class="hidden">
 
 		<h2>Photo Card</h2>
 
@@ -497,7 +499,7 @@
 
 	</div>
 
-	<div class="twitter-player">
+	<div id="twitter-player" class="hidden">
 
 		<h2>Player Card</h2>
 
@@ -546,7 +548,6 @@
 			required: false
 		}) }}
 
-		{#  #}
 		{{ forms.textField({
 			label: "Player"|t,
 			name: 'template_fields[twitterPlayer]',
@@ -611,3 +612,9 @@
 {% endif %}
 
 {% includeJsResource "sproutseo/js/template.js" %}
+
+{% set js %}
+	new Craft.SproutSeoTemplate();
+{% endset %}
+
+{% includeJs js %}
