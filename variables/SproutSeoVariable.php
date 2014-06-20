@@ -13,7 +13,7 @@ class SproutSeoVariable
   ## ------------------------------------------------------------
   ## General Variables
   ## ------------------------------------------------------------
-  
+
   public function getName()
   {
     return $this->plugin->getName();
@@ -30,13 +30,13 @@ class SproutSeoVariable
 
   /**
    * Set SEO Meta data in our templates
-   * 
+   *
    * @param  array  $meta Array of supported meta values
    * @return [type]       [description]
    */
   public function meta(array $meta = array())
   {
-    if (count($meta)) 
+    if (count($meta))
     {
       craft()->sproutSeo_meta->updateMeta($meta);
     }
@@ -44,7 +44,7 @@ class SproutSeoVariable
 
   /**
    * Output our SEO Meta Tags, and provide fallbacks
-   * 
+   *
    * @param  [type] $overrideInfo [description]
    * @return [type]               [description]
    */
@@ -52,7 +52,7 @@ class SproutSeoVariable
   {
     // @TODO - should optimize accept a fallback array?
     // maybe just allow this to be set in the CP.
-    
+
     if (count($meta))
     {
       // If an array is defined, add it to our meta array before we output anything
@@ -61,7 +61,7 @@ class SproutSeoVariable
 
     // This is our getter
     $overrideInfo = craft()->sproutSeo_meta->getMeta();
-    
+
     // Output the metadata as pre-defined HTML
     $output = craft()->sproutSeo_meta->optimize($overrideInfo);
 
@@ -84,7 +84,7 @@ class SproutSeoVariable
 
   /**
    * Get all Templates
-   * 
+   *
    * @return [type] [description]
    */
   public function allTemplates()
@@ -129,7 +129,7 @@ class SproutSeoVariable
    * @return array of Sections
    */
   public function getAllSections()
-  { 
+  {
     return craft()->sections->getAllSections();
   }
 
@@ -139,7 +139,7 @@ class SproutSeoVariable
    * @return array of Sections
    */
   public function getAllSectionsWithUrls()
-  { 
+  {
     return craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
   }
 
@@ -149,7 +149,7 @@ class SproutSeoVariable
    * @return array of Sections
    */
   public function getAllCustomPages()
-  { 
+  {
     return craft()->sproutSeo_sitemap->getAllCustomPages();
   }
 
