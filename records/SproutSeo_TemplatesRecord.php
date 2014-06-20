@@ -50,7 +50,7 @@ class SproutSeo_TemplatesRecord extends BaseRecord
                 AttributeType::String
             ),
 
-            // CARDS USED ON: All
+            // Generic on all cards
             'twitterSite' => array(
                 AttributeType::String
             ),
@@ -60,30 +60,66 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             'twitterCreator' => array(
                 AttributeType::String
             ),
-
-            // CARDS USED ON: Summary, Summary With Large Image
             'twitterDescription' => array(
                 AttributeType::String
             ),
-            // CARDS USED ON: Summary, Summary With Large Image, Photo
             'twitterImageSource' => array(
                 AttributeType::String
             ),
 
+            // Fields for Twitter Summary Card
+            'twitterSummaryTitle' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryDescription' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryImageSource' => array(
+                AttributeType::String
+            ),
+
+            // Fields for Twitter Summary Large Image Card
+            'twitterSummaryLargeImageTitle' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryLargeImageDescription' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryLargeImage' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryLargeImageImageSource' => array(
+                AttributeType::String
+            ),
+
+            // Fields for Twitter Photo Card
+            'twitterPhotoTitle' => array(
+                AttributeType::String,
+            ),
+            'twitterPhotoImageSource' => array(
+                AttributeType::String,
+            ),
+
             // Fields for Twitter Player Card
-            'twitterPlayer' => array(
+            'twitterPlayerTitle' => array(
                 AttributeType::String,
             ),
-            'twitterPlayerWidth' => array(
+            'twitterPlayerDescription' => array(
                 AttributeType::String,
             ),
-            'twitterPlayerHeight' => array(
+            'twitterPlayerImageSource' => array(
                 AttributeType::String,
             ),
             'twitterPlayerStream' => array(
                 AttributeType::String,
             ),
             'twitterPlayerStreamContentType' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerWidth' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerHeight' => array(
                 AttributeType::String,
             ),
 
