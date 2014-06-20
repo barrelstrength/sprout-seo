@@ -44,15 +44,31 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             'ogVideo'        => array(AttributeType::String),
             'ogLocale'       => array(AttributeType::String),
 
-            // General twitter options (default)
-            'twitterCard'    => array(AttributeType::String),
-            'twitterSite'    => array(AttributeType::String),
-            'twitterCreator' => array(AttributeType::String),
-            'twitterTitle'   => array(AttributeType::String),
-            'twitterDescription' => array(AttributeType::String),
-            'twitterImage'   => array(AttributeType::String),
+            // Store the Twitter Card Type
+            // @TODO convert to enum with the proper choices
+            'twitterCard' => array(
+                AttributeType::String
+            ),
 
-            // @TODO add extra fields for twitter card options
+            // CARDS USED ON: All
+            'twitterSite' => array(
+                AttributeType::String
+            ),
+            'twitterTitle' => array(
+                AttributeType::String
+            ),
+            'twitterCreator' => array(
+                AttributeType::String
+            ),
+
+            // CARDS USED ON: Summary, Summary With Large Image
+            'twitterDescription' => array(
+                AttributeType::String
+            ),
+            // CARDS USED ON: Summary, Summary With Large Image, Photo
+            'twitterImageSource' => array(
+                AttributeType::String
+            ),
 
             // Fields for Twitter Player Card
             'twitterPlayer' => array(

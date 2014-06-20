@@ -339,19 +339,19 @@
 	}) }}
 
 	{{ forms.textField({
-		label: "Twitter Creator"|t,
-		instructions: '@username for the content creator / author.',
-		name: 'template_fields[twitterCreator]',
-		value: template.twitterCreator,
+		label: "Twitter Title"|t,
+		instructions: 'Title should be concise and will be truncated at 70 characters.',
+		name: 'template_fields[twitterTitle]',
+		value: template.twitterTitle,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
-		label: "Twitter Title"|t,
-		instructions: 'Title should be concise and will be truncated at 70 characters.',
-		name: 'template_fields[twitterTitle]',
-		value: template.twitterTitle,
+		label: "Twitter Creator"|t,
+		instructions: '@username for the content creator / author.',
+		name: 'template_fields[twitterCreator]',
+		value: template.twitterCreator,
 		errors: "",
 		required: false
 	}) }}
