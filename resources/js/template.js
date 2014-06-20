@@ -19,8 +19,9 @@ Craft.SproutSeoTemplate = Garnish.Base.extend(
     onChange: function(ev)
     {
         // alert("Your book is overdue.");
-        changedElement = ev.target;
-        $('div#template-twitter-card-options').removeClass('hidden');
+        this.twitterCard = $('select[name="template_fields[twitterCard]"]');
+        this.cardSummary = $('div[]')
+        $('.twitter-summary').removeClass('hidden');
     }
 }
 )
