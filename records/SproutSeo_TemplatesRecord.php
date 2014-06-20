@@ -11,8 +11,14 @@ class SproutSeo_TemplatesRecord extends BaseRecord
     protected function defineAttributes()
     {
         return array(
-            'name'           => array(AttributeType::String, 'required' => true),
-            'handle'         => array(AttributeType::String, 'required' => true),
+            'name' => array(
+                AttributeType::String,
+                'required' => true
+            ),
+            'handle' => array(
+                AttributeType::String,
+                'required' => true
+            ),
             'appendSiteName' => array(AttributeType::String),
             'globalFallback' => array(AttributeType::Bool),
 
@@ -38,19 +44,46 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             'ogVideo'        => array(AttributeType::String),
             'ogLocale'       => array(AttributeType::String),
 
+            // General twitter options (default)
             'twitterCard'    => array(AttributeType::String),
             'twitterSite'    => array(AttributeType::String),
             'twitterCreator' => array(AttributeType::String),
             'twitterTitle'   => array(AttributeType::String),
             'twitterDescription' => array(AttributeType::String),
             'twitterImage'   => array(AttributeType::String),
+
+            // @TODO add extra fields for twitter card options
+
+            // Fields for Twitter Player Card
+            'twitterPlayer' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerWidth' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerHeight' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerStream' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerStreamContentType' => array(
+                AttributeType::String,
+            ),
+
         );
     }
 
     public function defineIndexes()
     {
         return array(
-            array('columns' => array('name', 'handle'), 'unique' => true),
+            array(
+                'columns' => array(
+                    'name',
+                    'handle'
+                    ),
+                'unique' => true
+            ),
         );
     }
 
