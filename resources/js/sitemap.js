@@ -67,7 +67,6 @@ Craft.SproutSeoSitemap = Garnish.Base.extend(
 		rowId = $(changedElement).closest('tr').data('rowid');
 
 		this.status = $('tr[data-rowid="'+rowId+'"] td span.status');
-		// this.id = $('input[name="sitemap_fields['+rowId+'][id]"]').val();
 		this.id = $('input[name="sitemap_fields['+rowId+'][id]"]').val();
 		this.sectionId = $('input[name="sitemap_fields['+rowId+'][sectionId]"]').val();
 		this.url = $('input[name="sitemap_fields['+rowId+'][url]"]').val();
