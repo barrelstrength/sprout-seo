@@ -368,8 +368,8 @@
 	{{ forms.textField({
 		label: "Twitter Image"|t,
 		instructions: 'The image must be a minimum size of 120x120px. Images larger than 120x120px will be resized and cropped square based on its longest dimension. Images must be less than 1MB in size.',
-		name: 'template_fields[twitterImage]',
-		value: template.twitterImage,
+		name: 'template_fields[twitterImageSource]',
+		value: template.twitterImageSource,
 		errors: "",
 		required: false
 	}) }}
@@ -378,12 +378,12 @@
 
 	{% set twitterCardOptions = {
 		'' : 'Select Twitter Card Style...',
-		'player' : 'Player',
 		'summary' : 'Summary',
 		'summary_large_image' : 'Summary Card with Large Image',
+		'player' : 'Player',
 	} %}
 
-	<h3>Twitter Card Type</h3>
+	<h2>Twitter Card Type</h2>
 
 	{{ forms.selectField({
 		name: 'template_fields[twitterCard]',
@@ -394,58 +394,176 @@
 		required: false
 	}) }}
 
-	<div class="instructions">
-		<p>Learn about twitter cards here: <a href="https://dev.twitter.com/docs/cards">https://dev.twitter.com/docs/cards</a></p>
-	</div>
+	<p>Learn about twitter cards here: <a href="https://dev.twitter.com/docs/cards">https://dev.twitter.com/docs/cards</a></p>
 
-	<hr />
+	<hr>
 
 	<div id="template-twitter-card-options">
 
-		<div class="summary hidden">
+		<div class="twitter-summary">
 
-			<h3>Summary</h3>
+			<h2>Summary</h2>
 
 			{{ forms.textField({
-				label: "Twitter Image"|t,
-				instructions: 'The image must be a minimum size of 120x120px. Images larger than 120x120px will be resized and cropped square based on its longest dimension. Images must be less than 1MB in size.',
-				name: 'template_fields[twitterImage]',
-				value: template.twitterImage,
+				label: "Summary Title"|t,
+				name: 'template_fields[twitterSummaryTitle]',
+				instructions: 'The title of your content as it should appear in the card.',
+				value: template.twitterSummaryTitle,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textareaField({
+				label: "Summary Description"|t,
+				name: 'template_fields[twitterSummaryDescription]',
+				instructions: 'A description of the content in a maximum of 200 characters.',
+				value: template.twitterSummaryDescription,
 				errors: "",
 				required: false
 			}) }}
 
 			{{ forms.textField({
-				label: "Twitter Image"|t,
-				instructions: 'The image must be a minimum size of 120x120px. Images larger than 120x120px will be resized and cropped square based on its longest dimension. Images must be less than 1MB in size.',
-				name: 'template_fields[twitterImage]',
-				value: template.twitterImage,
+				label: "Summary Image Source"|t,
+				name: 'template_fields[twitterSummaryImageSource]',
+				instructions: 'A URL to the image representing the content.',
+				value: template.twitterSummaryImageSource,
 				errors: "",
 				required: false
 			}) }}
 
-			{{ forms.textField({
-				label: "Twitter Image"|t,
-				instructions: 'The image must be a minimum size of 120x120px. Images larger than 120x120px will be resized and cropped square based on its longest dimension. Images must be less than 1MB in size.',
-				name: 'template_fields[twitterImage]',
-				value: template.twitterImage,
-				errors: "",
-				required: false
-			}) }}
+			<hr>
 
 		</div>
 
-		<div class="summary-large">
+		<div class="twitter-summary-large-image">
 
-			<h3>Summary Card with Large Image</h3>
+			<h2>Summary Card with Large Image</h2>
 
-			<img src="{{ resourceUrl('sproutseo/img/twitter/web_summary_large.png') }}">
+			{{ forms.textField({
+				label: "Summary With Large Image Title"|t,
+				name: 'template_fields[twitterSummaryLargeImageTitle]',
+				instructions: 'The title of your content as it should appear in the card.',
+				value: template.twitterSummaryLargeImageTitle,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textareaField({
+				label: "Summary With Large Image Description"|t,
+				name: 'template_fields[twitterSummaryLargeImageDescription]',
+				instructions: 'A description of the content in a maximum of 200 characters.',
+				value: template.twitterSummaryLargeImageDescription,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Summary With Large Image Source"|t,
+				name: 'template_fields[twitterSummaryLargeImageImageSource]',
+				instructions: 'A URL to the image representing the content.',
+				value: template.twitterSummaryLargeImageImageSource,
+				errors: "",
+				required: false
+			}) }}
+
+			<hr>
 
 		</div>
 
-		<div class="player hidden">
+		<div class="twitter-photo">
 
-			<h3>Summary</h3>
+			<h2>Photo Card</h2>
+
+			{{ forms.textField({
+				label: "Photo Title"|t,
+				name: 'template_fields[twitterPhotoTitle]',
+				instructions: 'The title of your content as it should appear in the card.',
+				value: template.twitterPhotoTitle,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Photo Image Source"|t,
+				name: 'template_fields[twitterPhotoImageSource]',
+				instructions: 'A URL to the image representing the content.',
+				value: template.twitterPhotoImageSource,
+				errors: "",
+				required: false
+			}) }}
+
+			<hr />
+
+		</div>
+
+		<div class="twitter-player">
+
+			<h2>Player Card</h2>
+
+			{{ forms.textField({
+				label: "Player title"|t,
+				name: 'template_fields[twitterPlayerTitle]',
+				instructions: 'The title of your content as it should appear in the card.',
+				value: template.twitterPlayerTitle,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textareaField({
+				label: "Player Description"|t,
+				name: 'template_fields[twitterPlayerDescription]',
+				instructions: 'A description of the content in a maximum of 200 characters.',
+				value: template.twitterPlayerDescription,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Player Image Source"|t,
+				name: 'template_fields[twitterPlayerImageSource]',
+				instructions: 'A URL to the image representing the content.',
+				value: template.twitterPlayerImageSource,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Player Stream"|t,
+				name: 'template_fields[twitterPlayerStream]',
+				instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrationlications directly. If provided, the stream must be delivered in the MPEG-4 container format.",
+				value: template.twitterPlayerStream,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Player Stream Content Type"|t,
+				name: 'template_fields[twitterPlayerStreamContentType]',
+				instructions: "The MIME type subtype combination that describes the content contained in twitter player stream.",
+				value: template.twitterPlayerStreamContentType,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Player Height"|t,
+				name: 'template_fields[twitterPlayerHeight]',
+				instructions: "Height of IFRAME specified in twitter player in pixels.",
+				value: template.twitterPlayerHeight,
+				errors: "",
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Player Width"|t,
+				name: 'template_fields[twitterPlayerWidth]',
+				instructions: 'Width of IFRAME specified in twitter player in pixels.',
+				value: template.twitterPlayerWidth,
+				errors: "",
+				required: false
+			}) }}
+
+			<hr />
 
 		</div>
 
