@@ -50,25 +50,14 @@ class SproutSeo_TemplatesRecord extends BaseRecord
                 AttributeType::String
             ),
 
-            // Generic on all cards
-            'twitterSite' => array(
-                AttributeType::String
-            ),
-            'twitterTitle' => array(
-                AttributeType::String
-            ),
-            'twitterCreator' => array(
-                AttributeType::String
-            ),
-            'twitterDescription' => array(
-                AttributeType::String
-            ),
-            'twitterImageSource' => array(
-                AttributeType::String
-            ),
-
             // Fields for Twitter Summary Card
+            'twitterSummarySite' => array(
+                AttributeType::String
+            ),
             'twitterSummaryTitle' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryCreator' => array(
                 AttributeType::String
             ),
             'twitterSummaryDescription' => array(
@@ -79,13 +68,19 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             ),
 
             // Fields for Twitter Summary Large Image Card
+            'twitterSummaryLargeImageSite' => array(
+                AttributeType::String
+            ),
             'twitterSummaryLargeImageTitle' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryLargeImageCreator' => array(
                 AttributeType::String
             ),
             'twitterSummaryLargeImageDescription' => array(
                 AttributeType::String
             ),
-            'twitterSummaryLargeImage' => array(
+            'twitterSummaryCreator' => array(
                 AttributeType::String
             ),
             'twitterSummaryLargeImageImageSource' => array(
@@ -93,21 +88,36 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             ),
 
             // Fields for Twitter Photo Card
+            'twitterPhotoSite' => array(
+                AttributeType::String
+            ),
             'twitterPhotoTitle' => array(
                 AttributeType::String,
+            ),
+            'twitterPhotoCreator' => array(
+                AttributeType::String
             ),
             'twitterPhotoImageSource' => array(
                 AttributeType::String,
             ),
 
             // Fields for Twitter Player Card
+            'twitterPlayerSite' => array(
+                AttributeType::String
+            ),
             'twitterPlayerTitle' => array(
                 AttributeType::String,
+            ),
+            'twitterPlayerCreator' => array(
+                AttributeType::String
             ),
             'twitterPlayerDescription' => array(
                 AttributeType::String,
             ),
             'twitterPlayerImageSource' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayer' => array(
                 AttributeType::String,
             ),
             'twitterPlayerStream' => array(
