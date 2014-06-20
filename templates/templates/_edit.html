@@ -614,7 +614,12 @@
 {% includeJsResource "sproutseo/js/template.js" %}
 
 {% set js %}
-	new Craft.SproutSeoTemplate();
+
+	new Craft.SproutSeoTemplate({
+	    dropdownSelector: ['#template-twitter select[name="template_fields[twitterCard]"]','#template-facebook select[name="template_fields[facebookType]"]'],
+	    appendage: ['#twitter-', '#facebook-']
+	});
+
 {% endset %}
 
 {% includeJs js %}

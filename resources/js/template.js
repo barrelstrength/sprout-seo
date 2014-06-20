@@ -3,79 +3,50 @@
 Craft.SproutSeoTemplate = Garnish.Base.extend(
 {
     // DEFINE VARIABLES
-    $selectDropdowns: null,
-    $currentTwitterCardType: null,
-    $savedTwitterCardType: null,
+    $selectTwitterDropdown: null,
+    $oldTwitterCardType: null,
+    $newTwitterCardType: null,
 
-    $targetClass: null,
     $appendage: null,
 
     $targetedElement: null,
-    $newTargetedElement: null,
-
-    // TEST
-    $test: null,
 
     // ON INIT
+    // @TODO clean this up asap...
     init: function()
     {
 
-        this.$selectDropdowns = $('#template-twitter select[name="template_fields[twitterCard]"]');
-
-        this.$savedTwitterCardType = ;
+        // @DONE chose the element to target
+        this.$selectTwitterDropdown = $('#template-twitter select[name="template_fields[twitterCard]"]');;
 
         // @DONE Select the current value of the Twitter Card on load
-        this.$currentTwitterCardType = this.$selectDropdowns.val();
-        // console.log(this.$currentTwitterCardType);
+        this.$oldTwitterCardType = this.$selectTwitterDropdown.val();
 
-        // @DONE concatenate the card type and div append
+        // @DONE concatenate the card type and div appendage
         this.$appendage = '#twitter-';
-        this.$targetedElement = this.$appendage + this.$currentTwitterCardType;
-            // console.log(this.$targetedElement);
+        this.$targetedElement = this.$appendage + this.$oldTwitterCardType;
 
-        // @TODO add if else for null targetedElement (no selection)
-        // @DONE Remove the hidden class from the current twitterCard div
+        // @DONE Remove the hidden class from the oldTwitterCardType div
         $(this.$targetedElement).removeClass('hidden');
-            // alert(newClass);
-            // console.log(this.$currentTwitterCardType);
 
-        // Add listener for dropdown
-        this.addListener(this.$selectDropdowns, 'change', 'onChange');
-
+        // @DONE Add listener for this.$selectTwitterDropdown to fire onChange
+        this.addListener(this.$selectTwitterDropdown, 'change', 'onChange');
     },
 
     // ON CHANGE
     onChange: function(ev)
     {
-
-        // TASKS:
-
         // @DONE Add hidden class to $targetedElement
         $(this.$targetedElement).addClass('hidden');
 
-        // @DONE Select the newtargetedElement
-        this.$newTargetedElement = this.$selectDropdowns.val();
-            // this.$test = this.$appendage + this.$newTargetedElement;
-            // console.log(this.$test);
+        // @DONE select the new value to the card type
+        this.$newTwitterCardType = this.$selectTwitterDropdown.val();
 
-        $(this.$newTargetedElement).removeClass('hidden');
+        // @DONE target the new element
+        this.$targetedElement = this.$appendage + this.$newTwitterCardType;
 
-        // 2. Remove class from newTargetedElement
-        // $(this.$newtarget
-
-        // @DONE Grab new value of the Twitter Card select
-        // Whatever the users selects
-        // this.twitterCard = this.$selectDropdowns.val();
-        // // console.log(this.twitterCard);
-        //
-        // this.changedSelect = this.twitterCard.val();
-        //
-        // // Remove the hidden class from the div based on selection
-        // $(this.changedSelect).removeClass('hidden');
-        // alert(this.changedSelect);
-        //
-        // this.$currentTwitterCardType = this.twitterCard;
-
+        // @DONE Remove the hidden class from the newTwitterCardType div
+        $(this.$targetedElement).removeClass('hidden');
     }
 }
 )
