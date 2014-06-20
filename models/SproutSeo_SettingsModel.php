@@ -11,9 +11,9 @@ class SproutSeo_SettingsModel extends BaseModel
             'appendSiteName'      => AttributeType::Bool,
             'customGlobalValue'   => AttributeType::String,
             'seoDivider'          => AttributeType::String,
-            'sitemapTemplate'			=> AttributeType::String,
-            'pingServices'				=> AttributeType::Mixed,
+            'sitemapTemplate'     => AttributeType::String,
+            'pingServices'        => AttributeType::Mixed,
         );
     }
-    
+
 }
