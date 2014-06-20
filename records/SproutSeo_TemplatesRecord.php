@@ -49,20 +49,20 @@ class SproutSeo_TemplatesRecord extends BaseRecord
             'twitterCard' => array(
                 AttributeType::String
             ),
+            'twitterSite' => array(
+                AttributeType::String
+            ),
+            'twitterTitle' => array(
+                AttributeType::String
+            ),
+            'twitterCreator' => array(
+                AttributeType::String
+            ),
+            'twitterDescription' => array(
+                AttributeType::String
+            ),
 
             // Fields for Twitter Summary Card
-            'twitterSummarySite' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryTitle' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryCreator' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryDescription' => array(
-                AttributeType::String
-            ),
             'twitterSummaryImageSource' => array(
                 AttributeType::String
             ),

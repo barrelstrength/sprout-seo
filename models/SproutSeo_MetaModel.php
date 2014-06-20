@@ -36,25 +36,25 @@ class SproutSeo_MetaModel extends BaseModel
             'ogVideo'        => array(AttributeType::String),
             'ogLocale'       => array(AttributeType::String),
 
-            // Store the Twitter Card Type
+            // Store the Twitter Card Type and global fields
             // @TODO convert to enum with the proper choices
             'twitterCard' => array(
                 AttributeType::String
             ),
+            'twitterSite' => array(
+                AttributeType::String
+            ),
+            'twitterTitle' => array(
+                AttributeType::String
+            ),
+            'twitterCreator' => array(
+                AttributeType::String
+            ),
+            'twitterDescription' => array(
+                AttributeType::String
+            ),
 
             // Fields for Twitter Summary Card
-            'twitterSummarySite' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryTitle' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryCreator' => array(
-                AttributeType::String
-            ),
-            'twitterSummaryDescription' => array(
-                AttributeType::String
-            ),
             'twitterSummaryImageSource' => array(
                 AttributeType::String
             ),

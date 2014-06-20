@@ -7,8 +7,6 @@ Craft.SproutSeoTemplate = Garnish.Base.extend(
     $oldTwitterCardType: null,
     $newTwitterCardType: null,
 
-    $appendage: null,
-
     $targetedElement: null,
 
     // ON INIT

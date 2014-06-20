@@ -347,38 +347,40 @@
 
 	<hr>
 
+	<h2>Global Card Options</h2>
+
 	{{ forms.textField({
 		label: "Site"|t,
-		name: 'template_fields[twitterSummarySite]',
+		name: 'template_fields[twitterSite]',
 		instructions: "The Twitter username of the owner of this card's domain.",
-		value: template.twitterSummarySite,
+		value: template.twitterSite,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Creator"|t,
-		name: 'template_fields[twitterSummaryCreator]',
+		name: 'template_fields[twitterCreator]',
 		instructions: "If the content of this card was authored by someone, include their Twitter username here.",
-		value: template.twitterSummaryCreator,
+		value: template.twitterCreator,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Title"|t,
-		name: 'template_fields[twitterSummaryTitle]',
+		name: 'template_fields[twitterTitle]',
 		instructions: 'The title of your content as it should appear in the card.',
-		value: template.twitterSummaryTitle,
+		value: template.twitterTitle,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textareaField({
 		label: "Description"|t,
-		name: 'template_fields[twitterSummaryDescription]',
+		name: 'template_fields[twitterDescription]',
 		instructions: 'A description of the content in a maximum of 200 characters.',
-		value: template.twitterSummaryDescription,
+		value: template.twitterDescription,
 		errors: "",
 		required: false
 	}) }}
@@ -615,10 +617,7 @@
 
 {% set js %}
 
-	new Craft.SproutSeoTemplate({
-	    dropdownSelector: ['#template-twitter select[name="template_fields[twitterCard]"]','#template-facebook select[name="template_fields[facebookType]"]'],
-	    appendage: ['#twitter-', '#facebook-']
-	});
+	new Craft.SproutSeoTemplate();
 
 {% endset %}
 
