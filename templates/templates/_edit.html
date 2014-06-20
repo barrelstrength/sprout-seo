@@ -327,9 +327,10 @@
 
 	{% set twitterCardOptions = {
 		'' : 'Select Twitter Card Type...',
-		'summary' : 'Summary',
+		'summary' : 'Summary Card',
 		'summary-large-image' : 'Summary Card with Large Image',
-		'player' : 'Player',
+		'player' : 'Player Card',
+		'photo' : 'Photo Card',
 	} %}
 
 	<h2>Twitter Card Type</h2>
@@ -385,11 +386,9 @@
 		required: false
 	}) }}
 
-	<hr>
-
 	<div id="twitter-summary" class="hidden">
 
-		<h2>Summary Card</h2>
+		<h2>Summary Card Specific</h2>
 
 		{{ forms.textField({
 			label: "Image Source"|t,
@@ -406,43 +405,7 @@
 
 	<div id="twitter-summary-large-image" class="hidden">
 
-		<h2>Summary Card with Large Image</h2>
-
-		{{ forms.textField({
-			label: "Site"|t,
-			name: 'template_fields[twitterSummaryLargeImageSite]',
-			instructions: "The Twitter username of the owner of this card's domain.",
-			value: template.twitterSummaryLargeImageSite,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Creator"|t,
-			name: 'template_fields[twitterSummaryLargeImageCreator]',
-			instructions: "If the content of this card was authored by someone, include their Twitter username here.",
-			value: template.twitterSummaryLargeImageCreator,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Summary With Large Image Title"|t,
-			name: 'template_fields[twitterSummaryLargeImageTitle]',
-			instructions: 'The title of your content as it should appear in the card.',
-			value: template.twitterSummaryLargeImageTitle,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textareaField({
-			label: "Description"|t,
-			name: 'template_fields[twitterSummaryLargeImageDescription]',
-			instructions: 'A description of the content in a maximum of 200 characters.',
-			value: template.twitterSummaryLargeImageDescription,
-			errors: "",
-			required: false
-		}) }}
+		<h2>Summary Card with Large Image Specific</h2>
 
 		{{ forms.textField({
 			label: "Image Source"|t,
@@ -459,34 +422,7 @@
 
 	<div id="twitter-photo" class="hidden">
 
-		<h2>Photo Card</h2>
-
-		{{ forms.textField({
-			label: "Site"|t,
-			name: 'template_fields[twitterPhotoSite]',
-			instructions: "The Twitter username of the owner of this card's domain.",
-			value: template.twitterPhotoSite,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Creator"|t,
-			name: 'template_fields[twitterPhotoCreator]',
-			instructions: "If the content of this card was authored by someone, include their Twitter username here.",
-			value: template.twitterPhotoCreator,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Title"|t,
-			name: 'template_fields[twitterPhotoTitle]',
-			instructions: 'The title of your content as it should appear in the card.',
-			value: template.twitterPhotoTitle,
-			errors: "",
-			required: false
-		}) }}
+		<h2>Photo Card Specific</h2>
 
 		{{ forms.textField({
 			label: "Image Source"|t,
@@ -503,43 +439,7 @@
 
 	<div id="twitter-player" class="hidden">
 
-		<h2>Player Card</h2>
-
-		{{ forms.textField({
-			label: "Site"|t,
-			name: 'template_fields[twitterPlayerSite]',
-			instructions: "The Twitter username of the owner of this card's domain.",
-			value: template.twitterPlayerSite,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Creator"|t,
-			name: 'template_fields[twitterPlayerCreator]',
-			instructions: "If the content of this card was authored by someone, include their Twitter username here.",
-			value: template.twitterPlayerCreator,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Title"|t,
-			name: 'template_fields[twitterPlayerTitle]',
-			instructions: 'The title of your content as it should appear in the card.',
-			value: template.twitterPlayerTitle,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textareaField({
-			label: "Description"|t,
-			name: 'template_fields[twitterPlayerDescription]',
-			instructions: 'A description of the content in a maximum of 200 characters.',
-			value: template.twitterPlayerDescription,
-			errors: "",
-			required: false
-		}) }}
+		<h2>Player Card Specific</h2>
 
 		{{ forms.textField({
 			label: "Image Source"|t,
