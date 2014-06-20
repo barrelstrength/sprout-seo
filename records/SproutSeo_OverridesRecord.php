@@ -15,7 +15,7 @@ class SproutSeo_OverridesRecord extends BaseRecord
             'title'          => array(AttributeType::String),
             'description'    => array(AttributeType::String),
             'keywords'       => array(AttributeType::String),
-            
+
             'robots'         => array(AttributeType::String),
             'canonical'      => array(AttributeType::String),
 
@@ -37,10 +37,83 @@ class SproutSeo_OverridesRecord extends BaseRecord
             'twitterCard'    => array(AttributeType::String),
             'twitterSite'    => array(AttributeType::String),
             'ogDescription'  => array(AttributeType::String),
-            'twitterCreator' => array(AttributeType::String),
-            'twitterTitle'   => array(AttributeType::String),
-            'twitterDescription' => array(AttributeType::String),
-            'twitterImage'   => array(AttributeType::String),
+            
+            'twitterCard' => array(
+                AttributeType::String
+            ),
+
+            // Generic on all cards
+            'twitterSite' => array(
+                AttributeType::String
+            ),
+            'twitterTitle' => array(
+                AttributeType::String
+            ),
+            'twitterCreator' => array(
+                AttributeType::String
+            ),
+            'twitterDescription' => array(
+                AttributeType::String
+            ),
+            'twitterImageSource' => array(
+                AttributeType::String
+            ),
+
+            // Fields for Twitter Summary Card
+            'twitterSummaryTitle' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryDescription' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryImageSource' => array(
+                AttributeType::String
+            ),
+
+            // Fields for Twitter Summary Large Image Card
+            'twitterSummaryLargeImageTitle' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryLargeImageDescription' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryLargeImage' => array(
+                AttributeType::String
+            ),
+            'twitterSummaryLargeImageImageSource' => array(
+                AttributeType::String
+            ),
+
+            // Fields for Twitter Photo Card
+            'twitterPhotoTitle' => array(
+                AttributeType::String,
+            ),
+            'twitterPhotoImageSource' => array(
+                AttributeType::String,
+            ),
+
+            // Fields for Twitter Player Card
+            'twitterPlayerTitle' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerDescription' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerImageSource' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerStream' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerStreamContentType' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerWidth' => array(
+                AttributeType::String,
+            ),
+            'twitterPlayerHeight' => array(
+                AttributeType::String,
+            ),
         );
     }
 
