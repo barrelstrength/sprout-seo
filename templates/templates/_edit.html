@@ -226,11 +226,27 @@
 <div id="template-facebook" class="hidden">
 
 	{% set ogTypesOptions = {
-		'' : 'Select Open Graph Type...',
-		'website' : 'Website',
-		'article' :	'Article',
-		'place' :	'Place',
-	} %}
+    '' : 'Select Open Graph Type...',
+	    'website' : 'Website',
+	    'article' : 'Article',
+	    'place' : 'Place',
+	    'profile' : 'Profile',
+	    'object' :  'Object',
+	    'book' : 'Book',
+	    'books.author' : 'Books Author',
+	    'books.book' : 'Books Book',
+	    'books.genre' : 'Books Genre',
+	    'music.song' : 'Music Song',
+	    'music.radio_station' : 'Music Radio Station',
+	    'music.playlist' : 'Music Playlist',
+	    'music.album' : 'Music Album',
+	    'video.other' : 'Video Other',
+	    'video.tv_show' : 'Video TV Show',
+	    'video.movie' : 'Video Movie',
+	    'video.episode' : 'Video Episode',
+	    'fitness.unit' : 'Fitness Unit',
+	    'fitness.course' : 'Fitness Course'
+	  } %}
 
 	<h2>Open Graph Type</h2>
 
@@ -242,7 +258,7 @@
 		required: false
 	}) }}
 
-	<hr>
+	<hr />
 
 	<h2>Open Graph Basic Options</h2>
 
@@ -276,12 +292,14 @@
 		required: false
 	}) }}
 
-	<hr>
+	<hr />
 
 	<div
 
 	{{ forms.textField({
-		label: "Open Graph Site Name"|t,
+		label: "Site Name"|t,
+		instructions: "If your object is part of a larger web site, the name which should be displayed for the overall site.",
+		placeholder: "The Rock",
 		name: 'template_fields[ogSiteName]',
 		value: template.ogSiteName,
 		errors: "",
@@ -289,7 +307,9 @@
 	}) }}
 
 	{{ forms.textField({
-		label: "Open Graph Description"|t,
+		label: "Description"|t,
+		instructions: "A one to two sentence description of your object.",
+		placeholder: "Don't trust the Greeks, even when they bring gifts.",
 		name: 'template_fields[ogDescription]',
 		value: template.ogDescription,
 		errors: "",
@@ -297,7 +317,19 @@
 	}) }}
 
 	{{ forms.textField({
-		label: "Open Graph Audio"|t,
+		label: "Locale"|t,
+		instructions: "The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.",
+		placeholder: "en_US",
+		name: 'template_fields[ogLocale]',
+		value: template.ogLocale,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Audio"|t,
+		instructions: "A URL to an audio file to accompany this object.",
+		placeholder: "http://www.seanconnery.com/audio.mp3",
 		name: 'template_fields[ogAudio]',
 		value: template.ogAudio,
 		errors: "",
@@ -305,17 +337,11 @@
 	}) }}
 
 	{{ forms.textField({
-		label: "Open Graph Video"|t,
+		label: "Video"|t,
+		instructions: "A URL to a video file that complements this object.",
+		placeholder: "http://www.seanconnery.com/didTheyTellPicasoNoBrush.mp4",
 		name: 'template_fields[ogVideo]',
 		value: template.ogVideo,
-		errors: "",
-		required: false
-	}) }}
-
-	{{ forms.textField({
-		label: "Open Graph Locale"|t,
-		name: 'template_fields[ogLocale]',
-		value: template.ogLocale,
 		errors: "",
 		required: false
 	}) }}
@@ -353,6 +379,7 @@
 		label: "Site"|t,
 		name: 'template_fields[twitterSite]',
 		instructions: "The Twitter username of the owner of this card's domain.",
+		placeholder: "@username",
 		value: template.twitterSite,
 		errors: "",
 		required: false
@@ -362,6 +389,7 @@
 		label: "Creator"|t,
 		name: 'template_fields[twitterCreator]',
 		instructions: "If the content of this card was authored by someone, include their Twitter username here.",
+		placeholder: "@username",
 		value: template.twitterCreator,
 		errors: "",
 		required: false
@@ -371,6 +399,7 @@
 		label: "Title"|t,
 		name: 'template_fields[twitterTitle]',
 		instructions: 'The title of your content as it should appear in the card.',
+		placeholder: "Sean Connery is the greatest",
 		value: template.twitterTitle,
 		errors: "",
 		required: false
@@ -380,6 +409,7 @@
 		label: "Description"|t,
 		name: 'template_fields[twitterDescription]',
 		instructions: 'A description of the content in a maximum of 200 characters.',
+		placeholder: "Losers always whine about doing thier best...",
 		value: template.twitterDescription,
 		errors: "",
 		required: false
