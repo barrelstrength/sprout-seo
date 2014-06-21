@@ -225,39 +225,16 @@
 
 <div id="template-facebook" class="hidden">
 
-	{{ forms.textField({
-		label: "Open Graph Title"|t,
-		name: 'template_fields[ogTitle]',
-		value: template.ogTitle,
-		errors: "",
-		required: false
-	}) }}
-
 	{% set ogTypesOptions = {
 		'' : 'Select Open Graph Type...',
 		'website' : 'Website',
 		'article' :	'Article',
 		'place' :	'Place',
-		'profile' :	'Profile',
-		'object' :	'Object',
-		'book' : 'Book',
-		'books.author' : 'Books Author',
-		'books.book' : 'Books Book',
-		'books.genre' : 'Books Genre',
-		'music.song' : 'Music Song',
-		'music.radio_station' : 'Music Radio Station',
-		'music.playlist' : 'Music Playlist',
-		'music.album' : 'Music Album',
-		'video.other' :	'Video Other',
-		'video.tv_show' :	'Video TV Show',
-		'video.movie' : 'Video Movie',
-		'video.episode' :	'Video Episode',
-		'fitness.unit' : 'Fitness Unit',
-		'fitness.course' : 'Fitness Course'
 	} %}
 
+	<h2>Open Graph Type</h2>
+
 	{{ forms.selectField({
-		label: "Open Graph Type"|t,
 		name: 'template_fields[ogType]',
 		options: ogTypesOptions,
 		value: template.ogType,
@@ -265,21 +242,43 @@
 		required: false
 	}) }}
 
+	<hr>
+
+	<h2>Open Graph Basic Options</h2>
+
 	{{ forms.textField({
-		label: "Open Graph URL"|t,
+		label: "Title"|t,
+		instructions: "The title of your object as it should appear within the graph, e.g., 'The Rock'.",
+		placeholder: "The Rock",
+		name: 'template_fields[ogTitle]',
+		value: template.ogTitle,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Image"|t,
+		instructions: "An image URL which should represent your object within the graph.",
+		placeholder: "http://www.seanconnery.com/image.png",
+		name: 'template_fields[ogImage]',
+		value: template.ogImage,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "URL"|t,
+		instructions: "The canonical URL of your object that will be used as its permanent ID in the graph.",
+		placeholder: "http://www.seanconnery.com/",
 		name: 'template_fields[ogUrl]',
 		value: template.ogUrl,
 		errors: "",
 		required: false
 	}) }}
 
-	{{ forms.textField({
-		label: "Open Graph Image"|t,
-		name: 'template_fields[ogImage]',
-		value: template.ogImage,
-		errors: "",
-		required: false
-	}) }}
+	<hr>
+
+	<div
 
 	{{ forms.textField({
 		label: "Open Graph Site Name"|t,
