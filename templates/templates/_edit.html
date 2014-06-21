@@ -273,15 +273,16 @@
 		required: false
 	}) }}
 
-	{{ forms.textField({
+	{{ forms.fileField({
 		label: "Image"|t,
 		instructions: "An image URL which should represent your object within the graph.",
-		placeholder: "http://www.seanconnery.com/image.png",
 		name: 'template_fields[ogImage]',
 		value: template.ogImage,
 		errors: "",
 		required: false
 	}) }}
+
+
 
 	{{ forms.textField({
 		label: "URL"|t,
