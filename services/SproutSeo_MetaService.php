@@ -175,7 +175,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getTwitterCardFieldsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-			->select('id, twitterCard, twitterSite, twitterCreator, twitterTitle, twitterDescription')
+			->select('id, twitterCard, twitterSite, twitterTitle, twitterCreator,
+			twitterDescription, twitterSummaryImageSource,
+			twitterSummaryLargeImageImageSource, twitterPhotoImageSource,
+			twitterPlayerImageSource, twitterPlayer, twitterPlayerStream,
+			twitterPlayerStreamContentType, twitterPlayerWidth,
+			twitterPlayerHeight')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(
 				':entryId' => $entryId
@@ -190,28 +195,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		else
 		{
 			return new SproutSeo_TwitterCardFieldModel;
-		}
-
-	}
-
-	public function getTwitterCardSummaryLargeFieldsByEntryId($entryId)
-	{
-		$query = craft()->db->createCommand()
-			->select('id, twitterCard, twitterSite, twitterCreator, twitterTitle, twitterDescription, twitterSummaryLargeImageImageSource')
-			->from('sproutseo_overrides')
-			->where('entryId = :entryId', array(
-				':entryId' => $entryId
-				)
-			)
-			->queryRow();
-
-	if (isset($query))
-	{
-			return SproutSeo_TwitterCardSummaryLargeFieldModel::populateModel($query);
-		}
-		else
-		{
-			return new SproutSeo_TwitterCardSummaryLargeFieldModel;
 		}
 
 	}
