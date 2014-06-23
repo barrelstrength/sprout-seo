@@ -113,12 +113,13 @@ class SproutSeo_TemplatesRecord extends BaseRecord
         );
     }
 
-    public function defineRelations()
-    {
-        return array(
-            'asset'    => array(static::BELONGS_TO, 'AssetFileRecord'),
-        );
-    }
+    // @TODO implement assets for field types
+    // public function defineRelations()
+    // {
+    //     return array(
+    //         'asset'    => array(static::BELONGS_TO, 'AssetFileRecord'),
+    //     );
+    // }
 
     /**
      * Create a new instance of the current class. This allows us to
