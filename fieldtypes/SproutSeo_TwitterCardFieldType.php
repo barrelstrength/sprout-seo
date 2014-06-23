@@ -10,7 +10,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
      */
     public function getName()
     {
-        return Craft::t('SEO: Twitter Summary Card');
+        return Craft::t('SEO: Twitter Card');
     }
 
     /**
@@ -48,7 +48,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
         $name = rtrim($name, "]");
         $name = "sproutseo_fields[$name]";
 
-        return craft()->templates->render('sproutseo/_cp/fields/twitterCard', array(
+        return craft()->templates->render('sproutseo/_cp/fields/twitter', array(
             'name'	     => $name,
             // // 'value'      => $value,
             'values'     => $values
