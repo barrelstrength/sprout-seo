@@ -194,6 +194,28 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	}
 
+	public function getTwitterCardSummaryLargeFieldsByEntryId($entryId)
+	{
+		$query = craft()->db->createCommand()
+			->select('id, twitterCard, twitterSite, twitterCreator, twitterTitle, twitterDescription, twitterSummaryLargeImageImageSource')
+			->from('sproutseo_overrides')
+			->where('entryId = :entryId', array(
+				':entryId' => $entryId
+				)
+			)
+			->queryRow();
+
+	if (isset($query))
+	{
+			return SproutSeo_TwitterCardSummaryLargeFieldModel::populateModel($query);
+		}
+		else
+		{
+			return new SproutSeo_TwitterCardSummaryLargeFieldModel;
+		}
+
+	}
+
 	public function getGeographicMetaFeildsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
