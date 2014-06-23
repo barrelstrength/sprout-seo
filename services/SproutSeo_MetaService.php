@@ -178,7 +178,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			->select('id, twitterCard, twitterSite, twitterTitle, twitterCreator,
 			twitterDescription, twitterSummaryImageSource,
 			twitterSummaryLargeImageImageSource, twitterPhotoImageSource,
-			twitterPlayerImageSource, twitterPlayer, twitterPlayerStream,
+			twitterPlayerImageSource, twitterPlayerStream,
 			twitterPlayerStreamContentType, twitterPlayerWidth,
 			twitterPlayerHeight')
 			->from('sproutseo_overrides')

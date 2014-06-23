@@ -2,13 +2,32 @@
 
 {% includeCssResource "sproutseo/css/fields.css" %}
 
-<div class="sproutseo-box">
+
+<div class="sproutseo-box" id="twitter">
+
+{% set twitterCardOptions = {
+    '' : 'Select Twitter Card Type...',
+    'summary' : 'Summary Card',
+    'summary-large-image' : 'Summary Card with Large Image',
+    'player' : 'Player Card',
+    'photo' : 'Photo Card',
+} %}
+
+{{ forms.selectField({
+    name: 'sproutseo_fields[twitterCard]',
+    options: twitterCardOptions,
+    value: (values.twitterCard is defined ? values.twitterCard : 'summary'),
+    value: values.twitterCard,
+    errors: "",
+    required: false
+}) }}
+
+<hr>
 
  {{ forms.textField({
      label: "Site"|t,
      name: 'sproutseo_fields[twitterSite]',
      instructions: "The Twitter username of the owner of this card's domain.",
-     placeholder: "@username",
      value: values.twitterSite,
      errors: "",
      required: false
@@ -18,7 +37,6 @@
      label: "Creator"|t,
      name: 'sproutseo_fields[twitterCreator]',
      instructions: "If the content of this card was authored by someone, include their Twitter username here.",
-     placeholder: "@username",
      value: values.twitterCreator,
      errors: "",
      required: false
@@ -28,7 +46,6 @@
      label: "Title"|t,
      name: 'sproutseo_fields[twitterTitle]',
      instructions: 'The title of your content as it should appear in the card.',
-     placeholder: "Sean Connery is the greatest",
      value: values.twitterTitle,
      errors: "",
      required: false
@@ -38,10 +55,115 @@
      label: "Description"|t,
      name: 'sproutseo_fields[twitterDescription]',
      instructions: 'A description of the content in a maximum of 200 characters.',
-     placeholder: "Losers always whine about doing thier best...",
      value: values.twitterDescription,
      errors: "",
      required: false
  }) }}
 
+<div id="twitter-summary" class="hidden">
+
+     <hr>
+
+     {{ forms.textField({
+         label: "Image Source"|t,
+         name: 'sproutseo_fields[twitterSummaryImageSource]',
+         instructions: 'A URL to the image representing the content.',
+         value: values.twitterSummaryImageSource,
+         errors: "",
+         required: false
+     }) }}
+
 </div>
+
+<div id="twitter-summary-large-image" class="hidden">
+
+     <hr>
+
+     {{ forms.textField({
+         label: "Image Source"|t,
+         name: 'sproutseo_fields[twitterSummaryLargeImageImageSource]',
+         instructions: 'A URL to the image representing the content.',
+         value: values.twitterSummaryLargeImageImageSource,
+         errors: "",
+         required: false
+     }) }}
+
+</div>
+
+<div id="twitter-photo" class="hidden">
+
+     <hr>
+
+     {{ forms.textField({
+         label: "Image Source"|t,
+         name: 'sproutseo_fields[twitterPhotoImageSource]',
+         instructions: 'A URL to the image representing the content.',
+         value: values.twitterPhotoImageSource,
+         errors: "",
+         required: false
+     }) }}
+
+</div>
+
+<div id="twitter-player" class="hidden">
+
+    <hr>
+
+     {{ forms.textField({
+         label: "Image Source"|t,
+         name: 'sproutseo_fields[twitterPlayerImageSource]',
+         instructions: 'A URL to the image representing the content.',
+         value: values.twitterPlayerImageSource,
+         errors: "",
+         required: false
+     }) }}
+
+     {{ forms.textField({
+         label: "Stream"|t,
+         name: 'sproutseo_fields[twitterPlayerStream]',
+         instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrationlications directly. If provided, the stream must be delivered in the MPEG-4 container format.",
+         value: values.twitterPlayerStream,
+         errors: "",
+         required: false
+     }) }}
+
+     {{ forms.textField({
+         label: "Stream Content Type"|t,
+         name: 'sproutseo_fields[twitterPlayerStreamContentType]',
+         instructions: "The MIME type subtype combination that describes the content contained in twitter player stream.",
+         value: values.twitterPlayerStreamContentType,
+         errors: "",
+         required: false
+     }) }}
+
+     {{ forms.textField({
+         label: "Height"|t,
+         name: 'sproutseo_fields[twitterPlayerHeight]',
+         instructions: "Height of IFRAME specified in twitter player in pixels.",
+         value: values.twitterPlayerHeight,
+         errors: "",
+         required: false
+     }) }}
+
+     {{ forms.textField({
+         label: "Width"|t,
+         name: 'sproutseo_fields[twitterPlayerWidth]',
+         instructions: 'Width of IFRAME specified in twitter player in pixels.',
+         value: values.twitterPlayerWidth,
+         errors: "",
+         required: false
+     }) }}
+
+ </div>
+
+</div>
+
+{% includeJsResource "sproutseo/js/field-twitter.js" %}
+
+{% set js %}
+
+    new Craft.SproutSeoTemplate();
+
+{% endset %}
+
+{% includeJs js %}

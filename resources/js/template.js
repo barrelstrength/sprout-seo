@@ -18,10 +18,10 @@ Craft.SproutSeoTemplate = Garnish.Base.extend(
             // console.log(this.$selectDropdowns);
 
         // @TODO remove classes from oldDropdowns as THIS method doesn't work
-        // this.$oldFacebookDropdown = $('#template-facebook select[name="template_fields[oGType]"]').val();
-        // $('#facebook-' + this.$oldFacebookDropdown).removeClass('hidden');
-        // this.$oldTwitterDropdown = $('#template-twitter select[name="template_fields[twitterCard]"]').val();
-        // $('#twitter-' + this.$oldTwitterDropdown).removeClass('hidden');
+        this.$oldFacebookDropdown = $('#template-facebook select[name="template_fields[oGType]"]').val();
+        $('#facebook-' + this.$oldFacebookDropdown).removeClass('hidden');
+        this.$oldTwitterDropdown = $('#template-twitter select[name="template_fields[twitterCard]"]').val();
+        $('#twitter-' + this.$oldTwitterDropdown).removeClass('hidden');
 
         // @DONE Add listener for this.$selectTwitterDropdown to fire onChange
         this.addListener(this.$selectDropdowns, 'change', 'onChange');
