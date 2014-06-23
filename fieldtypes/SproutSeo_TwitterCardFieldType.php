@@ -50,7 +50,6 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 
         return craft()->templates->render('sproutseo/_cp/fields/twitter', array(
             'name'	     => $name,
-            // // 'value'      => $value,
             'values'     => $values
         ));
     }
