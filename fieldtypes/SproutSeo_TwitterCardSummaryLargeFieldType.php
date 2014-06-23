@@ -27,6 +27,45 @@ class SproutSeo_TwitterCardSummaryLargeFieldType extends BaseFieldType
         return false;
     }
 
+    public function onAfterElementSave()
+    {
+
+        // Make sure we are actually submitting our field
+        if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
+
+        // Determine our entryId
+        $entryId = (isset($_POST['entryId']))
+            ? $_POST['entryId']
+            : $this->element->id;
+
+        // get any overrides for this entry
+        $model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
+
+        // Test to see if we have any values in our Sprout SEO fields
+        $saveSproutSeoFields = false;
+        foreach ($_POST['fields']['sproutseo_fields'] as $key => $value) {
+            if ($value)
+            {
+                $saveSproutSeoFields = true;
+                continue;
+            }
+        }
+
+        // If we don't have any values in our Sprout SEO fields
+        // don't add a record to the database
+        // but if a record already exists, we also should delete it.
+        if ( ! $saveSproutSeoFields )
+        {
+            // Remove record since it is now blank
+            if ($model->id)
+            {
+                craft()->sproutSeo_meta->deleteOverrideById($model->id);
+            }
+
+            return;
+        }
+    }
+
     /**
      * Display our FieldType
      *
