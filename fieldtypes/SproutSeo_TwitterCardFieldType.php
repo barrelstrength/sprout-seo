@@ -41,7 +41,14 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 
         $values = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
 
-        // $values->twitterSite = explode(',', $values->twitterSite);
+        // $inputId = craft()->templates->formatInputId($name);
+		// $namespaceInputId = craft()->templates->namespaceInputId($inputId);
+		// RETURN craft()->templates->render('sproutlinkfield/_fields/input', array(
+		// 	'id' => $namespaceInputId,
+		// 	'name'  => $name,
+		// 	'value' => $value
+		// ));
+
 
         // Cleanup the namespace around the $name handle
         $name = str_replace("fields[", "", $name);
