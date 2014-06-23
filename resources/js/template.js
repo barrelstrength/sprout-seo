@@ -13,10 +13,15 @@ Craft.SproutSeoTemplate = Garnish.Base.extend(
     // @TODO clean this up asap...
     init: function()
     {
-
         // @DONE chose the element to target
         this.$selectDropdowns = $('form select');
-            console.log(this.$selectDropdowns);
+            // console.log(this.$selectDropdowns);
+
+        // remove classes from oldDropdowns
+        this.$oldFacebookDropdown = $('#template-facebook select[name="template_fields[oGType]"]').val();
+        $('#facebook-' + this.$oldFacebookDropdown).removeClass('hidden');
+        this.$oldTwitterDropdown = $('#template-twitter select[name="template_fields[twitterCard]"]').val();
+        $('#twitter-' + this.$oldTwitterDropdown).removeClass('hidden');
 
         // @DONE Add listener for this.$selectTwitterDropdown to fire onChange
         this.addListener(this.$selectDropdowns, 'change', 'onChange');
@@ -29,7 +34,7 @@ Craft.SproutSeoTemplate = Garnish.Base.extend(
         // Perform actions only if bacebook is the open tab
         if ( $('#template-twitter').hasClass('hidden') && !$('#template-facebook').hasClass('hidden') )
         {
-            alert('hello facebook');
+            // alert('hello facebook');
             this.$selectDropdown = $('#template-facebook select[name="template_fields[oGType]"]');
             this.$appendage = '#facebook-';
             this.$oldSelectOption = this.$selectDropdown.val();
@@ -38,7 +43,7 @@ Craft.SproutSeoTemplate = Garnish.Base.extend(
         }
         else if ( $('#template-facebook').hasClass('hidden') && !$('#template-twitter').hasClass('hidden') )
         {
-            alert('hello twitter');
+            // alert('hello twitter');
             this.$selectDropdown = $('#template-twitter select[name="template_fields[twitterCard]"]');
             this.$appendage = '#twitter-';
             this.$oldSelectOption = this.$selectDropdown.val();

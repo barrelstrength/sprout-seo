@@ -64,11 +64,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	 */
 	public function getTemplateById($id)
 	{
-		if ($record = $this->metaRecord->findByPk($id)) 
+		if ($record = $this->metaRecord->findByPk($id))
 		{
 			return SproutSeo_MetaModel::populateModel($record);
 		}
-		else 
+		else
 		{
     	return new SproutSeo_MetaModel();
     }
@@ -161,13 +161,35 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				   ->where('entryId = :entryId', array(':entryId' => $entryId))
 				   ->queryRow();
 
-	   if (isset($query)) 
+	   if (isset($query))
 	   {
 			return SproutSeo_BasicMetaFieldModel::populateModel($query);
 		}
 		else
 		{
 			return new SproutSeo_BasicMetaFieldModel;
+		}
+
+	}
+
+	public function getTwitterCardFieldsByEntryId($entryId)
+	{
+		$query = craft()->db->createCommand()
+			->select('id, twitterCard, twitterSite, twitterCreator, twitterTitle, twitterDescription')
+			->from('sproutseo_overrides')
+			->where('entryId = :entryId', array(
+				':entryId' => $entryId
+				)
+			)
+			->queryRow();
+
+	if (isset($query))
+	{
+			return SproutSeo_TwitterCardFieldModel::populateModel($query);
+		}
+		else
+		{
+			return new SproutSeo_TwitterCardFieldModel;
 		}
 
 	}
@@ -180,7 +202,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				   ->where('entryId = :entryId', array(':entryId' => $entryId))
 				   ->queryRow();
 
-	   if (isset($query)) 
+	   if (isset($query))
 	   {
 			return SproutSeo_GeographicMetaFieldModel::populateModel($query);
 		}
@@ -199,7 +221,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				   ->where('entryId = :entryId', array(':entryId' => $entryId))
 				   ->queryRow();
 
-	   if (isset($query)) 
+	   if (isset($query))
 	   {
 			return SproutSeo_RobotsMetaFieldModel::populateModel($query);
 		}
@@ -229,7 +251,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function deleteOverrideById($id = null)
 	{
 		$record = new SproutSeo_OverridesRecord;
-			
+
 		// @TODO is this the right way to do this?  Would this actually return
 		// true or false?
 		// Returns the number of rows deleted
@@ -238,11 +260,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 
 	}
-	
+
 	/**
 	 * Deletes a template
 	 *
-	 * @param int 
+	 * @param int
 	 * @return bool
 	 */
 	public function deleteTemplate($id = null)
@@ -260,8 +282,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
 		// If no divider exists, use a dash
-		$this->divider = ($this->divider) ? $this->divider : '-'; 
-		
+		$this->divider = ($this->divider) ? $this->divider : '-';
+
 		// Setup all of our SEO Metadata Arrays
 		$entryOverrides = new SproutSeo_MetaModel; // Top Priority
 		$codeOverrides  = new SproutSeo_MetaModel; // Second Priority
@@ -280,7 +302,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$templates = craft()->sproutSeo_meta->getTemplateByTemplateHandle($templateHandle);
 
 			// create the string we will append to the end of our title if we should
-			if (isset($templates->appendSiteName)) 
+			if (isset($templates->appendSiteName))
 			{
 			  $this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
 			}
@@ -297,16 +319,16 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$scheme = ( isset($_SERVER['HTTPS'] ) ) ? "https://" : "http://" ;
 		$siteUrl = $scheme . $_SERVER['SERVER_NAME'];
 		$currentUrl = $siteUrl . craft()->request->url;
-		
+
 		$templates['canonical'] = $currentUrl;
-		
+
 
 		// PREPARE ENTRY OVERRIDES
 		// ------------------------------------------------------------
 
 		// If our code overrides include an ID, let's query the database and
 		// see if this entry has any Entry Overrides.
-		if (isset($overrideInfo['id'])) 
+		if (isset($overrideInfo['id']))
 		{
 		  // query for override array
 		  $entryOverrides = craft()->sproutSeo_meta->getOverrideByEntryId($overrideInfo['id']);
@@ -320,17 +342,17 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		// If we have any more values that were set in our template
 		// let's store them as code overrides.
-		if ( ! empty($overrideInfo)) 
+		if ( ! empty($overrideInfo))
 		{
 		  $codeOverrides = SproutSeo_MetaModel::populateModel($overrideInfo);
 		}
 
-		// @TODO - this is temporary, figure out the best syntax for 'Robots' values 
+		// @TODO - this is temporary, figure out the best syntax for 'Robots' values
 		// and update this to accomodate both the On-page and Code override situations
 		$codeOverrides->robots = ($codeOverrides->robots)
 		  ? $codeOverrides->robots
 		  : null;
-		
+
 
 		// PRIORITIZE OUR METADATA
 
@@ -352,17 +374,17 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// and wrangle what we need to here.
 
 		$metaValues = $this->_prioritizeMetaValues($entryOverrides, $codeOverrides, $templates);
-		
+
 		$output = "\n";
 		$openGraphPattern = '/^og:/';
 		$twitterPattern = '/^twitter:/';
 
-		foreach ($metaValues as $name => $value) 
+		foreach ($metaValues as $name => $value)
 		{
-		  
+
 		  if ($value)
 		  {
-				switch ($name) 
+				switch ($name)
 				{
 
 				  // Title tag
@@ -378,13 +400,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 					// Twitter Cards
 				  case (preg_match($twitterPattern, $name) ? true : false):
 					$output .= "\t<meta name='$name' content='$value'>\n";
-					break;					
+					break;
 
 				  // Canonical URLs
 				  case 'canonical':
 					$output .= "\t<link rel='canonical' href='$value' />\n";
 					break;
-				  
+
 				  // Robots
 				  case 'robots':
 					$output .= "\t<meta name='robots' content='$value' />\n";
@@ -483,7 +505,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	}
 
 	public function getMeta()
-	{	
+	{
 		return $this->sproutmeta;
 	}
 
@@ -491,13 +513,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	{
 		// @TODO - should updateMeta accept a fallback array?
 		// maybe just allow this to be set in the CP.
-		
+
 		if (!$fallback)
 		{
 			// add meta values to the global meta value
-			if (count($meta)) 
+			if (count($meta))
 			{
-			  foreach ($meta as $key => $value) 
+			  foreach ($meta as $key => $value)
 			  {
 			    // This is the setter
 			    $this->sproutmeta[$key] = $value;
@@ -527,7 +549,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$isGlobalFallback = ( isset($fallback['id']) && ($templateId == $fallback['id']) );
 		$noFallbackExists = !isset($fallback['id']);
 
-    if ($isGlobalFallback OR $noFallbackExists) 
+    if ($isGlobalFallback OR $noFallbackExists)
     {
     	return true;
     }
