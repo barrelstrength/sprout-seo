@@ -13,7 +13,6 @@ Craft.SproutSeoTemplate = Garnish.Base.extend(
     // ONCHANGE VARIABLES
     $newSelectOption: null,
     $newElement: null,
-    $changedElement: null,
 
     // ON INIT
     init: function()
