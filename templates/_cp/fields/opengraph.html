@@ -1,0 +1,116 @@
+{% import "_includes/forms" as forms %}
+
+{% includeCssResource "sproutseo/css/fields.css" %}
+
+<div class="sproutseo-box" id="open-graph">
+{# add ID from meta_service #}
+
+{% set ogTypesOptions = {
+'' : 'Select Open Graph Type...',
+    'website' : 'Website',
+    'article' : 'Article',
+  } %}
+
+{{ forms.selectField({
+    name: 'sproutseo_fields[ogType]',
+    options: ogTypesOptions,
+    value: values.ogType,
+    errors: "",
+    required: false
+}) }}
+
+<p>Learn more about Open Graph here: <a href="https://developers.facebook.com/docs/opengraph" target="_blank">https://developers.facebook.com/docs/opengraph</a>.</p>
+
+<hr />
+
+{{ forms.textField({
+    label: "Title"|t,
+    instructions: "The title of your object as it should appear within the graph, e.g., 'The Rock'.",
+    placeholder: "The Rock",
+    name: 'sproutseo_fields[ogTitle]',
+    value: values.ogTitle,
+    errors: "",
+    required: false
+}) }}
+
+{{ forms.textField({
+    label: "Image"|t,
+    instructions: "An image URL which should represent your object within the graph.",
+    name: 'sproutseo_fields[ogImage]',
+    value: values.ogImage,
+    errors: "",
+    required: false
+}) }}
+
+{{ forms.textField({
+    label: "URL"|t,
+    instructions: "The canonical URL of your object that will be used as its permanent ID in the graph.",
+    placeholder: "http://www.seanconnery.com/",
+    name: 'sproutseo_fields[ogUrl]',
+    value: values.ogUrl,
+    errors: "",
+    required: false
+}) }}
+
+<hr />
+
+{{ forms.textField({
+    label: "Site Name"|t,
+    instructions: "If your object is part of a larger web site, the name which should be displayed for the overall site.",
+    placeholder: "The Rock",
+    name: 'sproutseo_fields[ogSiteName]',
+    value: values.ogSiteName,
+    errors: "",
+    required: false
+}) }}
+
+{{ forms.textField({
+    label: "Description"|t,
+    instructions: "A one to two sentence description of your object.",
+    placeholder: "Don't trust the Greeks, even when they bring gifts.",
+    name: 'sproutseo_fields[ogDescription]',
+    value: values.ogDescription,
+    errors: "",
+    required: false
+}) }}
+
+{{ forms.textField({
+    label: "Locale"|t,
+    instructions: "The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.",
+    placeholder: "en_US",
+    name: 'sproutseo_fields[ogLocale]',
+    value: values.ogLocale,
+    errors: "",
+    required: false
+}) }}
+
+{{ forms.textField({
+    label: "Audio"|t,
+    instructions: "A URL to an audio file to accompany this object.",
+    placeholder: "http://www.seanconnery.com/audio.mp3",
+    name: 'sproutseo_fields[ogAudio]',
+    value: values.ogAudio,
+    errors: "",
+    required: false
+}) }}
+
+{{ forms.textField({
+    label: "Video"|t,
+    instructions: "A URL to a video file that complements this object.",
+    placeholder: "http://www.seanconnery.com/didTheyTellPicasoNoBrush.mp4",
+    name: 'sproutseo_fields[ogVideo]',
+    value: values.ogVideo,
+    errors: "",
+    required: false
+}) }}
+
+</div>
+{% includeJsResource "sproutseo/js/field-twitter.js" %}
+
+{% set js %}
+
+    new Craft.SproutSeoTemplate();
+
+{% endset %}
+
+{% includeJs js %}

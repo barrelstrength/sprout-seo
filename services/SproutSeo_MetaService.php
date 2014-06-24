@@ -202,7 +202,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getOpenGraphFieldsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-			->select('id, oG')
+			->select('id, ogTitle, ogType, ogUrl, ogImage, ogSiteName,
+			ogDescription, ogAudio, ogVideo, ogLocale')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(
 				':entryId' => $entryId
@@ -212,11 +213,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	if (isset($query))
 	{
-			return SproutSeo_TwitterCardFieldModel::populateModel($query);
+			return SproutSeo_OpenGraphFieldModel::populateModel($query);
 		}
 		else
 		{
-			return new SproutSeo_TwitterCardFieldModel;
+			return new SproutSeo_OpenGraphFieldModel;
 		}
 
 	}
