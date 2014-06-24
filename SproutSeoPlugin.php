@@ -34,8 +34,14 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
-		craft()->on('entries.saveEntry', array($this, 'onSaveEntry'));
-		craft()->on('content.saveContent', array($this, 'onSaveContent'));
+		craft()->on('entries.saveEntry', array(
+			$this,
+			'onSaveEntry'
+		));
+		craft()->on('content.saveContent', array(
+			$this,
+			'onSaveContent'
+		));
 	}
 
 	public function onSaveEntry(Event $event)

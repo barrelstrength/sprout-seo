@@ -541,10 +541,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getGlobalFallback()
 	{
 		return craft()->db->createCommand()
-									->select('*')
-									->from('sproutseo_templates')
-									->where('globalFallback=:globalFallback', array(':globalFallback' => 1))
-									->queryRow();
+			->select('*')
+			->from('sproutseo_templates')
+			->where('globalFallback=:globalFallback', array(
+				':globalFallback' => 1
+			))
+			->queryRow();
 	}
 
 	public function displayGlobalFallback($templateId = null)
