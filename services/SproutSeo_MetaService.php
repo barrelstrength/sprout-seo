@@ -199,6 +199,28 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	}
 
+	public function getOpenGraphFieldsByEntryId($entryId)
+	{
+		$query = craft()->db->createCommand()
+			->select('id, oG')
+			->from('sproutseo_overrides')
+			->where('entryId = :entryId', array(
+				':entryId' => $entryId
+				)
+			)
+			->queryRow();
+
+	if (isset($query))
+	{
+			return SproutSeo_TwitterCardFieldModel::populateModel($query);
+		}
+		else
+		{
+			return new SproutSeo_TwitterCardFieldModel;
+		}
+
+	}
+
 	public function getGeographicMetaFeildsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
