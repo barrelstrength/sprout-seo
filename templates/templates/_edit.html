@@ -230,23 +230,6 @@
     '' : 'Select Open Graph Type...',
 	    'website' : 'Website',
 	    'article' : 'Article',
-	    'place' : 'Place',
-	    'profile' : 'Profile',
-	    'object' :  'Object',
-	    'book' : 'Book',
-	    'books.author' : 'Books Author',
-	    'books.book' : 'Books Book',
-	    'books.genre' : 'Books Genre',
-	    'music.song' : 'Music Song',
-	    'music.radio_station' : 'Music Radio Station',
-	    'music.playlist' : 'Music Playlist',
-	    'music.album' : 'Music Album',
-	    'video.other' : 'Video Other',
-	    'video.tv_show' : 'Video TV Show',
-	    'video.movie' : 'Video Movie',
-	    'video.episode' : 'Video Episode',
-	    'fitness.unit' : 'Fitness Unit',
-	    'fitness.course' : 'Fitness Course'
 	  } %}
 
 	<h2>Open Graph Type</h2>
@@ -275,7 +258,7 @@
 		required: false
 	}) }}
 
-	{{ forms.fileField({
+	{{ forms.textField({
 		label: "Image"|t,
 		instructions: "An image URL which should represent your object within the graph.",
 		name: 'template_fields[ogImage]',
@@ -283,8 +266,6 @@
 		errors: "",
 		required: false
 	}) }}
-
-
 
 	{{ forms.textField({
 		label: "URL"|t,
