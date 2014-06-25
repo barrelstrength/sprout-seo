@@ -87,9 +87,9 @@ class SproutSeoVariable
    *
    * @return [type] [description]
    */
-  public function allTemplates()
+  public function allDefaults()
   {
-    return craft()->sproutSeo_meta->getAllTemplates();
+    return craft()->sproutSeo_meta->getAllDefaults();
   }
 
   /**
