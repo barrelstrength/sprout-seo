@@ -14,7 +14,7 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.7.1';
+		return '0.7.2';
 	}
 
 	public function getDeveloper()
@@ -81,17 +81,30 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/templates/new' =>
-			'sproutseo/templates/_edit',
 
-			'sproutseo/templates/(?P<templateId>\d+)' =>
-			'sproutseo/templates/_edit',
+			// route to a controller action
+			'sproutseo/defaults/new' => array(
+				'action' => 'sproutSeo/defaults/newDefault'
+			),
 
+			// route to a controller action
+			'sproutseo/defaults/_edit' => array(
+				'action' => 'sproutSeo/defaults/editDefault'
+			),
+
+			// route to a controller action
+			'sproutseo/templates/(?P<templateId>\d+)' => array(
+				'action' => 'sproutSeo/editTemplate'
+			),
+
+			// @TODO route to a controller action
 			'sproutseo/sitemap/newPage' =>
 			'sproutseo/sitemap/_edit',
 
-			'sproutseo/settings' =>
-			array('action' => 'sproutSeo/settings/settingsIndex')
+			// @TODO route to a controller action
+			'sproutseo/settings' => array(
+				'action' => 'sproutSeo/settings/settingsIndex'
+			)
 		);
 	}
 }
