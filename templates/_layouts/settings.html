@@ -7,17 +7,17 @@
 ] %}
 
 {% set tabs = {
-    templates: { 
-      label: "Meta Templates"|t,
-      url: "#settings-seo"
+    defaults: {
+        label: "Meta Defaults"|t,
+        url: "#settings-seo"
     },
-    sitemap: { 
-      label: "Sitemap"|t,
-      url: "#settings-sitemap"
+    sitemap: {
+        label: "Sitemap"|t,
+        url: "#settings-sitemap"
     },
-    general: { 
-      label: "Control Panel"|t,
-      url: "#settings-cp"
+    general: {
+        label: "Control Panel"|t,
+        url: "#settings-cp"
     }
 } %}
 
@@ -28,5 +28,5 @@
   {% include 'sproutseo/_partials/brand/footer' %}
 
 {% endset %}
-  
+
 {% includeCssResource "sproutseo/css/brand.css" %}
