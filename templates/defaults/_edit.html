@@ -2,58 +2,58 @@
 {% set centered = true %}
 
 {% set title %}
-	New Template - {{ craft.SproutSeo.name }}
+	New Default - {{ craft.SproutSeo.name }}
 {% endset %}
 
 {% set tabs = {
-		template: {
-      label: "Template Settings"|t,
-      url: '#template-main'
+	  template: {
+      label: "Default Settings"|t,
+      url: '#default-main'
     },
     main: {
       label: "Basic Info"|t,
-      url: '#template-basic'
+      url: '#default-basic'
     },
     publishinfo:    {
       label: "Robots"|t,
-      url: '#template-robots'
+      url: '#default-robots'
     },
     location:    {
       label: "Location"|t,
-      url: '#template-location'
+      url: '#default-location'
     },
     facebook:    {
       label: "Facebook"|t,
-      url: '#template-facebook'
+      url: '#default-facebook'
     },
     twitter:    {
       label: "Twitter"|t,
-      url: '#template-twitter'
+      url: '#default-twitter'
     }
 } %}
 
 {% import "_includes/forms" as forms %}
 
-{% if templateId is not defined %}
-	{% set templateId = null %}
+{% if defaultId is not defined %}
+	{% set defaultId = null %}
 {% endif %}
 
-{% if template is not defined %}
-	{% set template = craft.sproutSeo.getTemplateById(templateId) %}
+{% if default is not defined %}
+	{% set default = craft.sproutSeo.getDefaultById(defaultId) %}
 {% endif %}
 
 {% set body %}
 
 <form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
-	<input type="hidden" name="action" value="sproutSeo/meta/saveTemplates">
-	<input type="hidden" name="redirect" value="sproutseo/templates">
+	<input type="hidden" name="action" value="sproutSeo/defaults/saveDefault">
+	<input type="hidden" name="redirect" value="sproutseo/defaults">
 
-	<input type="hidden" name="template_fields[id]" value="{{ templateId }}">
+	<input type="hidden" name="template_fields[id]" value="{{ defaultId }}">
 
-<div id="template-main">
+<div id="default-main">
 
 	{{ forms.textField({
-		label: "Template Name"|t,
+		label: "Default Name"|t,
 		instructions: "Human readable template name"|t,
 		id: "name",
 		name: 'template_fields[name]',
@@ -63,7 +63,7 @@
 	}) }}
 
 	{{ forms.textField({
-		label: "Template Short Name"|t,
+		label: "Default Short Name"|t,
 		instructions: "Short name you will use to refer to your template in the code"|t,
 		id: "handle",
 		name: 'template_fields[handle]',
@@ -85,7 +85,7 @@
 
 </div>
 
-<div id="template-basic" class="hidden">
+<div id="default-basic" class="hidden">
 
 	{{ forms.textField({
 		label: "Title"|t,
@@ -123,7 +123,7 @@
 
 </div>
 
-<div id="template-robots" class="hidden">
+<div id="default-robots" class="hidden">
 
 	<h3>Robots - Basic</h3>
 
@@ -189,7 +189,7 @@
 
 </div>
 
-<div id="template-location" class="hidden">
+<div id="default-location" class="hidden">
 	{{ forms.textField({
 		label: "Region"|t,
 		name: 'template_fields[region]',
@@ -224,7 +224,7 @@
 
 </div>
 
-<div id="template-facebook" class="hidden">
+<div id="default-facebook" class="hidden">
 
 	{% set ogTypesOptions = {
     '' : 'Select Open Graph Type...',
@@ -335,7 +335,7 @@
 
 </div>
 
-<div id="template-twitter" class="hidden">
+<div id="default-twitter" class="hidden">
 
 	{% set twitterCardOptions = {
 		'' : 'Select Twitter Card Type...',
@@ -520,7 +520,7 @@
 </div>
 
 <div class="buttons">
-	<input class="btn submit" type="submit" value="Save Template">
+	<input class="btn submit" type="submit" value="Save Default">
 </div>
 
 </form>
@@ -531,11 +531,11 @@
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
 {% endif %}
 
-{% includeJsResource "sproutseo/js/template.js" %}
+{% includeJsResource "sproutseo/js/default.js" %}
 
 {% set js %}
 
-	new Craft.SproutSeoTemplate();
+	new Craft.SproutSeoDefault();
 
 {% endset %}
 

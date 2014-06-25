@@ -13,7 +13,7 @@
 
 {% if templates is empty %}
 
-	<h3>Create your first Default meta-data template.</h3>
+	<h3>Create your first Default meta-data default.</h3>
 
 {% else %}
 
@@ -29,7 +29,7 @@
 
 	<tr id="results" data-id="{{ template.id }}" data-name="{{ template.name|t }}">
 		<td>
-			<a href="{{ url('sproutseo/templates/' ~ template.id) }}">
+			<a href="{{ url('sproutseo/defaults/' ~ template.id) }}">
 				<strong>{{ template.name }}</strong>
 			</a>
 		</td>
@@ -49,7 +49,7 @@
 {% endif %}
 
 <div class="buttons">
-	<a class="btn submit add icon" href="{{ url('sproutseo/templates/new') }}">New Default</a>
+	<a class="btn submit add icon" href="{{ url('sproutseo/defaults/new') }}">New Default</a>
 </div>
 
 {% endset %}
