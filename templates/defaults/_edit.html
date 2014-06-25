@@ -6,7 +6,7 @@
 {% endset %}
 
 {% set tabs = {
-	  template: {
+	  default: {
       label: "Default Settings"|t,
       url: '#default-main'
     },
@@ -48,38 +48,38 @@
 	<input type="hidden" name="action" value="sproutSeo/defaults/saveDefault">
 	<input type="hidden" name="redirect" value="sproutseo/defaults">
 
-	<input type="hidden" name="template_fields[id]" value="{{ defaultId }}">
+	<input type="hidden" name="default_fields[id]" value="{{ defaultId }}">
 
 <div id="default-main">
 
 	{{ forms.textField({
 		label: "Default Name"|t,
-		instructions: "Human readable template name"|t,
+		instructions: "Human readable default name"|t,
 		id: "name",
-		name: 'template_fields[name]',
-		value: template.name,
+		name: 'default_fields[name]',
+		value: default.name,
 		errors: '',
 		required: true
 	}) }}
 
 	{{ forms.textField({
 		label: "Default Short Name"|t,
-		instructions: "Short name you will use to refer to your template in the code"|t,
+		instructions: "Short name you will use to refer to your default in the code"|t,
 		id: "handle",
-		name: 'template_fields[handle]',
-		value: template.handle,
+		name: 'default_fields[handle]',
+		value: default.handle,
 		errors: '',
 		required: true
 	}) }}
 
-	{% set canBeGlobalFallback = craft.sproutSeo.displayGlobalFallback(templateId) %}
+	{% set canBeGlobalFallback = craft.sproutSeo.displayGlobalFallback(defaultId) %}
 
 	{% if canBeGlobalFallback %}
 		{{ forms.checkboxField({
-			label: "Use this template as my global fallback"|t,
+			label: "Use this default as my global fallback"|t,
 			id: 'global-fallback',
-			name: 'template_fields[globalFallback]',
-			checked: template.globalFallback
+			name: 'default_fields[globalFallback]',
+			checked: default.globalFallback
 		}) }}
 	{% endif %}
 
@@ -89,25 +89,25 @@
 
 	{{ forms.textField({
 		label: "Title"|t,
-		name: 'template_fields[title]',
+		name: 'default_fields[title]',
 		instructions: "The Title will appear in your browser tab, and as the primary Heading in your search results"|t,
-		value: template.title,
+		value: default.title,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.checkboxField({
 	  label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
-	  name: 'template_fields[appendSiteName]',
-	  checked: (template.appendSiteName == 1 ? 1 : 0),
+	  name: 'default_fields[appendSiteName]',
+	  checked: (default.appendSiteName == 1 ? 1 : 0),
 	  errors: ''
 	}) }}
 
 	{{ forms.textField({
 		label: "Description"|t,
 		instructions: "A 140 word description of your content which will appear as the description in your search results."|t,
-		name: 'template_fields[description]',
-		value: template.description,
+		name: 'default_fields[description]',
+		value: default.description,
 		errors: "",
 		required: false
 	}) }}
@@ -115,8 +115,8 @@
 	{{ forms.textField({
 		label: "Keywords"|t,
 		instructions: "A list of keywords that describe your content"|t,
-		name: 'template_fields[keywords]',
-		value: template.keywords,
+		name: 'default_fields[keywords]',
+		value: default.keywords,
 		errors: "",
 		required: false
 	}) }}
@@ -135,13 +135,13 @@
 
 	<div>
 			<label>
-				<input type="checkbox" value="noindex" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noindex', template.robots) }}> noindex
+				<input type="checkbox" value="noindex" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noindex', default.robots) }}> noindex
 			</label>
 			<span class="info">I don't want this page to be indexed by search engines</span>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="nofollow" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('nofollow', template.robots) }}> nofollow
+				<input type="checkbox" value="nofollow" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('nofollow', default.robots) }}> nofollow
 			</label>
 			<span class="info">I don't want search engines to follow links on this page</span>
 	</div>
@@ -153,31 +153,31 @@
 
 	<div>
 			<label>
-				<input type="checkbox" value="noarchive" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noarchive', template.robots) }}> noarchive
+				<input type="checkbox" value="noarchive" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noarchive', default.robots) }}> noarchive
 			</label>
 			<span class="info">I don't want search engines to provide archived versions of this page to users</span>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="noimageindex" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noimageindex', template.robots) }}> noimageindex
+				<input type="checkbox" value="noimageindex" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noimageindex', default.robots) }}> noimageindex
 			</label>
 			<span class="info">I don't want images on this page to be indexed by search engines</span>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('nosnippet', template.robots) }}> nosnippet
+				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('nosnippet', default.robots) }}> nosnippet
 			</label>
 			<span class="info">I don't want Google to cache this page or display a description below the page in search results</span>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="noodp" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noodp', template.robots) }}> noodp
+				<input type="checkbox" value="noodp" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noodp', default.robots) }}> noodp
 			</label>
 			<span class="info">I don't want Google to use the Open Directory Project (ODP) description for this page. I want Google to use the description on the website.</span>
 	</div>
 	<div>
 			<label>
-				<input type="checkbox" value="noydir" id="" class="checkbox" name="template_fields[robots][]" {{ checkbox.isSelected('noydir', template.robots) }}> noydir
+				<input type="checkbox" value="noydir" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noydir', default.robots) }}> noydir
 			</label>
 			<span class="info">I don't want Bing or Yahoo! to use the Yahoo! Directory titles and descriptions for this page.  I want Bing and Yahoo! to use the titles and descriptions on the website.</span>
 	</div>
@@ -192,32 +192,32 @@
 <div id="default-location" class="hidden">
 	{{ forms.textField({
 		label: "Region"|t,
-		name: 'template_fields[region]',
-		value: template.region,
+		name: 'default_fields[region]',
+		value: default.region,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Placename"|t,
-		name: 'template_fields[placename]',
-		value: template.placename,
+		name: 'default_fields[placename]',
+		value: default.placename,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Latitude"|t,
-		name: 'template_fields[latitude]',
-		value: template.latitude,
+		name: 'default_fields[latitude]',
+		value: default.latitude,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Longitude"|t,
-		name: 'template_fields[longitude]',
-		value: template.longitude,
+		name: 'default_fields[longitude]',
+		value: default.longitude,
 		errors: "",
 		required: false
 	}) }}
@@ -235,9 +235,9 @@
 	<h2>Open Graph Type</h2>
 
 	{{ forms.selectField({
-		name: 'template_fields[ogType]',
+		name: 'default_fields[ogType]',
 		options: ogTypesOptions,
-		value: template.ogType,
+		value: default.ogType,
 		errors: "",
 		required: false
 	}) }}
@@ -252,8 +252,8 @@
 		label: "Title"|t,
 		instructions: "The title of your object as it should appear within the graph, e.g., 'The Rock'.",
 		placeholder: "The Rock",
-		name: 'template_fields[ogTitle]',
-		value: template.ogTitle,
+		name: 'default_fields[ogTitle]',
+		value: default.ogTitle,
 		errors: "",
 		required: false
 	}) }}
@@ -261,8 +261,8 @@
 	{{ forms.textField({
 		label: "Image"|t,
 		instructions: "An image URL which should represent your object within the graph.",
-		name: 'template_fields[ogImage]',
-		value: template.ogImage,
+		name: 'default_fields[ogImage]',
+		value: default.ogImage,
 		errors: "",
 		required: false
 	}) }}
@@ -271,8 +271,8 @@
 		label: "URL"|t,
 		instructions: "The canonical URL of your object that will be used as its permanent ID in the graph.",
 		placeholder: "http://www.seanconnery.com/",
-		name: 'template_fields[ogUrl]',
-		value: template.ogUrl,
+		name: 'default_fields[ogUrl]',
+		value: default.ogUrl,
 		errors: "",
 		required: false
 	}) }}
@@ -285,8 +285,8 @@
 		label: "Site Name"|t,
 		instructions: "If your object is part of a larger web site, the name which should be displayed for the overall site.",
 		placeholder: "The Rock",
-		name: 'template_fields[ogSiteName]',
-		value: template.ogSiteName,
+		name: 'default_fields[ogSiteName]',
+		value: default.ogSiteName,
 		errors: "",
 		required: false
 	}) }}
@@ -295,8 +295,8 @@
 		label: "Description"|t,
 		instructions: "A one to two sentence description of your object.",
 		placeholder: "Don't trust the Greeks, even when they bring gifts.",
-		name: 'template_fields[ogDescription]',
-		value: template.ogDescription,
+		name: 'default_fields[ogDescription]',
+		value: default.ogDescription,
 		errors: "",
 		required: false
 	}) }}
@@ -305,8 +305,8 @@
 		label: "Locale"|t,
 		instructions: "The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.",
 		placeholder: "en_US",
-		name: 'template_fields[ogLocale]',
-		value: template.ogLocale,
+		name: 'default_fields[ogLocale]',
+		value: default.ogLocale,
 		errors: "",
 		required: false
 	}) }}
@@ -315,8 +315,8 @@
 		label: "Audio"|t,
 		instructions: "A URL to an audio file to accompany this object.",
 		placeholder: "http://www.seanconnery.com/audio.mp3",
-		name: 'template_fields[ogAudio]',
-		value: template.ogAudio,
+		name: 'default_fields[ogAudio]',
+		value: default.ogAudio,
 		errors: "",
 		required: false
 	}) }}
@@ -325,8 +325,8 @@
 		label: "Video"|t,
 		instructions: "A URL to a video file that complements this object.",
 		placeholder: "http://www.seanconnery.com/didTheyTellPicasoNoBrush.mp4",
-		name: 'template_fields[ogVideo]',
-		value: template.ogVideo,
+		name: 'default_fields[ogVideo]',
+		value: default.ogVideo,
 		errors: "",
 		required: false
 	}) }}
@@ -348,10 +348,10 @@
 	<h2>Twitter Card Type</h2>
 
 	{{ forms.selectField({
-		name: 'template_fields[twitterCard]',
+		name: 'default_fields[twitterCard]',
 		options: twitterCardOptions,
-		value: (template.twitterCard is defined ? template.twitterCard : 'summary'),
-		value: template.twitterCard,
+		value: (default.twitterCard is defined ? default.twitterCard : 'summary'),
+		value: default.twitterCard,
 		errors: "",
 		required: false
 	}) }}
@@ -364,40 +364,40 @@
 
 	{{ forms.textField({
 		label: "Site"|t,
-		name: 'template_fields[twitterSite]',
+		name: 'default_fields[twitterSite]',
 		instructions: "The Twitter username of the owner of this card's domain.",
 		placeholder: "@username",
-		value: template.twitterSite,
+		value: default.twitterSite,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Creator"|t,
-		name: 'template_fields[twitterCreator]',
+		name: 'default_fields[twitterCreator]',
 		instructions: "If the content of this card was authored by someone, include their Twitter username here.",
 		placeholder: "@username",
-		value: template.twitterCreator,
+		value: default.twitterCreator,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textField({
 		label: "Title"|t,
-		name: 'template_fields[twitterTitle]',
+		name: 'default_fields[twitterTitle]',
 		instructions: 'The title of your content as it should appear in the card.',
 		placeholder: "Sean Connery is the greatest",
-		value: template.twitterTitle,
+		value: default.twitterTitle,
 		errors: "",
 		required: false
 	}) }}
 
 	{{ forms.textareaField({
 		label: "Description"|t,
-		name: 'template_fields[twitterDescription]',
+		name: 'default_fields[twitterDescription]',
 		instructions: 'A description of the content in a maximum of 200 characters.',
 		placeholder: "Losers always whine about doing thier best...",
-		value: template.twitterDescription,
+		value: default.twitterDescription,
 		errors: "",
 		required: false
 	}) }}
@@ -410,9 +410,9 @@
 
 		{{ forms.textField({
 			label: "Image Source"|t,
-			name: 'template_fields[twitterSummaryImageSource]',
+			name: 'default_fields[twitterSummaryImageSource]',
 			instructions: 'A URL to the image representing the content.',
-			value: template.twitterSummaryImageSource,
+			value: default.twitterSummaryImageSource,
 			errors: "",
 			required: false
 		}) }}
@@ -427,9 +427,9 @@
 
 		{{ forms.textField({
 			label: "Image Source"|t,
-			name: 'template_fields[twitterSummaryLargeImageImageSource]',
+			name: 'default_fields[twitterSummaryLargeImageImageSource]',
 			instructions: 'A URL to the image representing the content.',
-			value: template.twitterSummaryLargeImageImageSource,
+			value: default.twitterSummaryLargeImageImageSource,
 			errors: "",
 			required: false
 		}) }}
@@ -444,9 +444,9 @@
 
 		{{ forms.textField({
 			label: "Image Source"|t,
-			name: 'template_fields[twitterPhotoImageSource]',
+			name: 'default_fields[twitterPhotoImageSource]',
 			instructions: 'A URL to the image representing the content.',
-			value: template.twitterPhotoImageSource,
+			value: default.twitterPhotoImageSource,
 			errors: "",
 			required: false
 		}) }}
@@ -461,54 +461,54 @@
 
 		{{ forms.textField({
 			label: "Image Source"|t,
-			name: 'template_fields[twitterPlayerImageSource]',
+			name: 'default_fields[twitterPlayerImageSource]',
 			instructions: 'A URL to the image representing the content.',
-			value: template.twitterPlayerImageSource,
+			value: default.twitterPlayerImageSource,
 			errors: "",
 			required: false
 		}) }}
 
 		{{ forms.textField({
 			label: "Player"|t,
-			name: 'template_fields[twitterPlayer]',
+			name: 'default_fields[twitterPlayer]',
 			instructions: "HTTPS URL to iframe player. This must be a HTTPS URL which does not generate mixed content warnings in a web browser..",
-			value: template.twitterPlayer,
+			value: default.twitterPlayer,
 			errors: "",
 			required: false
 		}) }}
 
 		{{ forms.textField({
 			label: "Stream"|t,
-			name: 'template_fields[twitterPlayerStream]',
+			name: 'default_fields[twitterPlayerStream]',
 			instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrationlications directly. If provided, the stream must be delivered in the MPEG-4 container format.",
-			value: template.twitterPlayerStream,
+			value: default.twitterPlayerStream,
 			errors: "",
 			required: false
 		}) }}
 
 		{{ forms.textField({
 			label: "Stream Content Type"|t,
-			name: 'template_fields[twitterPlayerStreamContentType]',
+			name: 'default_fields[twitterPlayerStreamContentType]',
 			instructions: "The MIME type subtype combination that describes the content contained in twitter player stream.",
-			value: template.twitterPlayerStreamContentType,
+			value: default.twitterPlayerStreamContentType,
 			errors: "",
 			required: false
 		}) }}
 
 		{{ forms.textField({
 			label: "Height"|t,
-			name: 'template_fields[twitterPlayerHeight]',
+			name: 'default_fields[twitterPlayerHeight]',
 			instructions: "Height of IFRAME specified in twitter player in pixels.",
-			value: template.twitterPlayerHeight,
+			value: default.twitterPlayerHeight,
 			errors: "",
 			required: false
 		}) }}
 
 		{{ forms.textField({
 			label: "Width"|t,
-			name: 'template_fields[twitterPlayerWidth]',
+			name: 'default_fields[twitterPlayerWidth]',
 			instructions: 'Width of IFRAME specified in twitter player in pixels.',
-			value: template.twitterPlayerWidth,
+			value: default.twitterPlayerWidth,
 			errors: "",
 			required: false
 		}) }}
@@ -527,7 +527,7 @@
 
 {% endset %}
 
-{% if template.name is not defined or not template.handle %}
+{% if default.name is not defined or not default.handle %}
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
 {% endif %}
 
