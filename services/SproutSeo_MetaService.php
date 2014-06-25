@@ -16,7 +16,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	{
 		$this->metaRecord = $metaRecord;
 		if (is_null($this->metaRecord)) {
-			$this->metaRecord = SproutSeo_TemplatesRecord::model();
+			$this->metaRecord = SproutSeo_DefaultsRecord::model();
 		}
 
 		$this->seoOverrideRecord = $seoOverrideRecord;
@@ -45,24 +45,28 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all Templates from the database.
+	 * Get all Defaults from the database.
 	 *
 	 * @return array
 	 */
-	public function getAllTemplates()
+	public function getAllDefaults()
 	{
-		$records = $this->metaRecord->findAll(array('order'=>'name'));
+		$records = $this->metaRecord->findAll(array(
+			'order'=>'name'
+			)
+		);
 
 		return SproutSeo_MetaModel::populateModels($records, 'id');
 	}
 
 	/**
-	 * Get a specific Templates from the database based on ID. If no Templates exists, null is returned.
+	 * Get a specific Defaults from the database based on ID. If no Defaults
+	 * exists, null is returned.
 	 *
 	 * @param  int   $id
 	 * @return mixed
 	 */
-	public function getTemplateById($id)
+	public function getDefaultById($id)
 	{
 		if ($record = $this->metaRecord->findByPk($id))
 		{
@@ -74,11 +78,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
     }
 	}
 
-	public function getTemplateByTemplateHandle($handle)
+	public function getDefaultByDefaultHandle($handle)
 	{
 		$query = craft()->db->createCommand()
 					->select('*')
-					->from('sproutseo_templates')
+					->from('sproutseo_defaults')
 					->where('handle=:handle', array(':handle'=> $handle))
 					->queryRow();
 
@@ -94,14 +98,16 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		return $model;
 	}
 
-	public function saveTemplateInfo(SproutSeo_MetaModel &$model)
+	public function saveDefaultInfo(SproutSeo_MetaModel &$model)
 	{
 
 	   if ($id = $model->getAttribute('id'))
        {
 			if (null === ($record = $this->metaRecord->findByPk($id)))
             {
-				throw new Exception(Craft::t('Can\'t find template with ID "{id}"', array('id' => $id)));
+				throw new Exception(Craft::t('Can\'t find default with ID "{id}"', array(
+					'id' => $id
+				)));
 			}
 	   }
        else
@@ -290,14 +296,14 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Deletes a template
+	 * Deletes a default
 	 *
 	 * @param int
 	 * @return bool
 	 */
-	public function deleteTemplate($id = null)
+	public function deleteDefault($id = null)
 	{
-		$record = new SproutSeo_TemplatesRecord;
+		$record = new SproutSeo_DefaultsRecord;
 		return $record->deleteByPk($id);
 	}
 
@@ -318,19 +324,19 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$templates      = array(); // Lowest Priority
 
 
-		// PREPARE Templates
+		// PREPARE Defaults
 		// ------------------------------------------------------------
 
 		// If our code references a template template, create our template array
 		// If no template template is mentioned, we have an empty array
-		if (isset($overrideInfo['template']))
+		if (isset($overrideInfo['default']))
 		{
 
-			$templateHandle = $overrideInfo['template'];
-			$templates = craft()->sproutSeo_meta->getTemplateByTemplateHandle($templateHandle);
+			$defaultHandle = $overrideInfo['default'];
+			$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
 
 			// create the string we will append to the end of our title if we should
-			if (isset($templates->appendSiteName))
+			if (isset($defaults->appendSiteName))
 			{
 			  $this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
 			}
@@ -339,7 +345,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			// array and have it match up nicely.
 			// @TODO - may need to move this outside this if statement, or include other
 			// values that aren't part of the seo metadata model
-			unset($overrideInfo['template']);
+			unset($overrideInfo['default']);
 		}
 
 
@@ -348,7 +354,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$siteUrl = $scheme . $_SERVER['SERVER_NAME'];
 		$currentUrl = $siteUrl . craft()->request->url;
 
-		$templates['canonical'] = $currentUrl;
+		$defaults['canonical'] = $currentUrl;
 
 
 		// PREPARE ENTRY OVERRIDES
@@ -375,8 +381,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		  $codeOverrides = SproutSeo_MetaModel::populateModel($overrideInfo);
 		}
 
-		// @TODO - this is temporary, figure out the best syntax for 'Robots' values
-		// and update this to accomodate both the On-page and Code override situations
+		// @TODO - this is temporary, figure out the best syntax for 'Robots'
+		// values and update this to accomodate both the On-page and Code
+		// override situations
 		$codeOverrides->robots = ($codeOverrides->robots)
 		  ? $codeOverrides->robots
 		  : null;
@@ -565,7 +572,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	{
 		return craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_templates')
+			->from('sproutseo_defaults')
 			->where('globalFallback=:globalFallback', array(
 				':globalFallback' => 1
 			))
@@ -576,7 +583,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	{
 		$fallback = $this->getGlobalFallback();
 
-		$isGlobalFallback = ( isset($fallback['id']) && ($templateId == $fallback['id']) );
+		$isGlobalFallback = ( isset($fallback['id']) && ($defaultId == $fallback['id']) );
 		$noFallbackExists = !isset($fallback['id']);
 
     if ($isGlobalFallback OR $noFallbackExists)
