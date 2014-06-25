@@ -93,8 +93,8 @@ class SproutSeoPlugin extends BasePlugin
 			),
 
 			// route to a controller action
-			'sproutseo/templates/(?P<templateId>\d+)' => array(
-				'action' => 'sproutSeo/editTemplate'
+			'sproutseo/defaults/(?P<defaultId>\d+)' => array(
+				'action' => 'sproutSeo/defaults/editDefault'
 			),
 
 			// @TODO route to a controller action
