@@ -52,7 +52,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getAllDefaults()
 	{
 		$records = $this->metaRecord->findAll(array(
-			'order'=>'name'
+			'order' => 'name'
 			)
 		);
 
