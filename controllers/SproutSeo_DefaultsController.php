@@ -5,16 +5,16 @@ class SproutSeo_DefaultsController extends BaseController
 {
     public function actionNewDefault()
     {
-        $this->renderTemplate('sproutSeo/defaults/_edit');
+        return $this->renderTemplate('sproutSeo/defaults/_edit');
     }
 
     public function actionEditDefault()
     {
         // add the assets stuff here
-        die('edit default');
+        return $this->renderTemplate('sproutSeo/defaults/_edit');
     }
 
-    public function actionSaveDefaults()
+    public function actionSaveDefault()
     {
         $this->requirePostRequest();
 
@@ -52,6 +52,6 @@ class SproutSeo_DefaultsController extends BaseController
         $this->requireAjaxRequest();
 
         $this->returnJson(array(
-                'success' => craft()->sproutSeo_meta->deleteDefault(craft()->request->getRequiredPost('id')) >= 0 ? true : false));
+            'success' => craft()->sproutSeo_meta->deleteDefault(craft()->request->getRequiredPost('id')) >= 0 ? true : false));
     }
 }
