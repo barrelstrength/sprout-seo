@@ -64,22 +64,22 @@ class SproutSeo_TemplatesRecord extends BaseRecord
 
             // Fields for Twitter Summary Card
             'twitterSummaryImageSource' => array(
-                AttributeType::String
+                AttributeType::Number
             ),
 
             // Fields for Twitter Summary Large Image Card
             'twitterSummaryLargeImageImageSource' => array(
-                AttributeType::String
+                AttributeType::Number
             ),
 
             // Fields for Twitter Photo Card
             'twitterPhotoImageSource' => array(
-                AttributeType::String,
+                AttributeType::Number,
             ),
 
             // Fields for Twitter Player Card
             'twitterPlayerImageSource' => array(
-                AttributeType::String,
+                AttributeType::Number,
             ),
             'twitterPlayer' => array(
                 AttributeType::String,
@@ -114,12 +114,15 @@ class SproutSeo_TemplatesRecord extends BaseRecord
     }
 
     // @TODO implement assets for field types
-    // public function defineRelations()
-    // {
-    //     return array(
-    //         'asset'    => array(static::BELONGS_TO, 'AssetFileRecord'),
-    //     );
-    // }
+    public function defineRelations()
+    {
+        return array(
+            'twitterSummaryImageSource'           => array(static::BELONGS_TO, 'AssetFileRecord'),
+            'twitterSummaryLargeImageImageSource' => array(static::BELONGS_TO, 'AssetFileRecord'),
+            'twitterPhotoImageSource'             => array(static::BELONGS_TO, 'AssetFileRecord'),
+            'twitterPlayerImageSource'            => array(static::BELONGS_TO, 'AssetFileRecord'),
+        );
+    }
 
     /**
      * Create a new instance of the current class. This allows us to

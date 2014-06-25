@@ -5,11 +5,11 @@ class SproutSeo_SettingsController extends BaseController
 {
 	/**
 	 * Save Settings to the Database
-	 * 
+	 *
 	 * @return mixed Return to Page
 	 */
 	public function actionSettingsIndex()
-	{	
+	{
 		$settingsModel = new SproutSeo_SettingsModel;
 
 		// Create any variables you want available in your template
@@ -19,12 +19,12 @@ class SproutSeo_SettingsController extends BaseController
                          ->from('plugins')
                          ->where('class=:class', array(':class'=> 'SproutSeo'))
                          ->queryScalar();
-    
+
     $settings = JsonHelper::decode($settings);
     $settingsModel->setAttributes($settings);
-   
+
     $variables['settings'] = $settingsModel;
-    
+
 		// Load a particular template and with all of the variables you've created
 		$this->renderTemplate('sproutseo/settings', $variables);
 
@@ -32,7 +32,7 @@ class SproutSeo_SettingsController extends BaseController
 
 	public function actionSaveSettings()
 	{
-		
+
 		$this->requirePostRequest();
 		$settings = craft()->request->getPost('settings');
 

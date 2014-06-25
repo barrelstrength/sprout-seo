@@ -56,22 +56,22 @@ class SproutSeo_MetaModel extends BaseModel
 
             // Fields for Twitter Summary Card
             'twitterSummaryImageSource' => array(
-                AttributeType::String
+                AttributeType::Number
             ),
 
             // Fields for Twitter Summary Large Image Card
             'twitterSummaryLargeImageImageSource' => array(
-                AttributeType::String
+                AttributeType::Number
             ),
 
             // Fields for Twitter Photo Card
             'twitterPhotoImageSource' => array(
-                AttributeType::String,
+                AttributeType::Number,
             ),
 
             // Fields for Twitter Player Card
             'twitterPlayerImageSource' => array(
-                AttributeType::String,
+                AttributeType::Number,
             ),
             'twitterPlayer' => array(
                 AttributeType::String,
