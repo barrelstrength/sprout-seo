@@ -53,7 +53,7 @@
 <div id="default-main">
 
 	{{ forms.textField({
-		label: "Default Name"|t,
+		label: "Name"|t,
 		instructions: "Human readable default name"|t,
 		id: "name",
 		name: 'default_fields[name]',
@@ -63,8 +63,8 @@
 	}) }}
 
 	{{ forms.textField({
-		label: "Default Short Name"|t,
-		instructions: "Short name you will use to refer to your default in the code"|t,
+		label: "Short Name"|t,
+		instructions: "Short name you will use to refer to your defaults in the code"|t,
 		id: "handle",
 		name: 'default_fields[handle]',
 		value: default.handle,
