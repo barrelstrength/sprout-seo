@@ -82,32 +82,50 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		return array(
 
-			// route to a controller action
+			/*
+			* @controller SproutSeo_DefaultsController
+			* @template   sproutseo/templates/defaults/_edit.html
+			*/
 			'sproutseo/defaults/new' => array(
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
 
-			// route to a controller action
+			/*
+			* @controller SproutSeo_DefaultsController
+			* @template   sproutseo/templates/defaults/_edit.html
+			*/
 			'sproutseo/defaults/_edit' => array(
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
 
-			// route to a controller action
+			/*
+			* @controller SproutSeo_DefaultsController
+			* @template   sproutseo/templates/defaults/_edit.html
+			*/
 			'sproutseo/defaults/(?P<defaultId>\d+)' => array(
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
 
-			// route to a controller action
+			/*
+			* @controller SproutSeo_SitemapController
+			* @template   sproutseo/templates/sitemap/index.html
+			*/
 			'sproutseo/sitemap' => array(
 				'action' => 'sproutSeo/sitemap/sitemapIndex'
 			),
 
-			// route to a controller action
+			/*
+			* @controller SproutSeo_SitemapController
+			* @template   sproutseo/templates/sitemap/_edit.html
+			*/
 			'sproutseo/sitemap/newPage' => array(
 				'action' => 'sproutSeo/sitemap/editSitemap'
 			),
 
-			// route to a controller action
+			/*
+			* @controller SproutSeo_SettingsController
+			* @template   sproutseo/templates/settings/index.html
+			*/
 			'sproutseo/settings' => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			)
