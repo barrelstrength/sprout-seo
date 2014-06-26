@@ -3,10 +3,6 @@ namespace Craft;
 
 class SproutSeo_DefaultsController extends BaseController
 {
-    public function actionNewDefault()
-    {
-        return $this->renderTemplate('sproutSeo/defaults/_edit');
-    }
 
     public function actionEditDefault()
     {

@@ -14,7 +14,7 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.7.2';
+		return '0.7.1';
 	}
 
 	public function getDeveloper()
@@ -84,7 +84,7 @@ class SproutSeoPlugin extends BasePlugin
 
 			// route to a controller action
 			'sproutseo/defaults/new' => array(
-				'action' => 'sproutSeo/defaults/newDefault'
+				'action' => 'sproutSeo/defaults/editDefault'
 			),
 
 			// route to a controller action
