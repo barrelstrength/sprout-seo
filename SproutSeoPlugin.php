@@ -99,15 +99,15 @@ class SproutSeoPlugin extends BasePlugin
 
 			// route to a controller action
 			'sproutseo/sitemap' => array(
-				'action' => 'sproutseo/sitemap/sitemapIndex'
+				'action' => 'sproutSeo/sitemap/sitemapIndex'
 			),
 
 			// route to a controller action
 			'sproutseo/sitemap/newPage' => array(
-				'action' => 'sproutseo/sitemap/editSitemap'
+				'action' => 'sproutSeo/sitemap/editSitemap'
 			),
 
-			// @TODO route to a controller action
+			// route to a controller action
 			'sproutseo/settings' => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			)
