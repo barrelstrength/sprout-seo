@@ -4,6 +4,16 @@ namespace Craft;
 class SproutSeo_SitemapController extends BaseController
 {
 	/**
+	* Show Sitemap index
+	*
+	* @return mixed Return to Page
+	*/
+	public function actionSitemapIndex()
+	{
+		return $this->renderTemplate('sproutSeo/sitemap/index');
+	}
+
+	/**
 	 * Save Sitemap Info to the Database
 	 *
 	 * @return mixed Return to Page
@@ -42,7 +52,7 @@ class SproutSeo_SitemapController extends BaseController
 		$customPage->priority = craft()->request->getPost('priority');
 		$customPage->changeFrequency 	= craft()->request->getPost('changeFrequency');
 		$customPage->enabled 	= craft()->request->getPost('enabled');
-		
+
 		// @TODO - maybe add these as defaults to the model?  We don't need this for the Custom URLs.
 		$customPage->ping = 0;
 
@@ -66,11 +76,10 @@ class SproutSeo_SitemapController extends BaseController
 	{
     $this->requirePostRequest();
     $this->requireAjaxRequest();
-    
+
     $id = craft()->request->getRequiredPost('id');
     $result = craft()->sproutSeo_sitemap->deleteCustomPageById($id);
 
     $this->returnJson(array('success' => $result));
 	}
 }
-
