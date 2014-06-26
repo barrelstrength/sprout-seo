@@ -6,8 +6,31 @@ class SproutSeo_DefaultsController extends BaseController
 
     public function actionEditDefault()
     {
-        // add the assets stuff here
-        return $this->renderTemplate('sproutSeo/defaults/_edit');
+        // Set twitterSummaryImageSource
+        $variables['twitterSummaryImageSource'] = $SproutSeo_MetaModel->twitterSummaryImageSource;
+
+        // Set elements
+        if ($variables['twitterSummaryImageSource'])
+        {
+            $asset = craft()->elements->getElementById($variables['twitterSummaryImageSource']);
+            $variables['elements'] = array($asset);
+        }
+        else
+        {
+            $variables['elements'] = array();
+        }
+
+        // Set elementType
+        $variables['elementType'] = craft()->elements->getElementType(ElementType::Asset);
+
+        // Set assetsSourceExists
+        $sources = craft()->assets->findFolders();
+        $variables['assetsSourceExists'] = count($sources);
+
+        // Set newAssetsSourceUrl
+        $variables['newAssetsSourceUrl'] = UrlHelper::getUrl('settings/assets/sources/new');
+
+        return $this->renderTemplate('sproutSeo/defaults/_edit', $variables);
     }
 
     public function actionSaveDefault()
