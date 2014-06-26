@@ -97,9 +97,15 @@ class SproutSeoPlugin extends BasePlugin
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
 
-			// @TODO route to a controller action
-			'sproutseo/sitemap/newPage' =>
-			'sproutseo/sitemap/_edit',
+			// route to a controller action
+			'sproutseo/sitemap' => array(
+				'action' => 'sproutseo/sitemap/sitemapIndex'
+			),
+
+			// route to a controller action
+			'sproutseo/sitemap/newPage' => array(
+				'action' => 'sproutseo/sitemap/editSitemap'
+			),
 
 			// @TODO route to a controller action
 			'sproutseo/settings' => array(
