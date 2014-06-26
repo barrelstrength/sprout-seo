@@ -14,6 +14,16 @@ class SproutSeo_SitemapController extends BaseController
 	}
 
 	/**
+	* Create a new page for the sitemap
+	*
+	* @return mixed Return to Page
+	*/
+	public function actionEditSitemap()
+	{
+		return $this->renderTemplate('sproutSeo/sitemap/_edit');
+	}
+
+	/**
 	 * Save Sitemap Info to the Database
 	 *
 	 * @return mixed Return to Page
