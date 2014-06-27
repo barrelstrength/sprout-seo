@@ -38,56 +38,28 @@ class SproutSeo_MetaModel extends BaseModel
 
             // Store the Twitter Card Type and global fields
             // @TODO convert to enum with the proper choices
-            'twitterCard' => array(
-                AttributeType::String
-            ),
-            'twitterSite' => array(
-                AttributeType::String
-            ),
-            'twitterTitle' => array(
-                AttributeType::String
-            ),
-            'twitterCreator' => array(
-                AttributeType::String
-            ),
-            'twitterDescription' => array(
-                AttributeType::String
-            ),
+            'twitterCard' => array(AttributeType::String),
+            'twitterSite' => array(AttributeType::String),
+            'twitterTitle' => array(AttributeType::String),
+            'twitterCreator' => array(AttributeType::String),
+            'twitterDescription' => array(AttributeType::String),
 
             // Fields for Twitter Summary Card
-            'twitterSummaryImageSource' => array(
-                AttributeType::Number
-            ),
+            'twitterSummaryImageSource' => array(AttributeType::Number),
 
             // Fields for Twitter Summary Large Image Card
-            'twitterSummaryLargeImageImageSource' => array(
-                AttributeType::Number
-            ),
+            'twitterSummaryLargeImageImageSource' => array(AttributeType::Number),
 
             // Fields for Twitter Photo Card
-            'twitterPhotoImageSource' => array(
-                AttributeType::Number,
-            ),
+            'twitterPhotoImageSource' => array(AttributeType::Number,),
 
             // Fields for Twitter Player Card
-            'twitterPlayerImageSource' => array(
-                AttributeType::Number,
-            ),
-            'twitterPlayer' => array(
-                AttributeType::String,
-            ),
-            'twitterPlayerStream' => array(
-                AttributeType::String,
-            ),
-            'twitterPlayerStreamContentType' => array(
-                AttributeType::String,
-            ),
-            'twitterPlayerWidth' => array(
-                AttributeType::String,
-            ),
-            'twitterPlayerHeight' => array(
-                AttributeType::String,
-            ),
+            'twitterPlayerImageSource' => array(AttributeType::Number,),
+            'twitterPlayer' => array(AttributeType::String,),
+            'twitterPlayerStream' => array(AttributeType::String,),
+            'twitterPlayerStreamContentType' => array(AttributeType::String,),
+            'twitterPlayerWidth' => array(AttributeType::String,),
+            'twitterPlayerHeight' => array(AttributeType::String,),
 
         );
     }
