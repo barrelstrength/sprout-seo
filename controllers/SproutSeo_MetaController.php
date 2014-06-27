@@ -54,11 +54,12 @@ class SproutSeo_MetaController extends BaseController
 	{
 		$this->requirePostRequest();
 		$this->requireAjaxRequest();
-			
+		
+		$templateId = craft()->request->getRequiredPost('id');
+		$response = craft()->sproutSeo_meta->deleteTemplate($templateId);
+
 		$this->returnJson(array(
-			$templateId = craft()->request->getRequiredPost('id');
-			$response = craft()->sproutSeo_meta->deleteTemplate($templateId);
-			'success' => ($response >= 0) ? true : false;
+			'success' => ($response >= 0) ? true : false
 		));
 	}
 }
