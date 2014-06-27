@@ -11,7 +11,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		if (is_null($this->sitemapRecord)) {
 			$this->sitemapRecord = SproutSeo_SitemapRecord::model();
 		}
-
 	}
 
 	public function saveSitemap(SproutSeo_SitemapModel $attributes)
@@ -75,8 +74,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 	public function getSitemap()
 	{
-		// $sections = craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
-
 		$enabledSections = craft()->db->createCommand()
                 ->select('*')
                 ->from('sproutseo_sitemap')
@@ -178,10 +175,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 	}
 
-    public function deleteCustomPageById($id)
-    {
-    	$record = new SproutSeo_SitemapRecord;
-    	return $record->deleteByPk($id);
-    }
-
+  public function deleteCustomPageById($id)
+  {
+  	$record = new SproutSeo_SitemapRecord;
+  	return $record->deleteByPk($id);
+  }
 }

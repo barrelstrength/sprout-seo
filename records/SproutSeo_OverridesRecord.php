@@ -11,7 +11,10 @@ class SproutSeo_OverridesRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'entryId'        => array(AttributeType::Number, 'required' => true),
+			'entryId'        => array(
+				AttributeType::Number, 
+				'required' => true
+			),
 			'title'          => array(AttributeType::String),
 			'description'    => array(AttributeType::String),
 			'keywords'       => array(AttributeType::String),
@@ -36,10 +39,10 @@ class SproutSeo_OverridesRecord extends BaseRecord
 
 			// Store the Twitter Card Type and global fields
 			// @TODO convert to enum with the proper choices
-			'twitterCard' => array(AttributeType::String),
-			'twitterSite' => array(AttributeType::String),
-			'twitterTitle' => array(AttributeType::String),
-			'twitterCreator' => array(AttributeType::String),
+			'twitterCard'        => array(AttributeType::String),
+			'twitterSite'        => array(AttributeType::String),
+			'twitterTitle'       => array(AttributeType::String),
+			'twitterCreator'     => array(AttributeType::String),
 			'twitterDescription' => array(AttributeType::String),
 
 			// Fields for Twitter Summary Card
@@ -52,12 +55,12 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			'twitterPhotoImageSource' => array(AttributeType::String,),
 
 			// Fields for Twitter Player Card
-			'twitterPlayerImageSource' => array(AttributeType::String,),
-			'twitterPlayer' => array(AttributeType::String,),
-			'twitterPlayerStream' => array(AttributeType::String,),
+			'twitterPlayerImageSource'       => array(AttributeType::String,),
+			'twitterPlayer'                  => array(AttributeType::String,),
+			'twitterPlayerStream'            => array(AttributeType::String,),
 			'twitterPlayerStreamContentType' => array(AttributeType::String,),
-			'twitterPlayerWidth' => array(AttributeType::String,),
-			'twitterPlayerHeight' => array(AttributeType::String,),
+			'twitterPlayerWidth'             => array(AttributeType::String,),
+			'twitterPlayerHeight'            => array(AttributeType::String,),
 		);
 	}
 
