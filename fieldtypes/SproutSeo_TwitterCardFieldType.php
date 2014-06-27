@@ -33,10 +33,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	 * @return string Return our blocks input template
 	 */
 	public function getInputHtml($name, $value)
-	{
-		// Make sure we are actually submitting our field
-		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
-		
+	{	
 		$entryId = craft()->request->getSegment(3);
 
 		$values = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);

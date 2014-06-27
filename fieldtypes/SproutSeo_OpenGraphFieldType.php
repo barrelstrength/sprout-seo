@@ -34,9 +34,6 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
-		// Make sure we are actually submitting our field
-		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
-		
 		$entryId = craft()->request->getSegment(3);
 
 		$values = craft()->sproutSeo_meta->getOpenGraphFieldsByEntryId($entryId);
