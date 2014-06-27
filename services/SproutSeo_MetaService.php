@@ -335,6 +335,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$defaultHandle = $overrideInfo['default'];
 			$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
 
+			
+			// @TODO - check if $templates exists and if not, see if we have a 
+			// globalFallback template we can fall back to.  If not, we got nuthin'!
+			
+
 			// create the string we will append to the end of our title if we should
 			if (isset($defaults->appendSiteName))
 			{
@@ -511,6 +516,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	    'region'         => 'geo.region',
 	    'placename'      => 'geo.placename',
 	    'position'       => 'geo.position',
+
+	    // Open Graph
 	    'ogTitle'        => 'og:title',
 	    'ogType'         => 'og:type',
 	    'ogUrl'          => 'og:url',
@@ -520,12 +527,30 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	    'ogAudio'        => 'og:audio',
 	    'ogVideo'        => 'og:video',
 	    'ogLocale'       => 'og:locale',
+
+	    // Twitter
 	    'twitterCard'    => 'twitter:card',
 	    'twitterSite'    => 'twitter:site',
 	    'twitterCreator' => 'twitter:creator',
 	    'twitterTitle'   => 'twitter:title',
 	    'twitterDescription' => 'twitter:description',
-	    'twitterImage'    => 'twitter:image'
+
+	    // Fields for Twitter Summary Card
+	    'twitterSummaryImageSource' => 'twitter:image',
+
+	    // Fields for Twitter Summary Large Image Card
+	    'twitterSummaryLargeImageImageSource' => 'twitter:image',
+
+	    // Fields for Twitter Photo Card
+	    'twitterPhotoImageSource' => 'twitter::image',
+
+	    // Fields for Twitter Player Card
+	    'twitterPlayerImageSource' => 'twitter:image',
+	    'twitterPlayer' => 'twitter:player',
+	    'twitterPlayerStream' => 'twitter:player:stream',
+	    'twitterPlayerStreamContentType' => 'twitter:player:stream:content_type',
+	    'twitterPlayerWidth' => 'twitter:player:width',
+	    'twitterPlayerHeight' => 'twitter:player:height',
 	  );
 
 	  // update our array to use the actual meta name="" parameter values
