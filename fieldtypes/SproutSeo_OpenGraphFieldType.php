@@ -10,7 +10,7 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 	 */
 	public function getName()
 	{
-		return Craft::t('SEO: Open Graph');
+		return Craft::t('Meta: Open Graph');
 	}
 
 	/**

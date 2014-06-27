@@ -10,7 +10,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	 */
 	public function getName()
 	{
-		return Craft::t('SEO: Twitter Card');
+		return Craft::t('Meta: Twitter Card');
 	}
 
 	/**
