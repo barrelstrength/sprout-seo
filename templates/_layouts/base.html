@@ -10,7 +10,7 @@
 {% if craft.request.getSegment(3) == "" and craft.request.getSegment(2) != "settings" %}
 
 {% set tabs = {
-    templates: {
+    defaults: {
       label: "Defaults"|t,
       url: cpUrl('sproutseo/defaults')
     },

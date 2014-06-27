@@ -221,10 +221,10 @@
 		deleteAction: 'sproutSeo/sitemap/deleteCustomPage',
 		onDeleteObject: function(id)
 		{
-			if($('#templates').find('tbody').find('tr').size() == 0)
+			if($('#custom-pages').find('tbody').find('tr').size() == 0)
 			{
-				$('#templates').show();
-				$('#templates').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4"><p>Add your first custom page.</p></td></tr>');
+				$('#custom-pages').show();
+				$('#custom-pages').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4"><p>Add your first custom page.</p></td></tr>');
 			}
 		}
 	});

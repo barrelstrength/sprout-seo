@@ -98,14 +98,14 @@ class SproutSeoVariable
    * @param  int   $id
    * @return mixed
    */
-  public function getTemplateById($id)
+  public function getDefaultById($id)
   {
-    return craft()->sproutSeo_meta->getTemplateById($id);
+    return craft()->sproutSeo_meta->getDefaultById($id);
   }
 
-  public function displayGlobalFallback($templateId = null)
+  public function displayGlobalFallback($defaultId = null)
   {
-    return craft()->sproutSeo_meta->displayGlobalFallback($templateId);
+    return craft()->sproutSeo_meta->displayGlobalFallback($defaultId);
   }
 
   ## ------------------------------------------------------------

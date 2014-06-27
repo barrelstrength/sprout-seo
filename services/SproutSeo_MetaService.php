@@ -321,7 +321,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// Setup all of our SEO Metadata Arrays
 		$entryOverrides = new SproutSeo_MetaModel; // Top Priority
 		$codeOverrides  = new SproutSeo_MetaModel; // Second Priority
-		$templates      = array(); // Lowest Priority
+		$defaults       = array(); // Lowest Priority
 
 
 		// PREPARE Defaults
@@ -336,7 +336,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
 
 			
-			// @TODO - check if $templates exists and if not, see if we have a 
+			// @TODO - check if $defaults exists and if not, see if we have a 
 			// globalFallback template we can fall back to.  If not, we got nuthin'!
 			
 
@@ -401,7 +401,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		//
 		// 1) Entry Override
 		// 2) On-Page Override
-		// 3) Template
+		// 3) Default
 		// 4) Blank
 
 		// Once we have added all the content we need to be outputting
@@ -413,7 +413,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// so we want to simplify the front end code to a single function
 		// and wrangle what we need to here.
 
-		$metaValues = $this->_prioritizeMetaValues($entryOverrides, $codeOverrides, $templates);
+		$metaValues = $this->_prioritizeMetaValues($entryOverrides, $codeOverrides, $defaults);
 
 		$output = "\n";
 		$openGraphPattern = '/^og:/';
@@ -464,7 +464,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		return $output;
 	}
 
-	private function _prioritizeMetaValues($entryOverrides, $codeOverrides, $templates)
+	private function _prioritizeMetaValues($entryOverrides, $codeOverrides, $defaults)
 	{
 
 	  $metaValues = array();
@@ -484,9 +484,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
       {
 	      $metaValues[$key] = $codeOverrides[$key];
 	    }
-      elseif (isset($templates->handle))
+      elseif (isset($defaults->handle))
       {
-	      $metaValues[$key] = $templates->getAttribute($key);
+	      $metaValues[$key] = $defaults->getAttribute($key);
 	    }
       else
       {
@@ -495,7 +495,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	    }
 	  }
 
-	  // Unset general template info
+	  // Unset general default info
 	  unset($metaValues['id']);
 	  unset($metaValues['entryId']);
 	  unset($metaValues['name']);
@@ -604,7 +604,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			->queryRow();
 	}
 
-	public function displayGlobalFallback($templateId = null)
+	public function displayGlobalFallback($defaultId = null)
 	{
 		$fallback = $this->getGlobalFallback();
 

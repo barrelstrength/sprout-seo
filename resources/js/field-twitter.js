@@ -1,6 +1,6 @@
 (function($) {
 
-Craft.SproutSeoTemplate = Garnish.Base.extend(
+Craft.SproutSeoDefault = Garnish.Base.extend(
 {
     // DEFINE VARIABLES
     $selectDropdowns: null,
