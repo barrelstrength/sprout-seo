@@ -12,8 +12,6 @@ class SproutSeo_SettingsController extends BaseController
 	{	
 		$settingsModel = new SproutSeo_SettingsModel;
 
-		// Create any variables you want available in your template
-		// $variables['items'] = craft()->pluginName->getAllItems();
 		$settings = craft()->db->createCommand()
                          ->select('settings')
                          ->from('plugins')
@@ -25,14 +23,18 @@ class SproutSeo_SettingsController extends BaseController
    
     $variables['settings'] = $settingsModel;
     
-		// Load a particular template and with all of the variables you've created
+		// Load our template and with all of the variables we created
 		$this->renderTemplate('sproutseo/settings', $variables);
 
 	}
 
+	/**
+	 * Save Sprout SEO Settings
+	 * 
+	 * @return mixed redirect and variables
+	 */
 	public function actionSaveSettings()
 	{
-		
 		$this->requirePostRequest();
 		$settings = craft()->request->getPost('settings');
 

@@ -34,14 +34,8 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
-		craft()->on('entries.saveEntry', array(
-			$this,
-			'onSaveEntry'
-		));
-		craft()->on('content.saveContent', array(
-			$this,
-			'onSaveContent'
-		));
+		craft()->on('entries.saveEntry', array($this,'onSaveEntry'));
+		craft()->on('content.saveContent', array($this,'onSaveContent'));
 	}
 
 	public function onSaveEntry(Event $event)
@@ -81,17 +75,23 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
+
+			// Create a new template
 			'sproutseo/templates/new' =>
 			'sproutseo/templates/_edit',
 
+			// Edit an existing template
 			'sproutseo/templates/(?P<templateId>\d+)' =>
 			'sproutseo/templates/_edit',
 
+			// Create a new custom page
 			'sproutseo/sitemap/newPage' =>
 			'sproutseo/sitemap/_edit',
 
-			'sproutseo/settings' =>
-			array('action' => 'sproutSeo/settings/settingsIndex')
+			// Redirect to settings page controller
+			'sproutseo/settings' => array(
+				'action' => 'sproutSeo/settings/settingsIndex'
+			)
 		);
 	}
 }
