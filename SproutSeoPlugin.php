@@ -94,14 +94,6 @@ class SproutSeoPlugin extends BasePlugin
 			* @controller SproutSeo_DefaultsController
 			* @template   sproutseo/templates/defaults/_edit.html
 			*/
-			'sproutseo/defaults/_edit' => array(
-				'action' => 'sproutSeo/defaults/editDefault'
-			),
-
-			/*
-			* @controller SproutSeo_DefaultsController
-			* @template   sproutseo/templates/defaults/_edit.html
-			*/
 			'sproutseo/defaults/(?P<defaultId>\d+)' => array(
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
