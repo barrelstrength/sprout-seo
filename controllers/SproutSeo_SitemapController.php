@@ -10,7 +10,7 @@ class SproutSeo_SitemapController extends BaseController
 	*/
 	public function actionSitemapIndex()
 	{
-		return $this->renderTemplate('sproutSeo/sitemap/index');
+		$this->renderTemplate('sproutSeo/sitemap/index');
 	}
 
 	/**
@@ -20,7 +20,7 @@ class SproutSeo_SitemapController extends BaseController
 	*/
 	public function actionEditSitemap()
 	{
-		return $this->renderTemplate('sproutSeo/sitemap/_edit');
+		$this->renderTemplate('sproutSeo/sitemap/_edit');
 	}
 
 	/**
