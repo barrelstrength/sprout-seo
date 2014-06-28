@@ -86,15 +86,15 @@ class SproutSeo_DefaultsRecord extends BaseRecord
 	}
 
 	// @TODO implement assets for field types
-	public function defineRelations()
-	{
-		return array(
-			'twitterSummaryImageSource'           => array(static::BELONGS_TO, 'AssetFileRecord'),
-			'twitterSummaryLargeImageImageSource' => array(static::BELONGS_TO, 'AssetFileRecord'),
-			'twitterPhotoImageSource'             => array(static::BELONGS_TO, 'AssetFileRecord'),
-			'twitterPlayerImageSource'            => array(static::BELONGS_TO, 'AssetFileRecord'),
-		);
-	}
+	// public function defineRelations()
+	// {
+	// 	return array(
+	// 		'twitterSummaryImageSource'           => array(static::BELONGS_TO, 'AssetFileRecord'),
+	// 		'twitterSummaryLargeImageImageSource' => array(static::BELONGS_TO, 'AssetFileRecord'),
+	// 		'twitterPhotoImageSource'             => array(static::BELONGS_TO, 'AssetFileRecord'),
+	// 		'twitterPlayerImageSource'            => array(static::BELONGS_TO, 'AssetFileRecord'),
+	// 	);
+	// }
 
 	/**
 	 * Create a new instance of the current class. This allows us to
