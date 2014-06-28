@@ -31,7 +31,7 @@ Craft.SproutSeoDefault = Garnish.Base.extend(
     onChange: function(ev)
     {
 
-        // Perform actions only if bacebook is the open tab
+        // Perform actions only if facebook is the open tab
         if ( $('#default-twitter').hasClass('hidden') && !$('#default-facebook').hasClass('hidden') )
         {
             // alert('hello facebook');
@@ -40,7 +40,20 @@ Craft.SproutSeoDefault = Garnish.Base.extend(
             this.$oldSelectOption = this.$selectDropdown.val();
             this.$targetedElement = this.$appendage + this.$oldSelectOption;
             $(this.$targetedElement).removeClass('hidden');
+
+            // @DONE Add hidden class to $targetedElement
+            $(this.$targetedElement).addClass('hidden');
+
+            // @DONE select the new value to the card type
+            this.$newSelectOption = this.$selectDropdown.val();
+
+            // @DONE target the new element
+            this.$targetedElement = this.$appendage + this.$newSelectOption;
+
+            // @DONE Remove the hidden class from the div
+            $(this.$targetedElement).removeClass('hidden');
         }
+        // Perform actions only if twitter is the open tab
         else if ( $('#default-facebook').hasClass('hidden') && !$('#default-twitter').hasClass('hidden') )
         {
             // alert('hello twitter');
@@ -49,22 +62,22 @@ Craft.SproutSeoDefault = Garnish.Base.extend(
             this.$oldSelectOption = this.$selectDropdown.val();
             this.$targetedElement = this.$appendage + this.$oldSelectOption;
             $(this.$targetedElement).removeClass('hidden');
+
+            // @DONE Add hidden class to $targetedElement
+            $(this.$targetedElement).addClass('hidden');
+
+            // @DONE select the new value to the card type
+            this.$newSelectOption = this.$selectDropdown.val();
+
+            // @DONE target the new element
+            this.$targetedElement = this.$appendage + this.$newSelectOption;
+
+            // @DONE Remove the hidden class from the div
+            $(this.$targetedElement).removeClass('hidden');
         }
         else {
             // void
         }
-
-        // @DONE Add hidden class to $targetedElement
-        $(this.$targetedElement).addClass('hidden');
-
-        // @DONE select the new value to the card type
-        this.$newSelectOption = this.$selectDropdown.val();
-
-        // @DONE target the new element
-        this.$targetedElement = this.$appendage + this.$newSelectOption;
-
-        // @DONE Remove the hidden class from the div
-        $(this.$targetedElement).removeClass('hidden');
 
     }
 })
