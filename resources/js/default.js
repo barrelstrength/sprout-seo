@@ -3,81 +3,58 @@
 Craft.SproutSeoDefault = Garnish.Base.extend(
 {
     // DEFINE VARIABLES
-    $selectTwitterDropdown: null,
-    $oldSelectOption: null,
-    $newSelectOption: null,
+    $selectDropdowns: null,
+    $twitterAppendage: null,
 
-    $targetedElement: null,
+    // INIT VARIABLES
+    $twitterDropdown: null,
+    $oldTwitterSelectOption: null,
+    $currentTwitterElement: null,
+    $oldElement: null,
+
+    // ONCHANGE VARIABLES
+    $appendage: null,
+    $newSelectOption: null,
+    $newElement: null,
 
     // ON INIT
-    // @TODO clean this up asap...
     init: function()
     {
-        // @DONE chose the element to target
-        this.$selectDropdowns = $('form select');
-            // console.log(this.$selectDropdowns);
+        // TWITTER
+        // select the twitter dropdown so we can grab the value later
+        this.$twitterDropdown = $('#default-twitter select[name="default_fields[twitterCard]"]');
+        // grab the value of the current twitter select option
+        this.$oldTwitterSelectOption = $(this.$twitterDropdown).val();
+        // assign the appendage to twitter element
+        this.$twitterAppendage = '#twitter-';
+        // concatenate the appendage and the current value
+        this.$currentTwitterElement = this.$twitterAppendage + this.$oldTwitterSelectOption;
+        // remove the class from the current element
+        $(this.$currentTwitterElement).removeClass('hidden');
 
-        // @TODO remove classes from oldDropdowns as THIS method doesn't work
-        this.$oldFacebookDropdown = $('#default-facebook select[name="default_fields[oGType]"]').val();
-        $('#facebook-' + this.$oldFacebookDropdown).removeClass('hidden');
-        this.$oldTwitterDropdown = $('#default-twitter select[name="default_fields[twitterCard]"]').val();
-        $('#twitter-' + this.$oldTwitterDropdown).removeClass('hidden');
-
-        // @DONE Add listener for this.$selectTwitterDropdown to fire onChange
-        this.addListener(this.$selectDropdowns, 'change', 'onChange');
+        // LISTEN UP DRONES!
+        this.addListener(this.$twitterDropdown, 'change', 'onTwitterChange');
     },
 
-    // ON CHANGE
-    onChange: function(ev)
+    // ON TWITTER CHANGE
+    onTwitterChange: function(ev)
     {
+        // reassign variables for this listener
+        this.$appendage = this.$twitterAppendage;
+        this.$currentElement = this.$currentTwitterElement;
+        this.$selectDropdown = this.$twitterDropdown;
 
-        // Perform actions only if facebook is the open tab
-        if ( $('#default-twitter').hasClass('hidden') && !$('#default-facebook').hasClass('hidden') )
-        {
-            // alert('hello facebook');
-            this.$selectDropdown = $('#default-facebook select[name="default_fields[oGType]"]');
-            this.$appendage = '#facebook-';
-            this.$oldSelectOption = this.$selectDropdown.val();
-            this.$targetedElement = this.$appendage + this.$oldSelectOption;
-            $(this.$targetedElement).removeClass('hidden');
-
-            // @DONE Add hidden class to $targetedElement
-            $(this.$targetedElement).addClass('hidden');
-
-            // @DONE select the new value to the card type
-            this.$newSelectOption = this.$selectDropdown.val();
-
-            // @DONE target the new element
-            this.$targetedElement = this.$appendage + this.$newSelectOption;
-
-            // @DONE Remove the hidden class from the div
-            $(this.$targetedElement).removeClass('hidden');
-        }
-        // Perform actions only if twitter is the open tab
-        else if ( $('#default-facebook').hasClass('hidden') && !$('#default-twitter').hasClass('hidden') )
-        {
-            // alert('hello twitter');
-            this.$selectDropdown = $('#default-twitter select[name="default_fields[twitterCard]"]');
-            this.$appendage = '#twitter-';
-            this.$oldSelectOption = this.$selectDropdown.val();
-            this.$targetedElement = this.$appendage + this.$oldSelectOption;
-            $(this.$targetedElement).removeClass('hidden');
-
-            // @DONE Add hidden class to $targetedElement
-            $(this.$targetedElement).addClass('hidden');
-
-            // @DONE select the new value to the card type
-            this.$newSelectOption = this.$selectDropdown.val();
-
-            // @DONE target the new element
-            this.$targetedElement = this.$appendage + this.$newSelectOption;
-
-            // @DONE Remove the hidden class from the div
-            $(this.$targetedElement).removeClass('hidden');
-        }
-        else {
-            // void
-        }
+        // hide the current element on change
+        $(this.$currentElement).addClass('hidden');
+        // grab the value of the new element
+        this.$newSelectOption = $(this.$selectDropdown).val();
+        // assign the appendage to twitter element
+        this.$newElement = this.$appendage + this.$newSelectOption;
+        // remove the class from the new element
+        $(this.$newElement).removeClass('hidden');
+        // assign the old element to the new one... REBOOT
+        this.$currentElement = this.$newElement;
+            console.log(this.$currentElement);
 
     }
 })
