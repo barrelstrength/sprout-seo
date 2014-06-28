@@ -25,6 +25,66 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	}
 
 	/**
+	* Performs any additional actions after the element has been saved.
+	*/
+	public function onAfterElementSave()
+	{
+		// Make sure we are actually submitting our field
+		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
+
+		// Determine our entryId
+		$entryId = (isset($_POST['entryId']))
+			? $_POST['entryId']
+			: $this->element->id;
+
+		// get any overrides for this entry
+		$model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
+
+		// Test to see if we have any values in our Sprout SEO fields
+		$saveSproutSeoFields = false;
+		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value) {
+			if ($value)
+			{
+				$saveSproutSeoFields = true;
+				continue;
+			}
+		}
+
+		// If we don't have any values in our Sprout SEO fields
+		// don't add a record to the database
+		// but if a record already exists, we also should delete it.
+		if ( ! $saveSproutSeoFields )
+		{
+			// Remove record since it is now blank
+			if ($model->id)
+			{
+				craft()->sproutSeo_meta->deleteOverrideById($model->id);
+			}
+
+			return;
+		}
+
+
+		// Add the entry ID to the field data we will submit for Sprout SEO
+		$attributes['entryId'] = $entryId;
+
+		// Grab all the other Sprout SEO fields.
+		$attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
+
+		// If our override entry exists update it,
+		// if not create it
+		if ($model->entryId)
+		{
+			craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
+		}
+		else
+		{
+			craft()->sproutSeo_meta->createOverride($attributes);
+		}
+
+	}
+
+	/**
 	 * Display our FieldType
 	 *
 	 * @param string $name  Our FieldType handle
@@ -34,9 +94,9 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
-		// $entryId = craft()->request->getSegment(3);
+		$entryId = craft()->request->getSegment(3);
 
-		// $value = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
+		$values = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
 
 		// include css resource
 		craft()->templates->includeCssResource('sproutseo/css/fields.css');
@@ -48,7 +108,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 
 		return craft()->templates->render('sproutseo/_cp/fields/twitter', array(
 			'name'		=> $name,
-			'value'		=> $value
+			'values'	=> $values
 		));
 	}
 

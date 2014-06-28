@@ -13,8 +13,8 @@
 {{ forms.selectField({
     name: 'sproutseo_fields[twitterCard]',
     options: twitterCardOptions,
-    value: (value.twitterCard is defined ? value.twitterCard : 'summary'),
-    value: value.twitterCard,
+    value: (values.twitterCard is defined ? values.twitterCard : 'summary'),
+    value: values.twitterCard,
     errors: "",
     required: false
 }) }}
@@ -25,7 +25,7 @@
      label: "Site"|t,
      name: 'sproutseo_fields[twitterSite]',
      instructions: "The Twitter username of the owner of this card's domain.",
-     value: value.twitterSite,
+     value: values.twitterSite,
      errors: "",
      required: false
  }) }}
@@ -34,7 +34,7 @@
      label: "Creator"|t,
      name: 'sproutseo_fields[twitterCreator]',
      instructions: "If the content of this card was authored by someone, include their Twitter username here.",
-     value: value.twitterCreator,
+     value: values.twitterCreator,
      errors: "",
      required: false
  }) }}
@@ -43,7 +43,7 @@
      label: "Title"|t,
      name: 'sproutseo_fields[twitterTitle]',
      instructions: 'The title of your content as it should appear in the card.',
-     value: value.twitterTitle,
+     value: values.twitterTitle,
      errors: "",
      required: false
  }) }}
@@ -52,7 +52,7 @@
      label: "Description"|t,
      name: 'sproutseo_fields[twitterDescription]',
      instructions: 'A description of the content in a maximum of 200 characters.',
-     value: value.twitterDescription,
+     value: values.twitterDescription,
      errors: "",
      required: false
  }) }}
@@ -65,7 +65,7 @@
          label: "Image Source"|t,
          name: 'sproutseo_fields[twitterSummaryImageSource]',
          instructions: 'A URL to the image representing the content.',
-         value: value.twitterSummaryImageSource,
+         value: values.twitterSummaryImageSource,
          errors: "",
          required: false
      }) }}
@@ -80,7 +80,7 @@
          label: "Image Source"|t,
          name: 'sproutseo_fields[twitterSummaryLargeImageImageSource]',
          instructions: 'A URL to the image representing the content.',
-         value: value.twitterSummaryLargeImageImageSource,
+         value: values.twitterSummaryLargeImageImageSource,
          errors: "",
          required: false
      }) }}
@@ -95,7 +95,7 @@
          label: "Image Source"|t,
          name: 'sproutseo_fields[twitterPhotoImageSource]',
          instructions: 'A URL to the image representing the content.',
-         value: value.twitterPhotoImageSource,
+         value: values.twitterPhotoImageSource,
          errors: "",
          required: false
      }) }}
@@ -110,7 +110,7 @@
          label: "Image Source"|t,
          name: 'sproutseo_fields[twitterPlayerImageSource]',
          instructions: 'A URL to the image representing the content.',
-         value: value.twitterPlayerImageSource,
+         value: values.twitterPlayerImageSource,
          errors: "",
          required: false
      }) }}
@@ -119,7 +119,7 @@
          label: "Stream"|t,
          name: 'sproutseo_fields[twitterPlayerStream]',
          instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrationlications directly. If provided, the stream must be delivered in the MPEG-4 container format.",
-         value: value.twitterPlayerStream,
+         value: values.twitterPlayerStream,
          errors: "",
          required: false
      }) }}
@@ -128,7 +128,7 @@
          label: "Stream Content Type"|t,
          name: 'sproutseo_fields[twitterPlayerStreamContentType]',
          instructions: "The MIME type subtype combination that describes the content contained in twitter player stream.",
-         value: value.twitterPlayerStreamContentType,
+         value: values.twitterPlayerStreamContentType,
          errors: "",
          required: false
      }) }}
@@ -137,7 +137,7 @@
          label: "Height"|t,
          name: 'sproutseo_fields[twitterPlayerHeight]',
          instructions: "Height of IFRAME specified in twitter player in pixels.",
-         value: value.twitterPlayerHeight,
+         value: values.twitterPlayerHeight,
          errors: "",
          required: false
      }) }}
@@ -146,7 +146,7 @@
          label: "Width"|t,
          name: 'sproutseo_fields[twitterPlayerWidth]',
          instructions: 'Width of IFRAME specified in twitter player in pixels.',
-         value: value.twitterPlayerWidth,
+         value: values.twitterPlayerWidth,
          errors: "",
          required: false
      }) }}
