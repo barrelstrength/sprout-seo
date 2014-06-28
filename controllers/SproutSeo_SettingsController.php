@@ -15,15 +15,15 @@ class SproutSeo_SettingsController extends BaseController
 		// Create any variables you want available in your template
 		// $variables['items'] = craft()->pluginName->getAllItems();
 		$settings = craft()->db->createCommand()
-                         ->select('settings')
-                         ->from('plugins')
-                         ->where('class=:class', array(':class'=> 'SproutSeo'))
-                         ->queryScalar();
+			->select('settings')
+			->from('plugins')
+			->where('class=:class', array(':class'=> 'SproutSeo'))
+			->queryScalar();
 
-    $settings = JsonHelper::decode($settings);
-    $settingsModel->setAttributes($settings);
+		$settings = JsonHelper::decode($settings);
+		$settingsModel->setAttributes($settings);
 
-    $variables['settings'] = $settingsModel;
+		$variables['settings'] = $settingsModel;
 
 		// Load a particular template and with all of the variables you've created
 		$this->renderTemplate('sproutseo/settings', $variables);
