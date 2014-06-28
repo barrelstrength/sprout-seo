@@ -33,10 +33,13 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	 * @return string Return our blocks input template
 	 */
 	public function getInputHtml($name, $value)
-	{	
-		$entryId = craft()->request->getSegment(3);
+	{
+		// $entryId = craft()->request->getSegment(3);
 
-		$values = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
+		// $value = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
+
+		// include css resource
+		craft()->templates->includeCssResource('sproutseo/css/fields.css');
 
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);
@@ -44,8 +47,8 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		$name = "sproutseo_fields[$name]";
 
 		return craft()->templates->render('sproutseo/_cp/fields/twitter', array(
-			'name'	     => $name,
-			'values'     => $values
+			'name'		=> $name,
+			'value'		=> $value
 		));
 	}
 
