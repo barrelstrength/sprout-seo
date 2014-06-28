@@ -75,7 +75,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		else
 		{
     	return new SproutSeo_MetaModel();
-    }
+	    }
 	}
 
 	public function getDefaultByDefaultHandle($handle)
@@ -335,10 +335,10 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$defaultHandle = $overrideInfo['default'];
 			$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
 
-			
-			// @TODO - check if $defaults exists and if not, see if we have a 
+
+			// @TODO - check if $defaults exists and if not, see if we have a
 			// globalFallback template we can fall back to.  If not, we got nuthin'!
-			
+
 
 			// create the string we will append to the end of our title if we should
 			if (isset($defaults->appendSiteName))
