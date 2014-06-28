@@ -3,10 +3,16 @@ namespace Craft;
 
 class SproutSeo_DefaultsController extends BaseController
 {
+    protected $defaultId;
 
     public function actionEditDefault()
     {
-        $this->renderTemplate('sproutSeo/defaults/_edit');
+        $defaultId = craft()->request->getSegment(3);
+
+        $this->renderTemplate('sproutSeo/defaults/_edit', array(
+            'defaultId' => $defaultId
+            )
+        );
     }
 
     public function actionSaveDefault()

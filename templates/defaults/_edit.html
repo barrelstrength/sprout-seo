@@ -34,10 +34,12 @@
 
 {% import "_includes/forms" as forms %}
 
+{# @TODO abstract this to the controller #}
 {% if defaultId is not defined %}
 	{% set defaultId = null %}
 {% endif %}
 
+{# @TODO abstract this to the controller #}
 {% if default is not defined %}
 	{% set default = craft.sproutSeo.getDefaultById(defaultId) %}
 {% endif %}
