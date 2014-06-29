@@ -105,8 +105,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		{
 			if (null === ($record = $this->metaRecord->findByPk($id)))
 			{
-				// this is being thrown on NEW default type...
-				// NEW is being passed as the defaultId from the _edit template
+				// @BUG this is being thrown on NEW default save event...
+				// NEW is being passed as the id from the _edit template
 				throw new Exception(Craft::t('Can\'t find default with ID "{id}"', array(
 					'id' => $id
 				)));
