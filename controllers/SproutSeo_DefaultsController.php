@@ -6,7 +6,13 @@ class SproutSeo_DefaultsController extends BaseController
 
 	public function actionEditDefault()
 	{
+
 		$defaultId = craft()->request->getSegment(3);
+
+		// check if the segment is 'new' for a new entry
+		if ($defaultId === 'new') {
+			$defaultId = null;
+		}
 
 		$this->renderTemplate('sproutSeo/defaults/_edit', array(
 			'defaultId' => $defaultId
