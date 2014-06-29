@@ -331,11 +331,26 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		// If our code references a template template, create our template array
 		// If no template template is mentioned, we have an empty array
-		if (isset($overrideInfo['default']))
+		// @TODO - depracate the use of template
+		if (isset($overrideInfo['default']) or isset($overrideInfo['template']))
 		{
 
-			$defaultHandle = $overrideInfo['default'];
-			$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
+			
+			if (isset($overrideInfo['default']))
+			{
+				$defaultHandle = $overrideInfo['default'];
+				$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
+			}
+			// @TODO - depracate the use of template
+			if (isset($overrideInfo['template']))
+			{
+				craft()->deprecator->log('{ template : "' . $overrideInfo['template'] .'" }', '"Tempaltes" have been renamed to "Defaults". The "template" paramger has been deprecated. Use the "default" parameter instead.');
+
+				$defaultHandle = $overrideInfo['template'];
+				$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
+			}
+			
+			
 
 
 			// @TODO - check if $defaults exists and if not, see if we have a
@@ -343,9 +358,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 
 			// create the string we will append to the end of our title if we should
-			if (isset($defaults->appendSiteName))
+			if (isset($defaults->appendSiteName)  && $defaults->appendSiteName == 1)
 			{
-			  $this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
+			  $this->siteInfo = " " . $this->divider . " asd" . craft()->getInfo('siteName');
 			}
 
 			// Remove our template so we can assign the rest of our info to the codeOverride
