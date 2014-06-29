@@ -4,6 +4,22 @@ namespace Craft;
 class SproutSeo_DefaultsController extends BaseController
 {
 
+	public function actionNewDefault()
+	{
+
+		$defaultId = craft()->request->getSegment(3);
+
+		// check if the segment is 'new' for a new entry
+		if ($defaultId === 'new') {
+			$defaultId = null;
+		}
+
+		$this->renderTemplate('sproutSeo/defaults/_edit', array(
+			'defaultId' => $defaultId
+			)
+		);
+	}
+
 	public function actionEditDefault()
 	{
 
@@ -12,6 +28,10 @@ class SproutSeo_DefaultsController extends BaseController
 		// check if the segment is 'new' for a new entry
 		if ($defaultId === 'new') {
 			$defaultId = null;
+		}
+		else
+		{
+			// $defaultId = $defaultId;
 		}
 
 		$this->renderTemplate('sproutSeo/defaults/_edit', array(
