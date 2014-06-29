@@ -12,7 +12,7 @@ class SproutSeo_OverridesRecord extends BaseRecord
 	{
 		return array(
 			'entryId'        => array(
-				AttributeType::Number, 
+				AttributeType::Number,
 				'required' => true
 			),
 			'title'          => array(AttributeType::String),

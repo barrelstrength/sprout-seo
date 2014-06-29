@@ -59,15 +59,15 @@ class SproutSeo_DefaultsRecord extends BaseRecord
 			'twitterSummaryLargeImageImageSource' => array(AttributeType::Number),
 
 			// Fields for Twitter Photo Card
-			'twitterPhotoImageSource' => array(AttributeType::Number,),
+			'twitterPhotoImageSource' => array(AttributeType::Number),
 
 			// Fields for Twitter Player Card
-			'twitterPlayerImageSource' => array(AttributeType::Number,),
-			'twitterPlayer' => array(AttributeType::String,),
-			'twitterPlayerStream' => array(AttributeType::String,),
-			'twitterPlayerStreamContentType' => array(AttributeType::String,),
-			'twitterPlayerWidth' => array(AttributeType::String,),
-			'twitterPlayerHeight' => array(AttributeType::String,),
+			'twitterPlayerImageSource' => array(AttributeType::Number),
+			'twitterPlayer' => array(AttributeType::String),
+			'twitterPlayerStream' => array(AttributeType::String),
+			'twitterPlayerStreamContentType' => array(AttributeType::String),
+			'twitterPlayerWidth' => array(AttributeType::String),
+			'twitterPlayerHeight' => array(AttributeType::String),
 
 		);
 	}
@@ -84,17 +84,6 @@ class SproutSeo_DefaultsRecord extends BaseRecord
 			),
 		);
 	}
-
-	// @TODO implement assets for field types
-	// public function defineRelations()
-	// {
-	// 	return array(
-	// 		'twitterSummaryImageSource'           => array(static::BELONGS_TO, 'AssetFileRecord'),
-	// 		'twitterSummaryLargeImageImageSource' => array(static::BELONGS_TO, 'AssetFileRecord'),
-	// 		'twitterPhotoImageSource'             => array(static::BELONGS_TO, 'AssetFileRecord'),
-	// 		'twitterPlayerImageSource'            => array(static::BELONGS_TO, 'AssetFileRecord'),
-	// 	);
-	// }
 
 	/**
 	 * Create a new instance of the current class. This allows us to
