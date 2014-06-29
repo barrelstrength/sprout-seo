@@ -51,15 +51,15 @@ class SproutSeo_MetaModel extends BaseModel
             'twitterSummaryLargeImageImageSource' => array(AttributeType::String),
 
             // Fields for Twitter Photo Card
-            'twitterPhotoImageSource' => array(AttributeType::String,),
+            'twitterPhotoImageSource' => array(AttributeType::String),
 
             // Fields for Twitter Player Card
-            'twitterPlayerImageSource' => array(AttributeType::String,),
-            'twitterPlayer' => array(AttributeType::String,),
-            'twitterPlayerStream' => array(AttributeType::String,),
-            'twitterPlayerStreamContentType' => array(AttributeType::String,),
-            'twitterPlayerWidth' => array(AttributeType::String,),
-            'twitterPlayerHeight' => array(AttributeType::String,),
+            'twitterPlayerImageSource' => array(AttributeType::String),
+            'twitterPlayer' => array(AttributeType::String),
+            'twitterPlayerStream' => array(AttributeType::String),
+            'twitterPlayerStreamContentType' => array(AttributeType::String),
+            'twitterPlayerWidth' => array(AttributeType::String),
+            'twitterPlayerHeight' => array(AttributeType::String),
 
         );
     }
