@@ -53,16 +53,16 @@ class SproutSeo_DefaultsRecord extends BaseRecord
 			'twitterDescription' => array(AttributeType::String),
 
 			// Fields for Twitter Summary Card
-			'twitterSummaryImageSource' => array(AttributeType::Number),
+			'twitterSummaryImageSource' => array(AttributeType::String),
 
 			// Fields for Twitter Summary Large Image Card
-			'twitterSummaryLargeImageImageSource' => array(AttributeType::Number),
+			'twitterSummaryLargeImageImageSource' => array(AttributeType::String),
 
 			// Fields for Twitter Photo Card
-			'twitterPhotoImageSource' => array(AttributeType::Number),
+			'twitterPhotoImageSource' => array(AttributeType::String),
 
 			// Fields for Twitter Player Card
-			'twitterPlayerImageSource' => array(AttributeType::Number),
+			'twitterPlayerImageSource' => array(AttributeType::String),
 			'twitterPlayer' => array(AttributeType::String),
 			'twitterPlayerStream' => array(AttributeType::String),
 			'twitterPlayerStreamContentType' => array(AttributeType::String),
