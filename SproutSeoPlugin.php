@@ -87,7 +87,7 @@ class SproutSeoPlugin extends BasePlugin
 			* @template   sproutseo/templates/defaults/_edit.html
 			*/
 			'sproutseo/defaults/new' => array(
-				'action' => 'sproutSeo/defaults/editDefault'
+				'action' => 'sproutSeo/defaults/newDefault'
 			),
 
 			/*
