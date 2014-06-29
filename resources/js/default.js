@@ -8,9 +8,9 @@ Craft.SproutSeoDefault = Garnish.Base.extend(
 
     // INIT VARIABLES
     $twitterDropdown: null,
-    $oldTwitterSelectOption: null,
+    $savedTwitterSelectOption: null,
     $currentTwitterElement: null,
-    $oldElement: null,
+    $currentElement: null,
 
     // ONCHANGE VARIABLES
     $appendage: null,
@@ -20,15 +20,16 @@ Craft.SproutSeoDefault = Garnish.Base.extend(
     // ON INIT
     init: function()
     {
+
         // TWITTER
         // select the twitter dropdown so we can grab the value later
         this.$twitterDropdown = $('#default-twitter select[name="default_fields[twitterCard]"]');
         // grab the value of the current twitter select option
-        this.$oldTwitterSelectOption = $(this.$twitterDropdown).val();
+        this.$savedTwitterSelectOption = $(this.$twitterDropdown).val();
         // assign the appendage to twitter element
         this.$twitterAppendage = '#twitter-';
         // concatenate the appendage and the current value
-        this.$currentTwitterElement = this.$twitterAppendage + this.$oldTwitterSelectOption;
+        this.$currentTwitterElement = this.$twitterAppendage + this.$savedTwitterSelectOption;
         // remove the class from the current element
         $(this.$currentTwitterElement).removeClass('hidden');
 
@@ -39,10 +40,12 @@ Craft.SproutSeoDefault = Garnish.Base.extend(
     // ON TWITTER CHANGE
     onTwitterChange: function(ev)
     {
+
         // reassign variables for this listener
         this.$appendage = this.$twitterAppendage;
         this.$currentElement = this.$currentTwitterElement;
         this.$selectDropdown = this.$twitterDropdown;
+
 
         // hide the current element on change
         $(this.$currentElement).addClass('hidden');
@@ -54,7 +57,8 @@ Craft.SproutSeoDefault = Garnish.Base.extend(
         $(this.$newElement).removeClass('hidden');
         // assign the old element to the new one... REBOOT
         this.$currentElement = this.$newElement;
-            console.log(this.$currentElement);
+
+        // console.log('WTF on multiple changes... ?!?!?!');
 
     }
 })
