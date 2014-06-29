@@ -255,7 +255,6 @@
 	{{ forms.textField({
 		label: "Title"|t,
 		instructions: "The title of your object as it should appear within the graph, e.g., 'The Rock'.",
-		placeholder: "The Rock",
 		name: 'default_fields[ogTitle]',
 		value: default.ogTitle,
 		errors: "",
@@ -274,7 +273,6 @@
 	{{ forms.textField({
 		label: "URL"|t,
 		instructions: "The canonical URL of your object that will be used as its permanent ID in the graph.",
-		placeholder: "http://www.seanconnery.com/",
 		name: 'default_fields[ogUrl]',
 		value: default.ogUrl,
 		errors: "",
@@ -288,7 +286,6 @@
 	{{ forms.textField({
 		label: "Site Name"|t,
 		instructions: "If your object is part of a larger web site, the name which should be displayed for the overall site.",
-		placeholder: "The Rock",
 		name: 'default_fields[ogSiteName]',
 		value: default.ogSiteName,
 		errors: "",
@@ -298,7 +295,6 @@
 	{{ forms.textField({
 		label: "Description"|t,
 		instructions: "A one to two sentence description of your object.",
-		placeholder: "Don't trust the Greeks, even when they bring gifts.",
 		name: 'default_fields[ogDescription]',
 		value: default.ogDescription,
 		errors: "",
@@ -308,7 +304,6 @@
 	{{ forms.textField({
 		label: "Locale"|t,
 		instructions: "The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.",
-		placeholder: "en_US",
 		name: 'default_fields[ogLocale]',
 		value: default.ogLocale,
 		errors: "",
@@ -318,7 +313,6 @@
 	{{ forms.textField({
 		label: "Audio"|t,
 		instructions: "A URL to an audio file to accompany this object.",
-		placeholder: "http://www.seanconnery.com/audio.mp3",
 		name: 'default_fields[ogAudio]',
 		value: default.ogAudio,
 		errors: "",
@@ -328,7 +322,6 @@
 	{{ forms.textField({
 		label: "Video"|t,
 		instructions: "A URL to a video file that complements this object.",
-		placeholder: "http://www.seanconnery.com/didTheyTellPicasoNoBrush.mp4",
 		name: 'default_fields[ogVideo]',
 		value: default.ogVideo,
 		errors: "",
@@ -370,7 +363,6 @@
 		label: "Site"|t,
 		name: 'default_fields[twitterSite]',
 		instructions: "The Twitter username of the owner of this card's domain.",
-		placeholder: "@username",
 		value: default.twitterSite,
 		errors: "",
 		required: false
@@ -380,7 +372,6 @@
 		label: "Creator"|t,
 		name: 'default_fields[twitterCreator]',
 		instructions: "If the content of this card was authored by someone, include their Twitter username here.",
-		placeholder: "@username",
 		value: default.twitterCreator,
 		errors: "",
 		required: false
@@ -390,7 +381,6 @@
 		label: "Title"|t,
 		name: 'default_fields[twitterTitle]',
 		instructions: 'The title of your content as it should appear in the card.',
-		placeholder: "Sean Connery is the greatest",
 		value: default.twitterTitle,
 		errors: "",
 		required: false
@@ -400,7 +390,6 @@
 		label: "Description"|t,
 		name: 'default_fields[twitterDescription]',
 		instructions: 'A description of the content in a maximum of 200 characters.',
-		placeholder: "Losers always whine about doing thier best...",
 		value: default.twitterDescription,
 		errors: "",
 		required: false
