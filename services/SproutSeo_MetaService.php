@@ -74,17 +74,17 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		}
 		else
 		{
-    	return new SproutSeo_MetaModel();
+		return new SproutSeo_MetaModel();
 	    }
 	}
 
 	public function getDefaultByDefaultHandle($handle)
 	{
 		$query = craft()->db->createCommand()
-					->select('*')
-					->from('sproutseo_defaults')
-					->where('handle=:handle', array(':handle'=> $handle))
-					->queryRow();
+			->select('*')
+			->from('sproutseo_defaults')
+			->where('handle=:handle', array(':handle'=> $handle))
+			->queryRow();
 
 		$model = SproutSeo_MetaModel::populateModel($query);
 
@@ -98,36 +98,38 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		return $model;
 	}
 
-	public function saveDefaultInfo(SproutSeo_MetaModel &$model)
+	public function saveDefaultInfo(SproutSeo_MetaModel $model)
 	{
 
-	   if ($id = $model->getAttribute('id'))
-       {
+		if ($id = $model->getAttribute('id'))
+		{
 			if (null === ($record = $this->metaRecord->findByPk($id)))
-            {
+			{
+				// this is being thrown on NEW default type...
+				// NEW is being passed as the defaultId from the _edit template
 				throw new Exception(Craft::t('Can\'t find default with ID "{id}"', array(
 					'id' => $id
 				)));
 			}
-	   }
-       else
-       {
-           $record = $this->metaRecord->create();
-	   }
+			}
+			else
+			{
+				$record = $this->metaRecord->create();
+			}
 
 		// @TODO passing 'false' here allows us to save unsafe attributes
 		// we should really update this to address validation better.
 		$record->setAttributes($model->getAttributes(), false);
 
 		if ($record->save())
-        {
+		{
 			// update id on model (for new records)
 			$model->setAttribute('id', $record->getAttribute('id'));
 
 			return true;
 		}
-        else
-        {
+		else
+		{
 			$model->addErrors($record->getErrors());
 
 			return false;
@@ -138,22 +140,22 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getOverrideById($id)
 	{
 		if ($record = $this->seoOverrideRecord->findByPk($id))
-        {
+		{
 			return SproutSeo_OverridesModel::populateModel($record);
 		}
-        else
-        {
-            return false;
-        }
+		else
+		{
+			return false;
+		}
 	}
 
 	public function getOverrideByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-				   ->select('*')
-				   ->from('sproutseo_overrides')
-				   ->where('entryId = :entryId', array(':entryId' => $entryId))
-				   ->queryRow();
+			->select('*')
+			->from('sproutseo_overrides')
+			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->queryRow();
 
 		return SproutSeo_OverridesModel::populateModel($query);
 
@@ -475,21 +477,21 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	  // blank nomatter what.  We really just need to know we are looping through
 	  // the samme model for each of the levels of overrides or templates
 	  foreach ($entryOverrides->getAttributes() as $key => $value)
-    {
+	{
 	    if ($entryOverrides->getAttribute($key))
-      {
+	  {
 	      $metaValues[$key] = $value;
 	    }
-      elseif ($codeOverrides->getAttribute($key))
-      {
+	  elseif ($codeOverrides->getAttribute($key))
+	  {
 	      $metaValues[$key] = $codeOverrides[$key];
 	    }
-      elseif (isset($defaults->handle))
-      {
+	  elseif (isset($defaults->handle))
+	  {
 	      $metaValues[$key] = $defaults->getAttribute($key);
 	    }
-      else
-      {
+	  else
+	  {
 	      // We got nuthin'
 	      $metaValues[$key] = '';
 	    }
@@ -557,7 +559,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	  // as our index
 	  $meta = array();
 	  foreach ($metaValues as $name => $value)
-      {
+	  {
 	    $meta[$metaNames[$name]] = $value;
 	  }
 
@@ -611,14 +613,14 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$isGlobalFallback = ( isset($fallback['id']) && ($defaultId == $fallback['id']) );
 		$noFallbackExists = !isset($fallback['id']);
 
-    if ($isGlobalFallback OR $noFallbackExists)
-    {
-    	return true;
-    }
-    else
-    {
-    	return false;
-    }
+	if ($isGlobalFallback OR $noFallbackExists)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 	}
 
 	public function prepRobotsForDb($robotsArray)
