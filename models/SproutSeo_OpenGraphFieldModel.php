@@ -6,15 +6,15 @@ class SproutSeo_OpenGraphFieldModel extends BaseModel
 	protected function defineAttributes()
 	{
 		return array(
-			'ogTitle'        => AttributeType::String,
-			'ogType'         => AttributeType::String,
-			'ogUrl'          => AttributeType::String,
-			'ogImage'        => AttributeType::String,
-			'ogSiteName'     => AttributeType::String,
-			'ogDescription'  => AttributeType::String,
-			'ogAudio'        => AttributeType::String,
-			'ogVideo'        => AttributeType::String,
-			'ogLocale'       => AttributeType::String,
+			'ogTitle'        => array(AttributeType::String),
+			'ogType'         => array(AttributeType::String),
+			'ogUrl'          => array(AttributeType::String),
+			'ogImage'        => array(AttributeType::Number),
+			'ogSiteName'     => array(AttributeType::String),
+			'ogDescription'  => array(AttributeType::String),
+			'ogAudio'        => array(AttributeType::String),
+			'ogVideo'        => array(AttributeType::String),
+			'ogLocale'       => array(AttributeType::String),
 		);
 	}
 }

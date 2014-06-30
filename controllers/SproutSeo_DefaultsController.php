@@ -4,73 +4,87 @@ namespace Craft;
 class SproutSeo_DefaultsController extends BaseController
 {
 
-	public function actionNewDefault()
-	{
-
-		$defaultId = craft()->request->getSegment(3);
-
-		// check if the segment is 'new' for a new entry
-		if ($defaultId === 'new') {
-			$defaultId = null;
-		}
-
-		$this->renderTemplate('sproutSeo/defaults/_edit', array(
-			'defaultId' => $defaultId
-			)
-		);
-	}
-
 	public function actionEditDefault()
 	{
-
+		// Determine what we're working with
 		$defaultId = craft()->request->getSegment(3);
+		$variables['defaultId'] = ($defaultId == 'new') ? null : $defaultId;
 
-		// check if the segment is 'new' for a new entry
-		if ($defaultId === 'new') {
-			$defaultId = null;
-		}
-		else
+		// Get our Meta Model
+		$variables['default'] = craft()->sproutSeo_meta->getDefaultById($defaultId);
+
+		// Set up our asset fields
+		if (isset($variables['default']->ogImage)) 
 		{
-			// $defaultId = $defaultId;
+		    $asset = craft()->elements->getElementById($variables['default']->ogImage);
+		    $variables['ogImageElements'] = array($asset);
+		} 
+		else 
+		{
+		    $variables['ogImageElements'] = array();
 		}
 
-		$this->renderTemplate('sproutSeo/defaults/_edit', array(
-			'defaultId' => $defaultId
-			)
-		);
+		// Set up our asset fields
+		if (isset($variables['default']->twitterImage)) 
+		{
+		    $asset = craft()->elements->getElementById($variables['default']->twitterImage);
+		    $variables['twitterImageElements'] = array($asset);
+		} 
+		else 
+		{
+		    $variables['twitterImageElements'] = array();
+		}
+
+		// Set assetsSourceExists
+		$sources = craft()->assets->findFolders();
+		$variables['assetsSourceExists'] = count($sources);
+
+		// Set elementType
+		$variables['elementType'] = craft()->elements->getElementType(ElementType::Asset);
+
+		$this->renderTemplate('sproutSeo/defaults/_edit', $variables);
 	}
 
 	public function actionSaveDefault()
 	{
-
 		$this->requirePostRequest();
 
-		$id = false; // we assume have a new item now
+		// we assume have a new item now
+		// @TODO - probably a bad idea
+		$id = false; 
 
 		$model = craft()->sproutSeo_meta->newMetaModel($id);
 
 		$defaultFields = craft()->request->getPost('default_fields');
-
+		
 		// Convert Checkbox Array into comma-delimited String
 		if (isset($defaultFields['robots']))
 		{
 			$defaultFields['robots'] = craft()->sproutSeo_meta->prepRobotsForDb($defaultFields['robots']);
 		}
 
+		// Make our images single IDs instead of an array
+		$defaultFields['ogImage'] = (!empty($defaultFields['ogImage']) ? $defaultFields['ogImage'][0] : null);
+		$defaultFields['twitterImage'] = (!empty($defaultFields['twitterImage']) ? $defaultFields['twitterImage'][0] : null);
+
 		$model->setAttributes($defaultFields);
 
 		if (craft()->sproutSeo_meta->saveDefaultInfo($model))
 		{
+			
+			
 			craft()->userSession->setNotice(Craft::t('New default saved.'));
 			$this->redirectToPostedUrl();
 		}
+		else
+		{
+			craft()->userSession->setError(Craft::t("Couldn't save the default."));
 
-		craft()->userSession->setError(Craft::t("Couldn't save the default."));
-
-		// Send the field back to the template
-		craft()->urlManager->setRouteVariables(array(
-			'default' => $model
-		));
+			// Send the field back to the template
+			craft()->urlManager->setRouteVariables(array(
+				'default' => $model
+			));
+		}
 	}
 
 	public function actionDeleteDefaults()

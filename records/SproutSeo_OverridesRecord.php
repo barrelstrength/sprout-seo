@@ -18,6 +18,8 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			'title'          => array(AttributeType::String),
 			'description'    => array(AttributeType::String),
 			'keywords'       => array(AttributeType::String),
+			'author'         => array(AttributeType::String),
+			'publisher'      => array(AttributeType::String),
 
 			'robots'         => array(AttributeType::String),
 			'canonical'      => array(AttributeType::String),
@@ -45,22 +47,15 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			'twitterCreator'     => array(AttributeType::String),
 			'twitterDescription' => array(AttributeType::String),
 
-			// Fields for Twitter Summary Card
-			'twitterSummaryImageSource' => array(AttributeType::String),
-
-			// Fields for Twitter Summary Large Image Card
-			'twitterSummaryLargeImageImageSource' => array(AttributeType::String),
-
-			// Fields for Twitter Photo Card
-			'twitterPhotoImageSource' => array(AttributeType::String,),
+			'twitterUrl' => array(AttributeType::String),
+			'twitterImage' => array(AttributeType::String),
 
 			// Fields for Twitter Player Card
-			'twitterPlayerImageSource'       => array(AttributeType::String,),
-			'twitterPlayer'                  => array(AttributeType::String,),
-			'twitterPlayerStream'            => array(AttributeType::String,),
-			'twitterPlayerStreamContentType' => array(AttributeType::String,),
-			'twitterPlayerWidth'             => array(AttributeType::String,),
-			'twitterPlayerHeight'            => array(AttributeType::String,),
+			'twitterPlayer' => array(AttributeType::String),
+			'twitterPlayerStream' => array(AttributeType::String),
+			'twitterPlayerStreamContentType' => array(AttributeType::String),
+			'twitterPlayerWidth' => array(AttributeType::String),
+			'twitterPlayerHeight' => array(AttributeType::String),
 		);
 	}
 
@@ -68,6 +63,25 @@ class SproutSeo_OverridesRecord extends BaseRecord
 	{
 		return array(
 			array('columns' => array('entryId'), 'unique' => true),
+		);
+	}
+
+	/**
+	 * Relationships
+	 *
+	 * @return multitype:multitype:string boolean
+	 */
+	public function defineRelations()
+	{
+		return array (
+			'ogImage' => array (
+				static::BELONGS_TO,
+				'AssetFileRecord'
+			),
+			'twitterImage' => array (
+				static::BELONGS_TO,
+				'AssetFileRecord'
+			)
 		);
 	}
 }

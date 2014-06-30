@@ -9,6 +9,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	protected $siteInfo;
 	protected $divider;
 
+	protected $currentUrl;
+
 	protected $fallbackMeta = array();
 	protected $sproutmeta = array();
 
@@ -75,7 +77,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		else
 		{
 		return new SproutSeo_MetaModel();
-	    }
+			}
 	}
 
 	public function getDefaultByDefaultHandle($handle)
@@ -164,13 +166,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getBasicMetaFeildsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-				   ->select('id, title, description, keywords')
-				   ->from('sproutseo_overrides')
-				   ->where('entryId = :entryId', array(':entryId' => $entryId))
-				   ->queryRow();
+					 ->select('id, title, description, keywords')
+					 ->from('sproutseo_overrides')
+					 ->where('entryId = :entryId', array(':entryId' => $entryId))
+					 ->queryRow();
 
-	   if (isset($query))
-	   {
+		 if (isset($query))
+		 {
 			return SproutSeo_BasicMetaFieldModel::populateModel($query);
 		}
 		else
@@ -184,9 +186,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	{
 		$query = craft()->db->createCommand()
 			->select('id, twitterCard, twitterSite, twitterTitle, twitterCreator,
-			twitterDescription, twitterSummaryImageSource,
-			twitterSummaryLargeImageImageSource, twitterPhotoImageSource,
-			twitterPlayerImageSource, twitterPlayerStream,
+			twitterDescription, twitterImage, twitterPlayerStream,
 			twitterPlayerStreamContentType, twitterPlayerWidth,
 			twitterPlayerHeight')
 			->from('sproutseo_overrides')
@@ -233,13 +233,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getGeographicMetaFeildsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-				   ->select('region, placename, longitude, latitude')
-				   ->from('sproutseo_overrides')
-				   ->where('entryId = :entryId', array(':entryId' => $entryId))
-				   ->queryRow();
+					 ->select('region, placename, longitude, latitude')
+					 ->from('sproutseo_overrides')
+					 ->where('entryId = :entryId', array(':entryId' => $entryId))
+					 ->queryRow();
 
-	   if (isset($query))
-	   {
+		 if (isset($query))
+		 {
 			return SproutSeo_GeographicMetaFieldModel::populateModel($query);
 		}
 		else
@@ -252,13 +252,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getRobotsMetaFeildsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-				   ->select('canonical, robots')
-				   ->from('sproutseo_overrides')
-				   ->where('entryId = :entryId', array(':entryId' => $entryId))
-				   ->queryRow();
+					 ->select('canonical, robots')
+					 ->from('sproutseo_overrides')
+					 ->where('entryId = :entryId', array(':entryId' => $entryId))
+					 ->queryRow();
 
-	   if (isset($query))
-	   {
+		 if (isset($query))
+		 {
 			return SproutSeo_RobotsMetaFieldModel::populateModel($query);
 		}
 		else
@@ -271,7 +271,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function createOverride($attributes)
 	{
 		craft()->db->createCommand()
-					   ->insert('sproutseo_overrides', $attributes);
+						 ->insert('sproutseo_overrides', $attributes);
 	}
 
 	public function updateOverride($id, $attributes)
@@ -360,7 +360,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			// create the string we will append to the end of our title if we should
 			if (isset($defaults->appendSiteName)  && $defaults->appendSiteName == 1)
 			{
-			  $this->siteInfo = " " . $this->divider . " asd" . craft()->getInfo('siteName');
+				$this->siteInfo = " " . $this->divider . " asd" . craft()->getInfo('siteName');
 			}
 
 			// Remove our template so we can assign the rest of our info to the codeOverride
@@ -372,11 +372,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 
 		// Set the default canonical URL to be the current URL
-		$scheme = ( isset($_SERVER['HTTPS'] ) ) ? "https://" : "http://" ;
-		$siteUrl = $scheme . $_SERVER['SERVER_NAME'];
-		$currentUrl = $siteUrl . craft()->request->url;
-
-		$defaults['canonical'] = $currentUrl;
+		// $scheme = ( isset($_SERVER['HTTPS'] ) ) ? "https://" : "http://" ;
+		// $siteUrl = $scheme . $_SERVER['SERVER_NAME'];
+		// $currentUrl = $siteUrl . craft()->request->url;
+		
+		$this->currentUrl = UrlHelper::getSiteUrl(craft()->request->url);
+		$defaults['canonical'] = $this->currentUrl;
 
 
 		// PREPARE ENTRY OVERRIDES
@@ -386,10 +387,10 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// see if this entry has any Entry Overrides.
 		if (isset($overrideInfo['id']))
 		{
-		  // query for override array
-		  $entryOverrides = craft()->sproutSeo_meta->getOverrideByEntryId($overrideInfo['id']);
+			// query for override array
+			$entryOverrides = craft()->sproutSeo_meta->getOverrideByEntryId($overrideInfo['id']);
 
-		  unset($overrideInfo['id']);
+			unset($overrideInfo['id']);
 		}
 
 
@@ -400,15 +401,15 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// let's store them as code overrides.
 		if ( ! empty($overrideInfo))
 		{
-		  $codeOverrides = SproutSeo_MetaModel::populateModel($overrideInfo);
+			$codeOverrides = SproutSeo_MetaModel::populateModel($overrideInfo);
 		}
 
 		// @TODO - this is temporary, figure out the best syntax for 'Robots'
 		// values and update this to accomodate both the On-page and Code
 		// override situations
 		$codeOverrides->robots = ($codeOverrides->robots)
-		  ? $codeOverrides->robots
-		  : null;
+			? $codeOverrides->robots
+			: null;
 
 
 		// PRIORITIZE OUR METADATA
@@ -439,42 +440,51 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		foreach ($metaValues as $name => $value)
 		{
 
-		  if ($value)
-		  {
+			if ($value)
+			{
 				switch ($name)
 				{
 
-				  // Title tag
-				  case 'title':
+					// Title tag
+					case 'title':
 					$output .= "\t<title>$value".$this->siteInfo."</title>\n";
 					break;
 
-				  // Open Graph Tags
-				  case (preg_match($openGraphPattern, $name) ? true : false):
+					// Author tag
+					case 'author':
+					$output .= "\t<link href=\"$value\" rel=\"author\" />\n";
+					break;
+
+					case 'publisher':
+					$output .= "\t<link href=\"$value\" rel=\"publisher\" />\n";
+					break;
+
+					// Open Graph Tags
+					case (preg_match($openGraphPattern, $name) ? true : false):
 					$output .= "\t<meta property='$name' content='$value' />\n";
 					break;
 
 					// Twitter Cards
-				  case (preg_match($twitterPattern, $name) ? true : false):
+					case (preg_match($twitterPattern, $name) ? true : false):
 					$output .= "\t<meta name='$name' content='$value'>\n";
 					break;
 
-				  // Canonical URLs
-				  case 'canonical':
+					// Canonical URLs
+					case 'canonical':
 					$output .= "\t<link rel='canonical' href='$value' />\n";
 					break;
 
-				  // Robots
-				  case 'robots':
+					// Robots
+					case 'robots':
 					$output .= "\t<meta name='robots' content='$value' />\n";
 					break;
 
-				  // Standard Meta Tags
-				  default:
+					// Standard Meta Tags
+					default:
 					$output .= "\t<meta name='$name' content='$value' />\n";
 					break;
 				}
-		  }
+			}
 
 		}
 
@@ -484,101 +494,125 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	private function _prioritizeMetaValues($entryOverrides, $codeOverrides, $defaults)
 	{
 
-	  $metaValues = array();
+		$metaValues = array();
 
-	  // Loop through the entry override model
-	  // @TODO - make sure we loop through a defined model... we may not have an
-	  // entry override model each time... or maybe we can just define it so its
-	  // blank nomatter what.  We really just need to know we are looping through
-	  // the samme model for each of the levels of overrides or templates
-	  foreach ($entryOverrides->getAttributes() as $key => $value)
+		// Loop through the entry override model
+		// @TODO - make sure we loop through a defined model... we may not have an
+		// entry override model each time... or maybe we can just define it so its
+		// blank nomatter what.  We really just need to know we are looping through
+		// the samme model for each of the levels of overrides or templates
+		foreach ($entryOverrides->getAttributes() as $key => $value)
 	{
-	    if ($entryOverrides->getAttribute($key))
-	  {
-	      $metaValues[$key] = $value;
-	    }
-	  elseif ($codeOverrides->getAttribute($key))
-	  {
-	      $metaValues[$key] = $codeOverrides[$key];
-	    }
-	  elseif (isset($defaults->handle))
-	  {
-	      $metaValues[$key] = $defaults->getAttribute($key);
-	    }
-	  else
-	  {
-	      // We got nuthin'
-	      $metaValues[$key] = '';
-	    }
-	  }
+			if ($entryOverrides->getAttribute($key))
+		{
+				$metaValues[$key] = $value;
+			}
+		elseif ($codeOverrides->getAttribute($key))
+		{
+				$metaValues[$key] = $codeOverrides[$key];
+			}
+		elseif (isset($defaults->handle))
+		{
+				$metaValues[$key] = $defaults->getAttribute($key);
+			}
+		else
+		{
+				// We got nuthin'
+				$metaValues[$key] = '';
+			}
+		}
 
-	  // Unset general default info
-	  unset($metaValues['id']);
-	  unset($metaValues['entryId']);
-	  unset($metaValues['name']);
-	  unset($metaValues['handle']);
-	  unset($metaValues['appendSiteName']);
-	  unset($metaValues['globalFallback']);
+		// Modify our Assets to reference their URLs
+		
+		if (!empty($metaValues['ogImage'])) 
+		{
+			$ogImage = craft()->elements->getElementById($metaValues['ogImage']);
+			$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
+			$metaValues['ogImageSecure'] = UrlHelper::getSiteUrl($ogImage->url, null, "https");
+			$metaValues['ogImageWidth'] = $ogImage->width;
+			$metaValues['ogImageHeight'] = $ogImage->height;
+			$metaValues['ogImageType'] = $ogImage->mimeType;
+		}
 
-	  // These values get combined and become: geo.position
-	  unset($metaValues['longitude']);
-	  unset($metaValues['latitude']);
+		
+		$metaValues['twitterUrl'] = $this->currentUrl;
 
-	  $metaNames = array(
-	    'title'          => 'title',
-	    'description'    => 'description',
-	    'keywords'       => 'keywords',
-	    'robots'         => 'robots',
-	    'canonical'      => 'canonical',
-	    'region'         => 'geo.region',
-	    'placename'      => 'geo.placename',
-	    'position'       => 'geo.position',
+		if (!empty($metaValues['twitterImage'])) 
+		{
+			$twitterImage = craft()->elements->getElementById($metaValues['twitterImage']);
+			$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+		}
+		
 
-	    // Open Graph
-	    'ogTitle'        => 'og:title',
-	    'ogType'         => 'og:type',
-	    'ogUrl'          => 'og:url',
-	    'ogImage'        => 'og:image',
-	    'ogSiteName'     => 'og:site_name',
-	    'ogDescription'  => 'og:description',
-	    'ogAudio'        => 'og:audio',
-	    'ogVideo'        => 'og:video',
-	    'ogLocale'       => 'og:locale',
+		// Unset general default info
+		unset($metaValues['id']);
+		unset($metaValues['entryId']);
+		unset($metaValues['name']);
+		unset($metaValues['handle']);
+		unset($metaValues['appendSiteName']);
+		unset($metaValues['globalFallback']);
 
-	    // Twitter
-	    'twitterCard'    => 'twitter:card',
-	    'twitterSite'    => 'twitter:site',
-	    'twitterCreator' => 'twitter:creator',
-	    'twitterTitle'   => 'twitter:title',
-	    'twitterDescription' => 'twitter:description',
+		// These values get combined and become: geo.position
+		unset($metaValues['longitude']);
+		unset($metaValues['latitude']);
 
-	    // Fields for Twitter Summary Card
-	    'twitterSummaryImageSource' => 'twitter:image',
+		$metaNames = array(
+			'title'          => 'title',
+			'description'    => 'description',
+			'keywords'       => 'keywords',
+			'author'         => 'author',
+			'publisher'      => 'publisher',
 
-	    // Fields for Twitter Summary Large Image Card
-	    'twitterSummaryLargeImageImageSource' => 'twitter:image',
+			'robots'         => 'robots',
+			'canonical'      => 'canonical',
+			'region'         => 'geo.region',
+			'placename'      => 'geo.placename',
+			'position'       => 'geo.position',
 
-	    // Fields for Twitter Photo Card
-	    'twitterPhotoImageSource' => 'twitter::image',
+			// Open Graph
+			'ogTitle'        => 'og:title',
+			'ogType'         => 'og:type',
+			'ogUrl'          => 'og:url',
 
-	    // Fields for Twitter Player Card
-	    'twitterPlayerImageSource' => 'twitter:image',
-	    'twitterPlayer' => 'twitter:player',
-	    'twitterPlayerStream' => 'twitter:player:stream',
-	    'twitterPlayerStreamContentType' => 'twitter:player:stream:content_type',
-	    'twitterPlayerWidth' => 'twitter:player:width',
-	    'twitterPlayerHeight' => 'twitter:player:height',
-	  );
+			'ogImage'        => 'og:image',
+			'ogImageSecure'  => 'og:image:secure_url',
+			'ogImageWidth'   => 'og:image:width',
+			'ogImageHeight'  => 'og:image:height',
+			'ogImageType'    => 'og:image:type',
 
-	  // update our array to use the actual meta name="" parameter values
-	  // as our index
-	  $meta = array();
-	  foreach ($metaValues as $name => $value)
-	  {
-	    $meta[$metaNames[$name]] = $value;
-	  }
+			'ogSiteName'     => 'og:site_name',
+			'ogDescription'  => 'og:description',
+			'ogAudio'        => 'og:audio',
+			'ogVideo'        => 'og:video',
+			'ogLocale'       => 'og:locale',
 
-	  return $meta;
+			// Twitter
+			'twitterCard'    => 'twitter:card',
+			'twitterSite'    => 'twitter:site',
+			'twitterCreator' => 'twitter:creator',
+			'twitterTitle'   => 'twitter:title',
+			'twitterDescription' => 'twitter:description',
+
+			'twitterUrl'     => 'twitter:url',
+			'twitterImage'   => 'twitter:image',
+
+			// Fields for Twitter Player Card
+			'twitterPlayer' => 'twitter:player',
+			'twitterPlayerStream' => 'twitter:player:stream',
+			'twitterPlayerStreamContentType' => 'twitter:player:stream:content_type',
+			'twitterPlayerWidth' => 'twitter:player:width',
+			'twitterPlayerHeight' => 'twitter:player:height',
+		);
+
+		// update our array to use the actual meta name="" parameter values
+		// as our index
+		$meta = array();
+		foreach ($metaValues as $name => $value)
+		{
+			$meta[$metaNames[$name]] = $value;
+		}
+
+		return $meta;
 	}
 
 	public function getMeta()
@@ -596,18 +630,18 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			// add meta values to the global meta value
 			if (count($meta))
 			{
-			  foreach ($meta as $key => $value)
-			  {
-			    // This is the setter
-			    $this->sproutmeta[$key] = $value;
-			  }
+				foreach ($meta as $key => $value)
+				{
+					// This is the setter
+					$this->sproutmeta[$key] = $value;
+				}
 			}
 		}
 		else
 		{
 			// merge the optimize fallback with the rest of our meta values
 			array_merge($meta, $this->sproutmeta);
-	  }
+		}
 	}
 
 	public function getGlobalFallback()

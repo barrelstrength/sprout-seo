@@ -9,7 +9,9 @@ class SproutSeo_BasicMetaFieldModel extends BaseModel
     return array(
       'title'              => AttributeType::String,
       'description'        => AttributeType::String,
-      'keywords'           => AttributeType::String
+      'keywords'           => AttributeType::String,
+      'author'             => array(AttributeType::String),
+			'publisher'          => array(AttributeType::String),
     );
   }
 

@@ -6,45 +6,33 @@
 {% endset %}
 
 {% set tabs = {
-	  default: {
-      label: "Default Settings"|t,
-      url: '#default-main'
-    },
-    main: {
-      label: "Basic Info"|t,
-      url: '#default-basic'
-    },
-    publishinfo:    {
-      label: "Robots"|t,
-      url: '#default-robots'
-    },
-    location:    {
-      label: "Location"|t,
-      url: '#default-location'
-    },
-    facebook:    {
-      label: "Facebook"|t,
-      url: '#default-facebook'
-    },
-    twitter:    {
-      label: "Twitter"|t,
-      url: '#default-twitter'
-    }
+		default: {
+			label: "Default Settings"|t,
+			url: '#default-main'
+		},
+		main: {
+			label: "Basic Info"|t,
+			url: '#default-basic'
+		},
+		publishinfo:    {
+			label: "Robots"|t,
+			url: '#default-robots'
+		},
+		location:    {
+			label: "Location"|t,
+			url: '#default-location'
+		},
+		facebook:    {
+			label: "Facebook"|t,
+			url: '#default-facebook'
+		},
+		twitter:    {
+			label: "Twitter"|t,
+			url: '#default-twitter'
+		}
 } %}
 
 {% import "_includes/forms" as forms %}
-
-{# @TODO abstract this to the controller #}
-{% if defaultId is not defined %}
-	{% set defaultId = null %}
-{% endif %}
-
-{# @TODO abstract this to the controller #}
-{% if default is not defined %}
-	{% set default = craft.sproutSeo.getDefaultById(defaultId) %}
-{% endif %}
-
-
 
 {% set body %}
 
@@ -101,10 +89,10 @@
 	}) }}
 
 	{{ forms.checkboxField({
-	  label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
-	  name: 'default_fields[appendSiteName]',
-	  checked: (default.appendSiteName == 1 ? 1 : 0),
-	  errors: ''
+		label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
+		name: 'default_fields[appendSiteName]',
+		checked: (default.appendSiteName == 1 ? 1 : 0),
+		errors: ''
 	}) }}
 
 	{{ forms.textField({
@@ -231,10 +219,10 @@
 <div id="default-facebook" class="hidden">
 
 	{% set ogTypesOptions = {
-    '' : 'Select Open Graph Type...',
-	    'website' : 'Website',
-	    'article' : 'Article',
-	  } %}
+		'' : 'Select Open Graph Type...',
+			'website' : 'Website',
+			'article' : 'Article',
+		} %}
 
 	<h2>Open Graph Type</h2>
 
@@ -261,14 +249,23 @@
 		required: false
 	}) }}
 
-	{{ forms.textField({
-		label: "Image"|t,
-		instructions: "An image URL which should represent your object within the graph.",
-		name: 'default_fields[ogImage]',
-		value: default.ogImage,
-		errors: "",
-		required: false
-	}) }}
+	{% if assetsSourceExists %}
+		{{ forms.field({
+			label: 'Image',
+			}, forms.elementSelect({
+			elements: ogImageElements,
+			sourceElementId: default.ogImage,
+			elementType: elementType,
+			id: 'ogImage',
+			name: 'default_fields[ogImage]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image',
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
+	{% else %}
+		<p class="error">No assets sources currently exist. <a href="Create one on the {{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
+	{% endif %}
 
 	{{ forms.textField({
 		label: "URL"|t,
@@ -395,20 +392,30 @@
 		required: false
 	}) }}
 
+	{% if assetsSourceExists %}
+		{{ forms.field({
+			label: 'Image',
+			}, forms.elementSelect({
+			elements: twitterImageElements,
+			sourceElementId: default.twitterImage,
+			elementType: elementType,
+			id: 'twitterImage',
+			name: 'default_fields[twitterImage]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image',
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
+	{% else %}
+		<p class="error">No assets sources currently exist. <a href="Create one on the {{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
+	{% endif %}
 
 
 	<div id="twitter-summary" class="hidden">
 
 		<h2>Summary Card Specific</h2>
 
-		{{ forms.textField({
-			label: "Image Source"|t,
-			name: 'default_fields[twitterSummaryImageSource]',
-			instructions: 'A URL to the image representing the content.',
-			value: default.twitterSummaryImageSource,
-			errors: "",
-			required: false
-		}) }}
+		<p>Summary card is....</p>
 
 		<hr>
 
@@ -418,14 +425,7 @@
 
 		<h2>Summary Card with Large Image Specific</h2>
 
-		{{ forms.textField({
-			label: "Image Source"|t,
-			name: 'default_fields[twitterSummaryLargeImageImageSource]',
-			instructions: 'A URL to the image representing the content.',
-			value: default.twitterSummaryLargeImageImageSource,
-			errors: "",
-			required: false
-		}) }}
+		<p>Summary card with Large is....</p>
 
 		<hr>
 
@@ -435,14 +435,7 @@
 
 		<h2>Photo Card Specific</h2>
 
-		{{ forms.textField({
-			label: "Image Source"|t,
-			name: 'default_fields[twitterPhotoImageSource]',
-			instructions: 'A URL to the image representing the content.',
-			value: default.twitterPhotoImageSource,
-			errors: "",
-			required: false
-		}) }}
+		<p>Photo card is....</p>
 
 		<hr />
 
@@ -451,15 +444,6 @@
 	<div id="twitter-player" class="hidden">
 
 		<h2>Player Card Specific</h2>
-
-		{{ forms.textField({
-			label: "Image Source"|t,
-			name: 'default_fields[twitterPlayerImageSource]',
-			instructions: 'A URL to the image representing the content.',
-			value: default.twitterPlayerImageSource,
-			errors: "",
-			required: false
-		}) }}
 
 		{{ forms.textField({
 			label: "Player"|t,

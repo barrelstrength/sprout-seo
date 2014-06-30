@@ -57,63 +57,19 @@
      required: false
  }) }}
 
-<div id="twitter-summary" class="hidden">
-
-     <hr>
-
-     {{ forms.textField({
-         label: "Image Source"|t,
-         name: 'sproutseo_fields[twitterSummaryImageSource]',
-         instructions: 'A URL to the image representing the content.',
-         value: values.twitterSummaryImageSource,
-         errors: "",
-         required: false
-     }) }}
-
-</div>
-
-<div id="twitter-summary-large-image" class="hidden">
-
-     <hr>
-
-     {{ forms.textField({
-         label: "Image Source"|t,
-         name: 'sproutseo_fields[twitterSummaryLargeImageImageSource]',
-         instructions: 'A URL to the image representing the content.',
-         value: values.twitterSummaryLargeImageImageSource,
-         errors: "",
-         required: false
-     }) }}
-
-</div>
-
-<div id="twitter-photo" class="hidden">
-
-     <hr>
-
-     {{ forms.textField({
-         label: "Image Source"|t,
-         name: 'sproutseo_fields[twitterPhotoImageSource]',
-         instructions: 'A URL to the image representing the content.',
-         value: values.twitterPhotoImageSource,
-         errors: "",
-         required: false
-     }) }}
-
+ {{ forms.textField({
+     label: "Image Source"|t,
+     name: 'sproutseo_fields[twitterImage]',
+     instructions: 'A URL to the image representing the content.',
+     value: values.twitterImage,
+     errors: "",
+     required: false
+ }) }}
 </div>
 
 <div id="twitter-player" class="hidden">
 
     <hr>
-
-     {{ forms.textField({
-         label: "Image Source"|t,
-         name: 'sproutseo_fields[twitterPlayerImageSource]',
-         instructions: 'A URL to the image representing the content.',
-         value: values.twitterPlayerImageSource,
-         errors: "",
-         required: false
-     }) }}
 
      {{ forms.textField({
          label: "Stream"|t,
