@@ -40,11 +40,11 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 
 		// get any overrides for this entry
 		$model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
-		
+
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
 		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value) {
-			if ($value) 
+			if ($value)
 			{
 				$saveSproutSeoFields = true;
 				continue;
@@ -61,30 +61,29 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 			{
 				craft()->sproutSeo_meta->deleteOverrideById($model->id);
 			}
-			
+
 			return;
 		}
 
-		
+
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
-		
+
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
 
-		// If our override entry exists update it, 
+		// If our override entry exists update it,
 		// if not create it
-		if ($model->entryId) 
+		if ($model->entryId)
 		{
 			craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
-		} 
-		else 
+		}
+		else
 		{
 			craft()->sproutSeo_meta->createOverride($attributes);
 		}
 
 	}
-
 
 	/**
 	 * Display our FieldType
@@ -98,7 +97,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 	{
 		$entryId = craft()->request->getSegment(3);
 
-		$values = craft()->sproutSeo_meta->getGeographicMetaFeildsByEntryId($entryId);
+		$values = craft()->sproutSeo_meta->getGeographicMetaFieldsByEntryId($entryId);
 
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);
