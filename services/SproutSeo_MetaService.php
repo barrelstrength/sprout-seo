@@ -163,13 +163,15 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	}
 
-	public function getBasicMetaFeildsByEntryId($entryId)
+	public function getBasicMetaFieldsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-					 ->select('id, title, description, keywords')
-					 ->from('sproutseo_overrides')
-					 ->where('entryId = :entryId', array(':entryId' => $entryId))
-					 ->queryRow();
+			->select('id, title, description, keywords')
+			->from('sproutseo_overrides')
+			->where('entryId = :entryId', array(
+				':entryId' => $entryId
+			))
+			->queryRow();
 
 		 if (isset($query))
 		 {
@@ -192,7 +194,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(
 				':entryId' => $entryId
-				)
+			)
 			)
 			->queryRow();
 
@@ -214,8 +216,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			ogDescription, ogAudio, ogVideo, ogLocale')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(
-				':entryId' => $entryId
-				)
+			':entryId' => $entryId
+			)
 			)
 			->queryRow();
 
@@ -230,13 +232,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	}
 
-	public function getGeographicMetaFeildsByEntryId($entryId)
+	public function getGeographicMetaFieldsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-					 ->select('region, placename, longitude, latitude')
-					 ->from('sproutseo_overrides')
-					 ->where('entryId = :entryId', array(':entryId' => $entryId))
-					 ->queryRow();
+			->select('region, placename, longitude, latitude')
+			->from('sproutseo_overrides')
+			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->queryRow();
 
 		 if (isset($query))
 		 {
@@ -249,13 +251,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	}
 
-	public function getRobotsMetaFeildsByEntryId($entryId)
+	public function getRobotsMetaFieldsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-					 ->select('canonical, robots')
-					 ->from('sproutseo_overrides')
-					 ->where('entryId = :entryId', array(':entryId' => $entryId))
-					 ->queryRow();
+			->select('canonical, robots')
+			->from('sproutseo_overrides')
+			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->queryRow();
 
 		 if (isset($query))
 		 {
@@ -271,7 +273,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function createOverride($attributes)
 	{
 		craft()->db->createCommand()
-						 ->insert('sproutseo_overrides', $attributes);
+			->insert('sproutseo_overrides', $attributes);
 	}
 
 	public function updateOverride($id, $attributes)
@@ -293,7 +295,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// Returns the number of rows deleted
 		// ref: http://www.yiiframework.com/doc/api/1.1/CActiveRecord#deleteByPk-detail
 		return $record->deleteByPk($id);
-
 
 	}
 
@@ -335,7 +336,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		if (isset($overrideInfo['default']) or isset($overrideInfo['template']))
 		{
 
-			
+
 			if (isset($overrideInfo['default']))
 			{
 				$defaultHandle = $overrideInfo['default'];
@@ -349,8 +350,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				$defaultHandle = $overrideInfo['template'];
 				$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
 			}
-			
-			
+
+
 
 
 			// @TODO - check if $defaults exists and if not, see if we have a
@@ -375,7 +376,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// $scheme = ( isset($_SERVER['HTTPS'] ) ) ? "https://" : "http://" ;
 		// $siteUrl = $scheme . $_SERVER['SERVER_NAME'];
 		// $currentUrl = $siteUrl . craft()->request->url;
-		
+
 		$this->currentUrl = UrlHelper::getSiteUrl(craft()->request->url);
 		$defaults['canonical'] = $this->currentUrl;
 
@@ -523,8 +524,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		}
 
 		// Modify our Assets to reference their URLs
-		
-		if (!empty($metaValues['ogImage'])) 
+
+		if (!empty($metaValues['ogImage']))
 		{
 			$ogImage = craft()->elements->getElementById($metaValues['ogImage']);
 			$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
@@ -534,15 +535,15 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$metaValues['ogImageType'] = $ogImage->mimeType;
 		}
 
-		
+
 		$metaValues['twitterUrl'] = $this->currentUrl;
 
-		if (!empty($metaValues['twitterImage'])) 
+		if (!empty($metaValues['twitterImage']))
 		{
 			$twitterImage = craft()->elements->getElementById($metaValues['twitterImage']);
 			$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
 		}
-		
+
 
 		// Unset general default info
 		unset($metaValues['id']);
