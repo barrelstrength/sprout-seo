@@ -96,7 +96,25 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	{
 		$entryId = craft()->request->getSegment(3);
 
-		$values = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
+		$variables['values'] = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
+
+		// Set up our asset fields
+		if (isset($variables['default']->twitterImage))
+		{
+			$asset = craft()->elements->getElementById($variables['default']->twitterImage);
+			$variables['twitterImageElements'] = array($asset);
+		}
+		else
+		{
+			$variables['twitterImageElements'] = array();
+		}
+
+		// Set assetsSourceExists
+		$sources = craft()->assets->findFolders();
+		$variables['assetsSourceExists'] = count($sources);
+
+		// Set elementType
+		$variables['elementType'] = craft()->elements->getElementType(ElementType::Asset);
 
 		// include css resource
 		craft()->templates->includeCssResource('sproutseo/css/fields.css');
@@ -106,10 +124,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		$name = rtrim($name, "]");
 		$name = "sproutseo_fields[$name]";
 
-		return craft()->templates->render('sproutseo/_cp/fields/twitter', array(
-			'name'		=> $name,
-			'values'	=> $values
-		));
+		return craft()->templates->render('sproutseo/_cp/fields/twitter', $variables);
 	}
 
 }
