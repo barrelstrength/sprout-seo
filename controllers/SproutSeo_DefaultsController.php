@@ -14,23 +14,23 @@ class SproutSeo_DefaultsController extends BaseController
 		$variables['default'] = craft()->sproutSeo_meta->getDefaultById($defaultId);
 
 		// Set up our asset fields
-		if (isset($variables['default']->ogImage)) 
+		if (isset($variables['default']->ogImage))
 		{
 		    $asset = craft()->elements->getElementById($variables['default']->ogImage);
 		    $variables['ogImageElements'] = array($asset);
-		} 
-		else 
+		}
+		else
 		{
 		    $variables['ogImageElements'] = array();
 		}
 
 		// Set up our asset fields
-		if (isset($variables['default']->twitterImage)) 
+		if (isset($variables['default']->twitterImage))
 		{
 		    $asset = craft()->elements->getElementById($variables['default']->twitterImage);
 		    $variables['twitterImageElements'] = array($asset);
-		} 
-		else 
+		}
+		else
 		{
 		    $variables['twitterImageElements'] = array();
 		}
@@ -49,14 +49,18 @@ class SproutSeo_DefaultsController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		// we assume have a new item now
-		// @TODO - probably a bad idea
-		$id = false; 
+		// check if this is a new or existing default
+		if (craft()->request->getPost('default_fields[id]') == null ) {
+			$id = false;
+		}
+		else {
+			$id = craft()->request->getPost('default_fields[id]');
+		}
 
 		$model = craft()->sproutSeo_meta->newMetaModel($id);
 
 		$defaultFields = craft()->request->getPost('default_fields');
-		
+
 		// Convert Checkbox Array into comma-delimited String
 		if (isset($defaultFields['robots']))
 		{
@@ -71,8 +75,8 @@ class SproutSeo_DefaultsController extends BaseController
 
 		if (craft()->sproutSeo_meta->saveDefaultInfo($model))
 		{
-			
-			
+
+
 			craft()->userSession->setNotice(Craft::t('New default saved.'));
 			$this->redirectToPostedUrl();
 		}
