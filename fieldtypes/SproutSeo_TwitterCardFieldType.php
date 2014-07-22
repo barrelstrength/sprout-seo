@@ -89,7 +89,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	 *
 	 * @param string $name  Our FieldType handle
 	 * @param string $value Always returns blank, our block
-	 *                       only styles the Instructions field
+	 * only styles the Instructions field
 	 * @return string Return our blocks input template
 	 */
 	public function getInputHtml($name, $value)
