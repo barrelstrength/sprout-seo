@@ -56,9 +56,7 @@ Craft.SproutSeoDefault = Garnish.Base.extend(
         // remove the class from the new element
         $(this.$newElement).removeClass('hidden');
         // assign the old element to the new one... REBOOT
-        this.$currentElement = this.$newElement;
-
-        // console.log('WTF on multiple changes... ?!?!?!');
+        this.$currentTwitterElement = this.$newElement;
 
     }
 })
