@@ -66,40 +66,46 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	public function saveCustomPage(SproutSeo_SitemapModel $customPage)
-	{	
+	{
 		$result = craft()->db->createCommand()->insert('sproutseo_sitemap', $customPage->getAttributes());
-		
+
 		return $result;
 	}
 
 	public function getSitemap()
 	{
 		$enabledSections = craft()->db->createCommand()
-                ->select('*')
-                ->from('sproutseo_sitemap')
-                ->where('enabled = :enabled', array('enabled' => 1))
-                ->queryAll();
+			->select('*')
+			->from('sproutseo_sitemap')
+			->where('enabled = :enabled', array(
+				'enabled' => 1
+			))
+			->queryAll();
 
 		// Begin sitemap
 		// @TODO - let's break out this code so that we can return the full sitemap,
 		// or just the data so that someone could build it on their own
 		$sitemap = '<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
 		// Loop through each of our enabled sections
-    foreach ($enabledSections as $key => $sitemapSettings)
-    {
+		foreach ($enabledSections as $key => $sitemapSettings)
+		{
 
-    	// Grab all of the entries associated with that section
-    	// @TODO - how do we grab "LIVE" entries?  Do we need to update
-    	// things to use the ElementCriteriaModel?
+			// Grab all of the entries associated with that section
+			// @TODO - how do we grab "LIVE" entries?  Do we need to update
+			// things to use the ElementCriteriaModel?
 			$entries = craft()->db->createCommand()
-			            ->select('elements_i18n.uri, elements_i18n.dateUpdated')
-			            ->from('elements_i18n AS elements_i18n')
-			            ->join('entries AS entries', 'entries.id = elements_i18n.elementId')
-			            ->where('elements_i18n.enabled = :enabled', array('enabled' => 1))
-			            ->andWhere('entries.sectionId = :sectionId', array('sectionId' => $sitemapSettings['sectionId']))
-			            ->queryAll();
+				->select('elements_i18n.uri, elements_i18n.dateUpdated')
+				->from('elements_i18n AS elements_i18n')
+				->join('entries AS entries', 'entries.id = elements_i18n.elementId')
+				->where('elements_i18n.enabled = :enabled', array(
+					'enabled' => 1
+				))
+				->andWhere('entries.sectionId = :sectionId', array(
+					'sectionId' => $sitemapSettings['sectionId']
+				))
+				->queryAll();
 
 			// Loop through each entry
 			foreach ($entries as $key => $entry)
@@ -112,14 +118,41 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 				$sitemap .= '<lastmod>' . $entry['dateUpdated'] . '</lastmod>';
 				$sitemap .= '<changefreq>' . $sitemapSettings['changeFrequency'] . '</changefreq>';
 				$sitemap .= '<priority>' . $sitemapSettings['priority'] . '</priority>';
-	      $sitemap .= '</url>';
+				$sitemap .= '</url>';
 
 			}
 
-    }
+		}
+
+		// query all of the custom URL's in the database that are enabled
+		$customUrls = craft()->db->createCommand()
+			->select('url, priority, changeFrequency, enabled, dateUpdated')
+			->from('sproutseo_sitemap')
+			->where('enabled = :enabled', array(
+				'enabled' => 1
+			))
+			->andWhere('url is not null')
+			->queryAll();
+
+			// dd($customUrls);
+
+		// Loop through each custom page
+		foreach ($customUrls as $key => $entry)
+		{
+
+			$url = $entry['url'];
+
+			$sitemap .= '<url>';
+			$sitemap .= '<loc>' . $url . '</loc>';
+			$sitemap .= '<lastmod>' . $entry['dateUpdated'] . '</lastmod>';
+			$sitemap .= '<changefreq>' . $entry['changeFrequency'] . '</changefreq>';
+			$sitemap .= '<priority>' . $entry['priority'] . '</priority>';
+			$sitemap .= '</url>';
+
+		}
 
 		// End sitemap
-  	$sitemap .= '</urlset>';
+		$sitemap .= '</urlset>';
 
 		return $sitemap;
 	}
