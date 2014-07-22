@@ -111,6 +111,11 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			foreach ($entries as $key => $entry)
 			{
 
+				// check if the uri is the Craft home page
+				if ($entry['uri'] == '__home__') {
+					$entry['uri'] = null;
+				}
+
 				$url = craft()->getSiteUrl() . $entry['uri'];
 
 				$sitemap .= '<url>';
