@@ -16,8 +16,8 @@ class SproutSeo_DefaultsController extends BaseController
 		// Set up our asset fields
 		if (isset($variables['default']->ogImage))
 		{
-		    $asset = craft()->elements->getElementById($variables['default']->ogImage);
-		    $variables['ogImageElements'] = array($asset);
+			$asset = craft()->elements->getElementById($variables['default']->ogImage);
+			$variables['ogImageElements'] = array($asset);
 		}
 		else
 		{
@@ -27,12 +27,12 @@ class SproutSeo_DefaultsController extends BaseController
 		// Set up our asset fields
 		if (isset($variables['default']->twitterImage))
 		{
-		    $asset = craft()->elements->getElementById($variables['default']->twitterImage);
-		    $variables['twitterImageElements'] = array($asset);
+			$asset = craft()->elements->getElementById($variables['default']->twitterImage);
+			$variables['twitterImageElements'] = array($asset);
 		}
 		else
 		{
-		    $variables['twitterImageElements'] = array();
+			$variables['twitterImageElements'] = array();
 		}
 
 		// Set assetsSourceExists
