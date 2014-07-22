@@ -139,8 +139,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			->andWhere('url is not null')
 			->queryAll();
 
-			// dd($customUrls);
-
 		// Loop through each custom page
 		foreach ($customUrls as $key => $entry)
 		{
