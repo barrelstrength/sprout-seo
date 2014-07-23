@@ -32,6 +32,8 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		// Make sure we are actually submitting our field
 		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
 
+		$fields = craft()->request->getPost('fields');
+
 		// Determine our entryId
 		$entryId = (isset($_POST['entryId']))
 			? $_POST['entryId']
@@ -64,12 +66,12 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 			return;
 		}
 
-
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
 
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
+		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 
 		// If our override entry exists update it,
 		// if not create it
@@ -99,9 +101,9 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		$variables['values'] = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
 
 		// Set up our asset fields
-		if (isset($variables['default']->twitterImage))
+		if (isset($variables['values']->twitterImage))
 		{
-			$asset = craft()->elements->getElementById($variables['default']->twitterImage);
+			$asset = craft()->elements->getElementById($variables['values']->twitterImage);
 			$variables['twitterImageElements'] = array($asset);
 		}
 		else

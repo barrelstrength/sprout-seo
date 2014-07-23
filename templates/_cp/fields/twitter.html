@@ -71,9 +71,11 @@
 		limit: 1,
 		criteria: {"localeEnabled":null}
 	})) }}
+
 {% else %}
 	<p class="error">No assets sources currently exist. <a href="Create one on the {{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
 {% endif %}
+
 </div>
 
 <div id="twitter-player" class="hidden">
