@@ -1,6 +1,6 @@
 {% import "_includes/forms" as forms %}
 
-<div class="sproutseo-box" id="twitter">
+<div class="sproutseo-fields" id="twitter-card">
 
 {% set twitterCardOptions = {
 	'' : 'Select Twitter Card Type...',
@@ -78,7 +78,11 @@
 
 </div>
 
-<div id="twitter-player" class="hidden">
+<div id="summary-large-image" class="hidden">
+	Summary
+</div>
+
+<div id="player" class="hidden">
 
 	<hr>
 
@@ -120,11 +124,11 @@
 
  </div>
 
-{% includeJsResource "sproutseo/js/field-twitter.js" %}
+{% includeJsResource "sproutseo/js/twitter-card.js" %}
 
 {% set js %}
 
-	new Craft.SproutSeoDefault();
+	new Craft.SproutSeoTwitterCard();
 
 {% endset %}
 
