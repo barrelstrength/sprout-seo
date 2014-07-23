@@ -1,6 +1,6 @@
 (function($) {
 
-Craft.SproutSeoOpengraph = Garnish.Base.extend(
+Craft.SproutSeoOpenGraph = Garnish.Base.extend(
 {
 	$appendage: null,
 
@@ -16,7 +16,7 @@ Craft.SproutSeoOpengraph = Garnish.Base.extend(
 	init: function()
 	{
 		// select the dropdown to target
-		this.$select = $('#fields-opengraph select');
+		this.$select = $('#fields-open-graph select');
 			// console.log(this.$select);
 
 		// grab the value from the dropdown
@@ -60,7 +60,6 @@ Craft.SproutSeoOpengraph = Garnish.Base.extend(
 		// REBOOT!!!
 		this.$currentDiv = this.$newDiv;
 			// console.log(this.$newDiv);
-
 	}
 })
 
