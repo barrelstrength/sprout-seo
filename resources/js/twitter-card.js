@@ -44,22 +44,22 @@ Craft.SproutSeoTwitterCard = Garnish.Base.extend(
 	{
 		// hide the current div
 		$(this.$currentDiv).addClass('hidden');
-			console.log('add class hidden to this.$currentDiv');
+			// console.log('add class hidden to this.$currentDiv');
 
 		// grab the value from the dropdown
 		this.$newSelectValue = $(this.$select).val();
-			console.log(this.$selectValue);
+			// console.log(this.$selectValue);
 
 		// concatenate the new div for later use
 		this.$newDiv = this.$appendage + this.$newSelectValue;
-			console.log(this.$newDiv);
+			// console.log(this.$newDiv);
 
 		// remove the hidden class from new div
 		$(this.$newDiv).removeClass('hidden');
 
 		// REBOOT!!!
 		this.$currentDiv = this.$newDiv;
-			console.log(this.$newDiv);
+			// console.log(this.$newDiv);
 
 	}
 })
