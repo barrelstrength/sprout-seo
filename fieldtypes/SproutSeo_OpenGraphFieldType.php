@@ -29,8 +29,11 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 	*/
 	public function onAfterElementSave()
 	{
+		// grab only the opengraph fields
+		$fields = $_POST['fields']['sproutseo_opengraph'];
+
 		// Make sure we are actually submitting our field
-		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
+		if ( ! isset($fields)) return;
 
 		// Determine our entryId
 		$entryId = (isset($_POST['entryId']))
@@ -42,7 +45,7 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
-		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value) {
+		foreach ($fields as $key => $value) {
 			if ($value)
 			{
 				$saveSproutSeoFields = true;
@@ -64,12 +67,14 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 			return;
 		}
 
-
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
 
 		// Grab all the other Sprout SEO fields.
-		$attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
+		$attributes = array_merge($attributes, $fields);
+
+		// set ogImage from array to string
+		$attributes['ogImage'] = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
 
 		// If our override entry exists update it,
 		// if not create it
@@ -96,17 +101,35 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 	{
 		$entryId = craft()->request->getSegment(3);
 
-		$values = craft()->sproutSeo_meta->getOpenGraphFieldsByEntryId($entryId);
+		$variables['values'] = craft()->sproutSeo_meta->getOpenGraphFieldsByEntryId($entryId);
+
+		// Set up our asset fields
+		if (isset($variables['values']->ogImage))
+		{
+			$asset = craft()->elements->getElementById($variables['values']->ogImage);
+			$variables['ogImageElements'] = array($asset);
+		}
+		else
+		{
+			$variables['ogImageElements'] = array();
+		}
+
+		// Set assetsSourceExists
+		$sources = craft()->assets->findFolders();
+		$variables['assetsSourceExists'] = count($sources);
+
+		// Set elementType
+		$variables['elementType'] = craft()->elements->getElementType(ElementType::Asset);
+
+		// include css resource
+		craft()->templates->includeCssResource('sproutseo/css/fields.css');
 
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);
 		$name = rtrim($name, "]");
-		$name = "sproutseo_fields[$name]";
+		$name = "sproutseo_opengraph[$name]";
 
-		return craft()->templates->render('sproutseo/_cp/fields/opengraph', array(
-			'name'	     => $name,
-			'values'     => $values
-		));
+		return craft()->templates->render('sproutseo/_cp/fields/opengraph', $variables);
 	}
 
 }
