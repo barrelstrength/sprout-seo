@@ -29,10 +29,11 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	*/
 	public function onAfterElementSave()
 	{
-		// Make sure we are actually submitting our field
-		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
+		// grab only the opengraph fields
+		$fields = $_POST['fields']['sproutseo_twitter'];
 
-		$fields = craft()->request->getPost('fields');
+		// Make sure we are actually submitting our field
+		if ( ! isset($fields)) return;
 
 		// Determine our entryId
 		$entryId = (isset($_POST['entryId']))
@@ -44,7 +45,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
-		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value) {
+		foreach ($_POST['fields']['sproutseo_twitter'] as $key => $value) {
 			if ($value)
 			{
 				$saveSproutSeoFields = true;
@@ -70,7 +71,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		$attributes['entryId'] = $entryId;
 
 		// Grab all the other Sprout SEO fields.
-		$attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
+		$attributes = array_merge($attributes, $fields);
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 
 		// If our override entry exists update it,
@@ -124,7 +125,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);
 		$name = rtrim($name, "]");
-		$name = "sproutseo_fields[$name]";
+		$name = "sproutseo_twitter[$name]";
 
 		return craft()->templates->render('sproutseo/_cp/fields/twitter', $variables);
 	}
