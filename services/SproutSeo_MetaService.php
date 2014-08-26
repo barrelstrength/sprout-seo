@@ -76,8 +76,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		}
 		else
 		{
-		return new SproutSeo_MetaModel();
-			}
+			return new SproutSeo_MetaModel();
+		}
 	}
 
 	public function getDefaultByDefaultHandle($handle)
@@ -88,7 +88,14 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			->where('handle=:handle', array(':handle'=> $handle))
 			->queryRow();
 
-		$model = SproutSeo_MetaModel::populateModel($query);
+		if (isset($query)) 
+		{
+			$model = SproutSeo_MetaModel::populateModel($query);
+		}
+		else
+		{
+			return new SproutSeo_MetaModel();
+		}
 
 		$model->robots = ($model->robots) ? $this->prepRobotsForSettings($model->robots) : null;
 
@@ -324,7 +331,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// Setup all of our SEO Metadata Arrays
 		$entryOverrides = new SproutSeo_MetaModel; // Top Priority
 		$codeOverrides  = new SproutSeo_MetaModel; // Second Priority
-		$defaults       = array(); // Lowest Priority
+		$defaults       = new SproutSeo_MetaModel; // Lowest Priority
 
 
 		// PREPARE Defaults
@@ -335,12 +342,10 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// @TODO - depracate the use of template
 		if (isset($overrideInfo['default']) or isset($overrideInfo['template']))
 		{
-
-
 			if (isset($overrideInfo['default']))
 			{
 				$defaultHandle = $overrideInfo['default'];
-				$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
+				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);
 			}
 			// @TODO - depracate the use of template
 			if (isset($overrideInfo['template']))
@@ -348,20 +353,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				craft()->deprecator->log('{ template : "' . $overrideInfo['template'] .'" }', '"Tempaltes" have been renamed to "Defaults". The "template" paramger has been deprecated. Use the "default" parameter instead.');
 
 				$defaultHandle = $overrideInfo['template'];
-				$defaults = craft()->sproutSeo_meta->getDefaultByDefaultHandle($defaultHandle);
+				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);
 			}
-
-
-
-
-			// @TODO - check if $defaults exists and if not, see if we have a
-			// globalFallback template we can fall back to.  If not, we got nuthin'!
-
 
 			// create the string we will append to the end of our title if we should
 			if (isset($defaults->appendSiteName)  && $defaults->appendSiteName == 1)
 			{
-				$this->siteInfo = " " . $this->divider . " asd" . craft()->getInfo('siteName');
+				$this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
 			}
 
 			// Remove our template so we can assign the rest of our info to the codeOverride
@@ -378,7 +376,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// $currentUrl = $siteUrl . craft()->request->url;
 
 		$this->currentUrl = UrlHelper::getSiteUrl(craft()->request->url);
-		$defaults['canonical'] = $this->currentUrl;
+		$defaults->canonical = $this->currentUrl;
 
 
 		// PREPARE ENTRY OVERRIDES
@@ -497,27 +495,34 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		$metaValues = array();
 
+		$globalFallback = $this->getGlobalFallback();
+		
+
 		// Loop through the entry override model
 		// @TODO - make sure we loop through a defined model... we may not have an
 		// entry override model each time... or maybe we can just define it so its
 		// blank nomatter what.  We really just need to know we are looping through
 		// the samme model for each of the levels of overrides or templates
 		foreach ($entryOverrides->getAttributes() as $key => $value)
-	{
-			if ($entryOverrides->getAttribute($key))
 		{
+			if ($entryOverrides->getAttribute($key))
+			{
 				$metaValues[$key] = $value;
 			}
-		elseif ($codeOverrides->getAttribute($key))
-		{
+			elseif ($codeOverrides->getAttribute($key))
+			{	
 				$metaValues[$key] = $codeOverrides[$key];
 			}
-		elseif (isset($defaults->handle))
-		{
+			elseif ($defaults->getAttribute($key))
+			{	
 				$metaValues[$key] = $defaults->getAttribute($key);
 			}
-		else
-		{
+			elseif (!empty($globalFallback))
+			{
+				$metaValues[$key] = $globalFallback->getAttribute($key);
+			}
+			else
+			{
 				// We got nuthin'
 				$metaValues[$key] = '';
 			}
@@ -647,30 +652,32 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	public function getGlobalFallback()
 	{
-		return craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_defaults')
-			->where('globalFallback=:globalFallback', array(
-				':globalFallback' => 1
-			))
-			->queryRow();
+		$fallback = craft()->db->createCommand()
+											 ->select('*')
+											 ->from('sproutseo_defaults')
+											 ->where('globalFallback=:globalFallback', array(
+											 	':globalFallback' => 1
+											 ))
+											 ->queryRow();
+
+		return SproutSeo_MetaModel::populateModel($fallback);
 	}
 
 	public function displayGlobalFallback($defaultId = null)
 	{
 		$fallback = $this->getGlobalFallback();
 
-		$isGlobalFallback = ( isset($fallback['id']) && ($defaultId == $fallback['id']) );
-		$noFallbackExists = !isset($fallback['id']);
+		$isGlobalFallback = ( $fallback->id && ($defaultId == $fallback->id) );
+		$fallbackExists = !is_null($fallback->id);
 
-	if ($isGlobalFallback OR $noFallbackExists)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+		if ($isGlobalFallback OR !$fallbackExists)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public function prepRobotsForDb($robotsArray)
