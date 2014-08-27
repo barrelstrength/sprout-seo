@@ -40,6 +40,8 @@ class SproutSeo_DefaultsRecord extends BaseRecord
 			'ogType'         => array(AttributeType::String),
 			'ogUrl'          => array(AttributeType::String),
 			'ogImage'        => array(AttributeType::String),
+			'ogAuthor'       => array(AttributeType::String),
+			'ogPublisher'    => array(AttributeType::String),
 			'ogSiteName'     => array(AttributeType::String),
 			'ogDescription'  => array(AttributeType::String),
 			'ogAudio'        => array(AttributeType::String),

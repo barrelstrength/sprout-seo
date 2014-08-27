@@ -10,6 +10,8 @@ class SproutSeo_OpenGraphFieldModel extends BaseModel
 			'ogType'         => array(AttributeType::String),
 			'ogUrl'          => array(AttributeType::String),
 			'ogImage'        => array(AttributeType::Number),
+			'ogAuthor'       => array(AttributeType::String),
+			'ogPublisher'    => array(AttributeType::String),
 			'ogSiteName'     => array(AttributeType::String),
 			'ogDescription'  => array(AttributeType::String),
 			'ogAudio'        => array(AttributeType::String),

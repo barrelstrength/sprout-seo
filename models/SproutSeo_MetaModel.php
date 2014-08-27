@@ -36,6 +36,8 @@ class SproutSeo_MetaModel extends BaseModel
 			'ogImageWidth'   => array(AttributeType::String),
 			'ogImageHeight'  => array(AttributeType::String),
 			'ogImageType'    => array(AttributeType::String),
+			'ogAuthor'       => array(AttributeType::String),
+			'ogPublisher'    => array(AttributeType::String),
 			'ogSiteName'     => array(AttributeType::String),
 			'ogDescription'  => array(AttributeType::String),
 			'ogAudio'        => array(AttributeType::String),

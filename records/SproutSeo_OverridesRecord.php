@@ -34,6 +34,9 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			'ogUrl'          => array(AttributeType::String),
 			'ogImage'        => array(AttributeType::String),
 			'ogSiteName'     => array(AttributeType::String),
+			'ogAuthor'       => array(AttributeType::String),
+			'ogPublisher'    => array(AttributeType::String),
+			
 			'ogDescription'  => array(AttributeType::String),
 			'ogAudio'        => array(AttributeType::String),
 			'ogVideo'        => array(AttributeType::String),
