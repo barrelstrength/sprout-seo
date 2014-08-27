@@ -4,7 +4,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m140623_000000_sproutSeo_addTwitterCardFieldsToTemplates extends BaseMigration
+class m140623_000000_sproutSeo_addTwitterCardFieldsToOverrides extends BaseMigration
 {
 	/**
 	 * Any migration code in here is wrapped inside of a transaction.
