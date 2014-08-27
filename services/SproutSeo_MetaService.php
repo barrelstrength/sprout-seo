@@ -350,7 +350,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			// @TODO - depracate the use of template
 			if (isset($overrideInfo['template']))
 			{
-				craft()->deprecator->log('{ template : "' . $overrideInfo['template'] .'" }', '"Tempaltes" have been renamed to "Defaults". The "template" paramger has been deprecated. Use the "default" parameter instead.');
+				craft()->deprecator->log('{ template : "' . $overrideInfo['template'] .'" }', '"Templates" have been renamed to "Defaults". The "template" parameter has been deprecated. Use the "default" parameter instead. {% do craft.sproutSeo.meta({ default: "'.$overrideInfo['template'].'" }) %}');
 
 				$defaultHandle = $overrideInfo['template'];
 				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);
