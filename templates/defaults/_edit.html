@@ -36,7 +36,13 @@
 
 {% set body %}
 
-<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
+{% if craft.request.getSegment(3) == 'new' %}
+	{% set saveshortcutUrl = url('sproutseo/defaults') %}
+{% else %}
+  {% set saveshortcutUrl = url('sproutseo/defaults/' ~ defaultId) %}
+{% endif %}
+
+<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ saveshortcutUrl }}">
 	<input type="hidden" name="action" value="sproutSeo/defaults/saveDefault">
 	<input type="hidden" name="redirect" value="sproutseo/defaults">
 
