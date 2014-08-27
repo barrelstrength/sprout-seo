@@ -219,8 +219,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getOpenGraphFieldsByEntryId($entryId)
 	{
 		$query = craft()->db->createCommand()
-			->select('id, ogTitle, ogType, ogUrl, ogImage, ogSiteName,
-			ogDescription, ogAudio, ogVideo, ogLocale')
+			->select('id, ogTitle, ogType, ogUrl, ogImage, ogAuthor, ogPublisher, ogSiteName, ogDescription, ogAudio, ogVideo, ogLocale')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(
 			':entryId' => $entryId
@@ -356,12 +355,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);
 			}
 
-			// create the string we will append to the end of our title if we should
-			if (isset($defaults->appendSiteName)  && $defaults->appendSiteName == 1)
-			{
-				$this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
-			}
-
 			// Remove our template so we can assign the rest of our info to the codeOverride
 			// array and have it match up nicely.
 			// @TODO - may need to move this outside this if statement, or include other
@@ -493,10 +486,20 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	private function _prioritizeMetaValues($entryOverrides, $codeOverrides, $defaults)
 	{
 
-		$metaValues = array();
-
+		$metaValues     = array();
 		$globalFallback = $this->getGlobalFallback();
-		
+		$secureUrl      = ( isset($_SERVER['HTTPS']) ) ? true : false;
+
+		// create the string we will append to the end of our title if we should
+		// allow the selected default template to override the global fallback
+		if (isset($defaults->appendSiteName) && $defaults->appendSiteName == 1)
+		{	
+			$this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
+		}
+		elseif (isset($globalFallback->appendSiteName) && $globalFallback->appendSiteName == 1)
+		{
+			$this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
+		}
 
 		// Loop through the entry override model
 		// @TODO - make sure we loop through a defined model... we may not have an
@@ -529,15 +532,18 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		}
 
 		// Modify our Assets to reference their URLs
-
 		if (!empty($metaValues['ogImage']))
 		{
 			$ogImage = craft()->elements->getElementById($metaValues['ogImage']);
 			$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
-			$metaValues['ogImageSecure'] = UrlHelper::getSiteUrl($ogImage->url, null, "https");
 			$metaValues['ogImageWidth'] = $ogImage->width;
 			$metaValues['ogImageHeight'] = $ogImage->height;
 			$metaValues['ogImageType'] = $ogImage->mimeType;
+
+			if ($secureUrl) 
+			{
+				$metaValues['ogImageSecure'] = UrlHelper::getSiteUrl($ogImage->url, null, "https");
+			}
 		}
 
 
@@ -585,6 +591,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			'ogImageWidth'   => 'og:image:width',
 			'ogImageHeight'  => 'og:image:height',
 			'ogImageType'    => 'og:image:type',
+
+			'ogAuthor'       => 'og:author',
+			'ogPublisher'    => 'og:publisher',
 
 			'ogSiteName'     => 'og:site_name',
 			'ogDescription'  => 'og:description',
