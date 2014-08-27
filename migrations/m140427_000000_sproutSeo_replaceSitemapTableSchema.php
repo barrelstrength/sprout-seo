@@ -30,12 +30,35 @@ class m140427_000000_sproutSeo_replaceSitemapTableSchema extends BaseMigration
 
 		// Review Column Types in craft/app/enums/ColumnType.php
 		$this->createTable($tableName, array(
-			'sectionId' => array('column' => ColumnType::Int),
-			'url' => array('column' => ColumnType::Varchar),
-			'priority' => array('maxLength' => 2, 'decimals' => 1, 'column' => ColumnType::Decimal, 'default' => '0.5', 'required'=>true),
-			'changeFrequency' => array('maxLength' => 7, 'column' => ColumnType::Varchar,'default' => 'weekly', 'required'=>true),
-			'enabled' => array('column' => ColumnType::Bool,'default' => false, 'required'=>true),
-			'ping' => array('column' => ColumnType::Bool,'default' => false, 'required'=>true)
+			'sectionId' => array(
+				'column' => ColumnType::Int
+			),
+			'url' => array(
+				'column' => ColumnType::Varchar
+			),
+			'priority' => array(
+				'column' => ColumnType::Decimal, 
+				'default' => '0.5', 
+				'required'=>true, 
+				'maxLength' => 2, 
+				'decimals' => 1
+			),
+			'changeFrequency' => array(
+				'column'    => ColumnType::Varchar,
+				'default'   => 'weekly', 
+				'required'  => true, 
+				'maxLength' => 7
+			),
+			'enabled' => array(
+				'column'   => ColumnType::Bool,
+				'default'  => false, 
+				'required' => true
+			),
+			'ping' => array(
+				'column'   => ColumnType::Bool,
+				'default'  => false, 
+				'required' => true
+			)
 		));
 
 		$this->createIndex($tableName, 'sectionId', true);
