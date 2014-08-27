@@ -21,6 +21,9 @@ class m140624_000000_sproutSeo_renameTemplatestoDefaults extends BaseMigration
                 // Rename table
                 $this->renameTable($oldTableName, $newTableName);
 
+                MigrationHelper::dropIndexIfExists('sproutseo_templates', array('name', 'handle'), true);
+                $this->createIndex('sproutseo_defaults', 'name,handle', true);
+
                 SproutSeoPlugin::log("`$oldTableName` table has been renamed to `$newTableName`.", LogLevel::Info, true);
             }
 

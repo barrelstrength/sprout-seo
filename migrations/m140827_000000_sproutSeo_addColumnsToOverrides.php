@@ -14,10 +14,6 @@ class m140827_000000_sproutSeo_addColumnsToOverrides extends BaseMigration
 	public function safeUp()
 	{
 		// specify columns and AttributeType
-		$newColumnsAppend = array (
-			'appendSiteName'     => ColumnType::Varchar,
-		);
-
 		$newColumnsAuthorPublisher = array (
 			'author'             => ColumnType::Varchar,
 			'publisher'          => ColumnType::Varchar,
@@ -36,7 +32,6 @@ class m140827_000000_sproutSeo_addColumnsToOverrides extends BaseMigration
 			'twitterUrl'         => ColumnType::Varchar,
 		);
 
-		$this->_addColumnsAfter($newColumnsAppend, 'handle');
 		$this->_addColumnsAfter($newColumnsAuthorPublisher, 'keywords');
 		$this->_addColumnsAfter($newColumnsOg, 'ogImage');
 		$this->_addColumnsAfter($newColumnsTwitter, 'twitterCard');
