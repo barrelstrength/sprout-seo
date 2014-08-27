@@ -3,9 +3,10 @@
 <div class="sproutseo-fields" id="open-graph">
 
 {% set ogTypesOptions = {
-	'website' : 'Website',
+	'' : 'Select Open Graph Type...',
 	'article' : 'Article',
-  } %}
+	'website' : 'Website',
+} %}
 
 {{ forms.selectField({
 	name: 'sproutseo_open-graph[ogType]',
@@ -17,7 +18,7 @@
 
 {{ forms.textField({
 	label: "Title"|t,
-	instructions: "The title of your object as it should appear within the graph, e.g., 'The Rock'.",
+	instructions: "The title of your content as it should appear within the graph",
 	name: 'sproutseo_open-graph[ogTitle]',
 	value: values.ogTitle,
 	errors: "",
@@ -44,12 +45,27 @@
 
 {{ forms.textField({
 	label: "URL"|t,
-	instructions: "The canonical URL of your object that will be used as its permanent ID in the graph.",
+	instructions: "The canonical URL of your content that will be used as its permanent ID in the graph.",
 	name: 'sproutseo_open-graph[ogUrl]',
 	value: values.ogUrl,
 	errors: "",
 	required: false
 }) }}
+
+</div>
+
+<div id="article" class="hidden">
+	
+	{{ forms.textField({
+		label: "Author"|t,
+		name: 'default_fields[ogAuthor]',
+		instructions: "An array of Facebook profile URLs or IDs of the authors for this article (separate multiple profiles with a comma)",
+		value: values.ogAuthor,
+		errors: "",
+		required: false
+	}) }}
+
+	<br/>
 
 </div>
 
@@ -61,7 +77,7 @@
 
 	{{ forms.textField({
 		label: "Site Name"|t,
-		instructions: "If your object is part of a larger web site, the name which should be displayed for the overall site.",
+		instructions: "If your content is part of a larger web site, the name which should be displayed for the overall site.",
 		name: 'sproutseo_open-graph[ogSiteName]',
 		value: values.ogSiteName,
 		errors: "",
@@ -70,7 +86,7 @@
 
 	{{ forms.textField({
 		label: "Description"|t,
-		instructions: "A one to two sentence description of your object.",
+		instructions: "A one to two sentence description of your content.",
 		name: 'sproutseo_open-graph[ogDescription]',
 		value: values.ogDescription,
 		errors: "",
@@ -79,7 +95,7 @@
 
 	{{ forms.textField({
 		label: "Locale"|t,
-		instructions: "The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.",
+		instructions: "The locale these tags are marked up in. Default is en_us.",
 		name: 'sproutseo_open-graph[ogLocale]',
 		value: values.ogLocale,
 		errors: "",
@@ -88,7 +104,7 @@
 
 	{{ forms.textField({
 		label: "Audio"|t,
-		instructions: "A URL to an audio file to accompany this object.",
+		instructions: "A URL to an audio file to accompany this content.",
 		name: 'sproutseo_open-graph[ogAudio]',
 		value: values.ogAudio,
 		errors: "",
@@ -97,7 +113,7 @@
 
 	{{ forms.textField({
 		label: "Video"|t,
-		instructions: "A URL to a video file that complements this object.",
+		instructions: "A URL to a video file that complements this content.",
 		name: 'sproutseo_open-graph[ogVideo]',
 		value: values.ogVideo,
 		errors: "",
@@ -109,11 +125,8 @@
 {% includeJsResource "sproutseo/js/open-graph.js" %}
 
 {% set js %}
-
 	new Craft.SproutSeoOpenGraph();
-
 {% endset %}
-
 {% includeJs js %}
 
 {#

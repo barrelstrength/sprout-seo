@@ -97,7 +97,7 @@
 
 	{{ forms.textField({
 		label: "Description"|t,
-		instructions: "A 140 word description of your content which will appear as the description in your search results."|t,
+		instructions: "A 160 character description of your content which will appear as the description in your search results."|t,
 		name: 'default_fields[description]',
 		value: default.description,
 		errors: "",
@@ -112,6 +112,24 @@
 		errors: "",
 		required: false
 	}) }}
+
+	{# {{ forms.textField({
+		label: "Author"|t,
+		instructions: "Article author"|t,
+		name: 'default_fields[author]',
+		value: default.author,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Publisher"|t,
+		instructions: "Your Google+ Page URL"|t,
+		name: 'default_fields[author]',
+		value: default.author,
+		errors: "",
+		required: false
+	}) }} #}
 
 </div>
 
@@ -182,6 +200,7 @@
 </div>
 
 <div id="default-location" class="hidden">
+
 	{{ forms.textField({
 		label: "Region"|t,
 		name: 'default_fields[region]',
@@ -220,9 +239,9 @@
 
 	{% set ogTypesOptions = {
 		'' : 'Select Open Graph Type...',
-			'website' : 'Website',
-			'article' : 'Article',
-		} %}
+		'article' : 'Article',
+		'website' : 'Website',
+	} %}
 
 	<h2>Open Graph Type</h2>
 
@@ -242,8 +261,8 @@
 
 	{{ forms.textField({
 		label: "Title"|t,
-		instructions: "The title of your object as it should appear within the graph, e.g., 'The Rock'.",
 		name: 'default_fields[ogTitle]',
+		instructions: "The title of your content as it should appear within the graph",
 		value: default.ogTitle,
 		errors: "",
 		required: false
@@ -269,7 +288,7 @@
 
 	{{ forms.textField({
 		label: "URL"|t,
-		instructions: "The canonical URL of your object that will be used as its permanent ID in the graph.",
+		instructions: "The canonical URL of your content that will be used as its permanent ID in the graph.",
 		name: 'default_fields[ogUrl]',
 		value: default.ogUrl,
 		errors: "",
@@ -280,9 +299,31 @@
 
 	<h2>Optional Metadata</h2>
 
+	<div id="facebook-article" class="hidden">
+
+		{{ forms.textField({
+			label: "Publisher"|t,
+			name: 'default_fields[ogPublisher]',
+			instructions: "A Facebook page URL or ID of the publishing entity",
+			value: default.ogPublisher,
+			errors: "",
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Author"|t,
+			name: 'default_fields[ogAuthor]',
+			instructions: "An array of Facebook profile URLs or IDs of the authors for this article (separate multiple profiles with a comma)",
+			value: default.ogAuthor,
+			errors: "",
+			required: false
+		}) }}
+
+	</div>
+
 	{{ forms.textField({
 		label: "Site Name"|t,
-		instructions: "If your object is part of a larger web site, the name which should be displayed for the overall site.",
+		instructions: "If your content is part of a larger web site, the name which should be displayed for the overall site.",
 		name: 'default_fields[ogSiteName]',
 		value: default.ogSiteName,
 		errors: "",
@@ -291,7 +332,6 @@
 
 	{{ forms.textField({
 		label: "Description"|t,
-		instructions: "A one to two sentence description of your object.",
 		name: 'default_fields[ogDescription]',
 		value: default.ogDescription,
 		errors: "",
@@ -300,7 +340,7 @@
 
 	{{ forms.textField({
 		label: "Locale"|t,
-		instructions: "The locale these tags are marked up in. Of the format language_TERRITORY. Default is en_US.",
+		instructions: "The locale these tags are marked up in. Default is en_us.",
 		name: 'default_fields[ogLocale]',
 		value: default.ogLocale,
 		errors: "",
@@ -309,7 +349,7 @@
 
 	{{ forms.textField({
 		label: "Audio"|t,
-		instructions: "A URL to an audio file to accompany this object.",
+		instructions: "A URL to an audio file to accompany this content.",
 		name: 'default_fields[ogAudio]',
 		value: default.ogAudio,
 		errors: "",
@@ -318,7 +358,7 @@
 
 	{{ forms.textField({
 		label: "Video"|t,
-		instructions: "A URL to a video file that complements this object.",
+		instructions: "A URL to a video file that complements this content.",
 		name: 'default_fields[ogVideo]',
 		value: default.ogVideo,
 		errors: "",
@@ -359,7 +399,7 @@
 	{{ forms.textField({
 		label: "Site"|t,
 		name: 'default_fields[twitterSite]',
-		instructions: "The Twitter username of the owner of this card's domain.",
+		instructions: "The Twitter username of the owner of this card's domain. @TwitterName",
 		value: default.twitterSite,
 		errors: "",
 		required: false
@@ -368,7 +408,7 @@
 	{{ forms.textField({
 		label: "Creator"|t,
 		name: 'default_fields[twitterCreator]',
-		instructions: "If the content of this card was authored by someone, include their Twitter username here.",
+		instructions: "If the content of this card was authored by someone, include their Twitter username here. @TwitterName",
 		value: default.twitterCreator,
 		errors: "",
 		required: false
@@ -417,7 +457,7 @@
 		{{ forms.textField({
 			label: "Player"|t,
 			name: 'default_fields[twitterPlayer]',
-			instructions: "HTTPS URL to iframe player. This must be a HTTPS URL which does not generate mixed content warnings in a web browser..",
+			instructions: "HTTPS URL to iframe player. This must be a HTTPS URL which does not generate mixed content warnings in a web browser.",
 			value: default.twitterPlayer,
 			errors: "",
 			required: false
@@ -426,7 +466,7 @@
 		{{ forms.textField({
 			label: "Stream"|t,
 			name: 'default_fields[twitterPlayerStream]',
-			instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrationlications directly. If provided, the stream must be delivered in the MPEG-4 container format.",
+			instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrations directly. If provided, the stream must be delivered in the MPEG-4 container format.",
 			value: default.twitterPlayerStream,
 			errors: "",
 			required: false

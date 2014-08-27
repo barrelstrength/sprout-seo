@@ -23,7 +23,7 @@
  {{ forms.textField({
 	 label: "Site"|t,
 	 name: 'sproutseo_twitter[twitterSite]',
-	 instructions: "The Twitter username of the owner of this card's domain.",
+	 instructions: "The Twitter username of the owner of this card's domain. @TwitterName",
 	 value: values.twitterSite,
 	 errors: "",
 	 required: false
@@ -32,7 +32,7 @@
  {{ forms.textField({
 	 label: "Creator"|t,
 	 name: 'sproutseo_twitter[twitterCreator]',
-	 instructions: "If the content of this card was authored by someone, include their Twitter username here.",
+	 instructions: "If the content of this card was authored by someone, include their Twitter username here. @TwitterName",
 	 value: values.twitterCreator,
 	 errors: "",
 	 required: false
@@ -81,50 +81,49 @@
 
 	<hr>
 
-	 {{ forms.textField({
-		 label: "Stream"|t,
-		 name: 'sproutseo_twitter[twitterPlayerStream]',
-		 instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrationlications directly. If provided, the stream must be delivered in the MPEG-4 container format.",
-		 value: values.twitterPlayerStream,
-		 errors: "",
-		 required: false
-	 }) }}
+	{{ forms.textField({
+		label: "Stream"|t,
+		name: 'sproutseo_twitter[twitterPlayerStream]',
+		instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrations directly. If provided, the stream must be delivered in the MPEG-4 container format.",
+		value: values.twitterPlayerStream,
+		errors: "",
+		required: false
+	}) }}
 
-	 {{ forms.textField({
-		 label: "Stream Content Type"|t,
-		 name: 'sproutseo_twitter[twitterPlayerStreamContentType]',
-		 instructions: "The MIME type subtype combination that describes the content contained in twitter player stream.",
-		 value: values.twitterPlayerStreamContentType,
-		 errors: "",
-		 required: false
-	 }) }}
+	{{ forms.textField({
+		label: "Stream Content Type"|t,
+		name: 'sproutseo_twitter[twitterPlayerStreamContentType]',
+		instructions: "The MIME type subtype combination that describes the content contained in twitter player stream.",
+		value: values.twitterPlayerStreamContentType,
+		errors: "",
+		required: false
+	}) }}
 
-	 {{ forms.textField({
-		 label: "Height"|t,
-		 name: 'sproutseo_twitter[twitterPlayerHeight]',
-		 instructions: "Height of IFRAME specified in twitter player in pixels.",
-		 value: values.twitterPlayerHeight,
-		 errors: "",
-		 required: false
-	 }) }}
+	{{ forms.textField({
+		label: "Height"|t,
+		name: 'sproutseo_twitter[twitterPlayerHeight]',
+		instructions: "Height of IFRAME specified in twitter player in pixels.",
+		value: values.twitterPlayerHeight,
+		errors: "",
+		required: false
+	}) }}
 
-	 {{ forms.textField({
-		 label: "Width"|t,
-		 name: 'sproutseo_twitter[twitterPlayerWidth]',
-		 instructions: 'Width of IFRAME specified in twitter player in pixels.',
-		 value: values.twitterPlayerWidth,
-		 errors: "",
-		 required: false
-	 }) }}
+	{{ forms.textField({
+		label: "Width"|t,
+		name: 'sproutseo_twitter[twitterPlayerWidth]',
+		instructions: 'Width of IFRAME specified in twitter player in pixels.',
+		value: values.twitterPlayerWidth,
+		errors: "",
+		required: false
+	}) }}
 
- </div>
+</div>
 
 {% includeJsResource "sproutseo/js/twitter-card.js" %}
 
 {% set js %}
-
+	
 	new Craft.SproutSeoTwitterCard();
 
 {% endset %}
-
 {% includeJs js %}
