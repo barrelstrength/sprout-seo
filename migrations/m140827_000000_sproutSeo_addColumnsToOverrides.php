@@ -56,12 +56,6 @@ class m140827_000000_sproutSeo_addColumnsToOverrides extends BaseMigration
 			// check if the column does NOT exist
 			if (!craft()->db->columnExists($tableName, $columnName))
 			{
-				// add the column to the table
-				$this->addColumn($tableName, $columnName, array(
-						'column' => $columnType,
-						'required' => false)
-				);
-
 				$this->addColumnAfter($tableName, $columnName, array(
 					'column' => $columnType,
 					'required' => false
