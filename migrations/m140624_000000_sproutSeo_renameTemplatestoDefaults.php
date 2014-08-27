@@ -15,13 +15,14 @@ class m140624_000000_sproutSeo_renameTemplatestoDefaults extends BaseMigration
 
             if (craft()->db->tableExists($oldTableName))
             {
+                MigrationHelper::dropIndexIfExists('sproutseo_templates', array('name', 'handle'), true);
+                
                 SproutSeoPlugin::log("Old table `$oldTableName` does exist.", LogLevel::Info, true);
                 SproutSeoPlugin::log("Renaming the `$oldTableName` table.", LogLevel::Info, true);
 
                 // Rename table
                 $this->renameTable($oldTableName, $newTableName);
 
-                MigrationHelper::dropIndexIfExists('sproutseo_templates', array('name', 'handle'), true);
                 $this->createIndex('sproutseo_defaults', 'name,handle', true);
 
                 SproutSeoPlugin::log("`$oldTableName` table has been renamed to `$newTableName`.", LogLevel::Info, true);

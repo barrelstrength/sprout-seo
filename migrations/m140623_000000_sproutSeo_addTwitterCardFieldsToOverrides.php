@@ -41,10 +41,6 @@ class m140623_000000_sproutSeo_addTwitterCardFieldsToOverrides extends BaseMigra
 
 				// log that we created the new column
 				SproutSeoPlugin::log("Created the `$columnName` in the `$tableName` table.", LogLevel::Info, true);
-
-				$this->addForeignKey('sproutseo_overrides', 'twitterImage', 'assetfiles', 'id');
-
-				SproutSeoPlugin::log('Added twitterImage FK to sproutseo_overrides table.', LogLevel::Info, true);
 			}
 
 			// if the column already exists in the table

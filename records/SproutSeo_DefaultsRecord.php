@@ -86,19 +86,19 @@ class SproutSeo_DefaultsRecord extends BaseRecord
 	*
 	* @return multitype:multitype:string boolean
 	*/
-	public function defineRelations()
-	{
-		return array (
-			'ogImage' => array (
-				static::BELONGS_TO,
-				'AssetFileRecord'
-			),
-			'twitterImage' => array (
-				static::BELONGS_TO,
-				'AssetFileRecord'
-			)
-		);
-	}
+	// public function defineRelations()
+	// {
+	// 	return array (
+	// 		'ogImage' => array (
+	// 			static::BELONGS_TO,
+	// 			'AssetFileRecord'
+	// 		),
+	// 		'twitterImage' => array (
+	// 			static::BELONGS_TO,
+	// 			'AssetFileRecord'
+	// 		)
+	// 	);
+	// }
 
 	/**
 	* Create a new instance of the current class. This allows us to

@@ -4,7 +4,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m140827_000000_sproutSeo_updateOgImageForeignKeys extends BaseMigration
+class m140827_000000_sproutSeo_addOgImageForeignKeys extends BaseMigration
 {
 	/**
 	 * Any migration code in here is wrapped inside of a transaction.
@@ -13,8 +13,8 @@ class m140827_000000_sproutSeo_updateOgImageForeignKeys extends BaseMigration
 	 */
 	public function safeUp()
 	{
-		$this->addForeignKey('sproutseo_defaults', 'ogImage', 'assetfiles', 'id');
-		$this->addForeignKey('sproutseo_overrides', 'ogImage', 'assetfiles', 'id');
+		// $this->addForeignKey('sproutseo_defaults', 'id', 'assetfiles', 'id');
+		// $this->addForeignKey('sproutseo_overrides', 'id', 'assetfiles', 'id');
 
 		SproutSeoPlugin::log('Added FK to assetfiles table.', LogLevel::Info, true);
 
