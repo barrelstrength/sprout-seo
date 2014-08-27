@@ -18,10 +18,8 @@ class m140623_000000_sproutSeo_addTwitterCardFieldsToTemplates extends BaseMigra
 
 		// specify columns and AttributeType
 		$newColumns = array (
-			'twitterSummaryImageSource'           => ColumnType::Varchar,
-			'twitterSummaryLargeImageImageSource' => ColumnType::Varchar,
-			'twitterPhotoImageSource'             => ColumnType::Varchar,
-			'twitterPlayerImageSource'            => ColumnType::Varchar,
+			'twitterCard'                         => ColumnType::Varchar,
+			'twitterImage'                        => ColumnType::Varchar,
 			'twitterPlayer'                       => ColumnType::Varchar,
 			'twitterPlayerStream'                 => ColumnType::Varchar,
 			'twitterPlayerStreamContentType'      => ColumnType::Varchar,
