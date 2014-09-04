@@ -70,6 +70,11 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
 
+		// Make sure all of our images are strings (twitter/og)
+		// We need to do this in case another seo field with images exists
+		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
+		$attributes['ogImage'] = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
+
 		// If our override entry exists update it,
 		// if not create it
 		if ($model->entryId)

@@ -30,7 +30,7 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 	public function onAfterElementSave()
 	{
 		// grab only the opengraph fields
-		$fields = $_POST['fields']['sproutseo_opengraph'];
+		$fields = $_POST['fields']['sproutseo_fields'];
 
 		// Make sure we are actually submitting our field
 		if ( ! isset($fields)) return;
@@ -74,7 +74,9 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $fields);
 
-		// set ogImage from array to string
+		// Make sure all of our images are strings (twitter/og)
+		// We need to do this in case another seo field with images exists
+		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 		$attributes['ogImage'] = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
 
 		// If our override entry exists update it,
@@ -128,7 +130,7 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);
 		$name = rtrim($name, "]");
-		$name = "sproutseo_opengraph[$name]";
+		$name = "sproutseo_fields[$name]";
 
 		return craft()->templates->render('sproutseo/_cp/fields/open-graph', $variables);
 	}
