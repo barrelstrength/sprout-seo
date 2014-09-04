@@ -507,7 +507,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// blank nomatter what.  We really just need to know we are looping through
 		// the samme model for each of the levels of overrides or templates
 		foreach ($entryOverrides->getAttributes() as $key => $value)
-		{
+		{	
 			if ($entryOverrides->getAttribute($key))
 			{
 				$metaValues[$key] = $value;
@@ -530,6 +530,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				$metaValues[$key] = '';
 			}
 		}
+
 
 		// Modify our Assets to reference their URLs
 		if (!empty($metaValues['ogImage']))
@@ -624,7 +625,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$meta = array();
 		foreach ($metaValues as $name => $value)
 		{
-			$meta[$metaNames[$name]] = $value;
+			// Escape the values that might contain quotes
+			$meta[$metaNames[$name]] = htmlspecialchars($value, ENT_QUOTES, craft()->templates->getTwig()->getCharset());
 		}
 
 		return $meta;
