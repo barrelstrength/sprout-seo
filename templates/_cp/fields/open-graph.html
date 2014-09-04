@@ -9,7 +9,7 @@
 } %}
 
 {{ forms.selectField({
-	name: 'sproutseo_opengraph[ogType]',
+	name: 'sproutseo_fields[ogType]',
 	options: ogTypesOptions,
 	value: values.ogType,
 	errors: "",
@@ -19,7 +19,7 @@
 {{ forms.textField({
 	label: "Title"|t,
 	instructions: "The title of your content as it should appear within the graph",
-	name: 'sproutseo_opengraph[ogTitle]',
+	name: 'sproutseo_fields[ogTitle]',
 	value: values.ogTitle,
 	errors: "",
 	required: false
@@ -33,7 +33,7 @@
 		sourceElementId: values.ogImage,
 		elementType: elementType,
 		id: 'ogImage',
-		name: 'sproutseo_opengraph[ogImage]',
+		name: 'sproutseo_fields[ogImage]',
 		jsClass: 'Craft.AssetSelectInput',
 		addButtonLabel: 'Select Image',
 		limit: 1,
@@ -46,7 +46,7 @@
 {{ forms.textField({
 	label: "URL"|t,
 	instructions: "The canonical URL of your content that will be used as its permanent ID in the graph.",
-	name: 'sproutseo_opengraph[ogUrl]',
+	name: 'sproutseo_fields[ogUrl]',
 	value: values.ogUrl,
 	errors: "",
 	required: false
@@ -58,7 +58,7 @@
 	
 	{{ forms.textField({
 		label: "Author"|t,
-		name: 'default_fields[ogAuthor]',
+		name: 'sproutseo_fields[ogAuthor]',
 		instructions: "An array of Facebook profile URLs or IDs of the authors for this article (separate multiple profiles with a comma)",
 		value: values.ogAuthor,
 		errors: "",
@@ -78,7 +78,7 @@
 	{{ forms.textField({
 		label: "Site Name"|t,
 		instructions: "If your content is part of a larger web site, the name which should be displayed for the overall site.",
-		name: 'sproutseo_opengraph[ogSiteName]',
+		name: 'sproutseo_fields[ogSiteName]',
 		value: values.ogSiteName,
 		errors: "",
 		required: false
@@ -87,7 +87,7 @@
 	{{ forms.textField({
 		label: "Description"|t,
 		instructions: "A one to two sentence description of your content.",
-		name: 'sproutseo_opengraph[ogDescription]',
+		name: 'sproutseo_fields[ogDescription]',
 		value: values.ogDescription,
 		errors: "",
 		required: false
@@ -96,7 +96,7 @@
 	{{ forms.textField({
 		label: "Locale"|t,
 		instructions: "The locale these tags are marked up in. Default is en_us.",
-		name: 'sproutseo_opengraph[ogLocale]',
+		name: 'sproutseo_fields[ogLocale]',
 		value: values.ogLocale,
 		errors: "",
 		required: false
@@ -105,7 +105,7 @@
 	{{ forms.textField({
 		label: "Audio"|t,
 		instructions: "A URL to an audio file to accompany this content.",
-		name: 'sproutseo_opengraph[ogAudio]',
+		name: 'sproutseo_fields[ogAudio]',
 		value: values.ogAudio,
 		errors: "",
 		required: false
@@ -114,7 +114,7 @@
 	{{ forms.textField({
 		label: "Video"|t,
 		instructions: "A URL to a video file that complements this content.",
-		name: 'sproutseo_opengraph[ogVideo]',
+		name: 'sproutseo_fields[ogVideo]',
 		value: values.ogVideo,
 		errors: "",
 		required: false
