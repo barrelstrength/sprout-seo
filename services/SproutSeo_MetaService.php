@@ -625,8 +625,15 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$meta = array();
 		foreach ($metaValues as $name => $value)
 		{
-			// Escape the values that might contain quotes
-			$meta[$metaNames[$name]] = htmlspecialchars($value, ENT_QUOTES, craft()->templates->getTwig()->getCharset());
+			if (is_string($value)) 
+			{
+				// Escape the values that might contain quotes
+				$meta[$metaNames[$name]] = htmlspecialchars($value, ENT_QUOTES, craft()->templates->getTwig()->getCharset());
+			}
+			else
+			{
+				$meta[$metaNames[$name]] = $value;
+			}
 		}
 
 		return $meta;
