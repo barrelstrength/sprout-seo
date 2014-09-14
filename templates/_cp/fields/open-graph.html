@@ -1,0 +1,142 @@
+{% import "_includes/forms" as forms %}
+
+<div class="sproutseo-fields" id="open-graph">
+
+{% set ogTypesOptions = {
+	'' : 'Select Open Graph Type...',
+	'article' : 'Article',
+	'website' : 'Website',
+} %}
+
+{{ forms.selectField({
+	name: 'sproutseo_fields[ogType]',
+	options: ogTypesOptions,
+	value: values.ogType,
+	errors: "",
+	required: false
+}) }}
+
+{{ forms.textField({
+	label: "Title"|t,
+	instructions: "The title of your content as it should appear within the graph",
+	name: 'sproutseo_fields[ogTitle]',
+	value: values.ogTitle,
+	errors: "",
+	required: false
+}) }}
+
+{% if assetsSourceExists %}
+	{{ forms.field({
+		label: 'Image',
+		}, forms.elementSelect({
+		elements: ogImageElements,
+		sourceElementId: values.ogImage,
+		elementType: elementType,
+		id: 'ogImage',
+		name: 'sproutseo_fields[ogImage]',
+		jsClass: 'Craft.AssetSelectInput',
+		addButtonLabel: 'Select Image',
+		limit: 1,
+		criteria: {"localeEnabled":null}
+	})) }}
+{% else %}
+	<p class="error">No assets sources currently exist. <a href="Create one on the {{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
+{% endif %}
+
+{{ forms.textField({
+	label: "URL"|t,
+	instructions: "The canonical URL of your content that will be used as its permanent ID in the graph.",
+	name: 'sproutseo_fields[ogUrl]',
+	value: values.ogUrl,
+	errors: "",
+	required: false
+}) }}
+
+</div>
+
+<div id="article" class="hidden">
+	
+	{{ forms.textField({
+		label: "Author"|t,
+		name: 'sproutseo_fields[ogAuthor]',
+		instructions: "An array of Facebook profile URLs or IDs of the authors for this article (separate multiple profiles with a comma)",
+		value: values.ogAuthor,
+		errors: "",
+		required: false
+	}) }}
+
+	<br/>
+
+</div>
+
+<div id="optional-metadata">
+
+	<hr>
+
+	<h2>Optional Metadata</h2>
+
+	{{ forms.textField({
+		label: "Site Name"|t,
+		instructions: "If your content is part of a larger web site, the name which should be displayed for the overall site.",
+		name: 'sproutseo_fields[ogSiteName]',
+		value: values.ogSiteName,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Description"|t,
+		instructions: "A one to two sentence description of your content.",
+		name: 'sproutseo_fields[ogDescription]',
+		value: values.ogDescription,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Locale"|t,
+		instructions: "The locale these tags are marked up in. Default is en_us.",
+		name: 'sproutseo_fields[ogLocale]',
+		value: values.ogLocale,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Audio"|t,
+		instructions: "A URL to an audio file to accompany this content.",
+		name: 'sproutseo_fields[ogAudio]',
+		value: values.ogAudio,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Video"|t,
+		instructions: "A URL to a video file that complements this content.",
+		name: 'sproutseo_fields[ogVideo]',
+		value: values.ogVideo,
+		errors: "",
+		required: false
+	}) }}
+
+</div>
+
+{% includeJsResource "sproutseo/js/open-graph.js" %}
+
+{% set js %}
+	new Craft.SproutSeoOpenGraph();
+{% endset %}
+{% includeJs js %}
+
+{#
+<meta property="og:title" content="Open Graph protocol" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://ogp.me/" />
+<meta property="og:image" content="http://ogp.me/logo.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="300" />
+<meta property="og:image:height" content="300" />
+<meta property="og:description" content="The Open Graph protocol enables any web page to become a rich object in a social graph." />
+<meta property="fb:app_id" content="115190258555800" />
+#}

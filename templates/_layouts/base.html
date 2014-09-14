@@ -1,0 +1,37 @@
+{% extends "_layouts/cp" %}
+
+{% set title = craft.SproutSeo.name %}
+
+{% set crumbs = [
+  { label: craft.sproutseo.name, url: url('sproutseo/defaults') }
+] %}
+
+{# Only display these tabs at the top level #}
+{% if craft.request.getSegment(3) == "" and craft.request.getSegment(2) != "settings" %}
+
+{% set tabs = {
+    defaults: {
+      label: "Defaults"|t,
+      url: cpUrl('sproutseo/defaults')
+    },
+    sitemap: {
+      label: "Sitemap"|t,
+      url: cpUrl('sproutseo/sitemap'),
+    }
+} %}
+
+{% endif %}
+
+{% set extraPageHeaderHtml %}
+  <a class="btn settings icon" href="{{ url('sproutseo/settings') }}" title="{{ 'Settings'|t }}"></a>
+{% endset %}
+
+{% set content %}
+
+  {{ body }}
+
+  {% include 'sproutseo/_partials/brand/footer' %}
+
+{% endset %}
+
+{% includeCssResource "sproutseo/css/brand.css" %}

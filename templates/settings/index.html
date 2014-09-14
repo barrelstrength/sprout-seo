@@ -1,0 +1,39 @@
+{% extends "sproutseo/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set body %}
+
+<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
+  <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
+  <input type="hidden" name="redirect" value="sproutseo/settings">
+  
+  <div id="settings-seo">
+
+    {% namespace 'settings' %} 
+      {% include 'sproutseo/settings/_tabs/defaults' %}
+    {% endnamespace %}
+
+  </div>
+
+  <div id="settings-sitemap" class="hidden">
+
+    {% namespace 'settings' %} 
+      {% include 'sproutseo/settings/_tabs/sitemap' %}
+    {% endnamespace %}
+
+  </div>
+
+  <div id="settings-cp" class="hidden">
+
+    {% namespace 'settings' %} 
+      {% include 'sproutseo/settings/_tabs/cp' %}
+    {% endnamespace %}
+
+  </div>
+
+  <div class="buttons">
+    <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+  </div>
+</form>
+
+{% endset %}

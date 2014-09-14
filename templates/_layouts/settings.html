@@ -1,0 +1,28 @@
+{% extends "_layouts/cp" %}
+
+{% set title  = "Settings" %}
+
+{% set crumbs = [
+  { label: "Sprout SEO"|t, url: url('sproutseo') }
+] %}
+
+{% set tabs = {
+    defaults: {
+        label: "Meta Defaults"|t,
+        url: "#settings-seo"
+    },
+    general: {
+        label: "Control Panel"|t,
+        url: "#settings-cp"
+    }
+} %}
+
+{% set content %}
+
+  {{ body }}
+
+  {% include 'sproutseo/_partials/brand/footer' %}
+
+{% endset %}
+
+{% includeCssResource "sproutseo/css/brand.css" %}

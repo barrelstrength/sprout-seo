@@ -1,0 +1,22 @@
+
+<h2>Your Sitemap Template</h2>
+
+<p class="instructions">This is the template where your sitemap file will be saved.</p>
+<p><input type="text" style="width:96%;padding:10px;" name="sitemapTemplate" value="{{ settings.sitemapTemplate }}" placeholder="sitemap.xml"></p>
+
+
+<h2>Services to Ping</h2>
+
+{% set pingServices = {
+  'ask': 'Ask.com',
+  'baidu': 'Baidu',
+  'bing': 'Bing/Yahoo',
+  'google': 'Google',
+  'yandex': 'Yandex',
+} %}
+
+{{ forms.checkboxSelectField({
+  name: 'pingServices',
+  options: pingServices,
+  values: (settings.pingServices is defined ? settings.pingServices : '')
+}) }}

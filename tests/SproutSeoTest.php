@@ -7,7 +7,7 @@ class SproutSeoTest extends BaseTest
 {
 	protected $config;
 	protected $settings;
-	protected $sproutSeoService;
+	protected $sproutSeoMetaService;
 
 	public function setUp()
 	{
@@ -39,10 +39,10 @@ class SproutSeoTest extends BaseTest
 	 * @beginTestSuite
 	 */
 
-	public function testNewModel()
+	public function testNewMetaModel()
 	{
-		// Dummy test since $this->sproutSeoService->newModel() is not currently testable
-		$this->assertTrue(true);
+		// Dummy test since $this->sproutSeo_meta->newMetaModel() is not currently testable
+		$this->assertTrue(false);
 	}
 
 	/*
@@ -57,9 +57,9 @@ class SproutSeoTest extends BaseTest
 
 	protected function loadServices()
 	{
-		require_once __DIR__ . '/../services/SproutSeoService.php';
+		require_once __DIR__ . '/../services/SproutSeo_MetaService.php';
 
-		$this->sproutSeoService = new SproutSeoService(true, true);
+		$this->sproutSeoMetaService = new SproutSeo_MetaService(true, true);
 	}
 
 	protected function inspect($data)

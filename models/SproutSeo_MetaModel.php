@@ -1,14 +1,18 @@
 <?php
 namespace Craft;
 
-class SproutSeo_OverridesModel extends BaseModel
+class SproutSeo_MetaModel extends BaseModel
 {
 
 	protected function defineAttributes()
 	{
 		return array(
 			'id'             => array(AttributeType::Number),
-			'entryId'        => array(AttributeType::Number),
+			'name'           => array(AttributeType::String),
+			'handle'         => array(AttributeType::String),
+			'appendSiteName' => array(AttributeType::String),
+			'globalFallback' => array(AttributeType::Bool),
+
 			'title'          => array(AttributeType::String),
 			'description'    => array(AttributeType::String),
 			'keywords'       => array(AttributeType::String),
@@ -20,6 +24,7 @@ class SproutSeo_OverridesModel extends BaseModel
 
 			'region'         => array(AttributeType::String),
 			'placename'      => array(AttributeType::String),
+			'position'       => array(AttributeType::String),
 			'latitude'       => array(AttributeType::String),
 			'longitude'      => array(AttributeType::String),
 
@@ -31,6 +36,8 @@ class SproutSeo_OverridesModel extends BaseModel
 			'ogImageWidth'   => array(AttributeType::String),
 			'ogImageHeight'  => array(AttributeType::String),
 			'ogImageType'    => array(AttributeType::String),
+			'ogAuthor'       => array(AttributeType::String),
+			'ogPublisher'    => array(AttributeType::String),
 			'ogSiteName'     => array(AttributeType::String),
 			'ogDescription'  => array(AttributeType::String),
 			'ogAudio'        => array(AttributeType::String),
@@ -44,6 +51,7 @@ class SproutSeo_OverridesModel extends BaseModel
 			'twitterTitle' => array(AttributeType::String),
 			'twitterCreator' => array(AttributeType::String),
 			'twitterDescription' => array(AttributeType::String),
+
 			'twitterUrl' => array(AttributeType::String),
 			'twitterImage' => array(AttributeType::String),
 
@@ -55,5 +63,4 @@ class SproutSeo_OverridesModel extends BaseModel
 			'twitterPlayerHeight' => array(AttributeType::String),
 		);
 	}
-	
 }

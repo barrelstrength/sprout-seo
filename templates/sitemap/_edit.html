@@ -1,0 +1,89 @@
+{% extends "sproutseo/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+
+{% set selectedTab = 'sitemap' %}
+
+{% set priorityList = {
+    '1.0': '1.0 ↑ Highest'|t,
+    '0.9': '0.9',
+    '0.8': '0.8',
+    '0.7': '0.7',
+    '0.6': '0.6',
+    '0.5': '0.5',
+    '0.4': '0.4',
+    '0.3': '0.3',
+    '0.2': '0.2',
+    '0.1': '0.1',
+    '0.0': '0.0 ↓ Lowest'|t
+} %}
+
+{% set frequencyList = {
+    'always': 'Always'|t,
+    'hourly': 'Hourly'|t,
+    'daily': 'Daily'|t,
+    'weekly': 'Weekly'|t,
+    'monthly': 'Monthly'|t,
+    'yearly': 'Yearly'|t,
+    'never': 'Never'|t
+} %}
+
+{% set allSectionsWithUrls = craft.sproutSeo.getAllSectionsWithUrls() %}
+{% set customPages = craft.sproutSeo.getAllCustomPages() %}
+
+{% set body %}
+
+<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
+    <input type="hidden" name="action" value="sproutSeo/sitemap/saveCustomPage">
+    <input type="hidden" name="redirect" value="sproutseo/sitemap">
+
+    <h2>New Custom Page</h2>
+
+		{{ forms.textField({
+		  name: 'url',
+		  label: 'Custom URL',
+		  placeholder: "http://...",
+		  errors: "",
+		  required: true,
+		}) }}
+
+		{{ forms.selectField({
+		  name: 'priority',
+		  label: 'Priority',
+		  options: priorityList,
+		  value: (sitemap.priority is defined ? sitemap.priority : 0.5),
+		  errors: "",
+		  required: false
+		}) }}
+
+		{{ forms.selectField({
+		  name: 'changeFrequency',
+		  label: 'Change Frequency',
+		  options: frequencyList,
+		  value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
+		  errors: "",
+		  required: false
+		}) }}
+
+		{{ forms.checkboxField({
+		  name: 'enabled',
+		  label: 'Enabled',
+		  errors: "",
+		  checked: true,
+		  required: true,
+		}) }}
+
+    <div class="buttons">
+        <input type="submit" class="btn submit" value="{{ 'Add Custom Page'|t }}">
+    </div>
+
+</form>
+
+{% endset %}
+
+{% includeJsResource "sproutseo/js/sitemap.js" %}
+
+{% set js %}
+    new Craft.SproutSeoSitemap();
+{% endset %}
+
+{% includeJs js %}

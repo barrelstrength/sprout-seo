@@ -1,0 +1,72 @@
+{% extends "sproutseo/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+
+{% set defaults = craft.sproutSeo.allDefaults %}
+
+{% set body %}
+
+<style>
+.included-fields {
+	color: #999;
+}
+</style>
+
+{% if defaults is empty %}
+
+	<h3>Create your first meta-data default.</h3>
+
+{% else %}
+
+<table class="data" id="defaults">
+	<thead>
+		<th width="15%">Name</th>
+		<th width="15%">Handle</th>
+		<th width="70%"></th>
+		<td class="thin"></td>
+	</thead>
+
+	{% for default in defaults %}
+
+	<tr id="results" data-id="{{ default.id }}" data-name="{{ default.name|t }}">
+		<td>
+			<a href="{{ url('sproutseo/defaults/' ~ default.id) }}">
+				<strong>{{ default.name }}</strong>
+			</a>
+		</td>
+		<td><code>{{ default.handle }}</code></td>
+		<td class="included-fields">
+
+		</td>
+		<td class="thin">
+			<a class="delete icon" title="Delete"></a>
+		</td>
+	</tr>
+
+	{% endfor %}
+
+</table>
+
+{% endif %}
+
+<div class="buttons">
+	<a class="btn submit add icon" href="{{ url('sproutseo/defaults/new') }}">New Default</a>
+</div>
+
+{% endset %}
+
+{% set js %}
+	new Craft.AdminTable({
+		tableSelector: '#defaults',
+		deleteAction: 'sproutSeo/defaults/deleteDefaults',
+		onDeleteObject: function(id)
+		{
+			if($('#defaults').find('tbody').find('tr').size() == 0)
+			{
+				$('#defaults').show();
+				$('#defaults').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4">No results found.</td></tr>');
+			}
+		}
+	});
+
+{% endset %}
+{% includeJs js %}

@@ -1,0 +1,31 @@
+
+{{ forms.selectField({
+  label: 'Select the character that will be used between Title segments'|t,
+  id: 'seoDivider',
+  name: 'seoDivider',
+  instructions: "This character will be used in between your title segments, i.e. Blog Post Title – Website Name."|t,
+  options: { 
+    1 : {
+      'value' : '-',
+      'label' : 'Entry Title - ' ~ siteName
+    },
+    2 : {
+      'value' : '•',
+      'label' : 'Entry Title • ' ~ siteName
+    },
+    3 : {
+      'value' : '|',
+      'label' : 'Entry Title | ' ~ siteName
+    },
+    4 : {
+      'value' : '/',
+      'label' : 'Entry Title / ' ~ siteName
+    },
+    5 : {
+      'value' : ':',
+      'label' : 'Entry Title : ' ~ siteName
+    }
+  },
+  value : settings.seoDivider,
+  errors: ''  
+}) }}

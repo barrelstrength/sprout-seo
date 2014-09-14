@@ -1,14 +1,27 @@
 <?php
 namespace Craft;
 
-class SproutSeo_OverridesModel extends BaseModel
+class SproutSeo_DefaultsRecord extends BaseRecord
 {
+	public function getTableName()
+	{
+		return 'sproutseo_defaults';
+	}
 
 	protected function defineAttributes()
 	{
 		return array(
-			'id'             => array(AttributeType::Number),
-			'entryId'        => array(AttributeType::Number),
+			'name' => array(
+				AttributeType::String,
+				'required' => true
+			),
+			'handle' => array(
+				AttributeType::String,
+				'required' => true
+			),
+			'appendSiteName' => array(AttributeType::String),
+			'globalFallback' => array(AttributeType::Bool),
+
 			'title'          => array(AttributeType::String),
 			'description'    => array(AttributeType::String),
 			'keywords'       => array(AttributeType::String),
@@ -27,23 +40,22 @@ class SproutSeo_OverridesModel extends BaseModel
 			'ogType'         => array(AttributeType::String),
 			'ogUrl'          => array(AttributeType::String),
 			'ogImage'        => array(AttributeType::String),
-			'ogImageSecure'  => array(AttributeType::String),
-			'ogImageWidth'   => array(AttributeType::String),
-			'ogImageHeight'  => array(AttributeType::String),
-			'ogImageType'    => array(AttributeType::String),
+			'ogAuthor'       => array(AttributeType::String),
+			'ogPublisher'    => array(AttributeType::String),
 			'ogSiteName'     => array(AttributeType::String),
 			'ogDescription'  => array(AttributeType::String),
 			'ogAudio'        => array(AttributeType::String),
 			'ogVideo'        => array(AttributeType::String),
 			'ogLocale'       => array(AttributeType::String),
 
-			// Store the Twitter Card Type and global fields
+			// Store the Twitter Card Type
 			// @TODO convert to enum with the proper choices
 			'twitterCard' => array(AttributeType::String),
 			'twitterSite' => array(AttributeType::String),
 			'twitterTitle' => array(AttributeType::String),
 			'twitterCreator' => array(AttributeType::String),
 			'twitterDescription' => array(AttributeType::String),
+
 			'twitterUrl' => array(AttributeType::String),
 			'twitterImage' => array(AttributeType::String),
 
@@ -55,5 +67,50 @@ class SproutSeo_OverridesModel extends BaseModel
 			'twitterPlayerHeight' => array(AttributeType::String),
 		);
 	}
-	
+
+	public function defineIndexes()
+	{
+		return array(
+			array(
+				'columns' => array(
+					'name',
+					'handle'
+					),
+				'unique' => true
+			),
+		);
+	}
+
+	/**
+	* Relationships
+	*
+	* @return multitype:multitype:string boolean
+	*/
+	// public function defineRelations()
+	// {
+	// 	return array (
+	// 		'ogImage' => array (
+	// 			static::BELONGS_TO,
+	// 			'AssetFileRecord'
+	// 		),
+	// 		'twitterImage' => array (
+	// 			static::BELONGS_TO,
+	// 			'AssetFileRecord'
+	// 		)
+	// 	);
+	// }
+
+	/**
+	* Create a new instance of the current class. This allows us to
+	* properly unit test our service layer.
+	*
+	* @return BaseRecord
+	*/
+	public function create()
+	{
+		$class = get_class($this);
+		$record = new $class();
+
+		return $record;
+	}
 }

@@ -1,0 +1,34 @@
+{% import "_includes/forms" as forms %}
+
+{% includeCssResource "sproutseo/css/fields.css" %}
+
+<div class="sproutseo-box">
+
+  {{ forms.textField({
+    label: "Title",
+    name: "sproutseo_fields[title]",
+    value: values.title
+  }) }}
+
+  {{ forms.textField({
+    label: "Description",
+    instructions: "This text will appear in the search results describing the individual page for this content.  Length: 160 words.",
+    name: "sproutseo_fields[description]",
+    value: values.description
+  }) }}
+
+  {{ forms.textField({
+    label: "Keywords",
+    instructions: 'A comma-seprated list of key words or phrases that describe this content',
+    name: "sproutseo_fields[keywords]",
+    value: values.keywords
+  }) }}
+
+  {# {{ forms.textField({
+    label: "Author",
+    instructions: 'Article Author',
+    name: "sproutseo_fields[author]",
+    value: values.keywords
+  }) }} #}
+
+</div>

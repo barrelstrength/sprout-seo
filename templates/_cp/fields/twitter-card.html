@@ -1,0 +1,130 @@
+{% import "_includes/forms" as forms %}
+
+<div class="sproutseo-fields" id="twitter-card">
+
+{% set twitterCardOptions = {
+	'' : 'Select Twitter Card Type...',
+	'summary' : 'Summary Card',
+	'summary-large-image' : 'Summary Card with Large Image',
+	'player' : 'Player Card',
+	'photo' : 'Photo Card',
+} %}
+
+{{ forms.selectField({
+	name: 'sproutseo_fields[twitterCard]',
+	options: twitterCardOptions,
+	value: (values.twitterCard is defined ? values.twitterCard : 'summary'),
+	errors: "",
+	required: false
+}) }}
+
+<hr>
+
+ {{ forms.textField({
+	 label: "Site"|t,
+	 name: 'sproutseo_fields[twitterSite]',
+	 instructions: "The Twitter username of the owner of this card's domain. @TwitterName",
+	 value: values.twitterSite,
+	 errors: "",
+	 required: false
+ }) }}
+
+ {{ forms.textField({
+	 label: "Creator"|t,
+	 name: 'sproutseo_fields[twitterCreator]',
+	 instructions: "If the content of this card was authored by someone, include their Twitter username here. @TwitterName",
+	 value: values.twitterCreator,
+	 errors: "",
+	 required: false
+ }) }}
+
+ {{ forms.textField({
+	 label: "Title"|t,
+	 name: 'sproutseo_fields[twitterTitle]',
+	 instructions: 'The title of your content as it should appear in the card.',
+	 value: values.twitterTitle,
+	 errors: "",
+	 required: false
+ }) }}
+
+ {{ forms.textareaField({
+	 label: "Description"|t,
+	 name: 'sproutseo_fields[twitterDescription]',
+	 instructions: 'A description of the content in a maximum of 200 characters.',
+	 value: values.twitterDescription,
+	 errors: "",
+	 required: false
+ }) }}
+
+{% if assetsSourceExists %}
+
+	{{ forms.field({
+		label: 'Image',
+		}, forms.elementSelect({
+		elements: twitterImageElements,
+		sourceElementId: values.twitterImage,
+		elementType: elementType,
+		id: 'twitterImage',
+		name: 'sproutseo_fields[twitterImage]',
+		jsClass: 'Craft.AssetSelectInput',
+		addButtonLabel: 'Select Image',
+		limit: 1,
+		criteria: {"localeEnabled":null}
+	})) }}
+
+{% else %}
+	<p class="error">No assets sources currently exist. <a href="Create one on the {{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
+{% endif %}
+
+</div>
+
+<div id="player" class="hidden">
+
+	<hr>
+
+	{{ forms.textField({
+		label: "Stream"|t,
+		name: 'sproutseo_fields[twitterPlayerStream]',
+		instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrations directly. If provided, the stream must be delivered in the MPEG-4 container format.",
+		value: values.twitterPlayerStream,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Stream Content Type"|t,
+		name: 'sproutseo_fields[twitterPlayerStreamContentType]',
+		instructions: "The MIME type subtype combination that describes the content contained in twitter player stream.",
+		value: values.twitterPlayerStreamContentType,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Height"|t,
+		name: 'sproutseo_fields[twitterPlayerHeight]',
+		instructions: "Height of IFRAME specified in twitter player in pixels.",
+		value: values.twitterPlayerHeight,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Width"|t,
+		name: 'sproutseo_fields[twitterPlayerWidth]',
+		instructions: 'Width of IFRAME specified in twitter player in pixels.',
+		value: values.twitterPlayerWidth,
+		errors: "",
+		required: false
+	}) }}
+
+</div>
+
+{% includeJsResource "sproutseo/js/twitter-card.js" %}
+
+{% set js %}
+	
+	new Craft.SproutSeoTwitterCard();
+
+{% endset %}
+{% includeJs js %}

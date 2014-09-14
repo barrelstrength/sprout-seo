@@ -7,19 +7,14 @@ class SproutSeoPlugin extends BasePlugin
 {
 	public function getName()
 	{
-		// The plugin name
 		$pluginName = Craft::t('Sprout SEO');
 
-		// @TODO - Can we find a way to move this to the BSDPluginHelper function?
-		// I can't seem to pass an object or find the object we are working with.
-		$pluginClassHandle = $this->getClassHandle(__CLASS__);
-
-		return BSDPluginHelper::getPluginName($pluginName, $pluginClassHandle);
+		return BSDPluginHelper::getPluginName($this, $pluginName);
 	}
 
 	public function getVersion()
 	{
-		return '0.6.2';
+		return '0.8.0';
 	}
 
 	public function getDeveloper()
@@ -39,14 +34,20 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
-		craft()->on('entries.saveEntry', array($this, 'onSaveEntry'));
-		craft()->on('content.saveContent', array($this, 'onSaveContent'));
+		craft()->on('entries.saveEntry', array(
+			$this,
+			'onSaveEntry'
+		));
+		craft()->on('content.saveContent', array(
+			$this,
+			'onSaveContent'
+		));
 	}
 
 	public function onSaveEntry(Event $event)
 	{
 		// @TODO
-		// Test and see if the Section Entry being saved belongs to 
+		// Test and see if the Section Entry being saved belongs to
 		// a Section that we want to ping for.
 		// Get Sitemap URL
 		// Call ping function
@@ -55,28 +56,22 @@ class SproutSeoPlugin extends BasePlugin
 	public function onSaveContent(Event $event)
 	{
 		// @TODO
-		// Test and see if the Section Entry being saved belongs to 
+		// Test and see if the Section Entry being saved belongs to
 		// a Section that we want to ping for.
 		// Get Sitemap
 		// Call ping function
 	}
 
-
 	protected function defineSettings()
 	{
+		// We are managing our settings on the CP Tab but storing them
+		// in the plugin table so in order to use getSettings() we need
+		// these defined here (I think)
 		return array(
 			'pluginNameOverride'  => AttributeType::String,
 			'appendSiteName'      => AttributeType::Bool,
-			'customGlobalValue'   => AttributeType::String,
 			'seoDivider'          => AttributeType::String,
 		);
-	}
-
-	public function getSettingsHtml()
-	{
-		return craft()->templates->render('sproutseo/_settings/settings', array(
-			'settings' => $this->getSettings()
-		));
 	}
 
 	/**
@@ -85,12 +80,46 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/fallbacks/new' =>
-			'sproutseo/fallbacks/_edit',
 
-			'sproutseo/fallbacks/(?P<fallbackId>\d+)' =>
-			'sproutseo/fallbacks/_edit',
+			/*
+			* @controller SproutSeo_DefaultsController
+			* @template   sproutseo/templates/defaults/_edit.html
+			*/
+			'sproutseo/defaults/new' => array(
+				'action' => 'sproutSeo/defaults/editDefault'
+			),
+
+			/*
+			* @controller SproutSeo_DefaultsController
+			* @template   sproutseo/templates/defaults/_edit.html
+			*/
+			'sproutseo/defaults/(?P<defaultId>\d+)' => array(
+				'action' => 'sproutSeo/defaults/editDefault'
+			),
+
+			/*
+			* @controller SproutSeo_SitemapController
+			* @template   sproutseo/templates/sitemap/index.html
+			*/
+			'sproutseo/sitemap' => array(
+				'action' => 'sproutSeo/sitemap/sitemapIndex'
+			),
+
+			/*
+			* @controller SproutSeo_SitemapController
+			* @template   sproutseo/templates/sitemap/_edit.html
+			*/
+			'sproutseo/sitemap/newPage' => array(
+				'action' => 'sproutSeo/sitemap/editSitemap'
+			),
+
+			/*
+			* @controller SproutSeo_SettingsController
+			* @template   sproutseo/templates/settings/index.html
+			*/
+			'sproutseo/settings' => array(
+				'action' => 'sproutSeo/settings/settingsIndex'
+			)
 		);
 	}
-
 }
