@@ -23,9 +23,7 @@ Craft.SproutSeoSitemap = Garnish.Base.extend(
 	{
 		this.$checkboxes = $('.sitemap-settings input[type="checkbox"]');
 		this.$selectDropdowns = $('.sitemap-settings select');
-
-
-		// this.$customPageUrls = $('.sitemap-settings input.sitemap-custom-url');
+		this.$customPageUrls = $('.sitemap-settings input.sitemap-custom-url');
 
 		// this.$addCustomPageButton = $('#add-custom-page');
 
