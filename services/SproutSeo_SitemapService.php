@@ -118,9 +118,14 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 				$url = craft()->getSiteUrl() . $entry['uri'];
 
+				$dateUpdated = new DateTime($entry['dateUpdated']);
+				$date = $dateUpdated->format('Y-m-d');
+				$time = $dateUpdated->format('h:m:s');
+				$lastMod = $date . 'T' . $time . 'Z';
+
 				$sitemap .= '<url>';
 				$sitemap .= '<loc>' . $url . '</loc>';
-				$sitemap .= '<lastmod>' . $entry['dateUpdated'] . '</lastmod>';
+				$sitemap .= '<lastmod>' . $lastMod . '</lastmod>';
 				$sitemap .= '<changefreq>' . $sitemapSettings['changeFrequency'] . '</changefreq>';
 				$sitemap .= '<priority>' . $sitemapSettings['priority'] . '</priority>';
 				$sitemap .= '</url>';
@@ -145,9 +150,14 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 			$url = $entry['url'];
 
+			$dateUpdated = new DateTime($entry['dateUpdated']);
+			$date = $dateUpdated->format('Y-m-d');
+			$time = $dateUpdated->format('h:m:s');
+			$lastMod = $date . 'T' . $time . 'Z';
+
 			$sitemap .= '<url>';
 			$sitemap .= '<loc>' . $url . '</loc>';
-			$sitemap .= '<lastmod>' . $entry['dateUpdated'] . '</lastmod>';
+			$sitemap .= '<lastmod>' . $lastMod . '</lastmod>';
 			$sitemap .= '<changefreq>' . $entry['changeFrequency'] . '</changefreq>';
 			$sitemap .= '<priority>' . $entry['priority'] . '</priority>';
 			$sitemap .= '</url>';
