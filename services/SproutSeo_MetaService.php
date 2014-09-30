@@ -536,15 +536,20 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		if (!empty($metaValues['ogImage']))
 		{
 			$ogImage = craft()->elements->getElementById($metaValues['ogImage']);
-			$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
-			$metaValues['ogImageWidth'] = $ogImage->width;
-			$metaValues['ogImageHeight'] = $ogImage->height;
-			$metaValues['ogImageType'] = $ogImage->mimeType;
 
-			if ($secureUrl) 
+			if (!empty($ogImage)) 
 			{
-				$metaValues['ogImageSecure'] = UrlHelper::getSiteUrl($ogImage->url, null, "https");
+				$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
+				$metaValues['ogImageWidth'] = $ogImage->width;
+				$metaValues['ogImageHeight'] = $ogImage->height;
+				$metaValues['ogImageType'] = $ogImage->mimeType;
+
+				if ($secureUrl) 
+				{
+					$metaValues['ogImageSecure'] = UrlHelper::getSiteUrl($ogImage->url, null, "https");
+				}
 			}
+			
 		}
 
 
@@ -553,7 +558,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		if (!empty($metaValues['twitterImage']))
 		{
 			$twitterImage = craft()->elements->getElementById($metaValues['twitterImage']);
-			$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+
+			if (!empty($twitterImage)) 
+			{
+				$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+			}
 		}
 
 
