@@ -566,7 +566,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 			if (!empty($twitterImage)) 
 			{
-				$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+				// check to see if Asset already has full Site Url in folder Url
+				if (strpos($twitterImage->url, UrlHelper::getSiteUrl()) !== false) {
+					$metaValues['twitterImage'] = $twitterImage->url;
+				} else {
+					$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+				}
 			}
 		}
 
