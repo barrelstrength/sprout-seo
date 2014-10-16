@@ -30,7 +30,7 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 	public function onAfterElementSave()
 	{
 		// grab only the opengraph fields
-		$fields = $_POST['fields']['sproutseo_fields'];
+		$fields = (isset($_POST['fields']['sproutseo_fields'])) ? $_POST['fields']['sproutseo_fields'] : null;
 
 		// Make sure we are actually submitting our field
 		if ( ! isset($fields)) return;
