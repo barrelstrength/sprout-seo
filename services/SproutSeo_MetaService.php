@@ -539,7 +539,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 			if (!empty($ogImage)) 
 			{
-				$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
+				// check to see if Asset already has full Site Url in folder Url
+				if (strpos($ogImage->url, UrlHelper::getSiteUrl()) !== false) {
+					$metaValues['ogImage'] = $ogImage->url;
+				} else {
+					$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
+				}
 				$metaValues['ogImageWidth'] = $ogImage->width;
 				$metaValues['ogImageHeight'] = $ogImage->height;
 				$metaValues['ogImageType'] = $ogImage->mimeType;
@@ -561,7 +566,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 			if (!empty($twitterImage)) 
 			{
-				$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+				// check to see if Asset already has full Site Url in folder Url
+				if (strpos($twitterImage->url, UrlHelper::getSiteUrl()) !== false) {
+					$metaValues['twitterImage'] = $twitterImage->url;
+				} else {
+					$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+				}
 			}
 		}
 
