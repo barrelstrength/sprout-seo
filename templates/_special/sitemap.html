@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+{% if entries is iterable %}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	{% for entry in entries %}
+	<url>
+		<loc>{{ entry.url }}</loc>
+		<lastmod>{{ entry.modified }}</lastmod>
+		<changefreq>{{ entry.frequency }}</changefreq>
+		<priority>{{ entry.priority }}</priority>
+	</url>
+	{% endfor %}
+
+</urlset>
+{% endif %}

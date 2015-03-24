@@ -72,102 +72,75 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		return $result;
 	}
 
-	public function getSitemap()
+	/**
+	 * Returns all URLs for a given sitemap or the rendered sitemap itself
+	 *
+	 * @param bool $rendered Whether to return the rendered sitemap or an array of URLs
+	 *
+	 * @throws Exception
+	 * @return array|string
+	 */
+	public function getSitemap($rendered=true)
 	{
-		$enabledSections = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_sitemap')
-			->where('enabled = :enabled', array(
-				'enabled' => 1
-			))
-			->queryAll();
+		$urls            = array();
+		$command         = craft()->db->createCommand()->from('sproutseo_sitemap')->where('enabled = 1');
+		$criteria        = craft()->elements->getCriteria(ElementType::Entry);
 
-		// Begin sitemap
-		// @TODO - let's break out this code so that we can return the full sitemap,
-		// or just the data so that someone could build it on their own
-		$sitemap = '<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+		/**
+		 * @var SproutSeo_SiteMapRecord[]
+		 */
+		$enabledSections = $command->queryAll();
 
-		// Loop through each of our enabled sections
 		foreach ($enabledSections as $key => $sitemapSettings)
 		{
+			$criteria->limit     = null;
+			$criteria->status    = 'live';
+			$criteria->sectionId = $sitemapSettings['sectionId'];
 
-			// Grab all of the entries associated with that section
-			// @TODO - how do we grab "LIVE" entries?  Do we need to update
-			// things to use the ElementCriteriaModel?
-			$entries = craft()->db->createCommand()
-				->select('elements_i18n.uri, elements_i18n.dateUpdated')
-				->from('elements_i18n AS elements_i18n')
-				->join('entries AS entries', 'entries.id = elements_i18n.elementId')
-				->where('elements_i18n.enabled = :enabled', array(
-					'enabled' => 1
-				))
-				->andWhere('entries.sectionId = :sectionId', array(
-					'sectionId' => $sitemapSettings['sectionId']
-				))
-				->queryAll();
+			/**
+			 * @var EntryModel[]
+			 */
+			$entries = $criteria->find();
 
-			// Loop through each entry
-			foreach ($entries as $key => $entry)
+			foreach ($entries as $entry)
 			{
-
-				// check if the uri is the Craft home page
-				if ($entry['uri'] == '__home__') {
-					$entry['uri'] = null;
-				}
-
-				$url = craft()->getSiteUrl() . $entry['uri'];
-
-				$dateUpdated = new DateTime($entry['dateUpdated']);
-				$date = $dateUpdated->format('Y-m-d');
-				$time = $dateUpdated->format('h:m:s');
-				$lastMod = $date . 'T' . $time . 'Z';
-
-				$sitemap .= '<url>';
-				$sitemap .= '<loc>' . $url . '</loc>';
-				$sitemap .= '<lastmod>' . $lastMod . '</lastmod>';
-				$sitemap .= '<changefreq>' . $sitemapSettings['changeFrequency'] . '</changefreq>';
-				$sitemap .= '<priority>' . $sitemapSettings['priority'] . '</priority>';
-				$sitemap .= '</url>';
-
+				$urls[$entry->getUrl()] = array(
+					'url'       => $entry->getUrl(),
+					'modified'  => $entry->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+					'priority'  => $sitemapSettings['priority'],
+					'frequency' => $sitemapSettings['changeFrequency'],
+				);
 			}
-
 		}
 
-		// query all of the custom URL's in the database that are enabled
 		$customUrls = craft()->db->createCommand()
-			->select('url, priority, changeFrequency, enabled, dateUpdated')
+			->select('url, priority, changeFrequency as frequency, dateUpdated')
 			->from('sproutseo_sitemap')
-			->where('enabled = :enabled', array(
-				'enabled' => 1
-			))
+			->where('enabled = 1')
 			->andWhere('url is not null')
 			->queryAll();
 
-		// Loop through each custom page
-		foreach ($customUrls as $key => $entry)
+		foreach ($customUrls as $customEntry)
 		{
-
-			$url = $entry['url'];
-
-			$dateUpdated = new DateTime($entry['dateUpdated']);
-			$date = $dateUpdated->format('Y-m-d');
-			$time = $dateUpdated->format('h:m:s');
-			$lastMod = $date . 'T' . $time . 'Z';
-
-			$sitemap .= '<url>';
-			$sitemap .= '<loc>' . $url . '</loc>';
-			$sitemap .= '<lastmod>' . $lastMod . '</lastmod>';
-			$sitemap .= '<changefreq>' . $entry['changeFrequency'] . '</changefreq>';
-			$sitemap .= '<priority>' . $entry['priority'] . '</priority>';
-			$sitemap .= '</url>';
-
+			$modified                  = new DateTime($customEntry['dateUpdated']);
+			$customEntry['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
+			$urls[$customEntry['url']] = $customEntry;
 		}
 
-		// End sitemap
-		$sitemap .= '</urlset>';
+		if ($rendered)
+		{
+			$path = craft()->path->getTemplatesPath();
 
-		return $sitemap;
+			craft()->path->setTemplatesPath(dirname(__FILE__).'/../templates/');
+
+			$source = craft()->templates->render('_special/sitemap', array('entries' => $urls));
+
+			craft()->path->setTemplatesPath($path);
+
+			return TemplateHelper::getRaw($source);
+		}
+
+		return $urls;
 	}
 
 	public function getAllSectionsWithUrls()

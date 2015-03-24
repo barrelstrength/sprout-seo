@@ -111,11 +111,9 @@ class SproutSeoVariable
   ## Sitemap Variables (Front-end)
   ## ------------------------------------------------------------
 
-  public function getSitemap()
+  public function getSitemap($rendered=true)
   {
-	$sitemap = craft()->sproutSeo_sitemap->getSitemap();
-
-	return new \Twig_Markup($sitemap, craft()->templates->getTwig()->getCharset());
+	return craft()->sproutSeo_sitemap->getSitemap($rendered);
   }
 
   ## ------------------------------------------------------------
