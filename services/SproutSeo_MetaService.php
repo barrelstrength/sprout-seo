@@ -532,18 +532,23 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			}
 		}
 
-
 		// Modify our Assets to reference their URLs
 		if (!empty($metaValues['ogImage']))
 		{
+			$urlStrStart = "http";
+
 			$ogImage = craft()->elements->getElementById($metaValues['ogImage']);
 
+			$urlString = (string)($ogImage->url);
+
 			if (!empty($ogImage)) 
-			{
+			{			
 				// check to see if Asset already has full Site Url in folder Url
-				if (strpos($ogImage->url, UrlHelper::getSiteUrl()) !== false) {
+				if (strpos($urlString, $urlStrStart) !== false) {
 					$metaValues['ogImage'] = $ogImage->url;
-				} else {
+				} 
+
+				else {
 					$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
 				}
 				$metaValues['ogImageWidth'] = $ogImage->width;
