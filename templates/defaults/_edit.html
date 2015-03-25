@@ -150,16 +150,13 @@
 
 
 	<div>
-			<label>
-				<input type="checkbox" value="noindex" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noindex', default.robots) }}> noindex
-			</label>
-			<span class="info">I don't want this page to be indexed by search engines</span>
+			<input type="checkbox" value="noindex" id="noindex-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noindex', default.robots) }}><label for="noindex-choice">noindex</label>
+ 			<span class="info">I don't want this page to be indexed by search engines</span>
 	</div>
+
 	<div>
-			<label>
-				<input type="checkbox" value="nofollow" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('nofollow', default.robots) }}> nofollow
-			</label>
-			<span class="info">I don't want search engines to follow links on this page</span>
+			<input type="checkbox" value="nofollow" id="nofollow-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('nofollow', default.robots) }}><label for="nofollow-choice">nofollow</label>
+			<span class="info">I don't want this page to follow links on this page</span>
 	</div>
 
 	<h3>Robots - Advanced</h3>
@@ -168,33 +165,23 @@
 	http://tech4sky.com/noodp-noarchive-nosnippet-noydir-meta-tag #}
 
 	<div>
-			<label>
-				<input type="checkbox" value="noarchive" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noarchive', default.robots) }}> noarchive
-			</label>
-			<span class="info">I don't want search engines to provide archived versions of this page to users</span>
+			<input type="checkbox" value="noarchive" id="noarchive-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noarchive', default.robots) }}><label for="noarchive-choice">noarchive</label>
+ 			<span class="info">I don't want search engines to provide archived versions of this page to users</span>
 	</div>
 	<div>
-			<label>
-				<input type="checkbox" value="noimageindex" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noimageindex', default.robots) }}> noimageindex
-			</label>
+			<input type="checkbox" value="noimageindex" id="noimageindex-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noimageindex', default.robots) }}><label for="noimageindex-choice">noimageindex</label>
 			<span class="info">I don't want images on this page to be indexed by search engines</span>
 	</div>
 	<div>
-			<label>
-				<input type="checkbox" value="nosnippet" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('nosnippet', default.robots) }}> nosnippet
-			</label>
-			<span class="info">I don't want Google to cache this page or display a description below the page in search results</span>
+			<input type="checkbox" value="nosnippet" id="nosnippet-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('nosnippet', default.robots) }}><label for="nosnippet-choice">nosnippet</label>
+ 			<span class="info">I don't want Google to cache this page or display a description below the page in search results</span>
 	</div>
 	<div>
-			<label>
-				<input type="checkbox" value="noodp" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noodp', default.robots) }}> noodp
-			</label>
+			<input type="checkbox" value="noodp" id="noodp-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noodp', default.robots) }}><label for="noodp-choice">noodp</label>
 			<span class="info">I don't want Google to use the Open Directory Project (ODP) description for this page. I want Google to use the description on the website.</span>
 	</div>
 	<div>
-			<label>
-				<input type="checkbox" value="noydir" id="" class="checkbox" name="default_fields[robots][]" {{ checkbox.isSelected('noydir', default.robots) }}> noydir
-			</label>
+			<input type="checkbox" value="noydir" id="noydir-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noydir', default.robots) }}><label for="noydir-choice">noydir</label>
 			<span class="info">I don't want Bing or Yahoo! to use the Yahoo! Directory titles and descriptions for this page.  I want Bing and Yahoo! to use the titles and descriptions on the website.</span>
 	</div>
 
@@ -289,7 +276,7 @@
 			criteria: {"localeEnabled":null}
 		})) }}
 	{% else %}
-		<p class="error">No assets sources currently exist. <a href="Create one on the {{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
+		<p class="error">No assets sources currently exist. <a href="{{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
 	{% endif %}
 
 	{{ forms.textField({

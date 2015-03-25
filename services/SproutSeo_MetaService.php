@@ -99,7 +99,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		$model->robots = ($model->robots) ? $this->prepRobotsForSettings($model->robots) : null;
 
-		if ($model->latitude && $model->longitude)
+		if ($model->latitude || $model->longitude)
 		{
 			$model->position = $model->latitude . ";" . $model->longitude;
 		}
@@ -468,7 +468,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 					// Robots
 					case 'robots':
-					$output .= "\t<meta name='robots' content='$value' />\n";
+					$value = $this->prepRobotsForDb($value);
+					$output .= "\t<meta name='robots' content='" . StringHelper::arrayToString($value) . "' />\n";
 					break;
 
 					// Standard Meta Tags
