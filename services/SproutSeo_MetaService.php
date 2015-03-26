@@ -82,6 +82,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	public function getDefaultByDefaultHandle($handle)
 	{
+
 		$query = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_defaults')
@@ -93,13 +94,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$model = SproutSeo_MetaModel::populateModel($query);
 		}
 		else
-		{
+		{			
 			return new SproutSeo_MetaModel();
 		}
 
 		$model->robots = ($model->robots) ? $this->prepRobotsForSettings($model->robots) : null;
 
-		if ($model->latitude || $model->longitude)
+		if ($model->latitude && $model->longitude)
 		{
 			$model->position = $model->latitude . ";" . $model->longitude;
 		}
@@ -332,7 +333,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$codeOverrides  = new SproutSeo_MetaModel; // Second Priority
 		$defaults       = new SproutSeo_MetaModel; // Lowest Priority
 
-
 		// PREPARE Defaults
 		// ------------------------------------------------------------
 
@@ -344,7 +344,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			if (isset($overrideInfo['default']))
 			{
 				$defaultHandle = $overrideInfo['default'];
-				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);
+				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);				
 			}
 			// @TODO - depracate the use of template
 			if (isset($overrideInfo['template']))
@@ -361,8 +361,26 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			// values that aren't part of the seo metadata model
 			unset($overrideInfo['default']);
 		}
+		else
+		{
+			// Get the default handle
+			$query = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_defaults')
+			->queryRow();
 
+			if (isset($query)) 
+			{
+				$model = SproutSeo_MetaModel::populateModel($query);
+			}
 
+			// Ensure both latitude and longitude are present
+			if ($model->latitude && $model->longitude)
+			{
+				$defaults->position = $model->latitude . ";" . $model->longitude;
+			}
+			
+		}
 		// Set the default canonical URL to be the current URL
 		// $scheme = ( isset($_SERVER['HTTPS'] ) ) ? "https://" : "http://" ;
 		// $siteUrl = $scheme . $_SERVER['SERVER_NAME'];
@@ -370,7 +388,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		$this->currentUrl = UrlHelper::getSiteUrl(craft()->request->url);
 		$defaults->canonical = $this->currentUrl;
-
+		
 
 		// PREPARE ENTRY OVERRIDES
 		// ------------------------------------------------------------
@@ -568,12 +586,16 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		if (!empty($metaValues['twitterImage']))
 		{
+			$urlStrStart = "http";
+
 			$twitterImage = craft()->elements->getElementById($metaValues['twitterImage']);
+
+			$urlString = (string)($twitterImage->url);
 
 			if (!empty($twitterImage)) 
 			{
 				// check to see if Asset already has full Site Url in folder Url
-				if (strpos($twitterImage->url, UrlHelper::getSiteUrl()) !== false) {
+				if (strpos($urlString, $urlStrStart) !== false) {
 					$metaValues['twitterImage'] = $twitterImage->url;
 				} else {
 					$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
