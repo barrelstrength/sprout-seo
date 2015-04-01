@@ -33,6 +33,7 @@
 {% set body %}
 
 <form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
+	<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
     <input type="hidden" name="action" value="sproutSeo/sitemap/saveCustomPage">
     <input type="hidden" name="redirect" value="sproutseo/sitemap">
 

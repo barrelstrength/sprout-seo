@@ -457,14 +457,20 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$openGraphPattern = '/^og:/';
 		$twitterPattern = '/^twitter:/';
 
+		// If there is no robot value set to all positive robot meta tags
+		$checkRobot = False;
+
 		foreach ($metaValues as $name => $value)
 		{
-
 			if ($value)
 			{
+				if ($name == 'robots')
+	 			{
+					$checkRobot = True;
+				}
+
 				switch ($name)
 				{
-
 					// Title tag
 					case 'title':
 					$output .= "\t<title>$value".$this->siteInfo."</title>\n";
@@ -496,8 +502,54 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 					// Robots
 					case 'robots':
-					$value = $this->prepRobotsForDb($value);
-					$output .= "\t<meta name='robots' content='" . StringHelper::arrayToString($value) . "' />\n";
+					
+					// Default "positive" values
+					$positiveVal = array("index","follow","archive","imageindex",
+					"snippet","odp", "ydir");
+
+					// The user selected values
+					$negativeVal = $this->prepRobotsForDb($value);
+					$arrayStr = StringHelper::arrayToString($negativeVal);
+
+					// Process each value
+					while(strlen($arrayStr) > 0){
+
+						// At the last value, no more ','. Process and breal out of while loop
+						if(strpos($arrayStr, ",") == false){
+
+							// Get the final value
+							$item = $arrayStr; 
+							$item = substr($item, 2);
+
+							// Make sure value exists
+							if(in_array($item, $positiveVal)){
+
+								// Delete the old value and add the new
+								$key = array_search($item, $positiveVal);
+								unset($positiveVal[$key]);
+								$newVal = "no".$item;
+								array_push($positiveVal, $newVal);
+							}
+
+							// Set to notihng to jump out of while loop
+							$arrayStr = "";
+							break;
+						}
+
+						$item = strstr($arrayStr, ',', true); 
+						$item = substr($item, 2);
+	
+						if(in_array($item, $positiveVal)){
+							$key = array_search($item, $positiveVal);
+							unset($positiveVal[$key]);
+							$newVal = "no".$item;
+							array_push($positiveVal, $newVal);
+							$arrayStr = strstr($arrayStr, ',');
+							$arrayStr = substr($arrayStr,1);	
+						}
+					}
+ 
+					$output .= "\t<meta name='robots' content='" . StringHelper::arrayToString($positiveVal) . "' />\n";
 					break;
 
 					// Standard Meta Tags
