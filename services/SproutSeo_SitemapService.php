@@ -1,24 +1,42 @@
 <?php
 namespace Craft;
 
+/**
+ * Class SproutSeo_SitemapService
+ *
+ * @package Craft
+ */
 class SproutSeo_SitemapService extends BaseApplicationComponent
 {
+	/**
+	 * @var SproutSeo_SitemapRecord
+	 */
 	protected $sitemapRecord;
 
+	/**
+	 * @param null|SproutSeo_SitemapRecord $sitemapRecord
+	 */
 	public function __construct($sitemapRecord = null)
 	{
 		$this->sitemapRecord = $sitemapRecord;
-		if (is_null($this->sitemapRecord)) {
+
+		if (is_null($this->sitemapRecord))
+		{
 			$this->sitemapRecord = SproutSeo_SitemapRecord::model();
 		}
 	}
 
+	/**
+	 * @param SproutSeo_SitemapModel $attributes
+	 *
+	 * @return mixed|null|string
+	 */
 	public function saveSitemap(SproutSeo_SitemapModel $attributes)
 	{
-		$row = array();
+		$row   = array();
 		$isNew = false;
 
-		if (isset($attributes->id) && (substr( $attributes->id, 0, 3 ) === "new"))
+		if (isset($attributes->id) && (substr($attributes->id, 0, 3) === "new"))
 		{
 			$isNew = true;
 		}
@@ -28,25 +46,26 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			$row = craft()->db->createCommand()
 				->select('*')
 				->from('sproutseo_sitemap')
-				->where('id=:id',array(':id'=>$attributes->id))
+				->where('id=:id', array(':id' => $attributes->id))
 				->queryRow();
 		}
 
 		$model = SproutSeo_SitemapModel::populateModel($row);
 
-		$model->id = (!$isNew) ? $attributes->id : null;
-		$model->sectionId = (isset($attributes->sectionId)) ? $attributes->sectionId : null;
-		$model->url = (isset($attributes->url)) ? $attributes->url : null;
-		$model->priority = $attributes->priority;
+		$model->id              = (!$isNew) ? $attributes->id : null;
+		$model->sectionId       = (isset($attributes->sectionId)) ? $attributes->sectionId : null;
+		$model->url             = (isset($attributes->url)) ? $attributes->url : null;
+		$model->priority        = $attributes->priority;
 		$model->changeFrequency = $attributes->changeFrequency;
-		$model->enabled = ($attributes->enabled == 'true') ? 1 : 0;
-		$model->ping = ($attributes->ping == 'true') ? 1 : 0;
-		$model->dateUpdated = DateTimeHelper::currentTimeForDb();
-		$model->uid = StringHelper::UUID();
+		$model->enabled         = ($attributes->enabled == 'true') ? 1 : 0;
+		$model->ping            = ($attributes->ping == 'true') ? 1 : 0;
+		$model->dateUpdated     = DateTimeHelper::currentTimeForDb();
+		$model->uid             = StringHelper::UUID();
 
 		if ($isNew)
 		{
 			$model->dateCreated = DateTimeHelper::currentTimeForDb();
+
 			craft()->db->createCommand()->insert('sproutseo_sitemap', $model->getAttributes());
 
 			return craft()->db->lastInsertID;
@@ -54,17 +73,23 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		else
 		{
 			$result = craft()->db->createCommand()
-				->update('sproutseo_sitemap',
-				$model->getAttributes(),
-				'id=:id', array(
-					':id' => $model->id
-				)
-			);
+				->update(
+					'sproutseo_sitemap',
+					$model->getAttributes(),
+					'id=:id', array(
+						':id' => $model->id
+					)
+				);
 
 			return $model->id;
 		}
 	}
 
+	/**
+	 * @param SproutSeo_SitemapModel $customPage
+	 *
+	 * @return int
+	 */
 	public function saveCustomPage(SproutSeo_SitemapModel $customPage)
 	{
 		$result = craft()->db->createCommand()->insert('sproutseo_sitemap', $customPage->getAttributes());
@@ -80,57 +105,53 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 * @throws Exception
 	 * @return array|string
 	 */
-	public function getSitemap($rendered=true)
+	public function getSitemap($rendered = true)
 	{
 		$urls            = array();
 		$enabledSections = craft()->db->createCommand()
-															->select('*')
-															->from('sproutseo_sitemap')
-															->where('enabled = 1')
-															->andWhere('sectionId is not null')
-															->queryAll();
+			->select('*')
+			->from('sproutseo_sitemap')
+			->where('enabled = 1')
+			->andWhere('sectionId is not null')
+			->queryAll();
 
-		/**
-		 * @var SproutSeo_SiteMapRecord[]
-		 */
+		// Fetching settings for each enabled section in Sprout SEO
 		foreach ($enabledSections as $key => $sitemapSettings)
 		{
+			// Fetching all enabled locales
 			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
 				$criteria            = craft()->elements->getCriteria(ElementType::Entry);
 				$criteria->limit     = null;
-				$criteria->locale    = $locale->id;
 				$criteria->status    = 'live';
+				$criteria->locale    = $locale->id;
 				$criteria->sectionId = $sitemapSettings['sectionId'];
 
 				/**
-				 * @var EntryModel[]
+				 * @var $entries EntryModel[]
+				 *
+				 * Fetching all entries enabled for the current locale
 				 */
 				$entries = $criteria->find();
 
 				foreach ($entries as $entry)
 				{
-					if ($entry->uri == "__home__")
-					{
-						$url = $entry->getUrl();
-					} 
-					else
-					{
-						// @todo - confirm the best way to grab urls from ALL locales
-					// Calling $entry->getUrl() doesn't work. it outputs /es/es/...
-						$url = UrlHelper::getSiteUrl($entry->uri);
-					}
-
-					$urls[$entry->getUrl()] = array(
-						'url'       => $url,
+					$location = array(
+						'id'        => $entry->id,
+						'url'       => $entry->getUrl(),
+						'locale'    => $locale->id,
 						'modified'  => $entry->dateUpdated->format('Y-m-d\Th:m:s\Z'),
 						'priority'  => $sitemapSettings['priority'],
 						'frequency' => $sitemapSettings['changeFrequency'],
 					);
+
+					// Adding the location to $urls[] as a root or alternate location
+					$this->addLocationOrAlternate($urls, $location);
 				}
 			}
 		}
 
+		// Fetching all custom pages define in Sprout SEO
 		$customUrls = craft()->db->createCommand()
 			->select('url, priority, changeFrequency as frequency, dateUpdated')
 			->from('sproutseo_sitemap')
@@ -140,11 +161,13 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		foreach ($customUrls as $customEntry)
 		{
+			// Adding to the $urls[] indexed by URL to avoid collision with entry ids
 			$modified                  = new DateTime($customEntry['dateUpdated']);
 			$customEntry['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
 			$urls[$customEntry['url']] = craft()->config->parseEnvironmentString($customEntry);
 		}
 
+		// Rendering the template if the option is set
 		if ($rendered)
 		{
 			$path = craft()->path->getTemplatesPath();
@@ -161,6 +184,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		return $urls;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getAllSectionsWithUrls()
 	{
 		// @TODO - Probably can do this with a SitemapSettingsModel
@@ -200,6 +226,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		return $sectionData;
 	}
 
+	/**
+	 * @return array|\CDbDataReader
+	 */
 	public function getAllCustomPages()
 	{
 		$customPages = craft()->db->createCommand()
@@ -212,10 +241,32 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return int
+	 */
 	public function deleteCustomPageById($id)
 	{
 		$record = new SproutSeo_SitemapRecord;
 
 		return $record->deleteByPk($id);
+	}
+
+	/**
+	 * @param array $stack
+	 * @param array $location
+	 */
+	protected function addLocationOrAlternate(array &$stack, array $location)
+	{
+		// Determine if this entry is an alternate for default locale
+		if (isset($stack[$location['id']]))
+		{
+			$stack[$location['id']]['alternates'][] = $location;
+		}
+		else
+		{
+			$stack[$location['id']] = $location;
+		}
 	}
 }

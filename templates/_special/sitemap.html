@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+{# Spacing and new lines are for pretty XML output #}
+{# @todo Review XML validation because when the xml:link is used, it doesn't validate #}
 {% if entries is iterable %}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	{% for entry in entries %}
+
 	<url>
 		<loc>{{ entry.url }}</loc>
+
+		{% if entry.alternates is defined and entry.alternates is iterable %}
+		{% for alternate in entry.alternates %}
+
+		<xhtml:link
+			rel="alternate"
+			hreflang="{{ alternate.locale }}"
+			href="{{ alternate.url }}"
+			/>
+		{% endfor %}
+		{% else %}
+
 		<lastmod>{{ entry.modified }}</lastmod>
 		<changefreq>{{ entry.frequency }}</changefreq>
 		<priority>{{ entry.priority }}</priority>
+		{% endif %}
+
 	</url>
 	{% endfor %}
 
