@@ -34,7 +34,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
 
 		// Determine our entryId
-		$entryId = (isset($_POST['entryId']))
+		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
 			? $_POST['entryId']
 			: $this->element->id;
 

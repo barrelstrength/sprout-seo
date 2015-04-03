@@ -36,7 +36,7 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 		if ( ! isset($fields)) return;
 
 		// Determine our entryId
-		$entryId = (isset($_POST['entryId']))
+		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
 			? $_POST['entryId']
 			: $this->element->id;
 

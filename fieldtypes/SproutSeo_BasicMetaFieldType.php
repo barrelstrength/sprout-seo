@@ -33,7 +33,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
 
 		// Determine our entryId
-		$entryId = (isset($_POST['entryId']))
+		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
 			? $_POST['entryId']
 			: $this->element->id;
 
@@ -82,7 +82,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 			craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
 		}
 		else
-		{
+		{	
 			craft()->sproutSeo_meta->createOverride($attributes);
 		}
 
