@@ -10,7 +10,7 @@ class SproutSeo_MetaModel extends BaseModel
 			'id'             => array(AttributeType::Number),
 			'name'           => array(AttributeType::String),
 			'handle'         => array(AttributeType::String),
-			'appendSiteName' => array(AttributeType::String),
+			'appendSiteName' => array(AttributeType::String, 'default' => null),
 			'globalFallback' => array(AttributeType::Bool),
 
 			'title'          => array(AttributeType::String),

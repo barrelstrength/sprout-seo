@@ -517,13 +517,10 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$globalFallback = $this->getGlobalFallback();
 		$secureUrl      = ( isset($_SERVER['HTTPS']) ) ? true : false;
 
-		// create the string we will append to the end of our title if we should
-		// allow the selected default template to override the global fallback
-		if (isset($defaults->appendSiteName) && $defaults->appendSiteName == 1)
-		{	
-			$this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
-		}
-		elseif (isset($globalFallback->appendSiteName) && $globalFallback->appendSiteName == 1)
+		// Allow defaults to override append site setting
+		$appendSiteName = is_null($defaults->appendSiteName) ? $globalFallback->appendSiteName : $defaults->appendSiteName;
+
+		if ($appendSiteName)
 		{
 			$this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
 		}
