@@ -66,7 +66,7 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 		}
 
 
-		$_POST['fields']['sproutseo_fields']['robots'] = craft()->sproutSeo_meta->prepRobotsArray($_POST['fields']['sproutseo_fields']['robots']);
+		$_POST['fields']['sproutseo_fields']['robots'] = craft()->sproutSeo_meta->prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
