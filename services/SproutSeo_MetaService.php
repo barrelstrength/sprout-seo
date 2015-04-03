@@ -167,7 +167,17 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			->where('entryId = :entryId', array(':entryId' => $entryId))
 			->queryRow();
 
-		return SproutSeo_OverridesModel::populateModel($query);
+		$model = SproutSeo_OverridesModel::populateModel($query);
+
+		// Ensure both latitude and longitude are present
+		// @TODO - make this conversion part of the model and 
+		// clean up where this appears multiple times
+		if ($model->latitude && $model->longitude)
+		{
+			$model->position = $model->latitude . ";" . $model->longitude;
+		}
+		
+		return $model;
 
 	}
 
@@ -398,7 +408,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		if (isset($overrideInfo['id']))
 		{
 			// query for override array
-			$entryOverrides = craft()->sproutSeo_meta->getOverrideByEntryId($overrideInfo['id']);
+			$entryOverrides = $this->getOverrideByEntryId($overrideInfo['id']);
 
 			unset($overrideInfo['id']);
 		}
@@ -524,7 +534,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// @TODO - make sure we loop through a defined model... we may not have an
 		// entry override model each time... or maybe we can just define it so its
 		// blank nomatter what.  We really just need to know we are looping through
-		// the samme model for each of the levels of overrides or templates
+		// the same model for each of the levels of overrides or templates
 		foreach ($entryOverrides->getAttributes() as $key => $value)
 		{	
 			if ($entryOverrides->getAttribute($key))
@@ -602,7 +612,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				}
 			}
 		}
-
 
 		// Unset general default info
 		unset($metaValues['id']);

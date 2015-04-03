@@ -20,6 +20,7 @@ class SproutSeo_OverridesModel extends BaseModel
 
 			'region'         => array(AttributeType::String),
 			'placename'      => array(AttributeType::String),
+			'position'       => array(AttributeType::String),
 			'latitude'       => array(AttributeType::String),
 			'longitude'      => array(AttributeType::String),
 
