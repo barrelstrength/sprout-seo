@@ -614,30 +614,35 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		// Modify our Assets to reference their URLs
 		if (!empty($metaValues['ogImage']))
-		{
-			$urlStrStart = "http";
+		{	
+			// If ogImage starts with "http", roll with it
+			// If not, then process what we have to try to extract the URL
+			if ( substr($metaValues['ogImage'], 0, 4) !== "http" )
+			{
+				$ogImage = craft()->elements->getElementById($metaValues['ogImage']);
 
-			$ogImage = craft()->elements->getElementById($metaValues['ogImage']);
+				$imageUrl = (string)($ogImage->url);
 
-			$urlString = (string)($ogImage->url);
+				if (!empty($ogImage)) 
+				{			
+					// check to see if Asset already has full Site Url in folder Url
+					if (strpos($imageUrl, "http") !== false) 
+					{
+						$metaValues['ogImage'] = $ogImage->url;
+					}
+					else
+					{
+						$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
+					}
+					
+					$metaValues['ogImageWidth']  = $ogImage->width;
+					$metaValues['ogImageHeight'] = $ogImage->height;
+					$metaValues['ogImageType']   = $ogImage->mimeType;
 
-			if (!empty($ogImage)) 
-			{			
-				// check to see if Asset already has full Site Url in folder Url
-				if (strpos($urlString, $urlStrStart) !== false) {
-					$metaValues['ogImage'] = $ogImage->url;
-				} 
-
-				else {
-					$metaValues['ogImage'] = UrlHelper::getSiteUrl($ogImage->url);
-				}
-				$metaValues['ogImageWidth'] = $ogImage->width;
-				$metaValues['ogImageHeight'] = $ogImage->height;
-				$metaValues['ogImageType'] = $ogImage->mimeType;
-
-				if ($secureUrl) 
-				{
-					$metaValues['ogImageSecure'] = UrlHelper::getSiteUrl($ogImage->url, null, "https");
+					if ($secureUrl) 
+					{
+						$metaValues['ogImageSecure'] = UrlHelper::getSiteUrl($ogImage->url, null, "https");
+					}
 				}
 			}
 			
@@ -648,19 +653,25 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		if (!empty($metaValues['twitterImage']))
 		{
-			$urlStrStart = "http";
-
-			$twitterImage = craft()->elements->getElementById($metaValues['twitterImage']);
-
-			$urlString = (string)($twitterImage->url);
-
-			if (!empty($twitterImage)) 
+			// If ogImage starts with "http", roll with it
+			// If not, then process what we have to try to extract the URL
+			if ( substr($metaValues['twitterImage'], 0, 4) !== "http" )
 			{
-				// check to see if Asset already has full Site Url in folder Url
-				if (strpos($urlString, $urlStrStart) !== false) {
-					$metaValues['twitterImage'] = $twitterImage->url;
-				} else {
-					$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+				$twitterImage = craft()->elements->getElementById($metaValues['twitterImage']);
+
+				$imageUrl = (string)($twitterImage->url);
+
+				if (!empty($twitterImage)) 
+				{
+					// check to see if Asset already has full Site Url in folder Url
+					if (strpos($imageUrl, "http") !== false) 
+					{
+						$metaValues['twitterImage'] = $twitterImage->url;
+					}
+					else
+					{
+						$metaValues['twitterImage'] = UrlHelper::getSiteUrl($twitterImage->url);
+					}
 				}
 			}
 		}
