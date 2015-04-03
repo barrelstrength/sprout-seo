@@ -32,41 +32,11 @@ class SproutSeoPlugin extends BasePlugin
 		return true;
 	}
 
-	public function init()
-	{
-		craft()->on('entries.saveEntry', array(
-			$this,
-			'onSaveEntry'
-		));
-		craft()->on('content.saveContent', array(
-			$this,
-			'onSaveContent'
-		));
-	}
-
-	public function onSaveEntry(Event $event)
-	{
-		// @TODO
-		// Test and see if the Section Entry being saved belongs to
-		// a Section that we want to ping for.
-		// Get Sitemap URL
-		// Call ping function
-	}
-
-	public function onSaveContent(Event $event)
-	{
-		// @TODO
-		// Test and see if the Section Entry being saved belongs to
-		// a Section that we want to ping for.
-		// Get Sitemap
-		// Call ping function
-	}
-
 	protected function defineSettings()
 	{
 		// We are managing our settings on the CP Tab but storing them
 		// in the plugin table so in order to use getSettings() we need
-		// these defined here (I think)
+		// these defined here
 		return array(
 			'pluginNameOverride'  => AttributeType::String,
 			'appendSiteName'      => AttributeType::Bool,
