@@ -124,7 +124,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			$modified                  = new DateTime($customEntry['dateUpdated']);
 			$customEntry['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
-			$urls[$customEntry['url']] = $customEntry;
+			$urls[$customEntry['url']] = craft()->config->parseEnvironmentString($customEntry);
 		}
 
 		if ($rendered)
