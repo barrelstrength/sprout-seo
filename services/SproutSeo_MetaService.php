@@ -715,27 +715,15 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		return $this->sproutmeta;
 	}
 
-	public function updateMeta($meta, $fallback = false)
+	public function updateMeta($meta)
 	{
-		// @TODO - should updateMeta accept a fallback array?
-		// maybe just allow this to be set in the CP.
-
-		if (!$fallback)
+		// Add values to the $meta array
+		if (count($meta))
 		{
-			// add meta values to the global meta value
-			if (count($meta))
+			foreach ($meta as $key => $value)
 			{
-				foreach ($meta as $key => $value)
-				{
-					// This is the setter
-					$this->sproutmeta[$key] = $value;
-				}
+				$this->sproutmeta[$key] = $value;
 			}
-		}
-		else
-		{
-			// merge the optimize fallback with the rest of our meta values
-			array_merge($meta, $this->sproutmeta);
 		}
 	}
 

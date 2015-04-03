@@ -43,25 +43,17 @@ class SproutSeoVariable
 	}
 
 	/**
-	* Output our SEO Meta Tags, and provide fallbacks
+	* Process and output our SEO Meta Tags
 	*
 	* @param  [type] $overrideInfo [description]
 	* @return [type]               [description]
 	*/
-	public function optimize(array $meta = array())
+	public function optimize()
 	{
-		// @TODO - should optimize accept a fallback array?
-		// maybe just allow this to be set in the CP.
-		if (count($meta))
-		{
-			// If an array is defined, add it to our meta array before we output anything
-			craft()->sproutSeo_meta->updateMeta($meta, true);
-		}
-
-		// This is our getter
+		// Gather all override info set in $meta array
 		$overrideInfo = craft()->sproutSeo_meta->getMeta();
 
-		// Output the metadata as pre-defined HTML
+		// Process the meta values and prepare HTML output
 		$output = craft()->sproutSeo_meta->optimize($overrideInfo);
 
 		return new \Twig_Markup($output, craft()->templates->getTwig()->getCharset());
