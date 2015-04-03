@@ -30,7 +30,11 @@
 	<tr id="results" data-id="{{ default.id }}" data-name="{{ default.name|t }}">
 		<td>
 			<a href="{{ url('sproutseo/defaults/' ~ default.id) }}">
-				<strong>{{ default.name }}</strong>
+				{% if default.globalFallback %}
+				<span data-icon="home" title="Homepage" style="float:left;margin-top:-1px;margin-right:4px;"></span>
+				{% endif %}
+
+				<strong>{{ default.name }}</strong> 
 			</a>
 		</td>
 		<td><code>{{ default.handle }}</code></td>
