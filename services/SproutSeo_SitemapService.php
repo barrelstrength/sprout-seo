@@ -83,33 +83,51 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	public function getSitemap($rendered=true)
 	{
 		$urls            = array();
-		$command         = craft()->db->createCommand()->from('sproutseo_sitemap')->where('enabled = 1');
-		$criteria        = craft()->elements->getCriteria(ElementType::Entry);
+		$enabledSections = craft()->db->createCommand()
+															->select('*')
+															->from('sproutseo_sitemap')
+															->where('enabled = 1')
+															->andWhere('sectionId is not null')
+															->queryAll();
 
 		/**
 		 * @var SproutSeo_SiteMapRecord[]
 		 */
-		$enabledSections = $command->queryAll();
-
 		foreach ($enabledSections as $key => $sitemapSettings)
 		{
-			$criteria->limit     = null;
-			$criteria->status    = 'live';
-			$criteria->sectionId = $sitemapSettings['sectionId'];
-
-			/**
-			 * @var EntryModel[]
-			 */
-			$entries = $criteria->find();
-
-			foreach ($entries as $entry)
+			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
-				$urls[$entry->getUrl()] = array(
-					'url'       => $entry->getUrl(),
-					'modified'  => $entry->dateUpdated->format('Y-m-d\Th:m:s\Z'),
-					'priority'  => $sitemapSettings['priority'],
-					'frequency' => $sitemapSettings['changeFrequency'],
-				);
+				$criteria            = craft()->elements->getCriteria(ElementType::Entry);
+				$criteria->limit     = null;
+				$criteria->locale    = $locale->id;
+				$criteria->status    = 'live';
+				$criteria->sectionId = $sitemapSettings['sectionId'];
+
+				/**
+				 * @var EntryModel[]
+				 */
+				$entries = $criteria->find();
+
+				foreach ($entries as $entry)
+				{
+					if ($entry->uri == "__home__")
+					{
+						$url = $entry->getUrl();
+					} 
+					else
+					{
+						// @todo - confirm the best way to grab urls from ALL locales
+					// Calling $entry->getUrl() doesn't work. it outputs /es/es/...
+						$url = UrlHelper::getSiteUrl($entry->uri);
+					}
+
+					$urls[$entry->getUrl()] = array(
+						'url'       => $url,
+						'modified'  => $entry->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+						'priority'  => $sitemapSettings['priority'],
+						'frequency' => $sitemapSettings['changeFrequency'],
+					);
+				}
 			}
 		}
 
