@@ -457,18 +457,10 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$openGraphPattern = '/^og:/';
 		$twitterPattern = '/^twitter:/';
 
-		// If there is no robot value set to all positive robot meta tags
-		$checkRobot = False;
-
 		foreach ($metaValues as $name => $value)
 		{
 			if ($value)
 			{
-				if ($name == 'robots')
-	 			{
-					$checkRobot = True;
-				}
-
 				switch ($name)
 				{
 					// Title tag
@@ -502,54 +494,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 					// Robots
 					case 'robots':
-					
-					// Default "positive" values
-					$positiveVal = array("index","follow","archive","imageindex",
-					"snippet","odp", "ydir");
-
-					// The user selected values
-					$negativeVal = $this->prepRobotsForDb($value);
-					$arrayStr = StringHelper::arrayToString($negativeVal);
-
-					// Process each value
-					while(strlen($arrayStr) > 0){
-
-						// At the last value, no more ','. Process and breal out of while loop
-						if(strpos($arrayStr, ",") == false){
-
-							// Get the final value
-							$item = $arrayStr; 
-							$item = substr($item, 2);
-
-							// Make sure value exists
-							if(in_array($item, $positiveVal)){
-
-								// Delete the old value and add the new
-								$key = array_search($item, $positiveVal);
-								unset($positiveVal[$key]);
-								$newVal = "no".$item;
-								array_push($positiveVal, $newVal);
-							}
-
-							// Set to notihng to jump out of while loop
-							$arrayStr = "";
-							break;
-						}
-
-						$item = strstr($arrayStr, ',', true); 
-						$item = substr($item, 2);
-	
-						if(in_array($item, $positiveVal)){
-							$key = array_search($item, $positiveVal);
-							unset($positiveVal[$key]);
-							$newVal = "no".$item;
-							array_push($positiveVal, $newVal);
-							$arrayStr = strstr($arrayStr, ',');
-							$arrayStr = substr($arrayStr,1);	
-						}
-					}
- 
-					$output .= "\t<meta name='robots' content='" . StringHelper::arrayToString($positiveVal) . "' />\n";
+					$value = $this->_determineRobotsOutput($value);					
+					$output .= "\t<meta name='robots' content='" . $value . "' />\n";
 					break;
 
 					// Standard Meta Tags
@@ -610,6 +556,15 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				// We got nuthin'
 				$metaValues[$key] = '';
 			}
+		}
+
+
+		if (count($metaValues['robots']) == 0) 
+		{
+			// If no values are set, we set this to empty which triggers
+			// all positive values to be output.  Kinda lame.  
+			// @TODO - find a better way to do this.
+			$metaValues['robots'] = array('empty');
 		}
 
 		// Modify our Assets to reference their URLs
@@ -825,5 +780,39 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function prepRobotsForSettings($robotsString)
 	{
 		return ArrayHelper::stringToArray($robotsString);
+	}
+
+	private function _determineRobotsOutput($robotsArray)
+	{	
+		$robotsMap = array(
+			"noindex"      => "index",
+			"nofollow"     => "follow",
+			"noarchive"    => "archive",
+			"noimageindex" => "imageindex",
+			"nosnippet"    => "snippet",
+			"noodp"        => "odp",
+			"noydir"       => "ydir"
+		);
+
+		$robotOutputValues = "";
+
+		foreach ($robotsMap as $negativeValue => $positiveValue)
+		{
+			$robotString = StringHelper::arrayToString($robotsArray);
+
+			if (stristr($robotString, $negativeValue) === FALSE) 
+			{
+				$robotOutputValues .= $robotsMap[$negativeValue] . ",";				
+			}
+			else
+			{
+				$robotOutputValues .= $negativeValue . ",";
+			}
+		}
+		
+		// Remove the trailing comma
+		$robotOutputValues = rtrim($robotOutputValues, ",");
+
+		return $robotOutputValues;
 	}
 }
