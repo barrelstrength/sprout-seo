@@ -1,0 +1,37 @@
+{% import "_includes/forms" as forms %}
+
+<div class="sproutseo-box">
+
+	{{ forms.textField({
+		label: "Region",
+		instructions: 'The geo.region expects codes for <a
+		  href="http://geotags.com/iso3166/countries.html" target="_blank">Country Names and Subdivisions</a>. The <a
+		  href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.',
+		name: "sproutseo_fields[region]",
+		value: values.region
+	}) }}
+
+	{{ forms.textField({
+	  label: "Placename",
+	  instructions: 'The Placename field is typically used for city, county, and state names.',
+	  name: "sproutseo_fields[placename]",
+	  value: values.placename
+	}) }}
+
+	{{ forms.textField({
+		label: "Latitude",
+		name: "sproutseo_fields[latitude]",
+		value: values.latitude,
+		placeholder: '38.403440'
+	}) }}
+
+	{{ forms.textField({
+	  label: "Longitude",
+	  name: "sproutseo_fields[longitude]",
+	  value: values.longitude,
+	  placeholder: '-122.823676'
+	}) }}
+
+</div>
+
+{% includeCssResource "sproutseo/css/fields.css" %}

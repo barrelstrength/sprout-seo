@@ -7,7 +7,7 @@
 
 {% set tabs = {
 		default: {
-			label: "Default Settings"|t,
+			label: "Settings"|t,
 			url: '#default-main'
 		},
 		main: {
@@ -34,6 +34,12 @@
 
 {% import "_includes/forms" as forms %}
 
+{# Set a field context so we can manage field visibility between the SEO Defaults and the Field Types #}
+{% set fieldContext = 'defaults' %}
+
+{# Map the `defaults` object to `values` so we can use the same tempaltes for SEO Defaults and the Field Types #}
+{% set values = default %}
+
 {% set body %}
 
 {% if craft.request.getSegment(3) == 'new' %}
@@ -47,7 +53,7 @@
 	<input type="hidden" name="action" value="sproutSeo/defaults/saveDefault">
 	<input type="hidden" name="redirect" value="sproutseo/defaults">
 
-	<input type="hidden" name="default_fields[id]" value="{{ defaultId }}">
+	<input type="hidden" name="sproutseo_fields[id]" value="{{ defaultId }}">
 
 <div id="default-main">
 
@@ -55,7 +61,7 @@
 		label: "Name"|t,
 		instructions: "Human readable default name"|t,
 		id: "name",
-		name: 'default_fields[name]',
+		name: 'sproutseo_fields[name]',
 		value: default.name,
 		errors: '',
 		required: true
@@ -65,7 +71,7 @@
 		label: "Short Name"|t,
 		instructions: "Short name you will use to refer to your defaults in the code"|t,
 		id: "handle",
-		name: 'default_fields[handle]',
+		name: 'sproutseo_fields[handle]',
 		value: default.handle,
 		errors: '',
 		required: true
@@ -77,7 +83,7 @@
 		{{ forms.checkboxField({
 			label: "Use this default as my global fallback"|t,
 			id: 'global-fallback',
-			name: 'default_fields[globalFallback]',
+			name: 'sproutseo_fields[globalFallback]',
 			checked: default.globalFallback
 		}) }}
 	{% endif %}
@@ -86,145 +92,46 @@
 
 <div id="default-basic" class="hidden">
 
-	{{ forms.textField({
-		label: "Title"|t,
-		name: 'default_fields[title]',
-		instructions: "The Title will appear in your browser tab, and as the primary Heading in your search results"|t,
-		value: default.title,
-		errors: "",
-		required: false
-	}) }}
-
-	{{ forms.checkboxField({
-		label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
-		name: 'default_fields[appendSiteName]',
-		checked: (default.appendSiteName == 1 ? 1 : 0),
-		errors: ''
-	}) }}
-
-	{{ forms.textField({
-		label: "Description"|t,
-		instructions: "A 160 character description of your content which will appear as the description in your search results."|t,
-		name: 'default_fields[description]',
-		value: default.description,
-		errors: "",
-		required: false
-	}) }}
-
-	{{ forms.textField({
-		label: "Keywords"|t,
-		instructions: "A list of keywords that describe your content"|t,
-		name: 'default_fields[keywords]',
-		value: default.keywords,
-		errors: "",
-		required: false
-	}) }}
-
-	{# {{ forms.textField({
-		label: "Author"|t,
-		instructions: "Article author"|t,
-		name: 'default_fields[author]',
-		value: default.author,
-		errors: "",
-		required: false
-	}) }}
-
-	{{ forms.textField({
-		label: "Publisher"|t,
-		instructions: "Your Google+ Page URL"|t,
-		name: 'default_fields[author]',
-		value: default.author,
-		errors: "",
-		required: false
-	}) }} #}
+	{% include 'sproutseo/_partials/fields/input' %}
 
 </div>
 
 <div id="default-robots" class="hidden">
 
-	<h3>Robots - Basic</h3>
-
-	{% macro isSelected(target, string) %}
-		{% if target in string %}checked="checked"{% endif %}
-	{% endmacro %}
-	{% import _self as checkbox %}
-
-
-	<div>
-			<input type="checkbox" value="noindex" id="noindex-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noindex', default.robots) }}><label for="noindex-choice">noindex</label>
- 			<span class="info">I don't want this page to be indexed by search engines</span>
-	</div>
-
-	<div>
-			<input type="checkbox" value="nofollow" id="nofollow-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('nofollow', default.robots) }}><label for="nofollow-choice">nofollow</label>
-			<span class="info">I don't want this page to follow links on this page</span>
-	</div>
-
-	<h3>Robots - Advanced</h3>
-
-	{# Consider adding a link or posting a help article in our docs to clarify these:
-	http://tech4sky.com/noodp-noarchive-nosnippet-noydir-meta-tag #}
-
-	<div>
-			<input type="checkbox" value="noarchive" id="noarchive-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noarchive', default.robots) }}><label for="noarchive-choice">noarchive</label>
- 			<span class="info">I don't want search engines to provide archived versions of this page to users</span>
-	</div>
-	<div>
-			<input type="checkbox" value="noimageindex" id="noimageindex-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noimageindex', default.robots) }}><label for="noimageindex-choice">noimageindex</label>
-			<span class="info">I don't want images on this page to be indexed by search engines</span>
-	</div>
-	<div>
-			<input type="checkbox" value="nosnippet" id="nosnippet-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('nosnippet', default.robots) }}><label for="nosnippet-choice">nosnippet</label>
- 			<span class="info">I don't want Google to cache this page or display a description below the page in search results</span>
-	</div>
-	<div>
-			<input type="checkbox" value="noodp" id="noodp-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noodp', default.robots) }}><label for="noodp-choice">noodp</label>
-			<span class="info">I don't want Google to use the Open Directory Project (ODP) description for this page. I want Google to use the description on the website.</span>
-	</div>
-	<div>
-			<input type="checkbox" value="noydir" id="noydir-choice" class="fieldtoggle checkbox" name="default_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noydir', default.robots) }}><label for="noydir-choice">noydir</label>
-			<span class="info">I don't want Bing or Yahoo! to use the Yahoo! Directory titles and descriptions for this page.  I want Bing and Yahoo! to use the titles and descriptions on the website.</span>
-	</div>
-
-	<h3>Canonical URL</h3>
-
-	<p style="width:50%;">Canonical URL will default to the URL of the current page.  Canonical URL cannot be overriden at the template level, however, it can be override with on-page or entry-specific overrides.</p>
-
+	{% include 'sproutseo/_partials/fields/robots' %}
 
 </div>
 
 <div id="default-location" class="hidden">
 
 	{{ forms.textField({
-		label: "Region"|t,
-		name: 'default_fields[region]',
-		value: default.region,
-		errors: "",
-		required: false
+		label: "Region",
+		instructions: 'The geo.region expects codes for <a
+	  href="http://geotags.com/iso3166/countries.html" target="_blank">Country Names and Subdivisions</a>. The <a
+	  href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.',
+		name: "sproutseo_fields[region]",
+		value: default.region
 	}) }}
 
 	{{ forms.textField({
-		label: "Placename"|t,
-		name: 'default_fields[placename]',
-		value: default.placename,
-		errors: "",
-		required: false
+		label: "Placename",
+		instructions: "The Placename field is typically used for city, county, and state names.",
+		name: "sproutseo_fields[placename]",
+		value: default.placename
 	}) }}
 
 	{{ forms.textField({
-		label: "Latitude"|t,
-		name: 'default_fields[latitude]',
+		label: "Latitude",
+		name: "sproutseo_fields[latitude]",
 		value: default.latitude,
-		errors: "",
-		required: false
+		placeholder: '38.403440'
 	}) }}
 
 	{{ forms.textField({
-		label: "Longitude"|t,
-		name: 'default_fields[longitude]',
+		label: "Longitude",
+		name: "sproutseo_fields[longitude]",
 		value: default.longitude,
-		errors: "",
-		required: false
+		placeholder: '-122.823676'
 	}) }}
 
 </div>
@@ -237,17 +144,18 @@
 		'website' : 'Website',
 	} %}
 
-	<h2>Open Graph Type</h2>
+	<h2>Facebook Open Graph Meta Data</h2>
 
 	{{ forms.selectField({
-		name: 'default_fields[ogType]',
+		label: 'Open Graph Type',
+		instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
+		target="_blank">How Open Graph Stories work.</a>',
+		name: 'sproutseo_fields[ogType]',
 		options: ogTypesOptions,
 		value: default.ogType,
 		errors: "",
 		required: false
 	}) }}
-
-	<p>Learn more about Open Graph here: <a href="https://developers.facebook.com/docs/opengraph" target="_blank">https://developers.facebook.com/docs/opengraph</a>.</p>
 
 	<hr />
 
@@ -255,9 +163,21 @@
 
 	{{ forms.textField({
 		label: "Title"|t,
-		name: 'default_fields[ogTitle]',
+		name: 'sproutseo_fields[ogTitle]',
 		instructions: "The title of your content as it should appear within the graph",
+		maxlength: 88,
+		showCharsLeft: true,
 		value: default.ogTitle,
+		errors: "",
+		required: false,
+		placeholder: " "
+	}) }}
+
+	{{ forms.textField({
+		label: "URL"|t,
+		instructions: "The canonical URL of your content that will be used as its permanent ID in the graph.",
+		name: 'sproutseo_fields[ogUrl]',
+		value: default.ogUrl,
 		errors: "",
 		required: false
 	}) }}
@@ -270,7 +190,7 @@
 			sourceElementId: default.ogImage,
 			elementType: elementType,
 			id: 'ogImage',
-			name: 'default_fields[ogImage]',
+			name: 'sproutseo_fields[ogImage]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image',
 			limit: 1,
@@ -280,15 +200,6 @@
 		<p class="error">No assets sources currently exist. <a href="{{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
 	{% endif %}
 
-	{{ forms.textField({
-		label: "URL"|t,
-		instructions: "The canonical URL of your content that will be used as its permanent ID in the graph.",
-		name: 'default_fields[ogUrl]',
-		value: default.ogUrl,
-		errors: "",
-		required: false
-	}) }}
-
 	<hr />
 
 	<h2>Optional Metadata</h2>
@@ -297,7 +208,7 @@
 
 		{{ forms.textField({
 			label: "Publisher"|t,
-			name: 'default_fields[ogPublisher]',
+			name: 'sproutseo_fields[ogPublisher]',
 			instructions: "A Facebook page URL or ID of the publishing entity",
 			value: default.ogPublisher,
 			errors: "",
@@ -306,7 +217,7 @@
 
 		{{ forms.textField({
 			label: "Author"|t,
-			name: 'default_fields[ogAuthor]',
+			name: 'sproutseo_fields[ogAuthor]',
 			instructions: "An array of Facebook profile URLs or IDs of the authors for this article (separate multiple profiles with a comma)",
 			value: default.ogAuthor,
 			errors: "",
@@ -318,7 +229,7 @@
 	{{ forms.textField({
 		label: "Site Name"|t,
 		instructions: "If your content is part of a larger web site, the name which should be displayed for the overall site.",
-		name: 'default_fields[ogSiteName]',
+		name: 'sproutseo_fields[ogSiteName]',
 		value: default.ogSiteName,
 		errors: "",
 		required: false
@@ -326,16 +237,19 @@
 
 	{{ forms.textField({
 		label: "Description"|t,
-		name: 'default_fields[ogDescription]',
+		name: 'sproutseo_fields[ogDescription]',
+		maxlength: 200,
+		showCharsLeft: true,
 		value: default.ogDescription,
 		errors: "",
-		required: false
+		required: false,
+		placeholder: " "
 	}) }}
 
 	{{ forms.textField({
 		label: "Locale"|t,
 		instructions: "The locale these tags are marked up in. Default is en_us.",
-		name: 'default_fields[ogLocale]',
+		name: 'sproutseo_fields[ogLocale]',
 		value: default.ogLocale,
 		errors: "",
 		required: false
@@ -344,7 +258,7 @@
 	{{ forms.textField({
 		label: "Audio"|t,
 		instructions: "A URL to an audio file to accompany this content.",
-		name: 'default_fields[ogAudio]',
+		name: 'sproutseo_fields[ogAudio]',
 		value: default.ogAudio,
 		errors: "",
 		required: false
@@ -353,7 +267,7 @@
 	{{ forms.textField({
 		label: "Video"|t,
 		instructions: "A URL to a video file that complements this content.",
-		name: 'default_fields[ogVideo]',
+		name: 'sproutseo_fields[ogVideo]',
 		value: default.ogVideo,
 		errors: "",
 		required: false
@@ -373,10 +287,13 @@
 		'photo' : 'Photo Card',
 	} %}
 
-	<h2>Twitter Card Type</h2>
+	<h2>Twitter Card Meta Data</h2>
 
 	{{ forms.selectField({
-		name: 'default_fields[twitterCard]',
+		label: 'Twitter Card Type',
+		instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards"
+		target="_blank">How Twitter Cards work</a>.',
+		name: 'sproutseo_fields[twitterCard]',
 		options: twitterCardOptions,
 		value: (default.twitterCard is defined ? default.twitterCard : 'summary'),
 		value: default.twitterCard,
@@ -384,46 +301,52 @@
 		required: false
 	}) }}
 
-	<p>Learn about Twitter Cards here: <a href="https://dev.twitter.com/docs/cards" target="_blank">https://dev.twitter.com/docs/cards</a>.</p>
-
 	<hr>
 
 	<h2>Global Card Options</h2>
 
 	{{ forms.textField({
 		label: "Site"|t,
-		name: 'default_fields[twitterSite]',
-		instructions: "The Twitter username of the owner of this card's domain. @TwitterName",
+		name: 'sproutseo_fields[twitterSite]',
+		instructions: "The Twitter username of the owner of this card's domain.",
 		value: default.twitterSite,
 		errors: "",
-		required: false
+		required: false,
+		placeholder: '@ContentPublisher'
 	}) }}
 
 	{{ forms.textField({
 		label: "Creator"|t,
-		name: 'default_fields[twitterCreator]',
-		instructions: "If the content of this card was authored by someone, include their Twitter username here. @TwitterName",
+		name: 'sproutseo_fields[twitterCreator]',
+		instructions: "If the content of this card was authored by someone, include their Twitter username here.",
 		value: default.twitterCreator,
 		errors: "",
-		required: false
+		required: false,
+		placeholder: '@ContentAuthor'
 	}) }}
 
 	{{ forms.textField({
 		label: "Title"|t,
-		name: 'default_fields[twitterTitle]',
+		name: 'sproutseo_fields[twitterTitle]',
 		instructions: 'The title of your content as it should appear in the card.',
+		maxlength: 70,
+		showCharsLeft: true,
 		value: default.twitterTitle,
 		errors: "",
-		required: false
+		required: false,
+		placeholder: " "
 	}) }}
 
-	{{ forms.textareaField({
+	{{ forms.textField({
 		label: "Description"|t,
-		name: 'default_fields[twitterDescription]',
-		instructions: 'A description of the content in a maximum of 200 characters.',
+		name: 'sproutseo_fields[twitterDescription]',
+		instructions: 'A description of the content.',
+		maxlength: 200,
+		showCharsLeft: true,
 		value: default.twitterDescription,
 		errors: "",
-		required: false
+		required: false,
+		placeholder: " "
 	}) }}
 
 	{% if assetsSourceExists %}
@@ -434,7 +357,7 @@
 			sourceElementId: default.twitterImage,
 			elementType: elementType,
 			id: 'twitterImage',
-			name: 'default_fields[twitterImage]',
+			name: 'sproutseo_fields[twitterImage]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image',
 			limit: 1,
@@ -450,7 +373,7 @@
 
 		{{ forms.textField({
 			label: "Player"|t,
-			name: 'default_fields[twitterPlayer]',
+			name: 'sproutseo_fields[twitterPlayer]',
 			instructions: "HTTPS URL to iframe player. This must be a HTTPS URL which does not generate mixed content warnings in a web browser.",
 			value: default.twitterPlayer,
 			errors: "",
@@ -459,7 +382,7 @@
 
 		{{ forms.textField({
 			label: "Stream"|t,
-			name: 'default_fields[twitterPlayerStream]',
+			name: 'sproutseo_fields[twitterPlayerStream]',
 			instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrations directly. If provided, the stream must be delivered in the MPEG-4 container format.",
 			value: default.twitterPlayerStream,
 			errors: "",
@@ -468,7 +391,7 @@
 
 		{{ forms.textField({
 			label: "Stream Content Type"|t,
-			name: 'default_fields[twitterPlayerStreamContentType]',
+			name: 'sproutseo_fields[twitterPlayerStreamContentType]',
 			instructions: "The MIME type subtype combination that describes the content contained in twitter player stream.",
 			value: default.twitterPlayerStreamContentType,
 			errors: "",
@@ -477,7 +400,7 @@
 
 		{{ forms.textField({
 			label: "Height"|t,
-			name: 'default_fields[twitterPlayerHeight]',
+			name: 'sproutseo_fields[twitterPlayerHeight]',
 			instructions: "Height of IFRAME specified in twitter player in pixels.",
 			value: default.twitterPlayerHeight,
 			errors: "",
@@ -486,7 +409,7 @@
 
 		{{ forms.textField({
 			label: "Width"|t,
-			name: 'default_fields[twitterPlayerWidth]',
+			name: 'sproutseo_fields[twitterPlayerWidth]',
 			instructions: 'Width of IFRAME specified in twitter player in pixels.',
 			value: default.twitterPlayerWidth,
 			errors: "",

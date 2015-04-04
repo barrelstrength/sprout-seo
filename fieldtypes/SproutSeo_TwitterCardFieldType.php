@@ -131,7 +131,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		$name = rtrim($name, "]");
 		$name = "sproutseo_fields[$name]";
 
-		return craft()->templates->render('sproutseo/_cp/fields/twitter-card', $variables);
+		return craft()->templates->render('sproutseo/_partials/fields/twitter-card', $variables);
 	}
 
 }

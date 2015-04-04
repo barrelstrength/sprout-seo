@@ -111,7 +111,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		$name = "sproutseo_fields[$name]";
 		// $value = $values['title'];
 
-		return craft()->templates->render('sproutseo/_cp/fields/geo', array(
+		return craft()->templates->render('sproutseo/_partials/fields/geo', array(
 			'name'	     => $name,
 			// 'value'      => $value,
 			'values'     => $values

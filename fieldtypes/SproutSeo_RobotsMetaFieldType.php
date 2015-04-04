@@ -31,7 +31,10 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 	public function onAfterElementSave()
 	{
 		// Make sure we are actually submitting our field
-		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
+		if (!isset($_POST['fields']['sproutseo_fields']))
+		{
+			return;
+		}
 
 		// Determine our entryId
 		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
@@ -43,7 +46,8 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
-		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value) {
+		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value)
+		{
 			if ($value)
 			{
 				$saveSproutSeoFields = true;
@@ -54,7 +58,7 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 		// If we don't have any values in our Sprout SEO fields
 		// don't add a record to the database
 		// but if a record already exists, we also should delete it.
-		if ( ! $saveSproutSeoFields )
+		if (!$saveSproutSeoFields)
 		{
 			// Remove record since it is now blank
 			if ($model->id)
@@ -77,8 +81,8 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 		// Make sure all of our images are strings (twitter/og)
 		// We need to do this in case another seo field with images exists
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
-		$attributes['ogImage'] = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
-		
+		$attributes['ogImage']      = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
+
 		// If our override entry exists update it,
 		// if not create it
 		if ($model->entryId)
@@ -96,7 +100,7 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 	/**
 	 * Display our FieldType
 	 *
-	 * @param string $name  Our FieldType handle
+	 * @param string $name Our FieldType handle
 	 * @param string $value Always returns blank, our block
 	 *                       only styles the Instructions field
 	 * @return string Return our blocks input template
@@ -115,10 +119,10 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 
 		$name = "sproutseo_fields[$name]";
 
-		return craft()->templates->render('sproutseo/_cp/fields/robots', array(
-			'name'	     => $name,
-			// 'value'      => $value,
-			'values'     => $values
+		return craft()->templates->render('sproutseo/_partials/fields/robots', array(
+			'name'         => $name,
+			'values'       => $values,
+			'fieldContext' => 'robots'
 		));
 	}
 

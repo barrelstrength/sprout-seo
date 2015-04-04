@@ -50,16 +50,16 @@ class SproutSeo_DefaultsController extends BaseController
 		$this->requirePostRequest();
 
 		// check if this is a new or existing default
-		if (craft()->request->getPost('default_fields[id]') == null ) {
+		if (craft()->request->getPost('sproutseo_fields[id]') == null ) {
 			$id = false;
 		}
 		else {
-			$id = craft()->request->getPost('default_fields[id]');
+			$id = craft()->request->getPost('sproutseo_fields[id]');
 		}
 
 		$model = craft()->sproutSeo_meta->newMetaModel($id);
 
-		$defaultFields = craft()->request->getPost('default_fields');
+		$defaultFields = craft()->request->getPost('sproutseo_fields');
 
 		// Convert Checkbox Array into comma-delimited String
 		if (isset($defaultFields['robots']))
@@ -75,13 +75,13 @@ class SproutSeo_DefaultsController extends BaseController
 
 		if (craft()->sproutSeo_meta->saveDefaultInfo($model))
 		{
-
-
 			craft()->userSession->setNotice(Craft::t('New default saved.'));
 			$this->redirectToPostedUrl();
 		}
 		else
 		{
+			Craft::dd($model->getErrors());
+
 			craft()->userSession->setError(Craft::t("Couldn't save the default."));
 
 			// Send the field back to the template

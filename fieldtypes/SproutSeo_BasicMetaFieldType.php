@@ -107,7 +107,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 
 		$name = "sproutseo_fields[$name]";
 
-		return craft()->templates->render('sproutseo/_cp/fields/input', array(
+		return craft()->templates->render('sproutseo/_partials/fields/input', array(
 			'name'	     => $name,
 			'values'     => $values
 		));

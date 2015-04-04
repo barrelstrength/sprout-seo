@@ -132,7 +132,7 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 		$name = rtrim($name, "]");
 		$name = "sproutseo_fields[$name]";
 
-		return craft()->templates->render('sproutseo/_cp/fields/open-graph', $variables);
+		return craft()->templates->render('sproutseo/_partials/fields/open-graph', $variables);
 	}
 
 }
