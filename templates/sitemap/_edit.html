@@ -40,16 +40,16 @@
     <h2>New Custom Page</h2>
 
 		{{ forms.textField({
-		  name: 'url',
-		  label: 'Custom URL',
+		  label: 'Custom URL'|t,
+			name: 'url',
 		  placeholder: "http://...",
 		  errors: "",
 		  required: true,
 		}) }}
 
 		{{ forms.selectField({
+			label: 'Priority'|t,
 		  name: 'priority',
-		  label: 'Priority',
 		  options: priorityList,
 		  value: (sitemap.priority is defined ? sitemap.priority : 0.5),
 		  errors: "",
@@ -57,8 +57,8 @@
 		}) }}
 
 		{{ forms.selectField({
+			label: 'Change Frequency'|t,
 		  name: 'changeFrequency',
-		  label: 'Change Frequency',
 		  options: frequencyList,
 		  value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
 		  errors: "",
@@ -66,8 +66,8 @@
 		}) }}
 
 		{{ forms.checkboxField({
+			label: 'Enabled'|t,
 		  name: 'enabled',
-		  label: 'Enabled',
 		  errors: "",
 		  checked: true,
 		  required: true,

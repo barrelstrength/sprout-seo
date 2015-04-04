@@ -3,33 +3,33 @@
 <div class="sproutseo-box">
 
 	{{ forms.textField({
-		label: "Region",
+		label: "Region"|t,
 		instructions: 'The geo.region expects codes for <a
 		  href="http://geotags.com/iso3166/countries.html" target="_blank">Country Names and Subdivisions</a>. The <a
-		  href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.',
+		  href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.'|t,
 		name: "sproutseo_fields[region]",
 		value: values.region
 	}) }}
 
 	{{ forms.textField({
-	  label: "Placename",
-	  instructions: 'The Placename field is typically used for city, county, and state names.',
-	  name: "sproutseo_fields[placename]",
-	  value: values.placename
+		label: "Placename"|t,
+		instructions: 'The Placename field is typically used for city, county, and state names.'|t,
+		name: "sproutseo_fields[placename]",
+		value: values.placename
 	}) }}
 
 	{{ forms.textField({
-		label: "Latitude",
+		label: "Latitude"|t,
 		name: "sproutseo_fields[latitude]",
 		value: values.latitude,
 		placeholder: '38.403440'
 	}) }}
 
 	{{ forms.textField({
-	  label: "Longitude",
-	  name: "sproutseo_fields[longitude]",
-	  value: values.longitude,
-	  placeholder: '-122.823676'
+		label: "Longitude"|t,
+		name: "sproutseo_fields[longitude]",
+		value: values.longitude,
+		placeholder: '-122.823676'
 	}) }}
 
 </div>

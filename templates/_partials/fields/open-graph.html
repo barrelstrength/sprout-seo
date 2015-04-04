@@ -3,12 +3,17 @@
 <div class="sproutseo-fields" id="open-graph">
 
 	{% set ogTypesOptions = {
-		'' : 'Select Open Graph Type...',
-		'article' : 'Article',
-		'website' : 'Website',
+	'' : 'Select Open Graph Type...'|t,
+	'article' : 'Article'|t,
+	'website' : 'Website'|t,
 	} %}
 
+	<h2>Facebook Open Graph Meta Data</h2>
+
 	{{ forms.selectField({
+		label: 'Open Graph Type'|t,
+		instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
+target="_blank">How Open Graph Stories work.</a>'|t,
 		name: 'sproutseo_fields[ogType]',
 		options: ogTypesOptions,
 		value: values.ogType,
@@ -16,59 +21,53 @@
 		required: false
 	}) }}
 
+	<hr />
+
+	<h2>Basic Metadata</h2>
+
 	{{ forms.textField({
 		label: "Title"|t,
-		instructions: "The title of your content as it should appear within the graph",
+		instructions: "The title of your content as it should appear within the graph"|t,
 		name: 'sproutseo_fields[ogTitle]',
+		maxlength: 88,
+		showCharsLeft: true,
 		value: values.ogTitle,
 		errors: "",
-		required: false
+		required: false,
+		placeholder: " "
 	}) }}
-
-	{% if assetsSourceExists %}
-		{{ forms.field({
-			label: 'Image',
-			}, forms.elementSelect({
-			elements: ogImageElements,
-			sourceElementId: values.ogImage,
-			elementType: elementType,
-			id: 'ogImage',
-			name: 'sproutseo_fields[ogImage]',
-			jsClass: 'Craft.AssetSelectInput',
-			addButtonLabel: 'Select Image',
-			limit: 1,
-			criteria: {"localeEnabled":null}
-		})) }}
-
-	{% else %}
-
-		<p class="error">No assets sources currently exist. <a href="Create one on the {{ url('settings/assets/sources/new') }}">Asset Source settings page.</a></p>
-
-	{% endif %}
 
 	{{ forms.textField({
 		label: "URL"|t,
-		instructions: "The canonical URL of your content that will be used as its permanent ID in the graph.",
+		instructions: "The canonical URL of your content that will be used as its permanent ID in the graph."|t,
 		name: 'sproutseo_fields[ogUrl]',
 		value: values.ogUrl,
 		errors: "",
 		required: false
 	}) }}
 
-</div>
+	{% if assetsSourceExists %}
 
-<div id="article" class="hidden">
-	
-	{{ forms.textField({
-		label: "Author"|t,
-		name: 'sproutseo_fields[ogAuthor]',
-		instructions: "An array of Facebook profile URLs or IDs of the authors for this article (separate multiple profiles with a comma)",
-		value: values.ogAuthor,
-		errors: "",
-		required: false
-	}) }}
+		{{ forms.field({
+			label: 'Image'|t,
+		}, forms.elementSelect({
+			elements: ogImageElements,
+			sourceElementId: values.ogImage,
+			elementType: elementType,
+			id: 'ogImage',
+			name: 'sproutseo_fields[ogImage]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image'|t,
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
 
-	<br/>
+	{% else %}
+
+		<p class="error">{{ 'No assets sources currently exist. <a href="' ~ url('settings/assets/sources/new') ~ '">Asset
+				Source settings page.'|t }}</a></p>
+
+	{% endif %}
 
 </div>
 
@@ -80,7 +79,7 @@
 
 	{{ forms.textField({
 		label: "Site Name"|t,
-		instructions: "If your content is part of a larger web site, the name which should be displayed for the overall site.",
+		instructions: "If your content is part of a larger web site, the name which should be displayed for the overall site."|t,
 		name: 'sproutseo_fields[ogSiteName]',
 		value: values.ogSiteName,
 		errors: "",
@@ -89,16 +88,18 @@
 
 	{{ forms.textField({
 		label: "Description"|t,
-		instructions: "A one to two sentence description of your content.",
 		name: 'sproutseo_fields[ogDescription]',
+		maxlength: 200,
+		showCharsLeft: true,
 		value: values.ogDescription,
 		errors: "",
-		required: false
+		required: false,
+		placeholder: " "
 	}) }}
 
 	{{ forms.textField({
 		label: "Locale"|t,
-		instructions: "The locale these tags are marked up in. Default is en_us.",
+		instructions: "The locale these tags are marked up in. values.is en_us."|t,
 		name: 'sproutseo_fields[ogLocale]',
 		value: values.ogLocale,
 		errors: "",
@@ -107,7 +108,7 @@
 
 	{{ forms.textField({
 		label: "Audio"|t,
-		instructions: "A URL to an audio file to accompany this content.",
+		instructions: "A URL to an audio file to accompany this content."|t,
 		name: 'sproutseo_fields[ogAudio]',
 		value: values.ogAudio,
 		errors: "",
@@ -116,7 +117,7 @@
 
 	{{ forms.textField({
 		label: "Video"|t,
-		instructions: "A URL to a video file that complements this content.",
+		instructions: "A URL to a video file that complements this content."|t,
 		name: 'sproutseo_fields[ogVideo]',
 		value: values.ogVideo,
 		errors: "",
@@ -128,6 +129,12 @@
 {% includeJsResource "sproutseo/js/open-graph.js" %}
 
 {% set js %}
-	new Craft.SproutSeoOpenGraph();
+new Craft.SproutSeoOpenGraph();
 {% endset %}
 {% includeJs js %}
+
+
+
+
+
+

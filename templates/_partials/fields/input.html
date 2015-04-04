@@ -4,8 +4,8 @@
 
 	{{ forms.textField({
 		label: "Title"|t,
-		name: 'sproutseo_fields[title]',
 		instructions: "The Title of your content which will appear in search results"|t,
+		name: 'sproutseo_fields[title]',
 		maxlength: 55,
 		showCharsLeft: true,
 		value: values.title,
@@ -15,12 +15,12 @@
 	}) }}
 
 	{% if fieldContext is defined and fieldContext == 'defaults' %}
-	{{ forms.checkboxField({
-		label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
-		name: 'sproutseo_fields[appendSiteName]',
-		checked: (values.appendSiteName == 1 ? 1 : 0),
-		errors: ''
-	}) }}
+		{{ forms.checkboxField({
+			label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
+			name: 'sproutseo_fields[appendSiteName]',
+			checked: (values.appendSiteName == 1 ? 1 : 0),
+			errors: ''
+		}) }}
 	{% endif %}
 
 	{{ forms.textField({

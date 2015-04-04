@@ -13,14 +13,14 @@
 
 {% if defaults is empty %}
 
-	<h3>Create your first meta-data default.</h3>
+	<h3>{{ "Create your first meta-data default."|t }}</h3>
 
 {% else %}
 
 <table class="data" id="defaults">
 	<thead>
-		<th width="15%">Name</th>
-		<th width="15%">Handle</th>
+		<th width="15%">{{ "Name"|t }}</th>
+		<th width="15%">{{ "Handle"|t }}</th>
 		<th width="70%"></th>
 		<td class="thin"></td>
 	</thead>
@@ -31,7 +31,7 @@
 		<td>
 			<a href="{{ url('sproutseo/defaults/' ~ default.id) }}">
 				{% if default.globalFallback %}
-				<span data-icon="home" title="Homepage" style="float:left;margin-top:-1px;margin-right:4px;"></span>
+				<span data-icon="home" title="{{ "Homepage"|t }}"></span>
 				{% endif %}
 
 				<strong>{{ default.name }}</strong> 
@@ -42,7 +42,7 @@
 
 		</td>
 		<td class="thin">
-			<a class="delete icon" title="Delete"></a>
+			<a class="delete icon" title="{{ 'Delete'|t }}"></a>
 		</td>
 	</tr>
 
@@ -53,7 +53,7 @@
 {% endif %}
 
 <div class="buttons">
-	<a class="btn submit add icon" href="{{ url('sproutseo/defaults/new') }}">New Default</a>
+	<a class="btn submit add icon" href="{{ url('sproutseo/defaults/new') }}">{{ "New Default"|t }}</a>
 </div>
 
 {% endset %}
@@ -67,7 +67,8 @@
 			if($('#defaults').find('tbody').find('tr').size() == 0)
 			{
 				$('#defaults').show();
-				$('#defaults').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4">No results found.</td></tr>');
+				$('#defaults').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4">{{ "No results found."|t
+		}}</td></tr>');
 			}
 		}
 	});
