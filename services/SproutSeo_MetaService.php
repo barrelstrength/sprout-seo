@@ -443,6 +443,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		$metaValues = $this->_prioritizeMetaValues($entryOverrides, $codeOverrides, $defaults);
 
+
 		$output = "\n";
 		$openGraphPattern = '/^og:/';
 		$twitterPattern = '/^twitter:/';
@@ -451,6 +452,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		{
 			if ($value)
 			{
+				$value = craft()->config->parseEnvironmentString($value);
+
 				switch ($name)
 				{
 					// Title tag
