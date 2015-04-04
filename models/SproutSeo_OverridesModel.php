@@ -3,7 +3,6 @@ namespace Craft;
 
 class SproutSeo_OverridesModel extends BaseModel
 {
-
 	protected function defineAttributes()
 	{
 		return array(
@@ -39,22 +38,21 @@ class SproutSeo_OverridesModel extends BaseModel
 			'ogLocale'       => array(AttributeType::String),
 
 			// Store the Twitter Card Type and global fields
-			// @TODO convert to enum with the proper choices
-			'twitterCard' => array(AttributeType::String),
-			'twitterSite' => array(AttributeType::String),
-			'twitterTitle' => array(AttributeType::String),
-			'twitterCreator' => array(AttributeType::String),
+			'twitterCard'        => array(AttributeType::String),
+			'twitterSite'        => array(AttributeType::String),
+			'twitterTitle'       => array(AttributeType::String),
+			'twitterCreator'     => array(AttributeType::String),
 			'twitterDescription' => array(AttributeType::String),
-			'twitterUrl' => array(AttributeType::String),
+
+			'twitterUrl'   => array(AttributeType::String),
 			'twitterImage' => array(AttributeType::String),
 
 			// Fields for Twitter Player Card
-			'twitterPlayer' => array(AttributeType::String),
-			'twitterPlayerStream' => array(AttributeType::String),
+			'twitterPlayer'                  => array(AttributeType::String),
+			'twitterPlayerStream'            => array(AttributeType::String),
 			'twitterPlayerStreamContentType' => array(AttributeType::String),
-			'twitterPlayerWidth' => array(AttributeType::String),
-			'twitterPlayerHeight' => array(AttributeType::String),
+			'twitterPlayerWidth'             => array(AttributeType::String),
+			'twitterPlayerHeight'            => array(AttributeType::String),
 		);
 	}
-	
 }

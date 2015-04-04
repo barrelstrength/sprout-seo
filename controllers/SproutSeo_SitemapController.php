@@ -4,20 +4,20 @@ namespace Craft;
 class SproutSeo_SitemapController extends BaseController
 {
 	/**
-	* Show Sitemap index
-	*
-	* @return mixed Return to Page
-	*/
+	 * Show Sitemap index
+	 *
+	 * @return mixed Return to Page
+	 */
 	public function actionSitemapIndex()
 	{
 		$this->renderTemplate('sproutSeo/sitemap/index');
 	}
 
 	/**
-	* Create a new page for the sitemap
-	*
-	* @return mixed Return to Page
-	*/
+	 * Create a new page for the sitemap
+	 *
+	 * @return mixed Return to Page
+	 */
 	public function actionEditSitemap()
 	{
 		$this->renderTemplate('sproutSeo/sitemap/_edit');
@@ -32,42 +32,33 @@ class SproutSeo_SitemapController extends BaseController
 	{
 		$this->requireAjaxRequest();
 
-		$sitemapSettings['id'] = craft()->request->getPost('id');
-		$sitemapSettings['sectionId'] = craft()->request->getPost('sectionId');
-		$sitemapSettings['url'] = craft()->request->getPost('url');
-		$sitemapSettings['priority'] = craft()->request->getRequiredPost('priority');
+		$sitemapSettings['id']              = craft()->request->getPost('id');
+		$sitemapSettings['sectionId']       = craft()->request->getPost('sectionId');
+		$sitemapSettings['url']             = craft()->request->getPost('url');
+		$sitemapSettings['priority']        = craft()->request->getRequiredPost('priority');
 		$sitemapSettings['changeFrequency'] = craft()->request->getRequiredPost('changeFrequency');
-		$sitemapSettings['enabled'] = craft()->request->getRequiredPost('enabled');
-		$sitemapSettings['ping'] = craft()->request->getPost('ping');
+		$sitemapSettings['enabled']         = craft()->request->getRequiredPost('enabled');
+		$sitemapSettings['ping']            = craft()->request->getPost('ping');
 
 		$model = SproutSeo_SitemapModel::populateModel($sitemapSettings);
 
 		$lastInsertId = craft()->sproutSeo_sitemap->saveSitemap($model);
 		$this->returnJson(array(
-			'lastInsertId' => $lastInsertId)
+				'lastInsertId' => $lastInsertId)
 		);
-
 	}
 
 	public function actionSaveCustomPage()
 	{
-		// REQUIRE POST REQUEST
 		$this->requirePostRequest();
 
-		// HAND OFF TO MODEL
-		$customPage = new SproutSeo_SitemapModel();
+		$customPage                  = new SproutSeo_SitemapModel();
+		$customPage->url             = craft()->request->getPost('url');
+		$customPage->priority        = craft()->request->getPost('priority');
+		$customPage->changeFrequency = craft()->request->getPost('changeFrequency');
+		$customPage->enabled         = craft()->request->getPost('enabled');
 
-		// ATTRIBUTES
-		$customPage->url = craft()->request->getPost('url');
-		$customPage->priority = craft()->request->getPost('priority');
-		$customPage->changeFrequency 	= craft()->request->getPost('changeFrequency');
-		$customPage->enabled 	= craft()->request->getPost('enabled');
-
-		// @TODO - maybe add these as defaults to the model?  We don't need this for the Custom URLs.
-		$customPage->ping = 0;
-
-		// SAVE CUSTOM PAGE - PASS TO SERVICE
-		// @TODO clean up
+		// Save the Custom Page
 		if (craft()->sproutSeo_sitemap->saveCustomPage($customPage))
 		{
 			craft()->userSession->setNotice(Craft::t('Custom page saved.'));
@@ -77,19 +68,21 @@ class SproutSeo_SitemapController extends BaseController
 		{
 			craft()->userSession->setError(Craft::t('Couldn’t save custom page.'));
 		}
-
 	}
 
-	// @TODO make it delete the custom pages
-
+	/**
+	 * Deletes a Custom Page Record
+	 *
+	 * @return json success object
+	 */
 	public function actionDeleteCustomPage()
 	{
-    $this->requirePostRequest();
-    $this->requireAjaxRequest();
+		$this->requirePostRequest();
+		$this->requireAjaxRequest();
 
-    $id = craft()->request->getRequiredPost('id');
-    $result = craft()->sproutSeo_sitemap->deleteCustomPageById($id);
+		$id     = craft()->request->getRequiredPost('id');
+		$result = craft()->sproutSeo_sitemap->deleteCustomPageById($id);
 
-    $this->returnJson(array('success' => $result));
+		$this->returnJson(array('success' => $result));
 	}
 }

@@ -13,7 +13,7 @@ class SproutSeo_SitemapModel extends BaseModel
 			'changeFrequency' => array(AttributeType::String,'maxLength' => 3),
 			'priority'        => array(AttributeType::String,'maxLength' => 7),
 			'enabled'         => array(AttributeType::Bool),
-			'ping'            => array(AttributeType::Bool),
+			'ping'            => array(AttributeType::Bool, 'default' => 0),
 			'dateUpdated'     => AttributeType::DateTime,
 			'dateCreated'     => AttributeType::DateTime,
 			'uid'             => AttributeType::String,

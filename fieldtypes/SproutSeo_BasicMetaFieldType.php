@@ -75,8 +75,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 		$attributes['ogImage'] = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
 
-		// If our override entry exists update it,
-		// if not create it
+		// Update or create our override entry
 		if ($model->entryId)
 		{
 			craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
@@ -87,7 +86,6 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 		}
 
 	}
-
 
 	/**
 	 * Display our FieldType
@@ -101,9 +99,6 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 	{
 		$entryId = craft()->request->getSegment(3);
 
-		// @TODO - Make this into a Model
-		// $values = new SproutSeo_BasicMetaFieldModel;
-
 		$values = craft()->sproutSeo_meta->getBasicMetaFieldsByEntryId($entryId);
 
 		// Cleanup the namespace around the $name handle
@@ -111,12 +106,10 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 		$name = rtrim($name, "]");
 
 		$name = "sproutseo_fields[$name]";
-		// $value = $values['title'];
 
 		return craft()->templates->render('sproutseo/_cp/fields/input', array(
 			'name'	     => $name,
 			'values'     => $values
 		));
 	}
-
 }

@@ -110,25 +110,25 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	public function saveDefaultInfo(SproutSeo_MetaModel $model)
 	{
-
 		if ($id = $model->getAttribute('id'))
 		{
 			if (null === ($record = $this->metaRecord->findByPk($id)))
 			{
-				// @BUG this is being thrown on NEW default save event...
+				// @todo - Review whether this is causing a bug
+				// this is being thrown on NEW default save event...
 				// NEW is being passed as the id from the _edit template
 				throw new Exception(Craft::t('Can\'t find default with ID "{id}"', array(
 					'id' => $id
 				)));
 			}
-			}
-			else
-			{
-				$record = $this->metaRecord->create();
-			}
+		}
+		else
+		{
+			$record = $this->metaRecord->create();
+		}
 
-		// @TODO passing 'false' here allows us to save unsafe attributes
-		// we should really update this to address validation better.
+		// @todo - Can we improve how validation is handled here?
+		// Setting the second argument to 'false' allows us to save unsafe attributes
 		$record->setAttributes($model->getAttributes(), false);
 
 		if ($record->save())
@@ -144,7 +144,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 			return false;
 		}
-
 	}
 
 	public function getOverrideById($id)
@@ -170,8 +169,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$model = SproutSeo_OverridesModel::populateModel($query);
 
 		// Ensure both latitude and longitude are present
-		// @TODO - make this conversion part of the model and 
-		// clean up where this appears multiple times
+		// @todo - Refactor how longitude and latitude are handled through the whole process
 		if ($model->latitude && $model->longitude)
 		{
 			$model->position = $model->latitude . ";" . $model->longitude;
@@ -296,23 +294,21 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function updateOverride($id, $attributes)
 	{
 		craft()->db->createCommand()
-		->update('sproutseo_overrides',
-			$attributes,
-			'id = :id', array(':id' => $id)
-		);
-
+			->update('sproutseo_overrides',
+				$attributes,
+				'id = :id', array(':id' => $id)
+			);
 	}
 
 	public function deleteOverrideById($id = null)
 	{
 		$record = new SproutSeo_OverridesRecord;
 
-		// @TODO is this the right way to do this?  Would this actually return
-		// true or false?
+		// @todo - Review how this code works
+		// Will this actually return true or false?
 		// Returns the number of rows deleted
 		// ref: http://www.yiiframework.com/doc/api/1.1/CActiveRecord#deleteByPk-detail
 		return $record->deleteByPk($id);
-
 	}
 
 	/**
@@ -346,9 +342,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// PREPARE Defaults
 		// ------------------------------------------------------------
 
-		// If our code references a template template, create our template array
-		// If no template template is mentioned, we have an empty array
-		// @TODO - depracate the use of template
+		// Create our 'default' array or fallback to an empty array
+		// @deprecate - Sprout SEO 1.0 - Use 'default' instead
 		if (isset($overrideInfo['default']) or isset($overrideInfo['template']))
 		{
 			if (isset($overrideInfo['default']))
@@ -356,7 +351,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				$defaultHandle = $overrideInfo['default'];
 				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);				
 			}
-			// @TODO - depracate the use of template
+			// @deprecate - Sprout SEO 1.0 - Use 'default' instead
 			if (isset($overrideInfo['template']))
 			{
 				craft()->deprecator->log('{ template : "' . $overrideInfo['template'] .'" }', '"Templates" have been renamed to "Defaults". The "template" parameter has been deprecated. Use the "default" parameter instead. {% do craft.sproutSeo.meta({ default: "'.$overrideInfo['template'].'" }) %}');
@@ -365,19 +360,16 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);
 			}
 
-			// Remove our template so we can assign the rest of our info to the codeOverride
-			// array and have it match up nicely.
-			// @TODO - may need to move this outside this if statement, or include other
-			// values that aren't part of the seo metadata model
+			// Remove any values that don't need to be matched with the 'codeOverrides` array
 			unset($overrideInfo['default']);
 		}
 		else
 		{
-			// Get the default handle
+			// Get the handle of our SEO Default
 			$query = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_defaults')
-			->queryRow();
+				->select('*')
+				->from('sproutseo_defaults')
+				->queryRow();
 
 			if (isset($query)) 
 			{
@@ -391,15 +383,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			}
 			
 		}
-		// Set the default canonical URL to be the current URL
-		// $scheme = ( isset($_SERVER['HTTPS'] ) ) ? "https://" : "http://" ;
-		// $siteUrl = $scheme . $_SERVER['SERVER_NAME'];
-		// $currentUrl = $siteUrl . craft()->request->url;
 
+		// Set the default canonical URL to be the current URL
 		$this->currentUrl = UrlHelper::getSiteUrl(craft()->request->url);
 		$defaults->canonical = $this->currentUrl;
-		
 
+
+		// ------------------------------------------------------------
 		// PREPARE ENTRY OVERRIDES
 		// ------------------------------------------------------------
 
@@ -407,13 +397,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// see if this entry has any Entry Overrides.
 		if (isset($overrideInfo['id']))
 		{
-			// query for override array
 			$entryOverrides = $this->getOverrideByEntryId($overrideInfo['id']);
 
 			unset($overrideInfo['id']);
 		}
 
 
+		// ------------------------------------------------------------
 		// PREPARE CODE OVERRIDES
 		// ------------------------------------------------------------
 
@@ -424,15 +414,15 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$codeOverrides = SproutSeo_MetaModel::populateModel($overrideInfo);
 		}
 
-		// @TODO - this is temporary, figure out the best syntax for 'Robots'
-		// values and update this to accomodate both the On-page and Code
-		// override situations
+		// @todo - Refactor how we handle robots in all situations
 		$codeOverrides->robots = ($codeOverrides->robots)
 			? $codeOverrides->robots
 			: null;
 
 
+		// ------------------------------------------------------------
 		// PRIORITIZE OUR METADATA
+		// ------------------------------------------------------------
 
 		// For each item in our SEO DATA model, loop through
 		// and select the highest ranking item to output.
@@ -525,25 +515,27 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$this->siteInfo = " " . $this->divider . " " . craft()->getInfo('siteName');
 		}
 
-		// Loop through the entry override model
-		// @TODO - make sure we loop through a defined model... we may not have an
-		// entry override model each time... or maybe we can just define it so its
-		// blank nomatter what.  We really just need to know we are looping through
-		// the same model for each of the levels of overrides or templates
+		// Loop through all of our SEO meta values using the
+		// $entryOverrides model because it will always exist
+		// and is the highest priority in our SEO meta values waterfall
 		foreach ($entryOverrides->getAttributes() as $key => $value)
-		{	
+		{
+			// Highest Priority
 			if ($entryOverrides->getAttribute($key))
 			{
 				$metaValues[$key] = $value;
 			}
+			// Second Highest Priority
 			elseif ($codeOverrides->getAttribute($key))
 			{	
 				$metaValues[$key] = $codeOverrides[$key];
 			}
+			// Third Highest Priority
 			elseif ($defaults->getAttribute($key))
 			{	
 				$metaValues[$key] = $defaults->getAttribute($key);
 			}
+			// Lowest Priority
 			elseif (!empty($globalFallback))
 			{
 				$metaValues[$key] = $globalFallback->getAttribute($key);
@@ -555,12 +547,10 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			}
 		}
 
-
 		if (count($metaValues['robots']) == 0) 
 		{
 			// If no values are set, we set this to empty which triggers
-			// all positive values to be output.  Kinda lame.  
-			// @TODO - find a better way to do this.
+			// all positive values to be output.  Kinda lame.
 			$metaValues['robots'] = array('empty');
 		}
 
@@ -597,15 +587,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 					}
 				}
 			}
-			
 		}
-
 
 		$metaValues['twitterUrl'] = $this->currentUrl;
 
 		if (!empty($metaValues['twitterImage']))
 		{
-			// If ogImage starts with "http", roll with it
+			// If twitterImage starts with "http", roll with it
 			// If not, then process what we have to try to extract the URL
 			if ( substr($metaValues['twitterImage'], 0, 4) !== "http" )
 			{
@@ -730,12 +718,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 	public function getGlobalFallback()
 	{
 		$fallback = craft()->db->createCommand()
-											 ->select('*')
-											 ->from('sproutseo_defaults')
-											 ->where('globalFallback=:globalFallback', array(
-											 	':globalFallback' => 1
-											 ))
-											 ->queryRow();
+									->select('*')
+									->from('sproutseo_defaults')
+									->where('globalFallback=:globalFallback', array(
+										':globalFallback' => 1
+									))
+									->queryRow();
 
 		return SproutSeo_MetaModel::populateModel($fallback);
 	}
@@ -795,7 +783,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			}
 		}
 		
-		// Remove the trailing comma
+		// Remove the trailing comma from our string
 		$robotOutputValues = rtrim($robotOutputValues, ",");
 
 		return $robotOutputValues;

@@ -42,23 +42,21 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			'ogVideo'        => array(AttributeType::String),
 			'ogLocale'       => array(AttributeType::String),
 
-			// Store the Twitter Card Type and global fields
-			// @TODO convert to enum with the proper choices
 			'twitterCard'        => array(AttributeType::String),
 			'twitterSite'        => array(AttributeType::String),
 			'twitterTitle'       => array(AttributeType::String),
 			'twitterCreator'     => array(AttributeType::String),
 			'twitterDescription' => array(AttributeType::String),
 
-			'twitterUrl' => array(AttributeType::String),
-			'twitterImage' => array(AttributeType::String),
+			'twitterUrl'         => array(AttributeType::String),
+			'twitterImage'       => array(AttributeType::String),
 
 			// Fields for Twitter Player Card
-			'twitterPlayer' => array(AttributeType::String),
-			'twitterPlayerStream' => array(AttributeType::String),
+			'twitterPlayer'                  => array(AttributeType::String),
+			'twitterPlayerStream'            => array(AttributeType::String),
 			'twitterPlayerStreamContentType' => array(AttributeType::String),
-			'twitterPlayerWidth' => array(AttributeType::String),
-			'twitterPlayerHeight' => array(AttributeType::String),
+			'twitterPlayerWidth'             => array(AttributeType::String),
+			'twitterPlayerHeight'            => array(AttributeType::String),
 		);
 	}
 
@@ -68,23 +66,4 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			array('columns' => array('entryId'), 'unique' => true),
 		);
 	}
-
-	/**
-	 * Relationships
-	 *
-	 * @return multitype:multitype:string boolean
-	 */
-	// public function defineRelations()
-	// {
-	// 	return array (
-	// 		'ogImage' => array (
-	// 			static::BELONGS_TO,
-	// 			'AssetFileRecord'
-	// 		),
-	// 		'twitterImage' => array (
-	// 			static::BELONGS_TO,
-	// 			'AssetFileRecord'
-	// 		)
-	// 	);
-	// }
 }
