@@ -189,10 +189,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 */
 	public function getAllSectionsWithUrls()
 	{
-		// @TODO - Probably can do this with a SitemapSettingsModel
-		$sectionData = array();
-
-		// Get all of our Sections
 		$sections = craft()->sections->getAllSections();
 
 		// Get all of the Sitemap Settings regarding our Sections
@@ -201,22 +197,22 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			->from('sproutseo_sitemap')
 			->queryAll();
 
-		// Loop through the sections and
-		// 1) Remove any sections without URLs
+		// Prepare a list of all Sections we can link to
 		foreach ($sections as $key => $section)
 		{
+			// Remove Sections without URLs. They don't have links!
 			if (!$section->hasUrls)
 			{
-				// remove sections without URLs
 				unset($sections[$key]);
 			}
 
 			$sectionData[$section->id] = $section->getAttributes();
 		}
 
-		// 2) Add Sitemap data to any sectionIds that match
+		// Prepare the data for our Sitemap Settings page
 		foreach ($sitemapSettings as $key => $settings)
 		{
+			// Add Sitemap data to any sectionIds that match
 			if (array_key_exists($settings['sectionId'], $sectionData))
 			{
 				$sectionData[$settings['sectionId']]['settings'] = $settings;
@@ -238,12 +234,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			->queryAll();
 
 		return $customPages;
-
 	}
 
 	/**
 	 * @param $id
-	 *
 	 * @return int
 	 */
 	public function deleteCustomPageById($id)
