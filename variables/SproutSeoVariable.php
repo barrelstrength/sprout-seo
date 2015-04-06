@@ -103,9 +103,9 @@ class SproutSeoVariable
   ## Sitemap Variables (Front-end)
   ## ------------------------------------------------------------
 
-  public function getSitemap($rendered=true)
+  public function getSitemap($type = 'full', $rendered = true)
   {
-	return craft()->sproutSeo_sitemap->getSitemap($rendered);
+	return craft()->sproutSeo_sitemap->getSitemap($type, $rendered);
   }
 
   ## ------------------------------------------------------------

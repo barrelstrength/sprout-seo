@@ -105,7 +105,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 * @throws Exception
 	 * @return array|string
 	 */
-	public function getSitemap($rendered = true)
+	public function getSitemap($type = 'full', $rendered = true)
 	{
 		$urls            = array();
 		$enabledSections = craft()->db->createCommand()
@@ -174,7 +174,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 			craft()->path->setTemplatesPath(dirname(__FILE__).'/../templates/');
 
-			$source = craft()->templates->render('_special/sitemap', array('entries' => $urls));
+			$source = craft()->templates->render('_special/sitemap', array(
+				'entries' => $urls,
+				'type' => $type
+			));
 
 			craft()->path->setTemplatesPath($path);
 
@@ -200,13 +203,15 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		// Prepare a list of all Sections we can link to
 		foreach ($sections as $key => $section)
 		{
-			// Remove Sections without URLs. They don't have links!
-			if (!$section->hasUrls)
+			if ($section->hasUrls == 1)
+			{	
+				$sectionData[$section->id] = $section->getAttributes();
+			}
+			else
 			{
+				// Remove Sections without URLs. They don't have links!
 				unset($sections[$key]);
 			}
-
-			$sectionData[$section->id] = $section->getAttributes();
 		}
 
 		// Prepare the data for our Sitemap Settings page

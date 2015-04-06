@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+{%- if type == 'full' %}<?xml version="1.0" encoding="UTF-8"?>
 {# Spacing and new lines are for pretty XML output #}
 {# @todo Review XML validation because when the xml:link is used, it doesn't validate #}
-{% if entries is iterable %}
+{% endif -%}{%- if entries is iterable %}{%- if type == 'full' %}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-	{% for entry in entries %}
+{% endif -%}
 
+	{%- for entry in entries %}
 	<url>
 		<loc>{{ entry.url }}</loc>
 
 		{% if entry.alternates is defined and entry.alternates is iterable %}
 		{% for alternate in entry.alternates %}
-
 		<xhtml:link
 			rel="alternate"
 			hreflang="{{ alternate.locale }}"
@@ -25,7 +25,9 @@
 		{% endif %}
 
 	</url>
-	{% endfor %}
+	{% endfor -%}
 
+{%- if type == 'full' %}
 </urlset>
-{% endif %}
+{% endif -%}
+{% endif -%}
