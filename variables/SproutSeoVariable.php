@@ -1,8 +1,16 @@
 <?php
 namespace Craft;
 
+/**
+ * Class SproutSeoVariable
+ *
+ * @package Craft
+ */
 class SproutSeoVariable
 {
+	/**
+	 * @var SproutSeoPlugin
+	 */
 	protected $plugin;
 
 	public function __construct()
@@ -10,30 +18,27 @@ class SproutSeoVariable
 		$this->plugin = craft()->plugins->getPlugin('sproutseo');
 	}
 
-	## ------------------------------------------------------------
-	## General Variables
-	## ------------------------------------------------------------
-
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
 		return $this->plugin->getName();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getVersion()
 	{
 		return $this->plugin->getVersion();
 	}
 
-	## ------------------------------------------------------------
-	## Meta Variables (Front-end)
-	## ------------------------------------------------------------
-
 	/**
-	* Set SEO Meta data in our templates
-	*
-	* @param  array  $meta Array of supported meta values
-	* @return [type]       [description]
-	*/
+	 * Sets SEO metadata in templates
+	 *
+	 * @param array $meta Array of supported meta values
+	 */
 	public function meta(array $meta = array())
 	{
 		if (count($meta))
@@ -43,11 +48,10 @@ class SproutSeoVariable
 	}
 
 	/**
-	* Process and output our SEO Meta Tags
-	*
-	* @param  [type] $overrideInfo [description]
-	* @return [type]               [description]
-	*/
+	 * Processes and outputs SEO meta tags
+	 *
+	 * @return \Twig_Markup
+	 */
 	public function optimize()
 	{
 		// Gather all override info set in $meta array
@@ -56,12 +60,13 @@ class SproutSeoVariable
 		// Process the meta values and prepare HTML output
 		$output = craft()->sproutSeo_meta->optimize($overrideInfo);
 
-		return new \Twig_Markup($output, craft()->templates->getTwig()->getCharset());
+		return TemplateHelper::getRaw($output);
 	}
 
 	/**
-	* @DEPRECATED - Now use optimize()
-	*/
+	 * @deprecated Deprecated in favor of optimize()
+	 *
+	 */
 	public function define($overrideInfo)
 	{
 		craft()->deprecator->log('{{ craft.sproutSeo.define() }}', '<code>{{ craft.sproutSeo.define() }}</code> has been deprecated. Use <code>{{ craft.sproutSeo.optimize() }}</code> instead.');
@@ -69,77 +74,75 @@ class SproutSeoVariable
 		return $this->optimize($overrideInfo);
 	}
 
-  ## ------------------------------------------------------------
-  ## Meta Variables (Control Panel)
-  ## ------------------------------------------------------------
+	/**
+	 * Returns all templates
+	 *
+	 * @return mixed
+	 */
+	public function allDefaults()
+	{
+		return craft()->sproutSeo_meta->getAllDefaults();
+	}
 
-  /**
-   * Get all Templates
-   *
-   * @return [type] [description]
-   */
-  public function allDefaults()
-  {
-	return craft()->sproutSeo_meta->getAllDefaults();
-  }
+	/**
+	 * Returns a specific template if found
+	 *
+	 * @param int $id
+	 *
+	 * @return null|mixed
+	 */
+	public function getDefaultById($id)
+	{
+		return craft()->sproutSeo_meta->getDefaultById($id);
+	}
 
-  /**
-   * Get a specific template. If no template is found, returns null
-   *
-   * @param  int   $id
-   * @return mixed
-   */
-  public function getDefaultById($id)
-  {
-	return craft()->sproutSeo_meta->getDefaultById($id);
-  }
+	/**
+	 * @param null $defaultId
+	 *
+	 * @return mixed
+	 */
+	public function displayGlobalFallback($defaultId = null)
+	{
+		return craft()->sproutSeo_meta->displayGlobalFallback($defaultId);
+	}
 
-  public function displayGlobalFallback($defaultId = null)
-  {
-	return craft()->sproutSeo_meta->displayGlobalFallback($defaultId);
-  }
+	/**
+	 * @param array $options
+	 *
+	 * @return string
+	 */
+	public function getSitemap(array $options = null)
+	{
+		return craft()->sproutSeo_sitemap->getSitemap($options);
+	}
 
-  ## ------------------------------------------------------------
-  ## Sitemap Variables (Front-end)
-  ## ------------------------------------------------------------
+	/**
+	 * Returns all sections for Sitemap settings
+	 *
+	 * @return array of Sections
+	 */
+	public function getAllSections()
+	{
+		return craft()->sections->getAllSections();
+	}
 
-  public function getSitemap($type = 'full', $rendered = true)
-  {
-	return craft()->sproutSeo_sitemap->getSitemap($type, $rendered);
-  }
+	/**
+	 * Returns all sections with URLs for Sitemap settings
+	 *
+	 * @return array of Sections
+	 */
+	public function getAllSectionsWithUrls()
+	{
+		return craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
+	}
 
-  ## ------------------------------------------------------------
-  ## Sitemap Variables (Control Panel)
-  ## ------------------------------------------------------------
-
-  /**
-   * Get all Sections for our Sitemap settings.
-   *
-   * @return array of Sections
-   */
-  public function getAllSections()
-  {
-	return craft()->sections->getAllSections();
-  }
-
-  /**
-   * Get all Sections for our Sitemap settings.
-   *
-   * @return array of Sections
-   */
-  public function getAllSectionsWithUrls()
-  {
-	return craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
-  }
-
-  /**
-   * Get all Custom Pages for our Sitemap settings.
-   *
-   * @return array of Sections
-   */
-  public function getAllCustomPages()
-  {
-	return craft()->sproutSeo_sitemap->getAllCustomPages();
-  }
-
+	/**
+	 * Returns all custom pages for sitemap settings
+	 *
+	 * @return array of Sections
+	 */
+	public function getAllCustomPages()
+	{
+		return craft()->sproutSeo_sitemap->getAllCustomPages();
+	}
 }

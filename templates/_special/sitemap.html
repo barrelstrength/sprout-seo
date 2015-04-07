@@ -1,25 +1,29 @@
-{%- if type == 'full' %}
+{% if entries is iterable %}
+{% set urls %}
+{% for entry in entries %}
+    <url>
+        <loc>{{ entry.url }}</loc>
+        <lastmod>{{ entry.modified }}</lastmod>
+        <changefreq>{{ entry.frequency }}</changefreq>
+        <priority>{{ entry.priority }}</priority>
+        {% if entry.alternates is defined and entry.alternates|length %}
+        {%- for alternate in entry.alternates %}
+<xhtml:link rel="alternate" hreflang="{{ alternate.locale }}" href="{{ alternate.url }}" />
+        {% endfor %}{# alternates #}
+        {% endif -%}{# alternates? #}
+
+    </url>
+{% endfor %}{# entries #}
+{% endset %}{# urls #}
+{% endif %}{# entries? #}
+{#
+ #
+ # Returns URL nodes or the full sitemap based on options provided/supported #}
+{% if options.onlyUrls is defined and options.onlyUrls %}
+{{ urls }}
+{% else %}
 <?xml version="1.0" encoding="UTF-8"?>
-{# Spacing and new lines are for pretty XML output #}
-{# @todo Review XML validation because when the xml:link is used, it doesn't validate #}
-{% endif -%}
-{%- if entries is iterable %}
-{%- if type == 'full' %}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-{% endif -%}
-	{% for entry in entries %}
-	<url>
-		<loc>{{ entry.url }}</loc>
-		<lastmod>{{ entry.modified }}</lastmod>
-		<changefreq>{{ entry.frequency }}</changefreq>
-		<priority>{{ entry.priority }}</priority>
-{% if entry.alternates is defined and entry.alternates|length %}{% for alternate in entry.alternates %}
-		<xhtml:link rel="alternate" hreflang="{{ alternate.locale }}" href="{{ alternate.url }}" />
-{% endfor %}
-{% endif %}		
-	</url>
-{% endfor %}
-{%- if type == 'full' %}
+{{ urls }}
 </urlset>
-{% endif -%}
-{% endif -%}
+{% endif -%}{# onlyUrls? #}

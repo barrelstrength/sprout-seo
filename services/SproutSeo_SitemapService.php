@@ -100,12 +100,12 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	/**
 	 * Returns all URLs for a given sitemap or the rendered sitemap itself
 	 *
-	 * @param bool $rendered Whether to return the rendered sitemap or an array of URLs
+	 * @param array|null $options
 	 *
 	 * @throws Exception
 	 * @return array|string
 	 */
-	public function getSitemap($type = 'full', $rendered = true)
+	public function getSitemap(array $options = null)
 	{
 		$urls            = array();
 		$enabledSections = craft()->db->createCommand()
@@ -167,26 +167,21 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		$urls = $this->getLocalizedSitemapStructure($urls);
 
-		// Rendering the template if the option is set
-		if ($rendered)
-		{
-			$path = craft()->path->getTemplatesPath();
+		// Rendering the template and passing in received options
+		$path = craft()->path->getTemplatesPath();
 
-			craft()->path->setTemplatesPath(dirname(__FILE__).'/../templates/');
+		craft()->path->setTemplatesPath(dirname(__FILE__).'/../templates/');
 
-			$source = craft()->templates->render(
-				'_special/sitemap', array(
-					'entries' => $urls,
-					'type'    => $type
-				)
-			);
+		$source = craft()->templates->render(
+			'_special/sitemap', array(
+				'entries' => $urls,
+				'options' => is_array($options) ? $options : array(),
+			)
+		);
 
-			craft()->path->setTemplatesPath($path);
+		craft()->path->setTemplatesPath($path);
 
-			return TemplateHelper::getRaw($source);
-		}
-
-		return $urls;
+		return TemplateHelper::getRaw($source);
 	}
 
 	/**
