@@ -278,7 +278,14 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 				foreach ($locations as $index => $location)
 				{
 					// Add secondary locations as alternatives to primary
-					$structure[] = array_merge($location, array('alternates' => $locations));
+					if (count($locations) > 1)
+					{
+						$structure[] = array_merge($location, array('alternates' => $locations));
+					}
+					else
+					{
+						$structure[] = $location;
+					}
 				}
 			}
 		}
