@@ -136,7 +136,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 				foreach ($entries as $entry)
 				{
-					$location = array(
+					// Adding each location indexed by its id
+					$urls[$entry->id][] = array(
 						'id'        => $entry->id,
 						'url'       => $entry->getUrl(),
 						'locale'    => $locale->id,
@@ -144,9 +145,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 						'priority'  => $sitemapSettings['priority'],
 						'frequency' => $sitemapSettings['changeFrequency'],
 					);
-
-					// Adding the location to $urls[] as a root or alternate location
-					$this->addLocationOrAlternate($urls, $location);
 				}
 			}
 		}
@@ -161,11 +159,13 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		foreach ($customUrls as $customEntry)
 		{
-			// Adding to the $urls[] indexed by URL to avoid collision with entry ids
+			// Adding each custom location indexed by its URL
 			$modified                  = new DateTime($customEntry['dateUpdated']);
 			$customEntry['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
 			$urls[$customEntry['url']] = craft()->config->parseEnvironmentString($customEntry);
 		}
+
+		$urls = $this->getLocalizedSitemapStructure($urls);
 
 		// Rendering the template if the option is set
 		if ($rendered)
@@ -174,10 +174,12 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 			craft()->path->setTemplatesPath(dirname(__FILE__).'/../templates/');
 
-			$source = craft()->templates->render('_special/sitemap', array(
-				'entries' => $urls,
-				'type' => $type
-			));
+			$source = craft()->templates->render(
+				'_special/sitemap', array(
+					'entries' => $urls,
+					'type'    => $type
+				)
+			);
 
 			craft()->path->setTemplatesPath($path);
 
@@ -204,7 +206,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		foreach ($sections as $key => $section)
 		{
 			if ($section->hasUrls == 1)
-			{	
+			{
 				$sectionData[$section->id] = $section->getAttributes();
 			}
 			else
@@ -243,6 +245,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 	/**
 	 * @param $id
+	 *
 	 * @return int
 	 */
 	public function deleteCustomPageById($id)
@@ -253,19 +256,44 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Returns an array of localized entries for a sitemap from a set of URLs indexed by id
+	 *
+	 * The returned structure is compliant with multiple locale google sitemap spec
+	 *
 	 * @param array $stack
-	 * @param array $location
+	 *
+	 * @return array
 	 */
-	protected function addLocationOrAlternate(array &$stack, array $location)
+	protected function getLocalizedSitemapStructure(array $stack)
 	{
-		// Determine if this entry is an alternate for default locale
-		if (isset($stack[$location['id']]))
+		// Define the contain structure
+		$structure = array();
+
+		// Loop through all entries index by id
+		foreach ($stack as $id => $locations)
 		{
-			$stack[$location['id']]['alternates'][] = $location;
+			if (is_string($id))
+			{
+				// This is a custom location index by its URL
+				$structure[] = $locations;
+			}
+			else
+			{
+				// Loop through each entry and add it to root and create its alternates
+				foreach ($locations as $index => $location)
+				{
+					// Copy all locations
+					$alternates = $locations;
+
+					// Remove the primary location
+					unset($alternates[$index]);
+
+					// Add secondary locations as alternatives to primary
+					$structure[] = array_merge($location, compact('alternates'));
+				}
+			}
 		}
-		else
-		{
-			$stack[$location['id']] = $location;
-		}
+
+		return $structure;
 	}
 }

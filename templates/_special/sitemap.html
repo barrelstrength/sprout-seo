@@ -9,7 +9,7 @@
 	<url>
 		<loc>{{ entry.url }}</loc>
 
-		{% if entry.alternates is defined and entry.alternates is iterable %}
+		{% if entry.alternates is defined and entry.alternates|length %}
 		{% for alternate in entry.alternates %}
 		<xhtml:link
 			rel="alternate"
