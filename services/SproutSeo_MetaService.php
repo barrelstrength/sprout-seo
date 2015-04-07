@@ -343,21 +343,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// ------------------------------------------------------------
 
 		// Create our 'default' array or fallback to an empty array
-		// @deprecate - Sprout SEO 1.0 - Use 'default' instead
-		if (isset($overrideInfo['default']) or isset($overrideInfo['template']))
+		if (isset($overrideInfo['default']))
 		{
 			if (isset($overrideInfo['default']))
 			{
 				$defaultHandle = $overrideInfo['default'];
 				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);				
-			}
-			// @deprecate - Sprout SEO 1.0 - Use 'default' instead
-			if (isset($overrideInfo['template']))
-			{
-				craft()->deprecator->log('{ template : "' . $overrideInfo['template'] .'" }', '"Templates" have been renamed to "Defaults". The "template" parameter has been deprecated. Use the "default" parameter instead. {% do craft.sproutSeo.meta({ default: "'.$overrideInfo['template'].'" }) %}');
-
-				$defaultHandle = $overrideInfo['template'];
-				$defaults = $this->getDefaultByDefaultHandle($defaultHandle);
 			}
 
 			// Remove any values that don't need to be matched with the 'codeOverrides` array
