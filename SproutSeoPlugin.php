@@ -1,37 +1,58 @@
 <?php
 namespace Craft;
 
-require_once( dirname(__FILE__) . "/helpers/BSDPluginHelper.php" );
-
+/**
+ * Class SproutSeoPlugin
+ *
+ * @package Craft
+ */
 class SproutSeoPlugin extends BasePlugin
 {
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
-		$pluginName = Craft::t('Sprout SEO');
+		$pluginNameOverride = $this->getSettings()->getAttribute('pluginNameOverride');
 
-		return BSDPluginHelper::getPluginName($this, $pluginName);
+		return empty($pluginNameOverride) ? Craft::t('Sprout SEO') : $pluginNameOverride;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getVersion()
 	{
-		return '0.9.0';
+		return '0.9.1';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDeveloper()
 	{
 		return 'Barrel Strength Design';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDeveloperUrl()
 	{
 		return 'http://barrelstrengthdesign.com';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasCpSection()
 	{
 		return true;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function defineSettings()
 	{
 		// We are managing our settings on the CP Tab but storing them
@@ -45,48 +66,23 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
-	 * Register control panel routes
+	 * @return array
 	 */
 	public function registerCpRoutes()
 	{
 		return array(
-
-			/*
-			* @controller SproutSeo_DefaultsController
-			* @template   sproutseo/templates/defaults/_edit.html
-			*/
 			'sproutseo/defaults/new' => array(
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
-
-			/*
-			* @controller SproutSeo_DefaultsController
-			* @template   sproutseo/templates/defaults/_edit.html
-			*/
 			'sproutseo/defaults/(?P<defaultId>\d+)' => array(
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
-
-			/*
-			* @controller SproutSeo_SitemapController
-			* @template   sproutseo/templates/sitemap/index.html
-			*/
 			'sproutseo/sitemap' => array(
 				'action' => 'sproutSeo/sitemap/sitemapIndex'
 			),
-
-			/*
-			* @controller SproutSeo_SitemapController
-			* @template   sproutseo/templates/sitemap/_edit.html
-			*/
 			'sproutseo/sitemap/newPage' => array(
 				'action' => 'sproutSeo/sitemap/editSitemap'
 			),
-
-			/*
-			* @controller SproutSeo_SettingsController
-			* @template   sproutseo/templates/settings/index.html
-			*/
 			'sproutseo/settings' => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			)
