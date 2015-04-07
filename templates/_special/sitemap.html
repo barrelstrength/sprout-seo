@@ -11,6 +11,7 @@
 
 		{% if entry.alternates is defined and entry.alternates|length %}
 		{% for alternate in entry.alternates %}
+		
 		<xhtml:link
 			rel="alternate"
 			hreflang="{{ alternate.locale }}"

@@ -266,30 +266,24 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 */
 	protected function getLocalizedSitemapStructure(array $stack)
 	{
-		// Define the contain structure
+		// Defining the containing structure
 		$structure = array();
 
-		// Loop through all entries index by id
+		// Looping through all entries indexed by id
 		foreach ($stack as $id => $locations)
 		{
 			if (is_string($id))
 			{
-				// This is a custom location index by its URL
+				// Adding a custom location indexed by its URL
 				$structure[] = $locations;
 			}
 			else
 			{
-				// Loop through each entry and add it to root and create its alternates
+				// Looping through each entry and adding it as primary and creating its alternates
 				foreach ($locations as $index => $location)
 				{
-					// Copy all locations
-					$alternates = $locations;
-
-					// Remove the primary location
-					unset($alternates[$index]);
-
 					// Add secondary locations as alternatives to primary
-					$structure[] = array_merge($location, compact('alternates'));
+					$structure[] = array_merge($location, array('alternates' => $locations));
 				}
 			}
 		}
