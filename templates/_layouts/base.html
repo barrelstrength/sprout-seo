@@ -1,6 +1,8 @@
 {% extends "_layouts/cp" %}
 
+{% if not title is defined %}
 {% set title = craft.SproutSeo.name %}
+{% endif %}
 
 {% set crumbs = [
   { label: craft.sproutseo.name, url: url('sproutseo/defaults') }

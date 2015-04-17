@@ -2,7 +2,11 @@
 {% set centered = true %}
 
 {% set title %}
-New Default - {{ craft.SproutSeo.name }}
+    {% if not defaultId is empty %}
+        {{ default.name }} - {{ craft.SproutSeo.name }}
+    {% else %}
+        New Default - {{ craft.SproutSeo.name }}
+    {% endif %}
 {% endset %}
 
 {% set tabs = {
