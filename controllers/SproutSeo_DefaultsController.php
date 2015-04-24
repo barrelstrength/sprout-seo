@@ -11,7 +11,7 @@ class SproutSeo_DefaultsController extends BaseController
 		$variables['defaultId'] = ($defaultId == 'new') ? null : $defaultId;
 
 		// Get our Meta Model
-		$variables['default'] = craft()->sproutSeo_meta->getDefaultById($defaultId);
+		$variables['default'] = sproutSeo()->meta->getDefaultById($defaultId);
 
 		// Set up our asset fields
 		if (isset($variables['default']->ogImage))
@@ -57,14 +57,14 @@ class SproutSeo_DefaultsController extends BaseController
 			$id = craft()->request->getPost('sproutseo_fields[id]');
 		}
 
-		$model = craft()->sproutSeo_meta->newMetaModel($id);
+		$model = sproutSeo()->meta->newMetaModel($id);
 
 		$defaultFields = craft()->request->getPost('sproutseo_fields');
 
 		// Convert Checkbox Array into comma-delimited String
 		if (isset($defaultFields['robots']))
 		{
-			$defaultFields['robots'] = craft()->sproutSeo_meta->prepRobotsForDb($defaultFields['robots']);
+			$defaultFields['robots'] = sproutSeo()->meta->prepRobotsForDb($defaultFields['robots']);
 		}
 
 		// Make our images single IDs instead of an array
@@ -73,7 +73,7 @@ class SproutSeo_DefaultsController extends BaseController
 
 		$model->setAttributes($defaultFields);
 
-		if (craft()->sproutSeo_meta->saveDefaultInfo($model))
+		if (sproutSeo()->meta->saveDefaultInfo($model))
 		{
 			craft()->userSession->setNotice(Craft::t('New default saved.'));
 			$this->redirectToPostedUrl();
@@ -97,6 +97,6 @@ class SproutSeo_DefaultsController extends BaseController
 		$this->requireAjaxRequest();
 
 		$this->returnJson(array(
-			'success' => craft()->sproutSeo_meta->deleteDefault(craft()->request->getRequiredPost('id')) >= 0 ? true : false));
+			'success' => sproutSeo()->meta->deleteDefault(craft()->request->getRequiredPost('id')) >= 0 ? true : false));
 	}
 }

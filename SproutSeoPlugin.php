@@ -89,3 +89,11 @@ class SproutSeoPlugin extends BasePlugin
 		);
 	}
 }
+
+/**
+ * @return SproutSeoService
+ */
+function sproutSeo()
+{
+	return Craft::app()->getComponent('sproutSeo');
+}

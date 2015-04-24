@@ -42,7 +42,7 @@ class SproutSeo_SitemapController extends BaseController
 
 		$model = SproutSeo_SitemapModel::populateModel($sitemapSettings);
 
-		$lastInsertId = craft()->sproutSeo_sitemap->saveSitemap($model);
+		$lastInsertId = sproutSeo()->sitemap->saveSitemap($model);
 		$this->returnJson(array(
 				'lastInsertId' => $lastInsertId)
 		);
@@ -59,7 +59,7 @@ class SproutSeo_SitemapController extends BaseController
 		$customPage->enabled         = craft()->request->getPost('enabled');
 
 		// Save the Custom Page
-		if (craft()->sproutSeo_sitemap->saveCustomPage($customPage))
+		if (sproutSeo()->sitemap->saveCustomPage($customPage))
 		{
 			craft()->userSession->setNotice(Craft::t('Custom page saved.'));
 			$this->redirectToPostedUrl();
@@ -81,7 +81,7 @@ class SproutSeo_SitemapController extends BaseController
 		$this->requireAjaxRequest();
 
 		$id     = craft()->request->getRequiredPost('id');
-		$result = craft()->sproutSeo_sitemap->deleteCustomPageById($id);
+		$result = sproutSeo()->sitemap->deleteCustomPageById($id);
 
 		$this->returnJson(array('success' => $result));
 	}

@@ -36,7 +36,7 @@ class SproutSeo_SettingsController extends BaseController
 		$this->requirePostRequest();
 		$settings = craft()->request->getPost('settings');
 
-		if (craft()->sproutSeo_settings->saveSettings($settings))
+		if (sproutSeo()->settings->saveSettings($settings))
 		{
 			craft()->userSession->setNotice(Craft::t('Settings saved.'));
 

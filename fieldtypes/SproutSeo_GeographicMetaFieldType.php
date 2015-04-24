@@ -38,8 +38,10 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 			? $_POST['entryId']
 			: $this->element->id;
 
+		$locale = $this->element->locale;
+
 		// get any overrides for this entry
-		$model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
+		$model = sproutSeo()->meta->getOverrideByEntryAndLocaleId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -59,7 +61,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				craft()->sproutSeo_meta->deleteOverrideById($model->id);
+				sproutSeo()->meta->deleteOverrideById($model->id);
 			}
 
 			return;
@@ -81,11 +83,11 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		// if not create it
 		if ($model->entryId)
 		{
-			craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
+			sproutSeo()->meta->updateOverride($model->id, $attributes);
 		}
 		else
 		{
-			craft()->sproutSeo_meta->createOverride($attributes);
+			sproutSeo()->meta->createOverride($attributes);
 		}
 
 	}
@@ -102,7 +104,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 	{
 		$entryId = craft()->request->getSegment(3);
 
-		$values = craft()->sproutSeo_meta->getGeographicMetaFieldsByEntryId($entryId);
+		$values = sproutSeo()->meta->getGeographicMetaFieldsByEntryId($entryId);
 
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);

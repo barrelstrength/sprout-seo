@@ -12,6 +12,8 @@ class SproutSeo_BasicMetaFieldModel extends BaseModel
 			'keywords'    => AttributeType::String,
 			'author'      => array(AttributeType::String),
 			'publisher'   => array(AttributeType::String),
+
+			'locale'      => array(AttributeType::Locale, 'required' => true),
 		);
 	}
 

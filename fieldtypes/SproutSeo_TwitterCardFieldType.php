@@ -40,8 +40,10 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 			? $_POST['entryId']
 			: $this->element->id;
 
+		$locale = $this->element->locale;
+
 		// get any overrides for this entry
-		$model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
+		$model = sproutSeo()->meta->getOverrideByEntryAndLocaleId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -61,7 +63,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				craft()->sproutSeo_meta->deleteOverrideById($model->id);
+				sproutSeo()->meta->deleteOverrideById($model->id);
 			}
 
 			return;
@@ -82,11 +84,11 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		// if not create it
 		if ($model->entryId)
 		{
-			craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
+			sproutSeo()->meta->updateOverride($model->id, $attributes);
 		}
 		else
 		{
-			craft()->sproutSeo_meta->createOverride($attributes);
+			sproutSeo()->meta->createOverride($attributes);
 		}
 
 	}
@@ -103,7 +105,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	{
 		$entryId = craft()->request->getSegment(3);
 
-		$variables['values'] = craft()->sproutSeo_meta->getTwitterCardFieldsByEntryId($entryId);
+		$variables['values'] = sproutSeo()->meta->getTwitterCardFieldsByEntryId($entryId);
 
 		// Set up our asset fields
 		if (isset($variables['values']->twitterImage))

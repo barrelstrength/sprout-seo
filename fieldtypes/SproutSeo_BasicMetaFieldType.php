@@ -37,8 +37,11 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 			? $_POST['entryId']
 			: $this->element->id;
 
+		// Grab our locale
+		$locale = $this->element->locale;
+
 		// get any overrides for this entry
-		$model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
+		$model = sproutSeo()->meta->getOverrideByEntryAndLocaleId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -58,7 +61,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				craft()->sproutSeo_meta->deleteOverrideById($model->id);
+				sproutSeo()->meta->deleteOverrideById($model->id);
 			}
 
 			return;
@@ -66,6 +69,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
+		$attributes['locale'] = $locale;
 
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
@@ -78,11 +82,11 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 		// Update or create our override entry
 		if ($model->entryId)
 		{
-			craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
+			sproutSeo()->meta->updateOverride($model->id, $attributes);
 		}
 		else
-		{	
-			craft()->sproutSeo_meta->createOverride($attributes);
+		{
+			sproutSeo()->meta->createOverride($attributes);
 		}
 
 	}
@@ -98,8 +102,9 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 	public function getInputHtml($name, $value)
 	{
 		$entryId = craft()->request->getSegment(3);
+		$locale = $this->element->locale;
 
-		$values = craft()->sproutSeo_meta->getBasicMetaFieldsByEntryId($entryId);
+		$values = sproutSeo()->meta->getBasicMetaFieldsByEntryId($entryId, $locale);
 
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);

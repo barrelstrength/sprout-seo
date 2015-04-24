@@ -43,7 +43,7 @@ class SproutSeoVariable
 	{
 		if (count($meta))
 		{
-			craft()->sproutSeo_meta->updateMeta($meta);
+			sproutSeo()->meta->updateMeta($meta);
 		}
 	}
 
@@ -55,10 +55,10 @@ class SproutSeoVariable
 	public function optimize()
 	{
 		// Gather all override info set in $meta array
-		$overrideInfo = craft()->sproutSeo_meta->getMeta();
+		$overrideInfo = sproutSeo()->meta->getMeta();
 
 		// Process the meta values and prepare HTML output
-		$output = craft()->sproutSeo_meta->optimize($overrideInfo);
+		$output = sproutSeo()->meta->optimize($overrideInfo);
 
 		return TemplateHelper::getRaw($output);
 	}
@@ -81,7 +81,7 @@ class SproutSeoVariable
 	 */
 	public function allDefaults()
 	{
-		return craft()->sproutSeo_meta->getAllDefaults();
+		return sproutSeo()->meta->getAllDefaults();
 	}
 
 	/**
@@ -93,7 +93,7 @@ class SproutSeoVariable
 	 */
 	public function getDefaultById($id)
 	{
-		return craft()->sproutSeo_meta->getDefaultById($id);
+		return sproutSeo()->meta->getDefaultById($id);
 	}
 
 	/**
@@ -103,7 +103,7 @@ class SproutSeoVariable
 	 */
 	public function displayGlobalFallback($defaultId = null)
 	{
-		return craft()->sproutSeo_meta->displayGlobalFallback($defaultId);
+		return sproutSeo()->meta->displayGlobalFallback($defaultId);
 	}
 
 	/**
@@ -113,7 +113,7 @@ class SproutSeoVariable
 	 */
 	public function getSitemap(array $options = null)
 	{
-		return craft()->sproutSeo_sitemap->getSitemap($options);
+		return sproutSeo()->sitemap->getSitemap($options);
 	}
 
 	/**
@@ -133,7 +133,7 @@ class SproutSeoVariable
 	 */
 	public function getAllSectionsWithUrls()
 	{
-		return craft()->sproutSeo_sitemap->getAllSectionsWithUrls();
+		return sproutSeo()->sitemap->getAllSectionsWithUrls();
 	}
 
 	/**
@@ -143,6 +143,6 @@ class SproutSeoVariable
 	 */
 	public function getAllCustomPages()
 	{
-		return craft()->sproutSeo_sitemap->getAllCustomPages();
+		return sproutSeo()->sitemap->getAllCustomPages();
 	}
 }

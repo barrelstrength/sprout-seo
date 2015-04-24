@@ -41,8 +41,10 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 			? $_POST['entryId']
 			: $this->element->id;
 
+		$locale = $this->element->locale;
+
 		// get any overrides for this entry
-		$model = craft()->sproutSeo_meta->getOverrideByEntryId($entryId);
+		$model = sproutSeo()->meta->getOverrideByEntryAndLocaleId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -63,14 +65,14 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				craft()->sproutSeo_meta->deleteOverrideById($model->id);
+				sproutSeo()->meta->deleteOverrideById($model->id);
 			}
 
 			return;
 		}
 
 
-		$_POST['fields']['sproutseo_fields']['robots'] = craft()->sproutSeo_meta->prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+		$_POST['fields']['sproutseo_fields']['robots'] = sproutSeo()->meta->prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
@@ -87,11 +89,11 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 		// if not create it
 		if ($model->entryId)
 		{
-			craft()->sproutSeo_meta->updateOverride($model->id, $attributes);
+			sproutSeo()->meta->updateOverride($model->id, $attributes);
 		}
 		else
 		{
-			craft()->sproutSeo_meta->createOverride($attributes);
+			sproutSeo()->meta->createOverride($attributes);
 		}
 
 	}
@@ -109,7 +111,7 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 	{
 		$entryId = craft()->request->getSegment(3);
 
-		$values = craft()->sproutSeo_meta->getRobotsMetaFieldsByEntryId($entryId);
+		$values = sproutSeo()->meta->getRobotsMetaFieldsByEntryId($entryId);
 
 		$values->robots = explode(',', $values->robots);
 

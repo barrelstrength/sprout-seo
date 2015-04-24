@@ -11,10 +11,8 @@ class SproutSeo_OverridesRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'entryId'        => array(
-				AttributeType::Number,
-				'required' => true
-			),
+			'entryId'        => array(AttributeType::Number, 'required' => true),
+			'locale'         => array(AttributeType::Locale, 'required' => true),
 			'title'          => array(AttributeType::String),
 			'description'    => array(AttributeType::String),
 			'keywords'       => array(AttributeType::String),
@@ -57,13 +55,6 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			'twitterPlayerStreamContentType' => array(AttributeType::String),
 			'twitterPlayerWidth'             => array(AttributeType::String),
 			'twitterPlayerHeight'            => array(AttributeType::String),
-		);
-	}
-
-	public function defineIndexes()
-	{
-		return array(
-			array('columns' => array('entryId'), 'unique' => true),
 		);
 	}
 }

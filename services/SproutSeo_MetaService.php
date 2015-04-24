@@ -158,12 +158,13 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		}
 	}
 
-	public function getOverrideByEntryId($entryId)
+	public function getOverrideByEntryAndLocaleId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
 
 		$model = SproutSeo_OverridesModel::populateModel($query);
@@ -179,13 +180,16 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	}
 
-	public function getBasicMetaFieldsByEntryId($entryId)
+	public function getBasicMetaFieldsByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('id, title, description, keywords')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(
 				':entryId' => $entryId
+			))
+			->andWhere('locale = :locale', array(
+				':locale' => $locale
 			))
 			->queryRow();
 
@@ -210,8 +214,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(
 				':entryId' => $entryId
-			)
-			)
+			))
 			->queryRow();
 
 	if (isset($query))
@@ -388,7 +391,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// see if this entry has any Entry Overrides.
 		if (isset($overrideInfo['id']))
 		{
-			$entryOverrides = $this->getOverrideByEntryId($overrideInfo['id']);
+			$locale = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
+
+			$entryOverrides = $this->getOverrideByEntryAndLocaleId($overrideInfo['id'], $locale);
 
 			unset($overrideInfo['id']);
 		}
