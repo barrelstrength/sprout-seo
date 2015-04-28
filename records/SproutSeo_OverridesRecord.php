@@ -57,4 +57,11 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			'twitterPlayerHeight'            => array(AttributeType::String),
 		);
 	}
+
+    public function defineIndexes()
+    {
+        return array(
+            array('columns' => array('entryId, locale'), 'unique' => true),
+        );
+    }
 }
