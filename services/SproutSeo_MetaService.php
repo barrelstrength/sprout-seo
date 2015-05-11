@@ -379,9 +379,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		}
 
 		// Set the default canonical URL to be the current URL
-        $protocol               = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
-		$this->currentUrl       = $protocol . $_SERVER['HTTP_HOST'] . craft()->request->url;
-		$defaults->canonical    = $this->currentUrl;
+		$this->currentUrl = UrlHelper::getSiteUrl(craft()->request->path);
+		$defaults->canonical = $this->currentUrl;
 
 		// ------------------------------------------------------------
 		// PREPARE ENTRY OVERRIDES
