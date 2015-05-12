@@ -1,6 +1,11 @@
 <?php
 namespace Craft;
 
+/**
+ * Class SproutSeo_MetaService
+ *
+ * @package Craft
+ */
 class SproutSeo_MetaService extends BaseApplicationComponent
 {
 	protected $metaRecord;
@@ -217,8 +222,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			))
 			->queryRow();
 
-	if (isset($query))
-	{
+		if (isset($query))
+		{
 			return SproutSeo_TwitterCardFieldModel::populateModel($query);
 		}
 		else
@@ -239,8 +244,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			)
 			->queryRow();
 
-	if (isset($query))
-	{
+		if (isset($query))
+		{
 			return SproutSeo_OpenGraphFieldModel::populateModel($query);
 		}
 		else
@@ -258,8 +263,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			->where('entryId = :entryId', array(':entryId' => $entryId))
 			->queryRow();
 
-		 if (isset($query))
-		 {
+		if (isset($query))
+		{
 			return SproutSeo_GeographicMetaFieldModel::populateModel($query);
 		}
 		else
@@ -326,10 +331,14 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		return $record->deleteByPk($id);
 	}
 
+	/**
+	 * @param $overrideInfo
+	 *
+	 * @return string
+	 */
 	public function optimize($overrideInfo)
 	{
-		// by default don't append anything to the end of our title
-		$this->siteInfo = "";
+		$this->siteInfo = '';
 
 		// Divider from settings
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
@@ -338,9 +347,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$this->divider = ($this->divider) ? $this->divider : '-';
 
 		// Setup all of our SEO Metadata Arrays
-		$entryOverrides = new SproutSeo_MetaModel; // Top Priority
-		$codeOverrides  = new SproutSeo_MetaModel; // Second Priority
-		$defaults       = new SproutSeo_MetaModel; // Lowest Priority
+		$entryOverrides = new SproutSeo_MetaModel(); // Top Priority
+		$codeOverrides  = new SproutSeo_MetaModel(); // Second Priority
+		$defaults       = new SproutSeo_MetaModel(); // Lowest Priority
 
 		// PREPARE Defaults
 		// ------------------------------------------------------------
