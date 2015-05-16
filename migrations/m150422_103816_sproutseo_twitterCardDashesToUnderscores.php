@@ -24,12 +24,14 @@ class m150422_103816_sproutseo_twitterCardDashesToUnderscores extends BaseMigrat
         }
 
         $result = craft()->db->createCommand()
-            ->update('sproutseo_' . $table,
+            ->update(
+                'sproutseo_' . $table,
                 array(
                     'twitterCard' => 'summary_large_image'
                 ),
+                'twitterCard = :cardName',
                 array(
-                    'twitterCard' => 'summary-large-image'
+                    ':cardName' => 'summary-large-image'
                 )
             );
 
