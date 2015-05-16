@@ -18,6 +18,12 @@ class m150423_000000_sproutSeo_addLocaleToOverrides extends BaseMigration
 			'locale' => ColumnType::Char
 		);
 
+		SproutSeoPlugin::log('Dropping `entryId` index on the sproutseo_overrides table...', LogLevel::Info, true);
+
+		MigrationHelper::dropIndexIfExists('sproutseo_overrides', 'entryId');
+
+		SproutSeoPlugin::log('Done dropping `entryId` index on the sproutseo_overrides table.', LogLevel::Info, true);
+
 		$this->_addColumnsAfter($locale, 'entryId');
 
 		// return true and let craft know its done
@@ -44,12 +50,6 @@ class m150423_000000_sproutSeo_addLocaleToOverrides extends BaseMigration
 
 				// log that we created the new column
 				SproutSeoPlugin::log("Created the `$columnName` in the `$tableName` table.", LogLevel::Info, true);
-
-				SproutSeoPlugin::log('Dropping `entryId` index on the sproutseo_overrides table...', LogLevel::Info, true);
-
-				craft()->db->dropIndex('sproutseo_overrides', 'entryId');
-
-				SproutSeoPlugin::log('Done dropping `entryId` index on the sproutseo_overrides table.', LogLevel::Info, true);
 
 			}
 
