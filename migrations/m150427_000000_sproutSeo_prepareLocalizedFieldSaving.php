@@ -34,6 +34,7 @@ class m150427_000000_sproutSeo_prepareLocalizedFieldSaving extends BaseMigration
         }
 
         MigrationHelper::dropIndexIfExists($overridesTable, 'entryId');
+        
         SproutSeoPlugin::log("Index `entryId` dropped from `$overridesTable`.", LogLevel::Info, true);
 
         craft()->db->createCommand()
