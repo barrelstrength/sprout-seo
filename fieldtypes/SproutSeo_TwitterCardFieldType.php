@@ -71,6 +71,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
+		$attributes['locale'] = $locale;
 
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $fields);
