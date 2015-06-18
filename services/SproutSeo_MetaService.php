@@ -568,6 +568,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			// If not, then process what we have to try to extract the URL
 			if ( substr($metaValues['ogImage'], 0, 4) !== "http" )
 			{
+				if ( ! is_object($metaValues['ogImage']) )
+				{
+					throw new \Exception('Open Graph Image override value "'. $metaValues['ogImage'] .'" must be an
+					absolute path.');
+				}
+
 				$ogImage = craft()->elements->getElementById($metaValues['ogImage']);
 
 				$imageUrl = (string)($ogImage->url);
@@ -604,6 +610,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			// If not, then process what we have to try to extract the URL
 			if ( substr($metaValues['twitterImage'], 0, 4) !== "http" )
 			{
+				if ( ! is_object($metaValues['twitterImage']) )
+				{
+					throw new \Exception('Twitter Image override value "'. $metaValues['twitterImage'] .'" must be an
+					absolute path.');
+				}
+
 				$twitterImage = craft()->elements->getElementById($metaValues['twitterImage']);
 
 				$imageUrl = (string)($twitterImage->url);
