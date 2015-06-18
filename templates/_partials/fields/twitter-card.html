@@ -18,8 +18,7 @@
 		target="_blank">How Twitter Cards work</a>.'|t,
 		name: 'sproutseo_fields[twitterCard]',
 		options: twitterCardOptions,
-		value: (default.twitterCard is defined ? default.twitterCard : 'summary'),
-		value: default.twitterCard,
+		value: (values.twitterCard is defined ? values.twitterCard : 'summary'),
 		errors: "",
 		required: false
 	}) }}
@@ -30,7 +29,7 @@
 		label: "Site"|t,
 		instructions: "The Twitter username of the owner of this card's domain."|t,
 		name: 'sproutseo_fields[twitterSite]',
-		value: default.twitterSite,
+		value: values.twitterSite,
 		errors: "",
 		required: false,
 		placeholder: '@ContentPublisher'
@@ -40,7 +39,7 @@
 		label: "Creator"|t,
 		instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
 		name: 'sproutseo_fields[twitterCreator]',
-		value: default.twitterCreator,
+		value: values.twitterCreator,
 		errors: "",
 		required: false,
 		placeholder: '@ContentAuthor'
@@ -52,7 +51,7 @@
 		name: 'sproutseo_fields[twitterTitle]',
 		maxlength: 70,
 		showCharsLeft: true,
-		value: default.twitterTitle,
+		value: values.twitterTitle,
 		errors: "",
 		required: false,
 		placeholder: " "
@@ -64,7 +63,7 @@
 		name: 'sproutseo_fields[twitterDescription]',
 		maxlength: 200,
 		showCharsLeft: true,
-		value: default.twitterDescription,
+		value: values.twitterDescription,
 		errors: "",
 		required: false,
 		placeholder: " "
@@ -76,7 +75,7 @@
 			label: 'Image'|t,
 		}, forms.elementSelect({
 			elements: twitterImageElements,
-			sourceElementId: default.twitterImage,
+			sourceElementId: values.twitterImage,
 			elementType: elementType,
 			id: 'twitterImage',
 			name: 'sproutseo_fields[twitterImage]',
@@ -101,7 +100,7 @@
 			label: "Player"|t,
 			instructions: "HTTPS URL to iframe player. This must be a HTTPS URL which does not generate mixed content warnings in a web browser."|t,
 			name: 'sproutseo_fields[twitterPlayer]',
-			value: default.twitterPlayer,
+			value: values.twitterPlayer,
 			errors: "",
 			required: false
 		}) }}
@@ -111,7 +110,7 @@
 			instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrations directly. If
 			provided, the stream must be delivered in the MPEG-4 container format."|t,
 			name: 'sproutseo_fields[twitterPlayerStream]',
-			value: default.twitterPlayerStream,
+			value: values.twitterPlayerStream,
 			errors: "",
 			required: false
 		}) }}
@@ -120,7 +119,7 @@
 			label: "Stream Content Type"|t,
 			instructions: "The MIME type subtype combination that describes the content contained in twitter player stream."|t,
 			name: 'sproutseo_fields[twitterPlayerStreamContentType]',
-			value: default.twitterPlayerStreamContentType,
+			value: values.twitterPlayerStreamContentType,
 			errors: "",
 			required: false
 		}) }}
@@ -129,7 +128,7 @@
 			label: "Height"|t,
 			instructions: "Height of IFRAME specified in twitter player in pixels."|t,
 			name: 'sproutseo_fields[twitterPlayerHeight]',
-			value: default.twitterPlayerHeight,
+			value: values.twitterPlayerHeight,
 			errors: "",
 			required: false
 		}) }}
@@ -138,7 +137,7 @@
 			label: "Width"|t,
 			instructions: 'Width of IFRAME specified in twitter player in pixels.'|t,
 			name: 'sproutseo_fields[twitterPlayerWidth]',
-			value: default.twitterPlayerWidth,
+			value: values.twitterPlayerWidth,
 			errors: "",
 			required: false
 		}) }}
