@@ -30,8 +30,11 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 	 */
 	public function onAfterElementSave()
 	{
+		// grab only the geo fields
+		$fields = (isset($_POST['fields']['sproutseo_fields'])) ? $_POST['fields']['sproutseo_fields'] : null;
+
 		// Make sure we are actually submitting our field
-		if ( ! isset($_POST['fields']['sproutseo_fields'])) return;
+		if ( ! isset($fields)) return;
 
 		// Determine our entryId
 		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
@@ -68,12 +71,14 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		}
 
 
+		$fields['robots'] = sproutSeo()->meta->prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
 		$attributes['locale'] = $locale;
 
 		// Grab all the other Sprout SEO fields.
-		$attributes = array_merge($attributes, $_POST['fields']['sproutseo_fields']);
+		$attributes = array_merge($attributes, $fields);
 
 		// Make sure all of our images are strings (twitter/og)
 		// We need to do this in case another seo field with images exists

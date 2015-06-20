@@ -69,13 +69,15 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 			return;
 		}
 
+		$fields['robots'] = sproutSeo()->meta->prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
 		$attributes['locale'] = $locale;
 
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $fields);
-		
+
 		// Make sure all of our images are strings (twitter/og)
 		// We need to do this in case another seo field with images exists
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);

@@ -70,6 +70,8 @@ class SproutSeo_OpenGraphFieldType extends BaseFieldType
 			return;
 		}
 
+		$fields['robots'] = sproutSeo()->meta->prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
 		$attributes['locale'] = $locale;
