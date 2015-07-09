@@ -13,7 +13,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	 */
 	public function getName()
 	{
-		return Craft::t('SproputSeo_Redirects');
+		return Craft::t('SproutSeo_Redirects');
 	}
 
 	/**
