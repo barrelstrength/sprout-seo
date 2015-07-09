@@ -37,9 +37,8 @@
 			reverseToggle: "single-uri-container",
 			checked: ('noindex' in values.robots)
 		}) }}
-		<span class="info">{{ "I don't want this page to follow links on this page"|t }}</span>
+		<span class="info">{{ "I don't want this page to be indexed by search engines"|t }}</span>
 	</div>
-
 	<div>
 		{{ forms.checkbox({
 			label: "nofollow",
@@ -49,7 +48,7 @@
 			reverseToggle: "single-uri-container",
 			checked: ('nofollow' in values.robots)
 		}) }}
-		
+		<span class="info">{{ "I don't want robots to follow links on this page"|t }}</span>
 	</div>
 
 	<h3>{{ "Robots - Advanced"|t }}</h3>
