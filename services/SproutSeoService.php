@@ -23,6 +23,11 @@ class SproutSeoService extends BaseApplicationComponent
 	 */
 	public $sitemap;
 
+	/**
+	 * @var SproutSeo_RedirectsService
+	 */
+	public $redirects;
+
 	public function init()
 	{
 		parent::init();
@@ -30,5 +35,6 @@ class SproutSeoService extends BaseApplicationComponent
 		$this->meta     = Craft::app()->getComponent('sproutSeo_meta');
 		$this->sitemap  = Craft::app()->getComponent('sproutSeo_sitemap');
 		$this->settings = Craft::app()->getComponent('sproutSeo_settings');
+		$this->redirects = Craft::app()->getComponent('sproutSeo_redirects');
 	}
 }

@@ -1,0 +1,43 @@
+{% import "_includes/forms" as forms %}
+
+	{{  forms.lightswitchField({
+		label: "Regular expression?"|t,
+		id: 'regex',
+		name: 'regex',
+		value: redirect.regex,
+		on: (redirect.regex is defined) ? redirect.regex : ""
+	}) }}
+
+	{{ forms.textField({
+		label: "Old Url"|t,
+		id: 'oldUrl',
+		name: 'oldUrl',
+		value:  redirect.oldUrl,
+		errors: redirect.getErrors('oldUrl'),
+		first: true,
+		autofocus: true,
+		required: true,
+		size: 50
+	}) }}
+
+	{{ forms.textField({
+		label: "New Url"|t,
+		id: 'newUrl',
+		name: 'newUrl',
+		value:  redirect.newUrl,
+		errors: redirect.getErrors('newUrl'),
+		first: true,
+		autofocus: true,
+		required: true,
+		size: 50
+	}) }}
+
+	{{ forms.selectField({
+		label:  'Method'|t,
+		id: 'method',
+		name: 'method',
+		instructions:   'Choose a status code.'|t,
+		value:		redirect.method,
+		options:	methodOptions,
+		errors:   redirect.getErrors('method'),
+	}) }}

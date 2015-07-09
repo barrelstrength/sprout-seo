@@ -50,6 +50,24 @@ class SproutSeoPlugin extends BasePlugin
 		return true;
 	}
 
+	/* --------------------------------------------------------------
+	 * HOOKS
+	 * ------------------------------------------------------------ */
+
+	public function init()
+	{
+		if(craft()->request->isSiteRequest())
+		{
+			$url = craft()->request->getUrl();
+			$redirect = sproutSeo()->redirects->findUrl($url);
+
+			if ($redirect)
+			{
+				craft()->request->redirect($redirect->newUrl, true, $redirect->method);
+			}
+		}
+	}
+
 	/**
 	 * @return array
 	 */
@@ -85,6 +103,15 @@ class SproutSeoPlugin extends BasePlugin
 			),
 			'sproutseo/settings' => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
+			),
+			'sproutseo/redirects' => array(
+				'action' => 'sproutSeo/redirects/redirectIndex'
+			),
+			'sproutseo/redirects/new' => array(
+				'action' => 'sproutSeo/redirects/editRedirect'
+			),
+			'sproutseo/redirects/(?P<redirectId>\d+)' => array(
+				'action' => 'sproutSeo/redirects/editRedirect'
 			)
 		);
 	}
