@@ -42,7 +42,7 @@ class SproutSeo_RedirectRecord extends BaseRecord
 	 * Update "oldUrl" and "newUrl" to starts with a "/"
 	 *
 	 */
-	public function beforeSave()
+	protected function beforeValidate()
 	{
 		$this->oldUrl = sproutSeo()->redirects->addSlash($this->oldUrl);
 
