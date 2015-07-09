@@ -6,7 +6,6 @@ namespace Craft;
  */
 class SproutSeo_RedirectsController extends BaseController
 {
-
 	/**
 	 * Event index
 	 */

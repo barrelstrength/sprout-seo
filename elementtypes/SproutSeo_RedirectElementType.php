@@ -13,7 +13,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	 */
 	public function getName()
 	{
-		return Craft::t('SproutSeo_Redirects');
+		return Craft::t('Redirects');
 	}
 
 	/**
@@ -63,25 +63,10 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	public function defineTableAttributes($source = null)
 	{
 		return array(
-			'oldUrl' => Craft::t('Old URL'),
-			'newUrl' => Craft::t('New URL'),
+			'oldUrl' => Craft::t('Old Url'),
+			'newUrl' => Craft::t('New Url'),
 			'method' => Craft::t('Method'),
-			'test' => null,
-		);
-	}
-
-	/**
-	 * Returns the attributes that can be sorted in the table view
-	 *
-	 * @param string|null $source
-	 * @return array
-	 */
-	public function defineSortableAttributes()
-	{
-		return array(
-			'oldUrl' => Craft::t('Old URL'),
-			'newUrl' => Craft::t('New URL'),
-			'method' => Craft::t('Method'),
+			'test' => Craft::t('Test')
 		);
 	}
 
