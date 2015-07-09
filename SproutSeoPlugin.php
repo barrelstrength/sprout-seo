@@ -63,6 +63,7 @@ class SproutSeoPlugin extends BasePlugin
 		if(craft()->request->isSiteRequest())
 		{
 			$url = craft()->request->getUrl();
+
 			// check first on normal urls
 			$redirect = sproutSeo()->redirects->findUrl($url);
 
