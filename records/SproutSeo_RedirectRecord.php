@@ -44,7 +44,10 @@ class SproutSeo_RedirectRecord extends BaseRecord
 	 */
 	protected function beforeValidate()
 	{
-		$this->oldUrl = sproutSeo()->redirects->addSlash($this->oldUrl);
+		if(!$this->regex)
+		{
+			$this->oldUrl = sproutSeo()->redirects->addSlash($this->oldUrl);
+		}
 
 		$this->newUrl = sproutSeo()->redirects->addSlash($this->newUrl);
 
