@@ -28,17 +28,27 @@
 	<input type="hidden" name="sproutseo_fields[robots]" value="">
 
 	<h3>{{ "Robots - Basic"|t }}</h3>
-
 	<div>
-		<input type="checkbox" value="noindex" id="noindex-choice" class="fieldtoggle checkbox"
-			name="sproutseo_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noindex',
-		values.robots) }}><label for="noindex-choice">noindex</label>
+		{{ forms.checkbox({
+			label: "noindex",
+			id: "noindex-choice",
+			name: "sproutseo_fields[robots][]",
+			value: "noindex",
+			reverseToggle: "single-uri-container",
+			checked: ('noindex' in values.robots)
+		}) }}
 		<span class="info">{{ "I don't want this page to be indexed by search engines"|t }}</span>
 	</div>
-
 	<div>
-		<input type="checkbox" value="nofollow" id="nofollow-choice" class="fieldtoggle checkbox" name="sproutseo_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('nofollow', values.robots) }}><label for="nofollow-choice">nofollow</label>
-		<span class="info">{{ "I don't want this page to follow links on this page"|t }}</span>
+		{{ forms.checkbox({
+			label: "nofollow",
+			id: "nofollow-choice",
+			name: "sproutseo_fields[robots][]",
+			value: "nofollow",
+			reverseToggle: "single-uri-container",
+			checked: ('nofollow' in values.robots)
+		}) }}
+		<span class="info">{{ "I don't want robots to follow links on this page"|t }}</span>
 	</div>
 
 	<h3>{{ "Robots - Advanced"|t }}</h3>
@@ -47,29 +57,63 @@
 	http://tech4sky.com/noodp-noarchive-nosnippet-noydir-meta-tag #}
 
 	<div>
-		<input type="checkbox" value="noarchive" id="noarchive-choice" class="fieldtoggle checkbox" name="sproutseo_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noarchive', values.robots) }}><label for="noarchive-choice">noarchive</label>
+		{{ forms.checkbox({
+			label: "noarchive",
+			id: "noarchive-choice",
+			name: "sproutseo_fields[robots][]",
+			value: "noarchive",
+			reverseToggle: "single-uri-container",
+			checked: ('noarchive' in values.robots)
+		}) }}
 		<span class="info">{{ "I don't want search engines to provide archived versions of this page to users"|t }}</span>
 	</div>
 	<div>
-		<input type="checkbox" value="noimageindex" id="noimageindex-choice" class="fieldtoggle checkbox" name="sproutseo_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noimageindex', values.robots) }}><label for="noimageindex-choice">noimageindex</label>
+		{{ forms.checkbox({
+			label: "noimageindex",
+			id: "noimageindex-choice",
+			name: "sproutseo_fields[robots][]",
+			value: "noimageindex",
+			reverseToggle: "single-uri-container",
+			checked: ('noimageindex' in values.robots)
+		}) }}
 		<span class="info">{{ "I don't want images on this page to be indexed by search engines"|t }}</span>
 	</div>
 	<div>
-		<input type="checkbox" value="nosnippet" id="nosnippet-choice" class="fieldtoggle checkbox" name="sproutseo_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('nosnippet', values.robots) }}><label for="nosnippet-choice">nosnippet</label>
+		{{ forms.checkbox({
+			label: "nosnippet",
+			id: "nosnippet-choice",
+			name: "sproutseo_fields[robots][]",
+			value: "nosnippet",
+			reverseToggle: "single-uri-container",
+			checked: ('nosnippet' in values.robots)
+		}) }}
 		<span class="info">{{ "I don't want Google to cache this page or display a description below the page in search
 		results"|t }}</span>
 	</div>
 	<div>
-		<input type="checkbox" value="noodp" id="noodp-choice" class="fieldtoggle checkbox" name="sproutseo_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noodp', values.robots) }}><label for="noodp-choice">noodp</label>
+		{{ forms.checkbox({
+			label: "noodp",
+			id: "noodp-choice",
+			name: "sproutseo_fields[robots][]",
+			value: "noodp",
+			reverseToggle: "single-uri-container",
+			checked: ('noodp' in values.robots)
+		}) }}
 		<span class="info">{{ "I don't want Google to use the Open Directory Project (ODP) description for this page. I
 		want Google to use the description on the website."|t }}</span>
 	</div>
 	<div>
-		<input type="checkbox" value="noydir" id="noydir-choice" class="fieldtoggle checkbox" name="sproutseo_fields[robots][]" data-reverse-target="single-uri-container" {{ checkbox.isSelected('noydir', values.robots) }}><label for="noydir-choice">noydir</label>
+		{{ forms.checkbox({
+			label: "noydir",
+			id: "noydir-choice",
+			name: "sproutseo_fields[robots][]",
+			value: "noydir",
+			reverseToggle: "single-uri-container",
+			checked: ('noydir' in values.robots)
+		}) }}
 		<span class="info">{{ "I don't want Bing or Yahoo! to use the Yahoo! Directory titles and descriptions for this
 		page.  I want Bing and Yahoo! to use the titles and descriptions on the website."|t }}</span>
 	</div>
-
 </div>
 
 {% includeCssResource "sproutseo/css/fields.css" %}
