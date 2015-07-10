@@ -44,7 +44,7 @@ class SproutSeo_RedirectModel extends BaseElementModel
 	 */
 	public function getCpEditUrl()
 	{
-		return UrlHelper::getCpUrl('redirects/'.$this->id);
+		return UrlHelper::getCpUrl('sproutseo/redirects/'.$this->id);
 	}
 	//Get layout
 }

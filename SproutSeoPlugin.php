@@ -59,9 +59,20 @@ class SproutSeoPlugin extends BasePlugin
 		if(craft()->request->isSiteRequest())
 		{
 			$url = craft()->request->getUrl();
+			// check first on normal urls
 			$redirect = sproutSeo()->redirects->findUrl($url);
 
-			if ($redirect)
+			if (!$redirect)
+			{
+				// check on regex urls
+				$redirect = sproutSeo()->redirects->findRegexUrl($url);
+
+				if($redirect)
+				{
+					craft()->request->redirect($redirect->newUrl, true, $redirect->method);
+				}
+			}
+			else
 			{
 				craft()->request->redirect($redirect->newUrl, true, $redirect->method);
 			}

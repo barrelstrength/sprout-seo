@@ -126,6 +126,23 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Find a regex url
+	 *
+	 * @param string $url
+	 * @return SproutSeo_RedirectRecord $redirect
+	 */
+	public function findRegexUrl($url)
+	{
+		$criteria = new \CDbCriteria();
+		$criteria->addCondition('regex = true');
+		$criteria->addCondition(':url regexp oldUrl');
+		$criteria->params = array(':url'=>$url);
+		$criteria->limit = 1;
+
+		return SproutSeo_RedirectRecord::model()->find($criteria);
+	}
+
+	/**
 	 * Get methods
 	 *
 	 * @return array
