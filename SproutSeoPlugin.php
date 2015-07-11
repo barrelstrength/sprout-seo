@@ -60,8 +60,7 @@ class SproutSeoPlugin extends BasePlugin
 		// these defined here
 		return array(
 			'pluginNameOverride'  => AttributeType::String,
-			'appendSiteName'      => AttributeType::Bool,
-			'seoDivider'          => AttributeType::String,
+			'seoDivider'          => array(AttributeType::String, 'default' => '-'),
 		);
 	}
 
