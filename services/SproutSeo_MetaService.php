@@ -343,9 +343,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		// Divider from settings
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
-		// If no divider exists, use a dash
-		$this->divider = ($this->divider) ? $this->divider : '-';
-
 		// Setup all of our SEO Metadata Arrays
 		$entryOverrides = new SproutSeo_MetaModel(); // Top Priority
 		$codeOverrides  = new SproutSeo_MetaModel(); // Second Priority
