@@ -145,4 +145,9 @@ class SproutSeoVariable
 	{
 		return sproutSeo()->sitemap->getAllCustomPages();
 	}
+
+	public function getDivider()
+	{
+		return craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
+	}
 }
