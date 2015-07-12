@@ -36,16 +36,6 @@ class SproutSeoTest extends BaseTest
 	}
 
 	/*
-	 * @beginTestSuite
-	 */
-
-	public function testNewMetaModel()
-	{
-		// Dummy test since $this->sproutSeo_meta->newMetaModel() is not currently testable
-		$this->assertTrue(false);
-	}
-
-	/*
 	 * @endTestSuite
 	 */
 
