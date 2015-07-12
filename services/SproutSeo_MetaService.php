@@ -71,20 +71,21 @@ class SproutSeo_MetaService extends BaseApplicationComponent
    *
    * While we don't define HTML in our PHP as much as possible, the goal here is to be as easy to use as possible on the front end so we want to simplify the front end code to a single function and wrangle what we need to here.
 	 *
-	 * @param $entryOverrideMetaModel
-	 * @param $codeOverrideMetaModel
-	 * @param $defaultsMetaModel
-	 * @param $globalFallbackMetaModel
 	 * @return array
 	 * @throws \Exception
 	 */
 	public function getOptimizedMeta()
 	{
+		$entryOverrideMetaModel  = new SproutSeo_MetaModel();
+		$codeOverrideMetaModel   = new SproutSeo_MetaModel();
+		$defaultMetaModel        = new SproutSeo_MetaModel();
+		$globalFallbackMetaModel = new SproutSeo_MetaModel();
+
 		// Prepare a SproutSeo_MetaModel for each of our levels of priority
-		$entryOverrideMetaModel  = $this->_getEntryOverridesMetaModel($this->getMeta());
-		$codeOverrideMetaModel   = $this->_getCodeOverridesMetaModel($this->getMeta());
-		$defaultsMetaModel       = $this->_getDefaultsMetaModel($this->getMeta());
-		$globalFallbackMetaModel = $this->_getGlobalFallbackMetaModel();
+		$entryOverrideMetaModel  = $entryOverrideMetaModel->setMeta('entry', $this->getMeta());
+		$codeOverrideMetaModel   = $codeOverrideMetaModel->setMeta('code', $this->getMeta());
+		$defaultMetaModel        = $defaultMetaModel->setMeta('default', $this->getMeta());
+		$globalFallbackMetaModel = $globalFallbackMetaModel->setMeta('fallback');
 
 		$prioritizedMetaModel = new SproutSeo_MetaModel();
 
@@ -105,9 +106,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			{
 				$prioritizedMetaModel[$key] = $codeOverrideMetaModel[$key];
 			}
-			elseif ($defaultsMetaModel->getAttribute($key))
+			elseif ($defaultMetaModel->getAttribute($key))
 			{
-				$prioritizedMetaModel[$key] = $defaultsMetaModel->getAttribute($key);
+				$prioritizedMetaModel[$key] = $defaultMetaModel->getAttribute($key);
 			}
 			elseif ($globalFallbackMetaModel->getAttribute($key))
 			{
@@ -115,114 +116,14 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			}
 			else
 			{
-				$prioritizedMetaModel[$key] = '';
+				$prioritizedMetaModel[$key] = $prioritizedMetaModel->getAttribute($key);
 			}
 		}
 
 		// @todo - reorganize how this stuff works / robots need love.
-		$prioritizedMetaModel->title = SproutSeoMetaHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultsMetaModel, $globalFallbackMetaModel);
+		$prioritizedMetaModel->title = SproutSeoMetaHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel);
 		$prioritizedMetaModel->robots = SproutSeoMetaHelper::ensureRobotsHasValues($prioritizedMetaModel);
-		
+
 		return $prioritizedMetaModel;
-	}
-
-	public function displayGlobalFallback($defaultId = null)
-	{
-		$globalFallbackMetaModel = $this->_getGlobalFallbackMetaModel();
-
-		$isGlobalFallback = ( $globalFallbackMetaModel->id && ($defaultId == $globalFallbackMetaModel->id) );
-		$fallbackExists = !is_null($globalFallbackMetaModel->id);
-
-		if ($isGlobalFallback OR !$fallbackExists)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	public function _getGlobalFallbackMetaModel()
-	{
-		$globalFallback = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_defaults')
-			->where('globalFallback=:globalFallback', array(':globalFallback' => 1))
-			->queryRow();
-
-		$model = SproutSeo_MetaModel::populateModel($globalFallback);
-		$model->canonical = SproutSeoMetaHelper::prepareCanonical($model);
-
-		SproutSeoMetaHelper::prepareAssetUrls($model);
-
-		return $model;
-	}
-
-	/**
-	 * Create our default SproutSeo_MetaModel
-	 *
-	 * @param $overrideInfo
-	 * @return SproutSeo_MetaModel
-	 */
-	private function _getDefaultsMetaModel(&$overrideInfo)
-	{
-		$defaultsMetaModel = new SproutSeo_MetaModel();
-
-		if (isset($overrideInfo['default']))
-		{
-			// Build defaultsMetaModel from settings in template
-			$defaultsMetaModel = sproutSeo()->defaults->getDefaultByHandle($overrideInfo['default']);
-			$defaultsMetaModel->canonical = SproutSeoMetaHelper::prepareCanonical($defaultsMetaModel);
-
-			SproutSeoMetaHelper::prepareAssetUrls($defaultsMetaModel);
-		}
-
-		return $defaultsMetaModel;
-	}
-
-	/**
-	 * Create a SproutSeo_MetaModel based on an override element ID
-	 *
-	 * @param $overrideInfo
-	 * @return SproutSeo_MetaModel
-	 */
-	private function _getEntryOverridesMetaModel(&$overrideInfo)
-	{
-		$entryOverridesMetaModel = new SproutSeo_MetaModel();
-
-		if (isset($overrideInfo['id']))
-		{
-			// @todo - revisit when adding internationalization
-			$locale = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$entryOverride = sproutSeo()->overrides->getOverrideByEntryId($overrideInfo['id'], $locale);
-			$overrideAttributes = $entryOverride->getAttributes();
-
-			$entryOverridesMetaModel->setAttributes($overrideAttributes);
-
-			SproutSeoMetaHelper::prepareAssetUrls($entryOverridesMetaModel);
-		}
-
-		return $entryOverridesMetaModel;
-	}
-
-	/**
-	 * Process any overrides provided in via the templates and create a SproutSeo_MetaModel
-	 *
-	 * @param $overrideInfo
-	 * @return SproutSeo_MetaModel
-	 */
-	private function _getCodeOverridesMetaModel($overrideInfo)
-	{
-		$codeOverrideMetaModel = new SproutSeo_MetaModel();
-
-		if (!empty($overrideInfo))
-		{
-			$codeOverrideMetaModel->setAttributes($overrideInfo);
-
-			SproutSeoMetaHelper::prepareAssetUrls($codeOverrideMetaModel);
-		}
-
-		return $codeOverrideMetaModel;
 	}
 }
