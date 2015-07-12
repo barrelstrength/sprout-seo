@@ -8,6 +8,10 @@ namespace Craft;
  */
 class SproutSeoPlugin extends BasePlugin
 {
+	public function init()
+	{
+		Craft::import('plugins.sproutseo.helpers.SproutSeoMetaHelper');
+	}
 	/**
 	 * @return string
 	 */
