@@ -28,9 +28,6 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 	{
 		$record = new SproutSeo_OverridesRecord;
 
-		// @todo - Review how this code works
-		// Returns the number of rows deleted
-		// ref: http://www.yiiframework.com/doc/api/1.1/CActiveRecord#deleteByPk-detail
 		return $record->deleteByPk($id);
 	}
 
@@ -45,15 +42,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 
 		$model = SproutSeo_OverridesModel::populateModel($query);
 
-		// Ensure both latitude and longitude are present
-		// @todo - Refactor how longitude and latitude are handled through the whole process
-		if ($model->latitude && $model->longitude)
-		{
-			$model->position = $model->latitude . ";" . $model->longitude;
-		}
-
 		return $model;
-
 	}
 
 	public function getBasicMetaFieldByEntryId($entryId, $locale)

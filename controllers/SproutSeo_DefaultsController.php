@@ -76,7 +76,7 @@ class SproutSeo_DefaultsController extends BaseController
 
 		$model->setAttributes($defaultFields);
 
-		if (sproutSeo()->defaults->saveDefaultInfo($model))
+		if (sproutSeo()->defaults->saveDefault($model))
 		{
 			craft()->userSession->setNotice(Craft::t('New default saved.'));
 			$this->redirectToPostedUrl();

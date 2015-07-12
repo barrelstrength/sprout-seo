@@ -92,7 +92,6 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
 		// Default to the Current URL
-		// @todo - this is getting overriden for some reason, even when it shouldn't be
 		$prioritizedMetaModel->canonical = SproutSeoMetaHelper::prepareCanonical($prioritizedMetaModel);
 
 		foreach ($prioritizedMetaModel->getAttributes() as $key => $value)
