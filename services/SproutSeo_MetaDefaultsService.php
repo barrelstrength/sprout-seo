@@ -77,15 +77,12 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 
 		return $model;
 	}
-	public function saveDefaultInfo(SproutSeo_MetaModel $model)
+	public function saveDefault(SproutSeo_MetaModel $model)
 	{
 		if ($id = $model->getAttribute('id'))
 		{
 			if (null === ($record = $this->metaRecord->findByPk($id)))
 			{
-				// @todo - Review whether this is causing a bug
-				// this is being thrown on NEW default save event...
-				// NEW is being passed as the id from the _edit template
 				throw new Exception(Craft::t('Can\'t find default with ID "{id}"', array(
 					'id' => $id
 				)));
