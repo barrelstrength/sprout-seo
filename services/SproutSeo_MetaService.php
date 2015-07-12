@@ -86,10 +86,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$defaultsMetaModel       = $this->_getDefaultsMetaModel($this->getMeta());
 		$globalFallbackMetaModel = $this->_getGlobalFallbackMetaModel();
 
-		$this->siteInfo = SproutSeoMetaHelper::prepareAppendedSiteName($defaultsMetaModel, $globalFallbackMetaModel);
-		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
-
 		$prioritizedMetaModel = new SproutSeo_MetaModel();
+
+		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
 		// Default to the Current URL
 		// @todo - this is getting overriden for some reason, even when it shouldn't be
@@ -121,8 +120,9 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		}
 
 		// @todo - reorganize how this stuff works / robots need love.
+		$prioritizedMetaModel->title = SproutSeoMetaHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultsMetaModel, $globalFallbackMetaModel);
 		$prioritizedMetaModel->robots = SproutSeoMetaHelper::ensureRobotsHasValues($prioritizedMetaModel);
-
+		
 		return $prioritizedMetaModel;
 	}
 
@@ -154,6 +154,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$model = SproutSeo_MetaModel::populateModel($globalFallback);
 		$model->canonical = SproutSeoMetaHelper::prepareCanonical($model);
 
+		SproutSeoMetaHelper::prepareAssetUrls($model);
+
 		return $model;
 	}
 
@@ -172,6 +174,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			// Build defaultsMetaModel from settings in template
 			$defaultsMetaModel = sproutSeo()->defaults->getDefaultByHandle($overrideInfo['default']);
 			$defaultsMetaModel->canonical = SproutSeoMetaHelper::prepareCanonical($defaultsMetaModel);
+
+			SproutSeoMetaHelper::prepareAssetUrls($defaultsMetaModel);
 		}
 
 		return $defaultsMetaModel;
@@ -195,6 +199,8 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			$overrideAttributes = $entryOverride->getAttributes();
 
 			$entryOverridesMetaModel->setAttributes($overrideAttributes);
+
+			SproutSeoMetaHelper::prepareAssetUrls($entryOverridesMetaModel);
 		}
 
 		return $entryOverridesMetaModel;

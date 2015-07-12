@@ -9,20 +9,20 @@ class SproutSeoMetaHelper
 	 * @param $globalFallbackMetaModel
 	 * @return mixed
 	 */
-	public static function prepareAppendedSiteName($defaults, $globalFallbackMetaModel)
+	public static function prepareAppendedSiteName($prioritizedMetaModel, $defaultsMetaModel, $globalFallbackMetaModel)
 	{
 		// Does a selected Default override the Global Fallback appendSiteName value?
-		$appendSiteName = is_null($defaults->appendSiteName)
+		$appendSiteName = is_null($defaultsMetaModel->appendSiteName)
 			? $globalFallbackMetaModel->appendSiteName
-			: $defaults->appendSiteName;
+			: $defaultsMetaModel->appendSiteName;
 
 		if ($appendSiteName)
 		{
 			$divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
-			return " " . $divider . " " . craft()->getInfo('siteName');
+			return $prioritizedMetaModel->title . " " . $divider . " " . craft()->getInfo('siteName');
 		}
 
-		return null;
+		return $prioritizedMetaModel->title;
 	}
 
 	/**
