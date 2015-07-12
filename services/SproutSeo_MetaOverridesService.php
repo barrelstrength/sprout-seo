@@ -39,14 +39,13 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 	{
 		$record = new SproutSeo_OverridesRecord;
 
+		// @todo - Review how this code works
+		// Returns the number of rows deleted
+		// ref: http://www.yiiframework.com/doc/api/1.1/CActiveRecord#deleteByPk-detail
 		return $record->deleteByPk($id);
 	}
 
-	/**
-	 * @param $entryId
-	 * @param $locale
-	 * @return BaseModel
-	 */
+
 	public function getOverrideByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
