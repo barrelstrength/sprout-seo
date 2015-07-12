@@ -126,4 +126,22 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 		$record = new SproutSeo_DefaultsRecord;
 		return $record->deleteByPk($id);
 	}
+
+	/**
+	 * Determines if a global fallback setting already exists
+	 *
+	 * @return bool
+	 */
+	public function globalFallbackExists()
+	{
+		$globalFallbackMetaModel = new SproutSeo_MetaModel();
+		$globalFallbackMetaModel->setMeta('fallback');
+
+		if ($globalFallbackMetaModel->id)
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
