@@ -1,0 +1,37 @@
+<!-- This site is optimized with the Sprout SEO plugin v{{ craft.sproutSeo.getVersion }} - http://sprout.barrelstrengthdesign.com/craft-plugins/seo -->
+
+{% for name, value in meta.basic %}
+{% switch name %}
+{% case "title" %}
+	<title>{{ value }}</title>
+{% case "author" %}
+	<link href="{{ value }}" rel="author" />
+{% case "publisher" %}
+	<link href="{{ value }}" rel="publisher" />
+{% default %}
+	<meta name='{{ name }}' content='{{ value }}' />
+{% endswitch %}
+{% endfor %}
+
+{% for name, value in meta.robots %}
+{% switch name %}
+{% case "canonical" %}
+	<link rel='canonical' href='{{ value }}' />
+{% default %}
+	<meta name='{{ name }}' content='{{ value }}' />
+{% endswitch %}
+{% endfor %}
+
+{% for name, value in meta.geo %}
+	<meta name='{{ name }}' content='{{ value }}' />
+{% endfor %}
+
+{% for name, value in meta.openGraph %}
+	<meta property='{{ name }}' content='{{ value }}' />
+{% endfor %}
+
+{% for name, value in meta.twitter %}
+	<meta name='{{ name }}' content='{{ value }}'>
+{% endfor %}
+
+	<!-- / Sprout SEO Craft CMS plugin -->
