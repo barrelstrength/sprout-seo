@@ -43,7 +43,7 @@ class SproutSeoMetaHelper
 			return $model->latitude . ";" . $model->longitude;
 		}
 
-		return null;
+		return $model->position;
 	}
 
 	/**
