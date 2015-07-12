@@ -33,18 +33,15 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		// grab only the geo fields
 		$fields = (isset($_POST['fields']['sproutseo_fields'])) ? $_POST['fields']['sproutseo_fields'] : null;
 
-		// Make sure we are actually submitting our field
 		if ( ! isset($fields)) return;
 
-		// Determine our entryId
 		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
 			? $_POST['entryId']
 			: $this->element->id;
 
 		$locale = $this->element->locale;
 
-		// get any overrides for this entry
-		$model = sproutSeo()->meta->getOverrideByEntryAndLocaleId($entryId, $locale);
+		$model = sproutSeo()->overrides->getOverrideByEntryId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -64,7 +61,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				sproutSeo()->meta->deleteOverrideById($model->id);
+				sproutSeo()->overrides->deleteOverrideById($model->id);
 			}
 
 			return;
@@ -72,7 +69,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 
 		if (isset($_POST['fields']['sproutseo_fields']['robots']))
 		{
-			$fields['robots'] = sproutSeo()->meta->prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+			$fields['robots'] = SproutSeoMetaHelper::prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
 		}
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
@@ -91,11 +88,11 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		// if not create it
 		if ($model->entryId)
 		{
-			sproutSeo()->meta->updateOverride($model->id, $attributes);
+			sproutSeo()->overrides->updateOverride($model->id, $attributes);
 		}
 		else
 		{
-			sproutSeo()->meta->createOverride($attributes);
+			sproutSeo()->overrides->createOverride($attributes);
 		}
 
 	}
@@ -112,7 +109,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 	{
 		$entryId = craft()->request->getSegment(3);
 
-		$values = sproutSeo()->meta->getGeographicMetaFieldsByEntryId($entryId);
+		$values = sproutSeo()->overrides->getGeographicMetaFieldByEntryId($entryId);
 
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);
