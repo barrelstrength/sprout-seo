@@ -102,9 +102,9 @@ class SproutSeoVariable
 	 *
 	 * @return mixed
 	 */
-	public function displayGlobalFallback($defaultId = null)
+	public function globalFallbackExists($defaultId = null)
 	{
-		return sproutSeo()->meta->displayGlobalFallback($defaultId);
+		return sproutSeo()->defaults->globalFallbackExists($defaultId);
 	}
 
 	/**
