@@ -14,24 +14,24 @@ class SproutSeoService extends BaseApplicationComponent
 	public $meta;
 
 	/**
-	 * @var SproutSeo_SettingsService
+	 * @var SproutSeo_DefaultsService
 	 */
 	public $defaults;
 
 	/**
-	 * @var SproutSeo_SettingsService
+	 * @var SproutSeo_OverridesService
 	 */
 	public $overrides;
-
-	/**
-	 * @var SproutSeo_SettingsService
-	 */
-	public $settings;
 
 	/**
 	 * @var SproutSeo_SitemapService
 	 */
 	public $sitemap;
+
+	/**
+	 * @var SproutSeo_SettingsService
+	 */
+	public $settings;
 
 	/**
 	 * @var SproutSeo_RedirectsService
