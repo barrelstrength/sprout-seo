@@ -17,6 +17,7 @@ class SproutSeo_MetaModel extends BaseModel
 			'keywords'       => array(AttributeType::String),
 			'author'         => array(AttributeType::String),
 			'publisher'      => array(AttributeType::String),
+			'locale'         => array(AttributeType::String),
 
 			'robots'         => array(AttributeType::String),
 			'canonical'      => array(AttributeType::String),
@@ -60,5 +61,24 @@ class SproutSeo_MetaModel extends BaseModel
 			'twitterPlayerWidth'             => array(AttributeType::String),
 			'twitterPlayerHeight'            => array(AttributeType::String),
 		);
+	}
+
+	public function getMetaTagData()
+	{
+		$metaTagData = array();
+
+		$basicMetaModel = new SproutSeo_BasicMetaFieldModel();
+		$geographicMetaModel = new SproutSeo_GeographicMetaFieldModel();
+		$robotsMetaModel = new SproutSeo_RobotsMetaFieldModel();
+		$openGraphMetaModel = new SproutSeo_OpenGraphFieldModel();
+		$twitterCardMetaModel = new SproutSeo_TwitterCardFieldModel();
+
+		$metaTagData['basic'] = $basicMetaModel->getMetaTagData($this);
+		$metaTagData['geo'] = $geographicMetaModel->getMetaTagData($this);
+		$metaTagData['robots'] = $robotsMetaModel->getMetaTagData($this);
+		$metaTagData['openGraph'] = $openGraphMetaModel->getMetaTagData($this);
+		$metaTagData['twitter'] = $twitterCardMetaModel->getMetaTagData($this);
+
+		return $metaTagData;
 	}
 }
