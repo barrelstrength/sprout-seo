@@ -77,6 +77,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 
 		return $model;
 	}
+
 	public function saveDefault(SproutSeo_MetaModel $model)
 	{
 		if ($id = $model->getAttribute('id'))
