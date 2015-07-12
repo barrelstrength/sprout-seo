@@ -47,6 +47,11 @@ class SproutSeoVariable
 		}
 	}
 
+	public function getOptimizedMeta()
+	{
+		return sproutSeo()->meta->getOptimizedMeta();
+	}
+
 	/**
 	 * Processes and outputs SEO meta tags
 	 *
@@ -54,11 +59,7 @@ class SproutSeoVariable
 	 */
 	public function optimize()
 	{
-		// Gather all override info set in $meta array
-		$overrideInfo = sproutSeo()->meta->getMeta();
-
-		// Process the meta values and prepare HTML output
-		$output = sproutSeo()->meta->optimize($overrideInfo);
+		$output = sproutSeo()->meta->optimize();
 
 		return TemplateHelper::getRaw($output);
 	}
@@ -79,9 +80,9 @@ class SproutSeoVariable
 	 *
 	 * @return mixed
 	 */
-	public function allDefaults()
+	public function getDefaults()
 	{
-		return sproutSeo()->meta->getAllDefaults();
+		return sproutSeo()->defaults->getDefaults();
 	}
 
 	/**
@@ -93,7 +94,7 @@ class SproutSeoVariable
 	 */
 	public function getDefaultById($id)
 	{
-		return sproutSeo()->meta->getDefaultById($id);
+		return sproutSeo()->defaults->getDefaultById($id);
 	}
 
 	/**
