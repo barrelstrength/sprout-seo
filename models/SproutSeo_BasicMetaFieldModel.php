@@ -17,4 +17,19 @@ class SproutSeo_BasicMetaFieldModel extends BaseModel
 		);
 	}
 
+	public function getMetaTagData(SproutSeo_MetaModel $meta)
+	{
+		$tagData = array();
+
+		foreach ($this->getAttributes() as $key => $value)
+		{
+			if ($meta->{$key})
+			{
+				$value = craft()->config->parseEnvironmentString($meta->{$key});
+				$tagData[$key] = $value;
+			}
+		}
+
+		return $tagData;
+	}
 }
