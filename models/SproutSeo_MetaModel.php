@@ -7,6 +7,7 @@ class SproutSeo_MetaModel extends BaseModel
 	{
 		return array(
 			'id'             => array(AttributeType::Number),
+			'default'        => array(AttributeType::String),
 			'name'           => array(AttributeType::String),
 			'handle'         => array(AttributeType::String),
 			'appendSiteName' => array(AttributeType::String, 'default' => null),
@@ -80,5 +81,98 @@ class SproutSeo_MetaModel extends BaseModel
 		$metaTagData['twitter'] = $twitterCardMetaModel->getMetaTagData($this);
 
 		return $metaTagData;
+	}
+
+	public function setMeta($type = 'fallback', $overrideInfo = array())
+	{
+		switch ($type) {
+			case 'entry':
+				$this->setAttributes($this->getEntryOverride($overrideInfo));
+				break;
+
+			case 'code':
+				$this->setAttributes($this->getCodeOverride($overrideInfo));
+				break;
+
+			case 'default':
+				$this->setAttributes($this->getDefault($overrideInfo));
+				break;
+
+			case 'fallback':
+				$this->setAttributes($this->getGlobalFallback($overrideInfo));
+				break;
+		}
+
+		SproutSeoMetaHelper::prepareAssetUrls($this);
+
+		return $this;
+	}
+
+	/**
+	 * Create a SproutSeo_MetaModel based on an override element ID
+	 *
+	 * @param $overrideInfo
+	 * @return SproutSeo_MetaModel
+	 */
+	protected function getEntryOverride($overrideInfo)
+	{
+		if (isset($overrideInfo['id']))
+		{
+			// @todo - revisit when adding internationalization
+			$locale = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
+			$entryOverride = sproutSeo()->overrides->getOverrideByEntryId($overrideInfo['id'], $locale);
+			return $entryOverride->getAttributes();
+		}
+
+		return array();
+	}
+
+	/**
+	 * Process any overrides provided in via the templates and create a SproutSeo_MetaModel
+	 *
+	 * @param $overrideInfo
+	 * @return SproutSeo_MetaModel
+	 */
+	protected function getCodeOverride($overrideInfo)
+	{
+		if (!empty($overrideInfo))
+		{
+			return $overrideInfo;
+		}
+
+		return array();
+	}
+
+	/**
+	 * Create our default SproutSeo_MetaModel
+	 *
+	 * @param $overrideInfo
+	 * @return SproutSeo_MetaModel
+	 */
+	protected function getDefault($overrideInfo)
+	{
+		if (isset($overrideInfo['default']))
+		{
+			$defaultMetaModel = sproutSeo()->defaults->getDefaultByHandle($overrideInfo['default']);
+			return $defaultMetaModel->getAttributes();
+		}
+
+		return array();
+	}
+
+	protected function getGlobalFallback()
+	{
+		$globalFallback = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_defaults')
+			->where('globalFallback=:globalFallback', array(':globalFallback' => 1))
+			->queryRow();
+
+		if (!empty($globalFallback))
+		{
+			return $globalFallback;
+		}
+
+		return array();
 	}
 }

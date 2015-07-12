@@ -9,12 +9,12 @@ class SproutSeoMetaHelper
 	 * @param $globalFallbackMetaModel
 	 * @return mixed
 	 */
-	public static function prepareAppendedSiteName($prioritizedMetaModel, $defaultsMetaModel, $globalFallbackMetaModel)
+	public static function prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel)
 	{
 		// Does a selected Default override the Global Fallback appendSiteName value?
-		$appendSiteName = is_null($defaultsMetaModel->appendSiteName)
+		$appendSiteName = is_null($defaultMetaModel->appendSiteName)
 			? $globalFallbackMetaModel->appendSiteName
-			: $defaultsMetaModel->appendSiteName;
+			: $defaultMetaModel->appendSiteName;
 
 		if ($appendSiteName)
 		{
