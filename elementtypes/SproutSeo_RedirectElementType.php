@@ -155,7 +155,13 @@ class SproutSeo_RedirectElementType extends BaseElementType
 
 			case 'test':
 				// Send link for testing
-				return "<a href='{$element->oldUrl}' target='_blank' class='go'>Test</a>";
+				$link = "<a href='{$element->oldUrl}' target='_blank' class='go'>Test</a>";
+
+				if($element->regex)
+				{
+					$link = " - ";
+				}
+				return $link;
 
 			default:
 				return parent::getTableAttributeHtml($element, $attribute);

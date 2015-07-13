@@ -3,6 +3,7 @@
 	{{  forms.lightswitchField({
 		label: "Regular expression?"|t,
 		id: 'regex',
+		instructions: "Old Url example: /\&#92;/blog\&#92;/(.\&#42;)/ <br> New Url example: newBlog/$1",
 		name: 'regex',
 		value: redirect.regex,
 		on: (redirect.regex is defined) ? redirect.regex : ""

@@ -126,7 +126,8 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Find a regex url
+	 * Find a regex url using the preg_match php function and replace
+	 * capture groups if any using the preg_replace php function
 	 *
 	 * @param string $url
 	 * @return SproutSeo_RedirectRecord $redirect
@@ -135,11 +136,23 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	{
 		$criteria = new \CDbCriteria();
 		$criteria->addCondition('regex = true');
-		$criteria->addCondition(':url regexp oldUrl');
-		$criteria->params = array(':url'=>$url);
-		$criteria->limit = 1;
+		$redirects = SproutSeo_RedirectRecord::model()->findAll($criteria);
+		$redirect = null;
 
-		return SproutSeo_RedirectRecord::model()->find($criteria);
+		if($redirects)
+		{
+			foreach ($redirects as $value) {
+				if(preg_match($value->oldUrl, $url))
+				{
+					// Replace capture groups if any
+					$value->newUrl = preg_replace($value->oldUrl, $value->newUrl, $url);
+					$redirect = $value;
+					break;
+				}
+			}
+		}
+
+		return $redirect;
 	}
 
 	/**
@@ -166,7 +179,18 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	public function addSlash($url)
 	{
 		$slash = '/';
-		if($url[0] != $slash)
+		$external = false;
+		//Check if the url is external
+		if(strlen($url)>7)
+		{
+			$substr = substr($url, 0, 4);
+			if($substr == 'http')
+			{
+				$external = true;
+			}
+		}
+
+		if($url[0] != $slash && !$external)
 		{
 			$url = $slash.$url;
 		}
@@ -193,5 +217,25 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		}
 
 		return $response;
+	}
+
+	/**
+	 * This service allows find a url that needs redirect
+	 *
+	 * @param string current request url
+	 * @return SproutSeo_RedirectRecord
+	 */
+	public function getRedirect($url)
+	{
+		// check first on normal urls
+		$redirect = sproutSeo()->redirects->findUrl($url);
+
+		if (!$redirect)
+		{
+			// check on regex urls
+			$redirect = sproutSeo()->redirects->findRegexUrl($url);
+		}
+
+		return $redirect;
 	}
 }

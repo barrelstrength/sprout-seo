@@ -58,24 +58,13 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		Craft::import('plugins.sproutseo.helpers.SproutSeoMetaHelper');
 
-		if(craft()->request->isSiteRequest())
+		if(craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
 		{
 			$url = craft()->request->getUrl();
+			// check if the request url needs redirect
+			$redirect = sproutSeo()->redirects->getRedirect($url);
 
-			// check first on normal urls
-			$redirect = sproutSeo()->redirects->findUrl($url);
-
-			if (!$redirect)
-			{
-				// check on regex urls
-				$redirect = sproutSeo()->redirects->findRegexUrl($url);
-
-				if($redirect)
-				{
-					craft()->request->redirect($redirect->newUrl, true, $redirect->method);
-				}
-			}
-			else
+			if($redirect)
 			{
 				craft()->request->redirect($redirect->newUrl, true, $redirect->method);
 			}
