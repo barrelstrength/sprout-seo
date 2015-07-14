@@ -6,6 +6,7 @@ namespace Craft;
  */
 class SproutSeo_RedirectsController extends BaseController
 {
+
 	/**
 	 * Event index
 	 */
@@ -97,6 +98,26 @@ class SproutSeo_RedirectsController extends BaseController
 			craft()->urlManager->setRouteVariables(array(
 				'redirect' => $redirect
 			));
+		}
+	}
+
+	/**
+	 * Deletes a Redirect.
+	 */
+	public function actionDeleteRedirect()
+	{
+		$this->requirePostRequest();
+
+		$redirectId = craft()->request->getRequiredPost('redirectId');
+
+		if (sproutSeo()->redirects->deleteRedirectById($redirectId))
+		{
+			craft()->userSession->setNotice(Craft::t('Redirect deleted.'));
+			$this->redirectToPostedUrl();
+		}
+		else
+		{
+			craft()->userSession->setError(Craft::t('Couldn’t delete redirect.'));
 		}
 	}
 }
