@@ -68,14 +68,14 @@
 				<div class="menu">
 					<ul>
 						<li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">{{ "Save and continue editing"|t }}</a></li>
-						<li><a class="formsubmit" data-redirect="sprout/redirects/new">{{ "Save and add another"|t }}</a></li>
+						<li><a class="formsubmit" data-redirect="sproutseo/redirects/new">{{ "Save and add another"|t }}</a></li>
 					</ul>
 				</div>
 			</div>
 			{% if redirect.id  %}
-			<input type="button" class="btn formsubmit" value="{{ 'Delete'|t }}" data-action="redirects/deleteEvent"
+			<input type="button" class="btn formsubmit" value="{{ 'Delete'|t }}" data-action="sproutseo/redirects/deleteEvent"
 				data-confirm="{{ 'Are you sure you want to delete this redirect?'|t }}"
-				data-redirect="redirects">
+				data-redirect="sproutseo/redirects">
 			{% endif %}
 		</div>
 	</form>

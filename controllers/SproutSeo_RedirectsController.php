@@ -46,7 +46,7 @@ class SproutSeo_RedirectsController extends BaseController
 			}
 		}
 		// Set the "Continue Editing" URL
-		$variables['continueEditingUrl'] = 'redirects/{id}';
+		$variables['continueEditingUrl'] = 'sproutseo/redirects/{id}';
 		// Breadcrumbs
 		$variables['crumbs'] = array(
 			array('label' => Craft::t('Redirects'), 'url' => UrlHelper::getUrl('redirects'))
