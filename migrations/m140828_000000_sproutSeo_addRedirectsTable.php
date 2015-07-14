@@ -9,20 +9,19 @@ class m140828_000000_sproutSeo_addRedirectsTable extends BaseMigration
 	public function safeUp()
 	{
 		$tableName = 'sproutseo_redirects';
-		if (($table = $this->dbConnection->schema->getTable($tableName)))
+		if (!craft()->db->tableExists($tableName))
 		{
 			$this->createTable($tableName, array(
 					'id' => 'pk',
-					'oldUrl' => 'string',
-					'nextUrl' => 'string',
-					'method' => 'integer',
-					'regex' => 'boolean',
-					'dateCreated' => 'datetime',
-					'dateUpdated' => 'datetime',
-					'uid' => 'string',
-				)
+					'oldUrl' => 'string NOT NULL',
+					'newUrl' => 'string NOT NULL',
+					'method' => 'integer NOT NULL',
+					'regex' => 'boolean NOT NULL DEFAULT 0',
+					'dateCreated' => 'datetime DEFAULT NULL',
+					'dateUpdated' => 'datetime DEFAULT NULL',
+					'uid' => 'string NOT NULL DEFAULT 0',
+				),'ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci'
 			);
-
 		}
 		else
 		{
