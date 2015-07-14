@@ -141,11 +141,15 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 
 		if($redirects)
 		{
-			foreach ($redirects as $value) {
-				if(preg_match($value->oldUrl, $url))
+			foreach ($redirects as $value)
+			{
+				// Use backticks as delimiters as they are invalid characters for URLs
+				$oldUrlPattern = "`" . $value->oldUrl . "`";
+
+				if(preg_match($oldUrlPattern, $url))
 				{
 					// Replace capture groups if any
-					$value->newUrl = preg_replace($value->oldUrl, $value->newUrl, $url);
+					$value->newUrl = preg_replace($oldUrlPattern, $value->newUrl, $url);
 					$redirect = $value;
 					break;
 				}
