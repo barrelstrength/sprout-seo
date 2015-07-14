@@ -1,82 +1,89 @@
 {% extends "sproutseo/_layouts/base" %}
-{% import "_includes/forms" as forms %}
 
-{% set selectedTab = 'redirect' %}
-{% set body %}
-	<h2> {{ subTitle }} </h2>
-	<form
-		method="post"
-		accept-charset="UTF-8"
-		data-saveshortcut="1"
-		data-saveshortcut-redirect="{{ continueEditingUrl }}">
+{% set title = (redirect.id != "" ? "Edit Redirect"|t : "New Redirect"|t) %}
+
+{% set crumbs = [
+{ label: craft.sproutseo.name, url: url('sproutseo/defaults') },
+{ label: "Redirects"|t, url: url('sproutseo/redirects') }
+] %}
+
+{% block main %}
+
+	<form method="post" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ continueEditingUrl }}">
 		<input type="hidden" name="action" value="sproutSeo/redirects/saveRedirect">
 		<input type="hidden" name="redirect" value="sproutseo/redirects">
 		<input type="hidden" name="redirectId" value="{{ redirect.id }}">
-		{% if redirect.id %}<input type="hidden" name="redirectId" value="{{ redirect.id }}">{% endif %}
-		{#{% if craft.isLocalized() %}<input type="hidden" name="locale" value="{{ event.locale }}">{% endif %} #}
-		<div style = "width:100%; display:inline-block;">
-			<div style = "width:60%; display:inline-block;">
-				{{ forms.textField({
-					label: "Old Url"|t,
-					id: 'oldUrl',
-					name: 'oldUrl',
-					value:  redirect.oldUrl,
-					errors: redirect.getErrors('oldUrl'),
-					first: true,
-					autofocus: true,
-					required: true,
-					size: 95
-				}) }}
-			</div>
-			<div style = "width:35%; display:inline-block;">
-				{{  forms.lightswitchField({
-					label: "Regular expression"|t,
-					id: 'regex',
-					name: 'regex',
-					instructions: "Old Url example: /\&#92;/blog\&#92;/(.\&#42;)/ <br>New Url example: newBlog/$1",
-					value: redirect.regex,
-					on: (redirect.regex is defined) ? redirect.regex : ""
-				}) }}
-			</div>
-		</div>
 
-		{{ forms.textField({
-			label: "New Url"|t,
-			id: 'newUrl',
-			name: 'newUrl',
-			value:  redirect.newUrl,
-			errors: redirect.getErrors('newUrl'),
-			autofocus: true,
-			required: true,
-			size: 95
-		}) }}
+		<div class="grid first">
+			<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+				<div id="fields" class="pane">
 
-		{{ forms.selectField({
-			label:  'Method'|t,
-			id: 'method',
-			name: 'method',
-			instructions:   'Choose a status code.'|t,
-			value:		redirect.method,
-			options:	methodOptions,
-			errors:   redirect.getErrors('method'),
-		}) }}
+					{% if redirect.id %}
+						<input type="hidden" name="redirectId" value="{{ redirect.id }}">
+					{% endif %}
 
-		<div class="buttons">
-			<div class="btngroup submit first">
-				<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
-				<div class="btn submit menubtn"></div>
-				<div class="menu">
-					<ul>
-						<li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">{{ "Save and continue editing"|t }}</a></li>
-						<li><a class="formsubmit" data-redirect="sproutseo/redirects/new">{{ "Save and add another"|t }}</a></li>
-					</ul>
+					{% include 'sproutseo/redirect/_fields' %}
+
+					<div class="buttons">
+
+						{% if redirect.id  %}
+						<div class="input">
+							<div class="right">
+								<input type="button" class="btn small formsubmit" value="{{ 'Delete'|t }}"
+									data-action="sproutseo/redirects/deleteRedirect"
+									data-confirm="{{ 'Are you sure you want to delete this redirect?'|t }}"
+									data-redirect="sproutseo/redirects">
+							</div>
+						</div>
+						{% endif %}
+
+						<div class="btngroup submit first">
+							<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+							<div class="btn submit menubtn"></div>
+							<div class="menu">
+								<ul>
+									<li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">{{ "Save and continue editing"|t }}</a></li>
+									<li><a class="formsubmit" data-redirect="sproutseo/redirects/new">{{ "Save and add another"|t }}</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					{% include 'sproutseo/_partials/brand/footer' %}
+
 				</div>
 			</div>
-			{% if redirect.id  %}
-			<input type="button" class="btn formsubmit" value="{{ 'Delete'|t }}" data-action="sproutseo/redirects/deleteEvent"
-				data-confirm="{{ 'Are you sure you want to delete this redirect?'|t }}"
-				data-redirect="sproutseo/redirects">
-			{% endif %}
+
+			<div class="item" data-position="right" data-colspan="1">
+
+				<div class="pane">
+
+					<h2>Match Patterns</h2>
+
+					<p>Redirect multiple URLs with a similar pattern by selecting the Match Patterns option.</p>
+
+					<p>
+						<strong>Old URL - Regular Expressions</strong>
+						<ul>
+							<li>/old-location/(.*)</li>
+							<li>/old-location/(\d{4})/(\d{2})</li>
+						</ul>
+					</p>
+
+					<p>
+						<strong>New URL - Capture Groups</strong></strong>
+						<ul>
+							<li><em>new-location/$1</em></li>
+							<li><em>new-location/$1/$2</em></li>
+						</ul>
+					</p>
+
+				</div>
+
+			</div>
+
 		</div>
+
 	</form>
-{% endset %}
+
+{% endblock %}

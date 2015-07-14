@@ -8,7 +8,7 @@
 
 {% set tabs = {
     defaults: {
-        label: "Meta Defaults"|t,
+        label: "Defaults"|t,
         url: "#settings-seo"
     },
     general: {
@@ -19,9 +19,9 @@
 
 {% set content %}
 
-  {{ body }}
-
-  {% include 'sproutseo/_partials/brand/footer' %}
+  {% if body is defined %}
+    {{ body }}
+  {% endif %}
 
 {% endset %}
 

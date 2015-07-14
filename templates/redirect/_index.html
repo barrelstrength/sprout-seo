@@ -3,9 +3,6 @@
 {% set selectedTab = 'redirect' %}
 
 {% includeCssResource "sproutseo/css/brand.css" %}
-{% set crumbs = [
-  { label: craft.sproutseo.name, url: url('sproutseo/defaults') }
-] %}
 
 {% set title = craft.SproutSeo.name %}
 {# Only display these tabs at the top level #}
@@ -26,11 +23,10 @@
     }
 } %}
 {% endif %}
+
 {% set extraPageHeaderHtml %}
   <a class="btn settings icon" href="{{ url('sproutseo/settings') }}" title="{{ 'Settings'|t }}"></a>
 {% endset %}
-
-
 
 {% block sidebar %}
   <div class="buttons">
@@ -40,10 +36,9 @@
 	{{ parent() }}
 {% endblock %}
 
-
 {% block content %}
   {{ parent() }}
-    {% include 'sproutseo/_partials/brand/footer' %}
+  {% include 'sproutseo/_partials/brand/footer' %}
 {% endblock %}
 
 

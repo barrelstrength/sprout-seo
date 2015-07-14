@@ -9,31 +9,36 @@
     {% endif %}
 {% endset %}
 
+{% set crumbs = [
+{ label: craft.sproutseo.name, url: url('sproutseo/defaults') },
+{ label: "Defaults"|t, url: url('sproutseo/defaults') }
+] %}
+
 {% set tabs = {
 	default: {
 		label: "Settings"|t,
 		url: '#default-main'
 	},
 	main: {
-		label: "Basic Info"|t,
+		label: "Basic"|t,
 		url: '#default-basic'
 	},
-	publishinfo:    {
-		label: "Robots"|t,
-		url: '#default-robots'
-	},
-	location:    {
-		label: "Location"|t,
-		url: '#default-location'
-	},
-	facebook:    {
+	facebook: {
 		label: "Facebook"|t,
 		url: '#default-facebook'
 	},
-	twitter:    {
+	twitter: {
 		label: "Twitter"|t,
 		url: '#default-twitter'
-	}
+	},
+	location: {
+		label: "Location"|t,
+		url: '#default-location'
+	},
+	publishinfo: {
+		label: "Robots"|t,
+		url: '#default-robots'
+	},
 } %}
 
 {% import "_includes/forms" as forms %}
@@ -44,7 +49,7 @@
 {# Map the `defaults` object to `values` so we can use the same tempaltes for SEO Defaults and the Field Types #}
 {% set values = default %}
 
-{% set body %}
+{% block main %}
 
 {% if craft.request.getSegment(3) == 'new' %}
 	{% set saveshortcutUrl = url('sproutseo/defaults') %}
@@ -52,75 +57,87 @@
 	{% set saveshortcutUrl = url('sproutseo/defaults/' ~ defaultId) %}
 {% endif %}
 
-<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ saveshortcutUrl }}">
-	{{ getCsrfInput() }}
-	<input type="hidden" name="action" value="sproutSeo/defaults/saveDefault">
-	<input type="hidden" name="redirect" value="sproutseo/defaults">
+<div class="grid first">
+	<div class="item">
+		<div class="pane">
 
-	<input type="hidden" name="sproutseo_fields[id]" value="{{ defaultId }}">
+			{% include "_includes/tabs" %}
 
-	<div id="default-main">
+			<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ saveshortcutUrl }}">
+				{{ getCsrfInput() }}
+				<input type="hidden" name="action" value="sproutSeo/defaults/saveDefault">
+				<input type="hidden" name="redirect" value="sproutseo/defaults">
 
-		{{ forms.textField({
-			label: "Name"|t,
-			instructions: "Human readable default name"|t,
-			id: "name",
-			name: 'sproutseo_fields[name]',
-			value: default.name,
-			errors: '',
-			required: true
-		}) }}
+				<input type="hidden" name="sproutseo_fields[id]" value="{{ defaultId }}">
 
-		{{ forms.textField({
-			label: "Short Name"|t,
-			instructions: "Short name you will use to refer to your defaults in the code"|t,
-			id: "handle",
-			name: 'sproutseo_fields[handle]',
-			value: default.handle,
-			errors: '',
-			required: true
-		}) }}
+				<div id="default-main">
 
-		{% set globalFallbackExists = craft.sproutSeo.globalFallbackExists(defaultId) %}
+					{{ forms.textField({
+						label: "Name"|t,
+						instructions: "Human readable default name"|t,
+						id: "name",
+						name: 'sproutseo_fields[name]',
+						value: default.name,
+						errors: '',
+						required: true
+					}) }}
 
-		{% if not globalFallbackExists %}
-			{{ forms.checkboxField({
-				label: "Use this default as my global fallback"|t,
-				id: 'global-fallback',
-				name: 'sproutseo_fields[globalFallback]',
-				checked: default.globalFallback
-			}) }}
-		{% endif %}
+					{{ forms.textField({
+						label: "Short Name"|t,
+						instructions: "Short name you will use to refer to your defaults in the code"|t,
+						id: "handle",
+						name: 'sproutseo_fields[handle]',
+						value: default.handle,
+						errors: '',
+						required: true
+					}) }}
 
+					{% set globalFallbackExists = craft.sproutSeo.globalFallbackExists(defaultId) %}
+
+					{% if not globalFallbackExists %}
+						{{ forms.checkboxField({
+							label: "Use this default as my global fallback"|t,
+							id: 'global-fallback',
+							name: 'sproutseo_fields[globalFallback]',
+							checked: default.globalFallback
+						}) }}
+					{% endif %}
+
+				</div>
+
+				<div id="default-basic" class="hidden">
+					{% include 'sproutseo/_partials/fields/input' %}
+				</div>
+
+				<div id="default-robots" class="hidden">
+					{% include 'sproutseo/_partials/fields/robots' %}
+				</div>
+
+				<div id="default-location" class="hidden">
+					{% include 'sproutseo/_partials/fields/geo' %}
+				</div>
+
+				<div id="default-facebook" class="hidden">
+					{% include 'sproutseo/_partials/fields/open-graph' with { values : default } %}
+				</div>
+
+				<div id="default-twitter" class="hidden">
+					{% include 'sproutseo/_partials/fields/twitter-card' with { values : default } %}
+				</div>
+
+				<div class="buttons">
+					<input class="btn submit" type="submit" value="Save Default">
+				</div>
+
+			</form>
+
+			{% include 'sproutseo/_partials/brand/footer' %}
+
+		</div>
 	</div>
+</div>
 
-	<div id="default-basic" class="hidden">
-		{% include 'sproutseo/_partials/fields/input' %}
-	</div>
-
-	<div id="default-robots" class="hidden">
-		{% include 'sproutseo/_partials/fields/robots' %}
-	</div>
-
-	<div id="default-location" class="hidden">
-		{% include 'sproutseo/_partials/fields/geo' %}
-	</div>
-
-	<div id="default-facebook" class="hidden">
-		{% include 'sproutseo/_partials/fields/open-graph' with { values : default } %}
-	</div>
-
-	<div id="default-twitter" class="hidden">
-		{% include 'sproutseo/_partials/fields/twitter-card' with { values : default } %}
-	</div>
-
-	<div class="buttons">
-		<input class="btn submit" type="submit" value="Save Default">
-	</div>
-
-</form>
-
-{% endset %}
+{% endblock %}
 
 {% if default.name is not defined or not default.handle %}
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}

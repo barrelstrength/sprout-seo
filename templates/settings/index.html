@@ -3,38 +3,40 @@
 
 {% set body %}
 
-<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
-  {{ getCsrfInput() }}
-  <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
-  <input type="hidden" name="redirect" value="sproutseo/settings">
-  
-  <div id="settings-seo">
+  <form method="post" accept-charset="UTF-8" data-saveshortcut="1">
+    {{ getCsrfInput() }}
+    <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
+    <input type="hidden" name="redirect" value="sproutseo/settings">
 
-    {% namespace 'settings' %} 
-      {% include 'sproutseo/settings/_tabs/defaults' %}
-    {% endnamespace %}
+    <div id="settings-seo">
 
-  </div>
+      {% namespace 'settings' %}
+        {% include 'sproutseo/settings/_tabs/defaults' %}
+      {% endnamespace %}
 
-  <div id="settings-sitemap" class="hidden">
+    </div>
 
-    {% namespace 'settings' %} 
-      {% include 'sproutseo/settings/_tabs/sitemap' %}
-    {% endnamespace %}
+    <div id="settings-sitemap" class="hidden">
 
-  </div>
+      {% namespace 'settings' %}
+        {% include 'sproutseo/settings/_tabs/sitemap' %}
+      {% endnamespace %}
 
-  <div id="settings-cp" class="hidden">
+    </div>
 
-    {% namespace 'settings' %} 
-      {% include 'sproutseo/settings/_tabs/cp' %}
-    {% endnamespace %}
+    <div id="settings-cp" class="hidden">
 
-  </div>
+      {% namespace 'settings' %}
+        {% include 'sproutseo/settings/_tabs/cp' %}
+      {% endnamespace %}
 
-  <div class="buttons">
-    <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
-  </div>
-</form>
+    </div>
+
+    <div class="buttons">
+      <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+    </div>
+  </form>
+
+  {% include 'sproutseo/_partials/brand/footer' %}
 
 {% endset %}
