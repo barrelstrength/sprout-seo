@@ -11,9 +11,9 @@ class m140828_000000_sproutSeo_addRedirectsTable extends BaseMigration
 		$tableName = 'sproutseo_redirects';
 		if (!craft()->db->tableExists($tableName))
 		{
-			SproutSeoPlugin::log('Creating the sproutseo_redirects table.');
+			SproutSeoPlugin::log("Creating the {$tableName} table.");
 
-			craft()->db->createCommand()->createTable('sproutseo_redirects', array(
+			craft()->db->createCommand()->createTable($tableName, array(
 				'id'   			   => array('column' => ColumnType::Int, 'null' => false),
 				'oldUrl'       => array('column' => ColumnType::Varchar, 'null' => false),
 				'newUrl'       => array('column' => ColumnType::Varchar, 'null' => false),
@@ -24,10 +24,12 @@ class m140828_000000_sproutSeo_addRedirectsTable extends BaseMigration
 				'uid'      		 => array('column' => 'char(36)', 'null' => false, 'default'=>'0'),
 				), null, true, false
 			);
-			craft()->db->createCommand()->addPrimaryKey('sproutseo_redirects', 'id');
-			craft()->db->createCommand()->createIndex('sproutseo_redirects', 'id');
-			craft()->db->createCommand()->addForeignKey('sproutseo_redirects', 'id', 'elements', 'id', 'CASCADE', 'CASCADE');
-			SproutSeoPlugin::log('Finished creating the templatecaches table.');
+
+			craft()->db->createCommand()->addPrimaryKey($tableName, 'id');
+			craft()->db->createCommand()->createIndex($tableName, 'id');
+			craft()->db->createCommand()->addForeignKey($tableName, 'id', 'elements', 'id', 'CASCADE', 'CASCADE');
+
+			SproutSeoPlugin::log("Finished creating the {$tableName} table.");
 		}
 		else
 		{
