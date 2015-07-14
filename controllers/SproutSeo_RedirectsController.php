@@ -110,7 +110,7 @@ class SproutSeo_RedirectsController extends BaseController
 
 		$redirectId = craft()->request->getRequiredPost('redirectId');
 
-		if (sproutSeo()->redirects->deleteRedirectById($redirectId))
+		if(craft()->elements->deleteElementById($redirectId))
 		{
 			craft()->userSession->setNotice(Craft::t('Redirect deleted.'));
 			$this->redirectToPostedUrl();

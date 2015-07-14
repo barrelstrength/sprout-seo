@@ -110,19 +110,6 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Delete the redirect given the id
-	 * @param $id
-	 *
-	 * @return int
-	 */
-	public function deleteRedirectById($id)
-	{
-		$record = new SproutSeo_RedirectRecord;
-
-		return $record->deleteByPk($id);
-	}
-
-	/**
 	 * Find a url
 	 *
 	 * @param string $url
