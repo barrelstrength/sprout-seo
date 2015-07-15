@@ -18,7 +18,8 @@ class m140828_000000_sproutSeo_addRedirectsTable extends BaseMigration
 				'oldUrl'       => array('column' => ColumnType::Varchar, 'null' => false),
 				'newUrl'       => array('column' => ColumnType::Varchar, 'null' => false),
 				'method'       => array('column' => 'int(10)', 'null' => false),
-				'regex'        => array('column' => ColumnType::Bool, 'null' => false, 'default'=>0),
+				'regex'        => array('column' => ColumnType::TinyInt, 'length' => 1, 'null' => false, 'default' => 0,
+				                        'unsigned' => true),
 				'dateCreated'  => array('column' => ColumnType::DateTime, 'null' => false),
 				'dateUpdated'  => array('column' => ColumnType::DateTime, 'null' => false),
 				'uid'      		 => array('column' => 'char(36)', 'null' => false, 'default'=>'0'),
@@ -27,7 +28,7 @@ class m140828_000000_sproutSeo_addRedirectsTable extends BaseMigration
 
 			craft()->db->createCommand()->addPrimaryKey($tableName, 'id');
 			craft()->db->createCommand()->createIndex($tableName, 'id');
-			craft()->db->createCommand()->addForeignKey($tableName, 'id', 'elements', 'id', 'CASCADE', 'CASCADE');
+			craft()->db->createCommand()->addForeignKey($tableName, 'id', 'elements', 'id', 'CASCADE');
 
 			SproutSeoPlugin::log("Finished creating the {$tableName} table.");
 		}
