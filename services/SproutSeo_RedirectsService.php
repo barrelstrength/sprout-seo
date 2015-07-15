@@ -185,13 +185,9 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$slash = '/';
 		$external = false;
 		//Check if the url is external
-		if(strlen($url)>7)
+		if(filter_var($url, FILTER_VALIDATE_URL))
 		{
-			$substr = substr($url, 0, 4);
-			if($substr == 'http')
-			{
-				$external = true;
-			}
+			$external = true;
 		}
 
 		if($url[0] != $slash && !$external)
