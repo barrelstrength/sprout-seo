@@ -38,6 +38,13 @@ class SproutSeo_RedirectRecord extends BaseRecord
 		);
 	}
 
+	public function defineIndexes()
+	{
+		return array(
+			array('columns' => array('id')),
+		);
+	}
+
 	/**
 	 * Update "oldUrl" and "newUrl" to starts with a "/"
 	 *
