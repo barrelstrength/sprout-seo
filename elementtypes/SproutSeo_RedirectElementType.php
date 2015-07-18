@@ -27,6 +27,16 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	}
 
 	/**
+	 * @inheritDoc IElementType::hasStatuses()
+	 *
+	 * @return bool
+	 */
+	public function hasStatuses()
+	{
+		return true;
+	}
+
+	/**
 	 * Returns whether this element type has titles.
 	 *
 	 * @return bool
@@ -129,7 +139,9 @@ class SproutSeo_RedirectElementType extends BaseElementType
 		$changePermanentMethod = craft()->elements->getAction('SproutSeo_ChangePermanentMethod');
 		$changeTemporaryMethod = craft()->elements->getAction('SproutSeo_ChangeTemporaryMethod');
 
-		return array($deleteAction, $editAction, $changePermanentMethod, $changeTemporaryMethod);
+		$setStatusAction = craft()->elements->getAction('SproutSeo_SetStatus');
+
+		return array($deleteAction, $editAction, $changePermanentMethod, $changeTemporaryMethod, $setStatusAction);
 	}
 
 	/**

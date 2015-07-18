@@ -119,6 +119,8 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	{
 		$criteria = new \CDbCriteria();
 		$criteria->condition = 'oldUrl =:url';
+		$criteria->with = array('element');
+		$criteria->addCondition('element.enabled = 1');
 		$criteria->params = array(':url'=>$url);
 		$criteria->limit = 1;
 
@@ -136,6 +138,8 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	{
 		$criteria = new \CDbCriteria();
 		$criteria->addCondition('regex = true');
+		$criteria->with = array('element');
+		$criteria->addCondition('element.enabled = 1');
 		$redirects = SproutSeo_RedirectRecord::model()->findAll($criteria);
 		$redirect = null;
 
