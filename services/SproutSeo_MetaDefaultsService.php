@@ -127,18 +127,18 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	/**
 	 * Determines if a global fallback setting already exists
 	 *
-	 * @return bool
+	 * @return id | null
 	 */
-	public function globalFallbackExists()
+	public function globalFallbackId()
 	{
 		$globalFallbackMetaModel = new SproutSeo_MetaModel();
 		$globalFallbackMetaModel->setMeta('fallback');
 
 		if ($globalFallbackMetaModel->id)
 		{
-			return true;
+			return $globalFallbackMetaModel->id;
 		}
 
-		return false;
+		return null;
 	}
 }

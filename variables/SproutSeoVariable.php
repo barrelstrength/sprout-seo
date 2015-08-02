@@ -47,11 +47,6 @@ class SproutSeoVariable
 		}
 	}
 
-	public function getOptimizedMeta()
-	{
-		return sproutSeo()->meta->getOptimizedMeta();
-	}
-
 	/**
 	 * Processes and outputs SEO meta tags
 	 *
@@ -62,6 +57,18 @@ class SproutSeoVariable
 		$output = sproutSeo()->meta->optimize();
 
 		return TemplateHelper::getRaw($output);
+	}
+
+	/**
+	 * Prepare an array of the optimized Meta
+	 *
+	 * @return multi-dimensional array
+	 */
+	public function getOptimizedMeta()
+	{
+		$prioritizedMetaModel = sproutSeo()->meta->getOptimizedMeta();
+
+		return $prioritizedMetaModel->getMetaTagData();
 	}
 
 	/**
@@ -98,13 +105,22 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * @param $handle
+	 * @return SproutSeo_MetaModel
+	 */
+	public function getDefaultByHandle($handle)
+	{
+		return sproutSeo()->defaults->getDefaultByHandle($handle);
+	}
+
+	/**
 	 * @param null $defaultId
 	 *
 	 * @return mixed
 	 */
-	public function globalFallbackExists($defaultId = null)
+	public function globalFallbackId($defaultId = null)
 	{
-		return sproutSeo()->defaults->globalFallbackExists($defaultId);
+		return sproutSeo()->defaults->globalFallbackId($defaultId);
 	}
 
 	/**

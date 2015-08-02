@@ -41,7 +41,7 @@
 {# Set a field context so we can manage field visibility between the SEO Defaults and the Field Types #}
 {% set fieldContext = 'defaults' %}
 
-{# Map the `defaults` object to `values` so we can use the same tempaltes for SEO Defaults and the Field Types #}
+{# Map the `defaults` object to `values` so we can use the same templates for SEO Defaults and the Field Types #}
 {% set values = default %}
 
 {% set body %}
@@ -81,9 +81,9 @@
 			required: true
 		}) }}
 
-		{% set globalFallbackExists = craft.sproutSeo.globalFallbackExists(defaultId) %}
+		{% set globalFallbackId = craft.sproutSeo.globalFallbackId(defaultId) %}
 
-		{% if not globalFallbackExists %}
+		{% if not globalFallbackId or globalFallbackId == default.id %}
 			{{ forms.checkboxField({
 				label: "Use this default as my global fallback"|t,
 				id: 'global-fallback',
