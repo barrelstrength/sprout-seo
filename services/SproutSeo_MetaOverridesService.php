@@ -62,7 +62,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return new SproutSeo_BasicMetaFieldModel();
 	}
 
-	public function getTwitterCardFieldByEntryId($entryId)
+	public function getTwitterCardFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('id, twitterCard, twitterSite, twitterTitle, twitterCreator,
@@ -71,6 +71,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 			twitterPlayerHeight')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
 
 		if (isset($query))
@@ -81,12 +82,13 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return new SproutSeo_TwitterCardFieldModel();
 	}
 
-	public function getOpenGraphFieldByEntryId($entryId)
+	public function getOpenGraphFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('id, ogTitle, ogType, ogUrl, ogImage, ogAuthor, ogPublisher, ogSiteName, ogDescription, ogAudio, ogVideo, ogLocale')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
 
 		if (isset($query))
@@ -97,12 +99,13 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return new SproutSeo_OpenGraphFieldModel();
 	}
 
-	public function getGeographicMetaFieldByEntryId($entryId)
+	public function getGeographicMetaFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('region, placename, longitude, latitude')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
 
 		if (isset($query))
@@ -113,12 +116,13 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return new SproutSeo_GeographicMetaFieldModel();
 	}
 
-	public function getRobotsMetaFieldByEntryId($entryId)
+	public function getRobotsMetaFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('canonical, robots')
 			->from('sproutseo_overrides')
 			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
 
 		if (isset($query))
