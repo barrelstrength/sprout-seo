@@ -68,7 +68,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 
 		if (isset($_POST['fields']['sproutseo_fields']['robots']))
 		{
-			$fields['robots'] = SproutSeoMetaHelper::prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+			$fields['robots'] = SproutSeoMetaHelper::prepRobotsAsString($_POST['fields']['sproutseo_fields']['robots']);
 		}
 
 		// Add the entry ID to the field data we will submit for Sprout SEO

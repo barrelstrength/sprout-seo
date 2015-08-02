@@ -68,7 +68,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 
 		if (isset($_POST['fields']['sproutseo_fields']['robots']))
 		{
-			$fields['robots'] = SproutSeoMetaHelper::prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+			$fields['robots'] = SproutSeoMetaHelper::prepRobotsAsString($_POST['fields']['sproutseo_fields']['robots']);
 		}
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
@@ -107,8 +107,9 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	public function getInputHtml($name, $value)
 	{
 		$entryId = craft()->request->getSegment(3);
+		$locale = $this->element->locale;
 
-		$variables['values'] = sproutSeo()->overrides->getTwitterCardFieldByEntryId($entryId);
+		$variables['values'] = sproutSeo()->overrides->getTwitterCardFieldByEntryId($entryId, $locale);
 
 		// Set up our asset fields
 		if (isset($variables['values']->twitterImage))
