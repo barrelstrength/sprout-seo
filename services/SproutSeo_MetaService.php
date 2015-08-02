@@ -121,7 +121,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		// @todo - reorganize how this stuff works / robots need love.
 		$prioritizedMetaModel->title = SproutSeoMetaHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel);
-		$prioritizedMetaModel->robots = SproutSeoMetaHelper::ensureRobotsHasValues($prioritizedMetaModel);
+		$prioritizedMetaModel->robots = SproutSeoMetaHelper::prepRobotsAsString($prioritizedMetaModel->robots);
 
 		return $prioritizedMetaModel;
 	}
