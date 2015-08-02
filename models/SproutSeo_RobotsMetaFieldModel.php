@@ -23,7 +23,7 @@ class SproutSeo_RobotsMetaFieldModel extends BaseModel
 
 				if ($key == 'robots')
 				{
-					$value = $this->determineRobotsOutput($meta->{$key});
+					$value = $meta->robots;
 				}
 
 				$tagData[$key] = $value;
