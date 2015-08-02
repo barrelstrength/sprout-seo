@@ -46,22 +46,7 @@ class SproutSeoMetaHelper
 		return $model->position;
 	}
 
-	/**
-	 * @param $prioritizedMetaModel
-	 */
-	public static function ensureRobotsHasValues($prioritizedMetaModel)
-	{
-		if (count($prioritizedMetaModel->robots) == 0)
-		{
-			// If no values are set, we set this to empty which triggers
-			// all positive values to be output.  Kinda lame.
-			return array('empty');
-		}
-
-		return $prioritizedMetaModel->robots;
-	}
-
-	public static function prepRobotsForDb($robotsArray)
+	public static function prepRobotsAsString($robotsArray)
 	{
 		return StringHelper::arrayToString($robotsArray);
 	}
@@ -78,6 +63,15 @@ class SproutSeoMetaHelper
 	 */
 	public static function prepareAssetUrls(SproutSeo_MetaModel &$model)
 	{
+		// If a code override for ogImageSecure is provided, make sure it's an absolute URL
+		if (!empty($model->ogImageSecure))
+		{
+			if (substr($model->ogImageSecure, 0, 5) !== "https")
+			{
+				throw new \Exception('Open Graph Secure Image override value "' . $model->ogImageSecure . '" must be a secure, absolute url.');
+			}
+		}
+
 		// Modify our Assets to reference their URLs
 		if (!empty($model->ogImage))
 		{
@@ -87,7 +81,7 @@ class SproutSeoMetaHelper
 			{
 				if (!is_numeric($model->ogImage))
 				{
-					throw new \Exception('Open Graph Image override value "' . $model->ogImage . '" must be an absolute path.');
+					throw new \Exception('Open Graph Image override value "' . $model->ogImage . '" must be an absolute url.');
 				}
 
 				$ogImage = craft()->elements->getElementById($model->ogImage);
@@ -112,7 +106,8 @@ class SproutSeoMetaHelper
 
 					if (craft()->request->isSecureConnection())
 					{
-						$model->ogImageSecure = UrlHelper::getSiteUrl($ogImage->url, null, "https");
+						$secureUrl = preg_replace("/^http:/i", "https:", $ogImage->url);
+						$model->ogImageSecure = $secureUrl;
 					}
 				}
 			}
@@ -126,7 +121,7 @@ class SproutSeoMetaHelper
 			{
 				if (!is_numeric($model->twitterImage))
 				{
-					throw new \Exception('Twitter Image override value "' . $model->twitterImage . '" must be an	absolute path.');
+					throw new \Exception('Twitter Image override value "' . $model->twitterImage . '" must be an	absolute url.');
 				}
 
 				$twitterImage = craft()->elements->getElementById($model->twitterImage);
