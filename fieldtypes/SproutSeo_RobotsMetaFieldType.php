@@ -70,7 +70,7 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 
 		if (isset($_POST['fields']['sproutseo_fields']['robots']))
 		{
-			$fields['robots'] = SproutSeoMetaHelper::prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+			$fields['robots'] = SproutSeoMetaHelper::prepRobotsAsString($_POST['fields']['sproutseo_fields']['robots']);
 		}
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
@@ -110,8 +110,9 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 	public function getInputHtml($name, $value)
 	{
 		$entryId = craft()->request->getSegment(3);
+		$locale = $this->element->locale;
 
-		$values = sproutSeo()->overrides->getRobotsMetaFieldByEntryId($entryId);
+		$values = sproutSeo()->overrides->getRobotsMetaFieldByEntryId($entryId, $locale);
 
 		$values->robots = explode(',', $values->robots);
 

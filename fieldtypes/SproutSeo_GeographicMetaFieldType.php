@@ -69,7 +69,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 
 		if (isset($_POST['fields']['sproutseo_fields']['robots']))
 		{
-			$fields['robots'] = SproutSeoMetaHelper::prepRobotsForDb($_POST['fields']['sproutseo_fields']['robots']);
+			$fields['robots'] = SproutSeoMetaHelper::prepRobotsAsString($_POST['fields']['sproutseo_fields']['robots']);
 		}
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
@@ -108,8 +108,9 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 	public function getInputHtml($name, $value)
 	{
 		$entryId = craft()->request->getSegment(3);
+		$locale = $this->element->locale;
 
-		$values = sproutSeo()->overrides->getGeographicMetaFieldByEntryId($entryId);
+		$values = sproutSeo()->overrides->getGeographicMetaFieldByEntryId($entryId, $locale);
 
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);
