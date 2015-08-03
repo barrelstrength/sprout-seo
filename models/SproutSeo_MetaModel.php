@@ -83,6 +83,12 @@ class SproutSeo_MetaModel extends BaseModel
 		return $metaTagData;
 	}
 
+	/**
+	 * @param string $type
+	 * @param array $overrideInfo
+	 * @return $this
+	 * @throws \Exception
+	 */
 	public function setMeta($type = 'fallback', $overrideInfo = array())
 	{
 		switch ($type) {
@@ -160,6 +166,9 @@ class SproutSeo_MetaModel extends BaseModel
 		return array();
 	}
 
+	/**
+	 * @return array|\CDbDataReader|mixed
+	 */
 	protected function getGlobalFallback()
 	{
 		$globalFallback = craft()->db->createCommand()

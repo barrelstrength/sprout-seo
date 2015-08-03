@@ -55,6 +55,10 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 		}
 	}
 
+	/**
+	 * @param $handle
+	 * @return BaseModel|SproutSeo_MetaModel
+	 */
 	public function getDefaultByHandle($handle)
 	{
 		$query = craft()->db->createCommand()
@@ -77,6 +81,12 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 
 		return $model;
 	}
+
+	/**
+	 * @param SproutSeo_MetaModel $model
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function saveDefault(SproutSeo_MetaModel $model)
 	{
 		if ($id = $model->getAttribute('id'))
