@@ -86,7 +86,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$codeOverrideMetaModel   = $codeOverrideMetaModel->setMeta('code', $this->getMeta());
 		$defaultMetaModel        = $defaultMetaModel->setMeta('default', $this->getMeta());
 		$globalFallbackMetaModel = $globalFallbackMetaModel->setMeta('fallback');
-
+		
 		$prioritizedMetaModel = new SproutSeo_MetaModel();
 
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;

@@ -9,12 +9,19 @@ namespace Craft;
 class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 {
 
+	/**
+	 * @param $attributes
+	 */
 	public function createOverride($attributes)
 	{
 		craft()->db->createCommand()
 			->insert('sproutseo_overrides', $attributes);
 	}
 
+	/**
+	 * @param $id
+	 * @param $attributes
+	 */
 	public function updateOverride($id, $attributes)
 	{
 		craft()->db->createCommand()
@@ -24,6 +31,10 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 			);
 	}
 
+	/**
+	 * @param null $id
+	 * @return int
+	 */
 	public function deleteOverrideById($id = null)
 	{
 		$record = new SproutSeo_OverridesRecord;
@@ -31,6 +42,11 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return $record->deleteByPk($id);
 	}
 
+	/**
+	 * @param $entryId
+	 * @param $locale
+	 * @return BaseModel
+	 */
 	public function getOverrideByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
@@ -45,6 +61,11 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return $model;
 	}
 
+	/**
+	 * @param $entryId
+	 * @param $locale
+	 * @return BaseModel|SproutSeo_BasicMetaFieldModel
+	 */
 	public function getBasicMetaFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
@@ -62,6 +83,11 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return new SproutSeo_BasicMetaFieldModel();
 	}
 
+	/**
+	 * @param $entryId
+	 * @param $locale
+	 * @return BaseModel|SproutSeo_TwitterCardFieldModel
+	 */
 	public function getTwitterCardFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
@@ -82,6 +108,11 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return new SproutSeo_TwitterCardFieldModel();
 	}
 
+	/**
+	 * @param $entryId
+	 * @param $locale
+	 * @return BaseModel|SproutSeo_OpenGraphFieldModel
+	 */
 	public function getOpenGraphFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
@@ -99,6 +130,11 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return new SproutSeo_OpenGraphFieldModel();
 	}
 
+	/**
+	 * @param $entryId
+	 * @param $locale
+	 * @return BaseModel|SproutSeo_GeographicMetaFieldModel
+	 */
 	public function getGeographicMetaFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
@@ -116,6 +152,11 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return new SproutSeo_GeographicMetaFieldModel();
 	}
 
+	/**
+	 * @param $entryId
+	 * @param $locale
+	 * @return BaseModel|SproutSeo_RobotsMetaFieldModel
+	 */
 	public function getRobotsMetaFieldByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()

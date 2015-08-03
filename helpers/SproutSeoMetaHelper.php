@@ -57,7 +57,7 @@ class SproutSeoMetaHelper
 	}
 
 	/**
-	 * @todo - can probably improve how images are being handled here
+	 * @todo - improve how images are being handled here
 	 * @param $prioritizedMetaModel
 	 * @throws \Exception
 	 */
