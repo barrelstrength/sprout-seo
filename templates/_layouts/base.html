@@ -6,10 +6,6 @@
 {% set title = craft.SproutSeo.name %}
 {% endif %}
 
-{% set crumbs = [
-  { label: craft.sproutseo.name, url: url('sproutseo/defaults') }
-] %}
-
 {# Only display these tabs at the top level #}
 {% if craft.request.getSegment(3) == "" and craft.request.getSegment(2) != "settings" %}
 

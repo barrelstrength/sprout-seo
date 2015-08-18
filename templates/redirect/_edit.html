@@ -3,8 +3,8 @@
 {% set title = (redirect.id != "" ? "Edit Redirect"|t : "New Redirect"|t) %}
 
 {% set crumbs = [
-{ label: craft.sproutseo.name, url: url('sproutseo/defaults') },
-{ label: "Redirects"|t, url: url('sproutseo/redirects') }
+	{ label: craft.sproutseo.name, url: url('sproutseo/defaults') },
+	{ label: "Redirects"|t, url: url('sproutseo/redirects') }
 ] %}
 
 {% block main %}
@@ -30,7 +30,7 @@
 						<div class="input">
 							<div class="right">
 								<input type="button" class="btn small formsubmit" value="{{ 'Delete'|t }}"
-									data-action="sproutseo/redirects/deleteRedirect"
+									data-action="sproutSeo/redirects/deleteRedirect"
 									data-confirm="{{ 'Are you sure you want to delete this redirect?'|t }}"
 									data-redirect="sproutseo/redirects">
 							</div>
@@ -81,12 +81,6 @@
 				</div>
 
 			</div>
-
-			{% if redirect.id  %}
-			<input type="button" class="btn formsubmit" value="{{ 'Delete'|t }}" data-action="redirects/deleteEvent"
-				data-confirm="{{ 'Are you sure you want to delete this redirect?'|t }}"
-				data-redirect="redirects">
-			{% endif %}
 
 		</div>
 
