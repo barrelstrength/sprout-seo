@@ -1,9 +1,26 @@
 {% extends "sproutseo/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
+{% set title = "Defaults"|t %}
+
+{% set tabs = {
+	defaults: {
+		label: "Defaults"|t,
+		url: cpUrl('sproutseo/defaults')
+	},
+	sitemap: {
+		label: "Sitemap"|t,
+		url: cpUrl('sproutseo/sitemap'),
+	},
+	redirect: {
+		label: "Redirects"|t,
+		url: cpUrl('sproutseo/redirects'),
+	}
+} %}
+
 {% set defaults = craft.sproutSeo.getDefaults %}
 
-{% set body %}
+{% block main %}
 
 <style>
 .included-fields {
@@ -11,52 +28,66 @@
 }
 </style>
 
-{% if defaults is empty %}
+<div class="grid first">
+	<div class="item">
+		<div class="pane">
 
-	<h3>{{ "Create your first meta-data default."|t }}</h3>
+			{% if tabs is defined and tabs %}
+				{% include "_includes/tabs" %}
+			{% endif %}
 
-{% else %}
+			{% if defaults is empty %}
 
-<table class="data" id="defaults">
-	<thead>
-		<th width="15%">{{ "Name"|t }}</th>
-		<th width="15%">{{ "Handle"|t }}</th>
-		<th width="70%"></th>
-		<td class="thin"></td>
-	</thead>
+				<h3>{{ "Create your first meta-data default."|t }}</h3>
 
-	{% for default in defaults %}
+			{% else %}
 
-	<tr id="results" data-id="{{ default.id }}" data-name="{{ default.name|t }}">
-		<td>
-			<a href="{{ url('sproutseo/defaults/' ~ default.id) }}">
-				{% if default.globalFallback %}
-				<span data-icon="home" title="{{ "Homepage"|t }}"></span>
-				{% endif %}
+				<table class="data" id="defaults">
+					<thead>
+						<th width="15%">{{ "Name"|t }}</th>
+						<th width="15%">{{ "Handle"|t }}</th>
+						<th width="70%"></th>
+						<td class="thin"></td>
+					</thead>
 
-				<strong>{{ default.name }}</strong> 
-			</a>
-		</td>
-		<td><code>{{ default.handle }}</code></td>
-		<td class="included-fields">
+					{% for default in defaults %}
 
-		</td>
-		<td class="thin">
-			<a class="delete icon" title="{{ 'Delete'|t }}"></a>
-		</td>
-	</tr>
+					<tr id="results" data-id="{{ default.id }}" data-name="{{ default.name|t }}">
+						<td>
+							<a href="{{ url('sproutseo/defaults/' ~ default.id) }}">
+								{% if default.globalFallback %}
+								<span data-icon="home" title="{{ "Homepage"|t }}"></span>
+								{% endif %}
 
-	{% endfor %}
+								<strong>{{ default.name }}</strong>
+							</a>
+						</td>
+						<td><code>{{ default.handle }}</code></td>
+						<td class="included-fields">
 
-</table>
+						</td>
+						<td class="thin">
+							<a class="delete icon" title="{{ 'Delete'|t }}"></a>
+						</td>
+					</tr>
 
-{% endif %}
+					{% endfor %}
 
-<div class="buttons">
-	<a class="btn submit add icon" href="{{ url('sproutseo/defaults/new') }}">{{ "New Default"|t }}</a>
+				</table>
+
+			{% endif %}
+
+			<div class="buttons">
+				<a class="btn submit add icon" href="{{ url('sproutseo/defaults/new') }}">{{ "New Default"|t }}</a>
+			</div>
+
+			{% include 'sproutseo/_partials/brand/footer' %}
+
+		</div>
+	</div>
 </div>
 
-{% endset %}
+{% endblock %}
 
 {% set js %}
 	new Craft.AdminTable({

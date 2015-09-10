@@ -1,0 +1,49 @@
+{% extends "_layouts/elementindex" %}
+{% set elementType = 'SproutSeo_Redirect' %}
+{% set selectedTab = 'redirect' %}
+
+{% includeCssResource "sproutseo/css/brand.css" %}
+
+{% set crumbs = [
+  { label: craft.sproutseo.name, url: url('sproutseo/defaults') },
+  { label: 'Redirects'|t, url: url('sproutseo/redirects') }
+] %}
+
+{% set title = craft.SproutSeo.name %}
+{# Only display these tabs at the top level #}
+{% if craft.request.getSegment(3) == "" and craft.request.getSegment(2) != "settings" %}
+
+{% set tabs = {
+    defaults: {
+      label: "Defaults"|t,
+      url: cpUrl('sproutseo/defaults')
+    },
+    sitemap: {
+      label: "Sitemap"|t,
+      url: cpUrl('sproutseo/sitemap'),
+    },
+    redirect: {
+      label: "Redirects"|t,
+      url: cpUrl('sproutseo/redirects'),
+    }
+} %}
+{% endif %}
+
+{% set extraPageHeaderHtml %}
+  <a class="btn settings icon" href="{{ url('sproutseo/settings') }}" title="{{ 'Settings'|t }}"></a>
+{% endset %}
+
+{% block sidebar %}
+  <div class="buttons">
+			<a class="btn submit add icon" href="{{ url('sproutseo/redirects/new') }}">{{ "New Redirect"|t }}</a>
+	</div>
+
+	{{ parent() }}
+{% endblock %}
+
+{% block content %}
+  {{ parent() }}
+  {% include 'sproutseo/_partials/brand/footer' %}
+{% endblock %}
+
+

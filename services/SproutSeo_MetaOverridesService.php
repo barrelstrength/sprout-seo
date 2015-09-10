@@ -42,11 +42,6 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 		return $record->deleteByPk($id);
 	}
 
-	/**
-	 * @param $entryId
-	 * @param $locale
-	 * @return BaseModel
-	 */
 	public function getOverrideByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
