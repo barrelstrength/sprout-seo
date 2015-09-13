@@ -10,6 +10,7 @@
 {% block main %}
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ continueEditingUrl }}">
+		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/redirects/saveRedirect">
 		<input type="hidden" name="redirect" value="sproutseo/redirects">
 		<input type="hidden" name="redirectId" value="{{ redirect.id }}">
