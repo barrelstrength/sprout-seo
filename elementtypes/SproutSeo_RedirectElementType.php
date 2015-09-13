@@ -66,7 +66,22 @@ class SproutSeo_RedirectElementType extends BaseElementType
 			'oldUrl' => Craft::t('Old Url'),
 			'newUrl' => Craft::t('New Url'),
 			'method' => Craft::t('Method'),
-			'test' => Craft::t('Test')
+			'test'   => Craft::t('Test')
+		);
+	}
+
+	/**
+	 * Returns the attributes that can be sorted by in table views.
+	 *
+	 * @param string|null $source
+	 * @return array
+	 */
+	public function defineSortableAttributes($source = null)
+	{
+		return array(
+			'oldUrl' => Craft::t('Old Url'),
+			'newUrl' => Craft::t('New Url'),
+			'method' => Craft::t('Method')
 		);
 	}
 
