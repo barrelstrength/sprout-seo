@@ -11,7 +11,7 @@ class SproutSeo_RedirectsController extends BaseController
 	 */
 	public function actionRedirectIndex()
 	{
-		$this->renderTemplate('sproutSeo/redirect/_index');
+		$this->renderTemplate('sproutseo/redirects/_index');
 	}
 
 	/**
@@ -52,7 +52,7 @@ class SproutSeo_RedirectsController extends BaseController
 			array('label' => Craft::t('Redirects'), 'url' => UrlHelper::getUrl('redirects'))
 		);
 
-		$this->renderTemplate('sproutSeo/redirect/_edit',$variables);
+		$this->renderTemplate('sproutseo/redirects/_edit',$variables);
 	}
 
 	/**
