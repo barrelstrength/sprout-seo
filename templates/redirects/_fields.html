@@ -17,7 +17,6 @@
 	name: 'newUrl',
 	value: redirect.newUrl,
 	errors: redirect.getErrors('newUrl'),
-	autofocus: true,
 	required: true
 }) }}
 
@@ -28,6 +27,7 @@
 	value: (redirect.method != "" ? redirect.method : '302'),
 	options: methodOptions,
 	errors: redirect.getErrors('method'),
+	required: true
 }) }}
 
 {{ forms.lightswitchField({
