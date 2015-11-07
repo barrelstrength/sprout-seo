@@ -86,6 +86,14 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
+	 * Get Settings URL
+	 */
+	public function getSettingsUrl()
+	{
+		return 'sproutseo/settings';
+	}
+
+	/**
 	 * @return array
 	 */
 	public function registerCpRoutes()
