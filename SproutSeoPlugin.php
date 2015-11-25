@@ -66,6 +66,14 @@ class SproutSeoPlugin extends BasePlugin
 		return true;
 	}
 
+	/**
+	 * Get Settings URL
+	 */
+	public function getSettingsUrl()
+	{
+		return 'sproutseo/settings';
+	}
+
 	/* --------------------------------------------------------------
 	 * HOOKS
 	 * ------------------------------------------------------------ */
@@ -102,14 +110,6 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
-	 * Get Settings URL
-	 */
-	public function getSettingsUrl()
-	{
-		return 'sproutseo/settings';
-	}
-
-	/**
 	 * @return array
 	 */
 	public function registerCpRoutes()
@@ -140,14 +140,6 @@ class SproutSeoPlugin extends BasePlugin
 				'action' => 'sproutSeo/redirects/editRedirect'
 			)
 		);
-	}
-
-	/**
-	 * Get Settings URL
-	 */
-	public function getSettingsUrl()
-	{
-		return 'sproutseo/settings';
 	}
 }
 
