@@ -21,6 +21,14 @@ class SproutSeoPlugin extends BasePlugin
 	/**
 	 * @return string
 	 */
+	public function getDescription()
+	{
+		return 'Easily manage your SEO, Social Media Sharing, Redirects, and Sitemap';
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getVersion()
 	{
 		return '1.1.1';
@@ -40,6 +48,14 @@ class SproutSeoPlugin extends BasePlugin
 	public function getDeveloperUrl()
 	{
 		return 'http://barrelstrengthdesign.com';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDocumentationUrl()
+	{
+		return 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo/docs';
 	}
 
 	/**
@@ -124,6 +140,14 @@ class SproutSeoPlugin extends BasePlugin
 				'action' => 'sproutSeo/redirects/editRedirect'
 			)
 		);
+	}
+
+	/**
+	 * Get Settings URL
+	 */
+	public function getSettingsUrl()
+	{
+		return 'sproutseo/settings';
 	}
 }
 
