@@ -173,6 +173,20 @@ class SproutSeoPlugin extends BasePlugin
 				)
 		);
 	}
+
+	/**
+	 * @return array
+	 */
+	public function sproutMigrateRegisterElements()
+	{
+		return array(
+				'sproutseo_redirect'     => array(
+						'model'   => 'Craft\\SproutSeo_Redirect',
+						'method'  => 'saveRedirect',
+						'service' => 'sproutSeo_redirects',
+				)
+		);
+	}
 }
 
 /**
