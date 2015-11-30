@@ -83,6 +83,7 @@ class SproutSeo_RedirectsController extends BaseController
 		$redirect->newUrl = craft()->request->getPost('newUrl');
 		$redirect->method = craft()->request->getPost('method');
 		$redirect->regex = craft()->request->getPost('regex');
+		$redirect->enabled = craft()->request->getPost('enabled');
 
 		if (sproutSeo()->redirects->saveRedirect($redirect))
 		{

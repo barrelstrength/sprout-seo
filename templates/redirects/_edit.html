@@ -43,6 +43,34 @@
 
 		<div class="item" data-position="right" data-colspan="1">
 
+			<div class="pane meta">
+
+				{% set statusInput %}
+					<div class="left">
+						{{ forms.lightswitch({
+							id: 'enabled',
+							name: 'enabled',
+							on: redirect.enabled
+						}) }}
+					</div>
+
+					{% if redirect.id  %}
+						<div class="right">
+							<input type="button" class="btn small formsubmit" value="{{ 'Delete'|t }}"
+									data-action="sproutSeo/redirects/deleteRedirect"
+									data-confirm="{{ 'Are you sure you want to delete this redirect?'|t }}"
+									data-redirect="sproutseo/redirects">
+						</div>
+					{% endif %}
+				{% endset %}
+
+				{{ forms.field({
+					label: "Enabled"|t,
+					id: 'enabled'
+				}, statusInput) }}
+
+			</div>
+			
 			<div class="pane">
 
 				<h2>Match Patterns</h2>
@@ -64,28 +92,6 @@
 						<li><em>new-location/$1/$2</em></li>
 					</ul>
 				</p>
-
-			</div>
-
-			<div class="pane">
-
-				{# @todo - add and test status button #}
-				<div class="left">
-					{{ forms.lightswitch({
-						id: 'enabled',
-						name: 'enabled',
-						on: redirect.enabled
-					}) }}
-				</div>
-
-				{% if redirect.id  %}
-					<div class="right">
-						<input type="button" class="btn small formsubmit" value="{{ 'Delete'|t }}"
-								data-action="sproutSeo/redirects/deleteRedirect"
-								data-confirm="{{ 'Are you sure you want to delete this redirect?'|t }}"
-								data-redirect="sproutseo/redirects">
-					</div>
-				{% endif %}
 
 			</div>
 
