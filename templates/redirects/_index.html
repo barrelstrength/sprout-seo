@@ -2,8 +2,6 @@
 {% set elementType = 'SproutSeo_Redirect' %}
 {% set selectedTab = 'redirect' %}
 
-{% includeCssResource "sproutseo/css/brand.css" %}
-
 {% set crumbs = [
   { label: craft.sproutseo.name, url: url('sproutseo/defaults') },
   { label: 'Redirects'|t, url: url('sproutseo/redirects') }
@@ -42,8 +40,7 @@
 {% endblock %}
 
 {% block content %}
+
   {{ parent() }}
-  {% include 'sproutseo/_partials/brand/footer' %}
+
 {% endblock %}
-
-

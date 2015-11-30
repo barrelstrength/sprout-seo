@@ -93,6 +93,23 @@ class SproutSeoPlugin extends BasePlugin
 				craft()->request->redirect($redirect->newUrl, true, $redirect->method);
 			}
 		}
+
+		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutseo')
+		{
+			// @todo Craft 3 - update to use info from config.json
+			craft()->templates->includeJsResource('sproutseo/js/brand.js');
+			craft()->templates->includeJs("
+				sproutFormsBrand = new Craft.SproutBrand();
+				sproutFormsBrand.displayFooter({
+					pluginName: 'Sprout SEO',
+					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo',
+					pluginVersion: '" . $this->getVersion() . "',
+					pluginDescription: '" . $this->getDescription() . "',
+					developerName: '(Barrel Strength)',
+					developerUrl: '" . $this->getDeveloperUrl() . "'
+				});
+			");
+		}
 	}
 
 	/**
