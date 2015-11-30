@@ -35,22 +35,18 @@
 {% set allSectionsWithUrls = craft.sproutSeo.getAllSectionsWithUrls() %}
 {% set customPages = craft.sproutSeo.getAllCustomPages() %}
 
-{% block main %}
+{% set fullPageForm = true %}
 
-<div class="grid first">
-	<div class="item">
-		<div class="pane">
+{% block saveButton %}
+	<div class="buttons">
+		<a class="btn submit add icon" href="{{ url('sproutseo/sitemap/newPage') }}">New page</a>
+	</div>
+{% endblock %}
 
-			{% if tabs is defined and tabs %}
-				{% include "_includes/tabs" %}
-			{% endif %}
+{% set content %}
 
-<form method="post" action="" accept-charset="UTF-8">
-	{{ getCsrfInput() }}
 	<input type="hidden" name="action" value="sproutSeo/sitemap/saveSitemap">
 	<input type="hidden" name="redirect" value="sproutseo/sitemap">
-
-	<h2>Sections</h2>
 
 	<table class="data fullwidth sitemap-settings">
 		<thead>
@@ -125,84 +121,73 @@
 		</tbody>
 	</table>
 
+	{% if customPages|length %}
+
 	<br>
 	<hr>
 
 	<h2 class="first">{{ "Custom Pages"|t }} </h2>
 
-		{% if customPages|length %}
-
-		<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
-			<thead>
-				<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
-				<th style="width:15%;">{{ "Priority"|t }}</th>
-				<th style="width:15%;">{{ "Change Frequency"|t }}</th>
-				<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
-				{# <th style="width:8%;"></th> #}
-				<th class="thin"></th>
-			</thead>
-			<tbody>
+	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
+		<thead>
+			<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+			<th style="width:15%;">{{ "Priority"|t }}</th>
+			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
+			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
+			{# <th style="width:8%;"></th> #}
+			<th class="thin"></th>
+		</thead>
+		<tbody>
 
 			{% for page in customPages %}
 
-			<tr data-rowid="{{ page.id }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
-				<td>
-					<div style="display:inline-block;padding:7px 0 7px 10px;">
-					{% if (page.enabled is defined and page.enabled == 1) %}
-						<span class="status live"></span>
-					{% else %}
-						<span class="status disabled"></span>
-					{% endif %}
-					</div>
+				<tr data-rowid="{{ page.id }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
+					<td>
+						<div style="display:inline-block;padding:7px 0 7px 10px;">
+						{% if (page.enabled is defined and page.enabled == 1) %}
+							<span class="status live"></span>
+						{% else %}
+							<span class="status disabled"></span>
+						{% endif %}
+						</div>
 
-					<input type="hidden" name="sitemap_fields[{{ page.id }}][id]" value="{{ page.id }}">
+						<input type="hidden" name="sitemap_fields[{{ page.id }}][id]" value="{{ page.id }}">
 
-					<input type="text" name="sitemap_fields[{{ page.id }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
-				</td>
-				<td>
-					{{ forms.selectField({
-						name: 'sitemap_fields[' ~ page.id ~ '][priority]',
-						options: priorityList,
-						value: (page.priority is defined ? page.priority : 0.5),
-						errors: "",
-						required: false
-					}) }}
-				</td>
-				<td>
-					{{ forms.selectField({
-						name: 'sitemap_fields[' ~ page.id ~ '][changeFrequency]',
-						options: frequencyList,
-						value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
-						errors: "",
-						required: false
-					}) }}
-				</td>
-				<td style="text-align: center;">
-					<input type="checkbox" name="sitemap_fields[{{ page.id }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
-				</td>
-				{# <td></td> #}
-				<td>
-					<a class="delete icon" title="Delete"></a>
-				</td>
-			</tr>
+						<input type="text" name="sitemap_fields[{{ page.id }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
+					</td>
+					<td>
+						{{ forms.selectField({
+							name: 'sitemap_fields[' ~ page.id ~ '][priority]',
+							options: priorityList,
+							value: (page.priority is defined ? page.priority : 0.5),
+							errors: "",
+							required: false
+						}) }}
+					</td>
+					<td>
+						{{ forms.selectField({
+							name: 'sitemap_fields[' ~ page.id ~ '][changeFrequency]',
+							options: frequencyList,
+							value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
+							errors: "",
+							required: false
+						}) }}
+					</td>
+					<td style="text-align: center;">
+						<input type="checkbox" name="sitemap_fields[{{ page.id }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
+					</td>
+					{# <td></td> #}
+					<td>
+						<a class="delete icon" title="Delete"></a>
+					</td>
+				</tr>
 
 			{% endfor %}
-
-		{% else %}
-
-		<p>Add your first custom page.</p>
-
-		{% endif %}
 
 		</tbody>
 	</table>
 
-	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('sproutseo/sitemap/newPage') }}">New Custom Page</a>
-	</div>
-
-
-	</form>
+	{% endif %}
 
 	<style type="text/css">
 	.sitemap-custom-url:focus {
@@ -221,11 +206,7 @@
 	}
 	</style>
 
-		</div>
-	</div>
-</div>
-
-{% endblock %}
+{% endset %}
 
 {% includeJsResource "sproutseo/js/sitemap.js" %}
 

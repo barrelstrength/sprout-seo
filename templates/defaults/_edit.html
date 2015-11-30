@@ -1,5 +1,5 @@
 {% extends "sproutseo/_layouts/base" %}
-{% set centered = true %}
+{% import "_includes/forms" as forms %}
 
 {% set title %}
   {% if not defaultId is empty %}
@@ -40,7 +40,15 @@
 	},
 } %}
 
-{% import "_includes/forms" as forms %}
+{% set centered = true %}
+
+{% set fullPageForm = true %}
+
+{% if craft.request.getSegment(3) == 'new' %}
+	{% set saveShortcutRedirect = url('sproutseo/defaults') %}
+{% else %}
+	{% set saveShortcutRedirect = url('sproutseo/defaults/' ~ defaultId) %}
+{% endif %}
 
 {# Set a field context so we can manage field visibility between the SEO Defaults and the Field Types #}
 {% set fieldContext = 'defaults' %}
@@ -48,13 +56,13 @@
 {# Map the `defaults` object to `values` so we can use the same templates for SEO Defaults and the Field Types #}
 {% set values = default %}
 
-{% block main %}
+{% block saveButton %}
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="Save">
+	</div>
+{% endblock %}
 
-{% if craft.request.getSegment(3) == 'new' %}
-	{% set saveshortcutUrl = url('sproutseo/defaults') %}
-{% else %}
-	{% set saveshortcutUrl = url('sproutseo/defaults/' ~ defaultId) %}
-{% endif %}
+{% block main %}
 
 <div class="grid first">
 	<div class="item">
@@ -62,8 +70,6 @@
 
 			{% include "_includes/tabs" %}
 
-			<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ saveshortcutUrl }}">
-				{{ getCsrfInput() }}
 				<input type="hidden" name="action" value="sproutSeo/defaults/saveDefault">
 				<input type="hidden" name="redirect" value="sproutseo/defaults">
 
@@ -123,12 +129,6 @@
 				<div id="default-twitter" class="hidden">
 					{% include 'sproutseo/_partials/fields/twitter-card' with { values : default } %}
 				</div>
-
-				<div class="buttons">
-					<input class="btn submit" type="submit" value="Save Default">
-				</div>
-
-			</form>
 
 		</div>
 	</div>

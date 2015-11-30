@@ -3,16 +3,8 @@
 
 {% set title = "Redirects" %}
 
-{% block sidebar %}
-  <div class="buttons">
-			<a class="btn submit add icon" href="{{ url('sproutseo/redirects/new') }}">{{ "New Redirect"|t }}</a>
+{% set extraPageHeaderHtml %}
+	<div class="buttons">
+		<a class="btn submit add icon" href="{{ url('sproutseo/redirects/new') }}">{{ "New Redirect"|t }}</a>
 	</div>
-
-	{{ parent() }}
-{% endblock %}
-
-{% block content %}
-
-  {{ parent() }}
-
-{% endblock %}
+{% endset %}
