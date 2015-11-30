@@ -1,40 +1,23 @@
 {% extends "sproutseo/_layouts/settings" %}
 {% import "_includes/forms" as forms %}
 
-{% set body %}
+{% if settingsTemplate is not defined or not settingsTemplate %}
+	{% set settingsTemplate = 'general' %}
+{% endif %}
 
-  <form method="post" accept-charset="UTF-8" data-saveshortcut="1">
-    {{ getCsrfInput() }}
-    <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
-    <input type="hidden" name="redirect" value="sproutseo/settings">
+{% set fullPageForm = true %}
 
-    <div id="settings-seo">
+{% set content %}
 
-      {% namespace 'settings' %}
-        {% include 'sproutseo/settings/_tabs/defaults' %}
-      {% endnamespace %}
+	<input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
+	<input type="hidden" name="redirect" value="sproutseo/settings/{{ settingsTemplate }}">
 
-    </div>
+	{% namespace 'settings' %}
+		{% include 'sproutseo/settings/_tabs/' ~ settingsTemplate %}
+	{% endnamespace %}
 
-    <div id="settings-sitemap" class="hidden">
-
-      {% namespace 'settings' %}
-        {% include 'sproutseo/settings/_tabs/sitemap' %}
-      {% endnamespace %}
-
-    </div>
-
-    <div id="settings-cp" class="hidden">
-
-      {% namespace 'settings' %}
-        {% include 'sproutseo/settings/_tabs/cp' %}
-      {% endnamespace %}
-
-    </div>
-
-    <div class="buttons">
-      <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
-    </div>
-  </form>
+  <div class="buttons">
+    <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+  </div>
 
 {% endset %}

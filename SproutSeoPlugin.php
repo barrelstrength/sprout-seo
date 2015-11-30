@@ -147,6 +147,9 @@ class SproutSeoPlugin extends BasePlugin
 			'sproutseo/settings' => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
+			'sproutseo/settings/(?P<settingsTemplate>.*)' => array(
+					'action' => 'sproutSeo/settings/settingsIndex'
+			),
 			'sproutseo/redirects' => array(
 				'action' => 'sproutSeo/redirects/redirectIndex'
 			),
@@ -156,6 +159,18 @@ class SproutSeoPlugin extends BasePlugin
 			'sproutseo/redirects/(?P<redirectId>\d+)' => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function registerUserPermissions()
+	{
+		return array(
+				'editSproutSeoSettings' => array(
+						'label' => Craft::t('Edit Settings')
+				)
 		);
 	}
 }

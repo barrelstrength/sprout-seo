@@ -25,6 +25,8 @@ class SproutSeo_SettingsController extends BaseController
 
 		$variables['settings'] = $settingsModel;
 
+		$variables['settingsTemplate'] = craft()->request->getSegment(3);
+
 		// Load a particular template and with all of the variables you've created
 		$this->renderTemplate('sproutseo/settings', $variables);
 

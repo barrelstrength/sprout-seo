@@ -2,25 +2,47 @@
 
 {% set title  = "Settings" %}
 
-{% set crumbs = [
-  { label: "Sprout SEO"|t, url: url('sproutseo') }
-] %}
-
-{% set tabs = {
-    defaults: {
-        label: "Defaults"|t,
-        url: "#settings-seo"
-    },
-    general: {
-        label: "Control Panel"|t,
-        url: "#settings-cp"
-    }
+{% set subnav = {
+  defaults: {
+    label: "Defaults"|t,
+    url: cpUrl('sproutseo/defaults')
+  },
+  sitemap: {
+    label: "Sitemap"|t,
+    url: cpUrl('sproutseo/sitemap'),
+  },
+  redirects: {
+    label: "Redirects"|t,
+    url: cpUrl('sproutseo/redirects'),
+  }
 } %}
 
-{% set content %}
+{% if currentUser.can('editSproutSeoSettings') %}
+  {% set subnav = subnav|merge({
+    settings: {
+      label: "Settings"|t,
+      url: url('sproutseo/settings/general')
+    }
+  }) %}
+{% endif %}
 
-  {% if body is defined %}
-    {{ body }}
-  {% endif %}
+{% set selectedSubnavItem = craft.request.segment(2) ? craft.request.segment(2) : 'defaults' %}
+{% set selectedSidebarItem = craft.request.segment(3) %}
+
+{% set fullPageForm = true %}
+
+{% block saveButton %}{% endblock %}
+
+{% set sidebar %}
+
+  <nav class="last">
+    <ul>
+      <li><a href="{{ url('sproutseo/settings/general') }}" {% if selectedSidebarItem == 'general'
+        %}class="sel"{% endif %}>General Settings</a></li>
+      <li><a href="{{ url('sproutseo/settings/defaults') }}" {% if selectedSidebarItem == 'defaults' %}class="sel"{%
+        endif
+        %}>Defaults</a></li>
+    </ul>
+  </nav>
 
 {% endset %}

@@ -3,28 +3,6 @@
 
 {% set title = "Sitemap"|t %}
 
-{% set crumbs = [
-	{ label: craft.sproutseo.name, url: url('sproutseo/defaults') },
-	{ label: "Sitemap"|t, url: url('sproutseo/sitemap') }
-] %}
-
-{% set tabs = {
-	defaults: {
-		label: "Defaults"|t,
-		url: cpUrl('sproutseo/defaults')
-	},
-	sitemap: {
-		label: "Sitemap"|t,
-		url: cpUrl('sproutseo/sitemap'),
-	},
-	redirect: {
-		label: "Redirects"|t,
-		url: cpUrl('sproutseo/redirects'),
-	}
-} %}
-
-{% set selectedTab = 'sitemap' %}
-
 {% set priorityList = {
 	'1.0': '1.0 ↑ Highest'|t,
 	'0.9': '0.9',

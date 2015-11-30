@@ -2,16 +2,15 @@
 {% set centered = true %}
 
 {% set title %}
-    {% if not defaultId is empty %}
-        {{ default.name }}
-    {% else %}
-        New Default
-    {% endif %}
+  {% if not defaultId is empty %}
+    {{ default.name }}
+  {% else %}
+    New Default
+  {% endif %}
 {% endset %}
 
 {% set crumbs = [
-{ label: craft.sproutseo.name, url: url('sproutseo/defaults') },
-{ label: "Defaults"|t, url: url('sproutseo/defaults') }
+	{ label: "Defaults"|t, url: url('sproutseo/defaults') }
 ] %}
 
 {% set tabs = {

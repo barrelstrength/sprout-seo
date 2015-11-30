@@ -3,21 +3,6 @@
 
 {% set title = "Defaults"|t %}
 
-{% set tabs = {
-	defaults: {
-		label: "Defaults"|t,
-		url: cpUrl('sproutseo/defaults')
-	},
-	sitemap: {
-		label: "Sitemap"|t,
-		url: cpUrl('sproutseo/sitemap'),
-	},
-	redirect: {
-		label: "Redirects"|t,
-		url: cpUrl('sproutseo/redirects'),
-	}
-} %}
-
 {% set defaults = craft.sproutSeo.getDefaults %}
 
 {% block main %}

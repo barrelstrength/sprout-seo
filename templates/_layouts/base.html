@@ -1,15 +1,10 @@
 {% extends "_layouts/cp" %}
 
-{% set selectedTab = craft.request.segment(2) ? craft.request.segment(2) : 'defaults' %}
-
 {% if title is not defined %}
-{% set title = craft.SproutSeo.name %}
+	{% set title = craft.SproutSeo.name %}
 {% endif %}
 
-{# Only display these tabs at the top level #}
-{% if craft.request.getSegment(3) == "" and craft.request.getSegment(2) != "settings" %}
-
-{% set tabs = {
+{% set subnav = {
     defaults: {
       label: "Defaults"|t,
       url: cpUrl('sproutseo/defaults')
@@ -18,17 +13,22 @@
       label: "Sitemap"|t,
       url: cpUrl('sproutseo/sitemap'),
     },
-    redirect: {
+		redirects: {
       label: "Redirects"|t,
       url: cpUrl('sproutseo/redirects'),
     }
 } %}
 
+{% if currentUser.can('editSproutSeoSettings') %}
+	{% set subnav = subnav|merge({
+		settings: {
+			label: "Settings"|t,
+			url: url('sproutseo/settings/general')
+		}
+	}) %}
 {% endif %}
 
-{% set extraPageHeaderHtml %}
-	<a class="btn settings icon" href="{{ url('sproutseo/settings') }}" title="{{ 'Settings'|t }}"></a>
-{% endset %}
+{% set selectedSubnavItem = craft.request.segment(2) ? craft.request.segment(2) : 'defaults' %}
 
 {% block main %}
 

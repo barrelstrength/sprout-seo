@@ -1,13 +1,10 @@
 {% extends "sproutseo/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
-{% set selectedTab = 'sitemap' %}
-
 {% set title = "New Custom Page"|t %}
 
 {% set crumbs = [
-{ label: craft.sproutseo.name, url: url('sproutseo/defaults') },
-{ label: "Sitemap"|t, url: url('sproutseo/sitemap') }
+	{ label: "Sitemap"|t, url: url('sproutseo/sitemap') }
 ] %}
 
 {% set priorityList = {
