@@ -118,9 +118,9 @@ class SproutSeoVariable
 	 *
 	 * @return mixed
 	 */
-	public function globalFallbackId($defaultId = null)
+	public function globalFallbackId()
 	{
-		return sproutSeo()->defaults->globalFallbackId($defaultId);
+		return sproutSeo()->defaults->globalFallbackId();
 	}
 
 	/**

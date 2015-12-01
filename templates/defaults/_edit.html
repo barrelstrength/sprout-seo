@@ -97,9 +97,9 @@
 						required: true
 					}) }}
 
-					{% set globalFallbackId = craft.sproutSeo.globalFallbackId(defaultId) %}
+					{% set globalFallbackId = craft.sproutSeo.globalFallbackId() %}
 
-					{% if not globalFallbackId %}
+					{% if not globalFallbackId or (globalFallbackId == defaultId) %}
 						{{ forms.checkboxField({
 							label: "Use this default as my global fallback"|t,
 							id: 'global-fallback',
