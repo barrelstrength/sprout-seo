@@ -59,6 +59,14 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getReleaseFeedUrl()
+	{
+		return 'https://sprout.barrelstrengthdesign.com/craft-plugins/seo/releases.json';
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function hasCpSection()
