@@ -250,7 +250,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	{
 		$methodOptions = sproutSeo()->redirects->getMethods();
 		// get template
-		$html = craft()->templates->render('sproutseo/redirect/_editor', array(
+		$html = craft()->templates->render('sproutseo/redirects/_editor', array(
 			'redirect' => $element,
 			'methodOptions' => $methodOptions
 		));
