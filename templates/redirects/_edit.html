@@ -8,6 +8,7 @@
 ] %}
 
 {% set fullPageForm = true %}
+{% set saveShortcutRedirect = continueEditingUrl %}
 
 {% block saveButton %}
 	<div class="btngroup submit first">
@@ -15,7 +16,7 @@
 		<div class="btn submit menubtn"></div>
 		<div class="menu">
 			<ul>
-				<li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">{{ "Save and continue editing"|t }}</a></li>
+				<li><a class="formsubmit" data-redirect="{{ continueEditingUrl }}">{{ "Save and continue editing"|t }} <span class="shortcut">⌘S</span></a></li>
 				<li><a class="formsubmit" data-redirect="sproutseo/redirects/new">{{ "Save and add another"|t }}</a></li>
 			</ul>
 		</div>
