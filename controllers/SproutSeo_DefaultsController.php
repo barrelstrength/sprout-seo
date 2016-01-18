@@ -49,20 +49,11 @@ class SproutSeo_DefaultsController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		// check if this is a new or existing default
-		if (craft()->request->getPost('sproutseo_fields[id]') == null)
-		{
-			$id = false;
-		}
-		else
-		{
-			$id = craft()->request->getPost('sproutseo_fields[id]');
-		}
-
 		$model = new SproutSeo_MetaModel();
-		$model->id = $id;
 
 		$defaultFields = craft()->request->getPost('sproutseo_fields');
+		// check if this is a new or existing default
+		$defaultFields['id'] = (isset($defaultFields['id']) ? $defaultFields['id'] : null);
 
 		// Convert Checkbox Array into comma-delimited String
 		if (isset($defaultFields['robots']))
