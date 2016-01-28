@@ -278,7 +278,5 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 				':class'=>'SproutSeo'
 			)
 		);
-
-		SproutSeoPlugin::log('FUNCTION '.$structure->id, LogLevel::Info, true);
 	}
 }
