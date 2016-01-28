@@ -16,7 +16,13 @@ class m160127_000000_sproutSeo_addDefaultSettings extends BaseMigration
 		if(is_null($settings->structureId))
 		{
 			sproutSeo()->redirects->installDefaultSettings($settings->pluginNameOverride);
-			SproutSeoPlugin::log('Successfully added structure', LogLevel::Info, true);
+			SproutSeoPlugin::log('Successfully added structure -'.$sproutSeo()->redirects->getStructureId(), LogLevel::Info, true);
+			// Set structure to currents redirects
+			$redirects = SproutSeo_RedirectRecord::model()->findAll();
+			foreach ($redirects as $key => $redirect)
+			{
+				craft()->structures->appendToRoot(sproutSeo()->redirects->getStructureId(), $redirect);
+			}
 		}
 
 		return true;
