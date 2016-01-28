@@ -96,6 +96,8 @@ class SproutSeo_RedirectElementType extends BaseElementType
 		$sources = array(
 			'*' => array(
 				'label'    => Craft::t('All redirects'),
+				'structureId'  => sproutSeo()->redirects->getStructureId(),
+				'structureEditable' => true
 			)
 		);
 
@@ -106,7 +108,9 @@ class SproutSeo_RedirectElementType extends BaseElementType
 			$key = 'method:'.$method;
 			$sources[$key] = array(
 				'label'    => $method.' - '.$code,
-				'criteria' => array('method' => $method)
+				'criteria' => array('method' => $method),
+				'structureId'  => sproutSeo()->redirects->getStructureId(),
+				'structureEditable' => true
 			);
 		}
 
@@ -205,9 +209,13 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	 */
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
 	{
+		$structureId = sproutSeo()->redirects->getStructureId();
+
 		$query
 			->addSelect('redirects.oldUrl, redirects.newUrl, redirects.method, redirects.id, redirects.regex')
-			->join('sproutseo_redirects redirects', 'redirects.id = elements.id');
+			->join('sproutseo_redirects redirects', 'redirects.id = elements.id')
+			->leftJoin('structures structures', 'structures.id = :structureId', array(':structureId'=>$structureId))
+			->leftJoin('structureelements structureelements', array('and', 'structureelements.structureId = structures.id', 'structureelements.elementId = redirects.id'));
 
 		if ($criteria->id)
 		{

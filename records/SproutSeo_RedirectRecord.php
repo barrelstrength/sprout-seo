@@ -60,4 +60,23 @@ class SproutSeo_RedirectRecord extends BaseRecord
 
 		return true;
 	}
+
+	/**
+	* Scope to join with structure
+	*/
+	public function Structured()
+	{
+		$structureId = sproutSeo()->redirects->getStructureId();
+
+		$criteria         = $this->getDbCriteria();
+		$criteria->alias  = 'redirects';
+		$criteria->join   = 'LEFT JOIN craft_elements element ON element.id=redirects.id ';
+		$criteria->join   .= 'LEFT JOIN craft_structures structures ON structures.id=:structureId ';
+		$criteria->join   .= 'LEFT JOIN craft_structureelements elements ON elements.structureId=structures.id ';
+		$criteria->order  = 'elements.lft ASC';
+		$criteria->addCondition('element.enabled = 1 and elements.elementID = element.id');
+
+		$criteria->params = array(':structureId'=>$structureId);
+		return $this;
+	}
 }

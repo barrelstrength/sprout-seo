@@ -39,7 +39,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '2.0.1';
+		return '2.0.2';
 	}
 
 	/**
@@ -96,6 +96,11 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
+		craft()->structures->onMoveElement = function(Event $event) {
+			$element = $event->params['element'];
+			craft()->templateCache->deleteCachesByElementId($element['id']);
+		};
+
 		Craft::import('plugins.sproutseo.helpers.SproutSeoMetaHelper');
 
 		if(craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
@@ -139,6 +144,7 @@ class SproutSeoPlugin extends BasePlugin
 		return array(
 			'pluginNameOverride'  => AttributeType::String,
 			'seoDivider'          => array(AttributeType::String, 'default' => '-'),
+			'structureId'         => array( AttributeType::Number, 'default' => null )
 		);
 	}
 
@@ -202,6 +208,11 @@ class SproutSeoPlugin extends BasePlugin
 						'service' => 'sproutSeo_redirects',
 				)
 		);
+	}
+
+	public function onAfterInstall()
+	{
+		sproutSeo()->redirects->installDefaultSettings();
 	}
 }
 

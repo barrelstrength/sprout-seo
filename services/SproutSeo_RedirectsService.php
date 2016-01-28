@@ -69,6 +69,9 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 
 					$redirectRecord->save(false);
 
+					//Set the root structure
+					craft()->structures->appendToRoot(sproutSeo()->redirects->getStructureId(), $redirect);
+
 					if ($transaction !== null)
 					{
 						$transaction->commit();
@@ -119,12 +122,10 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	{
 		$criteria = new \CDbCriteria();
 		$criteria->condition = 'oldUrl =:url';
-		$criteria->with = array('element');
-		$criteria->addCondition('element.enabled = 1');
 		$criteria->params = array(':url'=>$url);
 		$criteria->limit = 1;
 
-		return SproutSeo_RedirectRecord::model()->find($criteria);
+		return SproutSeo_RedirectRecord::model()->Structured()->find($criteria);
 	}
 
 	/**
@@ -138,9 +139,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	{
 		$criteria = new \CDbCriteria();
 		$criteria->addCondition('regex = true');
-		$criteria->with = array('element');
-		$criteria->addCondition('element.enabled = 1');
-		$redirects = SproutSeo_RedirectRecord::model()->findAll($criteria);
+		$redirects = SproutSeo_RedirectRecord::model()->Structured()->findAll($criteria);
 		$redirect = null;
 
 		if($redirects)
@@ -241,5 +240,45 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		}
 
 		return $redirect;
+	}
+
+	/**
+	 * This service allows find the structure id from the sprout seo settings
+	 *
+	 * @return int
+	 */
+	public function getStructureId()
+	{
+		$plugin = craft()->plugins->getPlugin('sproutseo');
+    $settings = $plugin->getSettings();
+
+    return $settings->structureId;
+	}
+
+	/**
+	 * Install default styles to be used with Notes Field
+	 * @return none
+	 */
+	public function installDefaultSettings($pluginName = null)
+	{
+		$maxLevels            = 1;
+		$structure            = new StructureModel();
+		$structure->maxLevels = $maxLevels;
+		craft()->structures->saveStructure($structure);
+
+		$defaultValues = '{"pluginNameOverride":"'.$pluginName.'", "seoDivider":"-", "structureId":"'.$structure->id.'"}';
+
+		craft()->db->createCommand()->update(
+			'plugins',
+			array(
+				'settings' => $defaultValues
+			),
+			'class=:class',
+			array(
+				':class'=>'SproutSeo'
+			)
+		);
+
+		SproutSeoPlugin::log('FUNCTION '.$structure->id, LogLevel::Info, true);
 	}
 }
