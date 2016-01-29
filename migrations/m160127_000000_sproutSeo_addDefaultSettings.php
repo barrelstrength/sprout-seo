@@ -27,7 +27,14 @@ class m160127_000000_sproutSeo_addDefaultSettings extends BaseMigration
 			// Set structure to currents redirects
 			foreach ($redirects as $key => $redirect)
 			{
-				$redirectModel = SproutSeo_RedirectModel::populateModel($redirect);
+				$redirectModel = new SproutSeo_RedirectModel;
+				$redirectModel->id     = $redirect->id;
+				$redirectModel->oldUrl = $redirect->oldUrl;
+				$redirectModel->newUrl = $redirect->newUrl;
+				$redirectModel->method = $redirect->method;
+				$redirectModel->regex  = $redirect->regex;
+				SproutSeoPlugin::log('Structured! '.$redirectModel->id, LogLevel::Info, true);
+
 				craft()->structures->appendToRoot($structureId, $redirectModel);
 			}
 		}
