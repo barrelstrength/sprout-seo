@@ -64,7 +64,7 @@ class SproutSeo_RedirectRecord extends BaseRecord
 	/**
 	* Scope to join with structure
 	*/
-	public function Structured()
+	public function structured()
 	{
 		$structureId = sproutSeo()->redirects->getStructureId();
 

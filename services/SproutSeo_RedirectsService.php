@@ -125,7 +125,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$criteria->params = array(':url'=>$url);
 		$criteria->limit = 1;
 
-		return SproutSeo_RedirectRecord::model()->Structured()->find($criteria);
+		return SproutSeo_RedirectRecord::model()->structured()->find($criteria);
 	}
 
 	/**
@@ -139,7 +139,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	{
 		$criteria = new \CDbCriteria();
 		$criteria->addCondition('regex = true');
-		$redirects = SproutSeo_RedirectRecord::model()->Structured()->findAll($criteria);
+		$redirects = SproutSeo_RedirectRecord::model()->structured()->findAll($criteria);
 		$redirect = null;
 
 		if($redirects)
