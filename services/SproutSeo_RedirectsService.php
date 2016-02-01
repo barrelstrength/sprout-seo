@@ -113,7 +113,8 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Find a url
+	 * Find a regex url using the preg_match php function and replace
+	 * capture groups if any using the preg_replace php function also check normal urls
 	 *
 	 * @param string $url
 	 * @return SproutSeo_RedirectRecord $redirect
@@ -121,45 +122,36 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	public function findUrl($url)
 	{
 		$criteria = new \CDbCriteria();
-		$criteria->condition = 'oldUrl =:url';
-		$criteria->params = array(':url'=>$url);
-		$criteria->limit = 1;
-
-		return SproutSeo_RedirectRecord::model()->structured()->find($criteria);
-	}
-
-	/**
-	 * Find a regex url using the preg_match php function and replace
-	 * capture groups if any using the preg_replace php function
-	 *
-	 * @param string $url
-	 * @return SproutSeo_RedirectRecord $redirect
-	 */
-	public function findRegexUrl($url)
-	{
-		$criteria = new \CDbCriteria();
-		$criteria->addCondition('regex = true');
+		$criteria->order = "regex asc";
 		$redirects = SproutSeo_RedirectRecord::model()->structured()->findAll($criteria);
-		$redirect = null;
 
 		if($redirects)
 		{
-			foreach ($redirects as $value)
+			foreach ($redirects as $redirect)
 			{
-				// Use backticks as delimiters as they are invalid characters for URLs
-				$oldUrlPattern = "`" . $value->oldUrl . "`";
-
-				if(preg_match($oldUrlPattern, $url))
+				if($redirect->regex)
 				{
-					// Replace capture groups if any
-					$value->newUrl = preg_replace($oldUrlPattern, $value->newUrl, $url);
-					$redirect = $value;
-					break;
+					// Use backticks as delimiters as they are invalid characters for URLs
+					$oldUrlPattern = "`" . $redirect->oldUrl . "`";
+
+					if(preg_match($oldUrlPattern, $url))
+					{
+						// Replace capture groups if any
+						$redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
+						return $redirect;
+					}
+				}
+				else
+				{
+					if($redirect->oldUrl == $url)
+					{
+						return $redirect;
+					}
 				}
 			}
 		}
 
-		return $redirect;
+		return null;
 	}
 
 	/**
@@ -230,14 +222,8 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function getRedirect($url)
 	{
-		// check first on normal urls
+		// check out normal and regex urls
 		$redirect = sproutSeo()->redirects->findUrl($url);
-
-		if (!$redirect)
-		{
-			// check on regex urls
-			$redirect = sproutSeo()->redirects->findRegexUrl($url);
-		}
 
 		return $redirect;
 	}
