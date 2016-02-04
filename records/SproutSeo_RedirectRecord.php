@@ -67,12 +67,13 @@ class SproutSeo_RedirectRecord extends BaseRecord
 	public function structured()
 	{
 		$structureId = sproutSeo()->redirects->getStructureId();
+		$tablePrefix = craft()->db->getNormalizedTablePrefix();
 
 		$criteria         = $this->getDbCriteria();
 		$criteria->alias  = 'redirects';
-		$criteria->join   = 'LEFT JOIN craft_elements element ON element.id=redirects.id ';
-		$criteria->join   .= 'LEFT JOIN craft_structures structures ON structures.id=:structureId ';
-		$criteria->join   .= 'LEFT JOIN craft_structureelements elements ON elements.structureId=structures.id ';
+		$criteria->join   = 'LEFT JOIN '.$tablePrefix.'elements element ON element.id=redirects.id ';
+		$criteria->join   .= 'LEFT JOIN '.$tablePrefix.'structures structures ON structures.id=:structureId ';
+		$criteria->join   .= 'LEFT JOIN '.$tablePrefix.'structureelements elements ON elements.structureId=structures.id ';
 		$criteria->order  = 'elements.lft ASC';
 		$criteria->addCondition('element.enabled = 1 and elements.elementID = element.id');
 
