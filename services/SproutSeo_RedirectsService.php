@@ -69,8 +69,11 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 
 					$redirectRecord->save(false);
 
-					//Set the root structure
-					craft()->structures->appendToRoot(sproutSeo()->redirects->getStructureId(), $redirect);
+					if ($isNewRedirect)
+					{
+						//Set the root structure
+						craft()->structures->appendToRoot(sproutSeo()->redirects->getStructureId(), $redirect);
+					}
 
 					if ($transaction !== null)
 					{
@@ -122,7 +125,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	public function findUrl($url)
 	{
 		$redirects = SproutSeo_RedirectRecord::model()->structured()->findAll();
-		
+
 		if($redirects)
 		{
 			foreach ($redirects as $redirect)
