@@ -121,10 +121,8 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function findUrl($url)
 	{
-		$criteria = new \CDbCriteria();
-		$criteria->order = "regex asc";
-		$redirects = SproutSeo_RedirectRecord::model()->structured()->findAll($criteria);
-
+		$redirects = SproutSeo_RedirectRecord::model()->structured()->findAll();
+		
 		if($redirects)
 		{
 			foreach ($redirects as $redirect)
