@@ -69,6 +69,12 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 
 					$redirectRecord->save(false);
 
+					if ($isNewRedirect)
+					{
+						//Set the root structure
+						craft()->structures->appendToRoot(sproutSeo()->redirects->getStructureId(), $redirect);
+					}
+
 					if ($transaction !== null)
 					{
 						$transaction->commit();
@@ -110,57 +116,43 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Find a url
+	 * Find a regex url using the preg_match php function and replace
+	 * capture groups if any using the preg_replace php function also check normal urls
 	 *
 	 * @param string $url
 	 * @return SproutSeo_RedirectRecord $redirect
 	 */
 	public function findUrl($url)
 	{
-		$criteria = new \CDbCriteria();
-		$criteria->condition = 'oldUrl =:url';
-		$criteria->with = array('element');
-		$criteria->addCondition('element.enabled = 1');
-		$criteria->params = array(':url'=>$url);
-		$criteria->limit = 1;
-
-		return SproutSeo_RedirectRecord::model()->find($criteria);
-	}
-
-	/**
-	 * Find a regex url using the preg_match php function and replace
-	 * capture groups if any using the preg_replace php function
-	 *
-	 * @param string $url
-	 * @return SproutSeo_RedirectRecord $redirect
-	 */
-	public function findRegexUrl($url)
-	{
-		$criteria = new \CDbCriteria();
-		$criteria->addCondition('regex = true');
-		$criteria->with = array('element');
-		$criteria->addCondition('element.enabled = 1');
-		$redirects = SproutSeo_RedirectRecord::model()->findAll($criteria);
-		$redirect = null;
+		$redirects = SproutSeo_RedirectRecord::model()->structured()->findAll();
 
 		if($redirects)
 		{
-			foreach ($redirects as $value)
+			foreach ($redirects as $redirect)
 			{
-				// Use backticks as delimiters as they are invalid characters for URLs
-				$oldUrlPattern = "`" . $value->oldUrl . "`";
-
-				if(preg_match($oldUrlPattern, $url))
+				if($redirect->regex)
 				{
-					// Replace capture groups if any
-					$value->newUrl = preg_replace($oldUrlPattern, $value->newUrl, $url);
-					$redirect = $value;
-					break;
+					// Use backticks as delimiters as they are invalid characters for URLs
+					$oldUrlPattern = "`" . $redirect->oldUrl . "`";
+
+					if(preg_match($oldUrlPattern, $url))
+					{
+						// Replace capture groups if any
+						$redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
+						return $redirect;
+					}
+				}
+				else
+				{
+					if($redirect->oldUrl == $url)
+					{
+						return $redirect;
+					}
 				}
 			}
 		}
 
-		return $redirect;
+		return null;
 	}
 
 	/**
@@ -231,15 +223,49 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function getRedirect($url)
 	{
-		// check first on normal urls
+		// check out normal and regex urls
 		$redirect = sproutSeo()->redirects->findUrl($url);
 
-		if (!$redirect)
-		{
-			// check on regex urls
-			$redirect = sproutSeo()->redirects->findRegexUrl($url);
-		}
-
 		return $redirect;
+	}
+
+	/**
+	 * This service allows find the structure id from the sprout seo settings
+	 *
+	 * @return int
+	 */
+	public function getStructureId()
+	{
+		$plugin = craft()->plugins->getPlugin('sproutseo');
+    $settings = $plugin->getSettings();
+
+    return $settings->structureId;
+	}
+
+	/**
+	 * Install default styles to be used with Notes Field
+	 * @return none
+	 */
+	public function installDefaultSettings($pluginName = null)
+	{
+		$maxLevels            = 1;
+		$structure            = new StructureModel();
+		$structure->maxLevels = $maxLevels;
+		craft()->structures->saveStructure($structure);
+
+		$defaultValues = '{"pluginNameOverride":"'.$pluginName.'", "seoDivider":"-", "structureId":"'.$structure->id.'"}';
+
+		craft()->db->createCommand()->update(
+			'plugins',
+			array(
+				'settings' => $defaultValues
+			),
+			'class=:class',
+			array(
+				':class'=>'SproutSeo'
+			)
+		);
+
+		return $structure->id;
 	}
 }
