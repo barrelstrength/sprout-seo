@@ -86,10 +86,9 @@ class SproutSeoMetaHelper
 
 				$ogImage = craft()->elements->getElementById($model->ogImage);
 
-				$imageUrl = (string)($ogImage->url);
-
 				if (!empty($ogImage))
 				{
+					$imageUrl = (string)($ogImage->url);
 					// check to see if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
 					{
@@ -126,11 +125,10 @@ class SproutSeoMetaHelper
 
 				$twitterImage = craft()->elements->getElementById($model->twitterImage);
 
-				$imageUrl = (string)($twitterImage->url);
-
 				if (!empty($twitterImage))
 				{
-					// check to see if Asset already has full Site Url in folder Url
+					$imageUrl = (string)($twitterImage->url);
+					// check to se	e if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
 					{
 						$model->twitterImage = $twitterImage->url;
