@@ -96,11 +96,6 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
-		craft()->structures->onMoveElement = function(Event $event) {
-			$element = $event->params['element'];
-			craft()->templateCache->deleteCachesByElementId($element['id']);
-		};
-
 		Craft::import('plugins.sproutseo.helpers.SproutSeoMetaHelper');
 
 		if(craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
@@ -130,6 +125,15 @@ class SproutSeoPlugin extends BasePlugin
 					developerUrl: '" . $this->getDeveloperUrl() . "'
 				});
 			");
+		}
+
+		// Listener for redirects
+		if(craft()->request->isCpRequest() && craft()->request->isAjaxRequest())
+		{
+			craft()->structures->onMoveElement = function(Event $event) {
+					$element = $event->params['element'];
+					craft()->templateCache->deleteCachesByElementId($element['id']);
+			};
 		}
 	}
 
