@@ -126,15 +126,6 @@ class SproutSeoPlugin extends BasePlugin
 				});
 			");
 		}
-
-		// Listener for redirects
-		if(craft()->request->isCpRequest() && craft()->request->isAjaxRequest())
-		{
-			craft()->structures->onMoveElement = function(Event $event) {
-					$element = $event->params['element'];
-					craft()->templateCache->deleteCachesByElementId($element['id']);
-			};
-		}
 	}
 
 	/**
