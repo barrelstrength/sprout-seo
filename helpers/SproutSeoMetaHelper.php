@@ -109,6 +109,11 @@ class SproutSeoMetaHelper
 						$model->ogImageSecure = $secureUrl;
 					}
 				}
+				else
+				{
+					// If our selected asset was deleted, make sure it is null
+					$model->ogImage = null;
+				}
 			}
 		}
 
@@ -137,6 +142,11 @@ class SproutSeoMetaHelper
 					{
 						$model->twitterImage = UrlHelper::getSiteUrl($twitterImage->url);
 					}
+				}
+				else
+				{
+					// If our selected asset was deleted, make sure it is null
+					$model->twitterImage = null;
 				}
 			}
 		}
