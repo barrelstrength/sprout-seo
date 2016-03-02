@@ -12,6 +12,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 * Returns a Redirect by its ID.
 	 *
 	 * @param int $redirectId
+	 *
 	 * @return SproutSeo_RedirectModel|null
 	 */
 	public function getRedirectById($redirectId)
@@ -23,6 +24,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 * Saves a redirect.
 	 *
 	 * @param SproutSeo_RedirectModel $redirect
+	 *
 	 * @throws Exception
 	 * @return bool
 	 */
@@ -45,10 +47,10 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 			$redirectRecord = new SproutSeo_RedirectRecord();
 		}
 
-		$redirectRecord->oldUrl	= $redirect->oldUrl;
+		$redirectRecord->oldUrl = $redirect->oldUrl;
 		$redirectRecord->newUrl = $redirect->newUrl;
 		$redirectRecord->method = $redirect->method;
-		$redirectRecord->regex = $redirect->regex;
+		$redirectRecord->regex  = $redirect->regex;
 
 		$redirectRecord->validate();
 		$redirect->addErrors($redirectRecord->getErrors());
@@ -101,16 +103,17 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 * Update the current method in the record
 	 *
 	 * @param array $ids
-	 * @param int $method value to update
+	 * @param int   $method value to update
+	 *
 	 * @return bool
 	 */
 	public function updateMethods($ids, $newMethod)
 	{
 		$resp = craft()->db->createCommand()->update(
-				'sproutseo_redirects',
-				array('method' => $newMethod),
-				array('in', 'id', $ids)
-			);
+			'sproutseo_redirects',
+			array('method' => $newMethod),
+			array('in', 'id', $ids)
+		);
 
 		return $resp;
 	}
@@ -120,31 +123,33 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 * capture groups if any using the preg_replace php function also check normal urls
 	 *
 	 * @param string $url
+	 *
 	 * @return SproutSeo_RedirectRecord $redirect
 	 */
 	public function findUrl($url)
 	{
 		$redirects = SproutSeo_RedirectRecord::model()->structured()->findAll();
 
-		if($redirects)
+		if ($redirects)
 		{
 			foreach ($redirects as $redirect)
 			{
-				if($redirect->regex)
+				if ($redirect->regex)
 				{
 					// Use backticks as delimiters as they are invalid characters for URLs
 					$oldUrlPattern = "`" . $redirect->oldUrl . "`";
 
-					if(preg_match($oldUrlPattern, $url))
+					if (preg_match($oldUrlPattern, $url))
 					{
 						// Replace capture groups if any
 						$redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
+
 						return $redirect;
 					}
 				}
 				else
 				{
-					if($redirect->oldUrl == $url)
+					if ($redirect->oldUrl == $url)
 					{
 						return $redirect;
 					}
@@ -162,10 +167,11 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function getMethods()
 	{
-		$methods = array_flip(SproutSeo_RedirectMethods::getConstants());
+		$methods    = array_flip(SproutSeo_RedirectMethods::getConstants());
 		$newMethods = array();
-		foreach ($methods as $key => $value) {
-			$newMethods[$key] = $key.' - '.$value;
+		foreach ($methods as $key => $value)
+		{
+			$newMethods[$key] = $key . ' - ' . $value;
 		}
 
 		return $newMethods;
@@ -178,17 +184,17 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function addSlash($url)
 	{
-		$slash = '/';
+		$slash    = '/';
 		$external = false;
 		//Check if the url is external
-		if(filter_var($url, FILTER_VALIDATE_URL))
+		if (filter_var($url, FILTER_VALIDATE_URL))
 		{
 			$external = true;
 		}
 
-		if($url[0] != $slash && !$external)
+		if ($url[0] != $slash && !$external)
 		{
-			$url = $slash.$url;
+			$url = $slash . $url;
 		}
 
 		return $url;
@@ -198,12 +204,13 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 * Get Method Update Response from elementaction
 	 *
 	 * @param bool
+	 *
 	 * @return string
 	 */
 	public function getMethodUpdateResponse($status)
 	{
 		$response = null;
-		if($status)
+		if ($status)
 		{
 			$response = Craft::t('Methods updated.');
 		}
@@ -219,6 +226,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 * This service allows find a url that needs redirect
 	 *
 	 * @param string current request url
+	 *
 	 * @return SproutSeo_RedirectRecord
 	 */
 	public function getRedirect($url)
@@ -236,14 +244,15 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function getStructureId()
 	{
-		$plugin = craft()->plugins->getPlugin('sproutseo');
-    $settings = $plugin->getSettings();
+		$plugin   = craft()->plugins->getPlugin('sproutseo');
+		$settings = $plugin->getSettings();
 
-    return $settings->structureId;
+		return $settings->structureId;
 	}
 
 	/**
 	 * Install default styles to be used with Notes Field
+	 *
 	 * @return none
 	 */
 	public function installDefaultSettings($pluginName = null)
@@ -253,7 +262,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$structure->maxLevels = $maxLevels;
 		craft()->structures->saveStructure($structure);
 
-		$defaultValues = '{"pluginNameOverride":"'.$pluginName.'", "seoDivider":"-", "structureId":"'.$structure->id.'"}';
+		$defaultValues = '{"pluginNameOverride":"' . $pluginName . '", "seoDivider":"-", "structureId":"' . $structure->id . '"}';
 
 		craft()->db->createCommand()->update(
 			'plugins',
@@ -262,7 +271,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 			),
 			'class=:class',
 			array(
-				':class'=>'SproutSeo'
+				':class' => 'SproutSeo'
 			)
 		);
 

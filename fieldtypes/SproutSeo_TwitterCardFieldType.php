@@ -25,14 +25,17 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	}
 
 	/**
-	* Performs any additional actions after the element has been saved.
-	*/
+	 * Performs any additional actions after the element has been saved.
+	 */
 	public function onAfterElementSave()
 	{
 		// grab only the opengraph fields
 		$fields = (isset($_POST['fields']['sproutseo_fields'])) ? $_POST['fields']['sproutseo_fields'] : null;
 
-		if ( ! isset($fields)) return;
+		if (!isset($fields))
+		{
+			return;
+		}
 
 		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
 			? $_POST['entryId']
@@ -44,7 +47,8 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
-		foreach ($fields as $key => $value) {
+		foreach ($fields as $key => $value)
+		{
 			if ($value)
 			{
 				$saveSproutSeoFields = true;
@@ -55,7 +59,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		// If we don't have any values in our Sprout SEO fields
 		// don't add a record to the database
 		// but if a record already exists, we also should delete it.
-		if ( ! $saveSproutSeoFields )
+		if (!$saveSproutSeoFields)
 		{
 			// Remove record since it is now blank
 			if ($model->id)
@@ -73,7 +77,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
-		$attributes['locale'] = $locale;
+		$attributes['locale']  = $locale;
 
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $fields);
@@ -81,7 +85,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		// Make sure all of our images are strings (twitter/og)
 		// We need to do this in case another seo field with images exists
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
-		$attributes['ogImage'] = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
+		$attributes['ogImage']      = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
 
 		// If our override entry exists update it,
 		// if not create it
@@ -93,7 +97,6 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		{
 			sproutSeo()->overrides->createOverride($attributes);
 		}
-
 	}
 
 	/**
@@ -101,20 +104,21 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	 *
 	 * @param string $name  Our FieldType handle
 	 * @param string $value Always returns blank, our block
-	 * only styles the Instructions field
+	 *                      only styles the Instructions field
+	 *
 	 * @return string Return our blocks input template
 	 */
 	public function getInputHtml($name, $value)
 	{
 		$entryId = craft()->request->getSegment(3);
-		$locale = $this->element->locale;
+		$locale  = $this->element->locale;
 
 		$variables['values'] = sproutSeo()->overrides->getTwitterCardFieldByEntryId($entryId, $locale);
 
 		// Set up our asset fields
 		if (isset($variables['values']->twitterImage))
 		{
-			$asset = craft()->elements->getElementById($variables['values']->twitterImage);
+			$asset                             = craft()->elements->getElementById($variables['values']->twitterImage);
 			$variables['twitterImageElements'] = array($asset);
 		}
 		else
@@ -123,7 +127,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 		}
 
 		// Set assetsSourceExists
-		$sources = craft()->assets->findFolders();
+		$sources                         = craft()->assets->findFolders();
 		$variables['assetsSourceExists'] = count($sources);
 
 		// Set elementType

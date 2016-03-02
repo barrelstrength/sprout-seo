@@ -9,6 +9,6 @@ abstract class SproutSeo_RedirectStatuses extends BaseEnum
 	// Constants
 	// =========================================================================
 
-	const ON    = 'on';
-	const OFF  = 'off';
+	const ON  = 'on';
+	const OFF = 'off';
 }

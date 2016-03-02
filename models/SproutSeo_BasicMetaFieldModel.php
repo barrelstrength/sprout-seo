@@ -13,7 +13,7 @@ class SproutSeo_BasicMetaFieldModel extends BaseModel
 			'author'      => array(AttributeType::String),
 			'publisher'   => array(AttributeType::String),
 
-			'locale'      => array(AttributeType::Locale, 'required' => true),
+			'locale' => array(AttributeType::Locale, 'required' => true),
 		);
 	}
 
@@ -25,7 +25,7 @@ class SproutSeo_BasicMetaFieldModel extends BaseModel
 		{
 			if ($meta->{$key})
 			{
-				$value = craft()->config->parseEnvironmentString($meta->{$key});
+				$value         = craft()->config->parseEnvironmentString($meta->{$key});
 				$tagData[$key] = $value;
 			}
 		}

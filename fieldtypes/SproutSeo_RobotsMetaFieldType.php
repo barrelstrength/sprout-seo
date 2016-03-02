@@ -24,7 +24,6 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 		return false;
 	}
 
-
 	/**
 	 * Performs any additional actions after the element has been saved.
 	 */
@@ -33,7 +32,10 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 		// grab only the robots fields
 		$fields = (isset($_POST['fields']['sproutseo_fields'])) ? $_POST['fields']['sproutseo_fields'] : null;
 
-		if ( ! isset($fields)) return;
+		if (!isset($fields))
+		{
+			return;
+		}
 
 		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
 			? $_POST['entryId']
@@ -75,7 +77,7 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
-		$attributes['locale'] = $locale;
+		$attributes['locale']  = $locale;
 
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $fields);
@@ -95,22 +97,21 @@ class SproutSeo_RobotsMetaFieldType extends BaseFieldType
 		{
 			sproutSeo()->overrides->createOverride($attributes);
 		}
-
 	}
-
 
 	/**
 	 * Display our FieldType
 	 *
-	 * @param string $name Our FieldType handle
-	 * @param string $value Always returns blank, our block
+	 * @param string $name   Our FieldType handle
+	 * @param string $value  Always returns blank, our block
 	 *                       only styles the Instructions field
+	 *
 	 * @return string Return our blocks input template
 	 */
 	public function getInputHtml($name, $value)
 	{
 		$entryId = craft()->request->getSegment(3);
-		$locale = $this->element->locale;
+		$locale  = $this->element->locale;
 
 		$values = sproutSeo()->overrides->getRobotsMetaFieldByEntryId($entryId, $locale);
 

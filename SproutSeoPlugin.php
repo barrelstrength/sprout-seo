@@ -98,13 +98,13 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		Craft::import('plugins.sproutseo.helpers.SproutSeoMetaHelper');
 
-		if(craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
+		if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
 		{
 			$url = craft()->request->getUrl();
 			// check if the request url needs redirect
 			$redirect = sproutSeo()->redirects->getRedirect($url);
 
-			if($redirect)
+			if ($redirect)
 			{
 				craft()->request->redirect($redirect->newUrl, true, $redirect->method);
 			}
@@ -137,9 +137,9 @@ class SproutSeoPlugin extends BasePlugin
 		// in the plugin table so in order to use getSettings() we need
 		// these defined here
 		return array(
-			'pluginNameOverride'  => AttributeType::String,
-			'seoDivider'          => array(AttributeType::String, 'default' => '-'),
-			'structureId'         => array( AttributeType::Number, 'default' => null )
+			'pluginNameOverride' => AttributeType::String,
+			'seoDivider'         => array(AttributeType::String, 'default' => '-'),
+			'structureId'        => array(AttributeType::Number, 'default' => null)
 		);
 	}
 
@@ -149,31 +149,31 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/defaults/new' => array(
+			'sproutseo/defaults/new'                      => array(
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
-			'sproutseo/defaults/(?P<defaultId>\d+)' => array(
+			'sproutseo/defaults/(?P<defaultId>\d+)'       => array(
 				'action' => 'sproutSeo/defaults/editDefault'
 			),
-			'sproutseo/sitemap' => array(
+			'sproutseo/sitemap'                           => array(
 				'action' => 'sproutSeo/sitemap/sitemapIndex'
 			),
-			'sproutseo/sitemap/newPage' => array(
+			'sproutseo/sitemap/newPage'                   => array(
 				'action' => 'sproutSeo/sitemap/editSitemap'
 			),
-			'sproutseo/settings' => array(
+			'sproutseo/settings'                          => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
 			'sproutseo/settings/(?P<settingsTemplate>.*)' => array(
-					'action' => 'sproutSeo/settings/settingsIndex'
+				'action' => 'sproutSeo/settings/settingsIndex'
 			),
-			'sproutseo/redirects' => array(
+			'sproutseo/redirects'                         => array(
 				'action' => 'sproutSeo/redirects/redirectIndex'
 			),
-			'sproutseo/redirects/new' => array(
+			'sproutseo/redirects/new'                     => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			),
-			'sproutseo/redirects/(?P<redirectId>\d+)' => array(
+			'sproutseo/redirects/(?P<redirectId>\d+)'     => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			)
 		);
@@ -185,9 +185,9 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerUserPermissions()
 	{
 		return array(
-				'editSproutSeoSettings' => array(
-						'label' => Craft::t('Edit Settings')
-				)
+			'editSproutSeoSettings' => array(
+				'label' => Craft::t('Edit Settings')
+			)
 		);
 	}
 
@@ -197,11 +197,11 @@ class SproutSeoPlugin extends BasePlugin
 	public function sproutMigrateRegisterElements()
 	{
 		return array(
-				'sproutseo_redirect'     => array(
-						'model'   => 'Craft\\SproutSeo_Redirect',
-						'method'  => 'saveRedirect',
-						'service' => 'sproutSeo_redirects',
-				)
+			'sproutseo_redirect' => array(
+				'model'   => 'Craft\\SproutSeo_Redirect',
+				'method'  => 'saveRedirect',
+				'service' => 'sproutSeo_redirects',
+			)
 		);
 	}
 

@@ -11,44 +11,44 @@ class SproutSeo_SitemapRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'sectionId' => array(AttributeType::Number),
-			'url'       => array(AttributeType::String),
-			'priority'  => array(
+			'sectionId'       => array(AttributeType::Number),
+			'url'             => array(AttributeType::String),
+			'priority'        => array(
 				AttributeType::Number,
 				'maxLength' => 2,
-				'decimals' => 1,
-				'default' => '0.5',
-				'required' => true
+				'decimals'  => 1,
+				'default'   => '0.5',
+				'required'  => true
 			),
 			'changeFrequency' => array(
 				AttributeType::String,
 				'maxLength' => 7,
-				'default' => 'weekly',
+				'default'   => 'weekly',
+				'required'  => true
+			),
+			'enabled'         => array(
+				AttributeType::Bool,
+				'default'  => false,
 				'required' => true
 			),
-			'enabled' => array(
+			'ping'            => array(
 				AttributeType::Bool,
-				'default' => false,
-				'required' => true
-			),
-			'ping' => array(
-				AttributeType::Bool,
-				'default' => false,
+				'default'  => false,
 				'required' => true
 			),
 		);
 	}
 
 	/**
-	* Create a new instance of the current class. This allows us to
-	* properly unit test our service layer.
-	*
-	* @return BaseRecord
-	*/
+	 * Create a new instance of the current class. This allows us to
+	 * properly unit test our service layer.
+	 *
+	 * @return BaseRecord
+	 */
 	public function create()
 	{
 		$class = get_class($this);
-		
+
 		$record = new $class();
 
 		return $record;

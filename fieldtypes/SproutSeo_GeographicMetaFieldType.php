@@ -24,7 +24,6 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		return false;
 	}
 
-
 	/**
 	 * Performs any additional actions after the element has been saved.
 	 */
@@ -33,7 +32,10 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		// grab only the geo fields
 		$fields = (isset($_POST['fields']['sproutseo_fields'])) ? $_POST['fields']['sproutseo_fields'] : null;
 
-		if ( ! isset($fields)) return;
+		if (!isset($fields))
+		{
+			return;
+		}
 
 		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
 			? $_POST['entryId']
@@ -45,7 +47,8 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
-		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value) {
+		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value)
+		{
 			if ($value)
 			{
 				$saveSproutSeoFields = true;
@@ -56,7 +59,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		// If we don't have any values in our Sprout SEO fields
 		// don't add a record to the database
 		// but if a record already exists, we also should delete it.
-		if ( ! $saveSproutSeoFields )
+		if (!$saveSproutSeoFields)
 		{
 			// Remove record since it is now blank
 			if ($model->id)
@@ -74,7 +77,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
 		$attributes['entryId'] = $entryId;
-		$attributes['locale'] = $locale;
+		$attributes['locale']  = $locale;
 
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $fields);
@@ -82,8 +85,8 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		// Make sure all of our images are strings (twitter/og)
 		// We need to do this in case another seo field with images exists
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
-		$attributes['ogImage'] = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
-		
+		$attributes['ogImage']      = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
+
 		// If our override entry exists update it,
 		// if not create it
 		if ($model->entryId)
@@ -94,21 +97,21 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		{
 			sproutSeo()->overrides->createOverride($attributes);
 		}
-
 	}
 
 	/**
 	 * Display our FieldType
 	 *
-	 * @param string $name  Our FieldType handle
-	 * @param string $value Always returns blank, our block
+	 * @param string $name   Our FieldType handle
+	 * @param string $value  Always returns blank, our block
 	 *                       only styles the Instructions field
+	 *
 	 * @return string Return our blocks input template
 	 */
 	public function getInputHtml($name, $value)
 	{
 		$entryId = craft()->request->getSegment(3);
-		$locale = $this->element->locale;
+		$locale  = $this->element->locale;
 
 		$values = sproutSeo()->overrides->getGeographicMetaFieldByEntryId($entryId, $locale);
 
@@ -117,12 +120,13 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		$name = rtrim($name, "]");
 
 		$name = "sproutseo_fields[$name]";
+
 		// $value = $values['title'];
 
 		return craft()->templates->render('sproutseo/_partials/fields/geo', array(
-			'name'	     => $name,
+			'name'   => $name,
 			// 'value'      => $value,
-			'values'     => $values
+			'values' => $values
 		));
 	}
 

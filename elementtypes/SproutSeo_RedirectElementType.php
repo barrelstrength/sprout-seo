@@ -58,6 +58,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	 * Returns the attributes that can be shown/sorted by in table views.
 	 *
 	 * @param string|null $source
+	 *
 	 * @return array
 	 */
 	public function defineTableAttributes($source = null)
@@ -74,6 +75,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	 * Returns the attributes that can be sorted by in table views.
 	 *
 	 * @param string|null $source
+	 *
 	 * @return array
 	 */
 	public function defineSortableAttributes($source = null)
@@ -89,14 +91,15 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	 * Returns this element type's sources.
 	 *
 	 * @param string|null $context
+	 *
 	 * @return array|false
 	 */
 	public function getSources($context = null)
 	{
 		$sources = array(
 			'*' => array(
-				'label'    => Craft::t('All redirects'),
-				'structureId'  => sproutSeo()->redirects->getStructureId(),
+				'label'             => Craft::t('All redirects'),
+				'structureId'       => sproutSeo()->redirects->getStructureId(),
 				'structureEditable' => true
 			)
 		);
@@ -105,11 +108,11 @@ class SproutSeo_RedirectElementType extends BaseElementType
 
 		foreach ($methods as $code => $method)
 		{
-			$key = 'method:'.$method;
+			$key           = 'method:' . $method;
 			$sources[$key] = array(
-				'label'    => $method.' - '.$code,
-				'criteria' => array('method' => $method),
-				'structureId'  => sproutSeo()->redirects->getStructureId(),
+				'label'             => $method . ' - ' . $code,
+				'criteria'          => array('method' => $method),
+				'structureId'       => sproutSeo()->redirects->getStructureId(),
 				'structureEditable' => true
 			);
 		}
@@ -165,7 +168,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 
 	public function defineSearchableAttributes()
 	{
-		return array('oldUrl', 'newUrl','method','regex');
+		return array('oldUrl', 'newUrl', 'method', 'regex');
 	}
 
 	/**
@@ -182,16 +185,18 @@ class SproutSeo_RedirectElementType extends BaseElementType
 				$method = $element->$attribute;
 				//Get method options
 				$methods = array_flip(SproutSeo_RedirectMethods::getConstants());
-				return $method.' - '.$methods[$method];
+
+				return $method . ' - ' . $methods[$method];
 
 			case 'test':
 				// Send link for testing
 				$link = "<a href='{$element->oldUrl}' target='_blank' class='go'>Test</a>";
 
-				if($element->regex)
+				if ($element->regex)
 				{
 					$link = " - ";
 				}
+
 				return $link;
 
 			default:
@@ -203,8 +208,9 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	/**
 	 * Modifies an element query targeting elements of this type.
 	 *
-	 * @param DbCommand $query
+	 * @param DbCommand            $query
 	 * @param ElementCriteriaModel $criteria
+	 *
 	 * @return mixed
 	 */
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
@@ -214,7 +220,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 		$query
 			->addSelect('redirects.oldUrl, redirects.newUrl, redirects.method, redirects.id, redirects.regex')
 			->join('sproutseo_redirects redirects', 'redirects.id = elements.id')
-			->leftJoin('structures structures', 'structures.id = :structureId', array(':structureId'=>$structureId))
+			->leftJoin('structures structures', 'structures.id = :structureId', array(':structureId' => $structureId))
 			->leftJoin('structureelements structureelements', array('and', 'structureelements.structureId = structures.id', 'structureelements.elementId = redirects.id'));
 
 		if ($criteria->id)
@@ -235,11 +241,11 @@ class SproutSeo_RedirectElementType extends BaseElementType
 		}
 	}
 
-
 	/**
 	 * Populates an element model based on a query result.
 	 *
 	 * @param array $row
+	 *
 	 * @return array
 	 */
 	public function populateElementModel($row)
@@ -259,7 +265,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 		$methodOptions = sproutSeo()->redirects->getMethods();
 		// get template
 		$html = craft()->templates->render('sproutseo/redirects/_editor', array(
-			'redirect' => $element,
+			'redirect'      => $element,
 			'methodOptions' => $methodOptions
 		));
 
@@ -277,12 +283,13 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	public function saveElement(BaseElementModel $element, $params)
 	{
 		// Route this through RedirectsService::saveRedirect() so the proper redirect events get fired.
-		$redirect = new SproutSeo_RedirectModel();
-		$redirect->id = $element->id;
+		$redirect         = new SproutSeo_RedirectModel();
+		$redirect->id     = $element->id;
 		$redirect->oldUrl = $params['oldUrl'];
 		$redirect->newUrl = $params['newUrl'];
 		$redirect->method = $params['method'];
-		$redirect->regex = $params['regex'];
+		$redirect->regex  = $params['regex'];
+
 		// send response
 		return sproutSeo()->redirects->saveRedirect($redirect);;
 	}

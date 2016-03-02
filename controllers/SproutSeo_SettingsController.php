@@ -17,7 +17,7 @@ class SproutSeo_SettingsController extends BaseController
 		$settings = craft()->db->createCommand()
 			->select('settings')
 			->from('plugins')
-			->where('class=:class', array(':class'=> 'SproutSeo'))
+			->where('class=:class', array(':class' => 'SproutSeo'))
 			->queryScalar();
 
 		$settings = JsonHelper::decode($settings);
@@ -29,7 +29,6 @@ class SproutSeo_SettingsController extends BaseController
 
 		// Load a particular template and with all of the variables you've created
 		$this->renderTemplate('sproutseo/settings', $variables);
-
 	}
 
 	public function actionSaveSettings()

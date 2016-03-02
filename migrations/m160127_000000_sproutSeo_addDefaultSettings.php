@@ -10,10 +10,10 @@ class m160127_000000_sproutSeo_addDefaultSettings extends BaseMigration
 	 */
 	public function safeUp()
 	{
-		$plugin = craft()->plugins->getPlugin('sproutseo');
+		$plugin   = craft()->plugins->getPlugin('sproutseo');
 		$settings = $plugin->getSettings();
 
-		if(is_null($settings->structureId))
+		if (is_null($settings->structureId))
 		{
 			$structureId = sproutSeo()->redirects->installDefaultSettings($settings->pluginNameOverride);
 			SproutSeoPlugin::log('Successfully added structure', LogLevel::Info, true);
@@ -27,7 +27,7 @@ class m160127_000000_sproutSeo_addDefaultSettings extends BaseMigration
 			// Set structure to currents redirects
 			foreach ($redirects as $key => $redirect)
 			{
-				$redirectModel = new SproutSeo_RedirectModel;
+				$redirectModel         = new SproutSeo_RedirectModel;
 				$redirectModel->id     = $redirect["id"];
 				$redirectModel->oldUrl = $redirect["oldUrl"];
 				$redirectModel->newUrl = $redirect["newUrl"];

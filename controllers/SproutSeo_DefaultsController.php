@@ -7,7 +7,7 @@ class SproutSeo_DefaultsController extends BaseController
 	public function actionEditDefault()
 	{
 		// Determine what we're working with
-		$defaultId = craft()->request->getSegment(3);
+		$defaultId              = craft()->request->getSegment(3);
 		$variables['defaultId'] = ($defaultId == 'new') ? null : $defaultId;
 
 		// Get our Meta Model
@@ -16,18 +16,18 @@ class SproutSeo_DefaultsController extends BaseController
 		// Set up our asset fields
 		if (isset($variables['default']->ogImage))
 		{
-			$asset = craft()->elements->getElementById($variables['default']->ogImage);
+			$asset                        = craft()->elements->getElementById($variables['default']->ogImage);
 			$variables['ogImageElements'] = array($asset);
 		}
 		else
 		{
-		    $variables['ogImageElements'] = array();
+			$variables['ogImageElements'] = array();
 		}
 
 		// Set up our asset fields
 		if (isset($variables['default']->twitterImage))
 		{
-			$asset = craft()->elements->getElementById($variables['default']->twitterImage);
+			$asset                             = craft()->elements->getElementById($variables['default']->twitterImage);
 			$variables['twitterImageElements'] = array($asset);
 		}
 		else
@@ -36,7 +36,7 @@ class SproutSeo_DefaultsController extends BaseController
 		}
 
 		// Set assetsSourceExists
-		$sources = craft()->assets->findFolders();
+		$sources                         = craft()->assets->findFolders();
 		$variables['assetsSourceExists'] = count($sources);
 
 		// Set elementType
@@ -62,7 +62,7 @@ class SproutSeo_DefaultsController extends BaseController
 		}
 
 		// Make our images single IDs instead of an array
-		$defaultFields['ogImage'] = (!empty($defaultFields['ogImage']) ? $defaultFields['ogImage'][0] : null);
+		$defaultFields['ogImage']      = (!empty($defaultFields['ogImage']) ? $defaultFields['ogImage'][0] : null);
 		$defaultFields['twitterImage'] = (!empty($defaultFields['twitterImage']) ? $defaultFields['twitterImage'][0] : null);
 
 		$model->setAttributes($defaultFields);

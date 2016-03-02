@@ -57,19 +57,19 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 	/**
 	 * Prioritize our meta data
-   * ------------------------------------------------------------
-   *
-   * Loop through and select the highest ranking value for each attribute in our SproutSeo_MetaData model
-   *
-   * 1) Entry Override (Set by adding `id` override in Twig template code and using Meta Fields)
-   * 2) On-Page Override (Set in Twig template code)
-   * 3) Default (Set in control panel)
+	 * ------------------------------------------------------------
+	 *
+	 * Loop through and select the highest ranking value for each attribute in our SproutSeo_MetaData model
+	 *
+	 * 1) Entry Override (Set by adding `id` override in Twig template code and using Meta Fields)
+	 * 2) On-Page Override (Set in Twig template code)
+	 * 3) Default (Set in control panel)
 	 * 4) Global Fallback (Set in control panel)
-   * 5) Blank (Automatic)
-   *
-   * Once we have added all the content we need to be outputting to our array we will loop through that array and create the HTML we will output to our page.
-   *
-   * While we don't define HTML in our PHP as much as possible, the goal here is to be as easy to use as possible on the front end so we want to simplify the front end code to a single function and wrangle what we need to here.
+	 * 5) Blank (Automatic)
+	 *
+	 * Once we have added all the content we need to be outputting to our array we will loop through that array and create the HTML we will output to our page.
+	 *
+	 * While we don't define HTML in our PHP as much as possible, the goal here is to be as easy to use as possible on the front end so we want to simplify the front end code to a single function and wrangle what we need to here.
 	 *
 	 * @return array
 	 * @throws \Exception
@@ -86,7 +86,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		$codeOverrideMetaModel   = $codeOverrideMetaModel->setMeta('code', $this->getMeta());
 		$defaultMetaModel        = $defaultMetaModel->setMeta('default', $this->getMeta());
 		$globalFallbackMetaModel = $globalFallbackMetaModel->setMeta('fallback');
-		
+
 		$prioritizedMetaModel = new SproutSeo_MetaModel();
 
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
@@ -120,7 +120,7 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 		}
 
 		// @todo - reorganize how this stuff works / robots need love.
-		$prioritizedMetaModel->title = SproutSeoMetaHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel);
+		$prioritizedMetaModel->title  = SproutSeoMetaHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel);
 		$prioritizedMetaModel->robots = SproutSeoMetaHelper::prepRobotsAsString($prioritizedMetaModel->robots);
 
 		return $prioritizedMetaModel;

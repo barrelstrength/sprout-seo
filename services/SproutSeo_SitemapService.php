@@ -136,13 +136,13 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 				foreach ($entries as $entry)
 				{
-          // @todo ensure that this check/logging is absolutely necessary
-          // Catch null URLs, log them, and prevent them from being output to the sitemap
-          if(is_null($entry->getUrl()))
-          {
-	          SproutSeoPlugin::log('Entry ID ' . $entry->id . " does not have a URL.", LogLevel::Warning, true);
-            continue;
-          }
+					// @todo ensure that this check/logging is absolutely necessary
+					// Catch null URLs, log them, and prevent them from being output to the sitemap
+					if (is_null($entry->getUrl()))
+					{
+						SproutSeoPlugin::log('Entry ID ' . $entry->id . " does not have a URL.", LogLevel::Warning, true);
+						continue;
+					}
 
 					// Adding each location indexed by its id
 					$urls[$entry->id][] = array(
@@ -154,7 +154,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 						'frequency' => $sitemapSettings['changeFrequency'],
 					);
 				}
-
 			}
 		}
 
@@ -179,7 +178,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		// Rendering the template and passing in received options
 		$path = craft()->path->getTemplatesPath();
 
-		craft()->path->setTemplatesPath(dirname(__FILE__).'/../templates/');
+		craft()->path->setTemplatesPath(dirname(__FILE__) . '/../templates/');
 
 		$source = craft()->templates->render(
 			'_special/sitemap', array(

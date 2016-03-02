@@ -5,11 +5,12 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 {
 	/**
 	 * @param $settings
+	 *
 	 * @return bool
 	 */
 	public function saveSettings($settings)
 	{
-		$plugin = craft()->plugins->getPlugin('sproutseo');
+		$plugin      = craft()->plugins->getPlugin('sproutseo');
 		$seoSettings = $plugin->getSettings();
 
 		if (isset($settings["pluginNameOverride"]))

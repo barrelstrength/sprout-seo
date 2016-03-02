@@ -106,6 +106,7 @@ class SproutSeoVariable
 
 	/**
 	 * @param $handle
+	 *
 	 * @return SproutSeo_MetaModel
 	 */
 	public function getDefaultByHandle($handle)

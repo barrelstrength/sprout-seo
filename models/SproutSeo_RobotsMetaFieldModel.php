@@ -6,8 +6,8 @@ class SproutSeo_RobotsMetaFieldModel extends BaseModel
 	protected function defineAttributes()
 	{
 		return array(
-			'canonical'   => AttributeType::String,
-			'robots'      => AttributeType::String
+			'canonical' => AttributeType::String,
+			'robots'    => AttributeType::String
 		);
 	}
 
@@ -51,7 +51,7 @@ class SproutSeo_RobotsMetaFieldModel extends BaseModel
 		{
 			$robotString = StringHelper::arrayToString($robotsArray);
 
-			if (stristr($robotString, $negativeValue) === FALSE)
+			if (stristr($robotString, $negativeValue) === false)
 			{
 				$robotOutputValues .= $robotsMap[$negativeValue] . ",";
 			}

@@ -13,7 +13,8 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	public function __construct($metaRecord = null)
 	{
 		$this->metaRecord = $metaRecord;
-		if (is_null($this->metaRecord)) {
+		if (is_null($this->metaRecord))
+		{
 			$this->metaRecord = SproutSeo_DefaultsRecord::model();
 		}
 	}
@@ -40,7 +41,8 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	 * Get a specific Defaults from the database based on ID. If no Defaults
 	 * exists, null is returned.
 	 *
-	 * @param  int   $id
+	 * @param  int $id
+	 *
 	 * @return mixed
 	 */
 	public function getDefaultById($id)
@@ -57,6 +59,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 
 	/**
 	 * @param $handle
+	 *
 	 * @return BaseModel|SproutSeo_MetaModel
 	 */
 	public function getDefaultByHandle($handle)
@@ -64,7 +67,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 		$query = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_defaults')
-			->where('handle=:handle', array(':handle'=> $handle))
+			->where('handle=:handle', array(':handle' => $handle))
 			->queryRow();
 
 		if (isset($query))
@@ -76,7 +79,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 			return new SproutSeo_MetaModel();
 		}
 
-		$model->robots = ($model->robots) ? SproutSeoMetaHelper::prepRobotsForSettings($model->robots) : null;
+		$model->robots   = ($model->robots) ? SproutSeoMetaHelper::prepRobotsForSettings($model->robots) : null;
 		$model->position = SproutSeoMetaHelper::prepareGeoPosition($model);
 
 		return $model;
@@ -84,6 +87,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 
 	/**
 	 * @param SproutSeo_MetaModel $model
+	 *
 	 * @return bool
 	 * @throws Exception
 	 */
@@ -126,11 +130,13 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	 * Deletes a default
 	 *
 	 * @param int
+	 *
 	 * @return bool
 	 */
 	public function deleteDefault($id = null)
 	{
 		$record = new SproutSeo_DefaultsRecord;
+
 		return $record->deleteByPk($id);
 	}
 

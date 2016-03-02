@@ -10,7 +10,7 @@ class SproutSeo_RedirectModel extends BaseElementModel
 
 	public function __toString()
 	{
-		return (string)$this->oldUrl;
+		return (string) $this->oldUrl;
 	}
 
 	/**
@@ -23,7 +23,7 @@ class SproutSeo_RedirectModel extends BaseElementModel
 			'oldUrl' => AttributeType::String,
 			'newUrl' => AttributeType::String,
 			'method' => AttributeType::Number,
-			'regex' => AttributeType::Bool
+			'regex'  => AttributeType::Bool
 		));
 	}
 
@@ -44,7 +44,7 @@ class SproutSeo_RedirectModel extends BaseElementModel
 	 */
 	public function getCpEditUrl()
 	{
-		return UrlHelper::getCpUrl('sproutseo/redirects/'.$this->id);
+		return UrlHelper::getCpUrl('sproutseo/redirects/' . $this->id);
 	}
 	//Get layout
 }

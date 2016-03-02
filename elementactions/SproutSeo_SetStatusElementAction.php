@@ -102,11 +102,11 @@ class SproutSeo_SetStatusElementAction extends BaseElementAction
 		return array(
 			'status' => array(
 				AttributeType::Enum,
-				'values' => array(
+				'values'   => array(
 					SproutSeo_RedirectStatuses::ON,
 					SproutSeo_RedirectStatuses::OFF
 				),
-			'required' => true)
+				'required' => true)
 		);
 	}
 }

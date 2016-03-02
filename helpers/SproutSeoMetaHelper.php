@@ -7,6 +7,7 @@ class SproutSeoMetaHelper
 	 *
 	 * @param $defaults
 	 * @param $globalFallbackMetaModel
+	 *
 	 * @return mixed
 	 */
 	public static function prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel)
@@ -19,6 +20,7 @@ class SproutSeoMetaHelper
 		if ($appendSiteName)
 		{
 			$divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
+
 			return $prioritizedMetaModel->title . " " . $divider . " " . craft()->getInfo('siteName');
 		}
 
@@ -58,7 +60,9 @@ class SproutSeoMetaHelper
 
 	/**
 	 * @todo - improve how images are being handled here
+	 *
 	 * @param $prioritizedMetaModel
+	 *
 	 * @throws \Exception
 	 */
 	public static function prepareAssetUrls(SproutSeo_MetaModel &$model)
@@ -88,7 +92,7 @@ class SproutSeoMetaHelper
 
 				if (!empty($ogImage))
 				{
-					$imageUrl = (string)($ogImage->url);
+					$imageUrl = (string) ($ogImage->url);
 					// check to see if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
 					{
@@ -105,7 +109,7 @@ class SproutSeoMetaHelper
 
 					if (craft()->request->isSecureConnection())
 					{
-						$secureUrl = preg_replace("/^http:/i", "https:", $ogImage->url);
+						$secureUrl            = preg_replace("/^http:/i", "https:", $ogImage->url);
 						$model->ogImageSecure = $secureUrl;
 					}
 				}
@@ -132,7 +136,7 @@ class SproutSeoMetaHelper
 
 				if (!empty($twitterImage))
 				{
-					$imageUrl = (string)($twitterImage->url);
+					$imageUrl = (string) ($twitterImage->url);
 					// check to se	e if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
 					{

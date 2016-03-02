@@ -14,7 +14,7 @@ class m150423_000000_sproutSeo_addLocaleToOverrides extends BaseMigration
 	public function safeUp()
 	{
 		// specify columns and AttributeType
-		$locale = array (
+		$locale = array(
 			'locale' => ColumnType::Char
 		);
 
@@ -44,21 +44,20 @@ class m150423_000000_sproutSeo_addLocaleToOverrides extends BaseMigration
 				$this->addColumnAfter($tableName, $columnName, array(
 					'column' => $columnType,
 					'null'   => false,
-					),
+				),
 					$afterColumnHandle
 				);
 
 				// log that we created the new column
 				SproutSeoPlugin::log("Created the `$columnName` in the `$tableName` table.", LogLevel::Info, true);
-
 			}
 
 			// if the column already exists in the table
-			else {
+			else
+			{
 
 				// tell craft that we couldn't create the column as it alredy exists.
 				SproutSeoPlugin::log("Column `$columnName` already exists in the `$tableName` table.", LogLevel::Info, true);
-
 			}
 		}
 	}

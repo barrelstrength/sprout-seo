@@ -18,6 +18,7 @@ class SproutSeo_RedirectsController extends BaseController
 	 * Edit a Redirect.
 	 *
 	 * @param array $variables
+	 *
 	 * @throws HttpException
 	 */
 	public function actionEditRedirect(array $variables = array())
@@ -52,7 +53,7 @@ class SproutSeo_RedirectsController extends BaseController
 			array('label' => Craft::t('Redirects'), 'url' => UrlHelper::getUrl('redirects'))
 		);
 
-		$this->renderTemplate('sproutseo/redirects/_edit',$variables);
+		$this->renderTemplate('sproutseo/redirects/_edit', $variables);
 	}
 
 	/**
@@ -79,10 +80,10 @@ class SproutSeo_RedirectsController extends BaseController
 		}
 
 		// Set the event attributes, defaulting to the existing values for whatever is missing from the post data
-		$redirect->oldUrl = craft()->request->getPost('oldUrl', $redirect->oldUrl);
-		$redirect->newUrl = craft()->request->getPost('newUrl');
-		$redirect->method = craft()->request->getPost('method');
-		$redirect->regex = craft()->request->getPost('regex');
+		$redirect->oldUrl  = craft()->request->getPost('oldUrl', $redirect->oldUrl);
+		$redirect->newUrl  = craft()->request->getPost('newUrl');
+		$redirect->method  = craft()->request->getPost('method');
+		$redirect->regex   = craft()->request->getPost('regex');
 		$redirect->enabled = craft()->request->getPost('enabled');
 
 		if (sproutSeo()->redirects->saveRedirect($redirect))
@@ -110,7 +111,7 @@ class SproutSeo_RedirectsController extends BaseController
 
 		$redirectId = craft()->request->getRequiredPost('redirectId');
 
-		if(craft()->elements->deleteElementById($redirectId))
+		if (craft()->elements->deleteElementById($redirectId))
 		{
 			craft()->userSession->setNotice(Craft::t('Redirect deleted.'));
 			$this->redirectToPostedUrl();

@@ -41,7 +41,7 @@ class SproutSeoTest extends BaseTest
 
 	protected function setEnvironment()
 	{
-		$this->settings = m::mock('Craft\Model');
+		$this->settings         = m::mock('Craft\Model');
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 	}
 

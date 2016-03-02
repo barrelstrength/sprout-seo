@@ -24,7 +24,7 @@ class SproutSeo_RedirectRecord extends BaseRecord
 			'oldUrl' => array(AttributeType::String, 'required' => true),
 			'newUrl' => array(AttributeType::String, 'required' => true),
 			'method' => array(AttributeType::Number, 'required' => true),
-			'regex' => array(AttributeType::Bool, 'required' => true)
+			'regex'  => array(AttributeType::Bool, 'required' => true)
 		);
 	}
 
@@ -34,7 +34,7 @@ class SproutSeo_RedirectRecord extends BaseRecord
 	public function defineRelations()
 	{
 		return array(
-			'element'  => array(static::BELONGS_TO, 'ElementRecord', 'id', 'required' => true, 'onDelete' => static::CASCADE),
+			'element' => array(static::BELONGS_TO, 'ElementRecord', 'id', 'required' => true, 'onDelete' => static::CASCADE),
 		);
 	}
 
@@ -51,7 +51,7 @@ class SproutSeo_RedirectRecord extends BaseRecord
 	 */
 	protected function beforeValidate()
 	{
-		if(!$this->regex)
+		if (!$this->regex)
 		{
 			$this->oldUrl = sproutSeo()->redirects->addSlash($this->oldUrl);
 		}
@@ -62,22 +62,23 @@ class SproutSeo_RedirectRecord extends BaseRecord
 	}
 
 	/**
-	* Scope to join with structure
-	*/
+	 * Scope to join with structure
+	 */
 	public function structured()
 	{
 		$structureId = sproutSeo()->redirects->getStructureId();
 		$tablePrefix = craft()->db->getNormalizedTablePrefix();
 
-		$criteria         = $this->getDbCriteria();
-		$criteria->alias  = 'redirects';
-		$criteria->join   = 'LEFT JOIN '.$tablePrefix.'elements element ON element.id=redirects.id ';
-		$criteria->join   .= 'LEFT JOIN '.$tablePrefix.'structures structures ON structures.id=:structureId ';
-		$criteria->join   .= 'LEFT JOIN '.$tablePrefix.'structureelements elements ON elements.structureId=structures.id ';
-		$criteria->order  = 'elements.lft ASC';
+		$criteria        = $this->getDbCriteria();
+		$criteria->alias = 'redirects';
+		$criteria->join  = 'LEFT JOIN ' . $tablePrefix . 'elements element ON element.id=redirects.id ';
+		$criteria->join .= 'LEFT JOIN ' . $tablePrefix . 'structures structures ON structures.id=:structureId ';
+		$criteria->join .= 'LEFT JOIN ' . $tablePrefix . 'structureelements elements ON elements.structureId=structures.id ';
+		$criteria->order = 'elements.lft ASC';
 		$criteria->addCondition('element.enabled = 1 and elements.elementID = element.id');
 
-		$criteria->params = array(':structureId'=>$structureId);
+		$criteria->params = array(':structureId' => $structureId);
+
 		return $this;
 	}
 }

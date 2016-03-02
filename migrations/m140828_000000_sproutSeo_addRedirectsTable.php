@@ -14,16 +14,16 @@ class m140828_000000_sproutSeo_addRedirectsTable extends BaseMigration
 			SproutSeoPlugin::log("Creating the {$tableName} table.");
 
 			craft()->db->createCommand()->createTable($tableName, array(
-				'id'   			   => array('column' => ColumnType::Int, 'null' => false),
-				'oldUrl'       => array('column' => ColumnType::Varchar, 'null' => false),
-				'newUrl'       => array('column' => ColumnType::Varchar, 'null' => false),
-				'method'       => array('column' => 'int(10)', 'null' => false),
-				'regex'        => array('column' => ColumnType::TinyInt, 'length' => 1, 'null' => false, 'default' => 0,
-				                        'unsigned' => true),
-				'dateCreated'  => array('column' => ColumnType::DateTime, 'null' => false),
-				'dateUpdated'  => array('column' => ColumnType::DateTime, 'null' => false),
-				'uid'      		 => array('column' => 'char(36)', 'null' => false, 'default'=>'0'),
-				), null, true, false
+				'id'          => array('column' => ColumnType::Int, 'null' => false),
+				'oldUrl'      => array('column' => ColumnType::Varchar, 'null' => false),
+				'newUrl'      => array('column' => ColumnType::Varchar, 'null' => false),
+				'method'      => array('column' => 'int(10)', 'null' => false),
+				'regex'       => array('column'   => ColumnType::TinyInt, 'length' => 1, 'null' => false, 'default' => 0,
+				                       'unsigned' => true),
+				'dateCreated' => array('column' => ColumnType::DateTime, 'null' => false),
+				'dateUpdated' => array('column' => ColumnType::DateTime, 'null' => false),
+				'uid'         => array('column' => 'char(36)', 'null' => false, 'default' => '0'),
+			), null, true, false
 			);
 
 			craft()->db->createCommand()->addPrimaryKey($tableName, 'id');

@@ -33,6 +33,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 
 	/**
 	 * @param null $id
+	 *
 	 * @return int
 	 */
 	public function deleteOverrideById($id = null)
@@ -59,6 +60,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 	/**
 	 * @param $entryId
 	 * @param $locale
+	 *
 	 * @return BaseModel|SproutSeo_BasicMetaFieldModel
 	 */
 	public function getBasicMetaFieldByEntryId($entryId, $locale)
@@ -81,6 +83,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 	/**
 	 * @param $entryId
 	 * @param $locale
+	 *
 	 * @return BaseModel|SproutSeo_TwitterCardFieldModel
 	 */
 	public function getTwitterCardFieldByEntryId($entryId, $locale)
@@ -106,6 +109,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 	/**
 	 * @param $entryId
 	 * @param $locale
+	 *
 	 * @return BaseModel|SproutSeo_OpenGraphFieldModel
 	 */
 	public function getOpenGraphFieldByEntryId($entryId, $locale)
@@ -128,6 +132,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 	/**
 	 * @param $entryId
 	 * @param $locale
+	 *
 	 * @return BaseModel|SproutSeo_GeographicMetaFieldModel
 	 */
 	public function getGeographicMetaFieldByEntryId($entryId, $locale)
@@ -150,6 +155,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 	/**
 	 * @param $entryId
 	 * @param $locale
+	 *
 	 * @return BaseModel|SproutSeo_RobotsMetaFieldModel
 	 */
 	public function getRobotsMetaFieldByEntryId($entryId, $locale)
