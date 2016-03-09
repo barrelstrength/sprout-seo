@@ -12,6 +12,7 @@ class SproutSeo_SitemapRecord extends BaseRecord
 	{
 		return array(
 			'sectionId'       => array(AttributeType::Number),
+			'categoryGroupId' => array(AttributeType::Number),
 			'url'             => array(AttributeType::String),
 			'priority'        => array(
 				AttributeType::Number,

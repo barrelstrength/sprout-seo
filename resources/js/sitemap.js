@@ -16,6 +16,7 @@
 		$changeFrequency: null,
 		$enabled: null,
 		$ping: null,
+		$categoryGroupId: null,
 
 		$addCustomPageButton: null,
 
@@ -33,45 +34,20 @@
 			// this.addListener(this.$addCustomPageButton, 'click', 'addCustomPage');
 		},
 
-		// addCustomPage: function()
-		// {
-		// 	var $customPageTable = $('.custom-pages');
-		// 	var $lastRow = $customPageTable.find("tr:last");
-		// 	lastId = $lastRow.data('rowid');
-		// 	lastValue = $lastRow.find("input.sitemap-custom-url").val();
-		//
-		// 	var $newRow = $lastRow.clone(true);
-		//
-		// 	console.log($newRow);
-		// 	$newRow.attr('data-rowid','new-0');
-		//
-		// 	$newRow.find('input[name="sitemap_fields['+lastId+'][id]"]').val('new-0');
-		// 	$newRow.find('input[name="sitemap_fields['+lastId+'][id]"]').attr('name', 'sitemap_fields[new-0][id]');
-		// 	$newRow.find('input[name="sitemap_fields['+lastId+'][sectionId]"]').attr('name', 'sitemap_fields[new-0][sectionId]');
-		// 	$newRow.find('input[name="sitemap_fields['+lastId+'][url]"]').attr('name', 'sitemap_fields[new-0][url]');
-		// 	$newRow.find('select[name="sitemap_fields['+lastId+'][priority]"]').attr('name', 'sitemap_fields[new-0][priority]');
-		// 	$newRow.find('select[name="sitemap_fields['+lastId+'][changeFrequency]"]').attr('name', 'sitemap_fields[new-0][changeFrequency]');
-		// 	$newRow.find('input[name="sitemap_fields['+lastId+'][enabled]"]').attr('name', 'sitemap_fields[new-0][enabled]');
-		// 	$newRow.find('input[name="sitemap_fields['+lastId+'][ping]"]').attr('name', 'sitemap_fields[new-0][ping]');
-		//
-		// 	$newRow.find("input.sitemap-custom-url").val('');
-		// 	$lastRow.after($newRow);
-		//
-		// },
-
 		onChange: function(ev)
 		{
 			changedElement = ev.target;
-			rowId = $(changedElement).closest('tr').data('rowid');
+			rowId          = $(changedElement).closest('tr').data('rowid');
 
-			this.status = $('tr[data-rowid="' + rowId + '"] td span.status');
-			this.id = $('input[name="sitemap_fields[' + rowId + '][id]"]').val();
-			this.sectionId = $('input[name="sitemap_fields[' + rowId + '][sectionId]"]').val();
-			this.url = $('input[name="sitemap_fields[' + rowId + '][url]"]').val();
-			this.priority = $('select[name="sitemap_fields[' + rowId + '][priority]"]').val();
+			this.status          = $('tr[data-rowid="' + rowId + '"] td span.status');
+			this.id              = $('input[name="sitemap_fields[' + rowId + '][id]"]').val();
+			this.sectionId       = $('input[name="sitemap_fields[' + rowId + '][sectionId]"]').val();
+			this.url             = $('input[name="sitemap_fields[' + rowId + '][url]"]').val();
+			this.priority        = $('select[name="sitemap_fields[' + rowId + '][priority]"]').val();
 			this.changeFrequency = $('select[name="sitemap_fields[' + rowId + '][changeFrequency]"]').val();
-			this.enabled = $('input[name="sitemap_fields[' + rowId + '][enabled]"]').is(":checked");
-			this.ping = $('input[name="sitemap_fields[' + rowId + '][ping]"]').is(":checked");
+			this.enabled         = $('input[name="sitemap_fields[' + rowId + '][enabled]"]').is(":checked");
+			this.ping            = $('input[name="sitemap_fields[' + rowId + '][ping]"]').is(":checked");
+			this.categoryGroupId = $('input[name="sitemap_fields[' + rowId + '][categoryId]"]').val();
 
 			console.log('new request');
 			console.log(this.status);
@@ -82,6 +58,7 @@
 			console.log(this.changeFrequency);
 			console.log(this.enabled);
 			console.log(this.ping);
+			console.log(this.categoryGroupId);
 			console.log('end request');
 
 			if (this.enabled)
@@ -107,6 +84,7 @@
 				changeFrequency: this.changeFrequency,
 				enabled: this.enabled,
 				ping: this.ping,
+				categoryGroupId: this.categoryGroupId,
 			}, $.proxy(function(response, textStatus)
 			{
 				if (textStatus == 'success')

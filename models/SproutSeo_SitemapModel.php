@@ -9,6 +9,7 @@ class SproutSeo_SitemapModel extends BaseModel
 		return array(
 			'id'              => array(AttributeType::Number),
 			'sectionId'       => array(AttributeType::Number),
+			'categoryGroupId' => array(AttributeType::Number),
 			'url'             => array(AttributeType::String),
 			'changeFrequency' => array(AttributeType::String, 'maxLength' => 3),
 			'priority'        => array(AttributeType::String, 'maxLength' => 7),

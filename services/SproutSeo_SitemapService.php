@@ -36,7 +36,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$row   = array();
 		$isNew = false;
 
-		if (isset($attributes->id) && (substr($attributes->id, 0, 3) === "new"))
+		// ther first two letters allows to "s-" => section, "c-" => category
+		if (isset($attributes->id) && (substr($attributes->id, 2, 3) === "new"))
 		{
 			$isNew = true;
 		}
@@ -54,6 +55,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		$model->id              = (!$isNew) ? $attributes->id : null;
 		$model->sectionId       = (isset($attributes->sectionId)) ? $attributes->sectionId : null;
+		$model->categoryGroupId = (isset($attributes->categoryGroupId)) ? $attributes->categoryGroupId : null;
 		$model->url             = (isset($attributes->url)) ? $attributes->url : null;
 		$model->priority        = $attributes->priority;
 		$model->changeFrequency = $attributes->changeFrequency;
@@ -111,8 +113,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$enabledSections = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_sitemap')
-			->where('enabled = 1')
-			->andWhere('sectionId is not null')
+			->where('enabled = 1 and (sectionId is not null or categoryGroupId is not null)')
 			->queryAll();
 
 		// Fetching settings for each enabled section in Sprout SEO
@@ -121,11 +122,22 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			// Fetching all enabled locales
 			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
-				$criteria            = craft()->elements->getCriteria(ElementType::Entry);
+				$criteria = new \CDbCriteria();
+
+				if (isset($sitemapSettings['sectionId']))
+				{
+					$criteria  = craft()->elements->getCriteria(ElementType::Entry);
+					$criteria->sectionId = $sitemapSettings['sectionId'];
+				}
+				else if (isset($sitemapSettings['categoryGroupId']))
+				{
+					$criteria  = craft()->elements->getCriteria(ElementType::Category);
+					$criteria->groupId = $sitemapSettings['categoryGroupId'];
+				}
+
 				$criteria->limit     = null;
 				$criteria->status    = 'live';
 				$criteria->locale    = $locale->id;
-				$criteria->sectionId = $sitemapSettings['sectionId'];
 
 				/**
 				 * @var $entries EntryModel[]
@@ -200,10 +212,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$sections = craft()->sections->getAllSections();
 
 		// Get all of the Sitemap Settings regarding our Sections
-		$sitemapSettings = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_sitemap')
-			->queryAll();
+		$sitemapSettings = $this->getAllSiteMaps("section");
 
 		// Prepare a list of all Sections we can link to
 		foreach ($sections as $key => $section)
@@ -230,6 +239,67 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return $sectionData;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAllCategoriesWithUrls()
+	{
+		$categories   = craft()->categories->getAllGroups();
+		$categoryData = array();
+
+		// Get all of the Sitemap Settings regarding our Sections
+		$sitemapSettings = $this->getAllSiteMaps("category");
+
+		// Prepare a list of all categories we can link to
+		foreach ($categories as $key => $category)
+		{
+			if ($category->hasUrls == 1)
+			{
+					$categoryData[$category->id] = $category->getAttributes();
+			}
+			else
+			{
+				// Remove Sections without URLs. They don't have links!
+				unset($categories[$key]);
+			}
+		}
+
+		// Prepare the data for our Sitemap Settings page
+		foreach ($sitemapSettings as $key => $settings)
+		{
+			// Add Sitemap data to any sectionIds that match
+			if (array_key_exists($settings['categoryGroupId'], $categoryData))
+			{
+				$categoryData[$settings['categoryGroupId']]['settings'] = $settings;
+			}
+		}
+
+		return $categoryData;
+	}
+
+	/**
+	 * @param string type allowed: section|category
+	 * @return array
+	 */
+	public function getAllSiteMaps($type)
+	{
+		$sitemaps = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_sitemap');
+
+		switch ($type) {
+			case 'section':
+				$sitemaps->where('sectionId IS NOT NULL');
+				break;
+
+			case 'category':
+				$sitemaps->where('categoryGroupId IS NOT NULL');
+				break;
+		}
+
+		return $sitemaps->queryAll();
 	}
 
 	/**

@@ -39,6 +39,7 @@ class SproutSeo_SitemapController extends BaseController
 		$sitemapSettings['changeFrequency'] = craft()->request->getRequiredPost('changeFrequency');
 		$sitemapSettings['enabled']         = craft()->request->getRequiredPost('enabled');
 		$sitemapSettings['ping']            = craft()->request->getPost('ping');
+		$sitemapSettings['categoryGroupId'] = craft()->request->getPost('categoryGroupId');
 
 		$model = SproutSeo_SitemapModel::populateModel($sitemapSettings);
 
