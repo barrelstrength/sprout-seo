@@ -42,18 +42,27 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			$isNew = true;
 		}
 
+		// Check if the id is section or category
+		$sitemapId = $attributes->id;
+
+		if (!ctype_digit($sitemapId))
+		{
+			// remove "s-" or "c-"
+			$sitemapId = substr($sitemapId, 2);
+		}
+
 		if (!$isNew)
 		{
 			$row = craft()->db->createCommand()
 				->select('*')
 				->from('sproutseo_sitemap')
-				->where('id=:id', array(':id' => $attributes->id))
+				->where('id=:id', array(':id' => $sitemapId))
 				->queryRow();
 		}
 
 		$model = SproutSeo_SitemapModel::populateModel($row);
 
-		$model->id              = (!$isNew) ? $attributes->id : null;
+		$model->id              = (!$isNew) ? $sitemapId : null;
 		$model->sectionId       = (isset($attributes->sectionId)) ? $attributes->sectionId : null;
 		$model->categoryGroupId = (isset($attributes->categoryGroupId)) ? $attributes->categoryGroupId : null;
 		$model->url             = (isset($attributes->url)) ? $attributes->url : null;
@@ -135,9 +144,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					$criteria->groupId = $sitemapSettings['categoryGroupId'];
 				}
 
-				$criteria->limit     = null;
-				$criteria->status    = 'live';
-				$criteria->locale    = $locale->id;
+				$criteria->limit  = null;
+				$criteria->status = 'live';
+				$criteria->locale = $locale->id;
 
 				/**
 				 * @var $entries EntryModel[]
