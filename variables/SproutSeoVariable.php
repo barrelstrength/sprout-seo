@@ -174,6 +174,16 @@ class SproutSeoVariable
 		return sproutSeo()->sitemap->getAllCustomPages();
 	}
 
+	/**
+	 * Returns all sitemaps
+	 *
+	 * @return array of Sections
+	 */
+	public function getAllSitemapSections()
+	{
+		return sproutSeo()->sitemap->getAllSitemapSections();
+	}
+
 	public function getDivider()
 	{
 		return craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;

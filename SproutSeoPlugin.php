@@ -205,6 +205,20 @@ class SproutSeoPlugin extends BasePlugin
 		);
 	}
 
+	public function sproutSeoRegisterSitemap()
+	{
+		return array(
+			'sections' => array(
+				'method' => 'getAllSections',
+				'service' => 'sections',
+			),
+			'categories' => array(
+				'method' => 'getAllGroups',
+				'service' => 'categories',
+			)
+		);
+	}
+
 	public function onAfterInstall()
 	{
 		sproutSeo()->redirects->installDefaultSettings();

@@ -214,6 +214,72 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get all sitemap sections with URLs
+	 */
+	public function getAllSitemapSections()
+	{
+		$sitemaps = craft()->plugins->call('sproutSeoRegisterSitemap');
+
+		$sitemapGroupSettings = array();
+
+		foreach ($sitemaps as $sitemap)
+		{
+			foreach ($sitemap as $key => $settings)
+			{
+				$service = $settings['service'];
+				$method = $settings['method'];
+
+				$sitemapGroups = craft()->{$service}->{$method}();
+				$sitemapGroupSettings[$key] = $sitemapGroups;
+			}
+		}
+
+		$sectionData = array();
+
+		// Prepare a list of all Sitemap Groups we can link to
+		foreach ($sitemapGroupSettings as $key => $sitemapGroups)
+		{
+			foreach ($sitemapGroups as $sitemapGroup)
+			{
+				if ($sitemapGroup->hasUrls == 1)
+				{
+					$sectionData[$key][$sitemapGroup->id] = $sitemapGroup->getAttributes();
+				}
+				else
+				{
+					// Remove Sections without URLs. They don't have links!
+					unset($sitemapGroupSettings[$key]);
+				}
+			}
+		}
+
+		// @todo - needs updated to get all things from the sproutseo_sitemap table
+		// Need to add two new columns to sproutseo_sitemap table:
+		// - elementGroupId (the ID of the section, categoryGroup, email campaign, commerce product type, etc.
+		// - type (The thing that is the elementGroupId: 'section', 'categoryGroup', etc.)
+		$sitemapSettings = $this->getAllSiteMaps("section");
+
+		// Prepare the data for our Sitemap Settings page
+		foreach ($sitemapSettings as $key => $settings)
+		{
+			foreach ($sectionData as $key2 => $data)
+			{
+				// Add Sitemap data to any sectionIds that match
+				if (array_key_exists($settings['sectionId'], $data))
+				{
+					$sectionData[$key2][$settings['elementGroupId']]['settings'] = $settings;
+				}
+			}
+		}
+
+
+		// @TODO - This doesn't work yet! Needs additional code updated.
+		Craft::dd($sectionData);
+
+		return $sitemapGroups;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getAllSectionsWithUrls()
