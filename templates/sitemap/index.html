@@ -87,7 +87,7 @@
 							{{ elementGroup.name }}
 
 							<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
-							<input type="hidden" name="sitemap_fields[{{ sitemapId }}][sectionId]" value="{{ elementGroup.id }}">
+							<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
 
 						</strong>
 					</td>
@@ -137,8 +137,9 @@
 		<tbody>
 
 			{% for page in customPages %}
+				{% set sitemapId = "customUrl-"~page.id %}
 
-				<tr data-rowid="{{ page.id }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
+				<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
 					<td>
 						<div style="display:inline-block;padding:7px 0 7px 10px;">
 						{% if (page.enabled is defined and page.enabled == 1) %}
@@ -148,13 +149,13 @@
 						{% endif %}
 						</div>
 
-						<input type="hidden" name="sitemap_fields[{{ page.id }}][id]" value="{{ page.id }}">
+						<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
 
-						<input type="text" name="sitemap_fields[{{ page.id }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
+						<input type="text" name="sitemap_fields[{{ sitemapId }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
 					</td>
 					<td>
 						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ page.id ~ '][priority]',
+							name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
 							options: priorityList,
 							value: (page.priority is defined ? page.priority : 0.5),
 							errors: "",
@@ -163,7 +164,7 @@
 					</td>
 					<td>
 						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ page.id ~ '][changeFrequency]',
+							name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
 							options: frequencyList,
 							value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
 							errors: "",
@@ -171,7 +172,7 @@
 						}) }}
 					</td>
 					<td style="text-align: center;">
-						<input type="checkbox" name="sitemap_fields[{{ page.id }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
+						<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
 					</td>
 					{# <td></td> #}
 					<td>

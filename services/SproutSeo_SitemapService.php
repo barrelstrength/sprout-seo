@@ -33,26 +33,22 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 */
 	public function saveSitemap(SproutSeo_SitemapModel $attributes)
 	{
-		$row   = array();
-		$isNew = false;
+		$row       = array();
+		$isNew     = false;
+		$sitemapId = null;
 
-		// ther first two letters allows to "s-" => section, "c-" => category
-		if (isset($attributes->id) && (substr($attributes->id, 2, 3) === "new"))
+		$keys = explode("-", $attributes->id);
+		$type = $keys[0];
+
+		if (isset($keys) && $keys[1] == "new")
 		{
 			$isNew = true;
 		}
 
-		// Check if the id is section or category
-		$sitemapId = $attributes->id;
-
-		if (!ctype_digit($sitemapId))
-		{
-			// remove "s-" or "c-"
-			$sitemapId = substr($sitemapId, 2);
-		}
-
 		if (!$isNew)
 		{
+			$sitemapId = $keys[1];
+
 			$row = craft()->db->createCommand()
 				->select('*')
 				->from('sproutseo_sitemap')
@@ -62,12 +58,12 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		$model = SproutSeo_SitemapModel::populateModel($row);
 
-		$model->id              = (!$isNew) ? $sitemapId : null;
-		$model->sectionId       = (isset($attributes->sectionId)) ? $attributes->sectionId : null;
-		$model->categoryGroupId = (isset($attributes->categoryGroupId)) ? $attributes->categoryGroupId : null;
+		$model->id              = $sitemapId;
+		$model->elementGroupId  = (isset($attributes->elementGroupId)) ? $attributes->elementGroupId : null;
 		$model->url             = (isset($attributes->url)) ? $attributes->url : null;
 		$model->priority        = $attributes->priority;
 		$model->changeFrequency = $attributes->changeFrequency;
+		$model->type            = $type != "customUrl" ? $type : null;
 		$model->enabled         = ($attributes->enabled == 'true') ? 1 : 0;
 		$model->ping            = ($attributes->ping == 'true') ? 1 : 0;
 		$model->dateUpdated     = DateTimeHelper::currentTimeForDb();
@@ -214,7 +210,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all sitemap sections with URLs
+	 * Get all sitemaps registered on the sproutSeoRegisterSitemap hook
+	 *
+	 * @return array
 	 */
 	public function getAllSitemapsRegistered()
 	{
@@ -228,9 +226,17 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			{
 				$service = $settings['service'];
 				$method  = $settings['method'];
+				$class   = '\\Craft\\'.ucfirst($service)."Service";
 
-				$elements = craft()->{$service}->{$method}();
-				$sitemapGroupSettings[$type] = $elements;
+				if(method_exists($class, $method))
+				{
+					$elements = craft()->{$service}->{$method}();
+					$sitemapGroupSettings[$type] = $elements;
+				}
+				else
+				{
+					SproutSeoPlugin::log("Can't access to $class", LogLevel::Info, true);
+				}
 			}
 		}
 
