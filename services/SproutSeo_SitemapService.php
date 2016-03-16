@@ -216,67 +216,54 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	/**
 	 * Get all sitemap sections with URLs
 	 */
-	public function getAllSitemapSections()
+	public function getAllSitemapsRegistered()
 	{
-		$sitemaps = craft()->plugins->call('sproutSeoRegisterSitemap');
-
+		$sitemaps             = craft()->plugins->call('sproutSeoRegisterSitemap');
+		$siteMapData          = array();
 		$sitemapGroupSettings = array();
 
 		foreach ($sitemaps as $sitemap)
 		{
-			foreach ($sitemap as $key => $settings)
+			foreach ($sitemap as $type => $settings)
 			{
 				$service = $settings['service'];
-				$method = $settings['method'];
+				$method  = $settings['method'];
 
-				$sitemapGroups = craft()->{$service}->{$method}();
-				$sitemapGroupSettings[$key] = $sitemapGroups;
+				$elements = craft()->{$service}->{$method}();
+				$sitemapGroupSettings[$type] = $elements;
 			}
 		}
-
-		$sectionData = array();
 
 		// Prepare a list of all Sitemap Groups we can link to
-		foreach ($sitemapGroupSettings as $key => $sitemapGroups)
+		foreach ($sitemapGroupSettings as $type => $sitemapGroups)
 		{
-			foreach ($sitemapGroups as $sitemapGroup)
+			foreach ($sitemapGroups as $element)
 			{
-				if ($sitemapGroup->hasUrls == 1)
+				if (isset($element->hasUrls) && $element->hasUrls == 1)
 				{
-					$sectionData[$key][$sitemapGroup->id] = $sitemapGroup->getAttributes();
-				}
-				else
-				{
-					// Remove Sections without URLs. They don't have links!
-					unset($sitemapGroupSettings[$key]);
+					$siteMapData[$type][$element->id] = $element->getAttributes();
 				}
 			}
 		}
-
-		// @todo - needs updated to get all things from the sproutseo_sitemap table
-		// Need to add two new columns to sproutseo_sitemap table:
-		// - elementGroupId (the ID of the section, categoryGroup, email campaign, commerce product type, etc.
-		// - type (The thing that is the elementGroupId: 'section', 'categoryGroup', etc.)
-		$sitemapSettings = $this->getAllSiteMaps("section");
 
 		// Prepare the data for our Sitemap Settings page
-		foreach ($sitemapSettings as $key => $settings)
+		foreach ($siteMapData as $type => $data)
 		{
-			foreach ($sectionData as $key2 => $data)
+			$sitemapSettings = $this->getSiteMapsByType($type);
+
+			foreach ($sitemapSettings as $settings)
 			{
-				// Add Sitemap data to any sectionIds that match
-				if (array_key_exists($settings['sectionId'], $data))
+				// Add Sitemap data to any elementGroupId that match
+				$elementId = $settings['elementGroupId'];
+
+				if (array_key_exists($elementId, $data))
 				{
-					$sectionData[$key2][$settings['elementGroupId']]['settings'] = $settings;
+					$siteMapData[$type][$elementId]['settings'] = $settings;
 				}
 			}
 		}
 
-
-		// @TODO - This doesn't work yet! Needs additional code updated.
-		Craft::dd($sectionData);
-
-		return $sitemapGroups;
+		return $siteMapData;
 	}
 
 	/**
@@ -287,7 +274,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$sections = craft()->sections->getAllSections();
 
 		// Get all of the Sitemap Settings regarding our Sections
-		$sitemapSettings = $this->getAllSiteMaps("section");
+		$sitemapSettings = $this->getSiteMapsByType("sections");
 
 		// Prepare a list of all Sections we can link to
 		foreach ($sections as $key => $section)
@@ -325,7 +312,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$categoryData = array();
 
 		// Get all of the Sitemap Settings regarding our Sections
-		$sitemapSettings = $this->getAllSiteMaps("category");
+		$sitemapSettings = $this->getSiteMapsByType("category");
 
 		// Prepare a list of all categories we can link to
 		foreach ($categories as $key => $category)
@@ -355,26 +342,18 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param string type allowed: section|category
+	 * @param string $type
 	 * @return array
 	 */
-	public function getAllSiteMaps($type)
+	public function getSiteMapsByType($type)
 	{
 		$sitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_sitemap');
+			->from('sproutseo_sitemap')
+			->where('elementGroupId iS NOT NULL and type = :type', array(':type' => $type))
+			->queryAll();
 
-		switch ($type) {
-			case 'section':
-				$sitemaps->where('sectionId IS NOT NULL');
-				break;
-
-			case 'category':
-				$sitemaps->where('categoryGroupId IS NOT NULL');
-				break;
-		}
-
-		return $sitemaps->queryAll();
+		return $sitemaps;
 	}
 
 	/**

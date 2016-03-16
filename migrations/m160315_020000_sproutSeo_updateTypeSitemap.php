@@ -3,28 +3,28 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m160308_000000_sproutSeo_addCategoriesToSitemap extends BaseMigration
+class m160315_020000_sproutSeo_updateTypeSitemap extends BaseMigration
 {
 	/**
 	 * @return bool
 	 */
 	public function safeUp()
 	{
-		$tableName  = 'sproutseo_sitemap';
-		$columnName = 'categoryGroupId';
+		$tableName    = 'sproutseo_sitemap';
+		$columnName   = 'type';
 
 		if (!craft()->db->columnExists($tableName, $columnName))
 		{
-			$this->addColumnAfter($tableName, $columnName,
+
+			$this->addColumn($tableName, $columnName,
 				array(
-					'column'   => ColumnType::Int,
+					'column'   => ColumnType::Varchar,
 					'required' => false,
 					'default'  => null,
-				),
-				'sectionId'
+				)
 			);
 
-			SproutSeoPlugin::log("Created the column `locale` in `$tableName`.", LogLevel::Info, true);
+			SproutSeoPlugin::log("Created the column `$columnName` in `$tableName` .", LogLevel::Info, true);
 		}
 		else
 		{

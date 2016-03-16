@@ -179,9 +179,9 @@ class SproutSeoVariable
 	 *
 	 * @return array of Sections
 	 */
-	public function getAllSitemapSections()
+	public function getAllSitemapsRegistered()
 	{
-		return sproutSeo()->sitemap->getAllSitemapSections();
+		return sproutSeo()->sitemap->getAllSitemapsRegistered();
 	}
 
 	public function getDivider()
