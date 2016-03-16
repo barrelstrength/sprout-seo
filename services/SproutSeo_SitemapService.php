@@ -118,8 +118,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$enabledSections = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_sitemap')
-			->where('enabled = 1 and (sectionId is not null or categoryGroupId is not null)')
+			->where('enabled = 1 and elementGroupId is not null')
 			->queryAll();
+
+		$sitemapsRegistered = craft()->plugins->call('sproutSeoRegisterSitemap');
 
 		// Fetching settings for each enabled section in Sprout SEO
 		foreach ($enabledSections as $key => $sitemapSettings)
@@ -128,28 +130,26 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
 				$criteria = new \CDbCriteria();
+				$response = $this->getElementTypeRegistered($sitemapsRegistered, $sitemapSettings['type']);
+				$entries  = array();
 
-				if (isset($sitemapSettings['sectionId']))
+				if ($response != null)
 				{
-					$criteria  = craft()->elements->getCriteria(ElementType::Entry);
-					$criteria->sectionId = $sitemapSettings['sectionId'];
-				}
-				else if (isset($sitemapSettings['categoryGroupId']))
-				{
-					$criteria  = craft()->elements->getCriteria(ElementType::Category);
-					$criteria->groupId = $sitemapSettings['categoryGroupId'];
-				}
+					$elementGroupField = $response['elementGroupField'];
 
-				$criteria->limit  = null;
-				$criteria->status = 'live';
-				$criteria->locale = $locale->id;
+					$criteria  = craft()->elements->getCriteria($response['elementType']);
+					$criteria->{$elementGroupField} = $sitemapSettings['elementGroupId'];
 
-				/**
-				 * @var $entries EntryModel[]
-				 *
-				 * Fetching all entries enabled for the current locale
-				 */
-				$entries = $criteria->find();
+					$criteria->limit  = null;
+					$criteria->status = 'live';
+					$criteria->locale = $locale->id;
+					/**
+					 * @var $entries EntryModel[]
+					 *
+					 * Fetching all entries enabled for the current locale
+					 */
+					$entries = $criteria->find();
+				}
 
 				foreach ($entries as $entry)
 				{
@@ -429,5 +429,40 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return $structure;
+	}
+
+	/**
+	 * @param @sitemasRegisted array from hook
+	 * @param $type string
+	 * @return array
+	**/
+	private function getElementTypeRegistered($sitemapsRegistered, $type)
+	{
+		$response = array();
+
+		foreach ($sitemapsRegistered as $sitemap)
+		{
+			foreach ($sitemap as $typeRegistered => $settings)
+			{
+				if ($typeRegistered == $type)
+				{
+					if( isset($settings['elementType']) && isset($settings['elementGroupField']))
+					{
+						$response = array(
+							"elementType"       => $settings['elementType'],
+							"elementGroupField" => $settings['elementGroupField'],
+						);
+
+						return $response;
+					}
+					else
+					{
+						SproutSeoPlugin::log("The following keys are not defined in the sproutSeoRegisterSitemap hook: elementType or elementGroupField", LogLevel::Warning, true);
+					}
+				}
+			}
+		}
+
+		return $response;
 	}
 }
