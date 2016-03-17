@@ -35,18 +35,13 @@
 {% set customPages = craft.sproutSeo.getAllCustomPages() %}
 {% set sitemaps    = craft.sproutSeo.getAllSitemaps() %}
 
-{% set fullPageForm = true %}
-
-{% block saveButton %}
+{% set extraPageHeaderHtml %}
 	<div class="buttons">
 		<a class="btn submit add icon" href="{{ url('sproutseo/sitemap/newPage') }}">New page</a>
 	</div>
-{% endblock %}
+{% endset %}
 
 {% set content %}
-
-	<input type="hidden" name="action" value="sproutSeo/sitemap/saveSitemap">
-	<input type="hidden" name="redirect" value="sproutseo/sitemap">
 
 	{% for key, elementGroups in sitemaps %}
 
