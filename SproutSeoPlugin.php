@@ -219,6 +219,12 @@ class SproutSeoPlugin extends BasePlugin
 				'service'        => 'categories',
 				'method'         => 'getAllGroups',
 				'elementGroupId' => "groupId",
+			),
+			'commerce_product' => array(
+				'elementType'    => 'Commerce_Product',
+				'elementGroupId' => "productTypeId",
+				'service'        => 'commerce_productTypes',
+				'method'         => 'getAllProductTypes',
 			)
 		);
 	}
