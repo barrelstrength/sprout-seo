@@ -98,58 +98,71 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	{
 		$urls = array();
 
-		$enabledSitemaps = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_sitemap')
-			->where('enabled = 1 and elementGroupId is not null')
-			->queryAll();
-
-		$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
+		$registeredSitemaps = craft()->plugins->call('registerSproutSeoSitemap');
+		$enabledSitemaps    = $this->getAllSitemaps();
 
 		// Fetching settings for each enabled sitemap in Sprout SEO
-		foreach ($enabledSitemaps as $key => $sitemapSettings)
+		foreach ($enabledSitemaps as $type => $sitemaps)
 		{
-			// Fetching all enabled locales
-			foreach (craft()->i18n->getSiteLocales() as $locale)
+			//// Make sure we don't output any element groups that are enabled
+			//// in Sprout SEO but where the user may have edited the settings
+			//// and disabled URLs on the respective element
+			if (empty($enabledSitemaps[$type]))
 			{
-				$elementInfo = $this->getElementInfo($sitemaps, $sitemapSettings['type']);
+				continue;
+			}
 
-				$elements = array();
+			foreach ($sitemaps as $key => $sitemap)
+			{
+				$sitemapSettings = $sitemap['settings'];
 
-				if ($elementInfo != null)
+				if (!$sitemapSettings['enabled'])
 				{
-					$elementGroupId = $elementInfo['elementGroupId'];
-
-					$criteria                    = craft()->elements->getCriteria($elementInfo['elementType']);
-					$criteria->{$elementGroupId} = $sitemapSettings['elementGroupId'];
-
-					$criteria->limit  = null;
-					$criteria->status = 'live';
-					$criteria->locale = $locale->id;
-
-					$elements = $criteria->find();
+					continue;
 				}
 
-				foreach ($elements as $element)
+				// Fetching all enabled locales
+				foreach (craft()->i18n->getSiteLocales() as $locale)
 				{
-					// @todo ensure that this check/logging is absolutely necessary
-					// Catch null URLs, log them, and prevent them from being output to the sitemap
-					if (is_null($element->getUrl()))
-					{
-						SproutSeoPlugin::log('Element ID ' . $element->id . " does not have a URL.", LogLevel::Warning, true);
+					$elementInfo = $this->getElementInfo($registeredSitemaps, $type);
 
-						continue;
+					$elements = array();
+
+					if ($elementInfo != null)
+					{
+						$elementGroupId = $elementInfo['elementGroupId'];
+
+						$criteria                    = craft()->elements->getCriteria($elementInfo['elementType']);
+						$criteria->{$elementGroupId} = $sitemapSettings['elementGroupId'];
+
+						$criteria->limit  = null;
+						$criteria->status = 'live';
+						$criteria->locale = $locale->id;
+
+						$elements = $criteria->find();
 					}
 
-					// Adding each location indexed by its id
-					$urls[$element->id][] = array(
-						'id'        => $element->id,
-						'url'       => $element->getUrl(),
-						'locale'    => $locale->id,
-						'modified'  => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
-						'priority'  => $sitemapSettings['priority'],
-						'frequency' => $sitemapSettings['changeFrequency'],
-					);
+					foreach ($elements as $element)
+					{
+						// @todo ensure that this check/logging is absolutely necessary
+						// Catch null URLs, log them, and prevent them from being output to the sitemap
+						if (is_null($element->getUrl()))
+						{
+							SproutSeoPlugin::log('Element ID ' . $element->id . " does not have a URL.", LogLevel::Warning, true);
+
+							continue;
+						}
+
+						// Adding each location indexed by its id
+						$urls[$element->id][] = array(
+							'id'        => $element->id,
+							'url'       => $element->getUrl(),
+							'locale'    => $locale->id,
+							'modified'  => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+							'priority'  => $sitemapSettings['priority'],
+							'frequency' => $sitemapSettings['changeFrequency'],
+						);
+					}
 				}
 			}
 		}
