@@ -43,11 +43,12 @@
 
 {% set content %}
 
-	{% for key, elementGroups in sitemaps %}
+	{% for type, elementGroups in sitemaps %}
 
 		<table class="data fullwidth sitemap-settings">
+			{%set name = elementGroups.customName is not null ? elementGroups.customName :  type %}
 			<thead>
-				<th style="padding-left:9px;width:50%">{{ key|capitalize }} <span class="info">{{ "All of your " ~key~" that have unique URLs are listed here.  Enable each "~key~" you want to include in your sitemap."|t }}</span></th>
+				<th style="padding-left:9px;width:50%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
 				<th style="width:15%;">{{ "Priority"|t }} {% if loop.index == 1 %} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span>{% endif %}</th>
 				<th style="width:15%;">{{ "Change Frequency"|t }}{% if loop.index == 1 %}  <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span> {% endif %}</th>
 				<th style="width:8%;text-align: center;">{{ "Enabled"|t }} {% if loop.index == 1 %}<span class="info">{{ "Make the content in this section appear in your sitemap."|t }}</span>{% endif %}</th>
@@ -55,62 +56,63 @@
 			</thead>
 			<tbody>
 
-				{% for elementGroup in elementGroups %}
+			{% for elementGroup in elementGroups %}
+				{% if elementGroup.name is defined %}
+					{% set sitemap = null %}
+					{% if elementGroup.settings is defined %}
+						{% set sitemap = elementGroup.settings %}
+					{% endif %}
 
-				{% set sitemap = null %}
-				{% if elementGroup.settings is defined %}
-					{% set sitemap = elementGroup.settings %}
+					{% if sitemap.id is defined %}
+						{% set sitemapId = sitemap.id %}
+					{% else %}
+					  {% set sitemapId = 'new-' ~ loop.index %}
+					{% endif %}
+
+					{# elementGroup => type- #}
+					{% set sitemapId = type|lower~'-'~ sitemapId %}
+
+					<tr data-rowid="{{ sitemapId }}" data-type="section">
+						<td>
+							<strong style="display:inline-block;padding:7px 10px;">
+								{% if (sitemap.enabled is defined and sitemap.enabled == 1) %}
+									<span class="status live"></span>
+								{% else %}
+									<span class="status disabled"></span>
+								{% endif %}
+								{{ elementGroup.name }}
+
+								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
+								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
+
+							</strong>
+						</td>
+						<td>
+							{{ forms.selectField({
+								name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
+								options: priorityList,
+								value: (sitemap.priority is defined ? sitemap.priority : 0.5),
+								errors: "",
+								required: false
+							}) }}
+						</td>
+						<td>
+							{{ forms.selectField({
+								name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
+								options: frequencyList,
+								value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
+								errors: "",
+								required: false
+							}) }}
+						</td>
+						<td style="text-align: center;">
+							<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
+						</td>
+						<td></td>
+					</tr>
 				{% endif %}
-
-				{% if sitemap.id is defined %}
-					{% set sitemapId = sitemap.id %}
-				{% else %}
-				  {% set sitemapId = 'new-' ~ loop.index %}
-				{% endif %}
-
-				{# elementGroup => key- #}
-				{% set sitemapId = key~'-'~ sitemapId %}
-
-				<tr data-rowid="{{ sitemapId }}" data-type="section">
-					<td>
-						<strong style="display:inline-block;padding:7px 10px;">
-							{% if (sitemap.enabled is defined and sitemap.enabled == 1) %}
-								<span class="status live"></span>
-							{% else %}
-								<span class="status disabled"></span>
-							{% endif %}
-							{{ elementGroup.name }}
-
-							<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
-							<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
-
-						</strong>
-					</td>
-					<td>
-						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
-							options: priorityList,
-							value: (sitemap.priority is defined ? sitemap.priority : 0.5),
-							errors: "",
-							required: false
-						}) }}
-					</td>
-					<td>
-						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
-							options: frequencyList,
-							value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
-							errors: "",
-							required: false
-						}) }}
-					</td>
-					<td style="text-align: center;">
-						<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
-					</td>
-					<td></td>
-				</tr>
-		{% endfor %}
-		</tbody>
+			{% endfor %}
+			</tbody>
 		</table>
 		<br>
 		<hr>

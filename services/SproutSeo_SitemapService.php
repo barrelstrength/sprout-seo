@@ -219,12 +219,14 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			{
 				$service = $settings['service'];
 				$method  = $settings['method'];
+				$name    = $settings['name'];
 				$class   = '\\Craft\\' . ucfirst($service) . "Service";
 
 				if (method_exists($class, $method))
 				{
 					$elements                    = craft()->{$service}->{$method}();
 					$sitemapGroupSettings[$type] = $elements;
+					$sitemapGroupSettings[$type]['customName'] = $name;
 				}
 				else
 				{
@@ -236,6 +238,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		// Prepare a list of all Sitemap Groups we can link to
 		foreach ($sitemapGroupSettings as $type => $sitemapGroups)
 		{
+			$siteMapData[$type]['customName'] = $sitemapGroups['customName'];
 			foreach ($sitemapGroups as $element)
 			{
 				if (isset($element->hasUrls) && $element->hasUrls == 1)
