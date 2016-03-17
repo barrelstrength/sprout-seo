@@ -121,7 +121,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			->where('enabled = 1 and elementGroupId is not null')
 			->queryAll();
 
-		$sitemapsRegistered = craft()->plugins->call('sproutSeoRegisterSitemap');
+		$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
 
 		// Fetching settings for each enabled section in Sprout SEO
 		foreach ($enabledSections as $key => $sitemapSettings)
@@ -129,44 +129,41 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			// Fetching all enabled locales
 			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
-				$criteria = new \CDbCriteria();
-				$response = $this->getElementTypeRegistered($sitemapsRegistered, $sitemapSettings['type']);
-				$entries  = array();
+				$elementInfo = $this->getElementInfo($sitemaps, $sitemapSettings['type']);
 
-				if ($response != null)
+				$elements  = array();
+
+				if ($elementInfo != null)
 				{
-					$elementGroupField = $response['elementGroupField'];
+					$elementGroupId = $elementInfo['elementGroupId'];
 
-					$criteria  = craft()->elements->getCriteria($response['elementType']);
-					$criteria->{$elementGroupField} = $sitemapSettings['elementGroupId'];
+					$criteria                    = craft()->elements->getCriteria($elementInfo['elementType']);
+					$criteria->{$elementGroupId} = $sitemapSettings['elementGroupId'];
 
 					$criteria->limit  = null;
 					$criteria->status = 'live';
 					$criteria->locale = $locale->id;
-					/**
-					 * @var $entries EntryModel[]
-					 *
-					 * Fetching all entries enabled for the current locale
-					 */
-					$entries = $criteria->find();
+
+					$elements = $criteria->find();
 				}
 
-				foreach ($entries as $entry)
+				foreach ($elements as $element)
 				{
 					// @todo ensure that this check/logging is absolutely necessary
 					// Catch null URLs, log them, and prevent them from being output to the sitemap
-					if (is_null($entry->getUrl()))
+					if (is_null($element->getUrl()))
 					{
-						SproutSeoPlugin::log('Entry ID ' . $entry->id . " does not have a URL.", LogLevel::Warning, true);
+						SproutSeoPlugin::log('Element ID ' . $element->id . " does not have a URL.", LogLevel::Warning, true);
+
 						continue;
 					}
 
 					// Adding each location indexed by its id
-					$urls[$entry->id][] = array(
-						'id'        => $entry->id,
-						'url'       => $entry->getUrl(),
+					$urls[$element->id][] = array(
+						'id'        => $element->id,
+						'url'       => $element->getUrl(),
 						'locale'    => $locale->id,
-						'modified'  => $entry->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+						'modified'  => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
 						'priority'  => $sitemapSettings['priority'],
 						'frequency' => $sitemapSettings['changeFrequency'],
 					);
@@ -210,13 +207,13 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all sitemaps registered on the sproutSeoRegisterSitemap hook
+	 * Get all sitemaps registered on the registerSproutSeoSitemap hook
 	 *
 	 * @return array
 	 */
-	public function getAllSitemapsRegistered()
+	public function getAllSitemaps()
 	{
-		$sitemaps             = craft()->plugins->call('sproutSeoRegisterSitemap');
+		$sitemaps             = craft()->plugins->call('registerSproutSeoSitemap');
 		$siteMapData          = array();
 		$sitemapGroupSettings = array();
 
@@ -226,11 +223,11 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			{
 				$service = $settings['service'];
 				$method  = $settings['method'];
-				$class   = '\\Craft\\'.ucfirst($service)."Service";
+				$class   = '\\Craft\\' . ucfirst($service) . "Service";
 
-				if(method_exists($class, $method))
+				if (method_exists($class, $method))
 				{
-					$elements = craft()->{$service}->{$method}();
+					$elements                    = craft()->{$service}->{$method}();
 					$sitemapGroupSettings[$type] = $elements;
 				}
 				else
@@ -325,7 +322,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			if ($category->hasUrls == 1)
 			{
-					$categoryData[$category->id] = $category->getAttributes();
+				$categoryData[$category->id] = $category->getAttributes();
 			}
 			else
 			{
@@ -349,6 +346,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 	/**
 	 * @param string $type
+	 *
 	 * @return array
 	 */
 	public function getSiteMapsByType($type)
@@ -432,37 +430,41 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param @sitemasRegisted array from hook
+	 * @param $sitemaps
 	 * @param $type string
+	 *
 	 * @return array
-	**/
-	private function getElementTypeRegistered($sitemapsRegistered, $type)
+	 * @internal param $sitemaps array from hook
+	 */
+	private function getElementInfo($sitemaps, $sitemapSettingsType)
 	{
-		$response = array();
+		$elementInfo = array();
 
-		foreach ($sitemapsRegistered as $sitemap)
+		foreach ($sitemaps as $sitemap)
 		{
-			foreach ($sitemap as $typeRegistered => $settings)
+			foreach ($sitemap as $sitemapType => $settings)
 			{
-				if ($typeRegistered == $type)
+				if ($sitemapType == $sitemapSettingsType)
 				{
-					if( isset($settings['elementType']) && isset($settings['elementGroupField']))
+					if (isset($settings['elementType']) && isset($settings['elementGroupId']))
 					{
-						$response = array(
-							"elementType"       => $settings['elementType'],
-							"elementGroupField" => $settings['elementGroupField'],
+						$elementInfo = array(
+							"elementType"    => $settings['elementType'],
+							"elementGroupId" => $settings['elementGroupId'],
 						);
 
-						return $response;
+						return $elementInfo;
 					}
 					else
 					{
-						SproutSeoPlugin::log("The following keys are not defined in the sproutSeoRegisterSitemap hook: elementType or elementGroupField", LogLevel::Warning, true);
+						SproutSeoPlugin::log(Craft::t("Could not retrieve element types. The sitemap for {sitemapType} does not have correct integration values for `elementType` and/or `elementGroupId`", array(
+							'sitemapType' => $sitemapType
+						)), LogLevel::Warning, true);
 					}
 				}
 			}
 		}
 
-		return $response;
+		return $elementInfo;
 	}
 }

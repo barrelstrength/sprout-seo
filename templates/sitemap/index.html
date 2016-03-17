@@ -32,8 +32,8 @@
 {% endmacro %}
 {% import _self as checkbox %}
 
-{% set customPages           = craft.sproutSeo.getAllCustomPages() %}
-{% set allSitemapsRegistered = craft.sproutSeo.getAllSitemapsRegistered() %}
+{% set customPages = craft.sproutSeo.getAllCustomPages() %}
+{% set sitemaps    = craft.sproutSeo.getAllSitemaps() %}
 
 {% set fullPageForm = true %}
 
@@ -48,7 +48,7 @@
 	<input type="hidden" name="action" value="sproutSeo/sitemap/saveSitemap">
 	<input type="hidden" name="redirect" value="sproutseo/sitemap">
 
-	{% for key, elementGroups in allSitemapsRegistered %}
+	{% for key, elementGroups in sitemaps %}
 
 		<table class="data fullwidth sitemap-settings">
 			<thead>

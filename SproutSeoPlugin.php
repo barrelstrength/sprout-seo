@@ -205,20 +205,20 @@ class SproutSeoPlugin extends BasePlugin
 		);
 	}
 
-	public function sproutSeoRegisterSitemap()
+	public function registerSproutSeoSitemap()
 	{
 		return array(
-			'sections' => array(
-				'service'           => 'sections',
-				'method'            => 'getAllSections',
-				'elementType'       => ElementType::Entry,
-				'elementGroupField' => "sectionId",
+			'sections'         => array(
+				'elementType'    => ElementType::Entry,
+				'service'        => 'sections',
+				'method'         => 'getAllSections',
+				'elementGroupId' => "sectionId",
 			),
-			'categories' => array(
-				'service'           => 'categories',
-				'method'            => 'getAllGroups',
-				'elementType'       => ElementType::Category,
-				'elementGroupField' => "groupId",
+			'categories'       => array(
+				'elementType'    => ElementType::Category,
+				'service'        => 'categories',
+				'method'         => 'getAllGroups',
+				'elementGroupId' => "groupId",
 			)
 		);
 	}
