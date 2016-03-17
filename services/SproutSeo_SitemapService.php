@@ -9,24 +9,6 @@ namespace Craft;
 class SproutSeo_SitemapService extends BaseApplicationComponent
 {
 	/**
-	 * @var SproutSeo_SitemapRecord
-	 */
-	protected $sitemapRecord;
-
-	/**
-	 * @param null|SproutSeo_SitemapRecord $sitemapRecord
-	 */
-	public function __construct($sitemapRecord = null)
-	{
-		$this->sitemapRecord = $sitemapRecord;
-
-		if (is_null($this->sitemapRecord))
-		{
-			$this->sitemapRecord = SproutSeo_SitemapRecord::model();
-		}
-	}
-
-	/**
 	 * @param SproutSeo_SitemapModel $attributes
 	 *
 	 * @return mixed|null|string
@@ -114,8 +96,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 */
 	public function getSitemap(array $options = null)
 	{
-		$urls            = array();
-		$enabledSections = craft()->db->createCommand()
+		$urls = array();
+
+		$enabledSitemaps = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_sitemap')
 			->where('enabled = 1 and elementGroupId is not null')
@@ -123,15 +106,15 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
 
-		// Fetching settings for each enabled section in Sprout SEO
-		foreach ($enabledSections as $key => $sitemapSettings)
+		// Fetching settings for each enabled sitemap in Sprout SEO
+		foreach ($enabledSitemaps as $key => $sitemapSettings)
 		{
 			// Fetching all enabled locales
 			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
 				$elementInfo = $this->getElementInfo($sitemaps, $sitemapSettings['type']);
 
-				$elements  = array();
+				$elements = array();
 
 				if ($elementInfo != null)
 				{
@@ -267,81 +250,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return $siteMapData;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getAllSectionsWithUrls()
-	{
-		$sections = craft()->sections->getAllSections();
-
-		// Get all of the Sitemap Settings regarding our Sections
-		$sitemapSettings = $this->getSiteMapsByType("sections");
-
-		// Prepare a list of all Sections we can link to
-		foreach ($sections as $key => $section)
-		{
-			if ($section->hasUrls == 1)
-			{
-				$sectionData[$section->id] = $section->getAttributes();
-			}
-			else
-			{
-				// Remove Sections without URLs. They don't have links!
-				unset($sections[$key]);
-			}
-		}
-
-		// Prepare the data for our Sitemap Settings page
-		foreach ($sitemapSettings as $key => $settings)
-		{
-			// Add Sitemap data to any sectionIds that match
-			if (array_key_exists($settings['sectionId'], $sectionData))
-			{
-				$sectionData[$settings['sectionId']]['settings'] = $settings;
-			}
-		}
-
-		return $sectionData;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getAllCategoriesWithUrls()
-	{
-		$categories   = craft()->categories->getAllGroups();
-		$categoryData = array();
-
-		// Get all of the Sitemap Settings regarding our Sections
-		$sitemapSettings = $this->getSiteMapsByType("category");
-
-		// Prepare a list of all categories we can link to
-		foreach ($categories as $key => $category)
-		{
-			if ($category->hasUrls == 1)
-			{
-				$categoryData[$category->id] = $category->getAttributes();
-			}
-			else
-			{
-				// Remove Sections without URLs. They don't have links!
-				unset($categories[$key]);
-			}
-		}
-
-		// Prepare the data for our Sitemap Settings page
-		foreach ($sitemapSettings as $key => $settings)
-		{
-			// Add Sitemap data to any sectionIds that match
-			if (array_key_exists($settings['categoryGroupId'], $categoryData))
-			{
-				$categoryData[$settings['categoryGroupId']]['settings'] = $settings;
-			}
-		}
-
-		return $categoryData;
 	}
 
 	/**

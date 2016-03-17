@@ -135,36 +135,6 @@ class SproutSeoVariable
 	}
 
 	/**
-	 * Returns all sections for Sitemap settings
-	 *
-	 * @return array of Sections
-	 */
-	public function getAllSections()
-	{
-		return craft()->sections->getAllSections();
-	}
-
-	/**
-	 * Returns all sections with URLs for Sitemap settings
-	 *
-	 * @return array of Sections
-	 */
-	public function getAllSectionsWithUrls()
-	{
-		return sproutSeo()->sitemap->getAllSectionsWithUrls();
-	}
-
-	/**
-	 * Returns all categories with URLs for Sitemap settings
-	 *
-	 * @return array of Sections
-	 */
-	public function getAllCategoriesWithUrls()
-	{
-		return sproutSeo()->sitemap->getAllCategoriesWithUrls();
-	}
-
-	/**
 	 * Returns all custom pages for sitemap settings
 	 *
 	 * @return array of Sections
