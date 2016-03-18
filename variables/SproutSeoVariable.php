@@ -154,6 +154,16 @@ class SproutSeoVariable
 		return sproutSeo()->sitemap->getAllSitemaps();
 	}
 
+	/**
+	 * Returns all custom names
+	 *
+	 * @return array of Sections
+	 */
+	public function getAllCustomNames()
+	{
+		return sproutSeo()->sitemap->getAllCustomNames();
+	}
+
 	public function getDivider()
 	{
 		return craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;

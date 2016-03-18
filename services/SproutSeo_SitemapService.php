@@ -219,14 +219,12 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			{
 				$service = $settings['service'];
 				$method  = $settings['method'];
-				$name    = $settings['name'];
 				$class   = '\\Craft\\' . ucfirst($service) . "Service";
 
 				if (method_exists($class, $method))
 				{
 					$elements                    = craft()->{$service}->{$method}();
 					$sitemapGroupSettings[$type] = $elements;
-					$sitemapGroupSettings[$type]['customName'] = $name;
 				}
 				else
 				{
@@ -238,7 +236,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		// Prepare a list of all Sitemap Groups we can link to
 		foreach ($sitemapGroupSettings as $type => $sitemapGroups)
 		{
-			$siteMapData[$type]['customName'] = $sitemapGroups['customName'];
 			foreach ($sitemapGroups as $element)
 			{
 				if (isset($element->hasUrls) && $element->hasUrls == 1)
@@ -266,6 +263,34 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return $siteMapData;
+	}
+
+	/**
+	 * Get all customNames sitemaps registered on the registerSproutSeoSitemap hook
+	 *
+	 * @return array
+	 */
+	public function getAllCustomNames()
+	{
+		$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
+		$customNames = array();
+
+		foreach ($sitemaps as $sitemap)
+		{
+			foreach ($sitemap as $type => $settings)
+			{
+				if (isset($settings['name']) && $settings['name'] != null )
+				{
+					$customNames[$type] = $settings['name'];
+				}
+				else
+				{
+					$customNames[$type] = $type;
+				}
+			}
+		}
+
+		return $customNames;
 	}
 
 	/**

@@ -34,6 +34,7 @@
 
 {% set customPages = craft.sproutSeo.getAllCustomPages() %}
 {% set sitemaps    = craft.sproutSeo.getAllSitemaps() %}
+{% set customNames = craft.sproutSeo.getAllCustomNames() %}
 
 {% set extraPageHeaderHtml %}
 	<div class="buttons">
@@ -46,7 +47,7 @@
 	{% for type, elementGroups in sitemaps %}
 
 		<table class="data fullwidth sitemap-settings">
-			{%set name = elementGroups.customName is not null ? elementGroups.customName :  type %}
+			{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
 			<thead>
 				<th style="padding-left:9px;width:50%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
 				<th style="width:15%;">{{ "Priority"|t }} {% if loop.index == 1 %} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span>{% endif %}</th>
