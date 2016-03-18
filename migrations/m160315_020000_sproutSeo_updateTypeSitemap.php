@@ -16,12 +16,13 @@ class m160315_020000_sproutSeo_updateTypeSitemap extends BaseMigration
 		if (!craft()->db->columnExists($tableName, $columnName))
 		{
 
-			$this->addColumn($tableName, $columnName,
+			$this->addColumnAfter($tableName, $columnName,
 				array(
 					'column'   => ColumnType::Varchar,
 					'required' => false,
 					'default'  => null,
-				)
+				),
+				'sectionId'
 			);
 
 			SproutSeoPlugin::log("Created the column `$columnName` in `$tableName` .", LogLevel::Info, true);
