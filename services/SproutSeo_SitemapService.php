@@ -203,18 +203,27 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			foreach ($sitemap as $type => $settings)
 			{
-				$service = $settings['service'];
-				$method  = $settings['method'];
-				$class   = '\\Craft\\' . ucfirst($service) . "Service";
-
-				if (method_exists($class, $method))
+				if (isset($settings['service']) && isset($settings['method']))
 				{
-					$elements                    = craft()->{$service}->{$method}();
-					$sitemapGroupSettings[$type] = $elements;
+					$service = $settings['service'];
+					$method  = $settings['method'];
+					$class   = '\\Craft\\' . ucfirst($service) . "Service";
+
+					if (method_exists($class, $method))
+					{
+						$elements                    = craft()->{$service}->{$method}();
+						$sitemapGroupSettings[$type] = $elements;
+					}
+					else
+					{
+						SproutSeoPlugin::log("Can't access to $class", LogLevel::Info, true);
+					}
 				}
 				else
 				{
-					SproutSeoPlugin::log("Can't access to $class", LogLevel::Info, true);
+					SproutSeoPlugin::log(Craft::t("The sitemap for {sitemapType} does not have correct integration values for `service` and/or `method`", array(
+						'sitemapType' => $type
+					)), LogLevel::Warning, true);
 				}
 			}
 		}
