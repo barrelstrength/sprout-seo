@@ -3,7 +3,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m160315_020000_sproutSeo_updateTypeSitemap extends BaseMigration
+class m160315_020000_sproutSeo_addSitemapTypeColumn extends BaseMigration
 {
 	/**
 	 * @return bool
