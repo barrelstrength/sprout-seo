@@ -116,16 +116,14 @@
 			</tbody>
 		</table>
 		<br>
-		<hr>
+		
 	{% endfor %}
 
 	{% if customPages|length %}
 
-	<h2 class="first">{{ "Custom Pages"|t }} </h2>
-
 	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
 		<thead>
-			<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+			<th style="padding-left:9px;width:50%">{{ "Custom URLs"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
 			<th style="width:15%;">{{ "Priority"|t }}</th>
 			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
 			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
@@ -199,6 +197,15 @@
 		padding: 7px 5px;
 		background: #fff;
 		overflow: hidden;
+	}
+	.sitemap-settings {
+		margin-top: 30px;
+	}
+	.sitemap-settings:first-of-type {
+		margin-top: 0;
+	}
+	.sitemap-settings:last-of-type {
+		margin-bottom: 30px;
 	}
 	</style>
 
