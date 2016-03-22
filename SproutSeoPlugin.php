@@ -213,21 +213,21 @@ class SproutSeoPlugin extends BasePlugin
 				'elementType'    => ElementType::Entry,
 				'elementGroupId' => 'sectionId',
 				'service'        => 'sections',
-				'method'         => 'getAllSections',
+				'method'         => 'getAllSections'
 			),
 			'categories'       => array(
 				'name'           => 'Categories',
 				'elementType'    => ElementType::Category,
 				'elementGroupId' => 'groupId',
 				'service'        => 'categories',
-				'method'         => 'getAllGroups',
+				'method'         => 'getAllGroups'
 			),
 			'commerce_product' => array(
-				'name'           => 'Commerce Product',
+				'name'           => "Commerce Products",
 				'elementType'    => 'Commerce_Product',
 				'elementGroupId' => 'productTypeId',
 				'service'        => 'commerce_productTypes',
-				'method'         => 'getAllProductTypes',
+				'method'         => 'getAllProductTypes'
 			)
 		);
 	}
