@@ -31,7 +31,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '2.1.1';
+		return '2.2.0';
 	}
 
 	/**
@@ -201,6 +201,33 @@ class SproutSeoPlugin extends BasePlugin
 				'model'   => 'Craft\\SproutSeo_Redirect',
 				'method'  => 'saveRedirect',
 				'service' => 'sproutSeo_redirects',
+			)
+		);
+	}
+
+	public function registerSproutSeoSitemap()
+	{
+		return array(
+			'sections'         => array(
+				'name'           => 'Sections',
+				'elementType'    => ElementType::Entry,
+				'elementGroupId' => 'sectionId',
+				'service'        => 'sections',
+				'method'         => 'getAllSections'
+			),
+			'categories'       => array(
+				'name'           => 'Categories',
+				'elementType'    => ElementType::Category,
+				'elementGroupId' => 'groupId',
+				'service'        => 'categories',
+				'method'         => 'getAllGroups'
+			),
+			'commerce_product' => array(
+				'name'           => "Commerce Products",
+				'elementType'    => 'Commerce_Product',
+				'elementGroupId' => 'productTypeId',
+				'service'        => 'commerce_productTypes',
+				'method'         => 'getAllProductTypes'
 			)
 		);
 	}

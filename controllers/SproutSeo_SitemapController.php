@@ -33,19 +33,19 @@ class SproutSeo_SitemapController extends BaseController
 		$this->requireAjaxRequest();
 
 		$sitemapSettings['id']              = craft()->request->getPost('id');
-		$sitemapSettings['sectionId']       = craft()->request->getPost('sectionId');
+		$sitemapSettings['elementGroupId']  = craft()->request->getPost('elementGroupId');
 		$sitemapSettings['url']             = craft()->request->getPost('url');
 		$sitemapSettings['priority']        = craft()->request->getRequiredPost('priority');
 		$sitemapSettings['changeFrequency'] = craft()->request->getRequiredPost('changeFrequency');
 		$sitemapSettings['enabled']         = craft()->request->getRequiredPost('enabled');
 		$sitemapSettings['ping']            = craft()->request->getPost('ping');
-		$sitemapSettings['categoryGroupId'] = craft()->request->getPost('categoryGroupId');
 
 		$model = SproutSeo_SitemapModel::populateModel($sitemapSettings);
 
 		$lastInsertId = sproutSeo()->sitemap->saveSitemap($model);
 		$this->returnJson(array(
-				'lastInsertId' => $lastInsertId)
+				'lastInsertId' => $lastInsertId
+			)
 		);
 	}
 

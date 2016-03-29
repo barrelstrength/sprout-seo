@@ -11,8 +11,8 @@ class SproutSeo_SitemapRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'sectionId'       => array(AttributeType::Number),
-			'categoryGroupId' => array(AttributeType::Number),
+			'elementGroupId'  => array(AttributeType::Number),
+			'type'            => array(AttributeType::String),
 			'url'             => array(AttributeType::String),
 			'priority'        => array(
 				AttributeType::Number,

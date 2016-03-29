@@ -9,50 +9,28 @@ namespace Craft;
 class SproutSeo_SitemapService extends BaseApplicationComponent
 {
 	/**
-	 * @var SproutSeo_SitemapRecord
-	 */
-	protected $sitemapRecord;
-
-	/**
-	 * @param null|SproutSeo_SitemapRecord $sitemapRecord
-	 */
-	public function __construct($sitemapRecord = null)
-	{
-		$this->sitemapRecord = $sitemapRecord;
-
-		if (is_null($this->sitemapRecord))
-		{
-			$this->sitemapRecord = SproutSeo_SitemapRecord::model();
-		}
-	}
-
-	/**
 	 * @param SproutSeo_SitemapModel $attributes
 	 *
 	 * @return mixed|null|string
 	 */
 	public function saveSitemap(SproutSeo_SitemapModel $attributes)
 	{
-		$row   = array();
-		$isNew = false;
+		$row       = array();
+		$isNew     = false;
+		$sitemapId = null;
 
-		// ther first two letters allows to "s-" => section, "c-" => category
-		if (isset($attributes->id) && (substr($attributes->id, 2, 3) === "new"))
+		$keys = explode("-", $attributes->id);
+		$type = $keys[0];
+
+		if (isset($keys) && $keys[1] == "new")
 		{
 			$isNew = true;
 		}
 
-		// Check if the id is section or category
-		$sitemapId = $attributes->id;
-
-		if (!ctype_digit($sitemapId))
-		{
-			// remove "s-" or "c-"
-			$sitemapId = substr($sitemapId, 2);
-		}
-
 		if (!$isNew)
 		{
+			$sitemapId = $keys[1];
+
 			$row = craft()->db->createCommand()
 				->select('*')
 				->from('sproutseo_sitemap')
@@ -62,12 +40,12 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		$model = SproutSeo_SitemapModel::populateModel($row);
 
-		$model->id              = (!$isNew) ? $sitemapId : null;
-		$model->sectionId       = (isset($attributes->sectionId)) ? $attributes->sectionId : null;
-		$model->categoryGroupId = (isset($attributes->categoryGroupId)) ? $attributes->categoryGroupId : null;
+		$model->id              = $sitemapId;
+		$model->elementGroupId  = (isset($attributes->elementGroupId)) ? $attributes->elementGroupId : null;
 		$model->url             = (isset($attributes->url)) ? $attributes->url : null;
 		$model->priority        = $attributes->priority;
 		$model->changeFrequency = $attributes->changeFrequency;
+		$model->type            = $type != "customUrl" ? $type : null;
 		$model->enabled         = ($attributes->enabled == 'true') ? 1 : 0;
 		$model->ping            = ($attributes->ping == 'true') ? 1 : 0;
 		$model->dateUpdated     = DateTimeHelper::currentTimeForDb();
@@ -119,58 +97,55 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	public function getSitemap(array $options = null)
 	{
 		$urls            = array();
-		$enabledSections = craft()->db->createCommand()
+		$enabledSitemaps = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_sitemap')
-			->where('enabled = 1 and (sectionId is not null or categoryGroupId is not null)')
+			->where('enabled = 1 and elementGroupId is not null')
 			->queryAll();
 
+		$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
+
 		// Fetching settings for each enabled section in Sprout SEO
-		foreach ($enabledSections as $key => $sitemapSettings)
+		foreach ($enabledSitemaps as $key => $sitemapSettings)
 		{
 			// Fetching all enabled locales
 			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
-				$criteria = new \CDbCriteria();
+				$elementInfo = $this->getElementInfo($sitemaps, $sitemapSettings['type']);
 
-				if (isset($sitemapSettings['sectionId']))
+				$elements  = array();
+
+				if ($elementInfo != null)
 				{
-					$criteria  = craft()->elements->getCriteria(ElementType::Entry);
-					$criteria->sectionId = $sitemapSettings['sectionId'];
+					$elementGroupId = $elementInfo['elementGroupId'];
+
+					$criteria                    = craft()->elements->getCriteria($elementInfo['elementType']);
+					$criteria->{$elementGroupId} = $sitemapSettings['elementGroupId'];
+
+					$criteria->limit   = null;
+					$criteria->enabled = true;
+					$criteria->locale  = $locale->id;
+
+					$elements = $criteria->find();
 				}
-				else if (isset($sitemapSettings['categoryGroupId']))
-				{
-					$criteria  = craft()->elements->getCriteria(ElementType::Category);
-					$criteria->groupId = $sitemapSettings['categoryGroupId'];
-				}
 
-				$criteria->limit  = null;
-				$criteria->status = 'live';
-				$criteria->locale = $locale->id;
-
-				/**
-				 * @var $entries EntryModel[]
-				 *
-				 * Fetching all entries enabled for the current locale
-				 */
-				$entries = $criteria->find();
-
-				foreach ($entries as $entry)
+				foreach ($elements as $element)
 				{
 					// @todo ensure that this check/logging is absolutely necessary
 					// Catch null URLs, log them, and prevent them from being output to the sitemap
-					if (is_null($entry->getUrl()))
+					if (is_null($element->getUrl()))
 					{
-						SproutSeoPlugin::log('Entry ID ' . $entry->id . " does not have a URL.", LogLevel::Warning, true);
+						SproutSeoPlugin::log('Element ID ' . $element->id . " does not have a URL.", LogLevel::Warning, true);
+
 						continue;
 					}
 
 					// Adding each location indexed by its id
-					$urls[$entry->id][] = array(
-						'id'        => $entry->id,
-						'url'       => $entry->getUrl(),
+					$urls[$element->id][] = array(
+						'id'        => $element->id,
+						'url'       => $element->getUrl(),
 						'locale'    => $locale->id,
-						'modified'  => $entry->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+						'modified'  => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
 						'priority'  => $sitemapSettings['priority'],
 						'frequency' => $sitemapSettings['changeFrequency'],
 					);
@@ -214,101 +189,119 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get all sitemaps registered on the registerSproutSeoSitemap hook
+	 *
 	 * @return array
 	 */
-	public function getAllSectionsWithUrls()
+	public function getAllSitemaps()
 	{
-		$sections = craft()->sections->getAllSections();
+		$sitemaps             = craft()->plugins->call('registerSproutSeoSitemap');
+		$siteMapData          = array();
+		$sitemapGroupSettings = array();
 
-		// Get all of the Sitemap Settings regarding our Sections
-		$sitemapSettings = $this->getAllSiteMaps("section");
-
-		// Prepare a list of all Sections we can link to
-		foreach ($sections as $key => $section)
+		foreach ($sitemaps as $sitemap)
 		{
-			if ($section->hasUrls == 1)
+			foreach ($sitemap as $type => $settings)
 			{
-				$sectionData[$section->id] = $section->getAttributes();
+				if (isset($settings['service']) && isset($settings['method']))
+				{
+					$service = $settings['service'];
+					$method  = $settings['method'];
+					$class   = '\\Craft\\' . ucfirst($service) . "Service";
+
+					if (method_exists($class, $method))
+					{
+						$elements                    = craft()->{$service}->{$method}();
+						$sitemapGroupSettings[$type] = $elements;
+					}
+					else
+					{
+						SproutSeoPlugin::log("Can't access to $class", LogLevel::Info, true);
+					}
+				}
+				else
+				{
+					SproutSeoPlugin::log(Craft::t("The sitemap for {sitemapType} does not have correct integration values for `service` and/or `method`", array(
+						'sitemapType' => $type
+					)), LogLevel::Warning, true);
+				}
 			}
-			else
+		}
+
+		// Prepare a list of all Sitemap Groups we can link to
+		foreach ($sitemapGroupSettings as $type => $sitemapGroups)
+		{
+			foreach ($sitemapGroups as $element)
 			{
-				// Remove Sections without URLs. They don't have links!
-				unset($sections[$key]);
+				if (isset($element->hasUrls) && $element->hasUrls == 1)
+				{
+					$siteMapData[$type][$element->id] = $element->getAttributes();
+				}
 			}
 		}
 
 		// Prepare the data for our Sitemap Settings page
-		foreach ($sitemapSettings as $key => $settings)
+		foreach ($siteMapData as $type => $data)
 		{
-			// Add Sitemap data to any sectionIds that match
-			if (array_key_exists($settings['sectionId'], $sectionData))
+			$sitemapSettings = $this->getSiteMapsByType($type);
+
+			foreach ($sitemapSettings as $settings)
 			{
-				$sectionData[$settings['sectionId']]['settings'] = $settings;
+				// Add Sitemap data to any elementGroupId that match
+				$elementId = $settings['elementGroupId'];
+
+				if (array_key_exists($elementId, $data))
+				{
+					$siteMapData[$type][$elementId]['settings'] = $settings;
+				}
 			}
 		}
 
-		return $sectionData;
+		return $siteMapData;
 	}
 
 	/**
+	 * Get all customNames sitemaps registered on the registerSproutSeoSitemap hook
+	 *
 	 * @return array
 	 */
-	public function getAllCategoriesWithUrls()
+	public function getAllCustomNames()
 	{
-		$categories   = craft()->categories->getAllGroups();
-		$categoryData = array();
+		$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
+		$customNames = array();
 
-		// Get all of the Sitemap Settings regarding our Sections
-		$sitemapSettings = $this->getAllSiteMaps("category");
-
-		// Prepare a list of all categories we can link to
-		foreach ($categories as $key => $category)
+		foreach ($sitemaps as $sitemap)
 		{
-			if ($category->hasUrls == 1)
+			foreach ($sitemap as $type => $settings)
 			{
-					$categoryData[$category->id] = $category->getAttributes();
-			}
-			else
-			{
-				// Remove Sections without URLs. They don't have links!
-				unset($categories[$key]);
+				if (isset($settings['name']) && $settings['name'] != null )
+				{
+					$customNames[$type] = $settings['name'];
+				}
+				else
+				{
+					$customNames[$type] = $type;
+				}
 			}
 		}
 
-		// Prepare the data for our Sitemap Settings page
-		foreach ($sitemapSettings as $key => $settings)
-		{
-			// Add Sitemap data to any sectionIds that match
-			if (array_key_exists($settings['categoryGroupId'], $categoryData))
-			{
-				$categoryData[$settings['categoryGroupId']]['settings'] = $settings;
-			}
-		}
-
-		return $categoryData;
+		return $customNames;
 	}
 
 	/**
-	 * @param string type allowed: section|category
+	 * @param string $type
+	 *
 	 * @return array
 	 */
-	public function getAllSiteMaps($type)
+	public function getSiteMapsByType($type)
 	{
 		$sitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_sitemap');
+			->from('sproutseo_sitemap')
+			->where('elementGroupId iS NOT NULL and type = :type', array(':type' => $type))
+			->queryAll();
 
-		switch ($type) {
-			case 'section':
-				$sitemaps->where('sectionId IS NOT NULL');
-				break;
-
-			case 'category':
-				$sitemaps->where('categoryGroupId IS NOT NULL');
-				break;
-		}
-
-		return $sitemaps->queryAll();
+		return $sitemaps;
 	}
 
 	/**
@@ -378,5 +371,44 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return $structure;
+	}
+
+	/**
+	 * @param $sitemaps
+	 * @param $type string
+	 *
+	 * @return array
+	 * @internal param $sitemaps array from hook
+	 */
+	private function getElementInfo($sitemaps, $sitemapSettingsType)
+	{
+		$elementInfo = array();
+
+		foreach ($sitemaps as $sitemap)
+		{
+			foreach ($sitemap as $sitemapType => $settings)
+			{
+				if ($sitemapType == $sitemapSettingsType)
+				{
+					if (isset($settings['elementType']) && isset($settings['elementGroupId']))
+					{
+						$elementInfo = array(
+							"elementType"    => $settings['elementType'],
+							"elementGroupId" => $settings['elementGroupId'],
+						);
+
+						return $elementInfo;
+					}
+					else
+					{
+						SproutSeoPlugin::log(Craft::t("Could not retrieve element types. The sitemap for {sitemapType} does not have correct integration values for `elementType` and/or `elementGroupId`", array(
+							'sitemapType' => $sitemapType
+						)), LogLevel::Warning, true);
+					}
+				}
+			}
+		}
+
+		return $elementInfo;
 	}
 }
