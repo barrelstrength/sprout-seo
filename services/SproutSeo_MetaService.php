@@ -46,11 +46,11 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 
 		$variables['meta'] = $prioritizedMetaModel->getMetaTagData();
 
-		craft()->path->setTemplatesPath(craft()->path->getPluginsPath());
+		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
 		$output = craft()->templates->render('sproutseo/templates/_special/meta', $variables);
 
-		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
 		return $output;
 	}

@@ -172,9 +172,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$urls = $this->getLocalizedSitemapStructure($urls);
 
 		// Rendering the template and passing in received options
-		$path = craft()->path->getTemplatesPath();
+		$path = craft()->templates->getTemplatesPath();
 
-		craft()->path->setTemplatesPath(dirname(__FILE__) . '/../templates/');
+		craft()->templates->setTemplatesPath(dirname(__FILE__) . '/../templates/');
 
 		$source = craft()->templates->render(
 			'_special/sitemap', array(
