@@ -111,6 +111,13 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	public function getInputHtml($name, $value)
 	{
 		$entryId = craft()->request->getSegment(3);
+
+		// set support for craft commerce
+		if (craft()->request->getSegment(1) == 'commerce')
+		{
+			$entryId = craft()->request->getSegment(4);
+		}
+
 		$locale  = $this->element->locale;
 
 		$variables['values'] = sproutSeo()->overrides->getTwitterCardFieldByEntryId($entryId, $locale);
