@@ -110,13 +110,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
-		$entryId = craft()->request->getSegment(3);
-
-		// set support for craft commerce
-		if (craft()->request->getSegment(1) == 'commerce')
-		{
-			$entryId = craft()->request->getSegment(4);
-		}
+		$entryId = $this->element->id;
 
 		$locale  = $this->element->locale;
 
