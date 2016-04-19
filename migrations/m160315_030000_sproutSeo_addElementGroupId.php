@@ -31,6 +31,9 @@ class m160315_030000_sproutSeo_addElementGroupId extends BaseMigration
 
 		if (craft()->db->columnExists($tableName, 'sectionId') && !craft()->db->columnExists($tableName, $renameColumn))
 		{
+			// Solve issues on old version of mysql (can't rename columns with fk)
+			MigrationHelper::dropForeignKeyIfExists($tableName, array('sectionId'));
+
 			$this->renameColumn($tableName, 'sectionId', $renameColumn);
 
 			SproutSeoPlugin::log("Renamed the column sectionId to `$renameColumn`  in `$tableName` .", LogLevel::Info, true);
