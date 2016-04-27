@@ -1,3 +1,11 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Plugin Name"|t %}
+
+{% set settings = craft.sproutSeo.getSettings() %}
+
+{% set content %}
 
 {{ forms.textField({
 	label: "Plugin Name"|t,
@@ -9,3 +17,5 @@
 	first: true,
 	errors: ''
 }) }}
+
+{% endset %}

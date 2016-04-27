@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_DefaultsController extends BaseController
+class SproutSeo_MetaDefaultsController extends BaseController
 {
 
 	public function actionEditDefault()
@@ -42,7 +42,7 @@ class SproutSeo_DefaultsController extends BaseController
 		// Set elementType
 		$variables['elementType'] = craft()->elements->getElementType(ElementType::Asset);
 
-		$this->renderTemplate('sproutSeo/defaults/_edit', $variables);
+		$this->renderTemplate('sproutseo/meta/_edit', $variables);
 	}
 
 	public function actionSaveDefault()

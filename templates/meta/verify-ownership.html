@@ -1,0 +1,40 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Verify Ownership"|t %}
+
+{% set content %}
+
+	{{ forms.textField({
+		label: "Alexa Verification ID"|t,
+		name: 'sproutseo_meta[verification][alexa]',
+		value: '',
+		errors: '',
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Bing Webmaster Tools"|t,
+		name: 'sproutseo_meta[verification][bing]',
+		value: '',
+		errors: '',
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Google Search Console"|t,
+		name: 'sproutseo_meta[verification][google]',
+		value: '',
+		errors: '',
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Yandex Webmaster Tools"|t,
+		name: 'sproutseo_meta[verification][yandex]',
+		value: '',
+		errors: '',
+		required: true
+	}) }}
+
+{% endset %}

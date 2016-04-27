@@ -1,9 +1,13 @@
 {% extends "_layouts/elementindex" %}
 
 {% set subnav = {
-	defaults: {
-		label: "Defaults"|t,
-		url: cpUrl('sproutseo/defaults')
+	meta: {
+		label: "General"|t,
+		url: cpUrl('sproutseo/meta')
+	},
+	structureddata: {
+		label: "Structured Data"|t,
+		url: cpUrl('sproutseo/schema')
 	},
 	sitemap: {
 		label: "Sitemap"|t,
@@ -15,13 +19,13 @@
 	}
 } %}
 
-{% if currentUser.can('editSproutSeoSettings') %}
-	{% set subnav = subnav|merge({
-		settings: {
-			label: "Settings"|t,
-			url: url('sproutseo/settings/general')
-		}
-	}) %}
-{% endif %}
+{#{% if currentUser.can('editSproutSeoSettings') %}#}
+	{#{% set subnav = subnav|merge({#}
+		{#settings: {#}
+			{#label: "Settings"|t,#}
+			{#url: url('sproutseo/settings/general')#}
+		{#}#}
+	{#}) %}#}
+{#{% endif %}#}
 
 {% set selectedSubnavItem = craft.request.segment(2) ? craft.request.segment(2) : 'defaults' %}

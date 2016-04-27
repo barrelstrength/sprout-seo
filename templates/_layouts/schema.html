@@ -1,0 +1,33 @@
+{% extends "sproutseo/_layouts/base" %}
+
+{% if title is not defined %}
+	{% set title = docTitle ?? "General"|t %}
+{% endif %}
+
+{% set navItems = {
+	'overview': { title: "Overview"|t },
+
+	'content-heading': { heading: "Knowledge Graph"|t },
+	'content': { title: "Content"|t },
+
+	'schema-heading': { heading: "Structured Data"|t },
+	'schema': { title: "Schema"|t }
+
+} %}
+
+{% set selectedItem = craft.request.getSegment(3) %}
+{% set docTitle = navItems[selectedItem].title~' - '~title %}
+
+{% block sidebar %}
+	<nav>
+		<ul>
+			{% for id, item in navItems %}
+				{% if item.heading is defined %}
+					<li class="heading"><span>{{ item.heading }}</span></li>
+				{% else %}
+					<li><a href="{{ url('sproutseo/schema/'~id) }}"{% if id == selectedItem %} class="sel"{% endif %}>{{ item.title }}</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</nav>
+{% endblock %}

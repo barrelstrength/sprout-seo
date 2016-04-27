@@ -1,0 +1,60 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Meta Settings"|t %}
+
+{% set settings = craft.sproutSeo.getSettings() %}
+
+{% set content %}
+
+  {{ forms.selectField({
+    label: 'Select the character that will be used between Title segments'|t,
+    instructions: "This character will be used in between your title segments, i.e. Blog Post Title – Website Name."|t,
+    id: 'seoDivider',
+    name: 'seoDivider',
+    options: {
+      1 : {
+        'value' : '-',
+        'label' : 'Entry Title - ' ~ siteName | t
+      },
+      2 : {
+        'value' : '•',
+        'label' : 'Entry Title • ' ~ siteName | t
+      },
+      3 : {
+        'value' : '|',
+        'label' : 'Entry Title | ' ~ siteName | t
+      },
+      4 : {
+        'value' : '/',
+        'label' : 'Entry Title / ' ~ siteName | t
+      },
+      5 : {
+        'value' : ':',
+        'label' : 'Entry Title : ' ~ siteName | t
+      }
+    },
+    value : settings.seoDivider,
+    first: true,
+    errors: ''
+  }) }}
+
+  {{ forms.lightswitchField({
+    label: "Complicate Things"|t,
+    instructions: "By default, Sprout SEO uses the same Title, Description, and Image fields for Basic Meta, Open Graph Meta, and Twitter Meta. Unless you need to be very specific, this is probably ideal and can save you time and simplify the interface and simplify the complexity of the code. Enable this setting if you really feel your situation is so special, and that it's worth the time and additional complexity, to manage unique meta data across all these platforms.",
+    name: 'complicateThings',
+    on:   false,
+  }) }}
+
+  <h3>Things we should do to simplify things</h3>
+  <ul class="bullets">
+    <li>Just have one field for meta</li>
+    <li>Use the same value for the Title, Description, and Image field for Basic, Twitter, and Facebook meta</li>
+    <li>Default to hidden the ability to set a custom Title on the field type. We should assume the Element Title field will be used as the Title across all platforms unless overidden.</li>
+    <li>Make smart decisions behind the scenes about canonical URLs</li>
+    <li>Make smart decisions behind the scenes about multi-lingual content (but also know some people might be using this as multi-site)</li>
+    <li>Let user set default Facebook and Twitter Card types, we might be able to do all this stuff out of the box way better, and only let people with more custom needs override things.</li>
+    <li>Reuse top-level website info from the Knowledge Graph for defaults in Facebook and Twitter for things like Facebook Site Name or Twitter Content Creator, etc.</li>
+  </ul>
+
+{% endset %}

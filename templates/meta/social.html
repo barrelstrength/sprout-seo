@@ -1,0 +1,93 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Social Profiles"|t %}
+
+{% set content %}
+
+	<p><a href="https://developers.google.com/structured-data/customize/social-profiles" target="_blank">Social Profile Links</a> are for currently supported social profiles supported in the Google Knowledge panel. Google states in allows other profile links too, so maybe make this an arbitrary listing, or a dropdown of the supported ones and an other field that allows you to generate your own links. We just need the links in the code for the "sameAs" dictionary.</p>
+
+	<p>Let these be arbitrary, but have a way to pre-define popular ones and be able to update which ones we set as defaults for future releases, so we can adjust with changing trends.</p>
+
+	{{ forms.textField({
+		label: "Facebook"|t,
+		instructions: "Social URL "|t,
+		name: 'sproutseo_schema[facebook]',
+		value: '',
+		errors: '',
+		first: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Twitter"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[twitter]',
+		value: '',
+		errors: ''
+	}) }}
+
+	{{ forms.textField({
+		label: "Google+"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[googlePlus]',
+		value: '',
+		errors: ''
+	}) }}
+
+	{{ forms.textField({
+		label: "Instagram"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[instagram]',
+		value: '',
+		errors: ''
+	}) }}
+
+	{{ forms.textField({
+		label: "YouTube"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[youtube]',
+		value: '',
+		errors: ''
+	}) }}
+
+	{{ forms.textField({
+		label: "LinkedIn"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[linkedin]',
+		value: '',
+		errors: ''
+	}) }}
+
+	{{ forms.textField({
+		label: "Myspace"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[myspace]',
+		value: '',
+		errors: ''
+	}) }}
+
+	{{ forms.textField({
+		label: "Pinterest"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[pinterest]',
+		value: '',
+		errors: ''
+	}) }}
+
+	{{ forms.textField({
+		label: "SoundCloud"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[soundcloud]',
+		value: '',
+		errors: ''
+	}) }}
+
+	{{ forms.textField({
+		label: "Tumblr"|t,
+		instructions: "Social URL"|t,
+		name: 'sproutseo_schema[tumblr]',
+		value: '',
+		errors: ''
+	}) }}
+
+{% endset %}

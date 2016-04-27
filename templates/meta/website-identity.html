@@ -1,0 +1,34 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+
+{% set content %}
+
+	<p>Allow people to set an organization or a Person here at the very least. Could also be a place I guess or some other entity. Should probably default to what we can setup as default schema Organization, Person</p>
+
+	{{ forms.textField({
+		label: "Name"|t,
+		instructions: "Name of your organization"|t,
+		name: 'sproutseo_schema[name]',
+		value: '',
+		errors: '',
+		first: true,
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "URL"|t,
+		instructions: "Canonical URL of your organization"|t,
+		name: 'sproutseo_schema[url]',
+		value: '',
+		errors: '',
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Logo"|t,
+		name: 'sproutseo_schema[logo]',
+		value: '',
+		errors: ''
+	}) }}
+
+{% endset %}

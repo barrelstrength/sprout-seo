@@ -5,28 +5,34 @@
 {% endif %}
 
 {% set subnav = {
-    defaults: {
-      label: "Defaults"|t,
-      url: cpUrl('sproutseo/defaults')
-    },
-    sitemap: {
-      label: "Sitemap"|t,
-      url: cpUrl('sproutseo/sitemap'),
-    },
-		redirects: {
-      label: "Redirects"|t,
-      url: cpUrl('sproutseo/redirects'),
-    }
+	meta: {
+    label: "General"|t,
+    url: cpUrl('sproutseo/meta/overview')
+  },
+	schema: {
+		label: "Structured Data"|t,
+		url: cpUrl('sproutseo/schema/overview')
+	},
+  sitemap: {
+    label: "Sitemap"|t,
+    url: cpUrl('sproutseo/sitemap/overview'),
+  },
+	redirects: {
+    label: "Redirects"|t,
+    url: cpUrl('sproutseo/redirects'),
+  }
 } %}
 
-{% if currentUser.can('editSproutSeoSettings') %}
-	{% set subnav = subnav|merge({
-		settings: {
-			label: "Settings"|t,
-			url: url('sproutseo/settings/general')
-		}
-	}) %}
-{% endif %}
+{#
+Make sure new settings areas have permissions too..
+{% if currentUser.can('editSproutSeoSettings') %}#}
+	{#{% set subnav = subnav|merge({#}
+		{#settings: {#}
+			{#label: "Settings"|t,#}
+			{#url: url('sproutseo/settings/general')#}
+		{#}#}
+	{#}) %}#}
+{#{% endif %}#}
 
 {% set selectedSubnavItem = craft.request.segment(2) ? craft.request.segment(2) : 'defaults' %}
 

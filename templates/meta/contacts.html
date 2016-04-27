@@ -1,0 +1,56 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Contacts"|t %}
+
+{% set content %}
+
+	<table id="sproutseo-schema-contacts" class="editable">
+		<thead>
+		<tr>
+			<th scope="col" class="header">Column Heading</th>
+			<th scope="col" class="header">Handle</th>
+			<th scope="col" class="header">Width</th>
+			<th scope="col" class="header">Type</th>
+			<th class="header" colspan="2"></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr data-id="col1">
+			<td class="textual "><textarea name="types[Table][columns][col1][heading]" rows="1" style="min-height: 46px;">Single Line</textarea></td>
+			<td class="textual code"><textarea name="types[Table][columns][col1][handle]" rows="1" style="min-height: 46px;">singleLine</textarea></td>
+			<td class="textual code" width="50"><textarea name="types[Table][columns][col1][width]" rows="1" style="min-height: 46px;"></textarea></td>
+			<td class=" thin"><div class="select small">
+					<select name="types[Table][columns][col1][type]">
+						<option value="singleline" selected="">Single-line Text</option>
+						<option value="multiline">Multi-line text</option>
+						<option value="number">Number</option>
+						<option value="checkbox">Checkbox</option>
+					</select>
+				</div>
+			</td>
+			<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+			<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+		</tr>
+		</tbody>
+	</table>
+	<div class="btn add icon" tabindex="0">Add a column</div>
+
+{% endset %}
+
+{% includejs %}
+	(function() {
+
+		var tableId = 'sproutseo-schema-contacts';
+		var baseName = 'Table';
+		var columns = 2;
+		var settings = {
+			rowIdPrefix: 'col',
+			onAddRow: $.proxy(this, 'onAddColumn'),
+			onDeleteRow: $.proxy(this, 'reconstructDefaultsTable')
+		}
+
+		columnsTable = new Craft.EditableTable(tableId, baseName, columns, settings);
+
+	})();
+{% endincludejs %}

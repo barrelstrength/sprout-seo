@@ -1,0 +1,109 @@
+{% extends "sproutseo/_layouts/schema" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Structured Data"|t %}
+
+{% set schemaHandle = craft.request.getSegment(3) ?? 'schema' %}
+{% set selectedSidebarItem = schemaHandle %}
+
+{% set content %}
+
+	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
+		<thead>
+			<th>{{ "Name"|t }}</th>
+			<th>{{ "Content Type"|t }}</th>
+			<th>{{ "Schema Type"|t }}</th>
+			<th>{{ "Valid" }}</th>
+			<th class="thin"></th>
+		</thead>
+		<tbody>
+
+			<tr>
+				<td>
+					<a href="">Website Identity</a>
+				</td>
+				<td>
+					Custom
+				</td>
+				<td>
+					Mixed
+				</td>
+				<td>
+					<span data-icon="check" title="Yes"></span>
+				</td>
+				<td>
+					<a class="delete icon" title="Delete"></a>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<a href="">Person</a>
+				</td>
+				<td>
+					Users
+				</td>
+				<td>
+					Person
+				</td>
+				<td>
+					<span data-icon="error" title="No"></span>
+				</td>
+				<td>
+					<a class="delete icon" title="Delete"></a>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+
+	<div class="buttons">
+		<a class="btn submit add icon" href="{{ url('sproutseo/meta/new') }}">{{ "New Schema"|t }}</a>
+	</div>
+
+	<hr>
+
+	{% set schemaOptions = {
+		'value1': 'Creative Work',
+		'value2': 'Person',
+		'value3': 'Place'
+	} %}
+
+	{{ forms.selectField({
+		label: "Schema Type",
+		name: 'schemaOptions',
+		options: schemaOptions,
+		values: ''
+	}) }}
+
+	{% set elementOptions = {
+		'value1': 'Entries',
+		'value2': 'Products',
+		'value3': 'Users'
+	} %}
+
+	{{ forms.selectField({
+		label: "Content Type",
+		name: 'elementOptions',
+		options: elementOptions,
+		values: ''
+	}) }}
+
+	{{ forms.textareaField({
+		label: "Structured Data Map"|t,
+		instructions: "Map your schema to your content."|t,
+		id: 'schemaMap',
+		class: 'nicetext fullwidth code',
+		name: 'schemaMap',
+		value: '{
+	"name" : "{{ object.title }}",
+	"url" : "members/{{ object.id }}",
+	"sameAs" : [
+		"{{ object.matrixField.blockType.fieldHandle :: repeat }}",
+	]
+}',
+		errors: '',
+		rows: 15
+	}) }}
+
+{% endset %}

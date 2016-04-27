@@ -1,13 +1,15 @@
-{% extends "sproutseo/_layouts/base" %}
+{% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = "Defaults"|t %}
+{% set title = "Meta Templates"|t %}
 
 {% set defaults = craft.sproutSeo.getDefaults %}
 
+{% set selectedSidebarItem = craft.request.getSegment(2) %}
+
 {% set extraPageHeaderHtml %}
 	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('sproutseo/defaults/new') }}">{{ "New Default"|t }}</a>
+		<a class="btn submit add icon" href="{{ url('sproutseo/meta/new') }}">{{ "New Meta"|t }}</a>
 	</div>
 {% endset %}
 
@@ -21,15 +23,16 @@
 
 	{% if defaults is empty %}
 
-		<p>{{ "Create your first meta-data default."|t }}</p>
+		<p>{{ "Create your first meta template."|t }}</p>
 
 	{% else %}
 
-		<table class="data" id="defaults">
+		<table class="data" id="metaTemplate">
 			<thead>
 				<th width="15%">{{ "Name"|t }}</th>
 				<th width="15%">{{ "Handle"|t }}</th>
-				<th width="70%"></th>
+				<th width="5%">{{ "Global Fallback"|t }}</th>
+				<th width="65%"></th>
 				<td class="thin"></td>
 			</thead>
 
@@ -37,15 +40,16 @@
 
 			<tr id="results" data-id="{{ default.id }}" data-name="{{ default.name|t }}">
 				<td>
-					<a href="{{ url('sproutseo/defaults/' ~ default.id) }}">
-						{% if default.globalFallback %}
-						<span data-icon="home" title="{{ "Homepage"|t }}"></span>
-						{% endif %}
-
-						<strong>{{ default.name }}</strong>
+					<a href="{{ url('sproutseo/meta/' ~ default.id) }}">
+						{{ default.name }}
 					</a>
 				</td>
 				<td><code>{{ default.handle }}</code></td>
+				<td>
+					{% if default.globalFallback %}
+						<span data-icon="check" title="{{ 'Yes'|t }}"></span>
+					{% endif %}
+				</td>
 				<td class="included-fields">
 
 				</td>
@@ -64,14 +68,14 @@
 
 {% set js %}
 	new Craft.AdminTable({
-		tableSelector: '#defaults',
-		deleteAction: 'sproutSeo/defaults/deleteDefaults',
+		tableSelector: '#metaTemplate',
+		deleteAction: 'sproutSeo/metaDefaults/deleteDefaults',
 		onDeleteObject: function(id)
 		{
-			if($('#defaults').find('tbody').find('tr').size() == 0)
+			if($('#metaTemplate').find('tbody').find('tr').size() == 0)
 			{
-				$('#defaults').show();
-				$('#defaults').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4">{{ "No results found."|t
+				$('#metaTemplate').show();
+				$('#metaTemplate').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4">{{ "No results found."|t
 		}}</td></tr>');
 			}
 		}

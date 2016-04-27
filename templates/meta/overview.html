@@ -1,0 +1,36 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+
+{% set defaults = craft.sproutSeo.getDefaults %}
+
+{% set selectedSidebarItem = craft.request.getSegment(2) %}
+
+{% set extraPageHeaderHtml %}
+	<div class="buttons">
+		<a class="btn submit add icon" href="{{ url('sproutseo/meta/new') }}">{{ "New Meta"|t }}</a>
+	</div>
+{% endset %}
+
+{% set content %}
+
+	<h2>Sprout SEO Overview</h2>
+
+{% endset %}
+
+{% set js %}
+	new Craft.AdminTable({
+		tableSelector: '#metaTemplate',
+		deleteAction: 'sproutSeo/metaDefaults/deleteDefaults',
+		onDeleteObject: function(id)
+		{
+			if($('#metaTemplate').find('tbody').find('tr').size() == 0)
+			{
+				$('#metaTemplate').show();
+				$('#metaTemplate').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4">{{ "No results found."|t
+		}}</td></tr>');
+			}
+		}
+	});
+
+{% endset %}
+{% includeJs js %}

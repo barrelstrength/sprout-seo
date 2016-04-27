@@ -168,4 +168,9 @@ class SproutSeoVariable
 	{
 		return craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 	}
+
+	public function getSettings()
+	{
+		return craft()->plugins->getPlugin('sproutseo')->getSettings();
+	}
 }
