@@ -117,6 +117,12 @@ class SproutSeo_MetaService extends BaseApplicationComponent
 			{
 				$prioritizedMetaModel[$key] = $prioritizedMetaModel->getAttribute($key);
 			}
+
+			// Make sure all our strings are trimmed
+			if (is_string($prioritizedMetaModel[$key]))
+			{
+				$prioritizedMetaModel[$key] = trim($prioritizedMetaModel[$key]);
+			}
 		}
 
 		// @todo - reorganize how this stuff works / robots need love.
