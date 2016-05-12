@@ -23,12 +23,12 @@ class SproutSeo_SettingsController extends BaseController
 		$settings = JsonHelper::decode($settings);
 		$settingsModel->setAttributes($settings);
 
-		$variables['settings'] = $settingsModel;
-
-		$variables['settingsTemplate'] = craft()->request->getSegment(3);
+		$settingsTemplate = craft()->request->getSegment(3);
 
 		// Load a particular template and with all of the variables you've created
-		$this->renderTemplate('sproutseo/settings', $variables);
+		$this->renderTemplate('sproutseo/settings/' . $settingsTemplate, array(
+			'settings' => $settingsModel
+		));
 	}
 
 	public function actionSaveSettings()
