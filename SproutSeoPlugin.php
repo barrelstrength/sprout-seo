@@ -112,19 +112,15 @@ class SproutSeoPlugin extends BasePlugin
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutseo')
 		{
-			// @todo Craft 3 - update to use info from config.json
-			craft()->templates->includeJsResource('sproutseo/js/brand.js');
-			craft()->templates->includeJs("
-				sproutFormsBrand = new Craft.SproutBrand();
-				sproutFormsBrand.displayFooter({
-					pluginName: 'Sprout SEO',
-					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo',
-					pluginVersion: '" . $this->getVersion() . "',
-					pluginDescription: '" . $this->getDescription() . "',
-					developerName: '(Barrel Strength)',
-					developerUrl: '" . $this->getDeveloperUrl() . "'
-				});
-			");
+			craft()->templates->includeJsResource('sproutseo/js/SproutBase.js');
+			craft()->templates->includeJs("new Craft.SproutBase({
+				pluginName: 'Sprout SEO',
+				pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo',
+				pluginVersion: '" . $this->getVersion() . "',
+				pluginDescription: '" . $this->getDescription() . "',
+				developerName: '(Barrel Strength)',
+				developerUrl: '" . $this->getDeveloperUrl() . "'
+			})");
 		}
 	}
 
@@ -155,6 +151,9 @@ class SproutSeoPlugin extends BasePlugin
 			'sproutseo/meta/(?P<defaultId>\d+)'       => array(
 				'action' => 'sproutSeo/metaDefaults/editDefault'
 			),
+
+			'sproutseo/schema/new'                      =>
+			'sproutseo/schema/_edit',
 
 			'sproutseo/schema/(.*)' => array(
 				'action' => 'sproutSeo/schema/schemaEditTemplate'
@@ -194,6 +193,18 @@ class SproutSeoPlugin extends BasePlugin
 				'label' => Craft::t('Edit Settings')
 			)
 		);
+	}
+
+	/**
+	 * Add any Twig extensions.
+	 *
+	 * @return mixed
+	 */
+	public function addTwigExtension()
+	{
+		Craft::import('plugins.sproutseo.twigextensions.SproutSeoTwigExtension');
+
+		return new SproutSeoTwigExtension();
 	}
 
 	/**
