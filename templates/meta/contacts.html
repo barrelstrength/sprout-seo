@@ -1,56 +1,123 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
+{% import "sproutseo/_components/selectOther" as sproutFields %}
 
-{% set title = "Contacts"|t %}
+{% set title = "Contact Points"|t %}
+
+{% set settings = craft.sproutSeo.getSettings() %}
 
 {% set content %}
 
-	<table id="sproutseo-schema-contacts" class="editable">
+	{% set cols = [
+		{
+			type: 'selectOther',
+			heading: 'Contact Type',
+			options: {
+				'': 'Select Type...',
+				'customer service': 'Customer Service',
+				'technical support': 'Technical Support',
+				'billing support': 'Billing Support',
+				'bill payment': 'Bill Payment',
+				'sales': 'Sales',
+				'reservations': 'Reservations',
+				'credit card support': 'Credit Card Support',
+				'emergency': 'Emergency',
+				'baggage tracking': 'Baggage Tracking',
+				'roadside assistance': 'Roadside Assistance',
+				'package tracking': 'Package Tracking',
+				'custom': 'Custom'
+			}
+		},
+		{
+			type: 'textual',
+			heading: 'Telephone'
+		}
+	] %}
+
+
+	<div class="field" style="margin-bottom:0;">
+		<div class="heading">
+			<label>Contacts</label>
+			<p class="instructions">Add however many contact points you want.</p>
+		</div>
+	</div>
+
+	<table id="sproutseo-schema-contacts" class="data fullwidth">
 		<thead>
 		<tr>
-			<th scope="col" class="header">Column Heading</th>
-			<th scope="col" class="header">Handle</th>
-			<th scope="col" class="header">Width</th>
-			<th scope="col" class="header">Type</th>
-			<th class="header" colspan="2"></th>
+			{% for col in cols %}
+				<th>{{ col.heading }}</th>
+			{% endfor %}
+			<th class="thin"></th>
+			<th class="thin"></th>
 		</tr>
 		</thead>
 		<tbody>
-		<tr data-id="col1">
-			<td class="textual "><textarea name="types[Table][columns][col1][heading]" rows="1" style="min-height: 46px;">Single Line</textarea></td>
-			<td class="textual code"><textarea name="types[Table][columns][col1][handle]" rows="1" style="min-height: 46px;">singleLine</textarea></td>
-			<td class="textual code" width="50"><textarea name="types[Table][columns][col1][width]" rows="1" style="min-height: 46px;"></textarea></td>
-			<td class=" thin"><div class="select small">
-					<select name="types[Table][columns][col1][type]">
-						<option value="singleline" selected="">Single-line Text</option>
-						<option value="multiline">Multi-line text</option>
-						<option value="number">Number</option>
-						<option value="checkbox">Checkbox</option>
-					</select>
-				</div>
-			</td>
-			<td class="thin action"><a class="move icon" title="Reorder"></a></td>
-			<td class="thin action"><a class="delete icon" title="Delete"></a></td>
-		</tr>
+			<tr data-id="1">
+				{% for col in cols %}
+				<td>
+
+					{% if col.type == 'selectOther' %}
+
+						<div class="field sprout-selectother">
+							{{ sproutFields.selectOther({
+								name: 'sproutseo[schema][contactType]',
+								options: col.options,
+								values: '',
+								otherPlaceholderText: 'Custom Type'|t
+							}) }}
+						</div>
+
+					{% endif %}
+
+					{% if col.type == 'textual' %}
+
+						{{ forms.text({
+							name: 'sproutseo[schema][telephone]',
+							value: '',
+							errors: ''
+						}) }}
+
+					{% endif %}
+
+				</td>
+				{% endfor %}
+				<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+				<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+			</tr>
 		</tbody>
 	</table>
-	<div class="btn add icon" tabindex="0">Add a column</div>
+
+	<div class="buttons">
+		<div class="btn add icon small" tabindex="0">Add a Contact</div>
+	</div>
+
+	<hr>
+
+	<div class="buttons">
+		<div class="btn submit" tabindex="0">Save</div>
+	</div>
 
 {% endset %}
 
+{% includeJsResource 'sproutseo/js/SproutFields.js' %}
+{% includeJsResource 'sproutseo/js/EditableTable.js' %}
+
 {% includejs %}
-	(function() {
 
-		var tableId = 'sproutseo-schema-contacts';
-		var baseName = 'Table';
-		var columns = 2;
-		var settings = {
-			rowIdPrefix: 'col',
-			onAddRow: $.proxy(this, 'onAddColumn'),
-			onDeleteRow: $.proxy(this, 'reconstructDefaultsTable')
-		}
+(function() {
 
-		columnsTable = new Craft.EditableTable(tableId, baseName, columns, settings);
+	var tableId = 'sproutseo-schema-contacts';
+	var baseName = 'sproutseo';
+	var columns = {{ cols|json_encode|raw }};
+	var settings = {
+		rowIdPrefix: 'col',
+		onAddRow: $.proxy(this, 'onAddColumn'),
+		onDeleteRow: $.proxy(this, 'reconstructDefaultsTable')
+	}
 
-	})();
+	new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
+
+})();
+
 {% endincludejs %}

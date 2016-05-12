@@ -31,8 +31,9 @@
 			<thead>
 				<th width="15%">{{ "Name"|t }}</th>
 				<th width="15%">{{ "Handle"|t }}</th>
+				<th width="15%">{{ "URL Format"|t }}</th>
 				<th width="5%">{{ "Global Fallback"|t }}</th>
-				<th width="65%"></th>
+				<th width="50%"></th>
 				<td class="thin"></td>
 			</thead>
 
@@ -45,6 +46,7 @@
 					</a>
 				</td>
 				<td><code>{{ default.handle }}</code></td>
+				<td><code></code></td>
 				<td>
 					{% if default.globalFallback %}
 						<span data-icon="check" title="{{ 'Yes'|t }}"></span>

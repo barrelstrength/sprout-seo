@@ -129,13 +129,18 @@
 			{% set globalFallbackId = craft.sproutSeo.globalFallbackId() %}
 
 			{% if not globalFallbackId or (globalFallbackId == defaultId) %}
-				{{ forms.checkboxField({
-					label: "Use this default as my global fallback"|t,
-					id: 'global-fallback',
+				{{ forms.lightswitchField({
+					label: "Global Meta <span class='info'>Use this default as my global fallback</span>"|t,
 					name: 'sproutseo_fields[globalFallback]',
-					checked: default.globalFallback
+					on: default.globalFallback
 				}) }}
 			{% endif %}
+
+			{{ forms.lightswitchField({
+				label: "Site Name <span class='info'>Append Site Name '" ~ siteName ~ "' to all Titles</span>"|t,
+				name: 'sproutseo_fields[appendSiteName]',
+				on: default.appendSiteName
+			}) }}
 
 			<div class="field" id="enabled-field">
 				<div class="heading"></div>

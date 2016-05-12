@@ -1,12 +1,105 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
+{% import "sproutseo/_components/selectOther" as sproutFields %}
 
 {% set title = "Verify Ownership"|t %}
 
 {% set content %}
 
+	{% set cols = [
+		{
+			type: 'selectOther',
+			heading: 'Name',
+			options: {
+				'': 'Select Type...',
+				'alexaVerificationId': 'Alexa Verification ID',
+				'bingWebmasterTools': 'Bing Webmaster Tools',
+				'googleSearchConsole': 'Google Search Console',
+				'yandexWebmasterTools': 'Yandex Webmaster Tools',
+				'facebookAppId': 'Facebook App ID',
+				'pinterest': 'Pinterest',
+				'custom': 'Custom'
+			}
+		},
+		{
+			type: 'textual',
+			heading: 'Meta Tag Name'
+		},
+		{
+			type: 'textual',
+			heading: 'Verification Code'
+		}
+	] %}
+
+
+	<div class="field" style="margin-bottom:0;">
+		<div class="heading">
+			<label>Meta Tags</label>
+			<p class="instructions">Mnay services allow you to verify ownership by adding a meta tag to the <code><head></code> of your page. Add as many services as you'd like to verify.</p>
+		</div>
+	</div>
+
+	<table id="sproutseo-schema-contacts" class="data fullwidth">
+		<thead>
+		<tr>
+			{% for col in cols %}
+				<th>{{ col.heading }}</th>
+			{% endfor %}
+			<th class="thin"></th>
+			<th class="thin"></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr data-id="1">
+			{% for col in cols %}
+				<td>
+
+					{% if col.type == 'selectOther' %}
+
+						<div class="field sprout-selectother">
+							{{ sproutFields.selectOther({
+								name: 'sproutseo[schema][contactType]',
+								options: col.options,
+								values: '',
+								otherPlaceholderText: 'Custom Type'|t
+							}) }}
+						</div>
+
+					{% endif %}
+
+					{% if col.type == 'textual' %}
+
+						{{ forms.text({
+							name: 'sproutseo[schema][telephone]',
+							value: '',
+							errors: ''
+						}) }}
+
+					{% endif %}
+
+				</td>
+			{% endfor %}
+			<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+			<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+		</tr>
+		</tbody>
+	</table>
+
+	<div class="buttons">
+		<div class="btn add icon small" tabindex="0">Add a Verification Code</div>
+	</div>
+
+	<hr>
+
+	<div class="buttons">
+		<div class="btn submit" tabindex="0">Save</div>
+	</div>
+
+	<hr>
+
 	{{ forms.textField({
 		label: "Alexa Verification ID"|t,
+		instructions: 'Verify your <a href="http://www.alexa.com/siteowners/claim">Alexa account</a>'|t,
 		name: 'sproutseo_meta[verification][alexa]',
 		value: '',
 		errors: '',
@@ -15,6 +108,7 @@
 
 	{{ forms.textField({
 		label: "Bing Webmaster Tools"|t,
+		instructions: 'Verify your <a href="http://www.bing.com/webmaster/?rfp=1#/Dashboard/?url=politicalentrepreneurs.com">Bing Webmaster Tools account</a>'|t,
 		name: 'sproutseo_meta[verification][bing]',
 		value: '',
 		errors: '',
@@ -23,6 +117,7 @@
 
 	{{ forms.textField({
 		label: "Google Search Console"|t,
+		instructions: 'Verify your <a href="https://www.google.com/webmasters/verification/verification?hl=en&siteUrl=http%3A%2F%2Fpoliticalentrepreneurs.com/">Google Search Console account</a>'|t,
 		name: 'sproutseo_meta[verification][google]',
 		value: '',
 		errors: '',
@@ -31,6 +126,7 @@
 
 	{{ forms.textField({
 		label: "Yandex Webmaster Tools"|t,
+		instructions: 'Verify your <a href="http://help.yandex.com/webmaster/service/rights.xml#how-to">Yandex account</a>'|t,
 		name: 'sproutseo_meta[verification][yandex]',
 		value: '',
 		errors: '',
@@ -39,10 +135,43 @@
 
 	{{ forms.textField({
 		label: "Facebook App ID"|t,
+		instructions: 'Add your <a href="https://developers.facebook.com/docs/apps/register">Facebook App ID</a>'|t,
 		name: 'sproutseo_meta[verification][facebook]',
 		value: '',
 		errors: '',
 		required: true
 	}) }}
 
+	{{ forms.textField({
+		label: "Pinterest"|t,
+		instructions: 'Verify your <a href="https://help.pinterest.com/en/articles/confirm-your-website#html_file">Pinterest account</a>'|t,
+		name: 'sproutseo_meta[verification][pinterest]',
+		value: '',
+		errors: '',
+		required: true
+	}) }}
+
+
 {% endset %}
+
+{% includeJsResource 'sproutseo/js/SproutFields.js' %}
+{% includeJsResource 'sproutseo/js/EditableTable.js' %}
+
+{% includejs %}
+
+	(function() {
+
+		var tableId = 'sproutseo-schema-contacts';
+		var baseName = 'sproutseo';
+		var columns = {{ cols|json_encode|raw }};
+		var settings = {
+			rowIdPrefix: 'col',
+			onAddRow: $.proxy(this, 'onAddColumn'),
+			onDeleteRow: $.proxy(this, 'reconstructDefaultsTable')
+		}
+
+		new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
+
+	})();
+
+{% endincludejs %}

@@ -5,6 +5,19 @@
 
 	<p>Allow people to set an organization or a Person here at the very least. Could also be a place I guess or some other entity. Should probably default to what we can setup as default schema Organization, Person</p>
 
+	{% set identityTypes = [
+		{ label: "Organization", value: "organization" },
+		{ label: "Person", value: "person" }
+	] %}
+
+	{{ forms.selectField({
+		name: 'sproutSeo[schema][websiteIdentity]',
+		options: identityTypes,
+		value: '',
+		errors: "",
+		required: false
+	}) }}
+
 	{{ forms.textField({
 		label: "Name"|t,
 		instructions: "Name of your organization"|t,
@@ -30,5 +43,6 @@
 		value: '',
 		errors: ''
 	}) }}
+
 
 {% endset %}

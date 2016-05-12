@@ -1,5 +1,6 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
+{% import "sproutseo/_components/selectOther" as sproutFields %}
 
 {% set title = "Social Profiles"|t %}
 
@@ -9,85 +10,79 @@
 
 	<p>Let these be arbitrary, but have a way to pre-define popular ones and be able to update which ones we set as defaults for future releases, so we can adjust with changing trends.</p>
 
-	{{ forms.textField({
-		label: "Facebook"|t,
-		instructions: "Social URL "|t,
-		name: 'sproutseo_schema[facebook]',
-		value: '',
-		errors: '',
-		first: true
-	}) }}
+	{% set socialProfiles = {
+	"" : "Select...",
+	"Facebook" : "Facebook",
+	"Twitter" : "Twitter",
+	"Google" : "Google+",
+	"Instagram" : "Instagram",
+	"YouTube" : "YouTube",
+	"LinkedIn" : "LinkedIn",
+	"Myspace" : "Myspace",
+	"Pinterest" : "Pinterest",
+	"SoundCloud" : "SoundCloud",
+	"Tumblr" : "Tumblr",
+	"custom" : "Custom",
+	} %}
 
-	{{ forms.textField({
-		label: "Twitter"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[twitter]',
-		value: '',
-		errors: ''
-	}) }}
+	{% set socialProfiles = [
+	{ label: "Select...", value: '', placeholder: "" },
+	{ label: "Facebook", value: 'facebook', placeholder: "Example URL" },
+	{ label: "Twitter", value: 'twitter', placeholder: "Example URL" },
+	{ label: "Google+", value: 'googlePlus', placeholder: "Example URL" },
+	{ label: "Instagram", value: 'instagram', placeholder: "Example URL" },
+	{ label: "YouTube", value: 'youtube', placeholder: "Example URL" },
+	{ label: "LinkedIn", value: 'linkedin', placeholder: "Example URL" },
+	{ label: "Myspace", value: 'myspace', placeholder: "Example URL" },
+	{ label: "Pinterest", value: 'pinterest', placeholder: "Example URL" },
+	{ label: "SoundCloud", value: 'soundcloud', placeholder: "Example URL" },
+	{ label: "Tumblr", value: 'tumblr', placeholder: "Example URL" },
+	{ label: "Custom", value: 'custom', placeholder: "Example URL" }
+	] %}
 
-	{{ forms.textField({
-		label: "Google+"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[googlePlus]',
-		value: '',
-		errors: ''
-	}) }}
+	<div class="field" style="margin-bottom:0;">
+		<div class="heading">
+			<label>Social Profiles</label>
+			<p class="instructions">Add however many Social Profiles you want.</p>
+		</div>
+	</div>
 
-	{{ forms.textField({
-		label: "Instagram"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[instagram]',
-		value: '',
-		errors: ''
-	}) }}
+	<table id="sproutseo-schema-contacts" class="data fullwidth">
+		<thead>
+		<tr>
+			<th width="20%">{{ "Profile"|t }}</th>
+			<th width="80%">{{ "URL"|t }}</th>
+			<th class="thin"></th>
+			<th class="thin"></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr data-id="1">
+			<td>
+				<div class="field sprout-selectother">
+					{{ sproutFields.selectOther({
+						name: 'sproutseo[schema][contactType]',
+						options: socialProfiles,
+						values: '',
+						otherPlaceholderText: 'Custom Type'|t
+					}) }}
+				</div>
+			</td>
+			<td>
+				{{ forms.text({
+					name: 'sproutseo[schema][telephone]',
+					value: '',
+					errors: ''
+				}) }}
+			</td>
+			<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+			<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+		</tr>
+		</tbody>
+	</table>
 
-	{{ forms.textField({
-		label: "YouTube"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[youtube]',
-		value: '',
-		errors: ''
-	}) }}
-
-	{{ forms.textField({
-		label: "LinkedIn"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[linkedin]',
-		value: '',
-		errors: ''
-	}) }}
-
-	{{ forms.textField({
-		label: "Myspace"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[myspace]',
-		value: '',
-		errors: ''
-	}) }}
-
-	{{ forms.textField({
-		label: "Pinterest"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[pinterest]',
-		value: '',
-		errors: ''
-	}) }}
-
-	{{ forms.textField({
-		label: "SoundCloud"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[soundcloud]',
-		value: '',
-		errors: ''
-	}) }}
-
-	{{ forms.textField({
-		label: "Tumblr"|t,
-		instructions: "Social URL"|t,
-		name: 'sproutseo_schema[tumblr]',
-		value: '',
-		errors: ''
-	}) }}
+	<div class="buttons">
+		<div class="btn add icon submit" tabindex="0">Add a Contact</div>
+	</div>
 
 {% endset %}
