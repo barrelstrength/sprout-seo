@@ -173,4 +173,9 @@ class SproutSeoVariable
 	{
 		return craft()->plugins->getPlugin('sproutseo')->getSettings();
 	}
+
+	public function getGlobalKnowledgeGraphMeta()
+	{
+		return sproutSeo()->schema->getGlobalKnowledgeGraphMeta();
+	}
 }

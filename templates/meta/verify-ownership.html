@@ -6,20 +6,22 @@
 
 {% set content %}
 
+	{% set verifyOwnershipOptions = [
+		{ label: "Select...", value: '' },
+		{ label: "Alexa Verification ID", value: 'alexaVerificationId' },
+		{ label: "Bing Webmaster Tools", value: 'bingWebmasterTools' },
+		{ label: "Google Search Console", value: 'googleSearchConsole' },
+		{ label: "Yandex Webmaster Tools", value: 'yandexWebmasterTools' },
+		{ label: "Facebook App ID", value: 'facebookAppId' },
+		{ label: "Pinterest", value: 'pinterest' },
+		{ label: "Custom", value: 'custom' }
+	] %}
+
 	{% set cols = [
 		{
 			type: 'selectOther',
 			heading: 'Name',
-			options: {
-				'': 'Select Type...',
-				'alexaVerificationId': 'Alexa Verification ID',
-				'bingWebmasterTools': 'Bing Webmaster Tools',
-				'googleSearchConsole': 'Google Search Console',
-				'yandexWebmasterTools': 'Yandex Webmaster Tools',
-				'facebookAppId': 'Facebook App ID',
-				'pinterest': 'Pinterest',
-				'custom': 'Custom'
-			}
+			options: verifyOwnershipOptions
 		},
 		{
 			type: 'textual',
@@ -31,11 +33,21 @@
 		}
 	] %}
 
+	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
+
+	<p>	Link to docs with links to all the different supported ID instructions:
+		Verify your <a href="http://www.alexa.com/siteowners/claim">Alexa account</a>
+		Verify your <a href="http://www.bing.com/webmaster/?rfp=1#/Dashboard/?url=politicalentrepreneurs.com">Bing Webmaster Tools account</a>
+		Verify your <a href="https://www.google.com/webmasters/verification/verification?hl=en&siteUrl=http%3A%2F%2Fpoliticalentrepreneurs.com/">Google Search Console account</a>
+		Verify your <a href="http://help.yandex.com/webmaster/service/rights.xml#how-to">Yandex account</a>
+		Add your <a href="https://developers.facebook.com/docs/apps/register">Facebook App ID</a>
+		Verify your <a href="https://help.pinterest.com/en/articles/confirm-your-website#html_file">Pinterest account</a>
+	</p>
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
 			<label>Meta Tags</label>
-			<p class="instructions">Mnay services allow you to verify ownership by adding a meta tag to the <code><head></code> of your page. Add as many services as you'd like to verify.</p>
+			<p class="instructions">Many services allow you to verify ownership by adding a meta tag to the <code><head></code> of your page. Add as many services as you'd like to verify.</p>
 		</div>
 	</div>
 
@@ -50,38 +62,49 @@
 		</tr>
 		</thead>
 		<tbody>
+
+		{% for property in globalMeta.ownership  %}
+
 		<tr data-id="1">
-			{% for col in cols %}
-				<td>
 
-					{% if col.type == 'selectOther' %}
+			<td>
 
-						<div class="field sprout-selectother">
-							{{ sproutFields.selectOther({
-								name: 'sproutseo[schema][contactType]',
-								options: col.options,
-								values: '',
-								otherPlaceholderText: 'Custom Type'|t
-							}) }}
-						</div>
+				<div class="field sprout-selectother">
+					{{ sproutFields.selectOther({
+						name: 'sproutseo[schema][contactType]',
+						options: verifyOwnershipOptions,
+						value: property.service,
+						otherPlaceholderText: 'Custom Type'|t
+					}) }}
+				</div>
 
-					{% endif %}
+			</td>
+			<td>
 
-					{% if col.type == 'textual' %}
+				{{ forms.text({
+					name: 'sproutseo[schema][tagName]',
+					value: property.tagName,
+					errors: ''
+				}) }}
 
-						{{ forms.text({
-							name: 'sproutseo[schema][telephone]',
-							value: '',
-							errors: ''
-						}) }}
+			</td>
 
-					{% endif %}
+			<td>
 
-				</td>
-			{% endfor %}
+				{{ forms.text({
+					name: 'sproutseo[schema][verificationCode]',
+					value: property.verificationCode,
+					errors: ''
+				}) }}
+
+			</td>
+
 			<td class="thin action"><a class="move icon" title="Reorder"></a></td>
 			<td class="thin action"><a class="delete icon" title="Delete"></a></td>
 		</tr>
+
+		{% endfor %}
+
 		</tbody>
 	</table>
 
@@ -94,63 +117,6 @@
 	<div class="buttons">
 		<div class="btn submit" tabindex="0">Save</div>
 	</div>
-
-	<hr>
-
-	{{ forms.textField({
-		label: "Alexa Verification ID"|t,
-		instructions: 'Verify your <a href="http://www.alexa.com/siteowners/claim">Alexa account</a>'|t,
-		name: 'sproutseo_meta[verification][alexa]',
-		value: '',
-		errors: '',
-		required: true
-	}) }}
-
-	{{ forms.textField({
-		label: "Bing Webmaster Tools"|t,
-		instructions: 'Verify your <a href="http://www.bing.com/webmaster/?rfp=1#/Dashboard/?url=politicalentrepreneurs.com">Bing Webmaster Tools account</a>'|t,
-		name: 'sproutseo_meta[verification][bing]',
-		value: '',
-		errors: '',
-		required: true
-	}) }}
-
-	{{ forms.textField({
-		label: "Google Search Console"|t,
-		instructions: 'Verify your <a href="https://www.google.com/webmasters/verification/verification?hl=en&siteUrl=http%3A%2F%2Fpoliticalentrepreneurs.com/">Google Search Console account</a>'|t,
-		name: 'sproutseo_meta[verification][google]',
-		value: '',
-		errors: '',
-		required: true
-	}) }}
-
-	{{ forms.textField({
-		label: "Yandex Webmaster Tools"|t,
-		instructions: 'Verify your <a href="http://help.yandex.com/webmaster/service/rights.xml#how-to">Yandex account</a>'|t,
-		name: 'sproutseo_meta[verification][yandex]',
-		value: '',
-		errors: '',
-		required: true
-	}) }}
-
-	{{ forms.textField({
-		label: "Facebook App ID"|t,
-		instructions: 'Add your <a href="https://developers.facebook.com/docs/apps/register">Facebook App ID</a>'|t,
-		name: 'sproutseo_meta[verification][facebook]',
-		value: '',
-		errors: '',
-		required: true
-	}) }}
-
-	{{ forms.textField({
-		label: "Pinterest"|t,
-		instructions: 'Verify your <a href="https://help.pinterest.com/en/articles/confirm-your-website#html_file">Pinterest account</a>'|t,
-		name: 'sproutseo_meta[verification][pinterest]',
-		value: '',
-		errors: '',
-		required: true
-	}) }}
-
 
 {% endset %}
 

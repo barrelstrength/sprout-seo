@@ -10,35 +10,35 @@
 
 	<p>Let these be arbitrary, but have a way to pre-define popular ones and be able to update which ones we set as defaults for future releases, so we can adjust with changing trends.</p>
 
-	{% set socialProfiles = {
-	"" : "Select...",
-	"Facebook" : "Facebook",
-	"Twitter" : "Twitter",
-	"Google" : "Google+",
-	"Instagram" : "Instagram",
-	"YouTube" : "YouTube",
-	"LinkedIn" : "LinkedIn",
-	"Myspace" : "Myspace",
-	"Pinterest" : "Pinterest",
-	"SoundCloud" : "SoundCloud",
-	"Tumblr" : "Tumblr",
-	"custom" : "Custom",
-	} %}
-
-	{% set socialProfiles = [
-	{ label: "Select...", value: '', placeholder: "" },
-	{ label: "Facebook", value: 'facebook', placeholder: "Example URL" },
-	{ label: "Twitter", value: 'twitter', placeholder: "Example URL" },
-	{ label: "Google+", value: 'googlePlus', placeholder: "Example URL" },
-	{ label: "Instagram", value: 'instagram', placeholder: "Example URL" },
-	{ label: "YouTube", value: 'youtube', placeholder: "Example URL" },
-	{ label: "LinkedIn", value: 'linkedin', placeholder: "Example URL" },
-	{ label: "Myspace", value: 'myspace', placeholder: "Example URL" },
-	{ label: "Pinterest", value: 'pinterest', placeholder: "Example URL" },
-	{ label: "SoundCloud", value: 'soundcloud', placeholder: "Example URL" },
-	{ label: "Tumblr", value: 'tumblr', placeholder: "Example URL" },
-	{ label: "Custom", value: 'custom', placeholder: "Example URL" }
+	{% set socialProfileOptions = [
+		{ label: "Select...", value: '' },
+		{ label: "Facebook", value: 'facebook' },
+		{ label: "Twitter", value: 'twitter' },
+		{ label: "Google+", value: 'googlePlus' },
+		{ label: "Instagram", value: 'instagram' },
+		{ label: "YouTube", value: 'youtube' },
+		{ label: "LinkedIn", value: 'linkedin' },
+		{ label: "Myspace", value: 'myspace' },
+		{ label: "Pinterest", value: 'pinterest' },
+		{ label: "SoundCloud", value: 'soundcloud' },
+		{ label: "Tumblr", value: 'tumblr' },
+		{ label: "Custom", value: 'custom' }
 	] %}
+
+	{% set cols = [
+		{
+			type: 'selectOther',
+			heading: 'Profile',
+			options: socialProfileOptions
+		},
+		{
+			type: 'textual',
+			heading: 'URL'
+		}
+	] %}
+
+
+	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
@@ -47,23 +47,26 @@
 		</div>
 	</div>
 
-	<table id="sproutseo-schema-contacts" class="data fullwidth">
+	<table id="sproutseo-schema-social" class="data fullwidth collapsible">
 		<thead>
 		<tr>
-			<th width="20%">{{ "Profile"|t }}</th>
-			<th width="80%">{{ "URL"|t }}</th>
+			<th scope="col">{{ "Profile"|t }}</th>
+			<th scope="col">{{ "URL"|t }}</th>
 			<th class="thin"></th>
 			<th class="thin"></th>
 		</tr>
 		</thead>
 		<tbody>
+
+		{% for socialProfile in globalMeta.social  %}
+
 		<tr data-id="1">
 			<td>
 				<div class="field sprout-selectother">
 					{{ sproutFields.selectOther({
 						name: 'sproutseo[schema][contactType]',
-						options: socialProfiles,
-						values: '',
+						options: socialProfileOptions,
+						value: socialProfile.name,
 						otherPlaceholderText: 'Custom Type'|t
 					}) }}
 				</div>
@@ -71,18 +74,43 @@
 			<td>
 				{{ forms.text({
 					name: 'sproutseo[schema][telephone]',
-					value: '',
+					value: socialProfile.url,
 					errors: ''
 				}) }}
 			</td>
 			<td class="thin action"><a class="move icon" title="Reorder"></a></td>
 			<td class="thin action"><a class="delete icon" title="Delete"></a></td>
 		</tr>
+
+		{% endfor %}
+
 		</tbody>
 	</table>
 
 	<div class="buttons">
-		<div class="btn add icon submit" tabindex="0">Add a Contact</div>
+		<div class="btn small add icon" tabindex="0">Add a Profile</div>
 	</div>
 
 {% endset %}
+
+{% includeJsResource 'sproutseo/js/SproutFields.js' %}
+{% includeJsResource 'sproutseo/js/EditableTable.js' %}
+
+{% includejs %}
+
+(function() {
+
+	var tableId = 'sproutseo-schema-social';
+	var baseName = 'sproutseo';
+	var columns = {{ cols|json_encode|raw }};
+	var settings = {
+		rowIdPrefix: 'col',
+		onAddRow: $.proxy(this, 'onAddColumn'),
+		onDeleteRow: $.proxy(this, 'reconstructDefaultsTable')
+	}
+
+	new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
+
+})();
+
+{% endincludejs %}

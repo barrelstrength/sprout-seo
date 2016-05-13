@@ -8,25 +8,27 @@
 
 {% set content %}
 
+	{% set contactOptions = [
+		{ label: "Select Type...", value: '' },
+		{ label: "Customer Service", value: 'customer service' },
+		{ label: "Technical Support", value: 'technical support' },
+		{ label: "Billing Support", value: 'billing support' },
+		{ label: "Bill Payment", value: 'bill payment' },
+		{ label: "Sales", value: 'sales' },
+		{ label: "Reservations", value: 'reservations' },
+		{ label: "Credit Card Support", value: 'credit card support' },
+		{ label: "Emergency", value: 'emergency' },
+		{ label: "Baggage Tracking", value: 'baggage tracking' },
+		{ label: "Roadside Assistance", value: 'roadside assistance' },
+		{ label: "Package Tracking", value: 'package tracking' },
+		{ label: "Custom", value: 'custom' }
+	] %}
+
 	{% set cols = [
 		{
 			type: 'selectOther',
 			heading: 'Contact Type',
-			options: {
-				'': 'Select Type...',
-				'customer service': 'Customer Service',
-				'technical support': 'Technical Support',
-				'billing support': 'Billing Support',
-				'bill payment': 'Bill Payment',
-				'sales': 'Sales',
-				'reservations': 'Reservations',
-				'credit card support': 'Credit Card Support',
-				'emergency': 'Emergency',
-				'baggage tracking': 'Baggage Tracking',
-				'roadside assistance': 'Roadside Assistance',
-				'package tracking': 'Package Tracking',
-				'custom': 'Custom'
-			}
+			options: contactOptions
 		},
 		{
 			type: 'textual',
@@ -34,6 +36,7 @@
 		}
 	] %}
 
+	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
@@ -53,38 +56,34 @@
 		</tr>
 		</thead>
 		<tbody>
+
+			{% for contact in globalMeta.contacts %}
+
 			<tr data-id="1">
-				{% for col in cols %}
+
 				<td>
-
-					{% if col.type == 'selectOther' %}
-
-						<div class="field sprout-selectother">
-							{{ sproutFields.selectOther({
-								name: 'sproutseo[schema][contactType]',
-								options: col.options,
-								values: '',
-								otherPlaceholderText: 'Custom Type'|t
-							}) }}
-						</div>
-
-					{% endif %}
-
-					{% if col.type == 'textual' %}
-
-						{{ forms.text({
-							name: 'sproutseo[schema][telephone]',
-							value: '',
-							errors: ''
+					<div class="field sprout-selectother">
+						{{ sproutFields.selectOther({
+							name: 'sproutseo[schema][contactType]',
+							options: contactOptions,
+							value: contact.type,
+							otherPlaceholderText: 'Custom Type'|t
 						}) }}
-
-					{% endif %}
-
+					</div>
 				</td>
-				{% endfor %}
+				<td>
+					{{ forms.text({
+						name: 'sproutseo[schema][telephone]',
+						value: contact.phone,
+						errors: ''
+					}) }}
+				</td>
 				<td class="thin action"><a class="move icon" title="Reorder"></a></td>
 				<td class="thin action"><a class="delete icon" title="Delete"></a></td>
 			</tr>
+
+			{% endfor %}
+
 		</tbody>
 	</table>
 

@@ -24,6 +24,11 @@ class SproutSeoService extends BaseApplicationComponent
 	public $overrides;
 
 	/**
+	 * @var SproutSeo_SchemaService
+	 */
+	public $schema;
+
+	/**
 	 * @var SproutSeo_SitemapService
 	 */
 	public $sitemap;
@@ -45,6 +50,7 @@ class SproutSeoService extends BaseApplicationComponent
 		$this->meta      = Craft::app()->getComponent('sproutSeo_meta');
 		$this->defaults  = Craft::app()->getComponent('sproutSeo_metaDefaults');
 		$this->overrides = Craft::app()->getComponent('sproutSeo_metaOverrides');
+		$this->schema    = Craft::app()->getComponent('sproutSeo_schema');
 		$this->sitemap   = Craft::app()->getComponent('sproutSeo_sitemap');
 		$this->settings  = Craft::app()->getComponent('sproutSeo_settings');
 		$this->redirects = Craft::app()->getComponent('sproutSeo_redirects');
