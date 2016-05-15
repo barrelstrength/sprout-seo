@@ -3,6 +3,36 @@ if (typeof Craft.SproutFields === typeof undefined)
 	Craft.SproutFields = {};
 }
 
+(function($){
+
+// Set all the standard Craft.SproutFields.* stuff
+$.extend(Craft.SproutFields,
+{
+	initFields: function($container)
+	{
+		$('.sprout-selectother', $container).sproutSelectOther();
+	}
+});
+
+// -------------------------------------------
+//  Custom jQuery plugins
+// -------------------------------------------
+
+$.extend($.fn,
+{
+	sproutSelectOther: function()
+	{
+		return this.each(function()
+		{
+			console.log($.data);
+			if (!$.data(this, 'sprout-selectother'))
+			{
+				new Craft.SproutFields.SelectOtherField(this);
+			}
+		});
+	},
+});
+
 Craft.SproutFields.SelectOtherField = Garnish.Base.extend(
 {
 	$container: null,
@@ -25,8 +55,9 @@ Craft.SproutFields.SelectOtherField = Garnish.Base.extend(
 
 	handleSelectOtherChange: function()
 	{
+		selectedValue = this.$dropdownField.val();
 
-		if (this.$dropdownField.val() == 'custom')
+		if (selectedValue == 'custom')
 		{
 			// Remove the Select Field and it's wrapping div
 			this.$dropdownField.val('');
@@ -34,7 +65,11 @@ Craft.SproutFields.SelectOtherField = Garnish.Base.extend(
 
 			this.$textField.parent().removeClass('hidden');
 			this.$textField.find('input').focus();
-
+		}
+		else
+		{
+			// Store the selected value in the other field, as it takes precedence
+			this.$textField.val(selectedValue);
 		}
 
 	},
@@ -50,15 +85,6 @@ Craft.SproutFields.SelectOtherField = Garnish.Base.extend(
 
 	},
 
-
 });
 
-
-(function() {
-
-	// initialize Select Other fields
-	$('.sprout-selectother').each(function() {
-		new Craft.SproutFields.SelectOtherField(this);
-	});
-
-})();
+})(jQuery);

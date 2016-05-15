@@ -86,12 +86,14 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 		    $tr = $(rowHtml).appendTo(this.$tbody);
 
 		new Craft.SproutSeo.EditableTable.Row(this, $tr);
+
+		$container = $tr.find('.sprout-selectother');
+
 		this.sorter.addItems($tr);
 
 		// Focus the first input in the row
 		$tr.find('input,textarea,select').first().focus();
 
-		// onAddRow callback
 		this.settings.onAddRow($tr);
 	}
 },
@@ -105,6 +107,7 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 
 	getRowHtml: function(rowId, columns, baseName, values)
 	{
+
 		var rowHtml = '<tr data-id="'+rowId+'">';
 
 		for (var colId in columns)
@@ -122,7 +125,7 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 			{
 				case 'selectOther':
 				{
-					rowHtml += '<div class="select sproutseo-customoptiondropdown"><select name="'+name+'">';
+					rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select name="'+name+'">';
 
 					var hasOptgroups = false;
 
@@ -160,6 +163,10 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 
 					rowHtml += '</select></div>';
 
+					rowHtml += '<div class="texticon clearable sprout-selectothertext hidden"><input class="text fullwidth" type="text" name="'+name+'" value="" autocomplete="off"><div class="clear" title="Clear"></div></div>';
+
+					rowHtml += '</div>';
+
 					break;
 				}
 
@@ -186,6 +193,7 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 
 		return rowHtml;
 	}
+
 });
 
 /**
@@ -250,6 +258,8 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
 			i++;
 		}
 
+		this.initSproutFields();
+
 		// Now that all of the text cells have been nice-ified, let's normalize the heights
 		this.onTextareaHeightChange();
 
@@ -266,6 +276,11 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
 
 		var $deleteBtn = this.$tr.children().last().find('.delete');
 		this.addListener($deleteBtn, 'click', 'deleteRow');
+	},
+
+	initSproutFields: function()
+	{
+		Craft.SproutFields.initFields(this.$tr);
 	},
 
 	onTextareaFocus: function(ev)

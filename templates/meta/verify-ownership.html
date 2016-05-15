@@ -20,103 +20,97 @@
 	{% set cols = [
 		{
 			type: 'selectOther',
-			heading: 'Name',
 			options: verifyOwnershipOptions
 		},
 		{
 			type: 'textual',
-			heading: 'Meta Tag Name'
 		},
 		{
 			type: 'textual',
-			heading: 'Verification Code'
 		}
 	] %}
 
 	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
 
-	<p>	Link to docs with links to all the different supported ID instructions:
-		Verify your <a href="http://www.alexa.com/siteowners/claim">Alexa account</a>
-		Verify your <a href="http://www.bing.com/webmaster/?rfp=1#/Dashboard/?url=politicalentrepreneurs.com">Bing Webmaster Tools account</a>
-		Verify your <a href="https://www.google.com/webmasters/verification/verification?hl=en&siteUrl=http%3A%2F%2Fpoliticalentrepreneurs.com/">Google Search Console account</a>
-		Verify your <a href="http://help.yandex.com/webmaster/service/rights.xml#how-to">Yandex account</a>
-		Add your <a href="https://developers.facebook.com/docs/apps/register">Facebook App ID</a>
-		Verify your <a href="https://help.pinterest.com/en/articles/confirm-your-website#html_file">Pinterest account</a>
-	</p>
-
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
-			<label>Meta Tags</label>
-			<p class="instructions">Many services allow you to verify ownership by adding a meta tag to the <code><head></code> of your page. Add as many services as you'd like to verify.</p>
+			<label>{{ "Verify Ownership"|t }}</label>
+			<p class="instructions">Verify your site or app ownership for enhanced integration with several services. Each service you verify will add a meta tag to the &lt;head&gt; of your home page template. View instructions on where to find your verification code for <a href="http://www.alexa.com/siteowners/claim">Alexa</a>, <a href="http://www.bing.com/webmaster/?rfp=1#/Dashboard/?url={{ siteUrl|url_encode }}">Bing Webmaster Tools</a>, <a href="https://www.google.com/webmasters/verification/verification?hl=en&siteUrl={{ siteUrl|url_encode }}/">Google Search Console</a>, <a href="http://help.yandex.com/webmaster/service/rights.xml#how-to">Yandex Webmaster Tools</a>, <a href="https://developers.facebook.com/docs/apps/register">Facebook App ID</a>, and <a href="https://help.pinterest.com/en/articles/confirm-your-website#html_file">Pinterest</a>. Select 'Custom' if you wish to add a verification meta tag for additional services.</p>
 		</div>
 	</div>
 
-	<table id="sproutseo-schema-contacts" class="data fullwidth">
-		<thead>
-		<tr>
-			{% for col in cols %}
-				<th>{{ col.heading }}</th>
-			{% endfor %}
-			<th class="thin"></th>
-			<th class="thin"></th>
-		</tr>
-		</thead>
-		<tbody>
+	<form method="post" accept-charset="UTF-8" data-saveshortcut>
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="sproutSeo/schema/saveVerifyOwnership">
+		<input type="hidden" name="redirect" value="sproutseo/meta/verify-ownership">
 
-		{% for property in globalMeta.ownership  %}
+		<table id="sproutseo-schema-ownership" class="data fullwidth">
+			<thead>
+			<tr>
+				<th>{{ 'Name'|t }}</th>
+				<th>{{ 'Meta Tag Name'|t }}</th>
+				<th>{{ 'Verification Code'|t }}</th>
+				<th class="thin"></th>
+				<th class="thin"></th>
+			</tr>
+			</thead>
+			<tbody>
 
-		<tr data-id="1">
+			{% for property in globalMeta.ownership  %}
 
-			<td>
+			<tr data-id="{{ loop.index }}">
 
-				<div class="field sprout-selectother">
-					{{ sproutFields.selectOther({
-						name: 'sproutseo[schema][contactType]',
-						options: verifyOwnershipOptions,
-						value: property.service,
-						otherPlaceholderText: 'Custom Type'|t
+				<td>
+
+					<div class="field sprout-selectother">
+						{{ sproutFields.selectOther({
+							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][0]',
+							options: verifyOwnershipOptions,
+							value: property.service
+						}) }}
+					</div>
+
+				</td>
+				<td>
+
+					{{ forms.text({
+						name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][1]',
+						value: property.metaTag,
+						errors: ''
 					}) }}
-				</div>
 
-			</td>
-			<td>
+				</td>
 
-				{{ forms.text({
-					name: 'sproutseo[schema][tagName]',
-					value: property.tagName,
-					errors: ''
-				}) }}
+				<td>
 
-			</td>
+					{{ forms.text({
+						name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][2]',
+						value: property.verificationCode,
+						errors: ''
+					}) }}
 
-			<td>
+				</td>
 
-				{{ forms.text({
-					name: 'sproutseo[schema][verificationCode]',
-					value: property.verificationCode,
-					errors: ''
-				}) }}
+				<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+				<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+			</tr>
 
-			</td>
+			{% endfor %}
 
-			<td class="thin action"><a class="move icon" title="Reorder"></a></td>
-			<td class="thin action"><a class="delete icon" title="Delete"></a></td>
-		</tr>
+			</tbody>
+		</table>
 
-		{% endfor %}
+		<div class="buttons">
+			<div class="btn add icon small" tabindex="0">Add a Verification Code</div>
+		</div>
 
-		</tbody>
-	</table>
+		<hr>
 
-	<div class="buttons">
-		<div class="btn add icon small" tabindex="0">Add a Verification Code</div>
-	</div>
+		<div class="buttons">
+			<input type="submit" class="btn submit" value="Save" />
+		</div>
 
-	<hr>
-
-	<div class="buttons">
-		<div class="btn submit" tabindex="0">Save</div>
-	</div>
+	</form>
 
 {% endset %}
 
@@ -127,14 +121,10 @@
 
 	(function() {
 
-		var tableId = 'sproutseo-schema-contacts';
-		var baseName = 'sproutseo';
+		var tableId = 'sproutseo-schema-ownership';
+		var baseName = 'sproutseo[meta][ownership]';
 		var columns = {{ cols|json_encode|raw }};
-		var settings = {
-			rowIdPrefix: 'col',
-			onAddRow: $.proxy(this, 'onAddColumn'),
-			onDeleteRow: $.proxy(this, 'reconstructDefaultsTable')
-		}
+		var settings = {};
 
 		new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
 

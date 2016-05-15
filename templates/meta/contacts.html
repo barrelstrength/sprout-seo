@@ -2,7 +2,7 @@
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
 
-{% set title = "Contact Points"|t %}
+{% set title = "Contacts"|t %}
 
 {% set settings = craft.sproutSeo.getSettings() %}
 
@@ -40,8 +40,8 @@
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
-			<label>Contacts</label>
-			<p class="instructions">Add however many contact points you want.</p>
+			<label>{{ "Contacts"|t }}</label>
+			<p class="instructions">{{ "Adding <a href='https://developers.google.com/structured-data/customize/contact-points' target='_blank'>Corporate Contacts</a> to your site's structured data can prominently display contact information on the Google Knowledge panel in some searches."|t|raw }}</p>
 		</div>
 	</div>
 
@@ -104,19 +104,15 @@
 
 {% includejs %}
 
-(function() {
+	(function() {
 
-	var tableId = 'sproutseo-schema-contacts';
-	var baseName = 'sproutseo';
-	var columns = {{ cols|json_encode|raw }};
-	var settings = {
-		rowIdPrefix: 'col',
-		onAddRow: $.proxy(this, 'onAddColumn'),
-		onDeleteRow: $.proxy(this, 'reconstructDefaultsTable')
-	}
+		var tableId = 'sproutseo-schema-contacts';
+		var baseName = 'sproutseo[meta][contacts]';
+		var columns = {{ cols|json_encode|raw }};
+		var settings = {};
 
-	new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
+		new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
 
-})();
+	})();
 
 {% endincludejs %}

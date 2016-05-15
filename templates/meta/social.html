@@ -6,10 +6,6 @@
 
 {% set content %}
 
-	<p><a href="https://developers.google.com/structured-data/customize/social-profiles" target="_blank">Social Profile Links</a> are for currently supported social profiles supported in the Google Knowledge panel. Google states in allows other profile links too, so maybe make this an arbitrary listing, or a dropdown of the supported ones and an other field that allows you to generate your own links. We just need the links in the code for the "sameAs" dictionary.</p>
-
-	<p>Let these be arbitrary, but have a way to pre-define popular ones and be able to update which ones we set as defaults for future releases, so we can adjust with changing trends.</p>
-
 	{% set socialProfileOptions = [
 		{ label: "Select...", value: '' },
 		{ label: "Facebook", value: 'facebook' },
@@ -43,7 +39,7 @@
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
 			<label>Social Profiles</label>
-			<p class="instructions">Add however many Social Profiles you want.</p>
+			<p class="instructions">Adding <a href="https://developers.google.com/structured-data/customize/social-profiles" target="_blank">Social Profile Links</a> helps establish a relationship between your site or app and your related online profiles. Supported social profiles can be prominently displayed in your Google Knowledge panel, however, it's encouraged to add any other social profiles you have as well.</p>
 		</div>
 	</div>
 
@@ -101,13 +97,9 @@
 (function() {
 
 	var tableId = 'sproutseo-schema-social';
-	var baseName = 'sproutseo';
+	var baseName = 'sproutseo[meta][social]';
 	var columns = {{ cols|json_encode|raw }};
-	var settings = {
-		rowIdPrefix: 'col',
-		onAddRow: $.proxy(this, 'onAddColumn'),
-		onDeleteRow: $.proxy(this, 'reconstructDefaultsTable')
-	}
+	var settings = {};
 
 	new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
 
