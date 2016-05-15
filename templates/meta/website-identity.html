@@ -3,46 +3,92 @@
 
 {% set content %}
 
-	<p>Allow people to set an organization or a Person here at the very least. Could also be a place I guess or some other entity. Should probably default to what we can setup as default schema Organization, Person</p>
-
 	{% set identityTypes = [
 		{ label: "Organization", value: "organization" },
 		{ label: "Person", value: "person" }
 	] %}
 
-	{{ forms.selectField({
-		name: 'sproutSeo[schema][websiteIdentity]',
-		options: identityTypes,
-		value: '',
-		errors: "",
-		required: false
-	}) }}
+	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
+	{% set schema = globalMeta.knowledgeGraph %}
 
-	{{ forms.textField({
-		label: "Name"|t,
-		instructions: "Name of your organization"|t,
-		name: 'sproutseo_schema[name]',
-		value: '',
-		errors: '',
-		first: true,
-		required: true
-	}) }}
+	<form method="post" accept-charset="UTF-8" data-saveshortcut>
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
+		<input type="hidden" name="redirect" value="sproutseo/meta/{{ craft.request.getSegment(3) }}">
 
-	{{ forms.textField({
-		label: "URL"|t,
-		instructions: "Canonical URL of your organization"|t,
-		name: 'sproutseo_schema[url]',
-		value: '',
-		errors: '',
-		required: true
-	}) }}
+		{{ forms.selectField({
+			label: 'Website Identity'|t,
+			instructions: 'Select the primary concept that represents your brand identity.'|t,
+			name: 'sproutseo[schema][thing][type]',
+			options: identityTypes,
+			value: globalMeta.getType(),
+			errors: "",
+			required: false,
+			first: true
+		}) }}
 
-	{{ forms.textField({
-		label: "Logo"|t,
-		name: 'sproutseo_schema[logo]',
-		value: '',
-		errors: ''
-	}) }}
+		{{ forms.textField({
+			label: "Name"|t,
+			instructions: "Name of your organization"|t,
+			name: 'sproutseo[schema][thing][name]',
+			value: schema.name,
+			errors: '',
+			first: true,
+			required: true
+		}) }}
 
+		{{ forms.textField({
+			label: "Description"|t,
+			instructions: "Description of your organization"|t,
+			name: 'sproutseo[schema][thing][description]',
+			value: schema.name,
+			errors: '',
+			required: true
+		}) }}
+
+		{{ forms.textField({
+			label: "URL"|t,
+			instructions: "Canonical URL of your organization"|t,
+			name: 'sproutseo[schema][thing][url]',
+			value: schema.url,
+			errors: '',
+			required: true
+		}) }}
+
+		{{ forms.textField({
+			label: "Logo"|t,
+			name: 'sproutseo[schema][thing][logo]',
+			value: schema.name,
+			errors: ''
+		}) }}
+
+		{#{% set assetsSourceExists = true %}#}
+		{#{% if assetsSourceExists %}#}
+
+			{#{{ forms.field({#}
+				{#label: 'Image'|t,#}
+			{#}, forms.elementSelect({#}
+				{#elements: [],#}
+				{#sourceElementId: schema.name,#}
+				{#elementType: 'Asset',#}
+				{#name: 'sproutseo[schema][thing][logo]',#}
+				{#jsClass: 'Craft.AssetSelectInput',#}
+				{#addButtonLabel: 'Select Image'|t,#}
+				{#limit: 1,#}
+				{#criteria: {"localeEnabled":null}#}
+			{#})) }}#}
+
+		{#{% else %}#}
+
+			{#<p class="error">{{ 'No assets sources currently exist. <a href="' ~ url('settings/assets/sources/new') ~ '">Asset#}
+				{#Source settings page.'|t }}</a></p>#}
+
+		{#{% endif %}#}
+
+		<div class="buttons">
+			<input type="submit" class="btn submit" value="Save" />
+		</div>
+
+	</form>
 
 {% endset %}
