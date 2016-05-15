@@ -178,4 +178,9 @@ class SproutSeoVariable
 	{
 		return sproutSeo()->schema->getGlobalKnowledgeGraphMeta();
 	}
+
+	public function prepareKnowledgeGraphStructuredData()
+	{
+		return sproutSeo()->schema->prepareKnowledgeGraphStructuredData();
+	}
 }
