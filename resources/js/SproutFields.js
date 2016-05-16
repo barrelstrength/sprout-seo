@@ -24,7 +24,6 @@ $.extend($.fn,
 	{
 		return this.each(function()
 		{
-			console.log($.data);
 			if (!$.data(this, 'sprout-selectother'))
 			{
 				new Craft.SproutFields.SelectOtherField(this);
