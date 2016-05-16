@@ -14,11 +14,12 @@ class SproutSeo_SchemaController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		$postData = craft()->request->getPost('sproutseo');
-
+		$postData = craft()->request->getPost('sproutseo.schema');
+		$schemaType = craft()->request->getPost('schemaType');
+		
 		$schema = SproutSeo_SchemaModel::populateModel($postData);
-
-		if (sproutSeo()->schema->saveSchema('knowledgeGraph', $schema))
+		
+		if (sproutSeo()->schema->saveSchema($schemaType, $schema))
 		{
 			craft()->userSession->setNotice(Craft::t('Schema saved.'));
 
@@ -27,7 +28,7 @@ class SproutSeo_SchemaController extends BaseController
 		else
 		{
 			craft()->userSession->setError(Craft::t('Unable to save schema.'));
-			
+
 			craft()->urlManager->setRouteVariables(array(
 				'schema' => $schema
 			));

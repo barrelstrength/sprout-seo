@@ -8,17 +8,17 @@
 
 	{% set socialProfileOptions = [
 		{ label: "Select...", value: '' },
-		{ label: "Facebook", value: 'facebook' },
-		{ label: "Twitter", value: 'twitter' },
-		{ label: "Google+", value: 'googlePlus' },
-		{ label: "Instagram", value: 'instagram' },
-		{ label: "YouTube", value: 'youtube' },
-		{ label: "LinkedIn", value: 'linkedin' },
-		{ label: "Myspace", value: 'myspace' },
-		{ label: "Pinterest", value: 'pinterest' },
-		{ label: "SoundCloud", value: 'soundcloud' },
-		{ label: "Tumblr", value: 'tumblr' },
-		{ label: "Custom", value: 'custom' }
+		{ label: "Facebook", value: 'Facebook' },
+		{ label: "Twitter", value: 'Twitter' },
+		{ label: "Google+", value: 'Google+' },
+		{ label: "Instagram", value: 'Instagram' },
+		{ label: "YouTube", value: 'YouTube' },
+		{ label: "LinkedIn", value: 'LinkedIn' },
+		{ label: "Myspace", value: 'Myspace' },
+		{ label: "Pinterest", value: 'Pinterest' },
+		{ label: "SoundCloud", value: 'SoundCloud' },
+		{ label: "Tumblr", value: 'Tumblr' },
+		{ label: "Custom", value: 'Custom' }
 	] %}
 
 	{% set cols = [
@@ -33,7 +33,6 @@
 		}
 	] %}
 
-
 	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
 
 	<div class="field" style="margin-bottom:0;">
@@ -43,49 +42,63 @@
 		</div>
 	</div>
 
-	<table id="sproutseo-schema-social" class="data fullwidth collapsible">
-		<thead>
-		<tr>
-			<th scope="col">{{ "Profile"|t }}</th>
-			<th scope="col">{{ "URL"|t }}</th>
-			<th class="thin"></th>
-			<th class="thin"></th>
-		</tr>
-		</thead>
-		<tbody>
+	<form method="post" accept-charset="UTF-8" data-saveshortcut>
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
+		<input type="hidden" name="redirect" value="sproutseo/meta/{{ craft.request.getSegment(3) }}">
+		<input type="hidden" name="schemaType" value="social">
 
-		{% for socialProfile in globalMeta.social  %}
+		<table id="sproutseo-schema-social" class="data fullwidth collapsible">
+			<thead>
+			<tr>
+				<th scope="col">{{ "Profile"|t }}</th>
+				<th scope="col">{{ "URL"|t }}</th>
+				<th class="thin"></th>
+				<th class="thin"></th>
+			</tr>
+			</thead>
+			<tbody>
 
-		<tr data-id="1">
-			<td>
-				<div class="field sprout-selectother">
-					{{ sproutFields.selectOther({
-						name: 'sproutseo[schema][contactType]',
-						options: socialProfileOptions,
-						value: socialProfile.name,
-						otherPlaceholderText: 'Custom Type'|t
+			{% for socialProfile in globalMeta.social  %}
+
+			<tr data-id="{{ loop.index }}">
+				<td>
+					<div class="field sprout-selectother">
+						{{ sproutFields.selectOther({
+							name: 'sproutseo[schema][social][' ~ loop.index ~ '][0]',
+							options: socialProfileOptions,
+							value: socialProfile.profileName,
+							otherPlaceholderText: 'Custom Type'|t
+						}) }}
+					</div>
+				</td>
+				<td>
+					{{ forms.text({
+						name: 'sproutseo[schema][social][' ~ loop.index ~ '][1]',
+						value: socialProfile.url,
+						errors: ''
 					}) }}
-				</div>
-			</td>
-			<td>
-				{{ forms.text({
-					name: 'sproutseo[schema][telephone]',
-					value: socialProfile.url,
-					errors: ''
-				}) }}
-			</td>
-			<td class="thin action"><a class="move icon" title="Reorder"></a></td>
-			<td class="thin action"><a class="delete icon" title="Delete"></a></td>
-		</tr>
+				</td>
+				<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+				<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+			</tr>
 
-		{% endfor %}
+			{% endfor %}
 
-		</tbody>
-	</table>
+			</tbody>
+		</table>
 
-	<div class="buttons">
-		<div class="btn small add icon" tabindex="0">Add a Profile</div>
-	</div>
+		<div class="buttons">
+			<div class="btn add icon small" tabindex="0">Add a Profile</div>
+		</div>
+
+		<hr>
+
+		<div class="buttons">
+			<input type="submit" class="btn submit" value="Save" />
+		</div>
+
+	</form>
 
 {% endset %}
 
@@ -97,7 +110,7 @@
 (function() {
 
 	var tableId = 'sproutseo-schema-social';
-	var baseName = 'sproutseo[meta][social]';
+	var baseName = 'sproutseo[schema][social]';
 	var columns = {{ cols|json_encode|raw }};
 	var settings = {};
 

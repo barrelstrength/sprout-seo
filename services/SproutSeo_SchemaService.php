@@ -11,20 +11,22 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	/**
 	 * Full schema.org core and extended vocabulary as described on schema.org
 	 * http://schema.org/docs/full.html
-	 * 
+	 *
 	 * @var array
 	 */
 	public $vocabularies = array();
-	
-	public function saveSchema($target, $schema)
+
+	public function saveSchema($schemaType, $schema)
 	{
+		// @todo - what do we do if $schemaType doesn't have a value?
+
 		$values = array(
-			$target => $schema->getSchema('identity', 'json')
+			$schemaType => $schema->getSchema($schemaType, 'json')
 		);
 
 		craft()->db->createCommand()->update('sproutseo_globalmeta',
 			$values,
-			'id=:id', array(':id'=> 1)
+			'id=:id', array(':id' => 1)
 		);
 
 		return true;
@@ -81,35 +83,13 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	{
 		$schemaRaw = $this->getGlobalKnowledgeGraphMeta();
 
-		$schema['@context'] = "http://schema.org";
-		$schema['@type']    = $schemaRaw['knowledgeGraph']['type'];
-		$schema['name']     = $schemaRaw['knowledgeGraph']['name'];
-		$schema['url']      = $schemaRaw['knowledgeGraph']['url'];
+		$schemaRaw = SproutSeo_SchemaModel::populateModel($schemaRaw);
 
-		$contactPoints = array();
-		foreach ($schemaRaw['contacts'] as $contact)
-		{
-			$contactPoints[] = array(
-				'@type'       => 'ContactPoint',
-				'telephone'   => $contact['phone'],
-				'contactType' => $contact['type']
-			);
-		}
+		$schema = $schemaRaw->getSchema('identity');
+		$schema['contactPoint'] = $schemaRaw->getSchema('contacts');
+		$schema['sameAs'] = $schemaRaw->getSchema('social');
 
-		$schema['contactPoint'] = $contactPoints;
-
-		$socialLinks = array();
-		foreach ($schemaRaw['social'] as $socialLink)
-		{
-			$socialLinks[] = $socialLink['url'];
-		}
-
-		$schema['sameAs'] = $socialLinks;
-
-		$output = '
-<script type="application/ld+json">
-' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
-</script>';
+		$output = $this->prepareStructuredDataForHtml($schema);
 
 		return TemplateHelper::getRaw($output);
 	}
@@ -121,11 +101,10 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 			->from('sproutseo_globalmeta')
 			->queryRow();
 
-
-		$results['knowledgeGraph'] = JsonHelper::decode($results['knowledgeGraph']);
-		$results['contacts']       = JsonHelper::decode($results['contacts']);
-		$results['ownership']      = JsonHelper::decode($results['ownership']);
-		$results['social']         = JsonHelper::decode($results['social']);
+		$results['identity']  = JsonHelper::decode($results['identity']);
+		$results['contacts']  = JsonHelper::decode($results['contacts']);
+		$results['ownership'] = JsonHelper::decode($results['ownership']);
+		$results['social']    = JsonHelper::decode($results['social']);
 
 		$schema = SproutSeo_SchemaModel::populateModel($results);
 
@@ -158,6 +137,15 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		}
 	}
 
+	protected function prepareStructuredDataForHtml($schema)
+	{
+		return '
+<script type="application/ld+json">
+' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
+</script>';
+
+	}
+
 	protected function getArrayByPath($array, $path, $separator = '.')
 	{
 		$keys = explode($separator, $path);
@@ -179,7 +167,6 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 
 		return $array;
 	}
-
 
 	protected function updateArrayKeys(array $oldArray, $replaceKey)
 	{

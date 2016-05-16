@@ -3,16 +3,18 @@ namespace Craft;
 
 class SproutSeo_SchemaModel extends BaseModel
 {
+	public $schemaId = null;
 	public $type = null;
 
 	protected function defineAttributes()
 	{
 		return array(
-			'schema' => AttributeType::Mixed,
-
-			'knowledgeGraph' => AttributeType::Mixed,
+			'identity' => AttributeType::Mixed,
 			'contacts' => AttributeType::Mixed,
-			'social' => AttributeType::Mixed,
+			'social'   => AttributeType::Mixed,
+
+			// @todo - move to a meta tag model
+			'ownership' => AttributeType::Mixed,
 		);
 	}
 
@@ -26,6 +28,11 @@ class SproutSeo_SchemaModel extends BaseModel
 	 */
 	public function getSchema($target, $format = 'array')
 	{
+		if ($target)
+		{
+			$this->schemaId = $target;
+		}
+
 		$targetMethod = 'get' . ucfirst($target);
 
 		$schema = $this->{$targetMethod}();
@@ -42,42 +49,74 @@ class SproutSeo_SchemaModel extends BaseModel
 	// Supported Schema Types
 	// =========================================================================
 
-	public function getIdentity()
-	{
-		$identity = $this->prepareSchemaObject();
-
-		$identity['name']        = $this->schema['thing']['name'];
-		$identity['description'] = $this->schema['thing']['description'];
-		$identity['url']         = $this->schema['thing']['url'];
-
-		return $identity;
-	}
-
 	public function getType()
 	{
-		$this->getIdentity();
+		$this->getSchema('identity');
 
 		return $this->type;
 	}
 
-	public function getOrganization()
+	protected function getIdentity()
 	{
+		$structuredData = $this->prepareSchemaObject();
 
+		$schema = $this->{$this->schemaId};
+
+		$structuredData['name']        = $schema['name'];
+		$structuredData['description'] = $schema['description'];
+		$structuredData['url']         = $schema['url'];
+
+		return $structuredData;
 	}
 
-	public function getPerson()
+	protected function getOrganization()
 	{
-
 	}
 
-	public function getWebsite()
+	protected function getPerson()
 	{
-
 	}
 
-	public function getPlace()
+	protected function getWebsite()
 	{
+	}
 
+	protected function getPlace()
+	{
+	}
+
+
+	protected function getContacts()
+	{
+		$contacts = $this->{$this->schemaId};
+
+		$contactPoints = array();
+		foreach ($contacts as $contact)
+		{
+			$contactPoints[] = array(
+				'@type'       => 'ContactPoint',
+				'contactType' => isset($contact['contactType']) ? $contact['contactType'] : $contact[0],
+				'telephone'   => isset($contact['telephone']) ? $contact['telephone'] : $contact[1]
+			);
+		}
+
+		return $contactPoints;
+	}
+
+	protected function getSocial()
+	{
+		$profiles = $this->{$this->schemaId};
+
+		$profileLinks = array();
+		foreach ($profiles as $profile)
+		{
+			$profileLinks[] = array(
+				'profileName' => isset($profile['profileName']) ? $profile['profileName'] : $profile[0],
+				'url' => isset($profile['url']) ? $profile['url'] : $profile[1]
+			);
+		}
+
+		return $profileLinks;
 	}
 
 
@@ -86,7 +125,6 @@ class SproutSeo_SchemaModel extends BaseModel
 
 	public function getSchemaMap($object, $mapId)
 	{
-
 	}
 
 
@@ -95,7 +133,7 @@ class SproutSeo_SchemaModel extends BaseModel
 
 	protected function prepareSchemaObject()
 	{
-		$this->type = $this->schema['thing']['type'];
+		$this->type = $this->{$this->schemaId}['@type'];
 
 		return array(
 			"@context" => "http://schema.org",

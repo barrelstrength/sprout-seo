@@ -4,22 +4,23 @@
 {% set content %}
 
 	{% set identityTypes = [
-		{ label: "Organization", value: "organization" },
-		{ label: "Person", value: "person" }
+		{ label: "Organization", value: "Organization" },
+		{ label: "Person", value: "Person" }
 	] %}
 
 	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
-	{% set schema = globalMeta.knowledgeGraph %}
+	{% set schema = globalMeta.identity %}
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut>
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
 		<input type="hidden" name="redirect" value="sproutseo/meta/{{ craft.request.getSegment(3) }}">
+		<input type="hidden" name="schemaType" value="identity">
 
 		{{ forms.selectField({
 			label: 'Website Identity'|t,
 			instructions: 'Select the primary concept that represents your brand identity.'|t,
-			name: 'sproutseo[schema][thing][type]',
+			name: 'sproutseo[schema][identity][@type]',
 			options: identityTypes,
 			value: globalMeta.getType(),
 			errors: "",
@@ -30,7 +31,7 @@
 		{{ forms.textField({
 			label: "Name"|t,
 			instructions: "Name of your organization"|t,
-			name: 'sproutseo[schema][thing][name]',
+			name: 'sproutseo[schema][identity][name]',
 			value: schema.name,
 			errors: '',
 			first: true,
@@ -40,7 +41,7 @@
 		{{ forms.textField({
 			label: "Description"|t,
 			instructions: "Description of your organization"|t,
-			name: 'sproutseo[schema][thing][description]',
+			name: 'sproutseo[schema][identity][description]',
 			value: schema.name,
 			errors: '',
 			required: true
@@ -49,7 +50,7 @@
 		{{ forms.textField({
 			label: "URL"|t,
 			instructions: "Canonical URL of your organization"|t,
-			name: 'sproutseo[schema][thing][url]',
+			name: 'sproutseo[schema][identity][url]',
 			value: schema.url,
 			errors: '',
 			required: true
@@ -57,7 +58,7 @@
 
 		{{ forms.textField({
 			label: "Logo"|t,
-			name: 'sproutseo[schema][thing][logo]',
+			name: 'sproutseo[schema][identity][logo]',
 			value: schema.name,
 			errors: ''
 		}) }}
@@ -71,7 +72,7 @@
 				{#elements: [],#}
 				{#sourceElementId: schema.name,#}
 				{#elementType: 'Asset',#}
-				{#name: 'sproutseo[schema][thing][logo]',#}
+				{#name: 'sproutseo[schema][identity][logo]',#}
 				{#jsClass: 'Craft.AssetSelectInput',#}
 				{#addButtonLabel: 'Select Image'|t,#}
 				{#limit: 1,#}
