@@ -117,15 +117,6 @@
 				required: true
 			}) }}
 
-			{{ forms.textField({
-				label: "URL Format <span class='info'>Display the meta from this template when the URLs match this format. You can include regular expression patterns such as <code>(.*)</code></span>"|t,
-				id: "handle",
-				name: 'sproutseo_fields[handle]',
-				value: default.handle,
-				errors: '',
-				required: true
-			}) }}
-
 			{% set globalFallbackId = craft.sproutSeo.globalFallbackId() %}
 
 			{% if not globalFallbackId or (globalFallbackId == defaultId) %}
