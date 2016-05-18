@@ -9,10 +9,6 @@
     label: "General"|t,
     url: cpUrl('sproutseo/meta/templates')
   },
-	schema: {
-		label: "Structured Data"|t,
-		url: cpUrl('sproutseo/schema/content')
-	},
   sitemap: {
     label: "Sitemap"|t,
     url: cpUrl('sproutseo/sitemap/index'),
@@ -23,8 +19,6 @@
   }
 } %}
 
-
-{#Make sure new settings areas have permissions too..#}
 {% if currentUser.can('editSproutSeoSettings') %}
 	{% set subnav = subnav|merge({
 		settings: {
