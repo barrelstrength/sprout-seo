@@ -29,19 +29,35 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Name"|t,
+			label: "Organization Name"|t,
 			instructions: "Name of your organization"|t,
 			name: 'sproutseo[schema][identity][name]',
 			value: schema.name,
 			errors: '',
-			first: true,
+			first: true
+		}) }}
+
+		{{ forms.textField({
+			label: "Title"|t,
+			instructions: "Title"|t,
+			name: 'sproutseo[schema][identity][title]',
+			value: schema.name,
+			errors: ''
+		}) }}
+
+		{{ forms.textareaField({
+			label: "Description"|t,
+			instructions: "Description of your organization"|t,
+			name: 'sproutseo[schema][identity][description]',
+			value: schema.name,
+			errors: '',
 			required: true
 		}) }}
 
 		{{ forms.textField({
-			label: "Description"|t,
-			instructions: "Description of your organization"|t,
-			name: 'sproutseo[schema][identity][description]',
+			label: "Keywords"|t,
+			instructions: "Primary keywords that describe your content"|t,
+			name: 'sproutseo[schema][identity][keywords]',
 			value: schema.name,
 			errors: '',
 			required: true
