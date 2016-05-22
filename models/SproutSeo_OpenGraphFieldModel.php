@@ -27,7 +27,7 @@ class SproutSeo_OpenGraphFieldModel extends BaseModel
 		);
 	}
 
-	public function getMetaTagData(SproutSeo_MetaTagModel $meta)
+	public function getMetaTagData(SproutSeo_MetaTagsModel $meta)
 	{
 		$tagData = array();
 

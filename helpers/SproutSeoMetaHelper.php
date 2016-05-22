@@ -65,7 +65,7 @@ class SproutSeoMetaHelper
 	 *
 	 * @throws \Exception
 	 */
-	public static function prepareAssetUrls(SproutSeo_MetaTagModel &$model)
+	public static function prepareAssetUrls(SproutSeo_MetaTagsModel &$model)
 	{
 		// If a code override for ogImageSecure is provided, make sure it's an absolute URL
 		if (!empty($model->ogImageSecure))

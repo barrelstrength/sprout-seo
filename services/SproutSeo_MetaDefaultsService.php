@@ -32,7 +32,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 			->order('name')
 			->queryAll();
 
-		$model = SproutSeo_MetaTagModel::populateModels($defaults);
+		$model = SproutSeo_MetaTagsModel::populateModels($defaults);
 
 		return $model;
 	}
@@ -49,18 +49,18 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	{
 		if ($record = $this->metaRecord->findByPk($id))
 		{
-			return SproutSeo_MetaTagModel::populateModel($record);
+			return SproutSeo_MetaTagsModel::populateModel($record);
 		}
 		else
 		{
-			return new SproutSeo_MetaTagModel();
+			return new SproutSeo_MetaTagsModel();
 		}
 	}
 
 	/**
 	 * @param $handle
 	 *
-	 * @return BaseModel|SproutSeo_MetaTagModel
+	 * @return BaseModel|SproutSeo_MetaTagsModel
 	 */
 	public function getDefaultByHandle($handle)
 	{
@@ -72,11 +72,11 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 
 		if (isset($query))
 		{
-			$model = SproutSeo_MetaTagModel::populateModel($query);
+			$model = SproutSeo_MetaTagsModel::populateModel($query);
 		}
 		else
 		{
-			return new SproutSeo_MetaTagModel();
+			return new SproutSeo_MetaTagsModel();
 		}
 
 		$model->robots   = ($model->robots) ? SproutSeoMetaHelper::prepRobotsForSettings($model->robots) : null;
@@ -86,12 +86,12 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param SproutSeo_MetaTagModel $model
+	 * @param SproutSeo_MetaTagsModel $model
 	 *
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function saveDefault(SproutSeo_MetaTagModel $model)
+	public function saveDefault(SproutSeo_MetaTagsModel $model)
 	{
 		if ($id = $model->getAttribute('id'))
 		{
@@ -147,7 +147,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	 */
 	public function globalFallbackId()
 	{
-		$globalFallbackMetaModel = new SproutSeo_MetaTagModel();
+		$globalFallbackMetaModel = new SproutSeo_MetaTagsModel();
 		$globalFallbackMetaModel->setMeta('fallback');
 
 		if ($globalFallbackMetaModel->id)

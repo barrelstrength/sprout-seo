@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_MetaTagModel extends BaseModel
+class SproutSeo_MetaTagsModel extends BaseModel
 {
 	protected function defineAttributes()
 	{
@@ -117,11 +117,11 @@ class SproutSeo_MetaTagModel extends BaseModel
 	}
 
 	/**
-	 * Create a SproutSeo_MetaTagModel based on an override element ID
+	 * Create a SproutSeo_MetaTagsModel based on an override element ID
 	 *
 	 * @param $overrideInfo
 	 *
-	 * @return SproutSeo_MetaTagModel
+	 * @return SproutSeo_MetaTagsModel
 	 */
 	protected function getEntryOverride($overrideInfo)
 	{
@@ -138,11 +138,11 @@ class SproutSeo_MetaTagModel extends BaseModel
 	}
 
 	/**
-	 * Process any overrides provided in via the templates and create a SproutSeo_MetaTagModel
+	 * Process any overrides provided in via the templates and create a SproutSeo_MetaTagsModel
 	 *
 	 * @param $overrideInfo
 	 *
-	 * @return SproutSeo_MetaTagModel
+	 * @return SproutSeo_MetaTagsModel
 	 */
 	protected function getCodeOverride($overrideInfo)
 	{
@@ -155,11 +155,11 @@ class SproutSeo_MetaTagModel extends BaseModel
 	}
 
 	/**
-	 * Create our default SproutSeo_MetaTagModel
+	 * Create our default SproutSeo_MetaTagsModel
 	 *
 	 * @param $overrideInfo
 	 *
-	 * @return SproutSeo_MetaTagModel
+	 * @return SproutSeo_MetaTagsModel
 	 */
 	protected function getDefault($overrideInfo)
 	{
