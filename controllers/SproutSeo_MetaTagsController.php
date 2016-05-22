@@ -75,7 +75,7 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Convert Checkbox Array into comma-delimited String
 		if (isset($defaultFields['robots']))
 		{
-			$defaultFields['robots'] = SproutSeoMetaHelper::prepRobotsAsString($defaultFields['robots']);
+			$defaultFields['robots'] = SproutSeoOptimizeHelper::prepRobotsAsString($defaultFields['robots']);
 		}
 
 		// Make our images single IDs instead of an array

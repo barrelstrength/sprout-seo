@@ -32,7 +32,7 @@ class SproutSeo_GeographicMetaFieldModel extends BaseModel
 
 				if ($key == 'position')
 				{
-					$value = SproutSeoMetaHelper::prepareGeoPosition($meta);
+					$value = SproutSeoOptimizeHelper::prepareGeoPosition($meta);
 				}
 
 				$tagData[$this->getMetaTagName($key)] = $value;

@@ -111,7 +111,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 				break;
 		}
 
-		SproutSeoMetaHelper::prepareAssetUrls($this);
+		SproutSeoOptimizeHelper::prepareAssetUrls($this);
 
 		return $this;
 	}

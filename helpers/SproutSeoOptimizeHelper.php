@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeoMetaHelper
+class SproutSeoOptimizeHelper
 {
 	/**
 	 *

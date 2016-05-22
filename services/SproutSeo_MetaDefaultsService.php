@@ -79,8 +79,8 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 			return new SproutSeo_MetaTagsModel();
 		}
 
-		$model->robots   = ($model->robots) ? SproutSeoMetaHelper::prepRobotsForSettings($model->robots) : null;
-		$model->position = SproutSeoMetaHelper::prepareGeoPosition($model);
+		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
+		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
 
 		return $model;
 	}

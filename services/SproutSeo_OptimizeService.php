@@ -92,7 +92,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
 		// Default to the Current URL
-		$prioritizedMetaModel->canonical = SproutSeoMetaHelper::prepareCanonical($prioritizedMetaModel);
+		$prioritizedMetaModel->canonical = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaModel);
 
 		foreach ($prioritizedMetaModel->getAttributes() as $key => $value)
 		{
@@ -126,8 +126,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		}
 
 		// @todo - reorganize how this stuff works / robots need love.
-		$prioritizedMetaModel->title  = SproutSeoMetaHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel);
-		$prioritizedMetaModel->robots = SproutSeoMetaHelper::prepRobotsAsString($prioritizedMetaModel->robots);
+		$prioritizedMetaModel->title  = SproutSeoOptimizeHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel);
+		$prioritizedMetaModel->robots = SproutSeoOptimizeHelper::prepRobotsAsString($prioritizedMetaModel->robots);
 
 		return $prioritizedMetaModel;
 	}

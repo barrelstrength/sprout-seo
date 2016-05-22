@@ -96,7 +96,7 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
-		Craft::import('plugins.sproutseo.helpers.SproutSeoMetaHelper');
+		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
 		if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
 		{
