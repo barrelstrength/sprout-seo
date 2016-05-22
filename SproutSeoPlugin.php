@@ -146,10 +146,10 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		return array(
 			'sproutseo/globals/meta-tags/new'                => array(
-				'action' => 'sproutSeo/metaDefaults/editDefault'
+				'action' => 'sproutSeo/metaTags/editMetaTagGroup'
 			),
 			'sproutseo/globals/meta-tags/(?P<defaultId>\d+)' => array(
-				'action' => 'sproutSeo/metaDefaults/editDefault'
+				'action' => 'sproutSeo/metaTags/editMetaTagGroup'
 			),
 
 			'sproutseo/schema/new' =>

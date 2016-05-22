@@ -69,7 +69,7 @@
 {% set js %}
 	new Craft.AdminTable({
 		tableSelector: '#metaTemplate',
-		deleteAction: 'sproutSeo/metaDefaults/deleteDefaults',
+		deleteAction: 'sproutSeo/metaTags/deleteMetaTagGroupById',
 		onDeleteObject: function(id)
 		{
 			if($('#metaTemplate').find('tbody').find('tr').size() == 0)

@@ -5,7 +5,7 @@
   {% if not defaultId is empty %}
     {{ default.name }}
   {% else %}
-    New Meta
+    {{ "New Meta Tag Group"|t }}
   {% endif %}
 {% endset %}
 
@@ -58,8 +58,8 @@
 
 			{% include "_includes/tabs" %}
 
-				<input type="hidden" name="action" value="sproutSeo/metaDefaults/saveDefault">
-				<input type="hidden" name="redirect" value="sproutseo/meta">
+				<input type="hidden" name="action" value="sproutSeo/metaTags/saveMetaTagGroup">
+				<input type="hidden" name="redirect" value="sproutseo/globals/meta-tags">
 
 				<input type="hidden" name="sproutseo_fields[id]" value="{{ defaultId }}">
 
