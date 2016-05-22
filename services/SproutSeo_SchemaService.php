@@ -45,7 +45,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		$sitemap = sproutSeo()->sitemap->getAllSitemaps();
 
 		// Get our meta values
-		$meta = sproutSeo()->meta->optimize();
+		$meta = sproutSeo()->optimize->optimize();
 
 		// Check the Twig $context for any values we need to process
 		// to create Structured Data ($context->entry, $context->product, etc)

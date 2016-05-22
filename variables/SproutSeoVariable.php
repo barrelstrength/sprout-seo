@@ -43,7 +43,7 @@ class SproutSeoVariable
 	{
 		if (count($meta))
 		{
-			sproutSeo()->meta->updateMeta($meta);
+			sproutSeo()->optimize->updateMeta($meta);
 		}
 	}
 
@@ -54,7 +54,7 @@ class SproutSeoVariable
 	 */
 	public function optimize()
 	{
-		$output = sproutSeo()->meta->optimize();
+		$output = sproutSeo()->optimize->optimize();
 
 		return TemplateHelper::getRaw($output);
 	}
@@ -66,7 +66,7 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedMeta()
 	{
-		$prioritizedMetaModel = sproutSeo()->meta->getOptimizedMeta();
+		$prioritizedMetaModel = sproutSeo()->optimize->getOptimizedMeta();
 
 		return $prioritizedMetaModel->getMetaTagData();
 	}

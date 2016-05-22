@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_MetaService extends BaseApplicationComponent
+class SproutSeo_OptimizeService extends BaseApplicationComponent
 {
 	protected $sproutmeta = array();
 

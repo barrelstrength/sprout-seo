@@ -9,9 +9,9 @@ namespace Craft;
 class SproutSeoService extends BaseApplicationComponent
 {
 	/**
-	 * @var SproutSeo_MetaService
+	 * @var SproutSeo_OptimizeService
 	 */
-	public $meta;
+	public $optimize;
 
 	/**
 	 * @var SproutSeo_MetaDefaultsService
@@ -47,7 +47,7 @@ class SproutSeoService extends BaseApplicationComponent
 	{
 		parent::init();
 
-		$this->meta      = Craft::app()->getComponent('sproutSeo_meta');
+		$this->optimize  = Craft::app()->getComponent('sproutSeo_optimize');
 		$this->defaults  = Craft::app()->getComponent('sproutSeo_metaDefaults');
 		$this->overrides = Craft::app()->getComponent('sproutSeo_metaOverrides');
 		$this->schema    = Craft::app()->getComponent('sproutSeo_schema');
