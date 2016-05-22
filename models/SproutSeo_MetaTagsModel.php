@@ -7,6 +7,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	{
 		return array(
 			'id'             => array(AttributeType::Number),
+			'entryId'        => array(AttributeType::Number),
 			'default'        => array(AttributeType::String),
 			'name'           => array(AttributeType::String),
 			'handle'         => array(AttributeType::String),

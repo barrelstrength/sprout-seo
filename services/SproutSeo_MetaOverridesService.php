@@ -52,7 +52,7 @@ class SproutSeo_MetaOverridesService extends BaseApplicationComponent
 			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
 
-		$model = SproutSeo_OverridesModel::populateModel($query);
+		$model = SproutSeo_MetaTagsModel::populateModel($query);
 
 		return $model;
 	}
