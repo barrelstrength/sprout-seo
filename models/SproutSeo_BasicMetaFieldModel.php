@@ -17,7 +17,7 @@ class SproutSeo_BasicMetaFieldModel extends BaseModel
 		);
 	}
 
-	public function getMetaTagData(SproutSeo_MetaModel $meta)
+	public function getMetaTagData(SproutSeo_MetaTagModel $meta)
 	{
 		$tagData = array();
 

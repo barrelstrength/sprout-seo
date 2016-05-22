@@ -32,7 +32,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 			->order('name')
 			->queryAll();
 
-		$model = SproutSeo_MetaModel::populateModels($defaults);
+		$model = SproutSeo_MetaTagModel::populateModels($defaults);
 
 		return $model;
 	}
@@ -49,18 +49,18 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	{
 		if ($record = $this->metaRecord->findByPk($id))
 		{
-			return SproutSeo_MetaModel::populateModel($record);
+			return SproutSeo_MetaTagModel::populateModel($record);
 		}
 		else
 		{
-			return new SproutSeo_MetaModel();
+			return new SproutSeo_MetaTagModel();
 		}
 	}
 
 	/**
 	 * @param $handle
 	 *
-	 * @return BaseModel|SproutSeo_MetaModel
+	 * @return BaseModel|SproutSeo_MetaTagModel
 	 */
 	public function getDefaultByHandle($handle)
 	{
@@ -72,11 +72,11 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 
 		if (isset($query))
 		{
-			$model = SproutSeo_MetaModel::populateModel($query);
+			$model = SproutSeo_MetaTagModel::populateModel($query);
 		}
 		else
 		{
-			return new SproutSeo_MetaModel();
+			return new SproutSeo_MetaTagModel();
 		}
 
 		$model->robots   = ($model->robots) ? SproutSeoMetaHelper::prepRobotsForSettings($model->robots) : null;
@@ -86,12 +86,12 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param SproutSeo_MetaModel $model
+	 * @param SproutSeo_MetaTagModel $model
 	 *
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function saveDefault(SproutSeo_MetaModel $model)
+	public function saveDefault(SproutSeo_MetaTagModel $model)
 	{
 		if ($id = $model->getAttribute('id'))
 		{
@@ -147,7 +147,7 @@ class SproutSeo_MetaDefaultsService extends BaseApplicationComponent
 	 */
 	public function globalFallbackId()
 	{
-		$globalFallbackMetaModel = new SproutSeo_MetaModel();
+		$globalFallbackMetaModel = new SproutSeo_MetaTagModel();
 		$globalFallbackMetaModel->setMeta('fallback');
 
 		if ($globalFallbackMetaModel->id)

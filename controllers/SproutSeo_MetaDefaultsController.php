@@ -49,7 +49,7 @@ class SproutSeo_MetaDefaultsController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		$model = new SproutSeo_MetaModel();
+		$model = new SproutSeo_MetaTagModel();
 
 		$defaultFields = craft()->request->getPost('sproutseo_fields');
 		// check if this is a new or existing default

@@ -76,18 +76,18 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getOptimizedMeta()
 	{
-		$entryOverrideMetaModel  = new SproutSeo_MetaModel();
-		$codeOverrideMetaModel   = new SproutSeo_MetaModel();
-		$defaultMetaModel        = new SproutSeo_MetaModel();
-		$globalFallbackMetaModel = new SproutSeo_MetaModel();
+		$entryOverrideMetaModel  = new SproutSeo_MetaTagModel();
+		$codeOverrideMetaModel   = new SproutSeo_MetaTagModel();
+		$defaultMetaModel        = new SproutSeo_MetaTagModel();
+		$globalFallbackMetaModel = new SproutSeo_MetaTagModel();
 
-		// Prepare a SproutSeo_MetaModel for each of our levels of priority
+		// Prepare a SproutSeo_MetaTagModel for each of our levels of priority
 		$entryOverrideMetaModel  = $entryOverrideMetaModel->setMeta('entry', $this->getMeta());
 		$codeOverrideMetaModel   = $codeOverrideMetaModel->setMeta('code', $this->getMeta());
 		$defaultMetaModel        = $defaultMetaModel->setMeta('default', $this->getMeta());
 		$globalFallbackMetaModel = $globalFallbackMetaModel->setMeta('fallback');
 
-		$prioritizedMetaModel = new SproutSeo_MetaModel();
+		$prioritizedMetaModel = new SproutSeo_MetaTagModel();
 
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
