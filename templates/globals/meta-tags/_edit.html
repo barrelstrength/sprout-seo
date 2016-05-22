@@ -117,6 +117,15 @@
 				required: true
 			}) }}
 
+			{{ forms.textField({
+				label: "Handle <span class='info'>Name you will use to refer to this meta-tag group in your templates</span>"|t,
+				id: "handle",
+				name: 'sproutseo_fields[handle]',
+				value: default.handle,
+				errors: '',
+				required: true
+			}) }}
+
 			{% set globalFallbackId = craft.sproutSeo.globalFallbackId() %}
 
 			{% if not globalFallbackId or (globalFallbackId == defaultId) %}
