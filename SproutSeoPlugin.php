@@ -145,15 +145,15 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/meta/new'                      => array(
+			'sproutseo/globals/meta-tags/new'                => array(
 				'action' => 'sproutSeo/metaDefaults/editDefault'
 			),
-			'sproutseo/meta/(?P<defaultId>\d+)'       => array(
+			'sproutseo/globals/meta-tags/(?P<defaultId>\d+)' => array(
 				'action' => 'sproutSeo/metaDefaults/editDefault'
 			),
 
-			'sproutseo/schema/new'                      =>
-			'sproutseo/schema/_edit',
+			'sproutseo/schema/new' =>
+				'sproutseo/schema/_edit',
 
 			'sproutseo/schema/(.*)' => array(
 				'action' => 'sproutSeo/schema/schemaEditTemplate'

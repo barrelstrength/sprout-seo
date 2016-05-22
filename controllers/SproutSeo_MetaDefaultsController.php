@@ -7,7 +7,7 @@ class SproutSeo_MetaDefaultsController extends BaseController
 	public function actionEditDefault()
 	{
 		// Determine what we're working with
-		$defaultId              = craft()->request->getSegment(3);
+		$defaultId              = craft()->request->getSegment(4);
 		$variables['defaultId'] = ($defaultId == 'new') ? null : $defaultId;
 
 		// Get our Meta Model
@@ -42,7 +42,7 @@ class SproutSeo_MetaDefaultsController extends BaseController
 		// Set elementType
 		$variables['elementType'] = craft()->elements->getElementType(ElementType::Asset);
 
-		$this->renderTemplate('sproutseo/meta/_edit', $variables);
+		$this->renderTemplate('sproutseo/globals/meta-tags/_edit', $variables);
 	}
 
 	public function actionSaveDefault()

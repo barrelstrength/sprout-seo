@@ -10,7 +10,7 @@
 {% endset %}
 
 {% set crumbs = [
-	{ label: "Meta"|t, url: url('sproutseo/meta/templates') }
+	{ label: "Globals"|t, url: url('sproutseo/globals/meta-tags') }
 ] %}
 
 {% set tabs = {
@@ -33,9 +33,9 @@
 {% set fullPageForm = true %}
 
 {% if craft.request.getSegment(3) == 'new' %}
-	{% set saveShortcutRedirect = url('sproutseo/meta/templates') %}
+	{% set saveShortcutRedirect = url('sproutseo/globals/meta-tags') %}
 {% else %}
-	{% set saveShortcutRedirect = url('sproutseo/meta/' ~ defaultId) %}
+	{% set saveShortcutRedirect = url('sproutseo/globals/meta-tags/' ~ defaultId) %}
 {% endif %}
 
 {# Set a field context so we can manage field visibility between the SEO Defaults and the Field Types #}

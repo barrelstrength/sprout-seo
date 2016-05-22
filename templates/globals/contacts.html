@@ -47,7 +47,7 @@
 	<form method="post" accept-charset="UTF-8" data-saveshortcut>
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
-		<input type="hidden" name="redirect" value="sproutseo/meta/{{ craft.request.getSegment(3) }}">
+		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
 		<input type="hidden" name="schemaType" value="contacts">
 
 		<table id="sproutseo-schema-contacts" class="data fullwidth">
