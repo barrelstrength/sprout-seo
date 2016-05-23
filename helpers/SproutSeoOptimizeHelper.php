@@ -4,27 +4,27 @@ namespace Craft;
 class SproutSeoOptimizeHelper
 {
 	/**
+	 * @param $prioritizedMetaTagModel
+	 * @param $metaTagsGroupModel
+	 * @param $globalFallbackMetaTagModel
 	 *
-	 * @param $defaults
-	 * @param $globalFallbackMetaModel
-	 *
-	 * @return mixed
+	 * @return string
 	 */
-	public static function prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel)
+	public static function prepareAppendedSiteName($prioritizedMetaTagModel, $metaTagsGroupMetaTagModel, $globalFallbackMetaTagModel)
 	{
-		// Does a selected Default override the Global Fallback appendSiteName value?
-		$appendSiteName = is_null($defaultMetaModel->appendSiteName)
-			? $globalFallbackMetaModel->appendSiteName
-			: $defaultMetaModel->appendSiteName;
+		// Does a selected Meta Tag Group override the Global Fallback appendSiteName value?
+		$appendSiteName = is_null($metaTagsGroupMetaTagModel->appendSiteName)
+			? $globalFallbackMetaTagModel->appendSiteName
+			: $metaTagsGroupMetaTagModel->appendSiteName;
 
 		if ($appendSiteName)
 		{
 			$divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
-			return $prioritizedMetaModel->title . " " . $divider . " " . craft()->getInfo('siteName');
+			return $prioritizedMetaTagModel->title . " " . $divider . " " . craft()->getInfo('siteName');
 		}
 
-		return $prioritizedMetaModel->title;
+		return $prioritizedMetaTagModel->title;
 	}
 
 	/**
@@ -61,7 +61,7 @@ class SproutSeoOptimizeHelper
 	/**
 	 * @todo - improve how images are being handled here
 	 *
-	 * @param $prioritizedMetaModel
+	 * @param $prioritizedMetaTagModel
 	 *
 	 * @throws \Exception
 	 */

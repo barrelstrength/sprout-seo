@@ -3,24 +3,24 @@ namespace Craft;
 
 class SproutSeo_OptimizeService extends BaseApplicationComponent
 {
-	protected $sproutmeta = array();
+	protected $templateMeta = array();
 
 	protected $siteInfo;
 	protected $divider;
 	protected $currentUrl;
 
 	/**
-	 * Store our meta data in a place we can access nicely
+	 * Store our template meta data in a place so we can access when we need to
 	 *
 	 * @return array
 	 */
-	public function getMeta()
+	public function getMetaTagsFromTemplate()
 	{
-		return $this->sproutmeta;
+		return $this->templateMeta;
 	}
 
 	/**
-	 * Add values to the master $this->sproutmeta array
+	 * Add values to the master $this->templateMeta array
 	 *
 	 * @param $meta
 	 */
@@ -30,7 +30,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			foreach ($meta as $key => $value)
 			{
-				$this->sproutmeta[$key] = $value;
+				$this->templateMeta[$key] = $value;
 			}
 		}
 	}
@@ -42,9 +42,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function optimize()
 	{
-		$prioritizedMetaModel = $this->getOptimizedMeta();
+		$prioritizedMetaTagModel = $this->getOptimizedMeta();
 
-		$variables['meta'] = $prioritizedMetaModel->getMetaTagData();
+		$variables['meta'] = $prioritizedMetaTagModel->getMetaTagData();
 
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
@@ -76,59 +76,134 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getOptimizedMeta()
 	{
-		$entryOverrideMetaModel  = new SproutSeo_MetaTagsModel();
-		$codeOverrideMetaModel   = new SproutSeo_MetaTagsModel();
-		$defaultMetaModel        = new SproutSeo_MetaTagsModel();
-		$globalFallbackMetaModel = new SproutSeo_MetaTagsModel();
-
+		$entryOverrideMetaTagModel  = new SproutSeo_MetaTagsModel();
+		$codeOverrideMetaTagModel   = new SproutSeo_MetaTagsModel();
+		$metaTagsGroupMetaTagModel  = new SproutSeo_MetaTagsModel();
+		$globalFallbackMetaTagModel = new SproutSeo_MetaTagsModel();
+		
 		// Prepare a SproutSeo_MetaTagsModel for each of our levels of priority
-		$entryOverrideMetaModel  = $entryOverrideMetaModel->setMeta('entry', $this->getMeta());
-		$codeOverrideMetaModel   = $codeOverrideMetaModel->setMeta('code', $this->getMeta());
-		$defaultMetaModel        = $defaultMetaModel->setMeta('default', $this->getMeta());
-		$globalFallbackMetaModel = $globalFallbackMetaModel->setMeta('fallback');
+		$entryOverrideMetaTagModel  = $entryOverrideMetaTagModel->setMeta('entry', $this->getMetaTagsFromTemplate());
+		$codeOverrideMetaTagModel   = $codeOverrideMetaTagModel->setMeta('code', $this->getMetaTagsFromTemplate());
+		$metaTagsGroupMetaTagModel         = $metaTagsGroupMetaTagModel->setMeta('metaTagsGroup', $this->getMetaTagsFromTemplate());
+		$globalFallbackMetaTagModel = $globalFallbackMetaTagModel->setMeta('global');
 
-		$prioritizedMetaModel = new SproutSeo_MetaTagsModel();
+		$prioritizedMetaTagModel = new SproutSeo_MetaTagsModel();
 
 		$this->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
 		// Default to the Current URL
-		$prioritizedMetaModel->canonical = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaModel);
+		$prioritizedMetaTagModel->canonical = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
 
-		foreach ($prioritizedMetaModel->getAttributes() as $key => $value)
+		foreach ($prioritizedMetaTagModel->getAttributes() as $key => $value)
 		{
 			// Test for a value on each of our models in their order of priority
-			if ($entryOverrideMetaModel->getAttribute($key))
+			if ($entryOverrideMetaTagModel->getAttribute($key))
 			{
-				$prioritizedMetaModel[$key] = $entryOverrideMetaModel[$key];
+				$prioritizedMetaTagModel[$key] = $entryOverrideMetaTagModel[$key];
 			}
-			elseif ($codeOverrideMetaModel->getAttribute($key))
+			elseif ($codeOverrideMetaTagModel->getAttribute($key))
 			{
-				$prioritizedMetaModel[$key] = $codeOverrideMetaModel[$key];
+				$prioritizedMetaTagModel[$key] = $codeOverrideMetaTagModel[$key];
 			}
-			elseif ($defaultMetaModel->getAttribute($key))
+			elseif ($metaTagsGroupMetaTagModel->getAttribute($key))
 			{
-				$prioritizedMetaModel[$key] = $defaultMetaModel->getAttribute($key);
+				$prioritizedMetaTagModel[$key] = $metaTagsGroupMetaTagModel->getAttribute($key);
 			}
-			elseif ($globalFallbackMetaModel->getAttribute($key))
+			elseif ($globalFallbackMetaTagModel->getAttribute($key))
 			{
-				$prioritizedMetaModel[$key] = $globalFallbackMetaModel->getAttribute($key);
+				$prioritizedMetaTagModel[$key] = $globalFallbackMetaTagModel->getAttribute($key);
 			}
 			else
 			{
-				$prioritizedMetaModel[$key] = $prioritizedMetaModel->getAttribute($key);
+				$prioritizedMetaTagModel[$key] = $prioritizedMetaTagModel->getAttribute($key);
 			}
 
 			// Make sure all our strings are trimmed
-			if (is_string($prioritizedMetaModel[$key]))
+			if (is_string($prioritizedMetaTagModel[$key]))
 			{
-				$prioritizedMetaModel[$key] = trim($prioritizedMetaModel[$key]);
+				$prioritizedMetaTagModel[$key] = trim($prioritizedMetaTagModel[$key]);
 			}
 		}
 
 		// @todo - reorganize how this stuff works / robots need love.
-		$prioritizedMetaModel->title  = SproutSeoOptimizeHelper::prepareAppendedSiteName($prioritizedMetaModel, $defaultMetaModel, $globalFallbackMetaModel);
-		$prioritizedMetaModel->robots = SproutSeoOptimizeHelper::prepRobotsAsString($prioritizedMetaModel->robots);
+		$prioritizedMetaTagModel->title  = SproutSeoOptimizeHelper::prepareAppendedSiteName($prioritizedMetaTagModel, $metaTagsGroupMetaTagModel, $globalFallbackMetaTagModel);
+		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::prepRobotsAsString($prioritizedMetaTagModel->robots);
 
-		return $prioritizedMetaModel;
+		return $prioritizedMetaTagModel;
+	}
+
+	public function getKnowledgeGraphLinkedData()
+	{
+		$schemaRaw = sproutSeo()->schema->getGlobals();
+
+		$schemaRaw = SproutSeo_SchemaModel::populateModel($schemaRaw);
+
+		$schema                 = $schemaRaw->getSchema('identity');
+		$schema['contactPoint'] = $schemaRaw->getSchema('contacts');
+		$schema['sameAs']       = $schemaRaw->getSchema('social');
+
+		$output = $this->prepareLinkedDataForHtml($schema);
+
+		return TemplateHelper::getRaw($output);
+	}
+
+	public function prepareLinkedData($criteria, &$context)
+	{
+		// Take the values from our {% optimize %} tag, default to none.
+		// @todo could potentially accept a string as well and check here
+		$outputMeta   = isset($criteria['meta']) ? $criteria['meta'] : false;
+		$outputSchema = isset($criteria['schema']) ? $criteria['schema'] : false;
+
+		// Grab our path, we're going to figure out what SEO meta data and
+		// what Structured Data we need to output on the page based on this path
+		$path    = craft()->request->getPath();
+		$sitemap = sproutSeo()->sitemap->getAllSitemaps();
+
+		// Get our meta values
+		$meta = sproutSeo()->optimize->optimize();
+
+		// Check the Twig $context for any values we need to process
+		// to create Structured Data ($context->entry, $context->product, etc)
+
+		// Get our structured data values
+		$schema = sproutSeo()->schema->getGlobals();
+
+		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
+
+		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema', array(
+			'schema' => $schema
+		));
+
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+
+		// Process our Structured Data Schema Maps with the objects they match up with in the context
+
+		// Prepare our html for the template
+		$optimizedMeta = null;
+
+		if ($outputMeta)
+		{
+			$optimizedMeta .= $meta;
+		}
+
+		if ($outputSchema)
+		{
+			$optimizedMeta .= $schemaHtml;
+		}
+
+		return TemplateHelper::getRaw($optimizedMeta);
+	}
+
+	/**
+	 * @param $schema
+	 *
+	 * @return string
+	 */
+	protected function prepareLinkedDataForHtml($schema)
+	{
+		return '
+<script type="application/ld+json">
+' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
+</script>';
 	}
 }

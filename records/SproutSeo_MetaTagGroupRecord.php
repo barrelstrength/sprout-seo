@@ -1,18 +1,27 @@
 <?php
 namespace Craft;
 
-class SproutSeo_OverridesRecord extends BaseRecord
+class SproutSeo_MetaTagGroupRecord extends BaseRecord
 {
 	public function getTableName()
 	{
-		return 'sproutseo_overrides';
+		return 'sproutseo_metataggroups';
 	}
 
-	public function defineAttributes()
+	protected function defineAttributes()
 	{
 		return array(
-			'entryId'     => array(AttributeType::Number, 'required' => true),
-			'locale'      => array(AttributeType::Locale, 'required' => true),
+			'name'           => array(
+				AttributeType::String,
+				'required' => true
+			),
+			'handle'         => array(
+				AttributeType::String,
+				'required' => true
+			),
+			'appendSiteName' => array(AttributeType::String),
+			'globalFallback' => array(AttributeType::Bool),
+
 			'title'       => array(AttributeType::String),
 			'description' => array(AttributeType::String),
 			'keywords'    => array(AttributeType::String),
@@ -27,14 +36,13 @@ class SproutSeo_OverridesRecord extends BaseRecord
 			'latitude'  => array(AttributeType::String),
 			'longitude' => array(AttributeType::String),
 
-			'ogTitle'     => array(AttributeType::String),
-			'ogType'      => array(AttributeType::String),
-			'ogUrl'       => array(AttributeType::String),
-			'ogImage'     => array(AttributeType::String),
-			'ogSiteName'  => array(AttributeType::String),
-			'ogAuthor'    => array(AttributeType::String),
-			'ogPublisher' => array(AttributeType::String),
-
+			'ogTitle'       => array(AttributeType::String),
+			'ogType'        => array(AttributeType::String),
+			'ogUrl'         => array(AttributeType::String),
+			'ogImage'       => array(AttributeType::String),
+			'ogAuthor'      => array(AttributeType::String),
+			'ogPublisher'   => array(AttributeType::String),
+			'ogSiteName'    => array(AttributeType::String),
 			'ogDescription' => array(AttributeType::String),
 			'ogAudio'       => array(AttributeType::String),
 			'ogVideo'       => array(AttributeType::String),
@@ -61,7 +69,27 @@ class SproutSeo_OverridesRecord extends BaseRecord
 	public function defineIndexes()
 	{
 		return array(
-			array('columns' => array('entryId, locale'), 'unique' => true),
+			array(
+				'columns' => array(
+					'name',
+					'handle'
+				),
+				'unique'  => true
+			),
 		);
+	}
+
+	/**
+	 * Create a new instance of the current class. This allows us to
+	 * properly unit test our service layer.
+	 *
+	 * @return BaseRecord
+	 */
+	public function create()
+	{
+		$class  = get_class($this);
+		$record = new $class();
+
+		return $record;
 	}
 }

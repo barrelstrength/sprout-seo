@@ -7,15 +7,6 @@
 
 <div class="sproutseo-box">
 
-	{% if fieldContext is defined and fieldContext == 'defaults' %}
-
-		<h3>{{ "Canonical URL"|t }}</h3>
-
-		<p>{{  "Canonical URL will default to the URL of the current page. Canonical URL cannot be overriden
-			at the template level, however, it can be override with on-page or entry-specific overrides."|t }}</p>
-
-	{% endif %}
-
 	{% if fieldContext is defined and fieldContext == 'robots' %}
 		{{ forms.textField({
 			label: "Canonical"|t,

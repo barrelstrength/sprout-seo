@@ -16,6 +16,14 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	 */
 	public $vocabularies = array();
 
+	/**
+	 * Save schema to database
+	 * 
+	 * @param $schemaType
+	 * @param $schema
+	 *
+	 * @return bool
+	 */
 	public function saveSchema($schemaType, $schema)
 	{
 		// @todo - what do we do if $schemaType doesn't have a value?
@@ -24,7 +32,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 			$schemaType => $schema->getSchema($schemaType, 'json')
 		);
 
-		craft()->db->createCommand()->update('sproutseo_globalmeta',
+		craft()->db->createCommand()->update('sproutseo_globals',
 			$values,
 			'id=:id', array(':id' => 1)
 		);
@@ -32,79 +40,22 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		return true;
 	}
 
-	public function prepareStructuredData($criteria, &$context)
-	{
-		// Take the values from our {% optimize %} tag, default to none.
-		// @todo could potentially accept a string as well and check here
-		$outputMeta   = isset($criteria['meta']) ? $criteria['meta'] : false;
-		$outputSchema = isset($criteria['schema']) ? $criteria['schema'] : false;
-
-		// Grab our path, we're going to figure out what SEO meta data and
-		// what Structured Data we need to output on the page based on this path
-		$path    = craft()->request->getPath();
-		$sitemap = sproutSeo()->sitemap->getAllSitemaps();
-
-		// Get our meta values
-		$meta = sproutSeo()->optimize->optimize();
-
-		// Check the Twig $context for any values we need to process
-		// to create Structured Data ($context->entry, $context->product, etc)
-
-		// Get our structured data values
-		$schema = $this->getGlobalKnowledgeGraphMeta();
-
-		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
-
-		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema', array(
-			'schema' => $schema
-		));
-
-		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
-
-		// Process our Structured Data Schema Maps with the objects they match up with in the context
-
-		// Prepare our html for the template
-		$optimizedMeta = null;
-
-		if ($outputMeta)
-		{
-			$optimizedMeta .= $meta;
-		}
-
-		if ($outputSchema)
-		{
-			$optimizedMeta .= $schemaHtml;
-		}
-
-		return TemplateHelper::getRaw($optimizedMeta);
-	}
-
-	public function prepareKnowledgeGraphStructuredData()
-	{
-		$schemaRaw = $this->getGlobalKnowledgeGraphMeta();
-
-		$schemaRaw = SproutSeo_SchemaModel::populateModel($schemaRaw);
-
-		$schema = $schemaRaw->getSchema('identity');
-		$schema['contactPoint'] = $schemaRaw->getSchema('contacts');
-		$schema['sameAs'] = $schemaRaw->getSchema('social');
-
-		$output = $this->prepareStructuredDataForHtml($schema);
-
-		return TemplateHelper::getRaw($output);
-	}
-
-	public function getGlobalKnowledgeGraphMeta()
+	/**
+	 * Get global meta values
+	 *
+	 * @return BaseModel
+	 */
+	public function getGlobals()
 	{
 		$results = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_globalmeta')
+			->from('sproutseo_globals')
 			->queryRow();
 
-		$results['identity']  = JsonHelper::decode($results['identity']);
-		$results['contacts']  = JsonHelper::decode($results['contacts']);
-		$results['ownership'] = JsonHelper::decode($results['ownership']);
-		$results['social']    = JsonHelper::decode($results['social']);
+		$results['identity']  = isset($results['identity']) ? JsonHelper::decode($results['identity']) : null;
+		$results['contacts']  = isset($results['identity']) ? JsonHelper::decode($results['contacts']) : null;
+		$results['ownership'] = isset($results['identity']) ? JsonHelper::decode($results['ownership']) : null;
+		$results['social']    = isset($results['identity']) ? JsonHelper::decode($results['social']) : null;
 
 		$schema = SproutSeo_SchemaModel::populateModel($results);
 
@@ -137,15 +88,13 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		}
 	}
 
-	protected function prepareStructuredDataForHtml($schema)
-	{
-		return '
-<script type="application/ld+json">
-' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
-</script>';
-
-	}
-
+	/**
+	 * @param        $array
+	 * @param        $path
+	 * @param string $separator
+	 *
+	 * @return mixed
+	 */
 	protected function getArrayByPath($array, $path, $separator = '.')
 	{
 		$keys = explode($separator, $path);
@@ -168,6 +117,12 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		return $array;
 	}
 
+	/**
+	 * @param array $oldArray
+	 * @param       $replaceKey
+	 *
+	 * @return array
+	 */
 	protected function updateArrayKeys(array $oldArray, $replaceKey)
 	{
 		$newArray = array();

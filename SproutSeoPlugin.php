@@ -39,7 +39,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '2.2.0';
+		return '2.2.1';
 	}
 
 	/**
@@ -148,7 +148,7 @@ class SproutSeoPlugin extends BasePlugin
 			'sproutseo/globals/meta-tags/new'                => array(
 				'action' => 'sproutSeo/metaTags/editMetaTagGroup'
 			),
-			'sproutseo/globals/meta-tags/(?P<defaultId>\d+)' => array(
+			'sproutseo/globals/meta-tags/(?P<metaTagGroupId>\d+)' => array(
 				'action' => 'sproutSeo/metaTags/editMetaTagGroup'
 			),
 

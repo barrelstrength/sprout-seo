@@ -11,16 +11,16 @@ class SproutSeo_MetaTagsController extends BaseController
 	public function actionEditMetaTagGroup()
 	{
 		// Determine what we're working with
-		$segment   = craft()->request->getSegment(4);
-		$defaultId = ($segment == 'new') ? null : $segment;
+		$segment        = craft()->request->getSegment(4);
+		$metaTagGroupId = ($segment == 'new') ? null : $segment;
 
 		// Get our Meta Model
-		$default = sproutSeo()->defaults->getDefaultById($defaultId);
+		$metaTags = sproutSeo()->metaTags->getMetaTagGroupById($metaTagGroupId);
 
 		// Set up our asset fields
-		if (isset($default->ogImage))
+		if (isset($metaTags->ogImage))
 		{
-			$asset           = craft()->elements->getElementById($default->ogImage);
+			$asset           = craft()->elements->getElementById($metaTags->ogImage);
 			$ogImageElements = array($asset);
 		}
 		else
@@ -29,9 +29,9 @@ class SproutSeo_MetaTagsController extends BaseController
 		}
 
 		// Set up our asset fields
-		if (isset($default->twitterImage))
+		if (isset($metaTags->twitterImage))
 		{
-			$asset                = craft()->elements->getElementById($default->twitterImage);
+			$asset                = craft()->elements->getElementById($metaTags->twitterImage);
 			$twitterImageElements = array($asset);
 		}
 		else
@@ -47,8 +47,8 @@ class SproutSeo_MetaTagsController extends BaseController
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
 		$this->renderTemplate('sproutseo/globals/meta-tags/_edit', array(
-			'defaultId'            => $defaultId,
-			'default'              => $default,
+			'metaTagGroupId'       => $metaTagGroupId,
+			'metaTags'             => $metaTags,
 			'ogImageElements'      => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
 			'assetsSourceExists'   => $assetsSourceExists,
@@ -68,34 +68,35 @@ class SproutSeo_MetaTagsController extends BaseController
 
 		$model = new SproutSeo_MetaTagsModel();
 
-		$defaultFields = craft()->request->getPost('sproutseo_fields');
-		// check if this is a new or existing default
-		$defaultFields['id'] = (isset($defaultFields['id']) ? $defaultFields['id'] : null);
+		$metaTags = craft()->request->getPost('sproutseo_fields');
+
+		// Check if this is a new or existing Meta Tag Group
+		$metaTags['id'] = (isset($metaTags['id']) ? $metaTags['id'] : null);
 
 		// Convert Checkbox Array into comma-delimited String
-		if (isset($defaultFields['robots']))
+		if (isset($metaTags['robots']))
 		{
-			$defaultFields['robots'] = SproutSeoOptimizeHelper::prepRobotsAsString($defaultFields['robots']);
+			$metaTags['robots'] = SproutSeoOptimizeHelper::prepRobotsAsString($metaTags['robots']);
 		}
 
 		// Make our images single IDs instead of an array
-		$defaultFields['ogImage']      = (!empty($defaultFields['ogImage']) ? $defaultFields['ogImage'][0] : null);
-		$defaultFields['twitterImage'] = (!empty($defaultFields['twitterImage']) ? $defaultFields['twitterImage'][0] : null);
+		$metaTags['ogImage']      = (!empty($metaTags['ogImage']) ? $metaTags['ogImage'][0] : null);
+		$metaTags['twitterImage'] = (!empty($metaTags['twitterImage']) ? $metaTags['twitterImage'][0] : null);
 
-		$model->setAttributes($defaultFields);
+		$model->setAttributes($metaTags);
 
-		if (sproutSeo()->defaults->saveDefault($model))
+		if (sproutSeo()->metaTags->saveMetaTagGroup($model))
 		{
-			craft()->userSession->setNotice(Craft::t('New default saved.'));
+			craft()->userSession->setNotice(Craft::t('New Meta Tag Group saved.'));
 			$this->redirectToPostedUrl();
 		}
 		else
 		{
-			craft()->userSession->setError(Craft::t("Couldn't save the default."));
+			craft()->userSession->setError(Craft::t("Couldn't save the Meta Tag Group."));
 
 			// Send the field back to the template
 			craft()->urlManager->setRouteVariables(array(
-				'default' => $model
+				'metaTags' => $model
 			));
 		}
 	}
@@ -112,7 +113,7 @@ class SproutSeo_MetaTagsController extends BaseController
 
 		$metaTagGroupId = craft()->request->getRequiredPost('id');
 
-		$result = sproutSeo()->defaults->deleteDefault($metaTagGroupId);
+		$result = sproutSeo()->metaTags->deleteMetaTagGroupById($metaTagGroupId);
 
 		$this->returnJson(array(
 			'success' => $result >= 0 ? true : false

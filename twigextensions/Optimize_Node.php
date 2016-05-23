@@ -11,7 +11,7 @@ class Optimize_Node extends \Twig_Node
 	{
 		$compiler
 			->addDebugInfo($this)
-			->write('echo \Craft\craft()->sproutSeo->schema->prepareStructuredData(')
+			->write('echo \Craft\craft()->sproutSeo->optimize->prepareLinkedData(')
 			->subcompile($this->getNode('criteria'))
 			->raw(", \$context);\n\n");
 

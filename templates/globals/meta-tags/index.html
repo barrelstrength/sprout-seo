@@ -3,13 +3,13 @@
 
 {% set title = "Meta Tags"|t %}
 
-{% set defaults = craft.sproutSeo.getDefaults %}
+{% set metaTagGroups = craft.sproutSeo.getMetaTagGroups %}
 
 {% set selectedSidebarItem = craft.request.getSegment(2) %}
 
 {% set extraPageHeaderHtml %}
 	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('sproutseo/globals/meta-tags/new') }}">{{ "New meta tag group"|t }}</a>
+		<a class="btn submit add icon" href="{{ url('sproutseo/globals/meta-tags/new') }}">{{ "New Meta Tag Group"|t }}</a>
 	</div>
 {% endset %}
 
@@ -21,9 +21,9 @@
 }
 </style>
 
-	{% if defaults is empty %}
+	{% if metaTagGroups is empty %}
 
-		<p>{{ "Create your first meta template."|t }}</p>
+		<p>{{ "Create your first Meta Tag Group."|t }}</p>
 
 	{% else %}
 
@@ -36,17 +36,17 @@
 				<td class="thin"></td>
 			</thead>
 
-			{% for default in defaults %}
+			{% for metaTagGroup in metaTagGroups %}
 
-			<tr id="results" data-id="{{ default.id }}" data-name="{{ default.name|t }}">
+			<tr id="results" data-id="{{ metaTagGroup.id }}" data-name="{{ metaTagGroup.name|t }}">
 				<td>
-					<a href="{{ url('sproutseo/globals/meta-tags/' ~ default.id) }}">
-						{{ default.name }}
+					<a href="{{ url('sproutseo/globals/meta-tags/' ~ metaTagGroup.id) }}">
+						{{ metaTagGroup.name }}
 					</a>
 				</td>
-				<td><code>{{ default.handle }}</code></td>
+				<td><code>{{ metaTagGroup.handle }}</code></td>
 				<td>
-					{% if default.globalFallback %}
+					{% if metaTagGroup.globalFallback %}
 						<span data-icon="check" title="{{ 'Yes'|t }}"></span>
 					{% endif %}
 				</td>

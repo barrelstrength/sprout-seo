@@ -4,6 +4,8 @@ namespace Craft;
 class SproutSeo_SettingsService extends BaseApplicationComponent
 {
 	/**
+	 * Save the plugin settings to the database
+	 *
 	 * @param $settings
 	 *
 	 * @return bool

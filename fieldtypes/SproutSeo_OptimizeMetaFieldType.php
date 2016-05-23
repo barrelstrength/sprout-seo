@@ -43,7 +43,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$model = sproutSeo()->overrides->getOverrideByEntryId($entryId, $locale);
+		$model = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -64,7 +64,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				sproutSeo()->overrides->deleteOverrideById($model->id);
+				sproutSeo()->metaTags->deleteMetaTagContentById($model->id);
 			}
 
 			return;
@@ -87,14 +87,14 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 		$attributes['ogImage']      = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
 
-		// Update or create our override entry
+		// Update or create our Meta Tag Content entry
 		if ($model->entryId)
 		{
-			sproutSeo()->overrides->updateOverride($model->id, $attributes);
+			sproutSeo()->metaTags->updateMetaTagContent($model->id, $attributes);
 		}
 		else
 		{
-			sproutSeo()->overrides->createOverride($attributes);
+			sproutSeo()->metaTags->createMetaTagContent($attributes);
 		}
 	}
 
@@ -113,7 +113,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$values = sproutSeo()->overrides->getOverrideByEntryId($entryId, $locale);
+		$values = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
 
 		// Set up our asset fields
 		if (isset($variables['values']->ogImage))

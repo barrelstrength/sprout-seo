@@ -14,14 +14,9 @@ class SproutSeoService extends BaseApplicationComponent
 	public $optimize;
 
 	/**
-	 * @var SproutSeo_MetaDefaultsService
+	 * @var SproutSeo_MetaTagsService
 	 */
-	public $defaults;
-
-	/**
-	 * @var SproutSeo_MetaOverridesService
-	 */
-	public $overrides;
+	public $metaTags;
 
 	/**
 	 * @var SproutSeo_SchemaService
@@ -48,8 +43,7 @@ class SproutSeoService extends BaseApplicationComponent
 		parent::init();
 
 		$this->optimize  = Craft::app()->getComponent('sproutSeo_optimize');
-		$this->defaults  = Craft::app()->getComponent('sproutSeo_metaDefaults');
-		$this->overrides = Craft::app()->getComponent('sproutSeo_metaOverrides');
+		$this->metaTags  = Craft::app()->getComponent('sproutSeo_metaTags');
 		$this->schema    = Craft::app()->getComponent('sproutSeo_schema');
 		$this->sitemap   = Craft::app()->getComponent('sproutSeo_sitemap');
 		$this->settings  = Craft::app()->getComponent('sproutSeo_settings');

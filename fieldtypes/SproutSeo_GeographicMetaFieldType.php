@@ -43,7 +43,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$model = sproutSeo()->overrides->getOverrideByEntryId($entryId, $locale);
+		$model = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -64,7 +64,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				sproutSeo()->overrides->deleteOverrideById($model->id);
+				sproutSeo()->metaTags->deleteMetaTagContentById($model->id);
 			}
 
 			return;
@@ -87,15 +87,15 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 		$attributes['ogImage']      = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
 
-		// If our override entry exists update it,
+		// If our Meta Tag Content entry exists update it,
 		// if not create it
 		if ($model->entryId)
 		{
-			sproutSeo()->overrides->updateOverride($model->id, $attributes);
+			sproutSeo()->metaTags->updateMetaTagContent($model->id, $attributes);
 		}
 		else
 		{
-			sproutSeo()->overrides->createOverride($attributes);
+			sproutSeo()->metaTags->createMetaTagContent($attributes);
 		}
 	}
 
@@ -114,7 +114,7 @@ class SproutSeo_GeographicMetaFieldType extends BaseFieldType
 
 		$locale  = $this->element->locale;
 
-		$values = sproutSeo()->overrides->getGeographicMetaFieldByEntryId($entryId, $locale);
+		$values = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
 
 		// Cleanup the namespace around the $name handle
 		$name = str_replace("fields[", "", $name);

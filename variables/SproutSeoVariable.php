@@ -66,9 +66,9 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedMeta()
 	{
-		$prioritizedMetaModel = sproutSeo()->optimize->getOptimizedMeta();
+		$prioritizedMetaTagModel = sproutSeo()->optimize->getOptimizedMeta();
 
-		return $prioritizedMetaModel->getMetaTagData();
+		return $prioritizedMetaTagModel->getMetaTagData();
 	}
 
 	/**
@@ -87,9 +87,9 @@ class SproutSeoVariable
 	 *
 	 * @return mixed
 	 */
-	public function getDefaults()
+	public function getMetaTagGroups()
 	{
-		return sproutSeo()->defaults->getDefaults();
+		return sproutSeo()->metaTags->getMetaTagGroups();
 	}
 
 	/**
@@ -99,9 +99,9 @@ class SproutSeoVariable
 	 *
 	 * @return null|mixed
 	 */
-	public function getDefaultById($id)
+	public function getMetaTagGroupById($id)
 	{
-		return sproutSeo()->defaults->getDefaultById($id);
+		return sproutSeo()->metaTags->getMetaTagGroupById($id);
 	}
 
 	/**
@@ -109,19 +109,19 @@ class SproutSeoVariable
 	 *
 	 * @return SproutSeo_MetaTagsModel
 	 */
-	public function getDefaultByHandle($handle)
+	public function getMetaTagGroupByHandle($handle)
 	{
-		return sproutSeo()->defaults->getDefaultByHandle($handle);
+		return sproutSeo()->metaTags->getMetaTagGroupByHandle($handle);
 	}
 
 	/**
-	 * @param null $defaultId
+	 * @param null $metaTagGroupId
 	 *
 	 * @return mixed
 	 */
 	public function globalFallbackId()
 	{
-		return sproutSeo()->defaults->globalFallbackId();
+		return sproutSeo()->metaTags->globalFallbackId();
 	}
 
 	/**
@@ -174,13 +174,13 @@ class SproutSeoVariable
 		return craft()->plugins->getPlugin('sproutseo')->getSettings();
 	}
 
-	public function getGlobalKnowledgeGraphMeta()
+	public function getGlobals()
 	{
-		return sproutSeo()->schema->getGlobalKnowledgeGraphMeta();
+		return sproutSeo()->schema->getGlobals();
 	}
 
-	public function prepareKnowledgeGraphStructuredData()
+	public function getKnowledgeGraphLinkedData()
 	{
-		return sproutSeo()->schema->prepareKnowledgeGraphStructuredData();
+		return sproutSeo()->optimize->getKnowledgeGraphLinkedData();
 	}
 }

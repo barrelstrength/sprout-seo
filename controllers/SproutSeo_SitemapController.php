@@ -4,9 +4,9 @@ namespace Craft;
 class SproutSeo_SitemapController extends BaseController
 {
 	/**
-	 * Show Sitemap index
+	 * Load the Sitemap index page
 	 *
-	 * @return mixed Return to Page
+	 * @throws HttpException
 	 */
 	public function actionSitemapIndex()
 	{
@@ -14,9 +14,9 @@ class SproutSeo_SitemapController extends BaseController
 	}
 
 	/**
-	 * Create a new page for the sitemap
+	 * Load the Sitemap edit page
 	 *
-	 * @return mixed Return to Page
+	 * @throws HttpException
 	 */
 	public function actionEditSitemap()
 	{
@@ -26,7 +26,7 @@ class SproutSeo_SitemapController extends BaseController
 	/**
 	 * Save Sitemap Info to the Database
 	 *
-	 * @return mixed Return to Page
+	 * @throws HttpException
 	 */
 	public function actionSaveSitemap()
 	{
@@ -43,12 +43,17 @@ class SproutSeo_SitemapController extends BaseController
 		$model = SproutSeo_SitemapModel::populateModel($sitemapSettings);
 
 		$lastInsertId = sproutSeo()->sitemap->saveSitemap($model);
+
 		$this->returnJson(array(
-				'lastInsertId' => $lastInsertId
-			)
-		);
+			'lastInsertId' => $lastInsertId
+		));
 	}
 
+	/**
+	 * Save a Custom Sitemap Page
+	 *
+	 * @throws HttpException
+	 */
 	public function actionSaveCustomPage()
 	{
 		$this->requirePostRequest();
@@ -63,6 +68,7 @@ class SproutSeo_SitemapController extends BaseController
 		if (sproutSeo()->sitemap->saveCustomPage($customPage))
 		{
 			craft()->userSession->setNotice(Craft::t('Custom page saved.'));
+
 			$this->redirectToPostedUrl();
 		}
 		else
@@ -84,6 +90,8 @@ class SproutSeo_SitemapController extends BaseController
 		$id     = craft()->request->getRequiredPost('id');
 		$result = sproutSeo()->sitemap->deleteCustomPageById($id);
 
-		$this->returnJson(array('success' => $result));
+		$this->returnJson(array(
+			'success' => $result
+		));
 	}
 }

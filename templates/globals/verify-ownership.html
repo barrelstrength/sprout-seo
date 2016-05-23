@@ -30,7 +30,7 @@
 		}
 	] %}
 
-	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
+	{% set globals = craft.sproutSeo.getGlobals() %}
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
@@ -56,7 +56,7 @@
 			</thead>
 			<tbody>
 
-			{% for property in globalMeta.ownership  %}
+			{% for property in globals.ownership %}
 
 			<tr data-id="{{ loop.index }}">
 

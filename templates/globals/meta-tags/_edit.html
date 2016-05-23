@@ -2,8 +2,8 @@
 {% import "_includes/forms" as forms %}
 
 {% set title %}
-  {% if not defaultId is empty %}
-    {{ default.name }}
+  {% if not metaTagGroupId is empty %}
+    {{ metaTags.name }}
   {% else %}
     {{ "New Meta Tag Group"|t }}
   {% endif %}
@@ -16,15 +16,15 @@
 {% set tabs = {
 	main: {
 		label: "General"|t,
-		url: '#default-basic'
+		url: '#metatags-basic'
 	},
 	facebook: {
 		label: "Facebook"|t,
-		url: '#default-facebook'
+		url: '#metatags-facebook'
 	},
 	twitter: {
 		label: "Twitter"|t,
-		url: '#default-twitter'
+		url: '#metatags-twitter'
 	}
 } %}
 
@@ -35,14 +35,14 @@
 {% if craft.request.getSegment(3) == 'new' %}
 	{% set saveShortcutRedirect = url('sproutseo/globals/meta-tags') %}
 {% else %}
-	{% set saveShortcutRedirect = url('sproutseo/globals/meta-tags/' ~ defaultId) %}
+	{% set saveShortcutRedirect = url('sproutseo/globals/meta-tags/' ~ metaTagGroupId) %}
 {% endif %}
 
-{# Set a field context so we can manage field visibility between the SEO Defaults and the Field Types #}
+{# Set a field context so we can manage field visibility between the SEO Meta Tag Groups and the Field Types #}
 {% set fieldContext = 'defaults' %}
 
-{# Map the `defaults` object to `values` so we can use the same templates for SEO Defaults and the Field Types #}
-{% set values = default %}
+{# Map the `metaTags` object to `values` so we can use the same templates for SEO Meta Tag Groups and the Field Types #}
+{% set values = metaTags %}
 
 {% block saveButton %}
 	<div class="buttons">
@@ -61,9 +61,9 @@
 				<input type="hidden" name="action" value="sproutSeo/metaTags/saveMetaTagGroup">
 				<input type="hidden" name="redirect" value="sproutseo/globals/meta-tags">
 
-				<input type="hidden" name="sproutseo_fields[id]" value="{{ defaultId }}">
+				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
 
-				<div id="default-basic">
+				<div id="metatags-basic">
 
 					{% include 'sproutseo/_partials/fields/input' %}
 
@@ -72,11 +72,11 @@
 					{{ forms.checkboxField({
 						label: "Customize Location Info"|t,
 						name: 'hasTitleField',
-						toggle: 'default-location',
+						toggle: 'metatags-location',
 						checked: false
 					}) }}
 
-					<div id="default-location" class="hidden">
+					<div id="metatags-location" class="hidden">
 						{% include 'sproutseo/_partials/fields/geo' %}
 					</div>
 
@@ -85,22 +85,22 @@
 					{{ forms.checkboxField({
 						label: "Customize Robot Behavior"|t,
 						name: 'hasTitleField',
-						toggle: 'default-robots',
+						toggle: 'metatags-robots',
 						checked: false
 					}) }}
 
-					<div id="default-robots" class="hidden">
+					<div id="metatags-robots" class="hidden">
 						{% include 'sproutseo/_partials/fields/robots' %}
 					</div>
 
 				</div>
 
-				<div id="default-facebook" class="hidden">
-					{% include 'sproutseo/_partials/fields/open-graph' with { values : default } %}
+				<div id="metatags-facebook" class="hidden">
+					{% include 'sproutseo/_partials/fields/open-graph' with { values : metaTags } %}
 				</div>
 
-				<div id="default-twitter" class="hidden">
-					{% include 'sproutseo/_partials/fields/twitter-card' with { values : default } %}
+				<div id="metatags-twitter" class="hidden">
+					{% include 'sproutseo/_partials/fields/twitter-card' with { values : metaTags } %}
 				</div>
 
 		</div>
@@ -109,10 +109,10 @@
 		<div class="pane meta">
 
 			{{ forms.textField({
-				label: "Meta Name <span class='info'>Human readable default name</span>"|t,
+				label: "Name <span class='info'>Human readable Meta Tag Group name</span>"|t,
 				id: "name",
 				name: 'sproutseo_fields[name]',
-				value: default.name,
+				value: metaTags.name,
 				errors: '',
 				required: true
 			}) }}
@@ -121,25 +121,25 @@
 				label: "Handle <span class='info'>Name you will use to refer to this meta-tag group in your templates</span>"|t,
 				id: "handle",
 				name: 'sproutseo_fields[handle]',
-				value: default.handle,
+				value: metaTags.handle,
 				errors: '',
 				required: true
 			}) }}
 
 			{% set globalFallbackId = craft.sproutSeo.globalFallbackId() %}
 
-			{% if not globalFallbackId or (globalFallbackId == defaultId) %}
+			{% if not globalFallbackId or (globalFallbackId == metaTagGroupId) %}
 				{{ forms.lightswitchField({
-					label: "Global Meta <span class='info'>Use this default as my global fallback</span>"|t,
+					label: "Global Meta <span class='info'>Use this Meta Tag Group as my global fallback</span>"|t,
 					name: 'sproutseo_fields[globalFallback]',
-					on: default.globalFallback
+					on: metaTags.globalFallback
 				}) }}
 			{% endif %}
 
 			{{ forms.lightswitchField({
 				label: "Site Name <span class='info'>Append Site Name '" ~ siteName ~ "' to all Titles</span>"|t,
 				name: 'sproutseo_fields[appendSiteName]',
-				on: default.appendSiteName
+				on: metaTags.appendSiteName
 			}) }}
 
 			<div class="field" id="enabled-field">
@@ -166,15 +166,15 @@
 
 {% endset %}
 
-{% if default.name is not defined or not default.handle %}
+{% if metaTags.name is not defined or not metaTags.handle %}
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
 {% endif %}
 
-{% includeJsResource "sproutseo/js/default.js" %}
+{% includeJsResource "sproutseo/js/MetaTags.js" %}
 
 {% set js %}
 
-new Craft.SproutSeoDefault();
+new Craft.SproutSeoMetaTags();
 
 {% endset %}
 

@@ -33,7 +33,7 @@
 		}
 	] %}
 
-	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
+	{% set globals = craft.sproutSeo.getGlobals() %}
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
@@ -59,7 +59,7 @@
 			</thead>
 			<tbody>
 
-			{% for socialProfile in globalMeta.social  %}
+			{% for socialProfile in globals.social  %}
 
 			<tr data-id="{{ loop.index }}">
 				<td>

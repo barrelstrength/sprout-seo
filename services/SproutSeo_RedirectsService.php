@@ -109,13 +109,13 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function updateMethods($ids, $newMethod)
 	{
-		$resp = craft()->db->createCommand()->update(
+		$response = craft()->db->createCommand()->update(
 			'sproutseo_redirects',
 			array('method' => $newMethod),
 			array('in', 'id', $ids)
 		);
 
-		return $resp;
+		return $response;
 	}
 
 	/**
@@ -251,23 +251,29 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Install default styles to be used with Notes Field
+	 * Install default settings
+	 * 
+	 * @param null $pluginName
 	 *
-	 * @return none
+	 * @return mixed
+	 * @throws Exception
 	 */
 	public function installDefaultSettings($pluginName = null)
 	{
+		// Add a new Structure for our Redirects
 		$maxLevels            = 1;
 		$structure            = new StructureModel();
 		$structure->maxLevels = $maxLevels;
+
 		craft()->structures->saveStructure($structure);
 
-		$defaultValues = '{"pluginNameOverride":"' . $pluginName . '", "seoDivider":"-", "structureId":"' . $structure->id . '"}';
+		// Add our default plugin settings
+		$settings = '{"pluginNameOverride":"' . $pluginName . '", "seoDivider":"-", "structureId":"' . $structure->id . '"}';
 
 		craft()->db->createCommand()->update(
 			'plugins',
 			array(
-				'settings' => $defaultValues
+				'settings' => $settings
 			),
 			'class=:class',
 			array(

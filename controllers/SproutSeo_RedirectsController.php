@@ -7,7 +7,9 @@ namespace Craft;
 class SproutSeo_RedirectsController extends BaseController
 {
 	/**
-	 * Event index
+	 * Load the Redirect index page
+	 *
+	 * @throws HttpException
 	 */
 	public function actionRedirectIndex()
 	{
@@ -23,16 +25,15 @@ class SproutSeo_RedirectsController extends BaseController
 	 */
 	public function actionEditRedirect(array $variables = array())
 	{
-		//Get method options
 		$variables['methodOptions'] = sproutSeo()->redirects->getMethods();
-		//Set title
+
 		$variables['subTitle'] = Craft::t('Create a new redirect');
+
 		// Now let's set up the actual redirect
 		if (empty($variables['redirect']))
 		{
 			if (!empty($variables['redirectId']))
 			{
-				//Set title
 				$variables['subTitle'] = Craft::t('Edit redirect');
 				$variables['redirect'] = sproutSeo()->redirects->getRedirectById($variables['redirectId']);
 
@@ -46,9 +47,9 @@ class SproutSeo_RedirectsController extends BaseController
 				$variables['redirect'] = new SproutSeo_RedirectModel();
 			}
 		}
-		// Set the "Continue Editing" URL
+
 		$variables['continueEditingUrl'] = 'sproutseo/redirects/{id}';
-		// Breadcrumbs
+
 		$variables['crumbs'] = array(
 			array('label' => Craft::t('Redirects'), 'url' => UrlHelper::getUrl('redirects'))
 		);
@@ -71,7 +72,9 @@ class SproutSeo_RedirectsController extends BaseController
 
 			if (!$redirect)
 			{
-				throw new Exception(Craft::t('No redirect exists with the ID “{id}”', array('id' => $redirectId)));
+				throw new Exception(Craft::t('No redirect exists with the ID “{id}”', array(
+					'id' => $redirectId
+				)));
 			}
 		}
 		else
@@ -79,7 +82,8 @@ class SproutSeo_RedirectsController extends BaseController
 			$redirect = new SproutSeo_RedirectModel();
 		}
 
-		// Set the event attributes, defaulting to the existing values for whatever is missing from the post data
+		// Set the event attributes, defaulting to the existing values for
+		// whatever is missing from the post data
 		$redirect->oldUrl  = craft()->request->getPost('oldUrl', $redirect->oldUrl);
 		$redirect->newUrl  = craft()->request->getPost('newUrl');
 		$redirect->method  = craft()->request->getPost('method');
@@ -89,6 +93,7 @@ class SproutSeo_RedirectsController extends BaseController
 		if (sproutSeo()->redirects->saveRedirect($redirect))
 		{
 			craft()->userSession->setNotice(Craft::t('Redirect saved.'));
+			
 			$this->redirectToPostedUrl($redirect);
 		}
 		else

@@ -8,8 +8,8 @@
 		{ label: "Person", value: "Person" }
 	] %}
 
-	{% set globalMeta = craft.sproutSeo.getGlobalKnowledgeGraphMeta() %}
-	{% set schema = globalMeta.identity %}
+	{% set globals = craft.sproutSeo.getGlobals() %}
+	{% set schema = globals.identity %}
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut>
 		{{ getCsrfInput() }}
@@ -22,7 +22,7 @@
 			instructions: 'Select the primary concept that represents your brand identity.'|t,
 			name: 'sproutseo[schema][identity][@type]',
 			options: identityTypes,
-			value: globalMeta.getType(),
+			value: globals.getType(),
 			errors: "",
 			required: false,
 			first: true
@@ -32,7 +32,7 @@
 			label: "Organization Name"|t,
 			instructions: "Name of your organization"|t,
 			name: 'sproutseo[schema][identity][name]',
-			value: schema.name,
+			value: schema['name'] is defined ? schema.name : null,
 			errors: '',
 			first: true
 		}) }}
@@ -41,7 +41,7 @@
 			label: "Title"|t,
 			instructions: "Title"|t,
 			name: 'sproutseo[schema][identity][title]',
-			value: schema.name,
+			value: schema['name'] is defined ? schema.name : null,
 			errors: ''
 		}) }}
 
@@ -49,7 +49,7 @@
 			label: "Description"|t,
 			instructions: "Description of your organization"|t,
 			name: 'sproutseo[schema][identity][description]',
-			value: schema.name,
+			value: schema['name'] is defined ? schema.name : null,
 			errors: '',
 			required: true
 		}) }}
@@ -58,7 +58,7 @@
 			label: "Keywords"|t,
 			instructions: "Primary keywords that describe your content"|t,
 			name: 'sproutseo[schema][identity][keywords]',
-			value: schema.name,
+			value: schema['name'] is defined ? schema.name : null,
 			errors: '',
 			required: true
 		}) }}
@@ -67,7 +67,7 @@
 			label: "URL"|t,
 			instructions: "Canonical URL of your organization"|t,
 			name: 'sproutseo[schema][identity][url]',
-			value: schema.url,
+			value: schema['name'] is defined ? schema.name : null,
 			errors: '',
 			required: true
 		}) }}
@@ -75,7 +75,7 @@
 		{{ forms.textField({
 			label: "Logo"|t,
 			name: 'sproutseo[schema][identity][logo]',
-			value: schema.name,
+			value: schema['name'] is defined ? schema.name : null,
 			errors: ''
 		}) }}
 
