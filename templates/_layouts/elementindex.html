@@ -1,9 +1,13 @@
 {% extends "_layouts/elementindex" %}
 
 {% set subnav = {
-	meta: {
+	globals: {
 		label: "Globals"|t,
-		url: cpUrl('sproutseo/globals/meta-tags')
+		url: cpUrl('sproutseo/globals/website-identity')
+	},
+	metatags: {
+		label: "Meta Tags"|t,
+		url: cpUrl('sproutseo/metatags')
 	},
 	sitemap: {
 		label: "Sitemap"|t,

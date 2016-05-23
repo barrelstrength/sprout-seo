@@ -1,19 +1,17 @@
 {% extends "sproutseo/_layouts/base" %}
 
 {% if title is not defined %}
-	{% set title = "General"|t %}
+	{% set title = "Globals"|t %}
 {% endif %}
 
 {% set navItems = {
-	'meta-heading': { heading: "General"|t },
-	'meta-tags': { title: "Meta Tags"|t },
-	'verify-ownership': { title: "Verify Ownership"|t },
-
 	'identity-heading': { heading: "Knowledge Graph"|t },
 	'website-identity': { title: "Website Identity"|t },
 	'contacts': { title: "Contacts"|t },
 	'social': { title: "Social Profiles"|t },
 
+	'ownership-heading': { heading: "Ownership"|t },
+	'verify-ownership': { title: "Verify Ownership"|t },
 } %}
 
 {% set selectedItem = craft.request.getSegment(3) %}

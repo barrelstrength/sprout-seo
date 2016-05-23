@@ -10,7 +10,7 @@
 {% endset %}
 
 {% set crumbs = [
-	{ label: "Globals"|t, url: url('sproutseo/globals/meta-tags') }
+	{ label: "Globals"|t, url: url('sproutseo/metatags') }
 ] %}
 
 {% set centered = true %}
@@ -18,9 +18,9 @@
 {% set fullPageForm = true %}
 
 {% if craft.request.getSegment(3) == 'new' %}
-	{% set saveShortcutRedirect = url('sproutseo/globals/meta-tags') %}
+	{% set saveShortcutRedirect = url('sproutseo/metatags') %}
 {% else %}
-	{% set saveShortcutRedirect = url('sproutseo/globals/meta-tags/' ~ metaTagGroupId) %}
+	{% set saveShortcutRedirect = url('sproutseo/metatags/' ~ metaTagGroupId) %}
 {% endif %}
 
 {# Set a field context so we can manage field visibility between the SEO Meta Tag Groups and the Field Types #}
@@ -42,7 +42,7 @@
 		<div id="fields" class="pane">
 
 				<input type="hidden" name="action" value="sproutSeo/metaTags/saveMetaTagGroup">
-				<input type="hidden" name="redirect" value="sproutseo/globals/meta-tags">
+				<input type="hidden" name="redirect" value="sproutseo/metatags">
 
 				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
 

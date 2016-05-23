@@ -5,13 +5,17 @@
 {% endif %}
 
 {% set subnav = {
-	meta: {
+	globals: {
     label: "Globals"|t,
-    url: cpUrl('sproutseo/globals/meta-tags')
+    url: cpUrl('sproutseo/globals/website-identity')
   },
+	metatags: {
+		label: "Meta Tags"|t,
+		url: cpUrl('sproutseo/metatags')
+	},
   sitemap: {
     label: "Sitemap"|t,
-    url: cpUrl('sproutseo/sitemap/index'),
+    url: cpUrl('sproutseo/sitemap'),
   },
 	redirects: {
     label: "Redirects"|t,

@@ -1,4 +1,4 @@
-{% extends "sproutseo/_layouts/general" %}
+{% extends "sproutseo/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {% set title = "Meta Tags"|t %}
@@ -9,7 +9,7 @@
 
 {% set extraPageHeaderHtml %}
 	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('sproutseo/globals/meta-tags/new') }}">{{ "New Meta Tag Group"|t }}</a>
+		<a class="btn submit add icon" href="{{ url('sproutseo/metatags/new') }}">{{ "New Meta Tag Group"|t }}</a>
 	</div>
 {% endset %}
 
@@ -40,7 +40,7 @@
 
 			<tr id="results" data-id="{{ metaTagGroup.id }}" data-name="{{ metaTagGroup.name|t }}">
 				<td>
-					<a href="{{ url('sproutseo/globals/meta-tags/' ~ metaTagGroup.id) }}">
+					<a href="{{ url('sproutseo/metatags/' ~ metaTagGroup.id) }}">
 						{{ metaTagGroup.name }}
 					</a>
 				</td>

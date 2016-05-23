@@ -11,7 +11,7 @@ class SproutSeo_MetaTagsController extends BaseController
 	public function actionEditMetaTagGroup()
 	{
 		// Determine what we're working with
-		$segment        = craft()->request->getSegment(4);
+		$segment        = craft()->request->getSegment(3);
 		$metaTagGroupId = ($segment == 'new') ? null : $segment;
 
 		// Get our Meta Model
@@ -46,7 +46,7 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Set elementType
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
-		$this->renderTemplate('sproutseo/globals/meta-tags/_edit', array(
+		$this->renderTemplate('sproutseo/metatags/_edit', array(
 			'metaTagGroupId'       => $metaTagGroupId,
 			'metaTags'             => $metaTags,
 			'ogImageElements'      => $ogImageElements,
