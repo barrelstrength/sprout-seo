@@ -159,7 +159,8 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			'twitterImageElements' => $twitterImageElements,
 			'assetsSourceExists' => $assetsSourceExists,
 			'elementType' => $elementType,
-		  'fieldId' => $fieldId
+		  'fieldId' => $fieldId,
+			'fieldContext' => 'field'
 		));
 	}
 }

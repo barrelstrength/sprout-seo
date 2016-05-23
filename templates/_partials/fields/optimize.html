@@ -1,28 +1,5 @@
 {% import "_includes/forms" as forms %}
 
-<style>
-	#{{ fieldId }} > .heading:first-of-type { display: none; }
-
-	.sproutseo-preview-btns {
-		text-align: right;
-		margin-bottom: -1px;
-	}
-	.sproutseo-preview-btns li {
-		display: inline-block;
-		box-shadow: 0 0 0 1px #e3e5e8;
-		padding: 3px 5px 2px;
-		font-size: 12px;
-		margin-right: -3px;
-		background-image: linear-gradient(#f7f7f8, #f4f5f6);
-	}
-	.sproutseo-preview-btns li.selected {
-		background-color: #fff;
-		background-image: none;
-		border-bottom: 1px solid #fff;
-	}
-</style>
-
-
 		<div class="sproutseo-box-optimized">
 
 			{# @todo - Optional / Can also default to the Title field, or any field? #}
@@ -169,9 +146,9 @@
 
 			<div class="sproutseo-box-robots">
 
-				{% if fieldContext is defined and fieldContext == 'robots' %}
+				{% if fieldContext is defined and fieldContext == 'field' %}
 					{{ forms.textField({
-						label: "Canonical"|t,
+						label: "Canonical URL"|t,
 						name: "sproutseo_fields[canonical]",
 						value: values.canonical
 					}) }}
@@ -555,6 +532,32 @@
 </div>
 
 <style>
+	{# Hide the Heading of our Field so all our grouped sub-fields
+	 feel like they are part of the natural flow of fields #}
+	{% if fieldId is defined %}
+	#{{ fieldId }} > .heading:first-of-type { display: none; }
+	{% endif %}
+
+	{# Preview Buttons for Example Search, Facebook, & Twitter results #}
+	.sproutseo-preview-btns {
+		text-align: right;
+		margin-bottom: -1px;
+	}
+	.sproutseo-preview-btns li {
+		display: inline-block;
+		box-shadow: 0 0 0 1px #e3e5e8;
+		padding: 3px 5px 2px;
+		font-size: 12px;
+		margin-right: -3px;
+		background-image: linear-gradient(#f7f7f8, #f4f5f6);
+	}
+	.sproutseo-preview-btns li.selected {
+		background-color: #fff;
+		background-image: none;
+		border-bottom: 1px solid #fff;
+	}
+
+	{# Example Google Results #}
 	.google-result-border {
 		border-bottom: 1px solid rgba(0,0,0,0.07);
 		border-top: 1px solid rgba(0,0,0,0.07);
@@ -608,30 +611,13 @@
 	/*margin-top: -2px;*/
 	/*position: absolute;*/
 	/*}*/
+
+
+	{# Override hr on matrix blocks to display nicely #}
+	.pane hr {
+		margin: 14px -14px;
+	}
 </style>
-
-<div class="google-result-border">
-	<h3 class="google-result-heading">Pidgeon - Wikipedia, the free encyclopedia</h3>
-	<div class="s">
-		<div>
-			<divstyle="white-space:nowrap">
-			<cite class="google-result-cite">https://en.wikipedia.org/wiki/Pidgeon</cite>
-			{#<div class="action-menu">#}
-			{#<a href="#"><span class="mn-dwn-arw"></span></a>#}
-			{#</div>#}
-			<div class="google-result-identity">
-				<div class="crl">Wikipedia<span class="_Bs"></span></div>
-			</div>
-		</div>
-		<span class="google-result-description">Pidgeon is a surname from an archaic spelling of pigeon. Notable persons with the surname include: Caroline Pidgeon, Liberal Democrat politician in the United<wbr>&nbsp;...</span>
-	</div>
-</div>
-
-<p>Allow a user to see Matrix Block Options to expand the advanced options. Our field settings could allow a user to choose which blocks they want to display. And, even if they are all displayed they don't take up a ton of UI space until a user wants to expand them. We just have to limit each type of block to a single instance. We could still allow reordering and expanding and collapsing them as the user desires.</p>
-
-<p>We can also assume that the "Title" And "Keywords" fields are part of the default simple settings. A user can choose which fields to display for our default blocks.  Or maybe keywords becomes more of a utility field for page analysis in the long run.</p>
-
-
 
 {% includeCssResource "sproutseo/css/fields.css" %}
 {% includeJsResource "sproutseo/js/open-graph.js" %}

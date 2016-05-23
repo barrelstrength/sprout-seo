@@ -13,21 +13,6 @@
 	{ label: "Globals"|t, url: url('sproutseo/globals/meta-tags') }
 ] %}
 
-{% set tabs = {
-	main: {
-		label: "General"|t,
-		url: '#metatags-basic'
-	},
-	facebook: {
-		label: "Facebook"|t,
-		url: '#metatags-facebook'
-	},
-	twitter: {
-		label: "Twitter"|t,
-		url: '#metatags-twitter'
-	}
-} %}
-
 {% set centered = true %}
 
 {% set fullPageForm = true %}
@@ -39,7 +24,7 @@
 {% endif %}
 
 {# Set a field context so we can manage field visibility between the SEO Meta Tag Groups and the Field Types #}
-{% set fieldContext = 'defaults' %}
+{% set fieldContext = 'metaTagGroups' %}
 
 {# Map the `metaTags` object to `values` so we can use the same templates for SEO Meta Tag Groups and the Field Types #}
 {% set values = metaTags %}
@@ -56,52 +41,13 @@
 	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
 		<div id="fields" class="pane">
 
-			{% include "_includes/tabs" %}
-
 				<input type="hidden" name="action" value="sproutSeo/metaTags/saveMetaTagGroup">
 				<input type="hidden" name="redirect" value="sproutseo/globals/meta-tags">
 
 				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
 
-				<div id="metatags-basic">
 
-					{% include 'sproutseo/_partials/fields/input' %}
-
-					<hr>
-
-					{{ forms.checkboxField({
-						label: "Customize Location Info"|t,
-						name: 'hasTitleField',
-						toggle: 'metatags-location',
-						checked: false
-					}) }}
-
-					<div id="metatags-location" class="hidden">
-						{% include 'sproutseo/_partials/fields/geo' %}
-					</div>
-
-					<hr>
-
-					{{ forms.checkboxField({
-						label: "Customize Robot Behavior"|t,
-						name: 'hasTitleField',
-						toggle: 'metatags-robots',
-						checked: false
-					}) }}
-
-					<div id="metatags-robots" class="hidden">
-						{% include 'sproutseo/_partials/fields/robots' %}
-					</div>
-
-				</div>
-
-				<div id="metatags-facebook" class="hidden">
-					{% include 'sproutseo/_partials/fields/open-graph' with { values : metaTags } %}
-				</div>
-
-				<div id="metatags-twitter" class="hidden">
-					{% include 'sproutseo/_partials/fields/twitter-card' with { values : metaTags } %}
-				</div>
+				{% include 'sproutseo/_partials/fields/optimize' %}
 
 		</div>
 	</div>
