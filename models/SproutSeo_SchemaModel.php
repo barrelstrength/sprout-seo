@@ -91,13 +91,17 @@ class SproutSeo_SchemaModel extends BaseModel
 		$contacts = $this->{$this->schemaId};
 
 		$contactPoints = array();
-		foreach ($contacts as $contact)
+
+		if (count($contacts))
 		{
-			$contactPoints[] = array(
-				'@type'       => 'ContactPoint',
-				'contactType' => isset($contact['contactType']) ? $contact['contactType'] : $contact[0],
-				'telephone'   => isset($contact['telephone']) ? $contact['telephone'] : $contact[1]
-			);
+			foreach ($contacts as $contact)
+			{
+				$contactPoints[] = array(
+					'@type'       => 'ContactPoint',
+					'contactType' => isset($contact['contactType']) ? $contact['contactType'] : $contact[0],
+					'telephone'   => isset($contact['telephone']) ? $contact['telephone'] : $contact[1]
+				);
+			}
 		}
 
 		return $contactPoints;
@@ -108,12 +112,16 @@ class SproutSeo_SchemaModel extends BaseModel
 		$profiles = $this->{$this->schemaId};
 
 		$profileLinks = array();
-		foreach ($profiles as $profile)
+		
+		if (count($profiles))
 		{
-			$profileLinks[] = array(
-				'profileName' => isset($profile['profileName']) ? $profile['profileName'] : $profile[0],
-				'url' => isset($profile['url']) ? $profile['url'] : $profile[1]
-			);
+			foreach ($profiles as $profile)
+			{
+				$profileLinks[] = array(
+					'profileName' => isset($profile['profileName']) ? $profile['profileName'] : $profile[0],
+					'url' => isset($profile['url']) ? $profile['url'] : $profile[1]
+				);
+			}
 		}
 
 		return $profileLinks;
