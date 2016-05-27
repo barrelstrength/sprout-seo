@@ -15,7 +15,7 @@ class m160522_000000_sproutSeo_addGlobalsTable extends BaseMigration
 			SproutSeoPlugin::log("Creating the {$tableName} table.");
 
 			craft()->db->createCommand()->createTable($tableName, array(
-				'id' => array('column' => ColumnType::Int, 'null' => false),
+				'id' => array('column' => ColumnType::Int, 'null' => false, 'primaryKey' => true),
 				'locale'    => array('column' => ColumnType::Locale, 'null' => false),
 				'identity'  => array('column' => ColumnType::Text, 'null' => true),
 				'ownership' => array('column' => ColumnType::Text, 'null' => true),
