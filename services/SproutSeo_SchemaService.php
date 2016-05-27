@@ -18,7 +18,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 
 	/**
 	 * Save schema to database
-	 * 
+	 *
 	 * @param $schemaType
 	 * @param $schema
 	 *
@@ -32,12 +32,12 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 			$schemaType => $schema->getSchema($schemaType, 'json')
 		);
 
-		craft()->db->createCommand()->update('sproutseo_globals',
+		$result = craft()->db->createCommand()->update('sproutseo_globals',
 			$values,
 			'id=:id', array(':id' => 1)
 		);
 
-		return true;
+		return $result;
 	}
 
 	/**
