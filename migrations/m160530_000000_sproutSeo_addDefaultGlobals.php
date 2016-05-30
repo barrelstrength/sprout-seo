@@ -20,7 +20,7 @@ class m160530_000000_sproutSeo_addDefaultGlobals extends BaseMigration
 				->from($tableName)
 				->queryRow();
 
-			if (is_null($golobal))
+			if (!$global)
 			{
 				craft()->db->createCommand()->insert($tableName, array(
 					'locale'    => null,
