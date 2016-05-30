@@ -29,7 +29,7 @@
 					{% set optionLabel = (option.label is defined ? option.label : option) %}
 					{% set optionValue = (option.value is defined ? option.value : key) %}
 					{% set optionDisabled = (option.disabled is defined ? option.disabled : false) %}
-					<option value="{{ optionValue }}"{% if optionValue == value %} selected{% endif %}{% if optionDisabled %} disabled{% endif %}>{{ optionLabel }}</option>
+					<option {% if loop.first %} disabled selected {% endif%} value="{{ optionValue }}"{% if optionValue == value %} selected{% endif %}{% if optionDisabled %} disabled{% endif %}>{{ optionLabel }}</option>
 				{% endif %}
 				{% endfor %}
 				{% if hasOptgroups %}

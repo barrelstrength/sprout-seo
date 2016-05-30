@@ -129,6 +129,8 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 
 					var hasOptgroups = false;
 
+					var firstRow = 'disabled selected';
+
 					for (var key in col.options)
 					{
 						var option = col.options[key];
@@ -152,8 +154,10 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 							    optionValue = (typeof option.value != 'undefined' ? option.value : key),
 							    optionDisabled = (typeof option.disabled != 'undefined' ? option.disabled : false);
 
-							rowHtml += '<option value="'+optionValue+'"'+(optionValue == value ? ' selected' : '')+(optionDisabled ? ' disabled' : '')+'>'+optionLabel+'</option>';
+							rowHtml += '<option '+firstRow+' value="'+optionValue+'"'+(optionValue == value ? ' selected' : '')+(optionDisabled ? ' disabled' : '')+'>'+optionLabel+'</option>';
 						}
+
+						firstRow = '';
 					}
 
 					if (hasOptgroups)
