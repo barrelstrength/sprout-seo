@@ -22,9 +22,11 @@ class m160530_000000_sproutSeo_addDefaultGlobals extends BaseMigration
 
 			if (!$global)
 			{
+				$locale = craft()->i18n->getLocaleById(craft()->language);
+
 				craft()->db->createCommand()->insert($tableName, array(
-					'locale'    => null,
-					'identy'    => null,
+					'locale'    => $locale,
+					'identity'  => null,
 					'ownership' => null,
 					'contacts'  => null,
 					'social'    => null
