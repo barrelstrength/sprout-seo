@@ -88,6 +88,20 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		}
 	}
 
+	public function installDefaultGlobals()
+	{
+		$result = craft()->db->createCommand()->insert($tableName, array(
+				'locale'    => null,
+				'identy'    => null,
+				'ownership' => null,
+				'contacts'  => null,
+				'social'    => null
+			)
+		);
+
+		return $result;
+	}
+
 	/**
 	 * @param        $array
 	 * @param        $path

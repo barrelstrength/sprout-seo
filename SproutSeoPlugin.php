@@ -251,6 +251,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function onAfterInstall()
 	{
 		sproutSeo()->redirects->installDefaultSettings();
+		sproutSeo()->schema->installDefaultGlobals();
 	}
 }
 
