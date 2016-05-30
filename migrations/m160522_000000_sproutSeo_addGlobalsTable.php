@@ -27,6 +27,8 @@ class m160522_000000_sproutSeo_addGlobalsTable extends BaseMigration
 			), null, true, false
 			);
 
+			craft()->db->createCommand()->createIndex($tableName, 'id,locale', true);
+
 			SproutSeoPlugin::log("Finished creating the {$tableName} table.");
 		}
 		else
