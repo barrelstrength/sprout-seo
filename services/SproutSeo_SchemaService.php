@@ -53,9 +53,9 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 			->queryRow();
 
 		$results['identity']  = isset($results['identity']) ? JsonHelper::decode($results['identity']) : null;
-		$results['contacts']  = isset($results['identity']) ? JsonHelper::decode($results['contacts']) : null;
-		$results['ownership'] = isset($results['identity']) ? JsonHelper::decode($results['ownership']) : null;
-		$results['social']    = isset($results['identity']) ? JsonHelper::decode($results['social']) : null;
+		$results['contacts']  = isset($results['contacts']) ? JsonHelper::decode($results['contacts']) : null;
+		$results['ownership'] = isset($results['ownership']) ? JsonHelper::decode($results['ownership']) : null;
+		$results['social']    = isset($results['social']) ? JsonHelper::decode($results['social']) : null;
 
 		$schema = SproutSeo_SchemaModel::populateModel($results);
 
