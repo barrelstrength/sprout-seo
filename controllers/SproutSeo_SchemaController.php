@@ -56,6 +56,7 @@ class SproutSeo_SchemaController extends BaseController
 		$this->requirePostRequest();
 
 		$ownershipMeta = craft()->request->getPost('sproutseo.meta.ownership');
+		$schemaType    = craft()->request->getPost('schemaType');
 
 		// Remove empty items from multi-dimensional array
 		$ownershipMeta = array_filter(array_map('array_filter', $ownershipMeta));
@@ -67,51 +68,26 @@ class SproutSeo_SchemaController extends BaseController
 			// @todo - add proper validation and return errors to template
 			if (count($meta) == 3)
 			{
-				foreach ($meta as $key2 => $value)
-				{
-					if ($key2 == 0)
-					{
-						$ownershipMetaWithKeys[$key]['service'] = $value;
-					}
-
-					if ($key2 == 1)
-					{
-						$ownershipMetaWithKeys[$key]['metaTag'] = $value;
-					}
-
-					if ($key2 == 2)
-					{
-						$ownershipMetaWithKeys[$key]['verificationCode'] = $value;
-					}
-				}
+				$ownershipMetaWithKeys[$key]['service'] = $meta[0];
+				$ownershipMetaWithKeys[$key]['metaTag'] = $meta[1];
+				$ownershipMetaWithKeys[$key]['verificationCode'] = $meta[2];
 			}
 		}
 
-		// @todo - move to service layer
-		$results = craft()->db->createCommand()
-			->select('id, locale, ownership')
-			->from('sproutseo_globals')
-			->queryRow();
+		$schema = SproutSeo_SchemaModel::populateModel(array('ownership'=>$ownershipMetaWithKeys));
 
-		$globals            = SproutSeo_GlobalsModel::populateModel($results);
-		$globals->ownership = JsonHelper::encode($ownershipMetaWithKeys);
-
-		if (is_array($results) && count($results))
+		if (sproutSeo()->schema->saveSchema($schemaType, $schema))
 		{
-			//$id = (int) $results['id'];
-			//unset($results['id']);
+			craft()->userSession->setNotice(Craft::t('Schema saved.'));
 
-			craft()->db->createCommand()->update('sproutseo_globals',
-				$results,
-				'id=:id', array(':id' => $globals->id)
-			);
+			$this->redirectToPostedUrl($schema);
 		}
 		else
 		{
-			// @todo - update locale to be dynamic
-			craft()->db->createCommand()->insert('sproutseo_globals', array(
-				'locale'    => 'en_us',
-				'ownership' => JsonHelper::encode($globals->ownership)
+			craft()->userSession->setError(Craft::t('Unable to save schema.'));
+
+			craft()->urlManager->setRouteVariables(array(
+				'schema' => $schema
 			));
 		}
 	}

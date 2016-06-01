@@ -130,6 +130,12 @@ class SproutSeo_SchemaModel extends BaseModel
 		return $profileLinks;
 	}
 
+	protected function getOwnership()
+	{
+		$ownership = $this->{$this->schemaId};
+
+		return $ownership;
+	}
 
 	// Custom Schema Types
 	// =========================================================================
