@@ -62,9 +62,12 @@ class SproutSeo_SchemaModel extends BaseModel
 
 		$schema = $this->{$this->schemaId};
 
-		$structuredData['name']        = $schema['name'];
-		$structuredData['description'] = $schema['description'];
-		$structuredData['url']         = $schema['url'];
+		$structuredData['name']        = isset($schema['name']) ? $schema['name'] : null;
+		$structuredData['description'] = isset($schema['description']) ? $schema['description'] : null;
+		$structuredData['url']         = isset($schema['url']) ? $schema['url'] : null;
+		$structuredData['logo']        = isset($schema['logo']) ? $schema['logo'] : null;
+		$structuredData['keywords']    = isset($schema['keywords']) ? $schema['keywords'] : null;
+		$structuredData['title']       = isset($schema['title']) ? $schema['title'] : null;
 
 		return $structuredData;
 	}
@@ -112,7 +115,7 @@ class SproutSeo_SchemaModel extends BaseModel
 		$profiles = $this->{$this->schemaId};
 
 		$profileLinks = array();
-		
+
 		if (count($profiles))
 		{
 			foreach ($profiles as $profile)
