@@ -93,7 +93,7 @@
 		</table>
 
 		<div class="buttons">
-			<div class="btn add icon small" tabindex="0">Add a Contact</div>
+			<div id="addContact" class="btn add icon small" tabindex="0">Add a Contact</div>
 		</div>
 
 		<hr>
@@ -110,6 +110,14 @@
 {% includeJsResource 'sproutseo/js/EditableTable.js' %}
 
 {% includejs %}
+	$( document ).ready(function() {
+		var globals = {{ globals.contacts|json_encode|raw }};
+
+		if (globals == null)
+		{
+			$('#addContact').trigger('click');
+		}
+	});
 
 	(function() {
 

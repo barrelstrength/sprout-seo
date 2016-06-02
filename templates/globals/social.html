@@ -89,7 +89,7 @@
 		</table>
 
 		<div class="buttons">
-			<div class="btn add icon small" tabindex="0">Add a Profile</div>
+			<div id="addSocial" class="btn add icon small" tabindex="0">Add a Profile</div>
 		</div>
 
 		<hr>
@@ -106,6 +106,15 @@
 {% includeJsResource 'sproutseo/js/EditableTable.js' %}
 
 {% includejs %}
+
+$( document ).ready(function() {
+	var globals = {{ globals.social|json_encode|raw }};
+
+	if (globals == null)
+	{
+		$('#addSocial').trigger('click');
+	}
+});
 
 (function() {
 

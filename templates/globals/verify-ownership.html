@@ -101,7 +101,7 @@
 		</table>
 
 		<div class="buttons">
-			<div class="btn add icon small" tabindex="0">Add a Verification Code</div>
+			<div id="addOwnership" class="btn add icon small" tabindex="0">Add a Verification Code</div>
 		</div>
 
 		<hr>
@@ -134,6 +134,15 @@
 			}
 		}
 	}
+
+	$( document ).ready(function() {
+		var globals = {{ globals.ownership|json_encode|raw }};
+
+		if (globals == null)
+		{
+			$('#addOwnership').trigger('click');
+		}
+	});
 
 	(function() {
 

@@ -109,7 +109,6 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 	{
 
 		var rowHtml = '<tr data-id="'+rowId+'">';
-
 		for (var colId in columns)
 		{
 			var col = columns[colId],
@@ -125,7 +124,11 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 			{
 				case 'selectOther':
 				{
-					rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select onchange="setDefault(this)" name="'+name+'">';
+					var isOwnership = baseName.indexOf('ownership') > -1;
+					if (isOwnership)
+						rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select onchange="setDefault(this)" name="'+name+'">';
+					else
+						rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select name="'+name+'">';
 
 					var hasOptgroups = false;
 
