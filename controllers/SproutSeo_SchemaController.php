@@ -56,7 +56,7 @@ class SproutSeo_SchemaController extends BaseController
 		$this->requirePostRequest();
 
 		$ownershipMeta = craft()->request->getPost('sproutseo.meta.ownership');
-		$schemaType    = craft()->request->getPost('schemaType');
+		$schemaType    = 'ownership';
 
 		// Remove empty items from multi-dimensional array
 		$ownershipMeta = array_filter(array_map('array_filter', $ownershipMeta));
@@ -74,7 +74,10 @@ class SproutSeo_SchemaController extends BaseController
 			}
 		}
 
-		$schema = SproutSeo_SchemaModel::populateModel(array('ownership'=>$ownershipMetaWithKeys));
+		$schema = SproutSeo_SchemaModel::populateModel(array(
+			$schemaType => $ownershipMetaWithKeys
+			)
+		);
 
 		if (sproutSeo()->schema->saveSchema($schemaType, $schema))
 		{

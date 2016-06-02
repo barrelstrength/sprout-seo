@@ -8,13 +8,13 @@
 
 	{% set verifyOwnershipOptions = [
 		{ label: "Select...", value: '' },
-		{ label: "Bing Webmaster Tools", value: 'bingWebmasterTools' },
-		{ label: "Facebook App ID", value: 'facebookAppId' },
-		{ label: "Facebook Page", value: 'Facebook Page' },
-		{ label: "Google Search Console", value: 'googleSearchConsole' },
-		{ label: "Pinterest", value: 'pinterest' },
-		{ label: "Yandex Webmaster Tools", value: 'yandexWebmasterTools' },
-		{ label: "Custom", value: 'custom' }
+		{ label: "Bing Webmaster Tools", value: 'bingWebmasterTools', metaTagName : 'msvalidate.01' },
+		{ label: "Facebook App ID", value: 'facebookAppId', metaTagName : 'fb:app_id' },
+		{ label: "Facebook Page", value: 'FacebookPage', metaTagName : 'fb:app_id'  },
+		{ label: "Google Search Console", value: 'googleSearchConsole', metaTagName : 'google-site-verification'  },
+		{ label: "Pinterest", value: 'pinterest', metaTagName : 'p:domain_verify'  },
+		{ label: "Yandex Webmaster Tools", value: 'yandexWebmasterTools', metaTagName : 'yandex-verification'  },
+		{ label: "Custom", value: 'custom', metaTagName : ''  }
 	] %}
 
 	{% set cols = [
@@ -43,7 +43,6 @@
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/schema/saveVerifyOwnership">
 		<input type="hidden" name="redirect" value="sproutseo/globals/verify-ownership">
-		<input type="hidden" name="schemaType" value="ownership">
 
 		<table id="sproutseo-schema-ownership" class="data fullwidth">
 			<thead>
@@ -119,6 +118,22 @@
 {% includeJsResource 'sproutseo/js/EditableTable.js' %}
 
 {% includejs %}
+
+	function setDefault (field)
+	{
+		var columns = {{ verifyOwnershipOptions|json_encode|raw }};
+		var name = field.name;
+		var metagName = name.substring(0,29) + '[1]';
+
+		for (var colId in columns)
+		{
+			if (columns[colId].value == field.value)
+			{
+				$('input[name="' + metagName + '"]').val(columns[colId].metaTagName);
+				break;
+			}
+		}
+	}
 
 	(function() {
 

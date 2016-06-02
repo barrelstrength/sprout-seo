@@ -125,7 +125,7 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 			{
 				case 'selectOther':
 				{
-					rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select name="'+name+'">';
+					rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select onchange="setDefault(this)" name="'+name+'">';
 
 					var hasOptgroups = false;
 
