@@ -69,11 +69,11 @@
 
 {% set advancedSeoButtons %}
 	<div class="buttons">
-		<div class="btngroup">
-			<div class="btn" data-type="notes1">Geo</div>
-			<div class="btn" data-type="notes2">Robots</div>
-			<div class="btn" data-type="notes2">Open Graph</div>
-			<div class="btn" data-type="notes2">Twitter Card</div>
+		<div id="btngroup" class="btngroup">
+			<div class="btn" data-type="geo">Geo</div>
+			<div class="btn" data-type="robots">Robots</div>
+			<div class="btn" data-type="openGraph">Open Graph</div>
+			<div class="btn" data-type="twitterCard">Twitter Card</div>
 		</div>
 		<div class="btn add icon menubtn hidden">Add a block</div>
 	</div>
@@ -85,11 +85,11 @@
 }, advancedSeoButtons) }}
 
 
-<div class="matrix matrix-field" id="fields-notesMatrix" style="position: relative;">
+<div class="matrix matrix-field" style="position: relative;">
 
 	<div class="blocks">
 
-		<div class="matrixblock">
+		<div class="matrixblock"  id="fields-geo" >
 
 			<div class="titlebar">
 				<div class="blocktype">Geo</div>
@@ -132,7 +132,7 @@
 
 		</div>
 
-		<div class="matrixblock">
+		<div class="matrixblock" id="fields-robots">
 
 			<div class="titlebar">
 				<div class="blocktype">Robots</div>
@@ -236,7 +236,7 @@
 
 		</div>
 
-		<div class="matrixblock">
+		<div class="matrixblock" id="fields-openGraph">
 
 			<div class="titlebar">
 				<div class="blocktype">Open Graph</div>
@@ -372,7 +372,7 @@
 
 		</div>
 
-		<div class="matrixblock">
+		<div class="matrixblock" id="fields-twitterCard">
 
 			<div class="titlebar">
 				<div class="blocktype">Twitter Card</div>
@@ -592,6 +592,9 @@
 		font-family: arial, sans-serif;
 		font-size: 13px;
 	}
+	.matrixblock{
+		display:none;
+	}
 
 	/*.action-menu .mn-dwn-arw {*/
 	/*border-color: #006621 transparent;*/
@@ -624,6 +627,13 @@
 {% includeJsResource "sproutseo/js/twitter-card.js" %}
 
 {% set js %}
+	$( document ).ready(function() {
+		$("#btngroup div").click(function(){
+		  var divId = $(this).attr("data-type");
+		  $("#fields-"+divId).toggle();
+		  return false; // avoid parents divs if you have nested divs
+		});
+	});
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
 {% endset %}
