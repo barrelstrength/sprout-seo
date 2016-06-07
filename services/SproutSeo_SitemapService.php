@@ -140,7 +140,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 						continue;
 					}
 
-					// Adding each location indexed by its id
+					// Add each location indexed by its id
 					$urls[$element->id][] = array(
 						'id'        => $element->id,
 						'url'       => $element->getUrl(),
@@ -153,7 +153,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			}
 		}
 
-		// Fetching all custom pages define in Sprout SEO
+		// Fetching all custom pages defined in Sprout SEO
 		$customUrls = craft()->db->createCommand()
 			->select('url, priority, changeFrequency as frequency, dateUpdated')
 			->from('sproutseo_sitemap')
