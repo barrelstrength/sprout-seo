@@ -80,7 +80,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$codeOverrideMetaTagModel   = new SproutSeo_MetaTagsModel();
 		$metaTagsGroupMetaTagModel  = new SproutSeo_MetaTagsModel();
 		$globalFallbackMetaTagModel = new SproutSeo_MetaTagsModel();
-		
+
 		// Prepare a SproutSeo_MetaTagsModel for each of our levels of priority
 		$entryOverrideMetaTagModel  = $entryOverrideMetaTagModel->setMeta('entry', $this->getMetaTagsFromTemplate());
 		$codeOverrideMetaTagModel   = $codeOverrideMetaTagModel->setMeta('code', $this->getMetaTagsFromTemplate());
@@ -205,5 +205,21 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 <script type="application/ld+json">
 ' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
 </script>';
+	}
+
+	public function getDefaultFieldTypeSettings()
+	{
+		return array(
+			'displayPreview'         => true,
+			'useElementTypeTitle'    => false,
+			'usetMetaTitle'          => false,
+			'useMetaDescription'     => false,
+			'useMetaImage'           => false,
+			'displayAdvancedOptions' => true,
+			'showGeo'                => true,
+			'showRobots'             => true,
+			'showOpenGraph'          => true,
+			'showTwitter'            => true,
+		);
 	}
 }

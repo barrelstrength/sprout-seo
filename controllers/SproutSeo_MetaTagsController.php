@@ -43,6 +43,9 @@ class SproutSeo_MetaTagsController extends BaseController
 		$sources            = craft()->assets->findFolders();
 		$assetsSourceExists = count($sources);
 
+		//get optimized settigns
+		$settings = sproutSeo()->optimize->getDefaultFieldTypeSettings();
+
 		// Set elementType
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
@@ -52,7 +55,8 @@ class SproutSeo_MetaTagsController extends BaseController
 			'ogImageElements'      => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
 			'assetsSourceExists'   => $assetsSourceExists,
-			'elementType'          => $elementType
+			'elementType'          => $elementType,
+			'settings'             => $settings
 		));
 	}
 

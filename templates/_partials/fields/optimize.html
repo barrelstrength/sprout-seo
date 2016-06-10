@@ -3,17 +3,19 @@
 		<div class="sproutseo-box-optimized">
 
 			{# @todo - Optional / Can also default to the Title field, or any field? #}
-			{{ forms.textField({
-				label: "Meta Title"|t,
-				instructions: "The Title of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
-				name: 'sproutseo_fields[title]',
-				maxlength: 55,
-				showCharsLeft: true,
-				value: values.title,
-				errors: "",
-				required: false,
-				placeholder: " "
-			}) }}
+			{% if not settings.useElementTypeTitle or settings.usetMetaTitle %}
+				{{ forms.textField({
+					label: "Meta Title"|t,
+					instructions: "The Title of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
+					name: 'sproutseo_fields[title]',
+					maxlength: 55,
+					showCharsLeft: true,
+					value: values.title,
+					errors: "",
+					required: false,
+					placeholder: " "
+				}) }}
+			{% endif %}
 
 			{{ forms.textareaField({
 				label: "Meta Description"|t,
@@ -44,52 +46,55 @@
 
 		</div>
 
-
-<ul class="sproutseo-preview-btns">
-	<li class="selected">Search</li>
-	<li>Facebook</li>
-	<li>Twitter</li>
-</ul>
-<div class="google-result-border">
-	<h3 class="google-result-heading">Pidgeon - Wikipedia, the free encyclopedia</h3>
-	<div class="s">
-		<div>
-			<divstyle="white-space:nowrap">
-			<cite class="google-result-cite">https://en.wikipedia.org/wiki/Pidgeon</cite>
-			{#<div class="action-menu">#}
-			{#<a href="#"><span class="mn-dwn-arw"></span></a>#}
-			{#</div>#}
-			<div class="google-result-identity">
-				<div class="crl">Wikipedia<span class="_Bs"></span></div>
+{% if settings.displayPreview %}
+	<ul class="sproutseo-preview-btns">
+		<li class="selected">Search</li>
+		<li>Facebook</li>
+		<li>Twitter</li>
+	</ul>
+	<div class="google-result-border">
+		<h3 class="google-result-heading">Pidgeon - Wikipedia, the free encyclopedia</h3>
+		<div class="s">
+			<div>
+				<divstyle="white-space:nowrap">
+				<cite class="google-result-cite">https://en.wikipedia.org/wiki/Pidgeon</cite>
+				{#<div class="action-menu">#}
+				{#<a href="#"><span class="mn-dwn-arw"></span></a>#}
+				{#</div>#}
+				<div class="google-result-identity">
+					<div class="crl">Wikipedia<span class="_Bs"></span></div>
+				</div>
 			</div>
+			<span class="google-result-description">Pidgeon is a surname from an archaic spelling of pigeon. Notable persons with the surname include: Caroline Pidgeon, Liberal Democrat politician in the United<wbr>&nbsp;...</span>
 		</div>
-		<span class="google-result-description">Pidgeon is a surname from an archaic spelling of pigeon. Notable persons with the surname include: Caroline Pidgeon, Liberal Democrat politician in the United<wbr>&nbsp;...</span>
 	</div>
-</div>
+{% endif %}
 
-{% set advancedSeoButtons %}
-	<div class="buttons">
-		<div id="btngroup" class="btngroup">
-			<div class="btn" data-type="geo">Geo</div>
-			<div class="btn" data-type="robots">Robots</div>
-			<div class="btn" data-type="openGraph">Open Graph</div>
-			<div class="btn" data-type="twitterCard">Twitter Card</div>
+{% if settings.displayAdvancedOptions %}
+	{% set advancedSeoButtons %}
+		<div class="buttons">
+			<div id="btngroup" class="btngroup">
+				{% if settings.showGeo %}<div class="btn" data-type="geo">Geo</div>{% endif %}
+				{% if settings.showRobots %}<div class="btn" data-type="robots">Robots</div>{% endif %}
+				{% if settings.showOpenGraph %}<div class="btn" data-type="openGraph">Open Graph</div>{% endif %}
+				{% if settings.showTwitter %}<div class="btn" data-type="twitterCard">Twitter Card</div>{% endif %}
+			</div>
+			<div class="btn add icon menubtn hidden">Add a block</div>
 		</div>
-		<div class="btn add icon menubtn hidden">Add a block</div>
-	</div>
-{% endset %}
+	{% endset %}
 
-{{ forms.field({
-	label: 'Advanced Customization'|t,
-	instructions: 'If you have more specific SEO needs, you can further customize your meta data with the following fields.'
-}, advancedSeoButtons) }}
+	{{ forms.field({
+		label: 'Advanced Customization'|t,
+		instructions: 'If you have more specific SEO needs, you can further customize your meta data with the following fields.'
+	}, advancedSeoButtons) }}
+{%endif%}
 
 
 <div class="matrix matrix-field" style="position: relative;">
 
 	<div class="blocks">
 
-		<div class="matrixblock"  id="fields-geo" >
+		<div class="matrixblock fields-geo" >
 
 			<div class="titlebar">
 				<div class="blocktype">Geo</div>
@@ -132,7 +137,7 @@
 
 		</div>
 
-		<div class="matrixblock" id="fields-robots">
+		<div class="matrixblock fields-robots">
 
 			<div class="titlebar">
 				<div class="blocktype">Robots</div>
@@ -236,7 +241,7 @@
 
 		</div>
 
-		<div class="matrixblock" id="fields-openGraph">
+		<div class="matrixblock fields-openGraph">
 
 			<div class="titlebar">
 				<div class="blocktype">Open Graph</div>
@@ -266,18 +271,19 @@
 					<hr>
 
 					<h2>Basic Metadata</h2>
-
-					{{ forms.textField({
-						label: "Title"|t,
-						instructions: "The title of your content as it should appear within the graph"|t,
-						name: 'sproutseo_fields[ogTitle]',
-						maxlength: 88,
-						showCharsLeft: true,
-						value: values.ogTitle,
-						errors: "",
-						required: false,
-						placeholder: " "
-					}) }}
+					{% if not settings.usetMetaTitle %}
+						{{ forms.textField({
+							label: "Title"|t,
+							instructions: "The title of your content as it should appear within the graph"|t,
+							name: 'sproutseo_fields[ogTitle]',
+							maxlength: 88,
+							showCharsLeft: true,
+							value: values.ogTitle,
+							errors: "",
+							required: false,
+							placeholder: " "
+						}) }}
+					{% endif %}
 
 					{{ forms.textField({
 						label: "URL"|t,
@@ -289,20 +295,21 @@
 					}) }}
 
 					{% if assetsSourceExists %}
-
-						{{ forms.field({
-							label: 'Image'|t,
-						}, forms.elementSelect({
-							elements: ogImageElements,
-							sourceElementId: values.ogImage,
-							elementType: elementType,
-							id: 'ogImage',
-							name: 'sproutseo_fields[ogImage]',
-							jsClass: 'Craft.AssetSelectInput',
-							addButtonLabel: 'Select Image'|t,
-							limit: 1,
-							criteria: {"localeEnabled":null}
-						})) }}
+						{% if not settings.useMetaImage %}
+							{{ forms.field({
+								label: 'Image'|t,
+							}, forms.elementSelect({
+								elements: ogImageElements,
+								sourceElementId: values.ogImage,
+								elementType: elementType,
+								id: 'ogImage',
+								name: 'sproutseo_fields[ogImage]',
+								jsClass: 'Craft.AssetSelectInput',
+								addButtonLabel: 'Select Image'|t,
+								limit: 1,
+								criteria: {"localeEnabled":null}
+							})) }}
+						{% endif %}
 
 					{% else %}
 
@@ -328,16 +335,18 @@
 						required: false
 					}) }}
 
-					{{ forms.textField({
-						label: "Description"|t,
-						name: 'sproutseo_fields[ogDescription]',
-						maxlength: 200,
-						showCharsLeft: true,
-						value: values.ogDescription,
-						errors: "",
-						required: false,
-						placeholder: " "
-					}) }}
+					{% if not settings.useMetaDescription %}
+						{{ forms.textField({
+							label: "Description"|t,
+							name: 'sproutseo_fields[ogDescription]',
+							maxlength: 200,
+							showCharsLeft: true,
+							value: values.ogDescription,
+							errors: "",
+							required: false,
+							placeholder: " "
+						}) }}
+					{% endif %}
 
 					{{ forms.textField({
 						label: "Locale"|t,
@@ -372,7 +381,7 @@
 
 		</div>
 
-		<div class="matrixblock" id="fields-twitterCard">
+		<div class="matrixblock fields-twitterCard">
 
 			<div class="titlebar">
 				<div class="blocktype">Twitter Card</div>
@@ -422,46 +431,50 @@
 						required: false,
 						placeholder: '@ContentAuthor'
 					}) }}
+					{% if not settings.usetMetaTitle %}
+						{{ forms.textField({
+							label: "Title"|t,
+							instructions: 'The title of your content as it should appear in the card.'|t,
+							name: 'sproutseo_fields[twitterTitle]',
+							maxlength: 70,
+							showCharsLeft: true,
+							value: values.twitterTitle,
+							errors: "",
+							required: false,
+							placeholder: " "
+						}) }}
+					{% endif %}
 
-					{{ forms.textField({
-						label: "Title"|t,
-						instructions: 'The title of your content as it should appear in the card.'|t,
-						name: 'sproutseo_fields[twitterTitle]',
-						maxlength: 70,
-						showCharsLeft: true,
-						value: values.twitterTitle,
-						errors: "",
-						required: false,
-						placeholder: " "
-					}) }}
-
-					{{ forms.textField({
-						label: "Description"|t,
-						instructions: 'A description of the content.'|t,
-						name: 'sproutseo_fields[twitterDescription]',
-						maxlength: 200,
-						showCharsLeft: true,
-						value: values.twitterDescription,
-						errors: "",
-						required: false,
-						placeholder: " "
-					}) }}
+					{% if not settings.useMetaDescription %}
+						{{ forms.textField({
+							label: "Description"|t,
+							instructions: 'A description of the content.'|t,
+							name: 'sproutseo_fields[twitterDescription]',
+							maxlength: 200,
+							showCharsLeft: true,
+							value: values.twitterDescription,
+							errors: "",
+							required: false,
+							placeholder: " "
+						}) }}
+					{% endif %}
 
 					{% if assetsSourceExists %}
-
-						{{ forms.field({
-							label: 'Image'|t,
-						}, forms.elementSelect({
-							elements: twitterImageElements,
-							sourceElementId: values.twitterImage,
-							elementType: elementType,
-							id: 'twitterImage',
-							name: 'sproutseo_fields[twitterImage]',
-							jsClass: 'Craft.AssetSelectInput',
-							addButtonLabel: 'Select Image'|t,
-							limit: 1,
-							criteria: {"localeEnabled":null}
-						})) }}
+						{% if not settings.useMetaImage %}
+							{{ forms.field({
+								label: 'Image'|t,
+							}, forms.elementSelect({
+								elements: twitterImageElements,
+								sourceElementId: values.twitterImage,
+								elementType: elementType,
+								id: 'twitterImage',
+								name: 'sproutseo_fields[twitterImage]',
+								jsClass: 'Craft.AssetSelectInput',
+								addButtonLabel: 'Select Image'|t,
+								limit: 1,
+								criteria: {"localeEnabled":null}
+							})) }}
+						{% endif %}
 
 					{% else %}
 
@@ -628,9 +641,9 @@
 
 {% set js %}
 	$( document ).ready(function() {
-		$("#btngroup div").click(function(){
+		$(".btngroup div").click(function(){
 		  var divId = $(this).attr("data-type");
-		  $("#fields-"+divId).toggle();
+		  $(".fields-"+divId).toggle();
 		  return false; // avoid parents divs if you have nested divs
 		});
 	});

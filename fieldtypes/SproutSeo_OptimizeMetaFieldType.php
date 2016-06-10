@@ -25,6 +25,32 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 	}
 
 	/**
+	 * @return array
+	 */
+	protected function defineSettings()
+	{
+		return array(
+			'displayPreview'         => array(AttributeType::Bool, 'default'=>true),
+			'useElementTypeTitle'    => array(AttributeType::Bool, 'default'=>false),
+			'usetMetaTitle'          => array(AttributeType::Bool, 'default'=>false),
+			'useMetaDescription'     => array(AttributeType::Bool, 'default'=>false),
+			'useMetaImage'           => array(AttributeType::Bool, 'default'=>false),
+			'displayAdvancedOptions' => array(AttributeType::Bool, 'default'=>true),
+			'showGeo'                => array(AttributeType::Bool, 'default'=>true),
+			'showRobots'             => array(AttributeType::Bool, 'default'=>true),
+			'showOpenGraph'          => array(AttributeType::Bool, 'default'=>true),
+			'showTwitter'            => array(AttributeType::Bool, 'default'=>true),
+		);
+	}
+
+	public function getSettingsHtml()
+	{
+		return craft()->templates->render('sproutseo/_fieldtypes/optimizeMeta/settings', array(
+			'settings' => $this->getSettings()
+		));
+	}
+
+	/**
 	 * Performs any additional actions after the element has been saved.
 	 */
 	public function onAfterElementSave()
@@ -152,6 +178,8 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$name = "sproutseo_fields[$name]";
 
+		$settings = $this->getSettings();
+
 		return craft()->templates->render('sproutseo/_partials/fields/optimize', array(
 			'name'   => $name,
 			'values' => $values,
@@ -160,7 +188,8 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			'assetsSourceExists' => $assetsSourceExists,
 			'elementType' => $elementType,
 		  'fieldId' => $fieldId,
-			'fieldContext' => 'field'
+			'fieldContext' => 'field',
+			'settings' => $settings
 		));
 	}
 }
