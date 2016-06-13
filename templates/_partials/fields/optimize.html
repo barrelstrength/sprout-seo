@@ -94,7 +94,13 @@
 
 	<div class="blocks">
 
-		<div class="matrixblock fields-geo" >
+		<div class="matrixblock fields-geo"
+			{% if not values.region
+				 and not values.placename
+				 and not values.placename
+				 and not values.latitude
+				 and not values.longitude %} style="display:none;" {% endif %}
+		>
 
 			<div class="titlebar">
 				<div class="blocktype">Geo</div>
@@ -137,7 +143,10 @@
 
 		</div>
 
-		<div class="matrixblock fields-robots">
+		<div class="matrixblock fields-robots"
+			{% if not values.canonical
+			and not values.robots %} style="display:none;" {% endif %}
+		>
 
 			<div class="titlebar">
 				<div class="blocktype">Robots</div>
@@ -241,7 +250,14 @@
 
 		</div>
 
-		<div class="matrixblock fields-openGraph">
+		<div class="matrixblock fields-openGraph"
+			{% if not values.ogType
+				and not values.ogTitle
+				and not values.ogUrl and values.ogLocale
+				and not values.ogAudio and values.ogVideo
+				and not values.ogImage and values.ogDescription
+				and not values.ogSiteName %} style="display:none;" {% endif %}
+		>
 
 			<div class="titlebar">
 				<div class="blocktype">Open Graph</div>
@@ -381,7 +397,13 @@
 
 		</div>
 
-		<div class="matrixblock fields-twitterCard">
+		<div class="matrixblock fields-twitterCard"
+			{% if not values.twitterSite
+				and not values.twitterCreator and not values.twitterTitle
+				and not values.twitterDescription and not values.twitterPlayer
+				and not values.twitterPlayerStream and not values.twitterPlayerStreamContentType
+				and not values.twitterPlayerHeight and not values.twitterPlayerWidth %} style="display:none;" {% endif %}
+		>
 
 			<div class="titlebar">
 				<div class="blocktype">Twitter Card</div>
@@ -605,9 +627,6 @@
 		font-family: arial, sans-serif;
 		font-size: 13px;
 	}
-	.matrixblock{
-		display:none;
-	}
 
 	/*.action-menu .mn-dwn-arw {*/
 	/*border-color: #006621 transparent;*/
@@ -639,7 +658,8 @@
 {% includeJsResource "sproutseo/js/open-graph.js" %}
 {% includeJsResource "sproutseo/js/twitter-card.js" %}
 
-{% set js %}
+{% includejs %}
+
 	$( document ).ready(function() {
 		$(".btngroup div").click(function(){
 		  var divId = $(this).attr("data-type");
@@ -647,11 +667,11 @@
 		  return false; // avoid parents divs if you have nested divs
 		});
 	});
+
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
-{% endset %}
+{% endincludejs %}
 
-{% includeJs js %}
 
 
 
