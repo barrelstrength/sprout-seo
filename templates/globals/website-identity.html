@@ -1,6 +1,14 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
 
+{% set logoElements = [] %}
+{% set elementType = craft.sproutseo.getAssetElementType %}
+
+{% if schema.logo is defined and schema.logo %}
+	{% set logo =  craft.elements.getElementById(schema.logo) %}
+	{% set logoElements = logoElements|merge(logo) %}
+{%endif%}
+
 {% set title = 'Website Identity'|t %}
 
 {% set content %}
@@ -80,6 +88,20 @@
 			value: schema['logo'] is defined ? schema.logo : null,
 			errors: ''
 		}) }}
+
+		{{ forms.field({
+			label: 'Logo'|t,
+		}, forms.elementSelect({
+			elements: logoElements,
+			sourceElementId: schema['logo'] is defined ? schema.logo : null,
+			elementType: elementType,
+			id: 'logo',
+			name: 'sproutseo[schema][identity][logo]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image'|t,
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
 
 		{#{% set assetsSourceExists = true %}#}
 		{#{% if assetsSourceExists %}#}

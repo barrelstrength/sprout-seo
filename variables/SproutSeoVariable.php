@@ -183,4 +183,11 @@ class SproutSeoVariable
 	{
 		return sproutSeo()->optimize->getKnowledgeGraphLinkedData();
 	}
+
+	public function getAssetElementType()
+	{
+		$elementType = craft()->elements->getElementType(ElementType::Asset);
+
+		return $elementType;
+	}
 }
