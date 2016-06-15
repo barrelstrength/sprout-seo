@@ -18,7 +18,7 @@ Sprout SEO Translations
 ------------------------------------------------------------
 A default translation file is provided on GitHub and can be modified 
 as needed for your language requirements.
-https://github.com/BarrelStrength/Craft-SproutSeo/blob/master/translations/en_us.php
+https://github.com/BarrelStrength/Sprout-Plugin-Translations
 
 
 Sprout SEO Support
