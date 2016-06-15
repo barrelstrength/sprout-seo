@@ -27,6 +27,7 @@
 {% set fieldContext = 'metaTagGroups' %}
 
 {# Map the `metaTags` object to `values` so we can use the same templates for SEO Meta Tag Groups and the Field Types #}
+
 {% set values = metaTags %}
 
 {% block saveButton %}
@@ -59,7 +60,7 @@
 				id: "name",
 				name: 'sproutseo_fields[name]',
 				value: metaTags.name,
-				errors: '',
+				errors: metaTags.getErrors('name'),
 				required: true
 			}) }}
 
@@ -68,7 +69,7 @@
 				id: "handle",
 				name: 'sproutseo_fields[handle]',
 				value: metaTags.handle,
-				errors: '',
+				errors: metaTags.getErrors('handle'),
 				required: true
 			}) }}
 

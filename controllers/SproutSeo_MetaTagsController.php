@@ -8,7 +8,7 @@ class SproutSeo_MetaTagsController extends BaseController
 	 *
 	 * @throws HttpException
 	 */
-	public function actionEditMetaTagGroup()
+	public function actionEditMetaTagGroup(array $variables = array())
 	{
 		// Determine what we're working with
 		$segment        = craft()->request->getSegment(3);
@@ -16,6 +16,11 @@ class SproutSeo_MetaTagsController extends BaseController
 
 		// Get our Meta Model
 		$metaTags = sproutSeo()->metaTags->getMetaTagGroupById($metaTagGroupId);
+
+		if (isset($variables['metaTags']))
+		{
+			$metaTags = $variables['metaTags'];
+		}
 
 		// Set up our asset fields
 		if (isset($metaTags->ogImage))
@@ -97,7 +102,6 @@ class SproutSeo_MetaTagsController extends BaseController
 		else
 		{
 			craft()->userSession->setError(Craft::t("Couldn't save the Meta Tag Group."));
-
 			// Send the field back to the template
 			craft()->urlManager->setRouteVariables(array(
 				'metaTags' => $model
