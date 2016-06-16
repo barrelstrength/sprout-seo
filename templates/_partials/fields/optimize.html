@@ -3,7 +3,7 @@
 		<div class="sproutseo-box-optimized">
 
 			{# @todo - Optional / Can also default to the Title field, or any field? #}
-			{% if not settings.useElementTypeTitle or settings.usetMetaTitle %}
+			{% if not settings.useElementTypeTitle or settings.useMetaTitle %}
 				{{ forms.textField({
 					label: "Meta Title"|t,
 					instructions: "The Title of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
@@ -287,7 +287,7 @@
 					<hr>
 
 					<h2>Basic Metadata</h2>
-					{% if not settings.usetMetaTitle %}
+					{% if not settings.useMetaTitle %}
 						{{ forms.textField({
 							label: "Title"|t,
 							instructions: "The title of your content as it should appear within the graph"|t,
@@ -453,7 +453,7 @@
 						required: false,
 						placeholder: '@ContentAuthor'
 					}) }}
-					{% if not settings.usetMetaTitle %}
+					{% if not settings.useMetaTitle %}
 						{{ forms.textField({
 							label: "Title"|t,
 							instructions: 'The title of your content as it should appear in the card.'|t,

@@ -32,7 +32,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		return array(
 			'displayPreview'         => array(AttributeType::Bool, 'default'=>true),
 			'useElementTypeTitle'    => array(AttributeType::Bool, 'default'=>false),
-			'usetMetaTitle'          => array(AttributeType::Bool, 'default'=>false),
+			'useMetaTitle'          => array(AttributeType::Bool, 'default'=>false),
 			'useMetaDescription'     => array(AttributeType::Bool, 'default'=>false),
 			'useMetaImage'           => array(AttributeType::Bool, 'default'=>false),
 			'displayAdvancedOptions' => array(AttributeType::Bool, 'default'=>true),
@@ -125,6 +125,24 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 				$attributes['elementTitle'] = $entry->title;
 			}
 		}
+
+		if ($settings['useMetaTitle'] && $attributes['title'])
+		{
+			$attributes['ogTitle'] = $attributes['title'];
+			$attributes['twitterTitle'] = $attributes['title'];
+		}
+
+		if ($settings['useMetaDescription'] && $attributes['description'])
+		{
+			$attributes['ogDescription'] = $attributes['description'];
+			$attributes['twitterDescription']  = $attributes['description'];
+		}
+
+		/*if ($settings['useMetaImage'] && $attributes['description'])
+		{
+			$attributes['ogDescription'] = $attributes['description'];
+			$attributes['twitterDescription']  = $attributes['description'];
+		}*/
 
 		// Update or create our Meta Tag Content entry
 		if ($model->entryId)
