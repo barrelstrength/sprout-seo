@@ -1,25 +1,25 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
 
-{% set logoElements = [] %}
+{% set logoElement = null %}
 {% set elementType = craft.sproutseo.getAssetElementType %}
+{% set globals = craft.sproutSeo.getGlobals() %}
+{% set schema = globals.identity %}
 
 {% if schema.logo is defined and schema.logo %}
-	{% set logo =  craft.elements.getElementById(schema.logo) %}
-	{% set logoElements = logoElements|merge(logo) %}
+	{% for id in schema.logo %}
+		{% set logo = craft.sproutSeo.getElementById(id) %}
+		{% set logoElement = logo %}
+	{% endfor %}
 {%endif%}
 
 {% set title = 'Website Identity'|t %}
 
 {% set content %}
-
 	{% set identityTypes = [
 		{ label: "Organization", value: "Organization" },
 		{ label: "Person", value: "Person" }
 	] %}
-
-	{% set globals = craft.sproutSeo.getGlobals() %}
-	{% set schema = globals.identity %}
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut>
 		{{ getCsrfInput() }}
@@ -82,17 +82,10 @@
 			required: true
 		}) }}
 
-		{{ forms.textField({
-			label: "Logo"|t,
-			name: 'sproutseo[schema][identity][logo]',
-			value: schema['logo'] is defined ? schema.logo : null,
-			errors: ''
-		}) }}
-
 		{{ forms.field({
 			label: 'Logo'|t,
 		}, forms.elementSelect({
-			elements: logoElements,
+			elements: [logoElement],
 			sourceElementId: schema['logo'] is defined ? schema.logo : null,
 			elementType: elementType,
 			id: 'logo',

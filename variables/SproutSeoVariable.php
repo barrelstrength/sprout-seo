@@ -190,4 +190,11 @@ class SproutSeoVariable
 
 		return $elementType;
 	}
+
+	public function getElementById($id)
+	{
+		$element = craft()->elements->getElementById($id);
+
+		return $element != null ? $element : false;
+	}
 }
