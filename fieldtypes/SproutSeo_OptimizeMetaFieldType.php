@@ -113,6 +113,19 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 		$attributes['ogImage']      = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
 
+		// Validate any setting of the field type
+		$settings = $this->getSettings();
+
+		if ($settings['useElementTypeTitle'] && $entryId)
+		{
+			$entry = craft()->elements->getElementById($entryId);
+
+			if ($entry)
+			{
+				$attributes['elementTitle'] = $entry->title;
+			}
+		}
+
 		// Update or create our Meta Tag Content entry
 		if ($model->entryId)
 		{
@@ -144,7 +157,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// Set up our asset fields
 		if (isset($variables['values']->ogImage))
 		{
-			$asset                        = craft()->elements->getElementById($variables['values']->ogImage);
+			$asset = craft()->elements->getElementById($variables['values']->ogImage);
 			$ogImageElements = array($asset);
 		}
 		else
@@ -155,7 +168,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// Set up our asset fields
 		if (isset($variables['values']->twitterImage))
 		{
-			$asset                             = craft()->elements->getElementById($variables['values']->twitterImage);
+			$asset = craft()->elements->getElementById($variables['values']->twitterImage);
 			$twitterImageElements = array($asset);
 		}
 		else
@@ -164,7 +177,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		}
 
 		// Set assetsSourceExists
-		$sources                         = craft()->assets->findFolders();
+		$sources = craft()->assets->findFolders();
 		$assetsSourceExists = count($sources);
 
 		// Set elementType
