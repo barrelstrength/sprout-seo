@@ -112,6 +112,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// We need to do this in case another seo field with images exists
 		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 		$attributes['ogImage']      = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
+		$attributes['metaImage']    = (!empty($attributes['metaImage']) ? $attributes['metaImage'][0] : null);
 
 		// Validate any setting of the field type
 		$settings = $this->getSettings();
@@ -138,11 +139,11 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			$attributes['twitterDescription']  = $attributes['description'];
 		}
 
-		/*if ($settings['useMetaImage'] && $attributes['description'])
+		if ($settings['useMetaImage'] && $attributes['metaImage'])
 		{
-			$attributes['ogDescription'] = $attributes['description'];
-			$attributes['twitterDescription']  = $attributes['description'];
-		}*/
+			$attributes['ogImage'] = $attributes['metaImage'];
+			$attributes['twitterImage']  = $attributes['metaImage'];
+		}
 
 		// Update or create our Meta Tag Content entry
 		if ($model->entryId)
@@ -172,26 +173,27 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$values = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
 
-		// Set up our asset fields
-		if (isset($variables['values']->ogImage))
-		{
-			$asset = craft()->elements->getElementById($variables['values']->ogImage);
-			$ogImageElements = array($asset);
-		}
-		else
-		{
-			$ogImageElements = array();
-		}
+		$ogImageElements      = array();
+		$metaImageElements    = array();
+		$twitterImageElements = array();
 
 		// Set up our asset fields
-		if (isset($variables['values']->twitterImage))
+		if (isset($values->ogImage))
 		{
-			$asset = craft()->elements->getElementById($variables['values']->twitterImage);
-			$twitterImageElements = array($asset);
+			$asset = craft()->elements->getElementById($values->ogImage);
+			$ogImageElements = array($asset);
 		}
-		else
+
+		if (isset($values->metaImage))
 		{
-			$twitterImageElements = array();
+			$asset = craft()->elements->getElementById($values->metaImage);
+			$metaImageElements = array($asset);
+		}
+
+		if (isset($values->twitterImage))
+		{
+			$asset = craft()->elements->getElementById($values->twitterImage);
+			$twitterImageElements = array($asset);
 		}
 
 		// Set assetsSourceExists
@@ -216,6 +218,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			'values' => $values,
 			'ogImageElements' => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
+			'metaImageElements' => $metaImageElements,
 			'assetsSourceExists' => $assetsSourceExists,
 			'elementType' => $elementType,
 		  'fieldId' => $fieldId,

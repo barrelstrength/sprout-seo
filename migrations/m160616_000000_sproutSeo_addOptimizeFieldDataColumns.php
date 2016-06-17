@@ -10,25 +10,31 @@ class m160616_000000_sproutSeo_addOptimizeFieldDataColumns extends BaseMigration
 	 */
 	public function safeUp()
 	{
-		$tableName  = 'sproutseo_metatagcontent';
-		$columnName = 'elementTitle';
+		$tableName   = 'sproutseo_metatagcontent';
+		$columnsName = array(
+			array('name'=>'elementTitle', 'after'=>'title'),
+			array('name'=>'metaImage', 'after'=>'description')
+		);
 
-		if (!craft()->db->columnExists($tableName, $columnName))
+		foreach ($columnsName as $key => $column)
 		{
-			$this->addColumnAfter($tableName, $columnName,
-				array(
-					'column'   => ColumnType::Varchar,
-					'required' => false,
-					'default'  => null,
-				),
-				'title'
-			);
+			if (!craft()->db->columnExists($tableName, $column['name']))
+			{
+				$this->addColumnAfter($tableName, $column['name'],
+					array(
+						'column'   => ColumnType::Varchar,
+						'required' => false,
+						'default'  => null,
+					),
+					$column['after']
+				);
 
-			SproutSeoPlugin::log("Created the column `$columnName` in `$tableName` .", LogLevel::Info, true);
-		}
-		else
-		{
-			SproutSeoPlugin::log("Column `$columnName` already exists in `$tableName`.", LogLevel::Info, true);
+				SproutSeoPlugin::log("Created the column {$column['name']} in {$tableName} .", LogLevel::Info, true);
+			}
+			else
+			{
+				SproutSeoPlugin::log("Column {$column['name']} already exists in {$tableName}.", LogLevel::Info, true);
+			}
 		}
 
 		return true;

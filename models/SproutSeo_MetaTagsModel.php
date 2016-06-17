@@ -23,7 +23,9 @@ class SproutSeo_MetaTagsModel extends BaseModel
 
 		$this->basicMeta = array(
 			'title'       => array(AttributeType::String),
+			'elementTitle'=> array(AttributeType::String),
 			'description' => array(AttributeType::String),
+			'metaImage'   => array(AttributeType::String),
 			'keywords'    => array(AttributeType::String),
 			'author'      => array(AttributeType::String),
 			'publisher'   => array(AttributeType::String),

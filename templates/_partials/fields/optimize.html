@@ -16,7 +16,6 @@
 					placeholder: " "
 				}) }}
 			{% endif %}
-
 			{{ forms.textareaField({
 				label: "Meta Description"|t,
 				instructions: "A description of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
@@ -28,16 +27,15 @@
 				required: false,
 				placeholder: " "
 			}) }}
-
 			{{ forms.field({
 				label: 'Meta Image'|t,
 				instructions: 'A featured image that represents your content that will display when sharing on Facebook and Twitter and other services.'
 			}, forms.elementSelect({
-				elements: ogImageElements,
-				sourceElementId: values.ogImage,
+				elements: metaImageElements,
+				sourceElementId: [values.metaImage],
 				elementType: elementType,
-				id: 'ogImage',
-				name: 'sproutseo_fields[ogImage]',
+				id: 'metaImage',
+				name: 'sproutseo_fields[metaImage]',
 				jsClass: 'Craft.AssetSelectInput',
 				addButtonLabel: 'Select Image'|t,
 				limit: 1,
