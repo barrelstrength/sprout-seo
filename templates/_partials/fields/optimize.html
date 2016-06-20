@@ -72,10 +72,10 @@
 	{% set advancedSeoButtons %}
 		<div class="buttons">
 			<div id="btngroup" class="btngroup">
-				{% if settings.showGeo %}<div class="btn" data-type="geo">Geo</div>{% endif %}
-				{% if settings.showRobots %}<div class="btn" data-type="robots">Robots</div>{% endif %}
-				{% if settings.showOpenGraph %}<div class="btn" data-type="openGraph">Open Graph</div>{% endif %}
-				{% if settings.showTwitter %}<div class="btn" data-type="twitterCard">Twitter Card</div>{% endif %}
+				{% if settings.showGeo %}<div class="btn" id="btn-geo" data-type="geo">Geo</div>{% endif %}
+				{% if settings.showRobots %}<div class="btn" id="btn-robots" data-type="robots">Robots</div>{% endif %}
+				{% if settings.showOpenGraph %}<div class="btn" id="btn-openGraph" data-type="openGraph">Open Graph</div>{% endif %}
+				{% if settings.showTwitter %}<div class="btn" id="btn-twitterCard" data-type="twitterCard">Twitter Card</div>{% endif %}
 			</div>
 			<div class="btn add icon menubtn hidden">Add a block</div>
 		</div>
@@ -110,8 +110,8 @@
 				{{ forms.textField({
 					label: "Region"|t,
 					instructions: 'The geo.region expects codes for <a
-					  href="http://geotags.com/iso3166/countries.html" target="_blank">Country Names and Subdivisions</a>. The <a
-					  href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.'|t,
+						href="http://geotags.com/iso3166/countries.html" target="_blank">Country Names and Subdivisions</a>. The <a
+						href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.'|t,
 					name: "sproutseo_fields[region]",
 					value: values.region
 				}) }}
@@ -659,11 +659,39 @@
 {% includejs %}
 
 	$( document ).ready(function() {
-		$(".btngroup div").click(function(){
-		  var divId = $(this).attr("data-type");
-		  $(".fields-"+divId).toggle();
-		  return false; // avoid parents divs if you have nested divs
+
+		function toggleActive(div)
+		{
+			if (div.hasClass("active"))
+			{
+				div.removeClass("active");
+			}
+			else
+			{
+				div.addClass("active");
+			}
+		}
+
+		$(".btngroup div").click(function()
+		{
+			var divId = $(this).attr("data-type");
+			$(".fields-"+divId).toggle();
+			var btn = $("#btn-"+divId);
+			toggleActive(btn);
+			return false; // avoid parents divs if you have nested divs
 		});
+
+		// Checking active class
+		var fields = ["geo","robots","robots","openGraph"]
+		for (var i = 0; i < fields.length; i++)
+		{
+			var field = $(".fields-"+fields[i]+":visible");
+
+			if(field.length)
+			{
+				$("#btn-"+fields[i]).addClass("active");
+			}
+		}
 	});
 
 	new Craft.SproutSeoOpenGraph();

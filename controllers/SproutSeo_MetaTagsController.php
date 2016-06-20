@@ -17,6 +17,10 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Get our Meta Model
 		$metaTags = sproutSeo()->metaTags->getMetaTagGroupById($metaTagGroupId);
 
+		$twitterImageElements = array();
+		$ogImageElements = array();
+
+
 		if (isset($variables['metaTags']))
 		{
 			$metaTags = $variables['metaTags'];
@@ -25,23 +29,20 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Set up our asset fields
 		if (isset($metaTags->ogImage))
 		{
-			$asset           = craft()->elements->getElementById($metaTags->ogImage);
+			$asset = craft()->elements->getElementById($metaTags->ogImage);
 			$ogImageElements = array($asset);
 		}
-		else
-		{
-			$ogImageElements = array();
-		}
 
-		// Set up our asset fields
 		if (isset($metaTags->twitterImage))
 		{
-			$asset                = craft()->elements->getElementById($metaTags->twitterImage);
+			$asset = craft()->elements->getElementById($metaTags->twitterImage);
 			$twitterImageElements = array($asset);
 		}
-		else
+
+		if (isset($metaTags->metaImage))
 		{
-			$twitterImageElements = array();
+			$asset = craft()->elements->getElementById($metaTags->metaImage);
+			$metaImageElements = array($asset);
 		}
 
 		// Set assetsSourceExists
@@ -55,6 +56,7 @@ class SproutSeo_MetaTagsController extends BaseController
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
 		$this->renderTemplate('sproutseo/metatags/_edit', array(
+			'metaImageElements'    => $metaImageElements,
 			'metaTagGroupId'       => $metaTagGroupId,
 			'metaTags'             => $metaTags,
 			'ogImageElements'      => $ogImageElements,
@@ -91,6 +93,7 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Make our images single IDs instead of an array
 		$metaTags['ogImage']      = (!empty($metaTags['ogImage']) ? $metaTags['ogImage'][0] : null);
 		$metaTags['twitterImage'] = (!empty($metaTags['twitterImage']) ? $metaTags['twitterImage'][0] : null);
+		$metaTags['metaImage']    = (!empty($metaTags['metaImage']) ? $metaTags['metaImage'][0] : null);
 
 		$model->setAttributes($metaTags);
 
