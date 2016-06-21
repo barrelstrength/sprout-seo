@@ -62,12 +62,29 @@ class SproutSeo_SchemaModel extends BaseModel
 
 		$schema = $this->{$this->schemaId};
 
-		$structuredData['name']        = isset($schema['name']) ? $schema['name'] : null;
-		$structuredData['description'] = isset($schema['description']) ? $schema['description'] : null;
-		$structuredData['url']         = isset($schema['url']) ? $schema['url'] : null;
-		$structuredData['logo']        = isset($schema['logo']) ? $schema['logo'] : null;
-		$structuredData['keywords']    = isset($schema['keywords']) ? $schema['keywords'] : null;
-		$structuredData['title']       = isset($schema['title']) ? $schema['title'] : null;
+		$structuredData['name']                 = isset($schema['name']) ? $schema['name'] : null;
+		$structuredData['description']          = isset($schema['description']) ? $schema['description'] : null;
+		$structuredData['url']                  = isset($schema['url']) ? $schema['url'] : null;
+		$structuredData['logo']                 = isset($schema['logo']) ? $schema['logo'] : null;
+		$structuredData['keywords']             = isset($schema['keywords']) ? $schema['keywords'] : null;
+		$structuredData['alternateEntityName']  = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
+
+		$structuredData['address']       = isset($schema['address']) ? $schema['address'] : null;
+		$structuredData['streetAddress'] = isset($schema['streetAddress']) ? $schema['streetAddress'] : null;
+		$structuredData['locality']      = isset($schema['locality']) ? $schema['locality'] : null;
+		$structuredData['region']        = isset($schema['region']) ? $schema['region'] : null;
+		$structuredData['postalCode']    = isset($schema['postalCode']) ? $schema['postalCode'] : null;
+		$structuredData['country']       = isset($schema['country']) ? $schema['country'] : null;
+
+		$structuredData['latitude']            = isset($schema['latitude']) ? $schema['latitude'] : null;
+		$structuredData['longitude']           = isset($schema['longitude']) ? $schema['longitude'] : null;
+		$structuredData['dunsNumber']          = isset($schema['dunsNumber']) ? $schema['dunsNumber'] : null;
+		$structuredData['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
+		$structuredData['foundingDate']        = isset($schema['foundingDate']) ? $schema['foundingDate'] : null;
+		$structuredData['foundingLocation']    = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
+
+		$structuredData['localBusinessInfo']   = isset($schema['localBusinessInfo']) ? $schema['localBusinessInfo'] : null;
+		$structuredData['openClose']           = isset($schema['openClose']) ? $schema['openClose'] : null;
 
 		return $structuredData;
 	}

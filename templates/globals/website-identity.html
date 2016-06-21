@@ -39,7 +39,7 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Organization Name"|t,
+			label: "Name"|t,
 			instructions: "Name of your organization"|t,
 			name: 'sproutseo[schema][identity][name]',
 			value: schema['name'] is defined ? schema.name : null,
@@ -48,10 +48,9 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Title"|t,
-			instructions: "Title"|t,
-			name: 'sproutseo[schema][identity][title]',
-			value: schema['title'] is defined ? schema.title : null,
+			label: "Alternate Entity Name"|t,
+			name: 'sproutseo[schema][identity][alternateEntityName]',
+			value: schema['alternateEntityName'] is defined ? schema.alternateEntityName : null,
 			errors: ''
 		}) }}
 
@@ -65,19 +64,19 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Keywords"|t,
-			instructions: "Primary keywords that describe your content"|t,
-			name: 'sproutseo[schema][identity][keywords]',
-			value: schema['keywords'] is defined ? schema.keywords : null,
+			label: "URL"|t,
+			instructions: "Canonical URL of your organization"|t,
+			name: 'sproutseo[schema][identity][url]',
+			value: schema['url'] is defined ? schema.url : null,
 			errors: '',
 			required: true
 		}) }}
 
 		{{ forms.textField({
-			label: "URL"|t,
-			instructions: "Canonical URL of your organization"|t,
-			name: 'sproutseo[schema][identity][url]',
-			value: schema['url'] is defined ? schema.url : null,
+			label: "Keywords"|t,
+			instructions: "Primary keywords that describe your content"|t,
+			name: 'sproutseo[schema][identity][keywords]',
+			value: schema['keywords'] is defined ? schema.keywords : null,
 			errors: '',
 			required: true
 		}) }}
@@ -96,28 +95,148 @@
 			criteria: {"localeEnabled":null}
 		})) }}
 
-		{#{% set assetsSourceExists = true %}#}
-		{#{% if assetsSourceExists %}#}
+		{{ forms.textField({
+			label: "Telephone"|t,
+			name: 'sproutseo[schema][identity][telephone]',
+			value: schema['telephone'] is defined ? schema.telephone : null,
+			errors: '',
+			required: true
+		}) }}
 
-			{#{{ forms.field({#}
-				{#label: 'Image'|t,#}
-			{#}, forms.elementSelect({#}
-				{#elements: [],#}
-				{#sourceElementId: schema.name,#}
-				{#elementType: 'Asset',#}
-				{#name: 'sproutseo[schema][identity][logo]',#}
-				{#jsClass: 'Craft.AssetSelectInput',#}
-				{#addButtonLabel: 'Select Image'|t,#}
-				{#limit: 1,#}
-				{#criteria: {"localeEnabled":null}#}
-			{#})) }}#}
+		{{ forms.textField({
+			label: "Email"|t,
+			name: 'sproutseo[schema][identity][email]',
+			value: schema['email'] is defined ? schema.email : null,
+			errors: '',
+			required: true
+		}) }}
 
-		{#{% else %}#}
 
-			{#<p class="error">{{ 'No assets sources currently exist. <a href="' ~ url('settings/assets/sources/new') ~ '">Asset#}
-				{#Source settings page.'|t }}</a></p>#}
+		{#Address info#}
 
-		{#{% endif %}#}
+		{{ forms.textField({
+			label: "Address"|t,
+			name: 'sproutseo[schema][identity][address]',
+			value: schema['address'] is defined ? schema.address : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Street Address"|t,
+			name: 'sproutseo[schema][identity][streetAddress]',
+			value: schema['streetAddress'] is defined ? schema.streetAddress : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Locality"|t,
+			name: 'sproutseo[schema][identity][locality]',
+			value: schema['locality'] is defined ? schema.locality : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Region"|t,
+			name: 'sproutseo[schema][identity][region]',
+			value: schema['region'] is defined ? schema.region : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Postal Code"|t,
+			name: 'sproutseo[schema][identity][postalCode]',
+			value: schema['postalCode'] is defined ? schema.postalCode : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Country"|t,
+			name: 'sproutseo[schema][identity][country]',
+			value: schema['country'] is defined ? schema.country : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Latitude"|t,
+			name: 'sproutseo[schema][identity][latitude]',
+			value: schema['latitude'] is defined ? schema.latitude : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Longitude"|t,
+			name: 'sproutseo[schema][identity][longitude]',
+			value: schema['longitude'] is defined ? schema.longitude : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{#More info#}
+
+		{{ forms.textField({
+			label: "Duns Number"|t,
+			name: 'sproutseo[schema][identity][dunsNumber]',
+			value: schema['dunsNumber'] is defined ? schema.dunsNumber : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Organization Founder"|t,
+			name: 'sproutseo[schema][identity][organizationFounder]',
+			value: schema['organizationFounder'] is defined ? schema.organizationFounder : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Founding Date"|t,
+			name: 'sproutseo[schema][identity][foundingDate]',
+			value: schema['foundingDate'] is defined ? schema.foundingDate : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Founding Location"|t,
+			name: 'sproutseo[schema][identity][foundingLocation]',
+			value: schema['foundingLocation'] is defined ? schema.foundingLocation : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Country"|t,
+			name: 'sproutseo[schema][identity][country]',
+			value: schema['country'] is defined ? schema.country : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Local Business Info "|t,
+			name: 'sproutseo[schema][identity][localBusinessInfo]',
+			value: schema['localBusinessInfo'] is defined ? schema.localBusinessInfo : null,
+			errors: '',
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Sun->Sat"|t,
+			instructions: "Open/Close Hours for each day"|t,
+			name: 'sproutseo[schema][identity][openClose]',
+			value: schema['openClose'] is defined ? schema.openClose : null,
+			errors: '',
+			required: false
+		}) }}
+
 
 		<div class="buttons">
 			<input type="submit" class="btn submit" value="Save" />
