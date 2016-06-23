@@ -197,4 +197,29 @@ class SproutSeoVariable
 
 		return $element != null ? $element : false;
 	}
+
+
+	public function getOrganizationOptions()
+	{
+		$tree = file_get_contents(CRAFT_PLUGINS_PATH . 'sproutseo/resources/jsonld/tree.jsonld');
+		$json = json_decode($tree, true);
+		$jsonByName = array();
+
+		foreach ($json['children'] as $key => $value)
+		{
+			if ($value['name'] === 'Organization')
+			{
+				$json = $value['children'];
+				break;
+			}
+		}
+
+		foreach ($json as $key => $value)
+		{
+			$jsonByName[$value['name']] = $value;
+		}
+
+		return $jsonByName;
+	}
+
 }

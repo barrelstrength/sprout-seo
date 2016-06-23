@@ -5525,7 +5525,7 @@
 
                     "@type": "rdfs:Class",
                     "rdfs:subClassOf": "schema:Organization",
-                    "description": "An organization that provides flights for passengers.",
+                    "description": "Airline",
                     "name": "Airline",
                     "@id": "schema:Airline",
                     "layer": "core"
@@ -5647,7 +5647,7 @@
 
                     "@type": "rdfs:Class",
                     "rdfs:subClassOf": "schema:Organization",
-                    "description": "A particular physical business or branch of an organization. Examples of LocalBusiness include a restaurant, a particular branch of a restaurant chain, a branch of a bank, a medical practice, a club, a bowling alley, etc.",
+                    "description": "Local Business",
                     "name": "LocalBusiness",
                     "@id": "schema:LocalBusiness",
                     "layer": "core",
@@ -7175,7 +7175,7 @@
 
                     "@type": "rdfs:Class",
                     "rdfs:subClassOf": "schema:Organization",
-                    "description": "Organization: Non-governmental Organization.",
+                    "description": "Non-governmental Organization.",
                     "name": "NGO",
                     "@id": "schema:NGO",
                     "layer": "core"
@@ -7187,7 +7187,7 @@
 
                     "@type": "rdfs:Class",
                     "rdfs:subClassOf": "schema:Organization",
-                    "description": "A performance group, such as a band, an orchestra, or a circus.",
+                    "description": "Performing Group",
                     "name": "PerformingGroup",
                     "@id": "schema:PerformingGroup",
                     "layer": "core",
@@ -7237,7 +7237,7 @@
 
                     "@type": "rdfs:Class",
                     "rdfs:subClassOf": "schema:Organization",
-                    "description": "Represents the collection of all sports organizations, including sports teams, governing bodies, and sports associations.",
+                    "description": "Sports Organization",
                     "name": "SportsOrganization",
                     "@id": "schema:SportsOrganization",
                     "layer": "core",

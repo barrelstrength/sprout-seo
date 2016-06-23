@@ -5,6 +5,11 @@
 {% set elementType = craft.sproutseo.getAssetElementType %}
 {% set globals = craft.sproutSeo.getGlobals() %}
 {% set schema = globals.identity %}
+{% set organizationItems = craft.sproutSeo.getOrganizationOptions() %}
+{% set firstItems = {"":""} %}
+{% for item in organizationItems %}
+	{% set firstItems = firstItems | merge({(item.name):item.description}) %}
+{% endfor %}
 
 {% if schema.logo is defined and schema.logo %}
 	{% for id in schema.logo %}
@@ -27,17 +32,70 @@
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
 		<input type="hidden" name="schemaType" value="identity">
 
-		{{ forms.selectField({
-			label: 'Website Identity'|t,
-			instructions: 'Select the primary concept that represents your brand identity.'|t,
-			id: 'identityType',
-			name: 'sproutseo[schema][identity][@type]',
-			options: identityTypes,
-			value: globals.getType(),
-			errors: "",
-			required: false,
-			first: true
-		}) }}
+		<div class="field">
+			<div class="heading">
+					<label for="siteOwnerType">{{ "Website Identity"|t}}</label>
+					<div class="instructions"><p>{{ "Select the primary concept that represents your brand identity." |t |raw}}</p></div>
+			</div>
+			<div>
+				<div class="inline-item">
+					{{ forms.selectField({
+						class: "inline-item",
+						fieldClass: "inline-item",
+						id: 'identityType',
+						name: 'sproutseo[schema][identity][@type]',
+						options: identityTypes,
+						value: globals.getType(),
+						errors: "",
+						required: false
+					}) }}
+				</div>
+				<div class="inline-item">&rarr;</div>
+				<div class="inline-item">
+					{{ forms.selectField({
+						class: "inline-item",
+						fieldClass: "inline-item",
+						id: 'first',
+						role: 'listbox',
+						name: 'firstOrganizationSubType',
+						options: firstItems,
+						value: globals.getType(),
+						errors: "",
+						required: false,
+					}) }}
+				</div>
+				<div class="inline-item">&rarr;</div>
+				<div class="inline-item">
+					{{ forms.selectField({
+						class: "inline-item",
+						fieldClass: "inline-item",
+						id: 'second',
+						role: 'listbox',
+						name: 'secondOrganizationSubType',
+						options: {'':''},
+						value: '',
+						errors: '',
+						disabled : 'disabled',
+						required: false,
+					}) }}
+				</div>
+				<div class="inline-item">&rarr;</div>
+				<div class="inline-item">
+					{{ forms.selectField({
+						class: "inline-item",
+						fieldClass: "inline-item",
+						id: 'third',
+						role: 'listbox',
+						name: 'thirdOrganizationSubType',
+						options: {'':''},
+						value: '',
+						errors: '',
+						disabled : 'disabled',
+						required: false,
+					}) }}
+				</div>
+			</div>
+		</div>
 
 		<div id="person"  {% if globals.getType() != 'Person' %} style="display:none;" {% endif %}>
 
@@ -266,9 +324,30 @@
 			<input type="submit" class="btn submit" value="Save" />
 		</div>
 
+<style>
+	div.inline-item {
+		display: inline-block;
+		vertical-align: middle;
+		margin: 0;
+	}
+	.inline-item > div > label {
+		display: inline-block;
+		vertical-align: middle;
+		margin: 0;
+	}
+	div.half-width-field {
+		display: inline-block;
+		width: 45%;
+	}
+
+	div.half-width-field-left {
+		padding-right: 5%;
+	}
+</style>
 	</form>
 
 {% includejs %}
+	var items = {{ organizationItems|json_encode|raw }};
 	$( document ).ready(function() {
 			$( "#identityType" ).change(function() {
 				if(this.value === 'Person')
@@ -284,3 +363,5 @@
 {% endincludejs %}
 
 {% endset %}
+
+{% includeJsResource  "sproutseo/js/depending/script.js" %}
