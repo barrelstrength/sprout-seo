@@ -312,15 +312,37 @@
 			required: false
 		}) }}
 
-		{{ forms.textField({
-			label: "Sun->Sat"|t,
-			instructions: "Open/Close Hours for each day"|t,
-			name: 'sproutseo[schema][identity][openClose]',
-			value: schema['openClose'] is defined ? schema.openClose : null,
-			errors: '',
-			required: false
-		}) }}
-
+		<div class="field">
+			<div class="heading">
+					<label for="siteOwnerType">{{ "Opening Hours"|t}}</label>
+					<div class="instructions"><p>{{ "Open/Close Hours for each day" |t |raw}}</p></div>
+			</div>
+			<div>
+				<div class="inline-item">
+					{{ forms.timeField({
+						id:"open",
+						class: "inline-item",
+						fieldClass: "inline-item",
+						name: 'sproutseo[schema][identity][open]',
+						value: schema['open']['time'] is defined ? schema.open.time : null,
+						errors: '',
+						required: false
+					}) }}
+				</div>
+				<div class="inline-item"> {{"to"|t}}</div>
+				<div class="inline-item">
+					{{ forms.timeField({
+						id: "close",
+						class: "inline-item",
+						fieldClass: "inline-item",
+						name: 'sproutseo[schema][identity][close]',
+						value: schema['close']['time'] is defined ? schema.close.time : null,
+						errors: '',
+						required: false
+					}) }}
+				</div>
+			</div>
+		</div>
 
 		<div class="buttons">
 			<input type="submit" class="btn submit" value="Save" />
