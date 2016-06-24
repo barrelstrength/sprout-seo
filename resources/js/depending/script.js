@@ -62,10 +62,10 @@ $(document).ready(function() {
 		firstSelection = firstDropDown.val();
 
 		// Clear all dropdowns down to the hierarchy
-		clearDropDown($('select'), 2);
+		clearDropDown($("#organization :input"), 1);
 
 		// Disable all dropdowns down to the hierarchy
-		disableDropDown($('select'), 2);
+		disableDropDown($("#organization :input"), 1);
 
 		// Check current selection
 		if(firstSelection === '') {
@@ -89,10 +89,10 @@ $(document).ready(function() {
 		secondSelection = secondDropDown.val();
 
 		// Clear all dropdowns down to the hierarchy
-		clearDropDown($('select'), 3);
+		clearDropDown($("#organization :input"), 2);
 
 		// Disable all dropdowns down to the hierarchy
-		disableDropDown($('select'), 3);
+		disableDropDown($("#organization :input"), 2);
 
 		// Check current selection
 		if(secondSelection === '') {
