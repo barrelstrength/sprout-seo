@@ -69,6 +69,10 @@ class SproutSeo_SchemaModel extends BaseModel
 		$structuredData['keywords']             = isset($schema['keywords']) ? $schema['keywords'] : null;
 		$structuredData['alternateEntityName']  = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
 
+		$structuredData['firstOrganizationSubType']  = isset($schema['firstOrganizationSubType']) ? $schema['firstOrganizationSubType'] : null;
+		$structuredData['secondOrganizationSubType'] = isset($schema['secondOrganizationSubType']) ? $schema['secondOrganizationSubType'] : null;
+		$structuredData['thirdOrganizationSubType']  = isset($schema['thirdOrganizationSubType']) ? $schema['thirdOrganizationSubType'] : null;
+
 		$structuredData['address']       = isset($schema['address']) ? $schema['address'] : null;
 		$structuredData['streetAddress'] = isset($schema['streetAddress']) ? $schema['streetAddress'] : null;
 		$structuredData['locality']      = isset($schema['locality']) ? $schema['locality'] : null;

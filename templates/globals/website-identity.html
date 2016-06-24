@@ -50,49 +50,51 @@
 						required: false
 					}) }}
 				</div>
-				<div class="inline-item">&rarr;</div>
-				<div class="inline-item">
-					{{ forms.selectField({
-						class: "inline-item",
-						fieldClass: "inline-item",
-						id: 'first',
-						role: 'listbox',
-						name: 'firstOrganizationSubType',
-						options: firstItems,
-						value: globals.getType(),
-						errors: "",
-						required: false,
-					}) }}
-				</div>
-				<div class="inline-item">&rarr;</div>
-				<div class="inline-item">
-					{{ forms.selectField({
-						class: "inline-item",
-						fieldClass: "inline-item",
-						id: 'second',
-						role: 'listbox',
-						name: 'secondOrganizationSubType',
-						options: {'':''},
-						value: '',
-						errors: '',
-						disabled : 'disabled',
-						required: false,
-					}) }}
-				</div>
-				<div class="inline-item">&rarr;</div>
-				<div class="inline-item">
-					{{ forms.selectField({
-						class: "inline-item",
-						fieldClass: "inline-item",
-						id: 'third',
-						role: 'listbox',
-						name: 'thirdOrganizationSubType',
-						options: {'':''},
-						value: '',
-						errors: '',
-						disabled : 'disabled',
-						required: false,
-					}) }}
+				<div id="organization" {% if globals.getType() == 'Person' %} style="display:none;" {% endif %} class="inline-item">
+					<div class="inline-item">&rarr;</div>
+					<div class="inline-item">
+						{{ forms.selectField({
+							class: "inline-item",
+							fieldClass: "inline-item",
+							id: 'first',
+							role: 'listbox',
+							name: 'sproutseo[schema][identity][firstOrganizationSubType]',
+							options: firstItems,
+							value: '',
+							errors: "",
+							required: false,
+						}) }}
+					</div>
+					<div class="inline-item">&rarr;</div>
+					<div class="inline-item">
+						{{ forms.selectField({
+							class: "inline-item",
+							fieldClass: "inline-item",
+							id: 'second',
+							role: 'listbox',
+							name: 'sproutseo[schema][identity][secondOrganizationSubType]',
+							options: {'':''},
+							value: '',
+							errors: '',
+							disabled : 'disabled',
+							required: false,
+						}) }}
+					</div>
+					<div class="inline-item">&rarr;</div>
+					<div class="inline-item">
+						{{ forms.selectField({
+							class: "inline-item",
+							fieldClass: "inline-item",
+							id: 'third',
+							role: 'listbox',
+							name: 'sproutseo[schema][identity][thirdOrganizationSubType]',
+							options: {'':''},
+							value: '',
+							errors: '',
+							disabled : 'disabled',
+							required: false,
+						}) }}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -335,28 +337,37 @@
 		vertical-align: middle;
 		margin: 0;
 	}
-	div.half-width-field {
-		display: inline-block;
-		width: 45%;
-	}
-
-	div.half-width-field-left {
-		padding-right: 5%;
-	}
 </style>
 	</form>
 
 {% includejs %}
 	var items = {{ organizationItems|json_encode|raw }};
+	var schema = {{ schema|json_encode|raw }};
 	$( document ).ready(function() {
+			// check if we need load depending dropdowns
+			if (schema.hasOwnProperty('firstOrganizationSubType') && schema.firstOrganizationSubType)
+			{
+				$('#first').val(schema.firstOrganizationSubType).change();
+			}
+			if (schema.hasOwnProperty('secondOrganizationSubType') && schema.secondOrganizationSubType)
+			{
+				$('#second').val(schema.secondOrganizationSubType).change();
+			}
+			if (schema.hasOwnProperty('thirdOrganizationSubType') && schema.thirdOrganizationSubType)
+			{
+				$('#third').val(schema.thirdOrganizationSubType).change();
+			}
+
 			$( "#identityType" ).change(function() {
 				if(this.value === 'Person')
 				{
 					$( "#person" ).show();
+					$( "#organization" ).hide();
 				}
 				else
 				{
 					$( "#person" ).hide();
+					$( "#organization" ).show();
 				}
 		});
 	});
