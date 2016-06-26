@@ -32,16 +32,200 @@
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
 		<input type="hidden" name="schemaType" value="identity">
 
-		<div class="field">
+		{{ forms.textField({
+			label: "Name"|t,
+			instructions: "The preferred name of your website. <a href='#' class='fieldtoggle instructionstoggle'
+			data-target='toggle-alternate'>Add Alternate Entity Name</a>"|t,
+			name: 'sproutseo[schema][identity][name]',
+			value: schema['name'] is defined ? schema.name : null,
+			errors: '',
+			first: true
+		}) }}
+
+		<div id="toggle-alternate" class="{{ (schema['alternateEntityName'] is defined and schema.alternateEntityName ?:
+		'hidden' ) }}">
+			{{ forms.textField({
+				label: "Alternate Entity Name"|t,
+				instructions: "An alternate name you want search engines to consider."|t,
+				name: 'sproutseo[schema][identity][alternateEntityName]',
+				value: schema['alternateEntityName'] is defined ? schema.alternateEntityName : null,
+				errors: ''
+			}) }}
+		</div>
+
+		{{ forms.textareaField({
+			label: "Description"|t,
+			instructions: "A description of your website."|t,
+			name: 'sproutseo[schema][identity][description]',
+			value: schema['description'] is defined ? schema.description : null,
+			errors: '',
+			required: true
+		}) }}
+
+		{{ forms.textField({
+			label: "URL"|t,
+			instructions: "The URL of your official website."|t,
+			name: 'sproutseo[schema][identity][url]',
+			value: schema['url'] is defined ? schema.url : null,
+			errors: '',
+			required: true
+		}) }}
+
+		{{ forms.textField({
+			label: "Keywords"|t,
+			instructions: "The primary keywords or phrases that describe your website."|t,
+			name: 'sproutseo[schema][identity][keywords]',
+			value: schema['keywords'] is defined ? schema.keywords : null,
+			errors: '',
+			required: true
+		}) }}
+
+		{{ forms.field({
+			label: 'Logo'|t,
+			instructions: 'The preferred logo for your website.'|t,
+		}, forms.elementSelect({
+			elements: [logoElement],
+			sourceElementId: schema['logo'] is defined ? schema.logo : null,
+			elementType: elementType,
+			id: 'logo',
+			name: 'sproutseo[schema][identity][logo]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image'|t,
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
+
+		{{ forms.textField({
+			label: "Telephone"|t,
+			instructions: 'The preferred telephone number for your website.'|t,
+			name: 'sproutseo[schema][identity][telephone]',
+			value: schema['telephone'] is defined ? schema.telephone : null,
+			errors: '',
+			required: true
+		}) }}
+
+		{{ forms.textField({
+			label: "Email"|t,
+			instructions: 'The preferred email address for your website.'|t,
+			name: 'sproutseo[schema][identity][email]',
+			value: schema['email'] is defined ? schema.email : null,
+			errors: '',
+			required: true
+		}) }}
+
+		<hr>
+
+		{# Address info #}
+
+		{{ forms.lightswitchField({
+			label: "Additional information"|t,
+			instructions: 'Display fields to add additional information such as your address and DUNS number.'|t,
+			toggle: 'address-toggle',
+			name: 'sproutseo[schema][identity][additionalInfoToggle]',
+			on: schema['additionalInfoToggle'] is defined ? schema.additionalInfoToggle : false
+		}) }}
+
+		<div id="address-toggle" class="{{ (schema['additionalInfoToggle'] is defined and schema.additionalInfoToggle ?: "hidden")
+		}}">
+
+			{{ forms.textField({
+				label: "Address"|t,
+				instructions: 'Address of the specific business location.'|t,
+				name: 'sproutseo[schema][identity][address]',
+				value: schema['address'] is defined ? schema.address : null,
+				errors: '',
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Street Address"|t,
+				instructions: 'Street number, street name, and unit number (if applicable).'|t,
+				name: 'sproutseo[schema][identity][streetAddress]',
+				value: schema['streetAddress'] is defined ? schema.streetAddress : null,
+				errors: '',
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Locality"|t,
+				instructions: "City."|t,
+				name: 'sproutseo[schema][identity][locality]',
+				value: schema['locality'] is defined ? schema.locality : null,
+				errors: '',
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Region"|t,
+				instructions: "State or province."|t,
+				name: 'sproutseo[schema][identity][region]',
+				value: schema['region'] is defined ? schema.region : null,
+				errors: '',
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Postal Code"|t,
+				instructions: "Postal or zip code."|t,
+				name: 'sproutseo[schema][identity][postalCode]',
+				value: schema['postalCode'] is defined ? schema.postalCode : null,
+				errors: '',
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Country"|t,
+				instructions: "The 2-letter ISO 3166-1 alpha-2 country code."|t,
+				name: 'sproutseo[schema][identity][country]',
+				value: schema['country'] is defined ? schema.country : null,
+				errors: '',
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Latitude"|t,
+				instructions: "The latitude of the business location."|t,
+				name: 'sproutseo[schema][identity][latitude]',
+				value: schema['latitude'] is defined ? schema.latitude : null,
+				errors: '',
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Longitude"|t,
+				instructions: "The longitude of the business location."|t,
+				name: 'sproutseo[schema][identity][longitude]',
+				value: schema['longitude'] is defined ? schema.longitude : null,
+				errors: '',
+				required: false
+			}) }}
+
+			<hr>
+
+			{{ forms.textField({
+				label: "DUNS Number"|t,
+				instructions: 'The Dun & Bradstreet DUNS number for identifying an organization or business person.'|t,
+				name: 'sproutseo[schema][identity][dunsNumber]',
+				value: schema['dunsNumber'] is defined ? schema.dunsNumber : null,
+				errors: '',
+				required: false
+			}) }}
+
+		</div>
+
+		<hr>
+
+		<div class="field identityType-field-wrapper">
+
 			<div class="heading">
-					<label for="siteOwnerType">{{ "Website Identity"|t}}</label>
-					<div class="instructions"><p>{{ "Select the primary concept that represents your brand identity." |t |raw}}</p></div>
+				<label for="siteOwnerType">{{ "Website Identity"|t}}</label>
+				<div class="instructions"><p>{{ "Select the primary concept that represents your brand identity." |t |raw}}</p></div>
 			</div>
-			<div>
-				<div class="inline-item">
+
+			<div class="input">
+
+				<div>
 					{{ forms.selectField({
-						class: "inline-item",
-						fieldClass: "inline-item",
 						id: 'identityType',
 						name: 'sproutseo[schema][identity][@type]',
 						options: identityTypes,
@@ -50,12 +234,11 @@
 						required: false
 					}) }}
 				</div>
-				<div id="organization" {% if globals.getType() == 'Person' %} style="display:none;" {% endif %} class="inline-item">
-					<div class="inline-item">&rarr;</div>
-					<div class="inline-item">
+
+				<div class="organization-info {% if globals.getType() == 'Person' %}hidden{% endif %}">
+
+					<div>
 						{{ forms.selectField({
-							class: "inline-item",
-							fieldClass: "inline-item",
 							id: 'first',
 							role: 'listbox',
 							name: 'sproutseo[schema][identity][firstOrganizationSubType]',
@@ -65,33 +248,27 @@
 							required: false,
 						}) }}
 					</div>
-					<div class="inline-item">&rarr;</div>
-					<div class="inline-item">
+
+					<div>
 						{{ forms.selectField({
-							class: "inline-item",
-							fieldClass: "inline-item",
 							id: 'second',
 							role: 'listbox',
 							name: 'sproutseo[schema][identity][secondOrganizationSubType]',
 							options: {'':''},
 							value: '',
 							errors: '',
-							disabled : 'disabled',
 							required: false,
 						}) }}
 					</div>
-					<div class="inline-item">&rarr;</div>
-					<div class="inline-item">
+
+					<div>
 						{{ forms.selectField({
-							class: "inline-item",
-							fieldClass: "inline-item",
 							id: 'third',
 							role: 'listbox',
 							name: 'sproutseo[schema][identity][thirdOrganizationSubType]',
 							options: {'':''},
 							value: '',
 							errors: '',
-							disabled : 'disabled',
 							required: false,
 						}) }}
 					</div>
@@ -99,7 +276,82 @@
 			</div>
 		</div>
 
-		<div id="person"  {% if globals.getType() != 'Person' %} style="display:none;" {% endif %}>
+		<hr>
+
+		{# These fields should only display when 'Organization' is selected #}
+		<div class="organization-info {% if globals.getType() == 'Person' %}hidden{% endif %}">
+
+			{{ forms.textField({
+				label: "Founding Date"|t,
+				instructions: 'The date that this organization was founded.'|t,
+				name: 'sproutseo[schema][identity][foundingDate]',
+				value: schema['foundingDate'] is defined ? schema.foundingDate : null,
+				errors: '',
+				required: false
+			}) }}
+
+			{{ forms.textField({
+				label: "Founding Location"|t,
+				instructions: 'The place where the organization was founded.'|t,
+				name: 'sproutseo[schema][identity][foundingLocation]',
+				value: schema['foundingLocation'] is defined ? schema.foundingLocation : null,
+				errors: '',
+				required: false
+			}) }}
+
+			<hr>
+
+			{# These fields should only display when 'Organization => LocalBusiness' is selected #}
+			<div id="localbusiness">
+
+				{{ forms.textField({
+					label: "Local Business Info "|t,
+					name: 'sproutseo[schema][identity][localBusinessInfo]',
+					value: schema['localBusinessInfo'] is defined ? schema.localBusinessInfo : null,
+					errors: '',
+					required: false
+				}) }}
+
+				<div class="field">
+					<div class="heading">
+						<label for="siteOwnerType">{{ "Opening Hours"|t}}</label>
+						<div class="instructions"><p>{{ "Open/Close Hours for each day" |t |raw}}</p></div>
+					</div>
+					<div>
+						<div class="inline-item">
+							{{ forms.timeField({
+								id:"open",
+								class: "inline-item",
+								fieldClass: "inline-item",
+								name: 'sproutseo[schema][identity][open]',
+								value: schema['open']['time'] is defined ? schema.open.time : null,
+								errors: '',
+								required: false
+							}) }}
+						</div>
+						<div class="inline-item"> {{"to"|t}}</div>
+						<div class="inline-item">
+							{{ forms.timeField({
+								id: "close",
+								class: "inline-item",
+								fieldClass: "inline-item",
+								name: 'sproutseo[schema][identity][close]',
+								value: schema['close']['time'] is defined ? schema.close.time : null,
+								errors: '',
+								required: false
+							}) }}
+						</div>
+					</div>
+				</div>
+
+				<hr>
+
+			</div>
+
+		</div>
+
+		{# These fields should only display when 'Person' is selected #}
+		<div class="person-info {% if globals.getType() == 'Organization' %}hidden{% endif %}">
 
 			{{ forms.selectField({
 				label: 'Gender'|t,
@@ -117,256 +369,55 @@
 				name: 'sproutseo[schema][identity][birthplace]',
 				value: schema['birthplace'] is defined ? schema.birthplace : null,
 				errors: '',
-				first: true
 			}) }}
-			<br>
-		</div>
 
-		{{ forms.textField({
-			label: "Name"|t,
-			instructions: "Name of your organization"|t,
-			name: 'sproutseo[schema][identity][name]',
-			value: schema['name'] is defined ? schema.name : null,
-			errors: '',
-			first: true
-		}) }}
+			<hr>
 
-		{{ forms.textField({
-			label: "Alternate Entity Name"|t,
-			name: 'sproutseo[schema][identity][alternateEntityName]',
-			value: schema['alternateEntityName'] is defined ? schema.alternateEntityName : null,
-			errors: ''
-		}) }}
-
-		{{ forms.textareaField({
-			label: "Description"|t,
-			instructions: "Description of your organization"|t,
-			name: 'sproutseo[schema][identity][description]',
-			value: schema['description'] is defined ? schema.description : null,
-			errors: '',
-			required: true
-		}) }}
-
-		{{ forms.textField({
-			label: "URL"|t,
-			instructions: "Canonical URL of your organization"|t,
-			name: 'sproutseo[schema][identity][url]',
-			value: schema['url'] is defined ? schema.url : null,
-			errors: '',
-			required: true
-		}) }}
-
-		{{ forms.textField({
-			label: "Keywords"|t,
-			instructions: "Primary keywords that describe your content"|t,
-			name: 'sproutseo[schema][identity][keywords]',
-			value: schema['keywords'] is defined ? schema.keywords : null,
-			errors: '',
-			required: true
-		}) }}
-
-		{{ forms.field({
-			label: 'Logo'|t,
-		}, forms.elementSelect({
-			elements: [logoElement],
-			sourceElementId: schema['logo'] is defined ? schema.logo : null,
-			elementType: elementType,
-			id: 'logo',
-			name: 'sproutseo[schema][identity][logo]',
-			jsClass: 'Craft.AssetSelectInput',
-			addButtonLabel: 'Select Image'|t,
-			limit: 1,
-			criteria: {"localeEnabled":null}
-		})) }}
-
-		{{ forms.textField({
-			label: "Telephone"|t,
-			name: 'sproutseo[schema][identity][telephone]',
-			value: schema['telephone'] is defined ? schema.telephone : null,
-			errors: '',
-			required: true
-		}) }}
-
-		{{ forms.textField({
-			label: "Email"|t,
-			name: 'sproutseo[schema][identity][email]',
-			value: schema['email'] is defined ? schema.email : null,
-			errors: '',
-			required: true
-		}) }}
-
-
-		{#Address info#}
-
-		{{ forms.textField({
-			label: "Address"|t,
-			name: 'sproutseo[schema][identity][address]',
-			value: schema['address'] is defined ? schema.address : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Street Address"|t,
-			name: 'sproutseo[schema][identity][streetAddress]',
-			value: schema['streetAddress'] is defined ? schema.streetAddress : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Locality"|t,
-			name: 'sproutseo[schema][identity][locality]',
-			value: schema['locality'] is defined ? schema.locality : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Region"|t,
-			name: 'sproutseo[schema][identity][region]',
-			value: schema['region'] is defined ? schema.region : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Postal Code"|t,
-			name: 'sproutseo[schema][identity][postalCode]',
-			value: schema['postalCode'] is defined ? schema.postalCode : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Country"|t,
-			name: 'sproutseo[schema][identity][country]',
-			value: schema['country'] is defined ? schema.country : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Latitude"|t,
-			name: 'sproutseo[schema][identity][latitude]',
-			value: schema['latitude'] is defined ? schema.latitude : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Longitude"|t,
-			name: 'sproutseo[schema][identity][longitude]',
-			value: schema['longitude'] is defined ? schema.longitude : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{#More info#}
-
-		{{ forms.textField({
-			label: "Duns Number"|t,
-			name: 'sproutseo[schema][identity][dunsNumber]',
-			value: schema['dunsNumber'] is defined ? schema.dunsNumber : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Organization Founder"|t,
-			name: 'sproutseo[schema][identity][organizationFounder]',
-			value: schema['organizationFounder'] is defined ? schema.organizationFounder : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Founding Date"|t,
-			name: 'sproutseo[schema][identity][foundingDate]',
-			value: schema['foundingDate'] is defined ? schema.foundingDate : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Founding Location"|t,
-			name: 'sproutseo[schema][identity][foundingLocation]',
-			value: schema['foundingLocation'] is defined ? schema.foundingLocation : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Country"|t,
-			name: 'sproutseo[schema][identity][country]',
-			value: schema['country'] is defined ? schema.country : null,
-			errors: '',
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Local Business Info "|t,
-			name: 'sproutseo[schema][identity][localBusinessInfo]',
-			value: schema['localBusinessInfo'] is defined ? schema.localBusinessInfo : null,
-			errors: '',
-			required: false
-		}) }}
-
-		<div class="field">
-			<div class="heading">
-					<label for="siteOwnerType">{{ "Opening Hours"|t}}</label>
-					<div class="instructions"><p>{{ "Open/Close Hours for each day" |t |raw}}</p></div>
-			</div>
-			<div>
-				<div class="inline-item">
-					{{ forms.timeField({
-						id:"open",
-						class: "inline-item",
-						fieldClass: "inline-item",
-						name: 'sproutseo[schema][identity][open]',
-						value: schema['open']['time'] is defined ? schema.open.time : null,
-						errors: '',
-						required: false
-					}) }}
-				</div>
-				<div class="inline-item"> {{"to"|t}}</div>
-				<div class="inline-item">
-					{{ forms.timeField({
-						id: "close",
-						class: "inline-item",
-						fieldClass: "inline-item",
-						name: 'sproutseo[schema][identity][close]',
-						value: schema['close']['time'] is defined ? schema.close.time : null,
-						errors: '',
-						required: false
-					}) }}
-				</div>
-			</div>
 		</div>
 
 		<div class="buttons">
 			<input type="submit" class="btn submit" value="Save" />
 		</div>
 
-<style>
-	div.inline-item {
-		display: inline-block;
-		vertical-align: middle;
-		margin: 0;
-	}
-	.inline-item > div > label {
-		display: inline-block;
-		vertical-align: middle;
-		margin: 0;
-	}
-</style>
+		<style>
+
+			div.inline-item {
+				display: inline-block;
+				vertical-align: middle;
+				margin: 0;
+			}
+			.inline-item > div > label {
+				display: inline-block;
+				vertical-align: middle;
+				margin: 0;
+			}
+
+			/* Override default a tag fieldtoggle behavior to play more nicely with instructions text */
+			body.ltr a.instructionstoggle {
+				padding-left: 0;
+			}
+			a.instructionstoggle {
+				display: inline;
+			}
+			a.instructionstoggle:before {
+				content: '';
+			}
+
+			/* Space the Website Identify Fields */
+			.identityType-field-wrapper .input:first-of-type {
+				margin-bottom:5px !important;
+			}
+		</style>
+
 	</form>
 
 {% includejs %}
 	var items = {{ organizationItems|json_encode|raw }};
 	var schema = {{ schema|json_encode|raw }};
-	$( document ).ready(function() {
-			// check if we need load depending dropdowns
+
+	$(document).ready(function() {
+
+				// check if we need load depending dropdowns
 			if (schema.hasOwnProperty('firstOrganizationSubType') && schema.firstOrganizationSubType)
 			{
 				$('#first').val(schema.firstOrganizationSubType).change();
@@ -381,18 +432,32 @@
 			}
 
 			$( "#identityType" ).change(function() {
+
 				if(this.value === 'Person')
 				{
-					$( "#person" ).show();
-					$( "#organization" ).hide();
+					$( ".person-info" ).removeClass('hidden');
+					$( ".organization-info" ).addClass('hidden');
 				}
 				else
 				{
-					$( "#person" ).hide();
-					$( "#organization" ).show();
+					$( ".person-info" ).addClass('hidden');
+					$( ".organization-info" ).removeClass('hidden');
 				}
-		});
+
+				if(this.value === 'Organization')
+				{
+					$( ".organization-info" ).removeClass('hidden');
+					$( ".person-info" ).addClass('hidden');
+				}
+				else
+				{
+					$( ".organization-info" ).addClass('hidden');
+					$( ".person-info" ).removeClass('hidden');
+				}
+			});
+
 	});
+
 {% endincludejs %}
 
 {% endset %}

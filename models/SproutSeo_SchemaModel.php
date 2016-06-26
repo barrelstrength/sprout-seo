@@ -9,9 +9,9 @@ class SproutSeo_SchemaModel extends BaseModel
 	protected function defineAttributes()
 	{
 		return array(
-			'identity' => AttributeType::Mixed,
-			'contacts' => AttributeType::Mixed,
-			'social'   => AttributeType::Mixed,
+			'identity'  => AttributeType::Mixed,
+			'contacts'  => AttributeType::Mixed,
+			'social'    => AttributeType::Mixed,
 
 			// @todo - move to a meta tag model
 			'ownership' => AttributeType::Mixed,
@@ -62,23 +62,24 @@ class SproutSeo_SchemaModel extends BaseModel
 
 		$schema = $this->{$this->schemaId};
 
-		$structuredData['name']                 = isset($schema['name']) ? $schema['name'] : null;
-		$structuredData['description']          = isset($schema['description']) ? $schema['description'] : null;
-		$structuredData['url']                  = isset($schema['url']) ? $schema['url'] : null;
-		$structuredData['logo']                 = isset($schema['logo']) ? $schema['logo'] : null;
-		$structuredData['keywords']             = isset($schema['keywords']) ? $schema['keywords'] : null;
-		$structuredData['alternateEntityName']  = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
+		$structuredData['name']                = isset($schema['name']) ? $schema['name'] : null;
+		$structuredData['description']         = isset($schema['description']) ? $schema['description'] : null;
+		$structuredData['url']                 = isset($schema['url']) ? $schema['url'] : null;
+		$structuredData['logo']                = isset($schema['logo']) ? $schema['logo'] : null;
+		$structuredData['keywords']            = isset($schema['keywords']) ? $schema['keywords'] : null;
+		$structuredData['alternateEntityName'] = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
 
 		$structuredData['firstOrganizationSubType']  = isset($schema['firstOrganizationSubType']) ? $schema['firstOrganizationSubType'] : null;
 		$structuredData['secondOrganizationSubType'] = isset($schema['secondOrganizationSubType']) ? $schema['secondOrganizationSubType'] : null;
 		$structuredData['thirdOrganizationSubType']  = isset($schema['thirdOrganizationSubType']) ? $schema['thirdOrganizationSubType'] : null;
 
-		$structuredData['address']       = isset($schema['address']) ? $schema['address'] : null;
-		$structuredData['streetAddress'] = isset($schema['streetAddress']) ? $schema['streetAddress'] : null;
-		$structuredData['locality']      = isset($schema['locality']) ? $schema['locality'] : null;
-		$structuredData['region']        = isset($schema['region']) ? $schema['region'] : null;
-		$structuredData['postalCode']    = isset($schema['postalCode']) ? $schema['postalCode'] : null;
-		$structuredData['country']       = isset($schema['country']) ? $schema['country'] : null;
+		$structuredData['additionalInfoToggle'] = isset($schema['additionalInfoToggle']) ? $schema['additionalInfoToggle'] : null;
+		$structuredData['address']              = isset($schema['address']) ? $schema['address'] : null;
+		$structuredData['streetAddress']        = isset($schema['streetAddress']) ? $schema['streetAddress'] : null;
+		$structuredData['locality']             = isset($schema['locality']) ? $schema['locality'] : null;
+		$structuredData['region']               = isset($schema['region']) ? $schema['region'] : null;
+		$structuredData['postalCode']           = isset($schema['postalCode']) ? $schema['postalCode'] : null;
+		$structuredData['country']              = isset($schema['country']) ? $schema['country'] : null;
 
 		$structuredData['latitude']            = isset($schema['latitude']) ? $schema['latitude'] : null;
 		$structuredData['longitude']           = isset($schema['longitude']) ? $schema['longitude'] : null;
@@ -114,7 +115,6 @@ class SproutSeo_SchemaModel extends BaseModel
 	{
 	}
 
-
 	protected function getContacts()
 	{
 		$contacts = $this->{$this->schemaId};
@@ -148,7 +148,7 @@ class SproutSeo_SchemaModel extends BaseModel
 			{
 				$profileLinks[] = array(
 					'profileName' => isset($profile['profileName']) ? $profile['profileName'] : $profile[0],
-					'url' => isset($profile['url']) ? $profile['url'] : $profile[1]
+					'url'         => isset($profile['url']) ? $profile['url'] : $profile[1]
 				);
 			}
 		}
