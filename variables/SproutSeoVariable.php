@@ -222,4 +222,11 @@ class SproutSeoVariable
 		return $jsonByName;
 	}
 
+	public function getDate($string)
+	{
+		$date = new DateTime($string);
+
+		return $date;
+	}
+
 }
