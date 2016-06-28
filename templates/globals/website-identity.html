@@ -62,20 +62,25 @@
 			required: true
 		}) }}
 
+
+		<div class="field identityType-field-wrapper">
+
+			<div class="heading">
+				<label class="required" for="keywords">{{ "Keywords"|t}}</label>
+				<div class="instructions"><p>{{ "The primary keywords or phrases that describe your website." |t |raw}}</p></div>
+			</div>
+
+			<div class="">
+				{% set keywordsValue = schema['keywords'] is defined ? schema.keywords : null %}
+				<input name="sproutseo[schema][identity][keywords]" id="keywords" type="text" value="{{keywordsValue}}">
+			</div>
+		</div>
+
 		{{ forms.textField({
 			label: "URL"|t,
 			instructions: "The URL of your official website."|t,
 			name: 'sproutseo[schema][identity][url]',
 			value: schema['url'] is defined ? schema.url : null,
-			errors: '',
-			required: true
-		}) }}
-
-		{{ forms.textField({
-			label: "Keywords"|t,
-			instructions: "The primary keywords or phrases that describe your website."|t,
-			name: 'sproutseo[schema][identity][keywords]',
-			value: schema['keywords'] is defined ? schema.keywords : null,
 			errors: '',
 			required: true
 		}) }}
@@ -416,45 +421,55 @@
 	var schema = {{ schema|json_encode|raw }};
 
 	$(document).ready(function() {
+		$('#keywords').selectize({
+				delimiter: ' ',
+				persist: false,
+				create: function(input) {
+						return {
+								value: input,
+								text: input
+						}
+				}
+		});
 
-				// check if we need load depending dropdowns
-			if (schema.hasOwnProperty('firstOrganizationSubType') && schema.firstOrganizationSubType)
+			// check if we need load depending dropdowns
+		if (schema.hasOwnProperty('firstOrganizationSubType') && schema.firstOrganizationSubType)
+		{
+			$('#first').val(schema.firstOrganizationSubType).change();
+		}
+		if (schema.hasOwnProperty('secondOrganizationSubType') && schema.secondOrganizationSubType)
+		{
+			$('#second').val(schema.secondOrganizationSubType).change();
+		}
+		if (schema.hasOwnProperty('thirdOrganizationSubType') && schema.thirdOrganizationSubType)
+		{
+			$('#third').val(schema.thirdOrganizationSubType).change();
+		}
+
+		$( "#identityType" ).change(function() {
+
+			if(this.value === 'Person')
 			{
-				$('#first').val(schema.firstOrganizationSubType).change();
+				$( ".person-info" ).removeClass('hidden');
+				$( ".organization-info" ).addClass('hidden');
 			}
-			if (schema.hasOwnProperty('secondOrganizationSubType') && schema.secondOrganizationSubType)
+			else
 			{
-				$('#second').val(schema.secondOrganizationSubType).change();
+				$( ".person-info" ).addClass('hidden');
+				$( ".organization-info" ).removeClass('hidden');
 			}
-			if (schema.hasOwnProperty('thirdOrganizationSubType') && schema.thirdOrganizationSubType)
+
+			if(this.value === 'Organization')
 			{
-				$('#third').val(schema.thirdOrganizationSubType).change();
+				$( ".organization-info" ).removeClass('hidden');
+				$( ".person-info" ).addClass('hidden');
 			}
-
-			$( "#identityType" ).change(function() {
-
-				if(this.value === 'Person')
-				{
-					$( ".person-info" ).removeClass('hidden');
-					$( ".organization-info" ).addClass('hidden');
-				}
-				else
-				{
-					$( ".person-info" ).addClass('hidden');
-					$( ".organization-info" ).removeClass('hidden');
-				}
-
-				if(this.value === 'Organization')
-				{
-					$( ".organization-info" ).removeClass('hidden');
-					$( ".person-info" ).addClass('hidden');
-				}
-				else
-				{
-					$( ".organization-info" ).addClass('hidden');
-					$( ".person-info" ).removeClass('hidden');
-				}
-			});
+			else
+			{
+				$( ".organization-info" ).addClass('hidden');
+				$( ".person-info" ).removeClass('hidden');
+			}
+		});
 
 	});
 
