@@ -136,8 +136,8 @@
 			{{ forms.textField({
 				label: "Address"|t,
 				instructions: 'Address of the specific business location.'|t,
-				name: 'sproutseo[schema][identity][address]',
-				value: schema['address'] is defined ? schema.address : null,
+				name: 'sproutseo[schema][identity][addressLocality]',
+				value: schema['addressLocality'] is defined ? schema.addressLocality : null,
 				errors: '',
 				required: false
 			}) }}
@@ -163,8 +163,8 @@
 			{{ forms.textField({
 				label: "Region"|t,
 				instructions: "State or province."|t,
-				name: 'sproutseo[schema][identity][region]',
-				value: schema['region'] is defined ? schema.region : null,
+				name: 'sproutseo[schema][identity][addressRegion]',
+				value: schema['addressRegion'] is defined ? schema.addressRegion : null,
 				errors: '',
 				required: false
 			}) }}

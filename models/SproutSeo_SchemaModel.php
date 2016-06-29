@@ -74,10 +74,10 @@ class SproutSeo_SchemaModel extends BaseModel
 		$structuredData['thirdOrganizationSubType']  = isset($schema['thirdOrganizationSubType']) ? $schema['thirdOrganizationSubType'] : null;
 
 		$structuredData['additionalInfoToggle'] = isset($schema['additionalInfoToggle']) ? $schema['additionalInfoToggle'] : null;
-		$structuredData['address']              = isset($schema['address']) ? $schema['address'] : null;
+		$structuredData['addressLocality']      = isset($schema['addressLocality']) ? $schema['addressLocality'] : null;
 		$structuredData['streetAddress']        = isset($schema['streetAddress']) ? $schema['streetAddress'] : null;
 		$structuredData['locality']             = isset($schema['locality']) ? $schema['locality'] : null;
-		$structuredData['region']               = isset($schema['region']) ? $schema['region'] : null;
+		$structuredData['addressRegion']        = isset($schema['addressRegion']) ? $schema['addressRegion'] : null;
 		$structuredData['postalCode']           = isset($schema['postalCode']) ? $schema['postalCode'] : null;
 		$structuredData['country']              = isset($schema['country']) ? $schema['country'] : null;
 
