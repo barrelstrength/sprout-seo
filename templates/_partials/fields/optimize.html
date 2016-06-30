@@ -27,6 +27,20 @@
 				required: false,
 				placeholder: " "
 			}) }}
+
+			<div class="field identityType-field-wrapper">
+
+				<div class="heading">
+					<label class="" for="keywords">{{ "Keywords"|t}}</label>
+					<div class="instructions"><p>{{ "The primary keywords or phrases that describe your website." |t |raw}}</p></div>
+				</div>
+
+				<div class="">
+					{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
+					<input name="sproutseo_fields[keywords]" id="keywords" type="text" value="{{keywordsValue}}">
+				</div>
+			</div>
+
 			{{ forms.field({
 				label: 'Meta Image'|t,
 				instructions: 'A featured image that represents your content that will display when sharing on Facebook and Twitter and other services.'
@@ -671,6 +685,19 @@
 				div.addClass("active");
 			}
 		}
+		// Add validation for field type.
+		var keywords = $('#keywords').length ? $('#keywords') : $('#fields-keywords');
+
+		keywords.selectize({
+				delimiter: ',',
+				persist: false,
+				create: function(input) {
+						return {
+								value: input,
+								text: input
+						}
+				}
+		});
 
 		$(".btngroup div").click(function()
 		{
