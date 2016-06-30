@@ -1,46 +1,6 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.lightswitchField({
-	label: "Display Preview?"|t,
-	warning: '',
-	id: 'displayPreview',
-	name: 'displayPreview',
-	on: settings.displayPreview,
-}) }}
-
-{{ forms.lightswitchField({
-	label: "Display Advanced Customization Options?"|t,
-	warning: '',
-	id: 'displayAdvancedOptions',
-	name: 'displayAdvancedOptions',
-	on: settings.displayAdvancedOptions,
-	toggle: 'advancedOptions'
-}) }}
-
-<div id="advancedOptions" {% if not settings.displayAdvancedOptions %}class="hidden"{% endif %}>
-	{{ forms.checkboxField({
-	label: "Allow Geo Fields to be edited?"|t,
-	name: 'showGeo',
-	checked: settings.showGeo,
-	}) }}
-	{{ forms.checkboxField({
-		label: "Allow Robots Fields to be edited?"|t,
-		name: 'showRobots',
-		checked: settings.showRobots,
-	}) }}
-	{{ forms.checkboxField({
-		label: "Allow Open Graph Fields to be edited?"|t,
-		name: 'showOpenGraph',
-		checked: settings.showOpenGraph,
-	}) }}
-	{{ forms.checkboxField({
-		label: "Allow Twitter Fields to be edited?"|t,
-		name: 'showTwitter',
-		checked: settings.showTwitter,
-	}) }}
-</div>
-
-{{ forms.lightswitchField({
 	label: "Use the Element Type Title as the SEO Title?"|t,
 	warning: '',
 	id: 'useElementTypeTitle',
@@ -72,3 +32,142 @@
 	name: 'useMetaImage',
 	on: settings.useMetaImage,
 }) }}
+
+<hr>
+
+{% set optimizedTitleOptions = {
+	title: "Title",
+	custom1: "Custom Text Field 1",
+	custom2: "Custom Text Field 2",
+	custom3: "Custom Text Field 3",
+	"": "--",
+	custom: "Manually"
+} %}
+
+{{ forms.selectField({
+	label: "Meta Tag Title Field"|t,
+	instructions: "Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select
+	'Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t,
+	id: 'optimizedTitleField',
+	name: 'optimizedTitleField',
+	options: optimizedTitleOptions,
+	value: 'title'
+}) }}
+
+
+{% set optimizedDescriptionOptions = {
+	custom1: "Custom Text or Rich Text Field 1",
+	custom2: "Custom Text or Rich Text Field 2",
+	custom3: "Custom Text or Rich Text Field 3",
+	"": "--",
+	custom: "Manually"
+} %}
+
+{{ forms.selectField({
+	label: "Meta Tag Description Field"|t,
+	instructions: "Select the field to use for your basic, Open Graph, and Twitter Card meta tag descriptions. Select
+	'Manually' if you want the Optimize field to display a custom Description Field for your content editors to manage."|t,
+	id: 'optimizedDescriptionField',
+	name: 'optimizedDescriptionField',
+	options: optimizedDescriptionOptions,
+	value: 'custom'
+}) }}
+
+{% set optimizedImageOptions = {
+custom1: "Custom Assets Field 1",
+custom2: "Custom Assets Field 2",
+custom3: "Custom Assets Field 3",
+"": "--",
+custom: "Manually"
+} %}
+
+{{ forms.selectField({
+	label: "Meta Tag Feature Image Field"|t,
+	instructions: "Select the Assets field to use for your basic, Open Graph, and Twitter Card meta tag feature image.
+	Select 'Manually' if you want the Optimize field to display a custom Feature Image Field for your content editors to
+	manage."|t,
+	id: 'optimizedImageField',
+	name: 'optimizedImageField',
+	options: optimizedImageOptions,
+	value: 'custom'
+}) }}
+
+
+
+
+{{ forms.lightswitchField({
+	label: "Display Preview?"|t,
+	instructions: "Display a preview of what your meta data will look like in search results."|t,
+	warning: '',
+	id: 'displayPreview',
+	name: 'displayPreview',
+	on: settings.displayPreview,
+}) }}
+
+<hr>
+
+{% set advancedInput %}
+	<table class="data" style="width: auto;">
+		<thead>
+		<tr>
+			<th scope="col">{{ "Meta Tag Type"|t }}</th>
+			<th scope="col">{{ "Editable?"|t }}</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><label for="showGeo">{{ "Allow Geo Fields to be edited?"|t }}</label></td>
+				<td class="centeralign">
+					<div>
+						{{ forms.lightswitch({
+							name: 'showGeo',
+							on:   settings.showGeo,
+							small: true
+						}) }}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="showRobots">{{ "Allow Robots Fields to be edited?"|t }}</label></td>
+				<td class="centeralign">
+					<div>
+						{{ forms.lightswitch({
+							name: 'showRobots',
+							on:   settings.showRobots,
+							small: true
+						}) }}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="showOpenGraph">{{ "Allow Open Graph Fields to be edited?"|t }}</label></td>
+				<td class="centeralign">
+					<div>
+						{{ forms.lightswitch({
+							name: 'showOpenGraph',
+							on:   settings.showOpenGraph,
+							small: true
+						}) }}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="showTwitter">{{ "Allow Twitter Fields to be edited?"|t }}</label></td>
+				<td class="centeralign">
+					<div>
+						{{ forms.lightswitch({
+							name: 'showTwitter',
+							on:   settings.showTwitter,
+							small: true
+						}) }}
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+{% endset %}
+
+{{ forms.field({
+	label: "Display Advanced Customization Options?"|t,
+	errors: ''
+}, advancedInput) }}
