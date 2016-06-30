@@ -229,9 +229,16 @@ class SproutSeoVariable
 		return $date;
 	}
 
-	public function getJsonDescription($description)
+	public function getJsonName($description)
 	{
-		return preg_replace('/(?<!^)([A-Z])/', ' \\1', $description);
+		$name = preg_replace('/(?<!^)([A-Z])/', ' \\1', $description);
+
+		if ($name == 'N G O')
+		{
+			$name = 'Non Government Organization';
+		}
+
+		return preg_replace('/(?<!^)([A-Z])/', ' \\1', $name);
 	}
 
 }

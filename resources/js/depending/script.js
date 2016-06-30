@@ -19,6 +19,8 @@ $(document).ready(function() {
 		$.each(arrayObj, function(index, value) {
 			if(index >= startIndex) {
 				$(value).attr('disabled', 'disabled');
+				$(value).closest('div').addClass('hidden');
+				$(value).hide();
 			}
 		});
 	};
@@ -26,6 +28,8 @@ $(document).ready(function() {
 	// Method to disable dropdowns down to a given level
 	var enableDropDown = function(that) {
 		that.removeAttr('disabled');
+		that.closest('div').removeClass('hidden');
+		that.show();
 	};
 
 	// Method to generate and append options

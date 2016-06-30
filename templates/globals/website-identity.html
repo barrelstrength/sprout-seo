@@ -8,7 +8,7 @@
 {% set organizationItems = craft.sproutSeo.getOrganizationOptions() %}
 {% set firstItems = {"":""} %}
 {% for item in organizationItems %}
-	{% set firstItems = firstItems | merge({(item.name):item.description}) %}
+	{% set firstItems = firstItems | merge({(item.name):craft.sproutSeo.getJsonName(item.name)}) %}
 {% endfor %}
 
 {% if schema.logo is defined and schema.logo %}
@@ -258,6 +258,7 @@
 						{{ forms.selectField({
 							id: 'second',
 							role: 'listbox',
+							class: 'hidden',
 							name: 'sproutseo[schema][identity][secondOrganizationSubType]',
 							options: {'':''},
 							value: '',
@@ -270,6 +271,7 @@
 						{{ forms.selectField({
 							id: 'third',
 							role: 'listbox',
+							class: 'hidden',
 							name: 'sproutseo[schema][identity][thirdOrganizationSubType]',
 							options: {'':''},
 							value: '',
