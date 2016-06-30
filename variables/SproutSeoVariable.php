@@ -233,7 +233,7 @@ class SproutSeoVariable
 	{
 		$name = preg_replace('/(?<!^)([A-Z])/', ' \\1', $description);
 
-		if ($name == 'N G O')
+		if ($description == 'NGO')
 		{
 			$name = 'Non Government Organization';
 		}
