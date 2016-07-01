@@ -435,17 +435,17 @@
 		});
 
 			// check if we need load depending dropdowns
-		if (schema.hasOwnProperty('firstOrganizationSubType') && schema.firstOrganizationSubType)
+		if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[0])
 		{
-			$('#first').val(schema.firstOrganizationSubType).change();
+			$('#first').val(schema.organizationSubTypes[0]).change();
 		}
-		if (schema.hasOwnProperty('secondOrganizationSubType') && schema.secondOrganizationSubType)
+		if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[1])
 		{
-			$('#second').val(schema.secondOrganizationSubType).change();
+			$('#second').val(schema.organizationSubTypes[1]).change();
 		}
-		if (schema.hasOwnProperty('thirdOrganizationSubType') && schema.thirdOrganizationSubType)
+		if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[2])
 		{
-			$('#third').val(schema.thirdOrganizationSubType).change();
+			$('#third').val(schema.organizationSubTypes[2]).change();
 		}
 
 		$( "#identityType" ).change(function() {
