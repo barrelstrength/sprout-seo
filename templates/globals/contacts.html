@@ -7,22 +7,8 @@
 {% set settings = craft.sproutSeo.getSettings() %}
 
 {% set content %}
-
-	{% set contactOptions = [
-		{ label: "Select Type...", value: '' },
-		{ label: "Customer Service", value: 'customer service' },
-		{ label: "Technical Support", value: 'technical support' },
-		{ label: "Billing Support", value: 'billing support' },
-		{ label: "Bill Payment", value: 'bill payment' },
-		{ label: "Sales", value: 'sales' },
-		{ label: "Reservations", value: 'reservations' },
-		{ label: "Credit Card Support", value: 'credit card support' },
-		{ label: "Emergency", value: 'emergency' },
-		{ label: "Baggage Tracking", value: 'baggage tracking' },
-		{ label: "Roadside Assistance", value: 'roadside assistance' },
-		{ label: "Package Tracking", value: 'package tracking' },
-		{ label: "Custom", value: 'custom' }
-	] %}
+	{% set schemaType = "contacts" %}
+	{% set contactOptions = craft.sproutSeo.getGlobalOptions(schemaType) %}
 
 	{% set cols = [
 		{
@@ -48,7 +34,7 @@
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
-		<input type="hidden" name="schemaType" value="contacts">
+		<input type="hidden" name="schemaType" value="{{schemaType}}">
 
 		<table id="sproutseo-schema-contacts" class="data fullwidth">
 			<thead>
@@ -62,7 +48,10 @@
 			<tbody>
 
 				{% for contact in globals.contacts %}
-
+				{# check for custom values #}
+				{% if not craft.sproutSeo.isCustomValue(schemaType, contact.contactType) %}
+						{% set contactOptions = contactOptions|merge([{label: contact.contactType , value: contact.contactType }]) %}
+				{% endif %}
 				<tr data-id="{{ loop.index }}">
 
 					<td>

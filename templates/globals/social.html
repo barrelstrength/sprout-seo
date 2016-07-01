@@ -5,21 +5,8 @@
 {% set title = "Social Profiles"|t %}
 
 {% set content %}
-
-	{% set socialProfileOptions = [
-		{ label: "Select...", value: '' },
-		{ label: "Facebook", value: 'Facebook' },
-		{ label: "Twitter", value: 'Twitter' },
-		{ label: "Google+", value: 'Google+' },
-		{ label: "Instagram", value: 'Instagram' },
-		{ label: "YouTube", value: 'YouTube' },
-		{ label: "LinkedIn", value: 'LinkedIn' },
-		{ label: "Myspace", value: 'Myspace' },
-		{ label: "Pinterest", value: 'Pinterest' },
-		{ label: "SoundCloud", value: 'SoundCloud' },
-		{ label: "Tumblr", value: 'Tumblr' },
-		{ label: "Custom", value: 'custom' }
-	] %}
+	{% set schemaType = "social" %}
+	{% set socialProfileOptions = craft.sproutSeo.getGlobalOptions(schemaType) %}
 
 	{% set cols = [
 		{
@@ -46,7 +33,7 @@
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
-		<input type="hidden" name="schemaType" value="social">
+		<input type="hidden" name="schemaType" value="{{schemaType}}">
 
 		<table id="sproutseo-schema-social" class="data fullwidth collapsible">
 			<thead>
@@ -60,6 +47,10 @@
 			<tbody>
 
 			{% for socialProfile in globals.social  %}
+			{# check for custom values #}
+			{% if not craft.sproutSeo.isCustomValue(schemaType, socialProfile.profileName) %}
+					{% set socialProfileOptions = socialProfileOptions|merge([{label: socialProfile.profileName , value: socialProfile.profileName }]) %}
+			{% endif %}
 
 			<tr data-id="{{ loop.index }}">
 				<td>
