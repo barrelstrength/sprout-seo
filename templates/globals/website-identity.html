@@ -325,29 +325,38 @@
 						<div class="instructions"><p>{{ "Open/Close Hours for each day" |t |raw}}</p></div>
 					</div>
 					<div>
-						<div class="inline-item">
-							{{ forms.timeField({
-								id:"open",
-								class: "inline-item",
-								fieldClass: "inline-item",
-								name: 'sproutseo[schema][identity][open]',
-								value: schema['open']['time'] is defined ? schema.open.time : null,
-								errors: '',
-								required: false
-							}) }}
-						</div>
-						<div class="inline-item"> {{"to"|t}}</div>
-						<div class="inline-item">
-							{{ forms.timeField({
-								id: "close",
-								class: "inline-item",
-								fieldClass: "inline-item",
-								name: 'sproutseo[schema][identity][close]',
-								value: schema['close']['time'] is defined ? schema.close.time : null,
-								errors: '',
-								required: false
-							}) }}
-						</div>
+						<table class="data">
+							<thead>
+								<tr>
+									<td></td>
+									<th>{{"Opening Time"|t}}</th>
+									<th>{{"Closing Time"|t}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for day in 0..6 %}
+									<tr>
+										<th>
+												{{ craft.i18n.getLocaleData().getWeekDayName(day) }}
+										</th>
+										<td>
+												{{ forms.timeField({
+														id: 'openingHours-'~day~'-open',
+														name: 'sproutseo[schema][identity][openingHours]['~day~'][open]',
+														value: schema['openingHours'][day]['open'] is defined ? schema['openingHours'][day]['open'].time : null,
+												}) }}
+										</td>
+										<td>
+												{{ forms.timeField({
+														id: 'openingHours-'~day~'-close',
+														name: 'sproutseo[schema][identity][openingHours]['~day~'][close]',
+														value: schema['openingHours'][day]['close'] is defined ? schema['openingHours'][day]['close'].time : null,
+												}) }}
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
 					</div>
 				</div>
 
