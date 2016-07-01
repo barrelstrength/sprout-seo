@@ -238,7 +238,7 @@ class SproutSeoVariable
 			$name = 'Non Government Organization';
 		}
 
-		return preg_replace('/(?<!^)([A-Z])/', ' \\1', $name);
+		return $name;
 	}
 
 }
