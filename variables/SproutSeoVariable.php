@@ -253,52 +253,162 @@ class SproutSeoVariable
 		switch ($schemaType)
 		{
 			case 'contacts':
+
 				$options = array(
-						array('label' => "Select Type...", 'value'=>'' ),
-						array('label' => "Customer Service", 'value'=>'customer service' ),
-						array('label' => "Technical Support", 'value'=>'technical support' ),
-						array('label' => "Billing Support", 'value'=>'billing support' ),
-						array('label' => "Bill Payment", 'value'=>'bill payment' ),
-						array('label' => "Sales", 'value'=>'sales' ),
-						array('label' => "Reservations", 'value'=>'reservations' ),
-						array('label' => "Credit Card Support", 'value'=>'credit card support' ),
-						array('label' => "Emergency", 'value'=>'emergency' ),
-						array('label' => "Baggage Tracking", 'value'=>'baggage tracking' ),
-						array('label' => "Roadside Assistance", 'value'=>'roadside assistance' ),
-						array('label' => "Package Tracking", 'value'=>'package tracking' ),
-						array('label' => "Custom", 'value'=>'custom' )
+						array(
+							'label' => "Select Type...",
+							'value' => ''
+						),
+						array(
+							'label' => "Customer Service",
+							'value' => 'customer service'
+						),
+						array(
+							'label' => "Technical Support",
+							'value' => 'technical support'
+						),
+						array(
+							'label' => "Billing Support",
+							'value' => 'billing support'
+						),
+						array(
+							'label' => "Bill Payment",
+							'value' => 'bill payment'
+						),
+						array(
+							'label' => "Sales",
+							'value' => 'sales'
+						),
+						array(
+							'label' => "Reservations",
+							'value' => 'reservations'
+						),
+						array(
+							'label' => "Credit Card Support",
+							'value' => 'credit card support'
+						),
+						array(
+							'label' => "Emergency",
+							'value' => 'emergency'
+						),
+						array(
+							'label' => "Baggage Tracking",
+							'value' => 'baggage tracking'
+						),
+						array(
+							'label' => "Roadside Assistance",
+							'value' => 'roadside assistance'
+						),
+						array(
+							'label' => "Package Tracking",
+							'value' => 'package tracking'
+						),
+						array(
+							'label' => "Custom",
+							'value' => 'custom'
+						)
 					);
 
 				break;
 
-				case 'social':
+			case 'social':
 
 				$options = array(
-						array('label' => "Select..." , 'value' => '' ),
-						array('label' => "Facebook" , 'value' => 'Facebook' ),
-						array('label' => "Twitter" , 'value' => 'Twitter' ),
-						array('label' => "Google+" , 'value' => 'Google+' ),
-						array('label' => "Instagram" , 'value' => 'Instagram' ),
-						array('label' => "YouTube" , 'value' => 'YouTube' ),
-						array('label' => "LinkedIn" , 'value' => 'LinkedIn' ),
-						array('label' => "Myspace" , 'value' => 'Myspace' ),
-						array('label' => "Pinterest" , 'value' => 'Pinterest' ),
-						array('label' => "SoundCloud" , 'value' => 'SoundCloud' ),
-						array('label' => "Tumblr" , 'value' => 'Tumblr' ),
-						array('label' => "Custom" , 'value' => 'custom' )
+						array(
+							'label' => "Select...",
+							'value' => ''
+						),
+						array(
+							'label' => "Facebook",
+							'value' => 'Facebook'
+						),
+						array(
+							'label' => "Twitter",
+							'value' => 'Twitter'
+						),
+						array(
+							'label' => "Google+",
+							'value' => 'Google+'
+						),
+						array(
+							'label' => "Instagram",
+							'value' => 'Instagram',
+							'icon' => 'ABCD'
+						),
+						array(
+							'label' => "YouTube",
+							'value' => 'YouTube'
+						),
+						array(
+							'label' => "LinkedIn",
+							'value' => 'LinkedIn'
+						),
+						array(
+							'label' => "Myspace",
+							'value' => 'Myspace'
+						),
+						array(
+							'label' => "Pinterest",
+							'value' => 'Pinterest'
+						),
+						array(
+							'label' => "SoundCloud",
+							'value' => 'SoundCloud'
+						),
+						array(
+							'label' => "Tumblr",
+							'value' => 'Tumblr'
+						),
+						array(
+							'label' => "Custom",
+							'value' => 'custom'
+						),
 					);
 
-				case 'verify-ownership':
+				break;
+
+			case 'verify-ownership':
 
 				$options = array(
-						array( 'label' => "Select...", 'value' => '' ),
-						array( 'label' => "Bing Webmaster Tools", 'value' => 'bingWebmasterTools', 'metaTagName' => 'msvalidate.01' ),
-						array( 'label' => "Facebook App ID", 'value' => 'facebookAppId', 'metaTagName' => 'fb:app_id' ),
-						array( 'label' => "Facebook Page", 'value' => 'FacebookPage', 'metaTagName' => 'fb:app_id'  ),
-						array( 'label' => "Google Search Console", 'value' => 'googleSearchConsole', 'metaTagName' => 'google-site-verification'  ),
-						array( 'label' => "Pinterest", 'value' => 'pinterest', 'metaTagName' => 'p:domain_verify'  ),
-						array( 'label' => "Yandex Webmaster Tools", 'value' => 'yandexWebmasterTools', 'metaTagName' => 'yandex-verification'  ),
-						array( 'label' => "Custom", 'value' => 'custom', 'metaTagName' => ''  )
+						array(
+							'label' => "Select...",
+							'value' => ''
+						),
+						array(
+							'label' => "Bing Webmaster Tools",
+							'value' => 'bingWebmasterTools',
+							'metaTagName' => 'msvalidate.01'
+						),
+						array(
+							'label' => "Facebook App ID",
+							'value' => 'facebookAppId',
+							'metaTagName' => 'fb:app_id'
+						),
+						array(
+							'label' => "Facebook Page",
+							'value' => 'FacebookPage',
+							'metaTagName' => 'fb:app_id'
+						),
+						array(
+							'label' => "Google Search Console",
+							'value' => 'googleSearchConsole',
+							'metaTagName' => 'google-site-verification'
+						),
+						array(
+							'label' => "Pinterest",
+							'value' => 'pinterest', '
+							metaTagName' => 'p:domain_verify'
+						),
+						array(
+							'label' => "Yandex Webmaster Tools",
+							'value' => 'yandexWebmasterTools',
+							'metaTagName' => 'yandex-verification'
+						),
+						array(
+							'label' => "Custom",
+							'value' => 'custom', '
+							metaTagName' => ''
+						)
 					);
 
 				break;

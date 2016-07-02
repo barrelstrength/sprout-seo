@@ -48,47 +48,52 @@
 			<tbody>
 
 			{% for property in globals.ownership %}
+
 				{# check for custom values #}
 				{% if not craft.sproutSeo.isCustomValue(schemaType, property.service) %}
-						{% set verifyOwnershipOptions = verifyOwnershipOptions|merge([{label: property.service , value: property.service, metaTagName: property.metaTag }]) %}
+						{% set verifyOwnershipOptions = verifyOwnershipOptions|merge([{
+							label: property.service,
+							value: property.service,
+							metaTagName: property.metaTag
+						}]) %}
 				{% endif %}
 
-			<tr data-id="{{ loop.index }}">
+				<tr data-id="{{ loop.index }}">
 
-				<td>
+					<td>
 
-					<div class="field sprout-selectother">
-						{{ sproutFields.selectOther({
-							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][0]',
-							options: verifyOwnershipOptions,
-							value: property.service
+						<div class="field sprout-selectother">
+							{{ sproutFields.selectOther({
+								name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][0]',
+								options: verifyOwnershipOptions,
+								value: property.service
+							}) }}
+						</div>
+
+					</td>
+					<td>
+
+						{{ forms.text({
+							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][1]',
+							value: property.metaTag,
+							errors: ''
 						}) }}
-					</div>
 
-				</td>
-				<td>
+					</td>
 
-					{{ forms.text({
-						name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][1]',
-						value: property.metaTag,
-						errors: ''
-					}) }}
+					<td>
 
-				</td>
+						{{ forms.text({
+							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][2]',
+							value: property.verificationCode,
+							errors: ''
+						}) }}
 
-				<td>
+					</td>
 
-					{{ forms.text({
-						name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][2]',
-						value: property.verificationCode,
-						errors: ''
-					}) }}
-
-				</td>
-
-				<td class="thin action"><a class="move icon" title="Reorder"></a></td>
-				<td class="thin action"><a class="delete icon" title="Delete"></a></td>
-			</tr>
+					<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+					<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+				</tr>
 
 			{% endfor %}
 
