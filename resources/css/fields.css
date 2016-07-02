@@ -66,3 +66,11 @@
 .sproutseo-matrixfields .titlebar .blocktype {
   margin-left: -24px;
 }
+.sproutseo-advancedoption-btns div,
+.sproutseo-advancedoption-btns .sproutseo-icon {
+  opacity: .65;
+}
+.sproutseo-advancedoption-btns div.active,
+.sproutseo-advancedoption-btns .active .sproutseo-icon {
+  opacity: 1;
+}
