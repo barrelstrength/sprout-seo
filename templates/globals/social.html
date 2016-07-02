@@ -5,6 +5,7 @@
 {% set title = "Social Profiles"|t %}
 
 {% set content %}
+
 	{% set schemaType = "social" %}
 	{% set socialProfileOptions = craft.sproutSeo.getGlobalOptions(schemaType) %}
 
@@ -33,7 +34,7 @@
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
-		<input type="hidden" name="schemaType" value="{{schemaType}}">
+		<input type="hidden" name="schemaType" value="{{ schemaType }}">
 
 		<table id="sproutseo-schema-social" class="data fullwidth collapsible">
 			<thead>
@@ -46,33 +47,53 @@
 			</thead>
 			<tbody>
 
-			{% for socialProfile in globals.social  %}
-			{# check for custom values #}
-			{% if not craft.sproutSeo.isCustomValue(schemaType, socialProfile.profileName) %}
-					{% set socialProfileOptions = socialProfileOptions|merge([{label: socialProfile.profileName , value: socialProfile.profileName }]) %}
-			{% endif %}
+			{# Merge any custom values into the dropdown options #}
+			{% set socialProfileCustomOptions = socialProfileOptions %}
 
-			<tr data-id="{{ loop.index }}">
-				<td>
-					<div class="field sprout-selectother">
-						{{ sproutFields.selectOther({
-							name: 'sproutseo[schema][social][' ~ loop.index ~ '][0]',
-							options: socialProfileOptions,
-							value: socialProfile.profileName,
-							otherPlaceholderText: 'Custom Type'|t
+			{% set socialProfileCustomOptions = socialProfileCustomOptions|merge([
+				{ label: '--', value: '' }
+			]) %}
+
+			{% for socialProfile in globals.social  %}
+
+				{% if not craft.sproutSeo.isCustomValue(schemaType, socialProfile.profileName) %}
+					{% set socialProfileCustomOptions = socialProfileCustomOptions|merge([{
+						label: socialProfile.profileName,
+						value: socialProfile.profileName
+					}]) %}
+				{% endif %}
+
+			{% endfor %}
+
+			{% set socialProfileCustomOptions = socialProfileCustomOptions|merge([
+				{ label: '--', value: '' },
+				{ label: 'Custom', value: 'custom' }
+			]) %}
+
+
+			{% for socialProfile in globals.social  %}
+
+				<tr data-id="{{ loop.index }}">
+					<td>
+						<div class="field sprout-selectother">
+							{{ sproutFields.selectOther({
+								name: 'sproutseo[schema][social][' ~ loop.index ~ '][0]',
+								options: socialProfileCustomOptions,
+								value: socialProfile.profileName,
+								otherPlaceholderText: 'Custom Type'|t
+							}) }}
+						</div>
+					</td>
+					<td>
+						{{ forms.text({
+							name: 'sproutseo[schema][social][' ~ loop.index ~ '][1]',
+							value: socialProfile.url,
+							errors: ''
 						}) }}
-					</div>
-				</td>
-				<td>
-					{{ forms.text({
-						name: 'sproutseo[schema][social][' ~ loop.index ~ '][1]',
-						value: socialProfile.url,
-						errors: ''
-					}) }}
-				</td>
-				<td class="thin action"><a class="move icon" title="Reorder"></a></td>
-				<td class="thin action"><a class="delete icon" title="Delete"></a></td>
-			</tr>
+					</td>
+					<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+					<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+				</tr>
 
 			{% endfor %}
 
@@ -93,6 +114,7 @@
 
 {% endset %}
 
+{% includeCssResource 'sproutseo/css/fields.css' %}
 {% includeJsResource 'sproutseo/js/SproutFields.js' %}
 {% includeJsResource 'sproutseo/js/EditableTable.js' %}
 

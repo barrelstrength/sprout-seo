@@ -358,11 +358,7 @@ class SproutSeoVariable
 						array(
 							'label' => "Tumblr",
 							'value' => 'Tumblr'
-						),
-						array(
-							'label' => "Custom",
-							'value' => 'custom'
-						),
+						)
 					);
 
 				break;
