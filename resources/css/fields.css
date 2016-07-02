@@ -14,6 +14,8 @@
 	margin-bottom: 28px;
 }
 
+/* Icons
+------------------------------------------------------------ */
 
 @font-face {
   font-family: 'fontello';
@@ -25,9 +27,6 @@
   font-weight: normal;
   font-style: normal;
 }
-
-/* Icons
------------------------------------------------------------- */
 
 .sproutseo-icon
 {
@@ -95,6 +94,9 @@ a.instructionstoggle:before {
   content: '';
 }
 
+a.fieldtoggle.instructionstoggle {
+ color: #0d78f2;
+}
 /* Space the Website Identify Fields */
 .identitytype-dropdown .input {
   height: 32px; /* necessary to stop on select event adjusting height */

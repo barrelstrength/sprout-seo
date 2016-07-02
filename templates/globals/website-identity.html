@@ -35,7 +35,7 @@
 		{{ forms.textField({
 			label: "Name"|t,
 			instructions: "The preferred name of your website. <a href='#' class='fieldtoggle instructionstoggle'
-			data-target='toggle-alternate'>Add Alternate Entity Name</a>"|t,
+			data-target='toggle-alternate'>Add alternate name</a>."|t,
 			name: 'sproutseo[schema][identity][name]',
 			value: schema['name'] is defined ? schema.name : null,
 			errors: '',
@@ -45,7 +45,7 @@
 		<div id="toggle-alternate" class="{{ (schema['alternateEntityName'] is defined and schema.alternateEntityName ?:
 		'hidden' ) }}">
 			{{ forms.textField({
-				label: "Alternate Entity Name"|t,
+				label: "Alternate Name"|t,
 				instructions: "An alternate name you want search engines to consider."|t,
 				name: 'sproutseo[schema][identity][alternateEntityName]',
 				value: schema['alternateEntityName'] is defined ? schema.alternateEntityName : null,
