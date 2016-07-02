@@ -16,6 +16,7 @@
 					placeholder: " "
 				}) }}
 			{% endif %}
+
 			{{ forms.textareaField({
 				label: "Meta Description"|t,
 				instructions: "A description of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
@@ -84,10 +85,23 @@
 	{% set advancedSeoButtons %}
 		<div class="buttons">
 			<div id="btngroup" class="btngroup">
-				{% if settings.showGeo %}<div class="btn" id="btn-geo" data-type="geo">Geo</div>{% endif %}
-				{% if settings.showRobots %}<div class="btn" id="btn-robots" data-type="robots">Robots</div>{% endif %}
-				{% if settings.showOpenGraph %}<div class="btn" id="btn-openGraph" data-type="openGraph">Open Graph</div>{% endif %}
-				{% if settings.showTwitter %}<div class="btn" id="btn-twitterCard" data-type="twitterCard">Twitter Card</div>{% endif %}
+
+				{% if settings.showGeo %}
+					<div class="btn" id="btn-geo" data-type="geo"><i class="sproutseo-icon icon-location">&#xe804;</i> Geo</div>
+				{% endif %}
+
+				{% if settings.showRobots %}
+					<div class="btn" id="btn-robots" data-type="robots"><i class="sproutseo-icon icon-search">&#xe800;</i> Robots</div>
+				{% endif %}
+
+				{% if settings.showOpenGraph %}
+					<div class="btn" id="btn-openGraph" data-type="openGraph"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
+				{% endif %}
+
+				{% if settings.showTwitter %}
+					<div class="btn" id="btn-twitterCard" data-type="twitterCard"><i class="sproutseo-icon icon-twitter">&#xe801;</i> Twitter Card</div>
+				{% endif %}
+
 			</div>
 			<div class="btn add icon menubtn hidden">Add a block</div>
 		</div>
@@ -100,7 +114,7 @@
 {%endif%}
 
 
-<div class="matrix matrix-field" style="position: relative;">
+<div class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
 
 	<div class="blocks">
 
@@ -113,7 +127,7 @@
 		>
 
 			<div class="titlebar">
-				<div class="blocktype">Geo</div>
+				<div class="blocktype"><i class="sproutseo-icon icon-location">&#xe804;</i> Geo</div>
 				<div class="preview"></div>
 			</div>
 
@@ -159,8 +173,7 @@
 		>
 
 			<div class="titlebar">
-				<div class="blocktype">Robots</div>
-				<div class="preview"></div>
+				<div class="blocktype"><i class="sproutseo-icon icon-search">&#xe800;</i> Robots</div>
 			</div>
 
 			{% macro isSelected(target, string) %}
@@ -270,8 +283,7 @@
 		>
 
 			<div class="titlebar">
-				<div class="blocktype">Open Graph</div>
-				<div class="preview"></div>
+				<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
 			</div>
 
 			<div class="sproutseo-box-opengraph">
@@ -416,8 +428,7 @@
 		>
 
 			<div class="titlebar">
-				<div class="blocktype">Twitter Card</div>
-				<div class="preview"></div>
+				<div class="blocktype"><i class="sproutseo-icon icon-twitter">&#xe801;</i> Twitter Card</div>
 			</div>
 
 			<div class="sproutseo-box-twitter">
@@ -703,7 +714,7 @@
 		});
 
 		// Checking active class
-		var fields = ["geo","robots","robots","openGraph"]
+		var fields = ["geo","robots","openGraph","twitterCard"]
 		for (var i = 0; i < fields.length; i++)
 		{
 			var field = $(".fields-"+fields[i]+":visible");
