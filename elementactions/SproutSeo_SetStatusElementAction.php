@@ -13,7 +13,7 @@ class SproutSeo_SetStatusElementAction extends BaseElementAction
 	 */
 	public function getTriggerHtml()
 	{
-		return craft()->templates->render('sproutseo/_setStatus/trigger');
+		return craft()->templates->render('sproutseo/_components/elementactions/setstatus');
 	}
 
 	/**

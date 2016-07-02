@@ -45,7 +45,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 	public function getSettingsHtml()
 	{
-		return craft()->templates->render('sproutseo/_fieldtypes/optimizeMeta/settings', array(
+		return craft()->templates->render('sproutseo/_fieldtypes/optimize/settings', array(
 			'settings' => $this->getSettings()
 		));
 	}
@@ -213,7 +213,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$settings = $this->getSettings();
 
-		return craft()->templates->render('sproutseo/_partials/fields/optimize', array(
+		return craft()->templates->render('sproutseo/_fieldtypes/optimize/input', array(
 			'name'   => $name,
 			'values' => $values,
 			'ogImageElements' => $ogImageElements,
