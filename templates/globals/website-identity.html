@@ -262,18 +262,10 @@
 				label: 'Gender'|t,
 				id: 'identityType',
 				name: 'sproutseo[schema][identity][gender]',
-				options: ['Male','Female'],
+				options: ['Female','Male', 'Custom'],
 				value: schema['gender'] is defined ? schema.gender : null,
 				errors: "",
-				required: false,
-				first: true
-			}) }}
-
-			{{ forms.textField({
-				label: "Birthplace"|t,
-				name: 'sproutseo[schema][identity][birthplace]',
-				value: schema['birthplace'] is defined ? schema.birthplace : null,
-				errors: '',
+				required: false
 			}) }}
 
 			<hr>
