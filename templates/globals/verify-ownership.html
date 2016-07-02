@@ -51,11 +51,11 @@
 
 				{# check for custom values #}
 				{% if not craft.sproutSeo.isCustomValue(schemaType, property.service) %}
-						{% set verifyOwnershipOptions = verifyOwnershipOptions|merge([{
-							label: property.service,
-							value: property.service,
-							metaTagName: property.metaTag
-						}]) %}
+					{% set verifyOwnershipOptions = verifyOwnershipOptions|merge([{
+						label: property.service,
+						value: property.service,
+						metaTagName: property.metaTag
+					}]) %}
 				{% endif %}
 
 				<tr data-id="{{ loop.index }}">
