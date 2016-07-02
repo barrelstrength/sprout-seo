@@ -73,18 +73,7 @@ class SproutSeo_SchemaModel extends BaseModel
 		$structuredData['organizationSubTypes'][0] = isset($schema['firstOrganizationSubType']) ? $schema['firstOrganizationSubType'] : null;
 		$structuredData['organizationSubTypes'][1] = isset($schema['secondOrganizationSubType']) ? $schema['secondOrganizationSubType'] : null;
 		$structuredData['organizationSubTypes'][2] = isset($schema['thirdOrganizationSubType']) ? $schema['thirdOrganizationSubType'] : null;
-
-		$structuredData['additionalInfoToggle'] = isset($schema['additionalInfoToggle']) ? $schema['additionalInfoToggle'] : null;
-		$structuredData['addressLocality']      = isset($schema['addressLocality']) ? $schema['addressLocality'] : null;
-		$structuredData['streetAddress']        = isset($schema['streetAddress']) ? $schema['streetAddress'] : null;
-		$structuredData['locality']             = isset($schema['locality']) ? $schema['locality'] : null;
-		$structuredData['addressRegion']        = isset($schema['addressRegion']) ? $schema['addressRegion'] : null;
-		$structuredData['postalCode']           = isset($schema['postalCode']) ? $schema['postalCode'] : null;
-		$structuredData['country']              = isset($schema['country']) ? $schema['country'] : null;
-
-		$structuredData['latitude']            = isset($schema['latitude']) ? $schema['latitude'] : null;
-		$structuredData['longitude']           = isset($schema['longitude']) ? $schema['longitude'] : null;
-		$structuredData['dunsNumber']          = isset($schema['dunsNumber']) ? $schema['dunsNumber'] : null;
+		
 		$structuredData['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
 		$structuredData['foundingDate']        = isset($schema['foundingDate']) ? $schema['foundingDate'] : null;
 		$structuredData['foundingLocation']    = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
