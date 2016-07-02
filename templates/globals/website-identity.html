@@ -193,15 +193,6 @@
 				required: false
 			}) }}
 
-			{{ forms.textField({
-				label: "Founding Location"|t,
-				instructions: 'The place where the organization was founded.'|t,
-				name: 'sproutseo[schema][identity][foundingLocation]',
-				value: schema['foundingLocation'] is defined ? schema.foundingLocation : null,
-				errors: '',
-				required: false
-			}) }}
-
 			<hr>
 
 			{# These fields should only display when 'Organization => LocalBusiness' is selected #}
