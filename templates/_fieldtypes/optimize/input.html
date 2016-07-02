@@ -84,7 +84,7 @@
 {% if settings.displayAdvancedOptions %}
 	{% set advancedSeoButtons %}
 		<div class="buttons">
-			<div id="btngroup" class="btngroup">
+			<div id="btngroup" class="btngroup sproutseo-advancedoption-btns">
 
 				{% if settings.showGeo %}
 					<div class="btn" id="btn-geo" data-type="geo"><i class="sproutseo-icon icon-location">&#xe804;</i> Geo</div>
@@ -704,12 +704,19 @@
 			animateDelete: 20
 		});
 
-		$(".btngroup div").click(function()
+		$(".sproutseo-advancedoption-btns div").click(function()
 		{
 			var divId = $(this).attr("data-type");
 			$(".fields-"+divId).toggle();
+
+			// Meta Tag Group Settings
 			var btn = $("#btn-"+divId);
 			toggleActive(btn);
+
+			// Optimize Field Settings
+			var fieldsBtn = $("#fields-btn-"+divId);
+			toggleActive(fieldsBtn);
+
 			return false; // avoid parents divs if you have nested divs
 		});
 
