@@ -25,8 +25,10 @@
   font-weight: normal;
   font-style: normal;
 }
- 
- 
+
+/* Icons
+------------------------------------------------------------ */
+
 .sproutseo-icon
 {
   font-family: "fontello";
@@ -39,7 +41,6 @@
   width: 1em;
   margin-right: .2em;
   text-align: center;
-  /* opacity: .8; */
  
   /* For safety - reset parent styles, that can break glyph codes*/
   font-variant: normal;
@@ -52,15 +53,9 @@
   /* remove if not needed */
   margin-left: .2em;
  
-  /* You can be more comfortable with increased icons size */
-  /* font-size: 120%; */
- 
   /* Font smoothing. That was taken from TWBS */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
- 
-  /* Uncomment for 3D effect */
-  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
 .sproutseo-matrixfields .titlebar .blocktype {
@@ -73,4 +68,35 @@
 .sproutseo-advancedoption-btns div.active,
 .sproutseo-advancedoption-btns .active .sproutseo-icon {
   opacity: 1;
+}
+
+/* website-identity.html styles
+------------------------------------------------------------ */
+
+div.inline-item {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+}
+.inline-item > div > label {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+}
+
+/* Override default a tag fieldtoggle behavior to play more nicely with instructions text */
+body.ltr a.instructionstoggle {
+  padding-left: 0;
+}
+a.instructionstoggle {
+  display: inline;
+}
+a.instructionstoggle:before {
+  content: '';
+}
+
+/* Space the Website Identify Fields */
+.identitytype-dropdown .input {
+  height: 32px; /* necessary to stop on select event adjusting height */
+  margin-top: 5px;
 }
