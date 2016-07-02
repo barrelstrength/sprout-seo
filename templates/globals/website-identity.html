@@ -227,7 +227,7 @@
 
 			<div class="input">
 
-				<div>
+				<div class="identitytype-dropdown">
 					{{ forms.selectField({
 						id: 'identityType',
 						name: 'sproutseo[schema][identity][@type]',
@@ -240,7 +240,7 @@
 
 				<div id ="organization" class="organization-info {% if globals.getType() == 'Person' %}hidden{% endif %}">
 
-					<div>
+					<div class="identitytype-dropdown organizationinfo-dropdown">
 						{{ forms.selectField({
 							id: 'first',
 							role: 'listbox',
@@ -252,11 +252,10 @@
 						}) }}
 					</div>
 
-					<div>
+					<div class="identitytype-dropdown organizationinfo-dropdown hidden">
 						{{ forms.selectField({
 							id: 'second',
 							role: 'listbox',
-							class: 'hidden',
 							name: 'sproutseo[schema][identity][secondOrganizationSubType]',
 							options: {'':''},
 							value: '',
@@ -265,11 +264,10 @@
 						}) }}
 					</div>
 
-					<div>
+					<div class="identitytype-dropdown organizationinfo-dropdown hidden">
 						{{ forms.selectField({
 							id: 'third',
 							role: 'listbox',
-							class: 'hidden',
 							name: 'sproutseo[schema][identity][thirdOrganizationSubType]',
 							options: {'':''},
 							value: '',
@@ -309,18 +307,11 @@
 			{# These fields should only display when 'Organization => LocalBusiness' is selected #}
 			<div id="localbusiness">
 
-				{{ forms.textField({
-					label: "Local Business Info "|t,
-					name: 'sproutseo[schema][identity][localBusinessInfo]',
-					value: schema['localBusinessInfo'] is defined ? schema.localBusinessInfo : null,
-					errors: '',
-					required: false
-				}) }}
-
 				<div class="field">
 					<div class="heading">
 						<label for="siteOwnerType">{{ "Opening Hours"|t}}</label>
-						<div class="instructions"><p>{{ "Open/Close Hours for each day" |t |raw}}</p></div>
+						<div class="instructions"><p>{{ "The general opening hours for a business. Leave the hours blank to
+						indicate the business is closed on a particular day."	|t |raw}}</p></div>
 					</div>
 					<div>
 						<table class="data">
@@ -393,36 +384,6 @@
 			<input type="submit" class="btn submit" value="Save" />
 		</div>
 
-		<style>
-
-			div.inline-item {
-				display: inline-block;
-				vertical-align: middle;
-				margin: 0;
-			}
-			.inline-item > div > label {
-				display: inline-block;
-				vertical-align: middle;
-				margin: 0;
-			}
-
-			/* Override default a tag fieldtoggle behavior to play more nicely with instructions text */
-			body.ltr a.instructionstoggle {
-				padding-left: 0;
-			}
-			a.instructionstoggle {
-				display: inline;
-			}
-			a.instructionstoggle:before {
-				content: '';
-			}
-
-			/* Space the Website Identify Fields */
-			.identityType-field-wrapper .input:first-of-type {
-				margin-bottom:5px !important;
-			}
-		</style>
-
 	</form>
 
 {% includejs %}
@@ -482,6 +443,7 @@
 
 {% includeJsResource  "sproutseo/js/depending/script.js" %}
 
+{% includeCssResource  "sproutseo/css/fields.css" %}
 {% includeCssResource  "sproutseo/css/jquery.tag-editor.css" %}
 {% includeJsResource  "sproutseo/js/jquery.caret.min.js" %}
 {% includeJsResource  "sproutseo/js/jquery.tag-editor.min.js" %}

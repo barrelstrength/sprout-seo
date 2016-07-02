@@ -89,7 +89,6 @@ class SproutSeo_SchemaModel extends BaseModel
 		$structuredData['foundingDate']        = isset($schema['foundingDate']) ? $schema['foundingDate'] : null;
 		$structuredData['foundingLocation']    = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
 
-		$structuredData['localBusinessInfo'] = isset($schema['localBusinessInfo']) ? $schema['localBusinessInfo'] : null;
 		$structuredData['openingHours']      = isset($schema['openingHours']) ? $schema['openingHours'] : null;
 
 		//Person

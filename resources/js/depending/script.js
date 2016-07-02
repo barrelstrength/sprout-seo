@@ -8,7 +8,8 @@ $(document).ready(function() {
 	// Method to clear dropdowns down to a given level
 	var clearDropDown = function(arrayObj, startIndex) {
 		$.each(arrayObj, function(index, value) {
-			if(index >= startIndex) {
+			if (index >= startIndex)
+			{
 				$(value).html(option);
 			}
 		});
@@ -17,26 +18,23 @@ $(document).ready(function() {
 	// Method to disable dropdowns down to a given level
 	var disableDropDown = function(arrayObj, startIndex) {
 		$.each(arrayObj, function(index, value) {
-			if(index >= startIndex) {
-				$(value).attr('disabled', 'disabled');
-				$(value).closest('div').addClass('hidden');
-				$(value).hide();
+			if (index >= startIndex)
+			{
+				$(value).closest('div.organizationinfo-dropdown').addClass('hidden');
 			}
 		});
 	};
 
-	// Method to disable dropdowns down to a given level
-	var enableDropDown = function(that) {
-		that.removeAttr('disabled');
-		that.closest('div').removeClass('hidden');
-		that.show();
+	// Method to enable dropdowns down to a given level
+	var enableDropDown = function(element) {
+		element.closest('div.organizationinfo-dropdown').removeClass('hidden');
 	};
 
 	// Method to generate and append options
 	var generateOptions = function(element, children) {
 		var options, name = '';
 
-		for(var i = 0; i < children.length ; i++)
+		for (var i = 0; i < children.length; i++)
 		{
 			// insert space before capital letters
 			name = children[i].name.replace(/([A-Z])/g, ' $1').trim();
@@ -72,7 +70,8 @@ $(document).ready(function() {
 		disableDropDown($("#organization :input"), 1);
 
 		// Check current selection
-		if(firstSelection === '') {
+		if (firstSelection === '')
+		{
 			return;
 		}
 
@@ -89,6 +88,7 @@ $(document).ready(function() {
 
 	// Selection handler for second level dropdown
 	secondDropDown.on('change', function() {
+
 		firstSelection = $('#first').val();
 		secondSelection = secondDropDown.val();
 
@@ -99,8 +99,9 @@ $(document).ready(function() {
 		disableDropDown($("#organization :input"), 2);
 
 		// Check current selection
-		if(secondSelection === '') {
-			 return;
+		if (secondSelection === '')
+		{
+			return;
 		}
 
 		var secondChildren = [];
@@ -130,7 +131,6 @@ $(document).ready(function() {
 		thirdSelection = thirdDropDown.val();
 		// Final work goes here
 
-	 });
-
+	});
 
 });
