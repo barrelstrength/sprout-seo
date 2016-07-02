@@ -28,18 +28,16 @@
 				placeholder: " "
 			}) }}
 
-			<div class="field identityType-field-wrapper">
+			{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
 
-				<div class="heading">
-					<label class="" for="keywords">{{ "Keywords"|t}}</label>
-					<div class="instructions"><p>{{ "The primary keywords or phrases that describe your website." |t |raw}}</p></div>
-				</div>
-
-				<div class="">
-					{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
-					<input name="sproutseo_fields[keywords]" id="keywords" type="text" value="{{keywordsValue}}">
-				</div>
-			</div>
+			{{ forms.textField({
+				label: "Keywords"|t,
+				instructions: "The primary keywords or phrases that describe your website."|t,
+				id: 'keywords',
+				name: 'sproutseo[schema][identity][keywords]',
+				value: keywordsValue,
+				errors: ''
+			}) }}
 
 			{{ forms.field({
 				label: 'Meta Image'|t,
@@ -666,9 +664,14 @@
 	}
 </style>
 
+
 {% includeCssResource "sproutseo/css/fields.css" %}
 {% includeJsResource "sproutseo/js/open-graph.js" %}
 {% includeJsResource "sproutseo/js/twitter-card.js" %}
+
+{% includeCssResource "sproutseo/css/jquery.tag-editor.css" %}
+{% includeJsResource  "sproutseo/js/jquery.caret.min.js" %}
+{% includeJsResource  "sproutseo/js/jquery.tag-editor.min.js" %}
 
 {% includejs %}
 
@@ -685,18 +688,9 @@
 				div.addClass("active");
 			}
 		}
-		// Add validation for field type.
-		var keywords = $('#keywords').length ? $('#keywords') : $('#fields-keywords');
 
-		keywords.selectize({
-				delimiter: ',',
-				persist: false,
-				create: function(input) {
-						return {
-								value: input,
-								text: input
-						}
-				}
+		$('#keywords-field input, #fields-keywords-field input').tagEditor({
+			animateDelete: 20
 		});
 
 		$(".btngroup div").click(function()

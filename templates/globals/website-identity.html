@@ -63,18 +63,16 @@
 		}) }}
 
 
-		<div class="field identityType-field-wrapper">
+		{% set keywordsValue = schema['keywords'] is defined ? schema.keywords : null %}
 
-			<div class="heading">
-				<label class="required" for="keywords">{{ "Keywords"|t}}</label>
-				<div class="instructions"><p>{{ "The primary keywords or phrases that describe your website." |t |raw}}</p></div>
-			</div>
-
-			<div class="">
-				{% set keywordsValue = schema['keywords'] is defined ? schema.keywords : null %}
-				<input name="sproutseo[schema][identity][keywords]" id="keywords" type="text" value="{{keywordsValue}}">
-			</div>
-		</div>
+		{{ forms.textField({
+			label: "Keywords"|t,
+			instructions: "The primary keywords or phrases that describe your website."|t,
+			id: 'keywords',
+			name: 'sproutseo[schema][identity][keywords]',
+			value: keywordsValue,
+			errors: ''
+		}) }}
 
 		{{ forms.textField({
 			label: "URL"|t,
@@ -432,15 +430,9 @@
 	var schema = {{ schema|json_encode|raw }};
 
 	$(document).ready(function() {
-		$('#keywords').selectize({
-				delimiter: ',',
-				persist: false,
-				create: function(input) {
-						return {
-								value: input,
-								text: input
-						}
-				}
+
+		$('#keywords-field input').tagEditor({
+			animateDelete: 20
 		});
 
 			// check if we need load depending dropdowns
@@ -489,3 +481,7 @@
 {% endset %}
 
 {% includeJsResource  "sproutseo/js/depending/script.js" %}
+
+{% includeCssResource  "sproutseo/css/jquery.tag-editor.css" %}
+{% includeJsResource  "sproutseo/js/jquery.caret.min.js" %}
+{% includeJsResource  "sproutseo/js/jquery.tag-editor.min.js" %}
