@@ -5,7 +5,7 @@ class SproutSeo_SettingsController extends BaseController
 {
 	/**
 	 * Load the Settings Index page
-	 * 
+	 *
 	 * @throws HttpException
 	 */
 	public function actionSettingsIndex()

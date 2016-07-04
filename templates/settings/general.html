@@ -3,26 +3,39 @@
 
 {% set title = "Settings"|t %}
 
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = 'sproutforms/settings/general' %}
+{% set saveButton %}
+<div class="buttons">
+	<input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+</div>
+{% endset %}
+
 {% set content %}
 
-	{{ forms.textField({
-		label: "Plugin Name"|t,
-		instructions: "Intuitive, human-readable plugin name for the end user."|t,
-		id: 'pluginNameOverride',
-		name: 'pluginNameOverride',
-		value: settings.pluginNameOverride,
-		autofocus: true,
-		first: true,
-		errors: ''
-	}) }}
+	<input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
+	<div id="settings-cp">
+		{% namespace 'settings' %}
+			{{ forms.textField({
+				label: "Plugin Name"|t,
+				instructions: "Intuitive, human-readable plugin name for the end user."|t,
+				id: 'pluginNameOverride',
+				name: 'pluginNameOverride',
+				value: settings.pluginNameOverride,
+				autofocus: true,
+				first: true,
+				errors: ''
+			}) }}
 
-	{{ forms.textField({
-		label: "Meta Tag Group Template Folder"|t,
-		instructions: "Use a custom Meta Tag Group template. Copy _special/meta.html to your folder and do your thing."|t,
-		name: 'sproutseo_meta[templateFolder]',
-		value: '',
-		errors: '',
-		required: true
-	}) }}
+			{{ forms.textField({
+				label: "Meta Tag Group Template Folder"|t,
+				instructions: "Use a custom Meta Tag Group template. Copy _special/meta.html to your folder and do your thing."|t,
+				name: 'templateFolder',
+				value: settings.templateFolder,
+				errors: '',
+				required: true
+			}) }}
+		{% endnamespace %}
+	</div>
 
 {% endset %}

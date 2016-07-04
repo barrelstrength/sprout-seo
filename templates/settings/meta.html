@@ -5,73 +5,86 @@
 
 {% set settings = craft.sproutSeo.getSettings() %}
 
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = 'sproutforms/settings/general' %}
+{% set saveButton %}
+<div class="buttons">
+  <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+</div>
+{% endset %}
+
 {% set content %}
 
-  {{ forms.selectField({
-    label: 'Select the character that will be used between Title segments'|t,
-    instructions: "This character will be used in between your title segments, i.e. Blog Post Title – Website Name."|t,
-    id: 'seoDivider',
-    name: 'seoDivider',
-    options: {
-      1 : {
-        'value' : '-',
-        'label' : 'Entry Title - ' ~ siteName | t
-      },
-      2 : {
-        'value' : '•',
-        'label' : 'Entry Title • ' ~ siteName | t
-      },
-      3 : {
-        'value' : '|',
-        'label' : 'Entry Title | ' ~ siteName | t
-      },
-      4 : {
-        'value' : '/',
-        'label' : 'Entry Title / ' ~ siteName | t
-      },
-      5 : {
-        'value' : ':',
-        'label' : 'Entry Title : ' ~ siteName | t
-      }
-    },
-    value : settings.seoDivider,
-    first: true,
-    errors: ''
-  }) }}
+  <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
+  <div id="settings-cp">
+    {% namespace 'settings' %}
+      {{ forms.selectField({
+        label: 'Select the character that will be used between Title segments'|t,
+        instructions: "This character will be used in between your title segments, i.e. Blog Post Title – Website Name."|t,
+        id: 'seoDivider',
+        name: 'seoDivider',
+        options: {
+          1 : {
+            'value' : '-',
+            'label' : 'Entry Title - ' ~ siteName | t
+          },
+          2 : {
+            'value' : '•',
+            'label' : 'Entry Title • ' ~ siteName | t
+          },
+          3 : {
+            'value' : '|',
+            'label' : 'Entry Title | ' ~ siteName | t
+          },
+          4 : {
+            'value' : '/',
+            'label' : 'Entry Title / ' ~ siteName | t
+          },
+          5 : {
+            'value' : ':',
+            'label' : 'Entry Title : ' ~ siteName | t
+          }
+        },
+        value : settings.seoDivider,
+        first: true,
+        errors: ''
+      }) }}
 
-  {% set ogTypesOptions = {
-    '' : 'Select Open Graph Type...'|t,
-    'article' : 'Article'|t,
-    'website' : 'Website'|t,
-  } %}
+      {% set ogTypesOptions = {
+        '' : 'Select Open Graph Type...'|t,
+        'article' : 'Article'|t,
+        'website' : 'Website'|t,
+      } %}
 
-  {{ forms.selectField({
-    label: 'Default Open Graph Type'|t,
-    instructions: 'Select your default Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
-target="_blank">How Open Graph Stories work.</a>'|t,
-    name: 'sproutseo_fields[ogType]',
-    options: ogTypesOptions,
-    value: '',
-    errors: "",
-    required: false
-  }) }}
+      {{ forms.selectField({
+        label: 'Default Open Graph Type'|t,
+        instructions: 'Select your default Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
+    target="_blank">How Open Graph Stories work.</a>'|t,
+        name: 'ogType',
+        options: ogTypesOptions,
+        value: (settings.ogType is defined ? settings.ogType : null),
+        errors: "",
+        required: false
+      }) }}
 
-  {% set twitterCardOptions = {
-    '' : 'Select Twitter Card Type...'|t,
-    'summary' : 'Summary Card'|t,
-    'summary_large_image' : 'Summary Card with Large Image'|t,
-    'player' : 'Player Card'|t,
-    'photo' : 'Photo Card'|t,
-  } %}
+      {% set twitterCardOptions = {
+        '' : 'Select Twitter Card Type...'|t,
+        'summary' : 'Summary Card'|t,
+        'summary_large_image' : 'Summary Card with Large Image'|t,
+        'player' : 'Player Card'|t,
+        'photo' : 'Photo Card'|t,
+      } %}
 
-  {{ forms.selectField({
-    label: 'Default Twitter Card Type'|t,
-    instructions: 'Select your default Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
-    name: 'sproutseo_fields[twitterCard]',
-    options: twitterCardOptions,
-    value: (values.twitterCard is defined ? values.twitterCard : 'summary'),
-    errors: "",
-    required: false
-  }) }}
+      {{ forms.selectField({
+        label: 'Default Twitter Card Type'|t,
+        instructions: 'Select your default Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
+        name: 'twitterCard',
+        options: twitterCardOptions,
+        value: (settings.twitterCard is defined ? settings.twitterCard : 'summary'),
+        errors: "",
+        required: false
+      }) }}
+    {% endnamespace %}
+  </div>
 
 {% endset %}

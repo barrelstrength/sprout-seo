@@ -135,7 +135,10 @@ class SproutSeoPlugin extends BasePlugin
 		return array(
 			'pluginNameOverride' => AttributeType::String,
 			'seoDivider'         => array(AttributeType::String, 'default' => '-'),
-			'structureId'        => array(AttributeType::Number, 'default' => null)
+			'structureId'        => array(AttributeType::Number, 'default' => null),
+			'twitterCard'        => array(AttributeType::String, 'default' => null),
+			'ogType'             => array(AttributeType::String, 'default' => null),
+			'templateFolder'     => array(AttributeType::String, 'default' => null)
 		);
 	}
 

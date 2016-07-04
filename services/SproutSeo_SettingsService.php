@@ -29,6 +29,27 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 				$seoSettings->seoDivider;
 		}
 
+		if (isset($settings["twitterCard"]))
+		{
+			$seoSettings->twitterCard = $settings["twitterCard"] != null ?
+				$settings["twitterCard"] :
+				$seoSettings->twitterCard;
+		}
+
+		if (isset($settings["ogType"]))
+		{
+			$seoSettings->ogType = $settings["ogType"] != null ?
+				$settings["ogType"] :
+				$seoSettings->ogType;
+		}
+
+		if (isset($settings["templateFolder"]))
+		{
+			$seoSettings->templateFolder = $settings["templateFolder"] != null ?
+				$settings["templateFolder"] :
+				$seoSettings->templateFolder;
+		}
+
 		$settings = JsonHelper::encode($seoSettings);
 
 		$affectedRows = craft()->db->createCommand()->update('plugins', array(
