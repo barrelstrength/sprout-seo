@@ -302,10 +302,6 @@ class SproutSeoVariable
 						array(
 							'label' => "Package Tracking",
 							'value' => 'package tracking'
-						),
-						array(
-							'label' => "Custom",
-							'value' => 'custom'
 						)
 					);
 
