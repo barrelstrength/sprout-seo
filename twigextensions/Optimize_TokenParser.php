@@ -12,11 +12,10 @@ class Optimize_TokenParser extends \Twig_TokenParser
 
 	public function parse(\Twig_Token $token)
 	{
-		$lineno            = $token->getLine();
-		$nodes['criteria'] = $this->parser->getExpressionParser()->parseExpression();
+		$lineno = $token->getLine();
 		$this->parser->getStream()->expect(\Twig_Token::BLOCK_END_TYPE);
 
-		return new Optimize_Node($nodes, array(), $lineno, $this->getTag());
+		return new Optimize_Node(array(), array(), $lineno, $this->getTag());
 	}
 }
 
