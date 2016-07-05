@@ -8,7 +8,7 @@
 
 {% set content %}
 	{% set schemaType = "contacts" %}
-	{% set contactOptions = craft.sproutSeo.getGlobalOptions(schemaType) %}
+	{% set contactOptions = craft.sproutSeo.getFinalOptions(schemaType, 'contactType') %}
 
 	{% set cols = [
 		{
@@ -48,10 +48,6 @@
 			<tbody>
 
 				{% for contact in globals.contacts %}
-				{# check for custom values #}
-				{% if not craft.sproutSeo.isCustomValue(schemaType, contact.contactType) %}
-						{% set contactOptions = contactOptions|merge([{label: contact.contactType , value: contact.contactType }]) %}
-				{% endif %}
 				<tr data-id="{{ loop.index }}">
 
 					<td>

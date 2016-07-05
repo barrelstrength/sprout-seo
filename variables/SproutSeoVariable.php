@@ -363,7 +363,7 @@ class SproutSeoVariable
 
 				break;
 
-			case 'verify-ownership':
+			case 'ownership':
 
 				$options = array(
 						array(
@@ -399,16 +399,39 @@ class SproutSeoVariable
 							'label' => "Yandex Webmaster Tools",
 							'value' => 'yandexWebmasterTools',
 							'metaTagName' => 'yandex-verification'
-						),
-						array(
-							'label' => "Custom",
-							'value' => 'custom', '
-							metaTagName' => ''
 						)
 					);
 
 				break;
 		}
+
+		return $options;
+	}
+
+	public function getFinalOptions($schemaType, $handle)
+	{
+		$options = array();
+
+		$schemaGlobals = sproutSeo()->schema->getGlobals();
+		$isCustom      = false;
+		$options       = $this->getGlobalOptions($schemaType);
+
+		foreach ($schemaGlobals[$schemaType] as $shema)
+		{
+			if (!$this->isCustomValue($schemaType, $shema[$handle]))
+			{
+				if (!$isCustom)
+				{
+					array_push($options, array('label'=>'---', 'value'=>''));
+				}
+
+				$isCustom = true;
+				array_push($options, array('label'=>$shema[$handle], 'value'=>$shema[$handle]));
+			}
+		}
+
+		array_push($options, array('label'=>'---', 'value'=>''));
+		array_push($options, array('label'=>'Custom', 'value'=>'custom'));
 
 		return $options;
 	}

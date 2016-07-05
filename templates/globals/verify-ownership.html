@@ -5,8 +5,8 @@
 {% set title = "Verify Ownership"|t %}
 
 {% set content %}
-	{% set schemaType = "verify-ownership" %}
-	{% set verifyOwnershipOptions = craft.sproutSeo.getGlobalOptions(schemaType) %}
+	{% set schemaType = "ownership" %}
+	{% set verifyOwnershipOptions = craft.sproutSeo.getFinalOptions(schemaType, 'service') %}
 
 	{% set cols = [
 		{
@@ -48,16 +48,6 @@
 			<tbody>
 
 			{% for property in globals.ownership %}
-
-				{# check for custom values #}
-				{% if not craft.sproutSeo.isCustomValue(schemaType, property.service) %}
-					{% set verifyOwnershipOptions = verifyOwnershipOptions|merge([{
-						label: property.service,
-						value: property.service,
-						metaTagName: property.metaTag
-					}]) %}
-				{% endif %}
-
 				<tr data-id="{{ loop.index }}">
 
 					<td>

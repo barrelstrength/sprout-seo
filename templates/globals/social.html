@@ -7,7 +7,7 @@
 {% set content %}
 
 	{% set schemaType = "social" %}
-	{% set socialProfileOptions = craft.sproutSeo.getGlobalOptions(schemaType) %}
+	{% set socialProfileOptions = craft.sproutSeo.getFinalOptions(schemaType, 'profileName') %}
 
 	{% set cols = [
 		{
@@ -47,30 +47,6 @@
 			</thead>
 			<tbody>
 
-			{# Merge any custom values into the dropdown options #}
-			{% set socialProfileCustomOptions = socialProfileOptions %}
-
-			{% set socialProfileCustomOptions = socialProfileCustomOptions|merge([
-				{ label: '--', value: '' }
-			]) %}
-
-			{% for socialProfile in globals.social  %}
-
-				{% if not craft.sproutSeo.isCustomValue(schemaType, socialProfile.profileName) %}
-					{% set socialProfileCustomOptions = socialProfileCustomOptions|merge([{
-						label: socialProfile.profileName,
-						value: socialProfile.profileName
-					}]) %}
-				{% endif %}
-
-			{% endfor %}
-
-			{% set socialProfileCustomOptions = socialProfileCustomOptions|merge([
-				{ label: '--', value: '' },
-				{ label: 'Custom', value: 'custom' }
-			]) %}
-
-
 			{% for socialProfile in globals.social  %}
 
 				<tr data-id="{{ loop.index }}">
@@ -78,7 +54,7 @@
 						<div class="field sprout-selectother">
 							{{ sproutFields.selectOther({
 								name: 'sproutseo[schema][social][' ~ loop.index ~ '][0]',
-								options: socialProfileCustomOptions,
+								options: socialProfileOptions,
 								value: socialProfile.profileName,
 								otherPlaceholderText: 'Custom Type'|t
 							}) }}
