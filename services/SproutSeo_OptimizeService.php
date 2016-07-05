@@ -44,11 +44,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	{
 		$prioritizedMetaTagModel = $this->getOptimizedMeta();
 
-		$variables['meta'] = $prioritizedMetaTagModel->getMetaTagData();
-
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
-		$output = craft()->templates->render('sproutseo/templates/_special/meta', $variables);
+		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
+			'meta' => $prioritizedMetaTagModel->getMetaTagData()
+		));
 
 		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
@@ -84,7 +84,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// Prepare a SproutSeo_MetaTagsModel for each of our levels of priority
 		$entryOverrideMetaTagModel  = $entryOverrideMetaTagModel->setMeta('entry', $this->getMetaTagsFromTemplate());
 		$codeOverrideMetaTagModel   = $codeOverrideMetaTagModel->setMeta('code', $this->getMetaTagsFromTemplate());
-		$metaTagsGroupMetaTagModel         = $metaTagsGroupMetaTagModel->setMeta('metaTagsGroup', $this->getMetaTagsFromTemplate());
+		$metaTagsGroupMetaTagModel  = $metaTagsGroupMetaTagModel->setMeta('metaTagsGroup', $this->getMetaTagsFromTemplate());
 		$globalFallbackMetaTagModel = $globalFallbackMetaTagModel->setMeta('global');
 
 		$prioritizedMetaTagModel = new SproutSeo_MetaTagsModel();
@@ -147,13 +147,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		return TemplateHelper::getRaw($output);
 	}
 
-	public function prepareLinkedData($criteria, &$context)
+	public function prepareLinkedData(&$context)
 	{
-		// Take the values from our {% optimize %} tag, default to none.
-		// @todo could potentially accept a string as well and check here
-		$outputMeta   = isset($criteria['meta']) ? $criteria['meta'] : false;
-		$outputSchema = isset($criteria['schema']) ? $criteria['schema'] : false;
-
 		// Grab our path, we're going to figure out what SEO meta data and
 		// what Structured Data we need to output on the page based on this path
 		$path    = craft()->request->getPath();
@@ -180,16 +175,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 		// Prepare our html for the template
 		$optimizedMeta = null;
-
-		if ($outputMeta)
-		{
-			$optimizedMeta .= $meta;
-		}
-
-		if ($outputSchema)
-		{
-			$optimizedMeta .= $schemaHtml;
-		}
+		$optimizedMeta .= $meta;
+		$optimizedMeta .= $schemaHtml;
 
 		return TemplateHelper::getRaw($optimizedMeta);
 	}
@@ -212,7 +199,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		return array(
 			'displayPreview'         => true,
 			'useElementTypeTitle'    => false,
-			'useMetaTitle'          => false,
+			'useMetaTitle'           => false,
 			'useMetaDescription'     => false,
 			'useMetaImage'           => false,
 			'displayAdvancedOptions' => true,
