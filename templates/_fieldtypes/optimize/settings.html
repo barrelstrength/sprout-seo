@@ -48,13 +48,7 @@
 }) }}
 
 
-{% set optimizedDescriptionOptions = {
-	custom1: "Custom Text or Rich Text Field 1",
-	custom2: "Custom Text or Rich Text Field 2",
-	custom3: "Custom Text or Rich Text Field 3",
-	"": "--",
-	custom: "Manually"
-} %}
+{% set optimizedDescriptionOptions = craft.sproutSeo.getOptimizedDescriptionOptions %}
 
 {{ forms.selectField({
 	label: "Meta Tag Description Field"|t,
@@ -66,13 +60,7 @@
 	value: 'custom'
 }) }}
 
-{% set optimizedImageOptions = {
-custom1: "Custom Assets Field 1",
-custom2: "Custom Assets Field 2",
-custom3: "Custom Assets Field 3",
-"": "--",
-custom: "Manually"
-} %}
+{% set optimizedImageOptions = craft.sproutSeo.getOptimizedAssetsOptions %}
 
 {{ forms.selectField({
 	label: "Meta Tag Feature Image Field"|t,

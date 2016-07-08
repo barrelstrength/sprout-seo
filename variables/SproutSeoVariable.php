@@ -453,18 +453,18 @@ class SproutSeoVariable
 	}
 
 	/**
-	 * Returns all plain plain text fields available
+	 * Returns all plain fields available given a type
 	 *
 	 *@return array
 	*/
-	public function getOptimizedTitleOptions()
+	public function getOptimizedOptions($type = "PlainText")
 	{
 		$options = array();
 		$fields  = craft()->fields->getAllFields();
 
 		foreach ($fields as $key => $field)
 		{
-			if ($field->type == "PlainText")
+			if ($field->type == $type)
 			{
 				$context = explode(":", $field->context);
 				$context = isset($context[0]) ? $context[0] : 'global';
@@ -477,4 +477,36 @@ class SproutSeoVariable
 
 		return  $options;
 	}
+
+	/**
+	 * Returns all plain fields available given a type
+	 *
+	 *@return array
+	*/
+	public function getOptimizedTitleOptions()
+	{
+		return $this->getOptimizedOptions();
+	}
+
+	/**
+	 * Returns all plain fields available given a type
+	 *
+	 *@return array
+	*/
+	public function getOptimizedDescriptionOptions()
+	{
+		return $this->getOptimizedOptions();
+	}
+
+	/**
+	 * Returns all plain fields available given a type
+	 *
+	 *@return array
+	*/
+	public function getOptimizedAssetsOptions()
+	{
+		return $this->getOptimizedOptions("Assets");
+	}
+
+
 }
