@@ -452,4 +452,29 @@ class SproutSeoVariable
 		return false;
 	}
 
+	/**
+	 * Returns all plain plain text fields available
+	 *
+	 *@return array
+	*/
+	public function getOptimizedTitleOptions()
+	{
+		$options = array();
+		$fields  = craft()->fields->getAllFields();
+
+		foreach ($fields as $key => $field)
+		{
+			if ($field->type == "PlainText")
+			{
+				$context = explode(":", $field->context);
+				$context = isset($context[0]) ? $context[0] : 'global';
+				$options[$field->id] = $field->name." - ". ucfirst($context);
+			}
+		}
+
+		$options['custom'] = 'Manually';
+
+
+		return  $options;
+	}
 }

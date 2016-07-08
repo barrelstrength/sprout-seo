@@ -35,14 +35,7 @@
 
 <hr>
 
-{% set optimizedTitleOptions = {
-	title: "Title",
-	custom1: "Custom Text Field 1",
-	custom2: "Custom Text Field 2",
-	custom3: "Custom Text Field 3",
-	"": "--",
-	custom: "Manually"
-} %}
+{% set optimizedTitleOptions = craft.sproutSeo.getOptimizedTitleOptions() %}
 
 {{ forms.selectField({
 	label: "Meta Tag Title Field"|t,
