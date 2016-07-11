@@ -1,5 +1,6 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
+{% import "sproutseo/_components/selectOther" as sproutFields %}
 
 {% set logoElement = null %}
 {% set elementType = craft.sproutseo.getAssetElementType %}
@@ -249,16 +250,25 @@
 		{# These fields should only display when 'Person' is selected #}
 		<div class="person-info {% if globals.getType() == 'Organization' %}hidden{% endif %}">
 
-			{{ forms.selectField({
-				label: 'Gender'|t,
-				id: 'identityType',
-				name: 'sproutseo[schema][identity][gender]',
-				options: ['Female','Male', 'Custom'],
-				value: schema['gender'] is defined ? schema.gender : null,
-				errors: "",
-				required: false
-			}) }}
+			<div class="field">
 
+				<div class="heading">
+					<label for="siteOwnerType">{{ "Gender"|t}}</label>
+				</div>
+
+				<div class="input">
+
+					<div class="field sprout-selectother">
+						{%set optionsTest = craft.sproutseo.getGenderOptions() %}
+						{{ sproutFields.selectOther({
+							name: 'sproutseo[schema][identity][gender]',
+							options: optionsTest ,
+							value: schema['gender'] is defined ? schema.gender : null,
+							otherPlaceholderText: 'Custom Type'|t
+						}) }}
+					</div>
+				</div>
+			</div>
 			<hr>
 
 		</div>
@@ -269,11 +279,14 @@
 
 	</form>
 
+{% includeJsResource 'sproutseo/js/SproutFields.js' %}
+
 {% includejs %}
 	var items = {{ organizationItems|json_encode|raw }};
 	var schema = {{ schema|json_encode|raw }};
 
 	$(document).ready(function() {
+		Craft.SproutFields.initFields($("#content"));
 
 		$('#keywords-field input').tagEditor({
 			animateDelete: 20
@@ -330,3 +343,4 @@
 {% includeCssResource  "sproutseo/css/jquery.tag-editor.css" %}
 {% includeJsResource  "sproutseo/js/jquery.caret.min.js" %}
 {% includeJsResource  "sproutseo/js/jquery.tag-editor.min.js" %}
+

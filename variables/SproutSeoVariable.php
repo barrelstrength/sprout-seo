@@ -452,6 +452,39 @@ class SproutSeoVariable
 		return false;
 	}
 
+	public function getGenderOptions()
+	{
+		$schemaType = "identity";
+		$options    = array(
+			array(
+				'label' => "Select...",
+				'value' => ''
+			),
+			array(
+				'label' => "Female",
+				'value' => 'female'
+			),
+			array(
+				'label' => "Male",
+				'value' => 'male',
+			)
+		);
+
+		$schemaGlobals = sproutSeo()->schema->getGlobals();
+		$gender        = $schemaGlobals[$schemaType]['gender'];
+
+		if (!array_key_exists($gender, array('female'=>0, 'male'=>1)))
+		{
+			array_push($options, array('label'=>'---', 'value'=>'-'));
+			array_push($options, array('label'=>$gender, 'value'=>$gender));
+		}
+
+		array_push($options, array('label'=>'---', 'value'=>'-'));
+		array_push($options, array('label'=>'Custom', 'value'=>'custom'));
+
+		return $options;
+	}
+
 	/**
 	 * Returns all plain fields available given a type
 	 *
