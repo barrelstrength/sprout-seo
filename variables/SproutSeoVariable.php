@@ -495,18 +495,23 @@ class SproutSeoVariable
 		$options = array();
 		$fields  = craft()->fields->getAllFields();
 
+		$options[''] = "Select...";
+		$options['element-title'] = "Use the Element Type Title";
+		$options['-'] = "---";
+
 		foreach ($fields as $key => $field)
 		{
 			if ($field->type == $type)
 			{
 				$context = explode(":", $field->context);
 				$context = isset($context[0]) ? $context[0] : 'global';
-				$options[$field->id] = $field->name." - ". ucfirst($context);
+				$options[$field->id] = $field->name;
 			}
 		}
 
-		$options['custom'] = 'Manually';
-
+		$options['--']       = "---";
+		$options['manually'] = 'Manually';
+		$options['custom']   = 'Custom';
 
 		return  $options;
 	}

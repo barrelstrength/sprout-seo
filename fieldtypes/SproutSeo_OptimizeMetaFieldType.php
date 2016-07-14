@@ -30,16 +30,18 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 	protected function defineSettings()
 	{
 		return array(
-			'displayPreview'         => array(AttributeType::Bool, 'default'=>true),
-			'useElementTypeTitle'    => array(AttributeType::Bool, 'default'=>false),
-			'useMetaTitle'          => array(AttributeType::Bool, 'default'=>false),
-			'useMetaDescription'     => array(AttributeType::Bool, 'default'=>false),
-			'useMetaImage'           => array(AttributeType::Bool, 'default'=>false),
-			'displayAdvancedOptions' => array(AttributeType::Bool, 'default'=>true),
-			'showGeo'                => array(AttributeType::Bool, 'default'=>true),
-			'showRobots'             => array(AttributeType::Bool, 'default'=>true),
-			'showOpenGraph'          => array(AttributeType::Bool, 'default'=>true),
-			'showTwitter'            => array(AttributeType::Bool, 'default'=>true),
+			'displayPreview'            => array(AttributeType::Bool, 'default'=>true),
+			'useElementTypeTitle'       => array(AttributeType::Bool, 'default'=>false),
+			'useMetaTitle'              => array(AttributeType::Bool, 'default'=>false),
+			'useMetaDescription'        => array(AttributeType::Bool, 'default'=>false),
+			'useMetaImage'              => array(AttributeType::Bool, 'default'=>false),
+			'displayAdvancedOptions'    => array(AttributeType::Bool, 'default'=>true),
+			'showGeo'                   => array(AttributeType::Bool, 'default'=>true),
+			'showRobots'                => array(AttributeType::Bool, 'default'=>true),
+			'showOpenGraph'             => array(AttributeType::Bool, 'default'=>true),
+			'showTwitter'               => array(AttributeType::Bool, 'default'=>true),
+			'optimizedTitleField'       => array(AttributeType::String),
+			'optimizedDescriptionField' => array(AttributeType::String)
 		);
 	}
 

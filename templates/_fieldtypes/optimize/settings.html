@@ -1,4 +1,5 @@
 {% import "_includes/forms" as forms %}
+{% import "sproutseo/_components/selectOther" as sproutFields %}
 
 {{ forms.lightswitchField({
 	label: "Use the Element Type Title as the SEO Title?"|t,
@@ -37,28 +38,56 @@
 
 {% set optimizedTitleOptions = craft.sproutSeo.getOptimizedTitleOptions() %}
 
-{{ forms.selectField({
-	label: "Meta Tag Title Field"|t,
-	instructions: "Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select
-	'Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t,
-	id: 'optimizedTitleField',
-	name: 'optimizedTitleField',
-	options: optimizedTitleOptions,
-	value: 'title'
-}) }}
+<div class="field">
+
+	<div class="heading">
+		<label for="siteOwnerType">{{ "Meta Tag Title Field"|t}}</label>
+		<p class="instructions">
+			{{"Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select
+	'Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t}}
+		</p>
+	</div>
+
+	<div class="input">
+
+		<div class="field sprout-selectother">
+			{{ sproutFields.selectOther({
+				name: 'optimizedTitleField',
+				id: 'optimizedTitleField',
+				options: optimizedTitleOptions ,
+				value: '',
+				otherPlaceholderText: 'Custom twig code'|t
+			}) }}
+		</div>
+	</div>
+</div>
 
 
 {% set optimizedDescriptionOptions = craft.sproutSeo.getOptimizedDescriptionOptions %}
 
-{{ forms.selectField({
-	label: "Meta Tag Description Field"|t,
-	instructions: "Select the field to use for your basic, Open Graph, and Twitter Card meta tag descriptions. Select
-	'Manually' if you want the Optimize field to display a custom Description Field for your content editors to manage."|t,
-	id: 'optimizedDescriptionField',
-	name: 'optimizedDescriptionField',
-	options: optimizedDescriptionOptions,
-	value: 'custom'
-}) }}
+<div class="field">
+
+	<div class="heading">
+		<label for="siteOwnerType">{{ "Meta Tag Description Field"|t}}</label>
+		<p class="instructions">
+			{{"Select the field to use for your basic, Open Graph, and Twitter Card meta tag descriptions. Select
+	'Manually' if you want the Optimize field to display a custom Description Field for your content editors to manage."|t}}
+		</p>
+	</div>
+
+	<div class="input">
+
+		<div class="field sprout-selectother">
+			{{ sproutFields.selectOther({
+				name: 'optimizedDescriptionField',
+				id: 'optimizedDescriptionField',
+				options: optimizedDescriptionOptions ,
+				value: settings.optimizedDescriptionField is defined ? settings.optimizedDescriptionField : null,
+				otherPlaceholderText: 'Custom twig code'|t
+			}) }}
+		</div>
+	</div>
+</div>
 
 {% set optimizedImageOptions = craft.sproutSeo.getOptimizedAssetsOptions %}
 
@@ -148,7 +177,15 @@
 	</table>
 {% endset %}
 
+{% includeJsResource 'sproutseo/js/SproutFields.js' %}
+
+{% includejs %}
+	$(document).ready(function() {
+		Craft.SproutFields.initFields($("#content"));
+	});
+{% endincludejs %}
 {{ forms.field({
 	label: "Display Advanced Customization Options?"|t,
 	errors: ''
 }, advancedInput) }}
+
