@@ -412,22 +412,18 @@ class SproutSeoVariable
 		$isCustom      = false;
 		$options       = $this->getGlobalOptions($schemaType);
 
+		array_push($options, array('optgroup'=>'Custom'));
+
 		foreach ($schemaGlobals[$schemaType] as $shema)
 		{
 			if (!$this->isCustomValue($schemaType, $shema[$handle]))
 			{
-				if (!$isCustom)
-				{
-					array_push($options, array('label'=>'---', 'value'=>''));
-				}
-
 				$isCustom = true;
 				array_push($options, array('label'=>$shema[$handle], 'value'=>$shema[$handle]));
 			}
 		}
 
-		array_push($options, array('label'=>'---', 'value'=>''));
-		array_push($options, array('label'=>'Custom', 'value'=>'custom'));
+		array_push($options, array('label'=>'Add Custom', 'value'=>'custom'));
 
 		return $options;
 	}
@@ -473,14 +469,14 @@ class SproutSeoVariable
 		$schemaGlobals = sproutSeo()->schema->getGlobals();
 		$gender        = $schemaGlobals[$schemaType]['gender'];
 
+		array_push($options, array('optgroup'=>'Custom'));
+		
 		if (!array_key_exists($gender, array('female'=>0, 'male'=>1)))
 		{
-			array_push($options, array('label'=>'---', 'value'=>'-'));
 			array_push($options, array('label'=>$gender, 'value'=>$gender));
 		}
 
-		array_push($options, array('label'=>'---', 'value'=>'-'));
-		array_push($options, array('label'=>'Custom', 'value'=>'custom'));
+		array_push($options, array('label'=>'Add Custom', 'value'=>'custom'));
 
 		return $options;
 	}
