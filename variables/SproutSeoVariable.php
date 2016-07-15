@@ -470,7 +470,7 @@ class SproutSeoVariable
 		$gender        = $schemaGlobals[$schemaType]['gender'];
 
 		array_push($options, array('optgroup'=>'Custom'));
-		
+
 		if (!array_key_exists($gender, array('female'=>0, 'male'=>1)))
 		{
 			array_push($options, array('label'=>$gender, 'value'=>$gender));
@@ -492,8 +492,12 @@ class SproutSeoVariable
 		$fields  = craft()->fields->getAllFields();
 
 		$options[''] = "Select...";
-		$options['element-title'] = "Use the Element Type Title";
-		$options['-'] = "---";
+		$options[] = array('optgroup' => "Dynamic Meta");
+
+		if ($handle == 'optimizedTitleField')
+		{
+			$options['element-title'] = "Title";
+		}
 
 		foreach ($fields as $key => $field)
 		{
@@ -505,16 +509,15 @@ class SproutSeoVariable
 			}
 		}
 
-		$options['--']       = "---";
-		$options['manually'] = 'Manually';
-		$options['---']      = "---";
-
 		if (!isset($options[$settings[$handle]]))
 		{
 			$options[$settings[$handle]] = $settings[$handle];
 		}
 
-		$options['custom']   = 'Custom';
+		$options['custom']   = 'Add Custom';
+
+		$options[] = array('optgroup' => "Advanced Meta");
+		$options['manually'] = 'Manually';
 
 		return  $options;
 	}

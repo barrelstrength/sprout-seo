@@ -30,18 +30,19 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 	protected function defineSettings()
 	{
 		return array(
-			'displayPreview'            => array(AttributeType::Bool, 'default'=>true),
-			'useElementTypeTitle'       => array(AttributeType::Bool, 'default'=>false),
-			'useMetaTitle'              => array(AttributeType::Bool, 'default'=>false),
-			'useMetaDescription'        => array(AttributeType::Bool, 'default'=>false),
-			'useMetaImage'              => array(AttributeType::Bool, 'default'=>false),
-			'displayAdvancedOptions'    => array(AttributeType::Bool, 'default'=>true),
-			'showGeo'                   => array(AttributeType::Bool, 'default'=>true),
-			'showRobots'                => array(AttributeType::Bool, 'default'=>true),
-			'showOpenGraph'             => array(AttributeType::Bool, 'default'=>true),
-			'showTwitter'               => array(AttributeType::Bool, 'default'=>true),
+			'displayPreview'            => array(AttributeType::Bool, 'default' => true),
+			'useElementTypeTitle'       => array(AttributeType::Bool, 'default' => false),
+			'useMetaTitle'              => array(AttributeType::Bool, 'default' => false),
+			'useMetaDescription'        => array(AttributeType::Bool, 'default' => false),
+			'useMetaImage'              => array(AttributeType::Bool, 'default' => false),
+			'displayAdvancedOptions'    => array(AttributeType::Bool, 'default' => true),
+			'showGeo'                   => array(AttributeType::Bool, 'default' => true),
+			'showRobots'                => array(AttributeType::Bool, 'default' => true),
+			'showOpenGraph'             => array(AttributeType::Bool, 'default' => true),
+			'showTwitter'               => array(AttributeType::Bool, 'default' => true),
 			'optimizedTitleField'       => array(AttributeType::String),
-			'optimizedDescriptionField' => array(AttributeType::String)
+			'optimizedDescriptionField' => array(AttributeType::String),
+			'optimizedImageField'       => array(AttributeType::String)
 		);
 	}
 
@@ -131,20 +132,20 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		if ($settings['useMetaTitle'] && $attributes['title'])
 		{
-			$attributes['ogTitle'] = $attributes['title'];
+			$attributes['ogTitle']      = $attributes['title'];
 			$attributes['twitterTitle'] = $attributes['title'];
 		}
 
 		if ($settings['useMetaDescription'] && $attributes['description'])
 		{
-			$attributes['ogDescription'] = $attributes['description'];
-			$attributes['twitterDescription']  = $attributes['description'];
+			$attributes['ogDescription']      = $attributes['description'];
+			$attributes['twitterDescription'] = $attributes['description'];
 		}
 
 		if ($settings['useMetaImage'] && $attributes['metaImage'])
 		{
-			$attributes['ogImage'] = $attributes['metaImage'];
-			$attributes['twitterImage']  = $attributes['metaImage'];
+			$attributes['ogImage']      = $attributes['metaImage'];
+			$attributes['twitterImage'] = $attributes['metaImage'];
 		}
 
 		// Update or create our Meta Tag Content entry
@@ -182,24 +183,24 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// Set up our asset fields
 		if (isset($values->ogImage))
 		{
-			$asset = craft()->elements->getElementById($values->ogImage);
+			$asset           = craft()->elements->getElementById($values->ogImage);
 			$ogImageElements = array($asset);
 		}
 
 		if (isset($values->metaImage))
 		{
-			$asset = craft()->elements->getElementById($values->metaImage);
+			$asset             = craft()->elements->getElementById($values->metaImage);
 			$metaImageElements = array($asset);
 		}
 
 		if (isset($values->twitterImage))
 		{
-			$asset = craft()->elements->getElementById($values->twitterImage);
+			$asset                = craft()->elements->getElementById($values->twitterImage);
 			$twitterImageElements = array($asset);
 		}
 
 		// Set assetsSourceExists
-		$sources = craft()->assets->findFolders();
+		$sources            = craft()->assets->findFolders();
 		$assetsSourceExists = count($sources);
 
 		// Set elementType
@@ -216,16 +217,16 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$settings = $this->getSettings();
 
 		return craft()->templates->render('sproutseo/_fieldtypes/optimize/input', array(
-			'name'   => $name,
-			'values' => $values,
-			'ogImageElements' => $ogImageElements,
+			'name'                 => $name,
+			'values'               => $values,
+			'ogImageElements'      => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
-			'metaImageElements' => $metaImageElements,
-			'assetsSourceExists' => $assetsSourceExists,
-			'elementType' => $elementType,
-		  'fieldId' => $fieldId,
-			'fieldContext' => 'field',
-			'settings' => $settings
+			'metaImageElements'    => $metaImageElements,
+			'assetsSourceExists'   => $assetsSourceExists,
+			'elementType'          => $elementType,
+			'fieldId'              => $fieldId,
+			'fieldContext'         => 'field',
+			'settings'             => $settings
 		));
 	}
 }

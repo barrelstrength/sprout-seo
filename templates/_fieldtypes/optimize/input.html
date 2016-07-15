@@ -2,8 +2,8 @@
 
 		<div class="sproutseo-box-optimized">
 
-			{# @todo - Optional / Can also default to the Title field, or any field? #}
-			{% if not settings.useElementTypeTitle or settings.useMetaTitle %}
+
+			{% if settings.optimizedTitleField == 'manually' %}
 				{{ forms.textField({
 					label: "Meta Title"|t,
 					instructions: "The Title of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
@@ -17,17 +17,19 @@
 				}) }}
 			{% endif %}
 
-			{{ forms.textareaField({
-				label: "Meta Description"|t,
-				instructions: "A description of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
-				name: 'sproutseo_fields[description]',
-				maxlength: 160,
-				showCharsLeft: true,
-				value: values.description,
-				errors: "",
-				required: false,
-				placeholder: " "
-			}) }}
+			{% if settings.optimizedDescriptionField == 'manually' %}
+				{{ forms.textareaField({
+					label: "Meta Description"|t,
+					instructions: "A description of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
+					name: 'sproutseo_fields[description]',
+					maxlength: 160,
+					showCharsLeft: true,
+					value: values.description,
+					errors: "",
+					required: false,
+					placeholder: " "
+				}) }}
+			{% endif %}
 
 			{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
 
@@ -40,20 +42,22 @@
 				errors: ''
 			}) }}
 
-			{{ forms.field({
-				label: 'Meta Image'|t,
-				instructions: 'A featured image that represents your content that will display when sharing on Facebook and Twitter and other services.'
-			}, forms.elementSelect({
-				elements: metaImageElements,
-				sourceElementId: [values.metaImage],
-				elementType: elementType,
-				id: 'metaImage',
-				name: 'sproutseo_fields[metaImage]',
-				jsClass: 'Craft.AssetSelectInput',
-				addButtonLabel: 'Select Image'|t,
-				limit: 1,
-				criteria: {"localeEnabled":null}
-			})) }}
+			{% if settings.optimizedImageField == 'manually' %}
+				{{ forms.field({
+					label: 'Meta Image'|t,
+					instructions: 'A featured image that represents your content that will display when sharing on Facebook and Twitter and other services.'
+				}, forms.elementSelect({
+					elements: metaImageElements,
+					sourceElementId: [values.metaImage],
+					elementType: elementType,
+					id: 'metaImage',
+					name: 'sproutseo_fields[metaImage]',
+					jsClass: 'Craft.AssetSelectInput',
+					addButtonLabel: 'Select Image'|t,
+					limit: 1,
+					criteria: {"localeEnabled":null}
+				})) }}
+			{% endif %}
 
 		</div>
 
@@ -342,8 +346,7 @@
 
 					{% else %}
 
-						<p class="error">{{ 'No assets sources currently exist. <a href="' ~ url('settings/assets/sources/new') ~ '">Asset
-								Source settings page.'|t }}</a></p>
+						<p class="error">{{ 'No assets sources currently exist. <a href="' ~ url('settings/assets/sources/new') ~ '">Asset Source settings page.'|t }}</a></p>
 
 					{% endif %}
 
