@@ -5,86 +5,86 @@
 
 {% set settings = craft.sproutSeo.getSettings() %}
 
-{% set fullPageForm = true %}
-{% set saveShortcutRedirect = 'sproutforms/settings/general' %}
-{% set saveButton %}
-<div class="buttons">
-  <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
-</div>
-{% endset %}
-
 {% set content %}
 
-  <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
-  <div id="settings-cp">
-    {% namespace 'settings' %}
-      {{ forms.selectField({
-        label: 'Select the character that will be used between Title segments'|t,
-        instructions: "This character will be used in between your title segments, i.e. Blog Post Title – Website Name."|t,
-        id: 'seoDivider',
-        name: 'seoDivider',
-        options: {
-          1 : {
-            'value' : '-',
-            'label' : 'Entry Title - ' ~ siteName | t
-          },
-          2 : {
-            'value' : '•',
-            'label' : 'Entry Title • ' ~ siteName | t
-          },
-          3 : {
-            'value' : '|',
-            'label' : 'Entry Title | ' ~ siteName | t
-          },
-          4 : {
-            'value' : '/',
-            'label' : 'Entry Title / ' ~ siteName | t
-          },
-          5 : {
-            'value' : ':',
-            'label' : 'Entry Title : ' ~ siteName | t
-          }
-        },
-        value : settings.seoDivider,
-        first: true,
-        errors: ''
-      }) }}
+  <form method="post" accept-charset="UTF-8" data-saveshortcut data-saveshortcut-redirect="sproutseo/settings/meta">
+    {{ getCsrfInput() }}
+    <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
 
-      {% set ogTypesOptions = {
-        '' : 'Select Open Graph Type...'|t,
-        'article' : 'Article'|t,
-        'website' : 'Website'|t,
-      } %}
+    <div id="settings-cp">
+      {% namespace 'settings' %}
+        {{ forms.selectField({
+          label: 'Select the character that will be used between Title segments'|t,
+          instructions: "This character will be used in between your title segments, i.e. Blog Post Title – Website Name."|t,
+          id: 'seoDivider',
+          name: 'seoDivider',
+          options: {
+            1 : {
+              'value' : '-',
+              'label' : 'Dash -'
+            },
+            2 : {
+              'value' : '•',
+              'label' : 'Bullet •'
+            },
+            3 : {
+              'value' : '|',
+              'label' : 'Pipe |'
+            },
+            4 : {
+              'value' : '/',
+              'label' : 'Forward Slash /'
+            },
+            5 : {
+              'value' : ':',
+              'label' : 'Colon :'
+            }
+          },
+          value : settings.seoDivider,
+          first: true,
+          errors: ''
+        }) }}
 
-      {{ forms.selectField({
-        label: 'Default Open Graph Type'|t,
-        instructions: 'Select your default Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
-    target="_blank">How Open Graph Stories work.</a>'|t,
-        name: 'ogType',
-        options: ogTypesOptions,
-        value: (settings.ogType is defined ? settings.ogType : null),
-        errors: "",
-        required: false
-      }) }}
+        {% set ogTypesOptions = {
+          '' : 'Select Open Graph Type...'|t,
+          'article' : 'Article'|t,
+          'website' : 'Website'|t,
+        } %}
 
-      {% set twitterCardOptions = {
-        '' : 'Select Twitter Card Type...'|t,
-        'summary' : 'Summary Card'|t,
-        'summary_large_image' : 'Summary Card with Large Image'|t,
-        'player' : 'Player Card'|t,
-        'photo' : 'Photo Card'|t,
-      } %}
+        {{ forms.selectField({
+          label: 'Default Open Graph Type'|t,
+          instructions: 'Select your default Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
+      target="_blank">How Open Graph Stories work.</a>'|t,
+          name: 'ogType',
+          options: ogTypesOptions,
+          value: (settings.ogType is defined ? settings.ogType : null),
+          errors: "",
+          required: false
+        }) }}
 
-      {{ forms.selectField({
-        label: 'Default Twitter Card Type'|t,
-        instructions: 'Select your default Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
-        name: 'twitterCard',
-        options: twitterCardOptions,
-        value: (settings.twitterCard is defined ? settings.twitterCard : 'summary'),
-        errors: "",
-        required: false
-      }) }}
-    {% endnamespace %}
-  </div>
+        {% set twitterCardOptions = {
+          '' : 'Select Twitter Card Type...'|t,
+          'summary' : 'Summary Card'|t,
+          'summary_large_image' : 'Summary Card with Large Image'|t,
+          'player' : 'Player Card'|t
+        } %}
+
+        {{ forms.selectField({
+          label: 'Default Twitter Card Type'|t,
+          instructions: 'Select your default Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
+          name: 'twitterCard',
+          options: twitterCardOptions,
+          value: (settings.twitterCard is defined ? settings.twitterCard : 'summary'),
+          errors: "",
+          required: false
+        }) }}
+      {% endnamespace %}
+    </div>
+
+    <div class="buttons">
+      <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+    </div>
+
+  </form>
 
 {% endset %}
