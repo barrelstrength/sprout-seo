@@ -36,7 +36,7 @@
 
 <hr>
 
-{% set optimizedTitleOptions = craft.sproutSeo.getOptimizedTitleOptions() %}
+{% set optimizedTitleOptions = craft.sproutSeo.getOptimizedTitleOptions(settings) %}
 
 <div class="field">
 
@@ -55,7 +55,7 @@
 				name: 'optimizedTitleField',
 				id: 'optimizedTitleField',
 				options: optimizedTitleOptions ,
-				value: '',
+				value: settings.optimizedTitleField is defined ? settings.optimizedTitleField : null,
 				otherPlaceholderText: 'Custom twig code'|t
 			}) }}
 		</div>
@@ -63,7 +63,7 @@
 </div>
 
 
-{% set optimizedDescriptionOptions = craft.sproutSeo.getOptimizedDescriptionOptions %}
+{% set optimizedDescriptionOptions = craft.sproutSeo.getOptimizedDescriptionOptions(settings) %}
 
 <div class="field">
 

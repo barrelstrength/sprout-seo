@@ -490,7 +490,7 @@ class SproutSeoVariable
 	 *
 	 *@return array
 	*/
-	public function getOptimizedOptions($type = "PlainText")
+	public function getOptimizedOptions($type = "PlainText", $handle = null, $settings = null)
 	{
 		$options = array();
 		$fields  = craft()->fields->getAllFields();
@@ -511,6 +511,13 @@ class SproutSeoVariable
 
 		$options['--']       = "---";
 		$options['manually'] = 'Manually';
+		$options['---']      = "---";
+
+		if (!isset($options[$settings[$handle]]))
+		{
+			$options[$settings[$handle]] = $settings[$handle];
+		}
+
 		$options['custom']   = 'Custom';
 
 		return  $options;
@@ -521,9 +528,9 @@ class SproutSeoVariable
 	 *
 	 *@return array
 	*/
-	public function getOptimizedTitleOptions()
+	public function getOptimizedTitleOptions($settings)
 	{
-		return $this->getOptimizedOptions();
+		return $this->getOptimizedOptions('PlainText', 'optimizedTitleField', $settings);
 	}
 
 	/**
@@ -531,9 +538,9 @@ class SproutSeoVariable
 	 *
 	 *@return array
 	*/
-	public function getOptimizedDescriptionOptions()
+	public function getOptimizedDescriptionOptions($settings)
 	{
-		return $this->getOptimizedOptions();
+		return $this->getOptimizedOptions('PlainText', 'optimizedDescriptionField', $settings);
 	}
 
 	/**
