@@ -30,19 +30,14 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 	protected function defineSettings()
 	{
 		return array(
+			'optimizedTitleField'       => array(AttributeType::String),
+			'optimizedDescriptionField' => array(AttributeType::String),
+			'optimizedImageField'       => array(AttributeType::String),
 			'displayPreview'            => array(AttributeType::Bool, 'default' => true),
-			'useElementTypeTitle'       => array(AttributeType::Bool, 'default' => false),
-			'useMetaTitle'              => array(AttributeType::Bool, 'default' => false),
-			'useMetaDescription'        => array(AttributeType::Bool, 'default' => false),
-			'useMetaImage'              => array(AttributeType::Bool, 'default' => false),
-			'displayAdvancedOptions'    => array(AttributeType::Bool, 'default' => true),
 			'showGeo'                   => array(AttributeType::Bool, 'default' => true),
 			'showRobots'                => array(AttributeType::Bool, 'default' => true),
 			'showOpenGraph'             => array(AttributeType::Bool, 'default' => true),
-			'showTwitter'               => array(AttributeType::Bool, 'default' => true),
-			'optimizedTitleField'       => array(AttributeType::String),
-			'optimizedDescriptionField' => array(AttributeType::String),
-			'optimizedImageField'       => array(AttributeType::String)
+			'showTwitter'               => array(AttributeType::Bool, 'default' => true)
 		);
 	}
 
@@ -120,7 +115,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// Validate any setting of the field type
 		$settings = $this->getSettings();
 
-		if ($settings['useElementTypeTitle'] && $entryId)
+		if ($settings['optimizedTitleField'] == 'element-title' && $entryId)
 		{
 			$entry = craft()->elements->getElementById($entryId);
 
@@ -130,19 +125,19 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			}
 		}
 
-		if ($settings['useMetaTitle'] && $attributes['title'])
+		if ($settings['optimizedTitleField'] == 'manually' && $attributes['title'])
 		{
 			$attributes['ogTitle']      = $attributes['title'];
 			$attributes['twitterTitle'] = $attributes['title'];
 		}
 
-		if ($settings['useMetaDescription'] && $attributes['description'])
+		if ($settings['optimizedDescriptionField'] == 'manually' && $attributes['description'])
 		{
 			$attributes['ogDescription']      = $attributes['description'];
 			$attributes['twitterDescription'] = $attributes['description'];
 		}
 
-		if ($settings['useMetaImage'] && $attributes['metaImage'])
+		if ($settings['optimizedImageField'] == 'manually' && $attributes['metaImage'])
 		{
 			$attributes['ogImage']      = $attributes['metaImage'];
 			$attributes['twitterImage'] = $attributes['metaImage'];

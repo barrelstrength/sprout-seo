@@ -76,7 +76,7 @@
 
 {% endif %}
 
-{% if settings.displayAdvancedOptions %}
+{% if settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
 	{% set advancedSeoButtons %}
 		<div class="buttons">
 			<div id="btngroup" class="btngroup sproutseo-advancedoption-btns">
@@ -304,7 +304,7 @@
 					<hr>
 
 					<h2>Basic Metadata</h2>
-					{% if not settings.useMetaTitle %}
+					{% if settings.optimizedTitleField == 'manually' %}
 						{{ forms.textField({
 							label: "Title"|t,
 							instructions: "The title of your content as it should appear within the graph"|t,
@@ -328,7 +328,7 @@
 					}) }}
 
 					{% if assetsSourceExists %}
-						{% if not settings.useMetaImage %}
+						{% if settings.optimizedImageField == 'manually' %}
 							{{ forms.field({
 								label: 'Image'|t,
 							}, forms.elementSelect({
@@ -367,7 +367,7 @@
 						required: false
 					}) }}
 
-					{% if not settings.useMetaDescription %}
+					{% if settings.optimizedDescriptionField == 'manually' %}
 						{{ forms.textField({
 							label: "Description"|t,
 							name: 'sproutseo_fields[ogDescription]',
@@ -467,7 +467,7 @@
 						required: false,
 						placeholder: '@ContentAuthor'
 					}) }}
-					{% if not settings.useMetaTitle %}
+					{% if settings.optimizedTitleField == 'manually' %}
 						{{ forms.textField({
 							label: "Title"|t,
 							instructions: 'The title of your content as it should appear in the card.'|t,
@@ -481,7 +481,7 @@
 						}) }}
 					{% endif %}
 
-					{% if not settings.useMetaDescription %}
+					{% if settings.optimizedDescriptionField == 'manually' %}
 						{{ forms.textField({
 							label: "Description"|t,
 							instructions: 'A description of the content.'|t,
@@ -496,7 +496,7 @@
 					{% endif %}
 
 					{% if assetsSourceExists %}
-						{% if not settings.useMetaImage %}
+						{% if settings.optimizedImageField == 'manually' %}
 							{{ forms.field({
 								label: 'Image'|t,
 							}, forms.elementSelect({
@@ -511,7 +511,6 @@
 								criteria: {"localeEnabled":null}
 							})) }}
 						{% endif %}
-
 					{% else %}
 
 						<p class="error">{{ 'No assets sources currently exist. <a href="' ~ url('settings/assets/sources/new') ~ '">Asset

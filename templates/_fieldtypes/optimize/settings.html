@@ -138,41 +138,6 @@
 		</tbody>
 	</table>
 
-	<hr>
-
-	{{ forms.lightswitchField({
-		label: "Use the Element Type Title as the SEO Title?"|t,
-		warning: '',
-		id: 'useElementTypeTitle',
-		name: 'useElementTypeTitle',
-		on: settings.useElementTypeTitle,
-	}) }}
-
-
-	{{ forms.lightswitchField({
-		label: "Use the same value for the Meta Title, Facebook Title, and Twitter Title?"|t,
-		warning: '',
-		id: 'useMetaTitle',
-		name: 'useMetaTitle',
-		on: settings.useMetaTitle,
-	}) }}
-
-	{{ forms.lightswitchField({
-		label: "Use the same value for the Meta Description, Facebook Description, and Twitter Description?"|t,
-		warning: '',
-		id: 'useMetaDescription',
-		name: 'useMetaDescription',
-		on: settings.useMetaDescription,
-	}) }}
-
-	{{ forms.lightswitchField({
-		label: "Use the same value for the Facebook Feature Image, and Twitter Feature Image?"|t,
-		warning: '',
-		id: 'useMetaImage',
-		name: 'useMetaImage',
-		on: settings.useMetaImage,
-	}) }}
-
 {% endset %}
 
 {% includeJsResource 'sproutseo/js/SproutFields.js' %}

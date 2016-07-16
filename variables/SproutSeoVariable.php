@@ -509,7 +509,7 @@ class SproutSeoVariable
 			}
 		}
 
-		if (!isset($options[$settings[$handle]]))
+		if (!isset($options[$settings[$handle]]) && $settings[$handle] != 'manually')
 		{
 			$options[$settings[$handle]] = $settings[$handle];
 		}

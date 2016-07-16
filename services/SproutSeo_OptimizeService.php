@@ -198,11 +198,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	{
 		return array(
 			'displayPreview'         => true,
-			'useElementTypeTitle'    => false,
-			'useMetaTitle'           => false,
-			'useMetaDescription'     => false,
-			'useMetaImage'           => false,
-			'displayAdvancedOptions' => true,
 			'showGeo'                => true,
 			'showRobots'             => true,
 			'showOpenGraph'          => true,
