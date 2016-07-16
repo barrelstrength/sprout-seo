@@ -1,0 +1,48 @@
+{% extends "sproutseo/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Meta Settings"|t %}
+
+{% set settings = craft.sproutSeo.getSettings() %}
+
+{% set content %}
+
+  <form method="post" accept-charset="UTF-8" data-saveshortcut data-saveshortcut-redirect="sproutseo/settings/meta">
+    {{ getCsrfInput() }}
+    <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
+
+
+    {% namespace 'settings' %}
+
+      {{ forms.lightswitchField({
+        label: "Enable custom meta tag template"|t,
+        instructions: "Enable this setting if you wish to override the default meta tag templates and provide your own custom templates."|t,
+        name: 'toggleTemplateFolderOverride',
+        toggle: 'settings-defaulttemplateoverride',
+        on: (settings.templateFolder is empty ? false : true),
+        onLabel: "Enable"|t,
+        first: true
+      }) }}
+
+      <div id="settings-defaulttemplateoverride" class="{{ (settings.templateFolder is empty ? "hidden") }}">
+
+        {{ forms.textField({
+          label: "Meta Tag Group Template Folder"|t,
+          instructions: "Use a custom Meta Tag Group template. Copy _special/meta.html to your folder and do your thing."|t,
+          name: 'templateFolder',
+          value: settings.templateFolder,
+          errors: ''
+        }) }}
+
+      </div>
+
+    {% endnamespace %}
+
+
+    <div class="buttons">
+      <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+    </div>
+
+  </form>
+
+{% endset %}
