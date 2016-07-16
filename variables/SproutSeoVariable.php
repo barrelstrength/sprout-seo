@@ -414,12 +414,12 @@ class SproutSeoVariable
 
 		array_push($options, array('optgroup'=>'Custom'));
 
-		foreach ($schemaGlobals[$schemaType] as $shema)
+		foreach ($schemaGlobals[$schemaType] as $schema)
 		{
-			if (!$this->isCustomValue($schemaType, $shema[$handle]))
+			if (!$this->isCustomValue($schemaType, $schema[$handle]))
 			{
 				$isCustom = true;
-				array_push($options, array('label'=>$shema[$handle], 'value'=>$shema[$handle]));
+				array_push($options, array('label'=>$schema[$handle], 'value'=>$schema[$handle]));
 			}
 		}
 

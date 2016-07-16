@@ -9,6 +9,7 @@ class SproutSeo_SchemaModel extends BaseModel
 	protected function defineAttributes()
 	{
 		return array(
+			'meta'      => AttributeType::Mixed,
 			'identity'  => AttributeType::Mixed,
 			'contacts'  => AttributeType::Mixed,
 			'social'    => AttributeType::Mixed,
@@ -55,6 +56,11 @@ class SproutSeo_SchemaModel extends BaseModel
 
 		return $this->type;
 	}
+	
+	protected function getMeta()
+	{
+		return $this->meta;
+	}
 
 	protected function getIdentity()
 	{
@@ -73,12 +79,12 @@ class SproutSeo_SchemaModel extends BaseModel
 		$structuredData['organizationSubTypes'][0] = isset($schema['firstOrganizationSubType']) ? $schema['firstOrganizationSubType'] : null;
 		$structuredData['organizationSubTypes'][1] = isset($schema['secondOrganizationSubType']) ? $schema['secondOrganizationSubType'] : null;
 		$structuredData['organizationSubTypes'][2] = isset($schema['thirdOrganizationSubType']) ? $schema['thirdOrganizationSubType'] : null;
-		
+
 		$structuredData['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
 		$structuredData['foundingDate']        = isset($schema['foundingDate']) ? $schema['foundingDate'] : null;
 		$structuredData['foundingLocation']    = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
 
-		$structuredData['openingHours']      = isset($schema['openingHours']) ? $schema['openingHours'] : null;
+		$structuredData['openingHours'] = isset($schema['openingHours']) ? $schema['openingHours'] : null;
 
 		//Person
 		$structuredData['gender']     = isset($schema['gender']) ? $schema['gender'] : null;

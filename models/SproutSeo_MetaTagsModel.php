@@ -127,7 +127,10 @@ class SproutSeo_MetaTagsModel extends BaseModel
 				break;
 
 			case 'global':
-				$this->setAttributes($this->getGlobalFallback($overrideInfo));
+				$globals = sproutSeo()->schema->getGlobals();
+				$globalFallbackMetaTags = $globals->meta;
+
+				$this->setAttributes($globalFallbackMetaTags);
 				break;
 		}
 

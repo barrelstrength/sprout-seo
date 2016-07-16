@@ -26,9 +26,15 @@ class SproutSeo_SchemaController extends BaseController
 		$postData   = craft()->request->getPost('sproutseo.schema');
 		$schemaType = craft()->request->getPost('schemaType');
 
+		$schemaTypes = explode(',', $schemaType);
+
 		$schema = SproutSeo_SchemaModel::populateModel($postData);
 
-		if (sproutSeo()->schema->saveSchema($schemaType, $schema))
+		$globalFallbackMetaTags = $this->populateGlobalFallbackMetaTags($postData);
+
+		$schema->meta = JsonHelper::encode($globalFallbackMetaTags);
+
+		if (sproutSeo()->schema->saveSchema($schemaTypes, $schema))
 		{
 			craft()->userSession->setNotice(Craft::t('Schema saved.'));
 
@@ -37,7 +43,7 @@ class SproutSeo_SchemaController extends BaseController
 		else
 		{
 			craft()->userSession->setError(Craft::t('Unable to save schema.'));
-
+			Craft::dd($schema->getErrors());
 			craft()->urlManager->setRouteVariables(array(
 				'schema' => $schema
 			));
@@ -68,14 +74,14 @@ class SproutSeo_SchemaController extends BaseController
 			// @todo - add proper validation and return errors to template
 			if (count($meta) == 3)
 			{
-				$ownershipMetaWithKeys[$key]['service'] = $meta[0];
-				$ownershipMetaWithKeys[$key]['metaTag'] = $meta[1];
+				$ownershipMetaWithKeys[$key]['service']          = $meta[0];
+				$ownershipMetaWithKeys[$key]['metaTag']          = $meta[1];
 				$ownershipMetaWithKeys[$key]['verificationCode'] = $meta[2];
 			}
 		}
 
 		$schema = SproutSeo_SchemaModel::populateModel(array(
-			$schemaType => $ownershipMetaWithKeys
+				$schemaType => $ownershipMetaWithKeys
 			)
 		);
 
@@ -93,5 +99,62 @@ class SproutSeo_SchemaController extends BaseController
 				'schema' => $schema
 			));
 		}
+	}
+
+	public function populateGlobalFallbackMetaTags($postData)
+	{
+		$globalFallbackMetaTags = new SproutSeo_MetaTagsModel();
+
+		$siteName = craft()->getSiteName();
+
+		if (isset($postData['identity']))
+		{
+			$metaTitle       = $postData['identity']['name'];
+			$metaDescription = $postData['identity']['description'];
+			$metaKeywords    = $postData['identity']['keywords'];
+			$metaImage       = isset($postData['identity']['logo'][0]) ? $postData['identity']['logo'][0] : null;
+
+			// appendSiteName?  useAlternateName?
+			$globalFallbackMetaTags->title       = $metaTitle;
+			$globalFallbackMetaTags->description = $metaDescription;
+			$globalFallbackMetaTags->keywords    = $metaKeywords;
+
+			$globalFallbackMetaTags->ogType        = 'website';
+			$globalFallbackMetaTags->ogSiteName    = $siteName;
+			$globalFallbackMetaTags->ogAuthor      = '';
+			$globalFallbackMetaTags->ogPublisher   = '';
+			$globalFallbackMetaTags->ogTitle       = $metaTitle;
+			$globalFallbackMetaTags->description   = $metaDescription;
+			$globalFallbackMetaTags->ogImage       = $metaImage;
+			$globalFallbackMetaTags->ogImageSecure = '';
+			$globalFallbackMetaTags->ogImageWidth  = '';
+			$globalFallbackMetaTags->ogImageHeight = '';
+			$globalFallbackMetaTags->ogImageType   = '';
+
+			$globalFallbackMetaTags->twitterCard        = 'summary';
+			$globalFallbackMetaTags->twitterTitle       = $metaTitle;
+			$globalFallbackMetaTags->twitterDescription = $metaDescription;
+			$globalFallbackMetaTags->twitterImage       = $metaImage;
+		}
+
+		if (isset($postData['social']))
+		{
+			$socialProfiles = $postData['social'];
+
+			foreach ($socialProfiles as $profile)
+			{
+				if ($profile[0] == 'Twitter')
+				{
+					$twitterUrl = $profile[1];
+					$twitterName = '@' . substr($twitterUrl, strrpos($twitterUrl, '/') + 1);
+
+					$globalFallbackMetaTags->twitterSite = $twitterName;
+					$globalFallbackMetaTags->twitterCreator = $twitterName;
+					break;
+				}
+			}
+		}
+
+		return $globalFallbackMetaTags;
 	}
 }

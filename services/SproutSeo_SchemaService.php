@@ -24,20 +24,29 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	 *
 	 * @return bool
 	 */
-	public function saveSchema($schemaType, $schema)
+	public function saveSchema($schemaTypes, $schema)
 	{
 		// @todo - what do we do if $schemaType doesn't have a value?
 
-		$values = array(
-			$schemaType => $schema->getSchema($schemaType, 'json')
-		);
+		if (!is_array($schemaTypes))
+		{
+			array($schemaTypes);
+		}
 
-		$result = craft()->db->createCommand()->update('sproutseo_globals',
-			$values,
-			'id=:id', array(':id' => 1)
-		);
+		foreach ($schemaTypes as $schemaType)
+		{
+			$values = array(
+				$schemaType => $schema->getSchema($schemaType, 'json')
+			);
 
-		return $result;
+			$result = craft()->db->createCommand()->update('sproutseo_globals',
+				$values,
+				'id=:id', array(':id' => 1)
+			);
+		};
+
+		// @todo - add proper validation. Currently the above assumes everything is always working.
+		return true;
 	}
 
 	/**
@@ -52,6 +61,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 			->from('sproutseo_globals')
 			->queryRow();
 
+		$results['meta']      = isset($results['meta']) ? JsonHelper::decode($results['meta']) : null;
 		$results['identity']  = isset($results['identity']) ? JsonHelper::decode($results['identity']) : null;
 		$results['contacts']  = isset($results['contacts']) ? JsonHelper::decode($results['contacts']) : null;
 		$results['ownership'] = isset($results['ownership']) ? JsonHelper::decode($results['ownership']) : null;
