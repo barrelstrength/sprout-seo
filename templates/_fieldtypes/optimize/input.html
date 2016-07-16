@@ -5,28 +5,27 @@
 			{% if settings.optimizedTitleField == 'manually' %}
 				{{ forms.textField({
 					label: "Meta Title"|t,
-					instructions: "The Title of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
+					instructions: "The Title of your content which will appear in search results and social sharing."|t,
 					name: 'sproutseo_fields[title]',
-					maxlength: 55,
+					maxlength: 60,
 					showCharsLeft: true,
 					value: values.title,
 					errors: "",
-					required: false,
-					placeholder: " "
+					placeholder: siteName,
+					class: 'nicetext'
 				}) }}
 			{% endif %}
 
 			{% if settings.optimizedDescriptionField == 'manually' %}
 				{{ forms.textareaField({
 					label: "Meta Description"|t,
-					instructions: "A description of your content which will appear in search results and when sharing on Facebook and Twitter and other services."|t,
+					instructions: "A description of your content which will appear in search results and social sharing."|t,
 					name: 'sproutseo_fields[description]',
 					maxlength: 160,
 					showCharsLeft: true,
 					value: values.description,
 					errors: "",
-					required: false,
-					placeholder: " "
+					placeholder: "The official website of " ~ siteName
 				}) }}
 			{% endif %}
 
@@ -44,7 +43,7 @@
 			{% if settings.optimizedImageField == 'manually' %}
 				{{ forms.field({
 					label: 'Meta Image'|t,
-					instructions: 'A featured image that represents your content that will display when sharing on Facebook and Twitter and other services.'
+					instructions: 'A featured image that represents your content that will display in social sharing.'
 				}, forms.elementSelect({
 					elements: metaImageElements,
 					sourceElementId: [values.metaImage],

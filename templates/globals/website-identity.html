@@ -40,17 +40,25 @@
 			name: 'sproutseo[schema][identity][name]',
 			value: schema['name'] is defined ? schema.name : null,
 			errors: '',
-			first: true
+			first: true,
+			maxlength: 60,
+			showCharsLeft: true,
+			required: true,
+			placeholder: siteName,
+			class: 'nicetext'
 		}) }}
 
 		<div id="toggle-alternate" class="{{ (schema['alternateEntityName'] is defined and schema.alternateEntityName ?:
 		'hidden' ) }}">
 			{{ forms.textField({
 				label: "Alternate Name"|t,
-				instructions: "An alternate name you want search engines to consider."|t,
+				instructions: "An alternate name you want search engines to consider (i.e. such as a legal name or nickname)."|t,
 				name: 'sproutseo[schema][identity][alternateEntityName]',
 				value: schema['alternateEntityName'] is defined ? schema.alternateEntityName : null,
-				errors: ''
+				errors: '',
+				maxlength: 60,
+				showCharsLeft: true,
+				class: 'nicetext'
 			}) }}
 		</div>
 
@@ -60,9 +68,11 @@
 			name: 'sproutseo[schema][identity][description]',
 			value: schema['description'] is defined ? schema.description : null,
 			errors: '',
-			required: true
+			required: true,
+			maxlength: 160,
+			showCharsLeft: true,
+			placeholder: "The official website of " ~ siteName
 		}) }}
-
 
 		{% set keywordsValue = schema['keywords'] is defined ? schema.keywords : null %}
 
@@ -87,6 +97,7 @@
 		{{ forms.field({
 			label: 'Logo'|t,
 			instructions: 'The preferred logo for your website.'|t,
+			required: true
 		}, forms.elementSelect({
 			elements: [logoElement],
 			sourceElementId: schema['logo'] is defined ? schema.logo : null,
@@ -104,8 +115,7 @@
 			instructions: 'The preferred telephone number for your website.'|t,
 			name: 'sproutseo[schema][identity][telephone]',
 			value: schema['telephone'] is defined ? schema.telephone : null,
-			errors: '',
-			required: true
+			errors: ''
 		}) }}
 
 		{{ forms.textField({
@@ -113,8 +123,7 @@
 			instructions: 'The preferred email address for your website.'|t,
 			name: 'sproutseo[schema][identity][email]',
 			value: schema['email'] is defined ? schema.email : null,
-			errors: '',
-			required: true
+			errors: ''
 		}) }}
 
 		<hr>
