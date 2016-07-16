@@ -194,14 +194,24 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 </script>';
 	}
 
+	/**
+	 * Prepare the default field type settings for the Meta Tag Group context.
+	 *
+	 * Display all of our fields manually for the Meta Tag Groups
+	 *
+	 * @return array
+	 */
 	public function getDefaultFieldTypeSettings()
 	{
 		return array(
-			'displayPreview'         => true,
-			'showGeo'                => true,
-			'showRobots'             => true,
-			'showOpenGraph'          => true,
-			'showTwitter'            => true,
+			'optimizedTitleField'       => 'manually',
+			'optimizedDescriptionField' => 'manually',
+			'optimizedImageField'       => 'manually',
+			'displayPreview'            => true,
+			'showGeo'                   => true,
+			'showRobots'                => true,
+			'showOpenGraph'             => true,
+			'showTwitter'               => true,
 		);
 	}
 }
