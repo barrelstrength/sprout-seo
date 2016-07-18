@@ -1,12 +1,12 @@
 {% import "_includes/forms" as forms %}
 
-<div class="sproutseo-box">
+<div class="sproutseo-box-geo">
 
 	{{ forms.textField({
 		label: "Region"|t,
 		instructions: 'The geo.region expects codes for <a
-		  href="http://geotags.com/iso3166/countries.html" target="_blank">Country Names and Subdivisions</a>. The <a
-		  href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.'|t,
+						href="http://geotags.com/iso3166/countries.html" target="_blank">Country Names and Subdivisions</a>. The <a
+						href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.'|t,
 		name: "sproutseo_fields[region]",
 		value: values.region
 	}) }}

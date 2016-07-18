@@ -140,15 +140,16 @@
 
 {% endset %}
 
-{% includeJsResource 'sproutseo/js/SproutFields.js' %}
-
-{% includejs %}
-	$(document).ready(function() {
-		Craft.SproutFields.initFields($("#content"));
-	});
-{% endincludejs %}
 {{ forms.field({
 	label: "Display Advanced Customization Options?"|t,
 	errors: ''
 }, advancedInput) }}
+
+{% includeJsResource 'sproutseo/js/SproutFields.js' %}
+
+{% includejs %}
+$(document).ready(function() {
+Craft.SproutFields.initFields($("#content"));
+});
+{% endincludejs %}
 
