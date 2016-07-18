@@ -11,7 +11,7 @@ class m160706_000000_sproutSeo_updateDeprecatedTwitterCard extends BaseMigration
 	public function safeUp()
 	{
 		$tableNames = array(
-			'sproutseo_globals',
+			'sproutseo_metataggroups',
 			'sproutseo_metatagcontent'
 		);
 
@@ -24,12 +24,12 @@ class m160706_000000_sproutSeo_updateDeprecatedTwitterCard extends BaseMigration
 					->select('id')
 					->from($tableName)
 					->where('twitterCard =:photo', array(':photo' => 'photo'))
-					->queryRow();
+					->queryAll();
 
 				foreach ($rows as $row)
 				{
 					craft()->db->createCommand()->update($tableName,
-							array('options' => $newOptions),
+							array('twitterCard' => 'summary_large_image'),
 							'id = :id',
 							array(':id' => $row['id'])
 						);
