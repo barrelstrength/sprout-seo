@@ -54,9 +54,9 @@ class SproutSeo_SchemaModel extends BaseModel
 	{
 		$this->getSchema('identity');
 
-		return $this->type;
+		return $this->type != '' ? $this->type : 'Organization' ;
 	}
-	
+
 	protected function getMeta()
 	{
 		return $this->meta;
