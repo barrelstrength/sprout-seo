@@ -76,9 +76,9 @@ class SproutSeo_SchemaModel extends BaseModel
 		$structuredData['alternateEntityName'] = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
 
 		$structuredData['organizationSubTypes']    = array();
-		$structuredData['organizationSubTypes'][0] = isset($schema['firstOrganizationSubType']) ? $schema['firstOrganizationSubType'] : null;
-		$structuredData['organizationSubTypes'][1] = isset($schema['secondOrganizationSubType']) ? $schema['secondOrganizationSubType'] : null;
-		$structuredData['organizationSubTypes'][2] = isset($schema['thirdOrganizationSubType']) ? $schema['thirdOrganizationSubType'] : null;
+		$structuredData['organizationSubTypes'][0] = isset($schema['organizationInfo'][0]) ? $schema['organizationInfo'][0] : null;
+		$structuredData['organizationSubTypes'][1] = isset($schema['organizationInfo'][1]) ? $schema['organizationInfo'][1] : null;
+		$structuredData['organizationSubTypes'][2] = isset($schema['organizationInfo'][2]) ? $schema['organizationInfo'][2] : null;
 
 		$structuredData['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
 		$structuredData['foundingDate']        = isset($schema['foundingDate']) ? $schema['foundingDate'] : null;
