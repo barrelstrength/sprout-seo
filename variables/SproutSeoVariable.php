@@ -406,19 +406,17 @@ class SproutSeoVariable
 
 	public function getFinalOptions($schemaType, $handle)
 	{
-		$options = array();
-
 		$schemaGlobals = sproutSeo()->schema->getGlobals();
-		$isCustom      = false;
 		$options       = $this->getGlobalOptions($schemaType);
 
 		array_push($options, array('optgroup'=>'Custom'));
 
-		foreach ($schemaGlobals[$schemaType] as $schema)
+		$schemas = $schemaGlobals->{$schemaType} != null ? $schemaGlobals->{$schemaType} : array();
+
+		foreach ($schemas as $schema)
 		{
 			if (!$this->isCustomValue($schemaType, $schema[$handle]))
 			{
-				$isCustom = true;
 				array_push($options, array('label'=>$schema[$handle], 'value'=>$schema[$handle]));
 			}
 		}
