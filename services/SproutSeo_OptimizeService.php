@@ -138,9 +138,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 		$schemaRaw = SproutSeo_SchemaModel::populateModel($schemaRaw);
 
-		$schema                 = $schemaRaw->getSchema('identity');
-		$schema['contactPoint'] = $schemaRaw->getSchema('contacts');
-		$schema['sameAs']       = $schemaRaw->getSchema('social');
+		$schema                 = $schemaRaw->getJsonLd('identity');
+		$schema['contactPoint'] = $schemaRaw->getJsonLd('contacts');
+		$schema['sameAs']       = $schemaRaw->getJsonLd('social');
 
 		$output = $this->prepareLinkedDataForHtml($schema);
 

@@ -46,6 +46,126 @@ class SproutSeo_SchemaModel extends BaseModel
 		return $schema;
 	}
 
+	/**
+	 * Returns correct values for final Json-LD
+	 * Validated on: https://search.google.com/structured-data/testing-tool
+	 *
+	 * @param $target
+	 *
+	 * @return string
+	 */
+	public function getJsonLd($target)
+	{
+		$schema = $this->getSchema($target);
+		$jsonLd = array();
+		// Don't add null values to jsonLd
+		switch ($target)
+		{
+			case 'identity':
+				$jsonLd['@type'] = $schema['@type'];
+				$jsonLd['@context'] = $schema['@context'];
+				$jsonLd['name']          = isset($schema['name']) ? $schema['name'] : null;
+				$jsonLd['description']   = isset($schema['description']) ? $schema['description'] : null;
+				$jsonLd['url']           = isset($schema['url']) ? $schema['url'] : null;
+
+				if (isset($schema['logo'][0]))
+				{
+					$logo = craft()->assets->getFileById($schema['logo'][0]);
+
+					if ($logo)
+					{
+						$img = $schema['@type'] == 'Person' ? 'image' : 'logo';
+						$jsonLd[$img] = array(
+							"@type" => "ImageObject",
+							"url" => $logo->getUrl(),
+							"width" => $logo->getWidth(),
+							"height" => $logo->getHeight()
+						);
+					}
+				}
+
+				if ($schema['@type'] == 'Organization')
+				{
+					if (isset($schema['foundingDate']['date']))
+					{
+						$foundingDate = DateTime::createFromString($schema['foundingDate']);
+						$jsonLd['foundingDate'] = $foundingDate->format('Y-m-d');
+					}
+
+					$days = array(0=>"Su", 1=>"Mo", 2=>"Tu", 3=>"We", 4=>"Th", 5=>"Fr", 6=>"Sa");
+					$index = 0;
+					$openingHours = array();
+
+					if (isset($schema['organizationSubTypes'][0]) && $schema['organizationSubTypes'][0] == 'LocalBusiness')
+					{
+						foreach ($schema['openingHours'] as $key => $value)
+						{
+							$openingHours[$index] = $days[$index];
+
+							if (isset($value['open']['time']) && $value['open']['time'] != '')
+							{
+								$time = DateTime::createFromString($value['open']);
+								$openingHours[$index] .= " ".$time->format('H:m');
+							}
+
+							if (isset($value['close']['time']) && $value['close']['time'] != '')
+							{
+								$time = DateTime::createFromString($value['close']);
+								$openingHours[$index] .= "-".$time->format('H:m');
+							}
+							// didn't work this day
+							if (strlen($openingHours[$index]) == 2)
+							{
+								unset($openingHours[$index]);
+							}
+
+							$index++;
+						}
+
+						$jsonLd['openingHours'] = $openingHours;
+					}
+
+					$jsonLd['alternateEntityName'] = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
+					#For what @type is keywords needed?
+					#$jsonLd['keywords']            = isset($schema['keywords']) ? $schema['keywords'] : null;
+					#$jsonLd['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
+					#$jsonLd['foundingLocation']    = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
+
+					// Set the right value for @type
+					foreach ($schema['organizationSubTypes'] as $org)
+					{
+						if ($org != '')
+						{
+							$jsonLd['@type'] = $org;
+						}
+					}
+
+				}
+				else if($schema['@type'] == 'Person')
+				{
+					//Person
+					$jsonLd['gender']     = isset($schema['gender']) ? $schema['gender'] : null;
+					$jsonLd['birthplace'] = isset($schema['birthplace']) ? $schema['birthplace'] : null;
+				}
+
+				break;
+			case 'contacts':
+				$jsonLd = $schema;
+				break;
+			case 'social':
+				$index = 0;
+				foreach ($schema as $key => $value)
+				{
+					$jsonLd[$index] = $value['url'];
+					$index++;
+				}
+
+				break;
+		}
+
+		return $jsonLd;
+	}
+
 
 	// Supported Schema Types
 	// =========================================================================
@@ -76,9 +196,9 @@ class SproutSeo_SchemaModel extends BaseModel
 		$structuredData['alternateEntityName'] = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
 
 		$structuredData['organizationSubTypes']    = array();
-		$structuredData['organizationSubTypes'][0] = isset($schema['organizationInfo'][0]) ? $schema['organizationInfo'][0] : null;
-		$structuredData['organizationSubTypes'][1] = isset($schema['organizationInfo'][1]) ? $schema['organizationInfo'][1] : null;
-		$structuredData['organizationSubTypes'][2] = isset($schema['organizationInfo'][2]) ? $schema['organizationInfo'][2] : null;
+		$structuredData['organizationSubTypes'][0] = isset($schema['organizationSubTypes'][0]) ? $schema['organizationSubTypes'][0] : null;
+		$structuredData['organizationSubTypes'][1] = isset($schema['organizationSubTypes'][1]) ? $schema['organizationSubTypes'][1] : null;
+		$structuredData['organizationSubTypes'][2] = isset($schema['organizationSubTypes'][2]) ? $schema['organizationSubTypes'][2] : null;
 
 		$structuredData['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
 		$structuredData['foundingDate']        = isset($schema['foundingDate']) ? $schema['foundingDate'] : null;
