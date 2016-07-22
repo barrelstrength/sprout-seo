@@ -95,8 +95,8 @@
 		}) }}
 
 		{{ forms.field({
-			label: 'Logo'|t,
-			instructions: 'The preferred logo for your website.'|t,
+			label: 'Image'|t,
+			instructions: "The preferred logo for your website or Profile Image if you're a person."|t,
 			required: true
 		}, forms.elementSelect({
 			elements: [logoElement],
@@ -154,7 +154,7 @@
 						{{ forms.selectField({
 							id: 'first',
 							role: 'listbox',
-							name: 'sproutseo[schema][identity][organizationInfo][0]',
+							name: 'sproutseo[schema][identity][organizationSubTypes][0]',
 							options: firstItems,
 							value: '',
 							errors: "",
@@ -166,7 +166,7 @@
 						{{ forms.selectField({
 							id: 'second',
 							role: 'listbox',
-							name: 'sproutseo[schema][identity][organizationInfo][1]',
+							name: 'sproutseo[schema][identity][organizationSubTypes][1]',
 							options: {'':''},
 							value: '',
 							errors: '',
@@ -178,7 +178,7 @@
 						{{ forms.selectField({
 							id: 'third',
 							role: 'listbox',
-							name: 'sproutseo[schema][identity][organizationInfo][2]',
+							name: 'sproutseo[schema][identity][organizationSubTypes][2]',
 							options: {'':''},
 							value: '',
 							errors: '',
