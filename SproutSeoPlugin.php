@@ -98,6 +98,8 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
+		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
+
 		if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
 		{
 			$url = craft()->request->getUrl();
@@ -211,16 +213,14 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
+	 * Register Sprout Import importers classes for the Sprout Import plugin integration
+	 *
 	 * @return array
 	 */
-	public function sproutMigrateRegisterElements()
+	public function registerSproutImportImporters()
 	{
 		return array(
-			'sproutseo_redirect' => array(
-				'model'   => 'Craft\\SproutSeo_Redirect',
-				'method'  => 'saveRedirect',
-				'service' => 'sproutSeo_redirects',
-			)
+			new SproutSeo_RedirectSproutImportElementImporter
 		);
 	}
 
