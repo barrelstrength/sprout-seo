@@ -19,6 +19,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 			'handle'         => array(AttributeType::String),
 			'appendSiteName' => array(AttributeType::String, 'default' => null),
 			'globalFallback' => array(AttributeType::Bool),
+			'url'            => array(AttributeType::String),
 		);
 
 		$this->basicMeta = array(

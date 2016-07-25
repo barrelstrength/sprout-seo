@@ -76,16 +76,12 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getOptimizedMeta()
 	{
-		$entryOverrideMetaTagModel  = new SproutSeo_MetaTagsModel();
-		$codeOverrideMetaTagModel   = new SproutSeo_MetaTagsModel();
-		$metaTagsGroupMetaTagModel  = new SproutSeo_MetaTagsModel();
-		$globalFallbackMetaTagModel = new SproutSeo_MetaTagsModel();
-
-		// Prepare a SproutSeo_MetaTagsModel for each of our levels of priority
-		$entryOverrideMetaTagModel  = $entryOverrideMetaTagModel->setMeta('entry', $this->getMetaTagsFromTemplate());
-		$codeOverrideMetaTagModel   = $codeOverrideMetaTagModel->setMeta('code', $this->getMetaTagsFromTemplate());
-		$metaTagsGroupMetaTagModel  = $metaTagsGroupMetaTagModel->setMeta('metaTagsGroup', $this->getMetaTagsFromTemplate());
-		$globalFallbackMetaTagModel = $globalFallbackMetaTagModel->setMeta('global');
+		$prioritizeMetaLevels = array(
+			'entry' => null,//entryOverrideMetaTagModel
+			'code' => null,//codeOverrideMetaTagModel
+			'metaTagsGroup' => null,//metaTagsGroupMetaTagModel
+			'global' => null, //globalFallbackMetaTagModel
+		);
 
 		$prioritizedMetaTagModel = new SproutSeo_MetaTagsModel();
 
@@ -94,39 +90,44 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// Default to the Current URL
 		$prioritizedMetaTagModel->canonical = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
 
-		foreach ($prioritizedMetaTagModel->getAttributes() as $key => $value)
+		foreach ($prioritizeMetaLevels as $meta => $model)
 		{
-			// Test for a value on each of our models in their order of priority
-			if ($entryOverrideMetaTagModel->getAttribute($key))
+			$metaTagModel = new SproutSeo_MetaTagsModel();
+
+			if ($meta != 'global')
 			{
-				$prioritizedMetaTagModel[$key] = $entryOverrideMetaTagModel[$key];
-			}
-			elseif ($codeOverrideMetaTagModel->getAttribute($key))
-			{
-				$prioritizedMetaTagModel[$key] = $codeOverrideMetaTagModel[$key];
-			}
-			elseif ($metaTagsGroupMetaTagModel->getAttribute($key))
-			{
-				$prioritizedMetaTagModel[$key] = $metaTagsGroupMetaTagModel->getAttribute($key);
-			}
-			elseif ($globalFallbackMetaTagModel->getAttribute($key))
-			{
-				$prioritizedMetaTagModel[$key] = $globalFallbackMetaTagModel->getAttribute($key);
+				$metaTagModel = $metaTagModel->setMeta($meta);
 			}
 			else
 			{
-				$prioritizedMetaTagModel[$key] = $prioritizedMetaTagModel->getAttribute($key);
+				$metaTagModel  = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate());
 			}
 
-			// Make sure all our strings are trimmed
-			if (is_string($prioritizedMetaTagModel[$key]))
+			$prioritizeMetaLevels[$meta] = $metaTagModel;
+
+			foreach ($prioritizedMetaTagModel->getAttributes() as $key => $value)
 			{
-				$prioritizedMetaTagModel[$key] = trim($prioritizedMetaTagModel[$key]);
+				// Test for a value on each of our models in their order of priority
+				if ($metaTagModel->getAttribute($key))
+				{
+					$prioritizedMetaTagModel[$key] = $metaTagModel[$key];
+				}
+
+				// Make sure all our strings are trimmed
+				if (is_string($prioritizedMetaTagModel[$key]))
+				{
+					$prioritizedMetaTagModel[$key] = trim($prioritizedMetaTagModel[$key]);
+				}
 			}
 		}
 
 		// @todo - reorganize how this stuff works / robots need love.
-		$prioritizedMetaTagModel->title  = SproutSeoOptimizeHelper::prepareAppendedSiteName($prioritizedMetaTagModel, $metaTagsGroupMetaTagModel, $globalFallbackMetaTagModel);
+		$prioritizedMetaTagModel->title  = SproutSeoOptimizeHelper::prepareAppendedSiteName(
+			$prioritizedMetaTagModel,
+			$prioritizeMetaLevels['metaTagsGroup'],
+			$prioritizeMetaLevels['global']
+		);
+
 		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::prepRobotsAsString($prioritizedMetaTagModel->robots);
 
 		return $prioritizedMetaTagModel;

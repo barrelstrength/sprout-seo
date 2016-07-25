@@ -21,6 +21,7 @@ class SproutSeo_MetaTagGroupRecord extends BaseRecord
 			),
 			'appendSiteName' => array(AttributeType::String),
 			'globalFallback' => array(AttributeType::Bool),
+			'url'            => array(AttributeType::String),
 
 			'title'       => array(AttributeType::String),
 			'description' => array(AttributeType::String),
