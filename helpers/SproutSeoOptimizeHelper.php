@@ -154,5 +154,76 @@ class SproutSeoOptimizeHelper
 				}
 			}
 		}
+
+		if (!empty($model->metaImage))
+		{
+			// If twitterImage starts with "http", roll with it
+			// If not, then process what we have to try to extract the URL
+			if (substr($model->metaImage, 0, 4) !== "http")
+			{
+				if (!is_numeric($model->metaImage))
+				{
+					throw new \Exception('Meta Image override value "' . $model->metaImage . '" must be an	absolute url.');
+				}
+
+				$metaImage = craft()->elements->getElementById($model->metaImage);
+
+				if (!empty($metaImage))
+				{
+					$imageUrl = (string) ($metaImage->url);
+					// check to se	e if Asset already has full Site Url in folder Url
+					if (strpos($imageUrl, "http") !== false)
+					{
+						$model->metaImage = $metaImage->url;
+					}
+					else
+					{
+						$model->metaImage = UrlHelper::getSiteUrl($metaImage->url);
+					}
+				}
+				else
+				{
+					// If our selected asset was deleted, make sure it is null
+					$model->metaImage = null;
+				}
+			}
+		}
+	}
+
+	public static function getAssetUrl($id)
+	{
+		$url = null;
+
+		// If not, then process what we have to try to extract the URL
+		if (substr($id, 0, 4) !== "http")
+		{
+			if (!is_numeric($id))
+			{
+				throw new \Exception('Meta Image override value "' . $id . '" must be an	absolute url.');
+			}
+
+			$metaImage = craft()->elements->getElementById($id);
+
+			if (!empty($metaImage))
+			{
+				$imageUrl = (string) ($metaImage->url);
+				// check to se	e if Asset already has full Site Url in folder Url
+				if (strpos($imageUrl, "http") !== false)
+				{
+					$url = $metaImage->url;
+				}
+				else
+				{
+					$url = UrlHelper::getSiteUrl($metaImage->url);
+				}
+			}
+			else
+			{
+				// If our selected asset was deleted, make sure it is null
+				$url = null;
+			}
+		}
+
+		return $url;
 	}
 }

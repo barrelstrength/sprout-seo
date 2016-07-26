@@ -73,6 +73,15 @@
 				required: true
 			}) }}
 
+			{{ forms.textField({
+				label: "URL"|t,
+				id: "url",
+				name: 'sproutseo_fields[url]',
+				value: metaTags.url,
+				errors: metaTags.getErrors('url'),
+				required: true
+			}) }}
+
 			{% set globalFallbackId = craft.sproutSeo.globalFallbackId() %}
 
 			{% if not globalFallbackId or (globalFallbackId == metaTagGroupId) %}

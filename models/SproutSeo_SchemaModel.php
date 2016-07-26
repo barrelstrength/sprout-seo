@@ -77,7 +77,7 @@ class SproutSeo_SchemaModel extends BaseModel
 						$img = $schema['@type'] == 'Person' ? 'image' : 'logo';
 						$jsonLd[$img] = array(
 							"@type" => "ImageObject",
-							"url" => $logo->getUrl(),
+							"url" => SproutSeoOptimizeHelper::getAssetUrl($logo->id),
 							"width" => $logo->getWidth(),
 							"height" => $logo->getHeight()
 						);

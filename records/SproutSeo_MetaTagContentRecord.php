@@ -16,6 +16,7 @@ class SproutSeo_MetaTagContentRecord extends BaseRecord
 			'title'       => array(AttributeType::String),
 			'elementTitle'=> array(AttributeType::String, 'required' => false),
 			'description' => array(AttributeType::String),
+			'metaImage'   => array(AttributeType::String, 'required' => false),
 			'metaTitle'   => array(AttributeType::String, 'required' => false),
 			'keywords'    => array(AttributeType::String),
 			'author'      => array(AttributeType::String),

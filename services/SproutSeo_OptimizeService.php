@@ -4,6 +4,7 @@ namespace Craft;
 class SproutSeo_OptimizeService extends BaseApplicationComponent
 {
 	protected $templateMeta = array();
+	private $context;
 
 	protected $siteInfo;
 	protected $divider;
@@ -14,8 +15,20 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function getMetaTagsFromTemplate()
+	public function getMetaTagsFromTemplate($type = null)
 	{
+		switch ($type)
+		{
+			case 'metaTagsGroup':
+				$entry = $this->context['entry'];
+				$slug = $entry->slug;
+
+				$metagroup = sproutSeo()->metaTags->getMetaTagGroupByUrl($slug);
+				$this->templateMeta = $metagroup;
+				# code...
+				break;
+		}
+
 		return $this->templateMeta;
 	}
 
@@ -77,10 +90,10 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	public function getOptimizedMeta()
 	{
 		$prioritizeMetaLevels = array(
-			'entry' => null,//entryOverrideMetaTagModel
-			'code' => null,//codeOverrideMetaTagModel
-			'metaTagsGroup' => null,//metaTagsGroupMetaTagModel
 			'global' => null, //globalFallbackMetaTagModel
+			'metaTagsGroup' => null,//metaTagsGroupMetaTagModel
+			'code' => null,//codeOverrideMetaTagModel
+			'entry' => null,//entryOverrideMetaTagModel
 		);
 
 		$prioritizedMetaTagModel = new SproutSeo_MetaTagsModel();
@@ -94,13 +107,13 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			$metaTagModel = new SproutSeo_MetaTagsModel();
 
-			if ($meta != 'global')
+			if ($meta == 'global')
 			{
 				$metaTagModel = $metaTagModel->setMeta($meta);
 			}
 			else
 			{
-				$metaTagModel  = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate());
+				$metaTagModel  = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate($meta));
 			}
 
 			$prioritizeMetaLevels[$meta] = $metaTagModel;
@@ -152,6 +165,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	{
 		// Grab our path, we're going to figure out what SEO meta data and
 		// what Structured Data we need to output on the page based on this path
+		$this->context = $context;
 		$path    = craft()->request->getPath();
 		$sitemap = sproutSeo()->sitemap->getAllSitemaps();
 

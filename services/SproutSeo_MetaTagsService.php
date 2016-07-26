@@ -86,6 +86,34 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	}
 
 	/**
+	 * @param $url
+	 *
+	 * @return BaseModel|SproutSeo_MetaTagsModel
+	 */
+	public function getMetaTagGroupByUrl($url)
+	{
+		$query = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_metataggroups')
+			->where('url=:url', array(':url' => $url))
+			->queryRow();
+
+		if (isset($query))
+		{
+			$model = SproutSeo_MetaTagsModel::populateModel($query);
+		}
+		else
+		{
+			return new SproutSeo_MetaTagsModel();
+		}
+
+		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
+		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
+
+		return $model;
+	}
+
+	/**
 	 * @param SproutSeo_MetaTagsModel $model
 	 *
 	 * @return bool
@@ -171,7 +199,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		craft()->db->createCommand()
 			->insert('sproutseo_metatagcontent', $attributes);
 	}
-	
+
 	/**
 	 * Get a Meta Tag Content record by Entry ID
 	 *
