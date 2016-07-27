@@ -7,15 +7,25 @@ class SproutSeoOptimizeHelper
 	 * @param $prioritizedMetaTagModel
 	 * @param $metaTagsGroupModel
 	 * @param $globalFallbackMetaTagModel
-	 *
+	 * @param $entryOverrideMetaTagModel
 	 * @return string
 	 */
-	public static function prepareAppendedSiteName($prioritizedMetaTagModel, $metaTagsGroupMetaTagModel, $globalFallbackMetaTagModel)
+	public static function prepareAppendedSiteName(
+		$prioritizedMetaTagModel,
+		$metaTagsGroupMetaTagModel,
+		$globalFallbackMetaTagModel,
+		$entryOverrideMetaTagModel
+	)
 	{
 		// Does a selected Meta Tag Group override the Global Fallback appendSiteName value?
 		$appendSiteName = is_null($metaTagsGroupMetaTagModel->appendSiteName)
 			? $globalFallbackMetaTagModel->appendSiteName
 			: $metaTagsGroupMetaTagModel->appendSiteName;
+
+		$appendSiteName = is_null(
+			$entryOverrideMetaTagModel->title) ?
+			$appendSiteName :
+			$entryOverrideMetaTagModel->title;
 
 		if ($appendSiteName)
 		{

@@ -17,16 +17,36 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getMetaTagsFromTemplate($type = null)
 	{
+		$entry = isset($this->context['entry']) ? $this->context['entry'] : null;
+
 		switch ($type)
 		{
 			case 'metaTagsGroup':
-				$entry = $this->context['entry'];
-				$slug = $entry->slug;
+				if($entry)
+				{
+					$slug = $entry->slug;
 
-				$metagroup = sproutSeo()->metaTags->getMetaTagGroupByUrl($slug);
-				$this->templateMeta = $metagroup;
-				# code...
+					$metagroup = sproutSeo()->metaTags->getMetaTagGroupByUrl($slug);
+
+					$this->templateMeta = $metagroup;
+				}
+
 				break;
+			case 'entry':
+				if($entry)
+				{
+					$locale = $entry->locale;
+					$metaContent = sproutSeo()->metaTags->getMetaTagContentByEntryId($entry->id, $locale);
+					$metaContent->robots   = ($metaContent->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($metaContent->robots) : null;
+					$metaContent->position = SproutSeoOptimizeHelper::prepareGeoPosition($metaContent);
+
+					if ($metaContent->id)
+					{
+						$this->templateMeta = $metaContent;
+					}
+				}
+
+			break;
 		}
 
 		return $this->templateMeta;
@@ -113,7 +133,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			}
 			else
 			{
-				$metaTagModel  = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate($meta));
+				$metaTagModel  = $this->getMetaTagsFromTemplate($meta);
 			}
 
 			$prioritizeMetaLevels[$meta] = $metaTagModel;
@@ -138,7 +158,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$prioritizedMetaTagModel->title  = SproutSeoOptimizeHelper::prepareAppendedSiteName(
 			$prioritizedMetaTagModel,
 			$prioritizeMetaLevels['metaTagsGroup'],
-			$prioritizeMetaLevels['global']
+			$prioritizeMetaLevels['global'],
+			$prioritizeMetaLevels['entry']
 		);
 
 		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::prepRobotsAsString($prioritizedMetaTagModel->robots);
