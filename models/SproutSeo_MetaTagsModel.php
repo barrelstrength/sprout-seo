@@ -149,11 +149,11 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	 */
 	protected function getEntryOverride($overrideInfo)
 	{
-		if (isset($overrideInfo['id']))
+		if (isset($overrideInfo['entryId']))
 		{
 			// @todo - revisit when adding internationalization
 			$locale        = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$entryOverride = sproutSeo()->metaTags->getMetaTagContentByEntryId($overrideInfo['id'], $locale);
+			$entryOverride = sproutSeo()->metaTags->getMetaTagContentByEntryId($overrideInfo['entryId'], $locale);
 
 			return $entryOverride->getAttributes();
 		}
@@ -187,9 +187,9 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	 */
 	protected function getMetaTagsGroup($overrideInfo)
 	{
-		if (isset($overrideInfo['metaTagsGroup']))
+		if (isset($overrideInfo['slug']))
 		{
-			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByHandle($overrideInfo['metaTagsGroup']);
+			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByUrl($overrideInfo['slug']);
 
 			return $metaTagsModel->getAttributes();
 		}

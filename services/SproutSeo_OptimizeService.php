@@ -26,26 +26,15 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 				{
 					$slug = $entry->slug;
 
-					$metagroup = sproutSeo()->metaTags->getMetaTagGroupByUrl($slug);
-
-					$this->templateMeta = $metagroup;
+					$this->templateMeta = array('slug'=>$slug);
 				}
-
-				break;
+			break;
 			case 'entry':
 				if($entry)
 				{
-					$locale = $entry->locale;
-					$metaContent = sproutSeo()->metaTags->getMetaTagContentByEntryId($entry->id, $locale);
-					$metaContent->robots   = ($metaContent->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($metaContent->robots) : null;
-					$metaContent->position = SproutSeoOptimizeHelper::prepareGeoPosition($metaContent);
-
-					if ($metaContent->id)
-					{
-						$this->templateMeta = $metaContent;
-					}
+					//this will support any element
+					$this->templateMeta = array('entryId'=>$entry->id);
 				}
-
 			break;
 		}
 
@@ -133,7 +122,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			}
 			else
 			{
-				$metaTagModel  = $this->getMetaTagsFromTemplate($meta);
+				$metaTagModel = $metaTagModel->setMeta($meta,$this->getMetaTagsFromTemplate($meta));
 			}
 
 			$prioritizeMetaLevels[$meta] = $metaTagModel;
