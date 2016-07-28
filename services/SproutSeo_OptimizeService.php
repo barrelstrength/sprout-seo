@@ -116,14 +116,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			$metaTagModel = new SproutSeo_MetaTagsModel();
 
-			if ($meta == 'global')
-			{
-				$metaTagModel = $metaTagModel->setMeta($meta);
-			}
-			else
-			{
-				$metaTagModel = $metaTagModel->setMeta($meta,$this->getMetaTagsFromTemplate($meta));
-			}
+			$metaTagModel = $metaTagModel->setMeta($meta,$this->getMetaTagsFromTemplate($meta));
 
 			$prioritizeMetaLevels[$meta] = $metaTagModel;
 
