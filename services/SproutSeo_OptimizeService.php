@@ -21,7 +21,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 		switch ($type)
 		{
-			case 'metaTagsGroup':
+			case SproutSeo_MetaLevels::MetaTagsGroup:
 				if($entry)
 				{
 					$slug = $entry->slug;
@@ -29,7 +29,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 					$this->templateMeta = array('slug'=>$slug);
 				}
 			break;
-			case 'entry':
+			case SproutSeo_MetaLevels::Entry:
 				if($entry)
 				{
 					//this will support any element
@@ -98,12 +98,12 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getOptimizedMeta()
 	{
-		$prioritizeMetaLevels = array(
-			'global' => null, //globalFallbackMetaTagModel
-			'metaTagsGroup' => null,//metaTagsGroupMetaTagModel
-			'code' => null,//codeOverrideMetaTagModel
-			'entry' => null,//entryOverrideMetaTagModel
-		);
+		$metaLevels = SproutSeo_MetaLevels::getConstants();
+
+		foreach ($metaLevels as $key => $metaLelvel)
+		{
+			$prioritizeMetaLevels[$metaLelvel] = null;
+		}
 
 		$prioritizedMetaTagModel = new SproutSeo_MetaTagsModel();
 
@@ -139,9 +139,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// @todo - reorganize how this stuff works / robots need love.
 		$prioritizedMetaTagModel->title  = SproutSeoOptimizeHelper::prepareAppendedSiteName(
 			$prioritizedMetaTagModel,
-			$prioritizeMetaLevels['metaTagsGroup'],
-			$prioritizeMetaLevels['global'],
-			$prioritizeMetaLevels['entry']
+			$prioritizeMetaLevels[SproutSeo_MetaLevels::MetaTagsGroup],
+			$prioritizeMetaLevels[SproutSeo_MetaLevels::Global],
+			$prioritizeMetaLevels[SproutSeo_MetaLevels::Entry]
 		);
 
 		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::prepRobotsAsString($prioritizedMetaTagModel->robots);

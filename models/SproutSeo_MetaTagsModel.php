@@ -115,19 +115,19 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	{
 		switch ($type)
 		{
-			case 'entry':
+			case SproutSeo_MetaLevels::Entry:
 				$this->setAttributes($this->getEntryOverride($overrideInfo));
 				break;
 
-			case 'code':
+			case SproutSeo_MetaLevels::Code:
 				$this->setAttributes($this->getCodeOverride($overrideInfo));
 				break;
 
-			case 'metaTagsGroup':
+			case SproutSeo_MetaLevels::MetaTagsGroup:
 				$this->setAttributes($this->getMetaTagsGroup($overrideInfo));
 				break;
 
-			case 'global':
+			case SproutSeo_MetaLevels::Global:
 				$globals = sproutSeo()->schema->getGlobals();
 				$globalFallbackMetaTags = $globals->meta;
 
