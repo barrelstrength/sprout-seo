@@ -122,6 +122,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			if ($entry)
 			{
 				$attributes['elementTitle'] = $entry->title;
+				$attributes['title']        = $entry->title;
 			}
 		}
 
