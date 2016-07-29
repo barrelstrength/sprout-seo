@@ -216,7 +216,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					}
 					else
 					{
-						SproutSeoPlugin::log("Can't access to $class", LogLevel::Info, true);
+						SproutSeoPlugin::log("Unable to access $class", LogLevel::Info, true);
 					}
 				}
 				else
