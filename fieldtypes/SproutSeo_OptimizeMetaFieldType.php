@@ -199,6 +199,8 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$sources            = craft()->assets->findFolders();
 		$assetsSourceExists = count($sources);
 
+		$values['robots'] = SproutSeoOptimizeHelper::prepRobotsForSettings($values->robots);
+
 		// Set elementType
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 

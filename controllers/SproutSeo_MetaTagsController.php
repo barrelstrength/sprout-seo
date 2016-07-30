@@ -20,7 +20,6 @@ class SproutSeo_MetaTagsController extends BaseController
 		$twitterImageElements = array();
 		$ogImageElements = array();
 
-
 		if (isset($variables['metaTags']))
 		{
 			$metaTags = $variables['metaTags'];
@@ -44,6 +43,8 @@ class SproutSeo_MetaTagsController extends BaseController
 			$asset = craft()->elements->getElementById($metaTags->metaImage);
 			$metaImageElements = array($asset);
 		}
+
+		$metaTags->robots   = ($metaTags->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($metaTags->robots) : null;
 
 		// Set assetsSourceExists
 		$sources            = craft()->assets->findFolders();

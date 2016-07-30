@@ -15,7 +15,7 @@
 				<div>
 					{{ forms.lightswitch({
 						name: 'sproutseo_fields[robots][]',
-						on:   ('noindex' in values.robots),
+						on:   values.robots.noindex,
 						small: true
 					}) }}
 				</div>
@@ -31,7 +31,7 @@
 				<div>
 					{{ forms.lightswitch({
 						name: 'sproutseo_fields[robots][]',
-						on:   ('nofollow' in values.robots),
+						on:   values.robots.nofollow,
 						small: true
 					}) }}
 				</div>
@@ -47,7 +47,7 @@
 				<div>
 					{{ forms.lightswitch({
 						name: 'sproutseo_fields[robots][]',
-						on:   ('noarchive' in values.robots),
+						on:   values.robots.noarchive,
 						small: true
 					}) }}
 				</div>
@@ -63,7 +63,7 @@
 				<div>
 					{{ forms.lightswitch({
 						name: 'sproutseo_fields[robots][]',
-						on:   ('noimageindex' in values.robots),
+						on:   values.robots.noimageindex,
 						small: true
 					}) }}
 				</div>
@@ -79,7 +79,7 @@
 				<div>
 					{{ forms.lightswitch({
 						name: 'sproutseo_fields[robots][]',
-						on:   ('noodp' in values.robots),
+						on:   values.robots.noodp,
 						small: true
 					}) }}
 				</div>
@@ -95,7 +95,7 @@
 				<div>
 					{{ forms.lightswitch({
 						name: 'sproutseo_fields[robots][]',
-						on:   ('noydir' in values.robots),
+						on:   values.robots.noydir ,
 						small: true
 					}) }}
 				</div>
