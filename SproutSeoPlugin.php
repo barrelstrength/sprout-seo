@@ -220,7 +220,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerSproutImportImporters()
 	{
 		return array(
-			new SproutSeo_RedirectSproutImportElementImporter
+			new SproutSeo_RedirectSproutImportElementImporter()
 		);
 	}
 

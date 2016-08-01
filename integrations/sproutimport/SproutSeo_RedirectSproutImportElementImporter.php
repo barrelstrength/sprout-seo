@@ -6,9 +6,9 @@ class SproutSeo_RedirectSproutImportElementImporter extends BaseSproutImportElem
 	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'SproutSeo_RedirectModel';
+		return 'SproutSeo_Redirect';
 	}
 
 	/**
