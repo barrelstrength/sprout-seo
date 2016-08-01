@@ -550,5 +550,16 @@ class SproutSeoVariable
 		return $this->getOptimizedOptions("Assets");
 	}
 
+	/**
+	 * Returns all plain fields available given a type
+	 *
+	 *@return array
+	*/
+	public function getGlobalRobots()
+	{
+		$globals = sproutSeo()->schema->getGlobals();
+		$robots  = $globals->meta['robots'];
 
+		return SproutSeoOptimizeHelper::prepRobotsForSettings($robots);
+	}
 }

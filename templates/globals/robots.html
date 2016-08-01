@@ -4,7 +4,7 @@
 {% set title = "Robots"|t %}
 
 {% set settings = craft.sproutSeo.getSettings() %}
-{% set values = { robots : {} } %}
+{% set values = { robots : craft.sproutSeo.getGlobalRobots } %}
 
 {% set content %}
 
