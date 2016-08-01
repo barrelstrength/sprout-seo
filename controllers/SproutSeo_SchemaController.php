@@ -85,7 +85,7 @@ class SproutSeo_SchemaController extends BaseController
 			)
 		);
 
-		if (sproutSeo()->schema->saveSchema($schemaType, $schema))
+		if (sproutSeo()->schema->saveSchema(array($schemaType), $schema))
 		{
 			craft()->userSession->setNotice(Craft::t('Schema saved.'));
 
