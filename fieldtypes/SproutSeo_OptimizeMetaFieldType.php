@@ -115,22 +115,48 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// Validate any setting of the field type
 		$settings = $this->getSettings();
 
-		if ($settings['optimizedTitleField'] == 'element-title' && $entryId)
-		{
-			$entry = craft()->elements->getElementById($entryId);
-
-			if ($entry)
-			{
-				$attributes['elementTitle'] = $entry->title;
-				$attributes['title']        = $entry->title;
-			}
-		}
+		// Title - validations begins
+		$title = null;
 
 		if ($settings['optimizedTitleField'] == 'manually' && $attributes['title'])
 		{
 			$attributes['ogTitle']      = $attributes['title'];
 			$attributes['twitterTitle'] = $attributes['title'];
 		}
+		else if ($settings['optimizedTitleField'] != 'manually')
+		{
+			//it's an field id.
+			if (is_numeric($settings['optimizedDescriptionField']))
+			{
+				//Let's check if the field exists in the entry
+				$field = craft()->fields->getFieldById($settings['optimizedDescriptionField']);
+
+				if ($field)
+				{
+					if(isset($_POST['fields'][$field->handle]))
+					{
+						$title =  $fields[$field->handle];
+					}
+				}
+			}
+			else if ($settings['optimizedTitleField'] == 'element-title' && $entryId)
+			{
+				$entry = craft()->elements->getElementById($entryId);
+
+				if ($entry)
+				{
+					$title = $entry->title;
+				}
+			}
+			else
+			{
+				$title = craft()->templates->renderObjectTemplate($settings['optimizedTitleField'], $this->element);
+			}
+		}
+
+		$attributes['title']        = $title;
+		$attributes['elementTitle'] = $title;
+		// Title - validations ends
 
 		// Description - validations begins
 		$ogDescription = null;
@@ -143,7 +169,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		}
 		else if ($settings['optimizedDescriptionField'] != 'manually')
 		{
-			//it's an entry id.
+			//it's an field id.
 			if (is_numeric($settings['optimizedDescriptionField']))
 			{
 				//Let's check if the field exists in the entry
@@ -153,8 +179,8 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 				{
 					if(isset($_POST['fields'][$field->handle]))
 					{
-						$ogDescription      =  $_POST['fields'][$field->handle];
-						$twitterDescription =  $_POST['fields'][$field->handle];
+						$ogDescription      =  $fields[$field->handle];
+						$twitterDescription =  $fields[$field->handle];
 					}
 				}
 			}
