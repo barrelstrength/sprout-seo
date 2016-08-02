@@ -94,9 +94,9 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			return;
 		}
 
-		if (isset($_POST['fields']['sproutseo_fields']['robots']))
+		if (isset($fields['robots']))
 		{
-			$fields['robots'] = SproutSeoOptimizeHelper::prepRobotsAsString($_POST['fields']['sproutseo_fields']['robots']);
+			$fields['robots'] = SproutSeoOptimizeHelper::prepRobotsAsString($fields['robots']);
 		}
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
@@ -132,11 +132,44 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			$attributes['twitterTitle'] = $attributes['title'];
 		}
 
+		// Description - validations begins
+		$ogDescription = null;
+		$twitterDescription = null;
+
 		if ($settings['optimizedDescriptionField'] == 'manually' && $attributes['description'])
 		{
-			$attributes['ogDescription']      = $attributes['description'];
-			$attributes['twitterDescription'] = $attributes['description'];
+			$ogDescription      = $attributes['description'];
+			$twitterDescription = $attributes['description'];
 		}
+		else if ($settings['optimizedDescriptionField'] != 'manually')
+		{
+			//it's an entry id.
+			if (is_numeric($settings['optimizedDescriptionField']))
+			{
+				//Let's check if the field exists in the entry
+				$field = craft()->fields->getFieldById($settings['optimizedDescriptionField']);
+
+				if ($field)
+				{
+					if(isset($_POST['fields'][$field->handle]))
+					{
+						$ogDescription      =  $_POST['fields'][$field->handle];
+						$twitterDescription =  $_POST['fields'][$field->handle];
+					}
+				}
+			}
+			//it's a custom value
+			else
+			{
+				$ogDescription      = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
+				$twitterDescription = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
+			}
+		}
+
+		$attributes['ogDescription']      = $ogDescription;
+		$attributes['twitterDescription'] = $twitterDescription;
+		$attributes['description']        = $ogDescription != null ? $ogDescription : null;
+		// Description - validations ends
 
 		if ($settings['optimizedImageField'] == 'manually' && $attributes['metaImage'])
 		{
