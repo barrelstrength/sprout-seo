@@ -126,16 +126,16 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		else if ($settings['optimizedTitleField'] != 'manually')
 		{
 			//it's an field id.
-			if (is_numeric($settings['optimizedDescriptionField']))
+			if (is_numeric($settings['optimizedTitleField']))
 			{
 				//Let's check if the field exists in the entry
-				$field = craft()->fields->getFieldById($settings['optimizedDescriptionField']);
+				$field = craft()->fields->getFieldById($settings['optimizedTitleField']);
 
 				if ($field)
 				{
 					if(isset($_POST['fields'][$field->handle]))
 					{
-						$title =  $fields[$field->handle];
+						$title =  $_POST['fields'][$field->handle];
 					}
 				}
 			}
@@ -179,8 +179,8 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 				{
 					if(isset($_POST['fields'][$field->handle]))
 					{
-						$ogDescription      =  $fields[$field->handle];
-						$twitterDescription =  $fields[$field->handle];
+						$ogDescription      =  $_POST['fields'][$field->handle];
+						$twitterDescription =  $_POST['fields'][$field->handle];
 					}
 				}
 			}
@@ -197,11 +197,34 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$attributes['description']        = $ogDescription != null ? $ogDescription : null;
 		// Description - validations ends
 
+		// Image Field - validations begins
+		$metaImage = null;
 		if ($settings['optimizedImageField'] == 'manually' && $attributes['metaImage'])
 		{
-			$attributes['ogImage']      = $attributes['metaImage'];
-			$attributes['twitterImage'] = $attributes['metaImage'];
+			$metaImage = $attributes['metaImage'];
 		}
+		else if ($settings['optimizedImageField'] != 'manually')
+		{
+			//it's an field id.
+			if (is_numeric($settings['optimizedImageField']))
+			{
+				//Let's check if the field exists in the entry
+				$field = craft()->fields->getFieldById($settings['optimizedImageField']);
+
+				if ($field)
+				{
+					if(isset($_POST['fields'][$field->handle]))
+					{
+						$metaImage = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
+					}
+				}
+			}
+		}
+
+		$attributes['ogImage']      = $metaImage;
+		$attributes['twitterImage'] = $metaImage;
+		$attributes['metaImage']    = $metaImage;
+		// Image Field - validations ends
 
 		// Update or create our Meta Tag Content entry
 		if ($model->entryId)

@@ -512,7 +512,10 @@ class SproutSeoVariable
 			$options[$settings[$handle]] = $settings[$handle];
 		}
 
-		$options['custom']   = 'Add Custom';
+		if ($type != 'Assets')
+		{
+			$options['custom'] = 'Add Custom';
+		}
 
 		$options[] = array('optgroup' => "Advanced Meta");
 		$options['manually'] = 'Manually';
