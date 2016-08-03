@@ -128,16 +128,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			//it's an field id.
 			if (is_numeric($settings['optimizedTitleField']))
 			{
-				//Let's check if the field exists in the entry
-				$field = craft()->fields->getFieldById($settings['optimizedTitleField']);
-
-				if ($field)
-				{
-					if(isset($_POST['fields'][$field->handle]))
-					{
-						$title =  $_POST['fields'][$field->handle];
-					}
-				}
+				$title = $this->_getElementField($settings['optimizedTitleField']);
 			}
 			else if ($settings['optimizedTitleField'] == 'element-title' && $entryId)
 			{
@@ -172,17 +163,8 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			//it's an field id.
 			if (is_numeric($settings['optimizedDescriptionField']))
 			{
-				//Let's check if the field exists in the entry
-				$field = craft()->fields->getFieldById($settings['optimizedDescriptionField']);
-
-				if ($field)
-				{
-					if(isset($_POST['fields'][$field->handle]))
-					{
-						$ogDescription      =  $_POST['fields'][$field->handle];
-						$twitterDescription =  $_POST['fields'][$field->handle];
-					}
-				}
+				$ogDescription = $this->_getElementField($settings['optimizedDescriptionField']);
+				$twitterDescription = $ogDescription;
 			}
 			//it's a custom value
 			else
@@ -205,20 +187,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		}
 		else if ($settings['optimizedImageField'] != 'manually')
 		{
-			//it's an field id.
-			if (is_numeric($settings['optimizedImageField']))
-			{
-				//Let's check if the field exists in the entry
-				$field = craft()->fields->getFieldById($settings['optimizedImageField']);
-
-				if ($field)
-				{
-					if(isset($_POST['fields'][$field->handle]))
-					{
-						$metaImage = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
-					}
-				}
-			}
+			$metaImage = $this->_getElementField($settings['optimizedImageField']);
 		}
 
 		$attributes['ogImage']      = $metaImage;
@@ -235,6 +204,35 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		{
 			sproutSeo()->metaTags->createMetaTagContent($attributes);
 		}
+	}
+
+	private function _getElementField($id)
+	{
+		$value = null;
+		//it's an field id.
+		if (is_numeric($id))
+		{
+			//Let's check if the field exists in the entry
+			$field = craft()->fields->getFieldById($id);
+
+			if ($field)
+			{
+				if(isset($_POST['fields'][$field->handle]))
+				{
+					$type = $field->type;
+					if ($field->type == 'Assets')
+					{
+						$value = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
+					}
+					else
+					{
+						$value = $_POST['fields'][$field->handle];
+					}
+				}
+			}
+		}
+
+		return $value;
 	}
 
 	/**
