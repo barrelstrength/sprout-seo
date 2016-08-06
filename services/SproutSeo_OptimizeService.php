@@ -26,27 +26,19 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$sitemap       = sproutSeo()->sitemap->getAllSitemaps();
 
 		// Get our meta values
-		$meta = sproutSeo()->metaTags->getMetaTagHtml();
+		$metaHtml = sproutSeo()->metaTags->getMetaTagHtml();
 
 		// Check the Twig $context for any values we need to process
 		// to create Structured Data ($context->entry, $context->product, etc)
 
 		// Get our structured data values
-		$schema = sproutSeo()->schema->getGlobals();
-
-		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
-
-		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema', array(
-			'schema' => $schema
-		));
-
-		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+		$schemaHtml = sproutSeo()->schema->getStructureDataHtml();
 
 		// Process our Structured Data Schema Maps with the objects they match up with in the context
 
 		// Prepare our html for the template
 		$optimizedMetadata = null;
-		$optimizedMetadata .= $meta;
+		$optimizedMetadata .= $metaHtml;
 		$optimizedMetadata .= $schemaHtml;
 
 		return TemplateHelper::getRaw($optimizedMetadata);

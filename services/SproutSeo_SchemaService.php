@@ -17,6 +17,24 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	public $vocabularies = array();
 
 	/**
+	 * @return string
+	 */
+	public function getStructureDataHtml()
+	{
+		$schema = $this->getGlobals();
+
+		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
+
+		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema', array(
+			'schema' => $schema
+		));
+
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+
+		return $schemaHtml;
+	}
+
+	/**
 	 * Get global meta values
 	 *
 	 * @return BaseModel
