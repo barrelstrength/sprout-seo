@@ -7,9 +7,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	public $context;
 	public $templateMeta = array();
 
-	protected $siteInfo;
-	protected $currentUrl;
-
 	/**
 	 * Get all metadata (Meta Tags and Structured Data) for the page
 	 *
@@ -45,7 +42,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Add values to the master sproutSeo()->optimize->templateMeta array
+	 * Add values to the master $this->templateMeta array
 	 *
 	 * @param $meta
 	 */
@@ -55,7 +52,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			foreach ($meta as $key => $value)
 			{
-				sproutSeo()->optimize->templateMeta[$key] = $value;
+				$this->templateMeta[$key] = $value;
 			}
 		}
 	}
