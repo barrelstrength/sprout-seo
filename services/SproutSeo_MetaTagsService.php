@@ -19,6 +19,132 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		}
 	}
 
+	// Meta Tags Output
+	// =========================================================================
+
+	/**
+	 * @param $overrideInfo
+	 *
+	 * @return string
+	 */
+	public function getMetaTagHtml()
+	{
+		$prioritizedMetaTagModel = $this->getOptimizedMeta();
+
+		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
+
+		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
+			'meta' => $prioritizedMetaTagModel->getMetaTagData()
+		));
+
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+
+		return $output;
+	}
+
+	/**
+	 * Prioritize our meta data
+	 * ------------------------------------------------------------
+	 *
+	 * Loop through and select the highest ranking value for each attribute in our SproutSeo_MetaData model
+	 *
+	 * 1) Entry Override (Set by adding `id` override in Twig template code and using Meta Fields)
+	 * 2) On-Page Override (Set in Twig template code)
+	 * 3) Default (Set in control panel)
+	 * 4) Global Fallback (Set in control panel)
+	 * 5) Blank (Automatic)
+	 *
+	 * Once we have added all the content we need to be outputting to our array we will loop through that array and create the HTML we will output to our page.
+	 *
+	 * While we don't define HTML in our PHP as much as possible, the goal here is to be as easy to use as possible on the front end so we want to simplify the front end code to a single function and wrangle what we need to here.
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public function getOptimizedMeta()
+	{
+		$metaLevels = SproutSeo_MetaLevels::getConstants();
+
+		foreach ($metaLevels as $key => $metaLelvel)
+		{
+			$prioritizeMetaLevels[$metaLelvel] = null;
+		}
+
+		$prioritizedMetaTagModel = new SproutSeo_MetaTagsModel();
+
+		sproutSeo()->optimize->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
+
+		// Default to the Current URL
+		$prioritizedMetaTagModel->canonical = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
+
+		foreach ($prioritizeMetaLevels as $meta => $model)
+		{
+			$metaTagModel = new SproutSeo_MetaTagsModel();
+
+			$metaTagModel = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate($meta));
+
+			$prioritizeMetaLevels[$meta] = $metaTagModel;
+
+			foreach ($prioritizedMetaTagModel->getAttributes() as $key => $value)
+			{
+				// Test for a value on each of our models in their order of priority
+				if ($metaTagModel->getAttribute($key))
+				{
+					$prioritizedMetaTagModel[$key] = $metaTagModel[$key];
+				}
+
+				// Make sure all our strings are trimmed
+				if (is_string($prioritizedMetaTagModel[$key]))
+				{
+					$prioritizedMetaTagModel[$key] = trim($prioritizedMetaTagModel[$key]);
+				}
+			}
+		}
+
+		// @todo - reorganize how this stuff works / robots need love.
+		$prioritizedMetaTagModel->title = SproutSeoOptimizeHelper::prepareAppendedSiteName(
+			$prioritizedMetaTagModel,
+			$prioritizeMetaLevels[SproutSeo_MetaLevels::MetaTagsGroup],
+			$prioritizeMetaLevels[SproutSeo_MetaLevels::Global],
+			$prioritizeMetaLevels[SproutSeo_MetaLevels::Entry]
+		);
+
+		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::prepRobotsAsString($prioritizedMetaTagModel->robots);
+
+		return $prioritizedMetaTagModel;
+	}
+
+	/**
+	 * Store our template meta data in a place so we can access when we need to
+	 *
+	 * @return array
+	 */
+	public function getMetaTagsFromTemplate($type = null)
+	{
+		$entry = isset(sproutSeo()->optimize->context['entry']) ? sproutSeo()->optimize->context['entry'] : null;
+
+		switch ($type)
+		{
+			case SproutSeo_MetaLevels::MetaTagsGroup:
+				if ($entry)
+				{
+					$slug = $entry->slug;
+
+					sproutSeo()->optimize->templateMeta = array('slug' => $slug);
+				}
+				break;
+			case SproutSeo_MetaLevels::Entry:
+				if ($entry)
+				{
+					//this will support any element
+					sproutSeo()->optimize->templateMeta = array('entryId' => $entry->id);
+				}
+				break;
+		}
+
+		return sproutSeo()->optimize->templateMeta;
+	}
+
 	// Global Meta Tags
 	// =========================================================================
 

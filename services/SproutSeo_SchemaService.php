@@ -17,39 +17,6 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	public $vocabularies = array();
 
 	/**
-	 * Save schema to database
-	 *
-	 * @param $schemaType
-	 * @param $schema
-	 *
-	 * @return bool
-	 */
-	public function saveSchema($schemaTypes, $schema)
-	{
-		// @todo - what do we do if $schemaType doesn't have a value?
-
-		if (!is_array($schemaTypes))
-		{
-			array($schemaTypes);
-		}
-
-		foreach ($schemaTypes as $schemaType)
-		{
-			$values = array(
-				$schemaType => $schema->getSchema($schemaType, 'json')
-			);
-
-			$result = craft()->db->createCommand()->update('sproutseo_globals',
-				$values,
-				'id=:id', array(':id' => 1)
-			);
-		};
-
-		// @todo - add proper validation. Currently the above assumes everything is always working.
-		return true;
-	}
-
-	/**
 	 * Get global meta values
 	 *
 	 * @return BaseModel
@@ -98,6 +65,70 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		}
 	}
 
+	public function getKnowledgeGraphLinkedData()
+	{
+		$schemaRaw = sproutSeo()->schema->getGlobals();
+
+		$schemaRaw = SproutSeo_SchemaModel::populateModel($schemaRaw);
+
+		$schema                 = $schemaRaw->getJsonLd('identity');
+		$schema['contactPoint'] = $schemaRaw->getJsonLd('contacts');
+		$schema['sameAs']       = $schemaRaw->getJsonLd('social');
+
+		$output = $this->prepareLinkedDataForHtml($schema);
+
+		return TemplateHelper::getRaw($output);
+	}
+
+	/**
+	 * @param $schema
+	 *
+	 * @return string
+	 */
+	protected function prepareLinkedDataForHtml($schema)
+	{
+		return '
+<script type="application/ld+json">
+' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
+</script>';
+	}
+
+	/**
+	 * Save schema to database
+	 *
+	 * @param $schemaType
+	 * @param $schema
+	 *
+	 * @return bool
+	 */
+	public function saveSchema($schemaTypes, $schema)
+	{
+		// @todo - what do we do if $schemaType doesn't have a value?
+
+		if (!is_array($schemaTypes))
+		{
+			array($schemaTypes);
+		}
+
+		foreach ($schemaTypes as $schemaType)
+		{
+			$values = array(
+				$schemaType => $schema->getSchema($schemaType, 'json')
+			);
+
+			$result = craft()->db->createCommand()->update('sproutseo_globals',
+				$values,
+				'id=:id', array(':id' => 1)
+			);
+		};
+
+		// @todo - add proper validation. Currently the above assumes everything is always working.
+		return true;
+	}
+
+	/**
+	 * @return int
+	 */
 	public function installDefaultGlobals()
 	{
 		$tableName = "sproutseo_globals";

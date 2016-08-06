@@ -54,7 +54,7 @@ class SproutSeoVariable
 	 */
 	public function optimize()
 	{
-		$output = sproutSeo()->optimize->optimize();
+		$output = sproutSeo()->metaTags->getMetaTagHtml();
 
 		return TemplateHelper::getRaw($output);
 	}
@@ -181,7 +181,7 @@ class SproutSeoVariable
 
 	public function getKnowledgeGraphLinkedData()
 	{
-		return sproutSeo()->optimize->getKnowledgeGraphLinkedData();
+		return sproutSeo()->schema->getKnowledgeGraphLinkedData();
 	}
 
 	public function getAssetElementType()
