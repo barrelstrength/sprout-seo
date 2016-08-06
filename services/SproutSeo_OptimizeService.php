@@ -16,6 +16,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getMetadata(&$context)
 	{
+		$optimizedMetadata = null;
+
 		// Grab our path, we're going to figure out what SEO meta data and
 		// what Structured Data we need to output on the page based on this path
 		$this->context = $context;
@@ -32,11 +34,12 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$schemaHtml = sproutSeo()->schema->getStructureDataHtml();
 
 		// Process our Structured Data Schema Maps with the objects they match up with in the context
+		$mainEntitySchemaHtml = sproutSeo()->schema->getMainEntityStructuredDataHtml($context);
 
 		// Prepare our html for the template
-		$optimizedMetadata = null;
 		$optimizedMetadata .= $metaHtml;
 		$optimizedMetadata .= $schemaHtml;
+		$optimizedMetadata .= $mainEntitySchemaHtml;
 
 		return TemplateHelper::getRaw($optimizedMetadata);
 	}

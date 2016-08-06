@@ -27,6 +27,13 @@
 	'never': 'Never'|t
 } %}
 
+{% set schemaMaps = {
+	'': ''|t,
+	'schemaMapId1': 'News Article'|t,
+	'productType1': 'Product One'|t,
+	'productType2': 'Product Two'|t,
+} %}
+
 {% macro isSelected(target) %}
 	{% if target %}checked="checked"{% endif %}
 {% endmacro %}
@@ -50,6 +57,7 @@
 			{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
 			<thead>
 				<th style="padding-left:9px;width:50%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
+				<th style="width:15%;">{{ "Main Entity"|t }} {% if loop.index == 1 %} <span class="info">{{ "Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span>{% endif %}</th>
 				<th style="width:15%;">{{ "Priority"|t }} {% if loop.index == 1 %} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span>{% endif %}</th>
 				<th style="width:15%;">{{ "Change Frequency"|t }}{% if loop.index == 1 %}  <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span> {% endif %}</th>
 				<th style="width:8%;text-align: center;">{{ "Enabled"|t }} {% if loop.index == 1 %}<span class="info">{{ "Make the content in this section appear in your sitemap."|t }}</span>{% endif %}</th>
@@ -87,6 +95,15 @@
 								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
 
 							</strong>
+						</td>
+						<td>
+							{{ forms.selectField({
+								name: 'sitemap_fields[' ~ sitemapId ~ '][schemaMap]',
+								options: schemaMaps,
+								value: (sitemap.schemaMap is defined ? sitemap.schemaMap : 0.5),
+								errors: "",
+								required: false
+							}) }}
 						</td>
 						<td>
 							{{ forms.selectField({

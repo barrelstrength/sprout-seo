@@ -96,8 +96,10 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
+		Craft::import('plugins.sproutseo.contracts.BaseSproutSeoSchemaMap');
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_NewsArticleSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 
 		if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
@@ -228,26 +230,36 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		return array(
 			'sections'         => array(
-				'name'           => 'Sections',
-				'elementType'    => ElementType::Entry,
-				'elementGroupId' => 'sectionId',
-				'service'        => 'sections',
-				'method'         => 'getAllSections'
+				'name'                   => 'Sections',
+				'elementType'            => ElementType::Entry,
+				'elementGroupId'         => 'sectionId',
+				'service'                => 'sections',
+				'method'                 => 'getAllSections',
+				'matchedElementVariable' => 'entry'
 			),
 			'categories'       => array(
-				'name'           => 'Categories',
-				'elementType'    => ElementType::Category,
-				'elementGroupId' => 'groupId',
-				'service'        => 'categories',
-				'method'         => 'getAllGroups'
+				'name'                   => 'Categories',
+				'elementType'            => ElementType::Category,
+				'elementGroupId'         => 'groupId',
+				'service'                => 'categories',
+				'method'                 => 'getAllGroups',
+				'matchedElementVariable' => 'category'
 			),
 			'commerce_product' => array(
-				'name'           => "Commerce Products",
-				'elementType'    => 'Commerce_Product',
-				'elementGroupId' => 'productTypeId',
-				'service'        => 'commerce_productTypes',
-				'method'         => 'getAllProductTypes'
+				'name'                   => "Commerce Products",
+				'elementType'            => 'Commerce_Product',
+				'elementGroupId'         => 'productTypeId',
+				'service'                => 'commerce_productTypes',
+				'method'                 => 'getAllProductTypes',
+				'matchedElementVariable' => 'product'
 			)
+		);
+	}
+
+	public function registerSproutSeoSchemaMaps()
+	{
+		return array(
+			new SproutSeo_NewsArticleSchemaMap()
 		);
 	}
 
