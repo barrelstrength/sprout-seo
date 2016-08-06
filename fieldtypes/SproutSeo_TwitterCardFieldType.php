@@ -112,7 +112,7 @@ class SproutSeo_TwitterCardFieldType extends BaseFieldType
 	{
 		$entryId = $this->element->id;
 
-		$locale  = $this->element->locale;
+		$locale = $this->element->locale;
 
 		$variables['values'] = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
 

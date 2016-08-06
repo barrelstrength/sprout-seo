@@ -22,20 +22,20 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		switch ($type)
 		{
 			case SproutSeo_MetaLevels::MetaTagsGroup:
-				if($entry)
+				if ($entry)
 				{
 					$slug = $entry->slug;
 
-					$this->templateMeta = array('slug'=>$slug);
+					$this->templateMeta = array('slug' => $slug);
 				}
-			break;
+				break;
 			case SproutSeo_MetaLevels::Entry:
-				if($entry)
+				if ($entry)
 				{
 					//this will support any element
-					$this->templateMeta = array('entryId'=>$entry->id);
+					$this->templateMeta = array('entryId' => $entry->id);
 				}
-			break;
+				break;
 		}
 
 		return $this->templateMeta;
@@ -116,7 +116,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			$metaTagModel = new SproutSeo_MetaTagsModel();
 
-			$metaTagModel = $metaTagModel->setMeta($meta,$this->getMetaTagsFromTemplate($meta));
+			$metaTagModel = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate($meta));
 
 			$prioritizeMetaLevels[$meta] = $metaTagModel;
 
@@ -137,7 +137,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		}
 
 		// @todo - reorganize how this stuff works / robots need love.
-		$prioritizedMetaTagModel->title  = SproutSeoOptimizeHelper::prepareAppendedSiteName(
+		$prioritizedMetaTagModel->title = SproutSeoOptimizeHelper::prepareAppendedSiteName(
 			$prioritizedMetaTagModel,
 			$prioritizeMetaLevels[SproutSeo_MetaLevels::MetaTagsGroup],
 			$prioritizeMetaLevels[SproutSeo_MetaLevels::Global],
@@ -169,8 +169,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// Grab our path, we're going to figure out what SEO meta data and
 		// what Structured Data we need to output on the page based on this path
 		$this->context = $context;
-		$path    = craft()->request->getPath();
-		$sitemap = sproutSeo()->sitemap->getAllSitemaps();
+		$path          = craft()->request->getPath();
+		$sitemap       = sproutSeo()->sitemap->getAllSitemaps();
 
 		// Get our meta values
 		$meta = sproutSeo()->optimize->optimize();

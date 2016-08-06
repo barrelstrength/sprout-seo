@@ -93,7 +93,7 @@ class SproutSeo_RedirectsController extends BaseController
 		if (sproutSeo()->redirects->saveRedirect($redirect))
 		{
 			craft()->userSession->setNotice(Craft::t('Redirect saved.'));
-			
+
 			$this->redirectToPostedUrl($redirect);
 		}
 		else

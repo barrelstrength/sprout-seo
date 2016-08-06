@@ -106,7 +106,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 
 		$result = craft()->db->createCommand()->insert($tableName, array(
 				'locale'    => $locale,
-				'identity'    => null,
+				'identity'  => null,
 				'ownership' => null,
 				'contacts'  => null,
 				'social'    => null

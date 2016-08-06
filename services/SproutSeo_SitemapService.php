@@ -113,7 +113,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			{
 				$elementInfo = $this->getElementInfo($sitemaps, $sitemapSettings['type']);
 
-				$elements  = array();
+				$elements = array();
 
 				if ($elementInfo != null)
 				{
@@ -274,7 +274,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			foreach ($sitemap as $type => $settings)
 			{
-				if (isset($settings['name']) && $settings['name'] != null )
+				if (isset($settings['name']) && $settings['name'] != null)
 				{
 					$customNames[$type] = $settings['name'];
 				}

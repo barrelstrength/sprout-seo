@@ -111,7 +111,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 	{
 		$entryId = $this->element->id;
 
-		$locale  = $this->element->locale;
+		$locale = $this->element->locale;
 
 		$values = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
 

@@ -252,7 +252,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 
 	/**
 	 * Install default settings
-	 * 
+	 *
 	 * @param null $pluginName
 	 *
 	 * @return mixed

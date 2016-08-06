@@ -11,16 +11,16 @@ class SproutSeo_MetaTagContentRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'entryId'     => array(AttributeType::Number, 'required' => true),
-			'locale'      => array(AttributeType::Locale, 'required' => true),
-			'title'       => array(AttributeType::String),
-			'elementTitle'=> array(AttributeType::String, 'required' => false),
-			'description' => array(AttributeType::String),
-			'metaImage'   => array(AttributeType::String, 'required' => false),
-			'metaTitle'   => array(AttributeType::String, 'required' => false),
-			'keywords'    => array(AttributeType::String),
-			'author'      => array(AttributeType::String),
-			'publisher'   => array(AttributeType::String),
+			'entryId'      => array(AttributeType::Number, 'required' => true),
+			'locale'       => array(AttributeType::Locale, 'required' => true),
+			'title'        => array(AttributeType::String),
+			'elementTitle' => array(AttributeType::String, 'required' => false),
+			'description'  => array(AttributeType::String),
+			'metaImage'    => array(AttributeType::String, 'required' => false),
+			'metaTitle'    => array(AttributeType::String, 'required' => false),
+			'keywords'     => array(AttributeType::String),
+			'author'       => array(AttributeType::String),
+			'publisher'    => array(AttributeType::String),
 
 			'robots'    => array(AttributeType::String),
 			'canonical' => array(AttributeType::String),

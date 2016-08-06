@@ -150,7 +150,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/metatags/new'                => array(
+			'sproutseo/metatags/new'                     => array(
 				'action' => 'sproutSeo/metaTags/editMetaTagGroup'
 			),
 			'sproutseo/metatags/(?P<metaTagGroupId>\d+)' => array(

@@ -8,6 +8,7 @@ class SproutSeoOptimizeHelper
 	 * @param $metaTagsGroupModel
 	 * @param $globalFallbackMetaTagModel
 	 * @param $entryOverrideMetaTagModel
+	 *
 	 * @return string
 	 */
 	public static function prepareAppendedSiteName(
@@ -65,25 +66,25 @@ class SproutSeoOptimizeHelper
 
 	public static function prepRobotsForSettings($robotsString)
 	{
-		$arrayRobots =  explode(",", $robotsString);
+		$arrayRobots = explode(",", $robotsString);
 
 		$robots = array(
-			'noindex' => 0,
-			'nofollow' => 0,
-			'noarchive' => 0,
+			'noindex'      => 0,
+			'nofollow'     => 0,
+			'noarchive'    => 0,
 			'noimageindex' => 0,
-			'noodp' => 0,
-			'noydir' => 0,
+			'noodp'        => 0,
+			'noydir'       => 0,
 		);
 
 		if (count($arrayRobots) == 6)
 		{
-			$robots['noindex'] = $arrayRobots[0];
-			$robots['nofollow'] = $arrayRobots[1];
-			$robots['noarchive'] = $arrayRobots[2];
+			$robots['noindex']      = $arrayRobots[0];
+			$robots['nofollow']     = $arrayRobots[1];
+			$robots['noarchive']    = $arrayRobots[2];
 			$robots['noimageindex'] = $arrayRobots[3];
-			$robots['noodp'] = $arrayRobots[4];
-			$robots['noydir'] = $arrayRobots[5];
+			$robots['noodp']        = $arrayRobots[4];
+			$robots['noydir']       = $arrayRobots[5];
 		}
 
 		return $robots;

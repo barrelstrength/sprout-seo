@@ -29,10 +29,10 @@ class m160706_000000_sproutSeo_updateDeprecatedTwitterCard extends BaseMigration
 				foreach ($rows as $row)
 				{
 					craft()->db->createCommand()->update($tableName,
-							array('twitterCard' => 'summary_large_image'),
-							'id = :id',
-							array(':id' => $row['id'])
-						);
+						array('twitterCard' => 'summary_large_image'),
+						'id = :id',
+						array(':id' => $row['id'])
+					);
 
 					SproutSeoPlugin::log("Updated deprecated photo card", LogLevel::Info, true);
 				}

@@ -145,10 +145,10 @@ class SproutSeo_SchemaController extends BaseController
 			{
 				if ($profile[0] == 'Twitter')
 				{
-					$twitterUrl = $profile[1];
+					$twitterUrl  = $profile[1];
 					$twitterName = '@' . substr($twitterUrl, strrpos($twitterUrl, '/') + 1);
 
-					$globalFallbackMetaTags->twitterSite = $twitterName;
+					$globalFallbackMetaTags->twitterSite    = $twitterName;
 					$globalFallbackMetaTags->twitterCreator = $twitterName;
 					break;
 				}

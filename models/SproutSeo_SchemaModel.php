@@ -62,11 +62,11 @@ class SproutSeo_SchemaModel extends BaseModel
 		switch ($target)
 		{
 			case 'identity':
-				$jsonLd['@type'] = $schema['@type'];
-				$jsonLd['@context'] = $schema['@context'];
-				$jsonLd['name']          = isset($schema['name']) ? $schema['name'] : null;
-				$jsonLd['description']   = isset($schema['description']) ? $schema['description'] : null;
-				$jsonLd['url']           = isset($schema['url']) ? $schema['url'] : null;
+				$jsonLd['@type']       = $schema['@type'];
+				$jsonLd['@context']    = $schema['@context'];
+				$jsonLd['name']        = isset($schema['name']) ? $schema['name'] : null;
+				$jsonLd['description'] = isset($schema['description']) ? $schema['description'] : null;
+				$jsonLd['url']         = isset($schema['url']) ? $schema['url'] : null;
 
 				if (isset($schema['logo'][0]))
 				{
@@ -74,11 +74,11 @@ class SproutSeo_SchemaModel extends BaseModel
 
 					if ($logo)
 					{
-						$img = $schema['@type'] == 'Person' ? 'image' : 'logo';
+						$img          = $schema['@type'] == 'Person' ? 'image' : 'logo';
 						$jsonLd[$img] = array(
-							"@type" => "ImageObject",
-							"url" => SproutSeoOptimizeHelper::getAssetUrl($logo->id),
-							"width" => $logo->getWidth(),
+							"@type"  => "ImageObject",
+							"url"    => SproutSeoOptimizeHelper::getAssetUrl($logo->id),
+							"width"  => $logo->getWidth(),
 							"height" => $logo->getHeight()
 						);
 					}
@@ -88,12 +88,12 @@ class SproutSeo_SchemaModel extends BaseModel
 				{
 					if (isset($schema['foundingDate']['date']))
 					{
-						$foundingDate = DateTime::createFromString($schema['foundingDate']);
+						$foundingDate           = DateTime::createFromString($schema['foundingDate']);
 						$jsonLd['foundingDate'] = $foundingDate->format('Y-m-d');
 					}
 
-					$days = array(0=>"Su", 1=>"Mo", 2=>"Tu", 3=>"We", 4=>"Th", 5=>"Fr", 6=>"Sa");
-					$index = 0;
+					$days         = array(0 => "Su", 1 => "Mo", 2 => "Tu", 3 => "We", 4 => "Th", 5 => "Fr", 6 => "Sa");
+					$index        = 0;
 					$openingHours = array();
 
 					if (isset($schema['organizationSubTypes'][0]) && $schema['organizationSubTypes'][0] == 'LocalBusiness')
@@ -105,13 +105,13 @@ class SproutSeo_SchemaModel extends BaseModel
 							if (isset($value['open']['time']) && $value['open']['time'] != '')
 							{
 								$time = DateTime::createFromString($value['open']);
-								$openingHours[$index] .= " ".$time->format('H:m');
+								$openingHours[$index] .= " " . $time->format('H:m');
 							}
 
 							if (isset($value['close']['time']) && $value['close']['time'] != '')
 							{
 								$time = DateTime::createFromString($value['close']);
-								$openingHours[$index] .= "-".$time->format('H:m');
+								$openingHours[$index] .= "-" . $time->format('H:m');
 							}
 							// didn't work this day
 							if (strlen($openingHours[$index]) == 2)
@@ -139,13 +139,15 @@ class SproutSeo_SchemaModel extends BaseModel
 							$jsonLd['@type'] = $org;
 						}
 					}
-
 				}
-				else if($schema['@type'] == 'Person')
+				else
 				{
-					//Person
-					$jsonLd['gender']     = isset($schema['gender']) ? $schema['gender'] : null;
-					$jsonLd['birthplace'] = isset($schema['birthplace']) ? $schema['birthplace'] : null;
+					if ($schema['@type'] == 'Person')
+					{
+						//Person
+						$jsonLd['gender']     = isset($schema['gender']) ? $schema['gender'] : null;
+						$jsonLd['birthplace'] = isset($schema['birthplace']) ? $schema['birthplace'] : null;
+					}
 				}
 
 				break;
@@ -174,7 +176,7 @@ class SproutSeo_SchemaModel extends BaseModel
 	{
 		$this->getSchema('identity');
 
-		return $this->type != '' ? $this->type : 'Organization' ;
+		return $this->type != '' ? $this->type : 'Organization';
 	}
 
 	protected function getMeta()
