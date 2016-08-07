@@ -99,6 +99,10 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import('plugins.sproutseo.contracts.BaseSproutSeoSchemaMap');
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ContactPointSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ImageObjectSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_OrganizationSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PersonSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_NewsArticleSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 
@@ -259,6 +263,10 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerSproutSeoSchemaMaps()
 	{
 		return array(
+			new SproutSeo_ContactPointSchemaMap(),
+			new SproutSeo_ImageObjectSchemaMap(),
+			new SproutSeo_OrganizationSchemaMap(),
+			new SproutSeo_PersonSchemaMap(),
 			new SproutSeo_NewsArticleSchemaMap()
 		);
 	}
