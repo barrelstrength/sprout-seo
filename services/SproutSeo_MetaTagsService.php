@@ -37,7 +37,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 
 		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
 			'globals' => $globals,
-			'meta' => $prioritizedMetaTagModel->getMetaTagData()
+			'meta'    => $prioritizedMetaTagModel->getMetaTagData()
 		));
 
 		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
@@ -78,7 +78,9 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		sproutSeo()->optimize->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
 		// Default to the Current URL
-		$prioritizedMetaTagModel->canonical = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
+		$prioritizedMetaTagModel->canonical  = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
+		$prioritizedMetaTagModel->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
+		$prioritizedMetaTagModel->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
 
 		foreach ($prioritizeMetaLevels as $meta => $model)
 		{

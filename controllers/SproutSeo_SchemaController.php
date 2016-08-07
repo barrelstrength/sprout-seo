@@ -28,6 +28,12 @@ class SproutSeo_SchemaController extends BaseController
 
 		$schemaTypes = explode(',', $schemaType);
 
+		// @todo - can we enforce this in a better place?
+		if (isset($postData['identity']['url']) && $postData['identity']['url'] == "")
+		{
+			$postData['identity']['url'] = UrlHelper::getSiteUrl();
+		}
+
 		$schema = SproutSeo_SchemaModel::populateModel($postData);
 
 		$globalFallbackMetaTags = $this->populateGlobalFallbackMetaTags($postData);
