@@ -65,9 +65,9 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	{
 		$metaLevels = SproutSeo_MetaLevels::getConstants();
 
-		foreach ($metaLevels as $key => $metaLelvel)
+		foreach ($metaLevels as $key => $metaLevel)
 		{
-			$prioritizeMetaLevels[$metaLelvel] = null;
+			$prioritizeMetaLevels[$metaLevel] = null;
 		}
 
 		$prioritizedMetaTagModel = new SproutSeo_MetaTagsModel();
