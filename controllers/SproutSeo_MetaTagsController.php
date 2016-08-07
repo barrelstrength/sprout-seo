@@ -44,8 +44,8 @@ class SproutSeo_MetaTagsController extends BaseController
 			$metaImageElements = array($asset);
 		}
 
-		$metaTags->robots = ($metaTags->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($metaTags->robots) : null;
-
+		$metaTags->robots = ($metaTags->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($metaTags->robots) : SproutSeoOptimizeHelper::prepRobotsForSettings($metaTags->robots);
+		
 		// Set assetsSourceExists
 		$sources            = craft()->assets->findFolders();
 		$assetsSourceExists = count($sources);
