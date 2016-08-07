@@ -29,11 +29,14 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 */
 	public function getMetaTagHtml()
 	{
+		$globals = sproutSeo()->schema->getGlobals();
+
 		$prioritizedMetaTagModel = $this->getOptimizedMeta();
 
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
 		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
+			'globals' => $globals,
 			'meta' => $prioritizedMetaTagModel->getMetaTagData()
 		));
 
