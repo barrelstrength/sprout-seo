@@ -3,15 +3,20 @@ namespace Craft;
 
 abstract class BaseSproutSeoSchemaMap
 {
-	/**
-	 * @var SproutSeo_SchemaModel
-	 */
-	public $globals;
+	public $attributes;
+	private $isContext;
 
-
-	public function __construct()
+	public function __construct($attributes = null, $isContext = true)
 	{
-		$this->globals = sproutSeo()->schema->getGlobals();
+		if (isset($attributes))
+		{
+			$this->attributes = $attributes;
+		}
+
+		if (isset($isContext))
+		{
+			$this->isContext = $isContext;
+		}
 	}
 
 	/**
@@ -43,20 +48,7 @@ abstract class BaseSproutSeoSchemaMap
 	// Do we really need the @methodName syntax? or do we just write this in PHP?
 	public function getAttributes()
 	{
-		return array(
-			'name' => 'product.title',
-			'image' => '@getFirst(product.featureImage)',
-			'image' => $this->getFirst('product.featureImage'),
-			'image' => $this->element->featureImage->first(),
-			'description' => 'product.description',
-			'sku' => 'product.sku',
-
-			// How does this work? Is this defined here or does it referenec another integration? Every @type references a unique integration...
-			'brand' => array(
-				'@type' => 'Thing',
-				'name' => 'ACME'
-			),
-		);
+		return null;
 	}
 
 	// Should we let integrations give users a chance to set setings in the CP UI?
@@ -65,14 +57,23 @@ abstract class BaseSproutSeoSchemaMap
 	//    ??
 	// }
 
-	// method that gets called at top level to 
-	// process the settings map and return a 
-	// usable JSON-LD schema object
+	/**
+	 * Convert Schema Map attributes to valid JSON-LD
+	 *
+	 * @return string
+	 */
 	public function getSchema()
 	{
 		$attributes = $this->getAttributes();
 
-		$schema['@context'] = $this->getContext();
+
+		if ($this->isContext)
+		{
+			// Add the @context tag for the full context
+			$schema['@context'] = $this->getContext();
+		}
+
+		// Grab the type after we process the attributes in case we need to set it dynamically
 		$schema['@type'] = $this->getType();
 
 		foreach ($attributes as $key => $value)
@@ -83,11 +84,20 @@ abstract class BaseSproutSeoSchemaMap
 			$schema[$key] = $value;
 		}
 
-		return '
+		if ($this->isContext)
+		{
+			// Return the JSON-LD script tag and full context
+			return '
 <script type="application/ld+json">
 ' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
 </script>';
 
+		}
+		else
+		{
+			// If context has already been established, just return the data
+			return $schema;
+		}
 	}
 
 	/**

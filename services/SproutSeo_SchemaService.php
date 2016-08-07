@@ -44,22 +44,13 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 			return null;
 		}
 
-		// 1. Check the page load and see if it has any matchedElement variables
-
-		// Get Enabled Sitemaps and index them by type
-		$enabledSitemaps = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_sitemap')
-			->where('enabled = 1 and elementGroupId is not null')
-			->queryAll();
-
-		foreach ($enabledSitemaps as $key => $enabledSitemap)
-		{
-			$enabledSitemaps[$enabledSitemap['type']] = $enabledSitemap;
-			unset($enabledSitemaps[$key]);
-		}
-
-		// Do we need the hook here? Or should we just return Enabled Sitemap integrations from the CP?
+		// Get all registered sitemap integrations
+		//
+		// We will use these to determine if an available variable being loaded
+		// matches a matchedElementVariable supported by one of the sitemaps. As
+		// we can only have one Main Entity on the page, we assume that if the URL
+		// being loaded has a match that it's the main entity on the page. We use
+		// the first match we find.
 		$sitemaps                  = craft()->plugins->call('registerSproutSeoSitemap');
 		$matchedElementsByVariable = array();
 		$matchedElementsByType     = array();
@@ -88,38 +79,59 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		}
 
 		// If we do have matched elements, let's grab their element data from the $context
-		$matchedVariables = array_intersect_key($context, $matchedElementsByVariable);
-		$matchedVariable = reset($matchedVariables);
+		$matchedVariables    = array_intersect_key($context, $matchedElementsByVariable);
+		$matchedVariableKeys = array_keys($matchedVariables);
+		$matchedVariableName = reset($matchedVariableKeys);
+		$matchedVariable     = reset($matchedVariables);
 
-		// If we do have matched enabled Sitemaps types, grab the info from their saved Sitemap settings
-		// @todo - add the selected SchemaMap target to the sitemap settings. We want to grab it here next.
-		$matchedTypes = array_intersect_key($enabledSitemaps, $matchedElementsByType);
-		$matchedType = reset($matchedTypes);
+		// Let's also grab all the integration settings for the matched variable so we can get more info below
+		$matchedVariableSettings = array_intersect_key($matchedElementsByVariable, $context);
+		$matchedVariableSetting  = reset($matchedVariableSettings);
 
+		if (!$matchedVariableSetting)
+		{
+			return null;
+		}
+
+		$elementGroupId          = $matchedVariableSetting['elementGroupId'];
+		$matchedElementGroupId   = $matchedVariable->{$elementGroupId};
+		$matchedElementGroupType = $matchedVariableSetting['type'];
+
+		if (!$matchedElementGroupId or !$matchedElementGroupType)
+		{
+			return null;
+		}
+
+		// Get all enabled sitemaps.
+		//
+		// We will need to make sure that the Entity we find has an enabled sitemap
+		// and that sitemap has defined what the Main Entity Schema Map should be.
+		// @todo - can we potentially store the matchedElementVariable info
+		// in a way we can grab it with this query and simplify the above logic?
+		// @todo - also ensure that we have a where clause that confirms we have a schema map setting
+		$enabledMatchingSitemap = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_sitemap')
+			->where('enabled = 1')
+			->andWhere('elementGroupId = ' . $matchedElementGroupId)
+			->andWhere('type = "' . $matchedElementGroupType . '"')
+			->queryRow();
+
+		if (!$enabledMatchingSitemap)
+		{
+			// Nothing to see here!
+			return null;
+		}
+
+		// Prepare our Matched Element with the Main Entity Schema Map
 		// Now we can grab the saved schemaMap setting from our sitemap and build our JSON-LD
-		// $matchedType['mainEntitySchemaMapId']
+		// $schemaMap = $enabledMatchingSitemap['mainEntitySchemaMapId']
+		// @todo - fix hard coded Schema Map. Make dynamic.
+		$schemaMap = new SproutSeo_NewsArticleSchemaMap(array(
+			$matchedVariableName => $matchedVariable
+		));
 
-
-		// Not sure this gets us anything new. It gets us routeParams like `entry` and `category`, but we're
-		// already figuring that out just by looking at our settings and seeing if one of those exists in
-		// the context....
-		//$routeParams          = craft()->urlManager->getRouteParams();
-		//$availableRouteParams = array_keys($routeParams['variables']);
-		//Craft::dd($routeParams);
-
-		// 2. Check our Sprout SEO Sitemap settings and see if we have any sitemaps
-		//    that match and have a schema mapping associated with them (we can test $routeParams['template'] against the sitemap elementGroup Entry Template setting. I=i.e. $routeParams['template'] = news/_entry => Entry Template ?? This can be duplicate, does it matter? OR MAYBE we just need to test the groupId of the element found against the sitemap records groupId... for example, found entry element has a entry.sectionId that we can match to our sitemap options to ensure we match up entry with the right sitemap Schema mapping setting.
-		// 3. Hand off the available element to the mapping and get back JSON-LD
-		// $pageSpecificSchemaHtml = sproutSeo()->schema->getMainEntitySchema($context);
-
-
-		// @todo - hard coded for proof of concept, need to make dynamic
-		$schemaMaps = craft()->plugins->call('registerSproutSeoSchemaMaps');
-
-		// @todo - need to compare the registered schema with a Selected Schema Mapping for the page.
-		$newSchema = $schemaMaps['SproutSeo'][0];
-
-		return $newSchema->getSchema();
+		return $schemaMap->getSchema();
 	}
 
 	/**
@@ -173,15 +185,21 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 
 	public function getKnowledgeGraphLinkedData()
 	{
-		$schemaRaw = sproutSeo()->schema->getGlobals();
+		$output = null;
 
-		$schemaRaw = SproutSeo_SchemaModel::populateModel($schemaRaw);
+		$globals = sproutSeo()->schema->getGlobals();
 
-		$schema                 = $schemaRaw->getJsonLd('identity');
-		$schema['contactPoint'] = $schemaRaw->getJsonLd('contacts');
-		$schema['sameAs']       = $schemaRaw->getJsonLd('social');
+		if ($identityType = $globals->identity['@type'])
+		{
+			// Determine if we have an Organization or Person Schema Type
+			$schemaModel = 'Craft\SproutSeo_' . $identityType . 'SchemaMap';
 
-		$output = $this->prepareLinkedDataForHtml($schema);
+			$identitySchema = new $schemaModel(array(
+				'globals' => $globals
+			));
+
+			$output = $identitySchema->getSchema();
+		}
 
 		return TemplateHelper::getRaw($output);
 	}
