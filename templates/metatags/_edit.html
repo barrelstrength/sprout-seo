@@ -82,16 +82,6 @@
 				required: true
 			}) }}
 
-			{% set globalFallbackId = craft.sproutSeo.globalFallbackId() %}
-
-			{% if not globalFallbackId or (globalFallbackId == metaTagGroupId) %}
-				{{ forms.lightswitchField({
-					label: "Global Meta <span class='info'>Use this Meta Tag Group as my global fallback</span>"|t,
-					name: 'sproutseo_fields[globalFallback]',
-					on: metaTags.globalFallback
-				}) }}
-			{% endif %}
-
 			{{ forms.lightswitchField({
 				label: "Site Name <span class='info'>Append Site Name '" ~ siteName ~ "' to all Titles</span>"|t,
 				name: 'sproutseo_fields[appendSiteName]',

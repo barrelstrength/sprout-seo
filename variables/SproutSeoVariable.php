@@ -115,16 +115,6 @@ class SproutSeoVariable
 	}
 
 	/**
-	 * @param null $metaTagGroupId
-	 *
-	 * @return mixed
-	 */
-	public function globalFallbackId()
-	{
-		return sproutSeo()->metaTags->globalFallbackId();
-	}
-
-	/**
 	 * @param array $options
 	 *
 	 * @return string

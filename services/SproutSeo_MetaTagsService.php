@@ -299,24 +299,6 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		return $record->deleteByPk($id);
 	}
 
-	/**
-	 * Determines if a global fallback setting already exists
-	 *
-	 * @return id | null
-	 */
-	public function globalFallbackId()
-	{
-		$globalFallbackMetaTagModel = new SproutSeo_MetaTagsModel();
-		$globalFallbackMetaTagModel->setMeta('global');
-
-		if ($globalFallbackMetaTagModel->id)
-		{
-			return $globalFallbackMetaTagModel->id;
-		}
-
-		return null;
-	}
-
 	// Meta Tag Content
 	// =========================================================================
 
