@@ -1,0 +1,127 @@
+{% extends "sproutseo/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+
+{% set title %}
+	{% if not metaTagGroupId is empty %}
+		{{ metaTags.name }}
+	{% else %}
+		{{ "New Meta Tag Group"|t }}
+	{% endif %}
+{% endset %}
+
+{% set crumbs = [
+{ label: "Globals"|t, url: url('sproutseo/metatags') }
+] %}
+
+{% set centered = true %}
+
+{% set fullPageForm = true %}
+
+{% if craft.request.getSegment(3) == 'new' %}
+	{% set saveShortcutRedirect = url('sproutseo/metatags') %}
+{% else %}
+	{% set saveShortcutRedirect = url('sproutseo/metatags/' ~ metaTagGroupId) %}
+{% endif %}
+
+{# Set a field context so we can manage field visibility between the SEO Meta Tag Groups and the Field Types #}
+{% set fieldContext = 'metaTagGroups' %}
+
+{# Map the `metaTags` object to `values` so we can use the same templates for SEO Meta Tag Groups and the Field Types #}
+
+{% set values = metaTags %}
+
+{% block saveButton %}
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="Save">
+	</div>
+{% endblock %}
+
+{% block main %}
+
+	<div class="grid first" data-max-cols="3">
+		<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+			<div id="fields" class="pane">
+
+				<input type="hidden" name="action" value="sproutSeo/metaTags/saveMetaTagGroup">
+				<input type="hidden" name="redirect" value="sproutseo/metatags">
+
+				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
+
+
+				{% include 'sproutseo/_fieldtypes/optimize/input' %}
+
+			</div>
+		</div>
+		<div class="item" data-position="right" data-colspan="1">
+			<div class="pane meta">
+
+				{{ forms.textField({
+					label: "Name <span class='info'>Human readable Meta Tag Group name</span>"|t,
+					id: "name",
+					name: 'sproutseo_fields[name]',
+					value: metaTags.name,
+					errors: metaTags.getErrors('name'),
+					required: true
+				}) }}
+
+				{{ forms.textField({
+					label: "Handle <span class='info'>Name you will use to refer to this meta-tag group in your templates</span>"|t,
+					id: "handle",
+					name: 'sproutseo_fields[handle]',
+					value: metaTags.handle,
+					errors: metaTags.getErrors('handle'),
+					required: true
+				}) }}
+
+				{{ forms.textField({
+					label: "URL"|t,
+					id: "url",
+					name: 'sproutseo_fields[url]',
+					value: metaTags.url,
+					errors: metaTags.getErrors('url'),
+					required: true
+				}) }}
+
+				{{ forms.lightswitchField({
+					label: "Site Name <span class='info'>Append Site Name '" ~ siteName ~ "' to all Titles</span>"|t,
+					name: 'sproutseo_fields[appendSiteName]',
+					on: metaTags.appendSiteName
+				}) }}
+
+				<div class="field" id="enabled-field">
+					<div class="heading"></div>
+					<div class="input">
+						<div class="right">
+							<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutForms/entries/deleteEntry" data-confirm="Are you sure you want to delete this entry and all of it's data?" data-redirect="sproutforms/entries">
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% set sidebar %}
+
+	<nav class="last">
+
+	</nav>
+
+
+{% endset %}
+
+{% if metaTags.name is not defined or not metaTags.handle %}
+	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
+{% endif %}
+
+{% includeJsResource "sproutseo/js/MetaTags.js" %}
+
+{% set js %}
+
+	new Craft.SproutSeoMetaTags();
+
+{% endset %}
+
+{% includeJs js %}

@@ -1,0 +1,268 @@
+{% extends "sproutseo/_layouts/sitemap" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Metadata"|t %}
+
+{% set schemaMaps = {
+	'': ''|t,
+	'schemaMapId1': 'News Article'|t,
+	'productType1': 'Product One'|t,
+	'productType2': 'Product Two'|t,
+} %}
+
+{% macro isSelected(target) %}
+	{% if target %}checked="checked"{% endif %}
+{% endmacro %}
+{% import _self as checkbox %}
+
+{% set customPages = craft.sproutSeo.getAllCustomPages() %}
+{% set sitemaps    = craft.sproutSeo.getAllSitemaps() %}
+{% set customNames = craft.sproutSeo.getAllCustomNames() %}
+
+{% set extraPageHeaderHtml %}
+	<div class="buttons">
+		<a class="btn submit add icon" href="{{ url('sproutseo/metadata/new') }}">{{ "New Meta Tag Group"|t }}</a>
+	</div>
+{% endset %}
+
+{% set content %}
+
+	{% for type, elementGroups in sitemaps %}
+
+		<table class="data fullwidth sitemap-settings">
+			{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
+			<thead>
+				<th style="padding-left:9px;width:35%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
+				<th style="width:15%;">URL Pattern</th>
+				<th style="width:15%;">{{ "Meta Tags"|t }} {% if loop.index == 1 %} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span>{% endif %}</th>
+				<th style="width:15%;">{{ "Main Entity"|t }} {% if loop.index == 1 %} <span class="info">{{ "Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span>{% endif %}</th>
+				<th class="thin"></th>
+			</thead>
+			<tbody>
+
+			{% for elementGroup in elementGroups %}
+				{% if elementGroup.name is defined %}
+					{% set sitemap = null %}
+					{% if elementGroup.settings is defined %}
+						{% set sitemap = elementGroup.settings %}
+					{% endif %}
+
+					{% if sitemap.id is defined %}
+						{% set sitemapId = sitemap.id %}
+					{% else %}
+					  {% set sitemapId = 'new-' ~ loop.index %}
+					{% endif %}
+
+					{# elementGroup => type- #}
+					{% set sitemapId = type|lower~'-'~ sitemapId %}
+
+					<tr data-rowid="{{ sitemapId }}" data-type="section">
+						<td>
+							<strong style="display:inline-block;padding:7px 10px;">
+								{% if (sitemap.enabled is defined and sitemap.enabled == 1) %}
+									<span class="status live"></span>
+								{% else %}
+									<span class="status disabled"></span>
+								{% endif %}
+								{{ elementGroup.name }}
+
+								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
+								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
+
+							</strong>
+						</td>
+						<td>
+							<code>something/(.*)</code>
+						</td>
+						<td>
+							<span class="status live"></span> <a href="#">Edit Meta Tags</a>
+						</td>
+						<td>
+							<span class="status disabled"></span>
+
+							{{ forms.select({
+								name: 'sitemap_fields[' ~ sitemapId ~ '][schemaMap]',
+								options: schemaMaps,
+								value: (sitemap.schemaMap is defined ? sitemap.schemaMap : 0.5),
+								errors: "",
+								required: false
+							}) }}
+						</td>
+						<td></td>
+					</tr>
+				{% endif %}
+			{% endfor %}
+			</tbody>
+		</table>
+		<br>
+		
+	{% endfor %}
+
+	{% if customPages|length %}
+
+	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
+		<thead>
+		<th style="padding-left:9px;width:35%">Custom Pages <span class="info">{{ "Custom Pages..."|t }}</span></th>
+		<th style="width:15%;">URL Pattern</th>
+		<th style="width:15%;">{{ "Meta Tags"|t }} {% if loop.index == 1 %} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span>{% endif %}</th>
+		<th style="width:15%;">{{ "Main Entity"|t }} {% if loop.index == 1 %} <span class="info">{{ "Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span>{% endif %}</th>
+		<th class="thin"></th>
+		</thead>
+		<tbody>
+
+			{% for page in customPages %}
+				{% set sitemapId = "customUrl-"~page.id %}
+
+				<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
+					<td>
+						<div style="display:inline-block;padding:7px 0 7px 10px;">
+						{% if (page.enabled is defined and page.enabled == 1) %}
+							<span class="status live"></span>
+						{% else %}
+							<span class="status disabled"></span>
+						{% endif %}
+						</div>
+
+						<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
+
+						<input type="text" name="sitemap_fields[{{ sitemapId }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
+					</td>
+					<td>
+						{{ forms.selectField({
+							name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
+							options: priorityList,
+							value: (page.priority is defined ? page.priority : 0.5),
+							errors: "",
+							required: false
+						}) }}
+					</td>
+					<td>
+						{{ forms.selectField({
+							name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
+							options: frequencyList,
+							value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
+							errors: "",
+							required: false
+						}) }}
+					</td>
+					<td style="text-align: center;">
+						<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
+					</td>
+					{# <td></td> #}
+					<td>
+						<a class="delete icon" title="Delete"></a>
+					</td>
+				</tr>
+
+			{% endfor %}
+
+		</tbody>
+	</table>
+
+	{% endif %}
+
+
+	{% set metaTagGroups = craft.sproutSeo.getMetaTagGroups %}
+
+	{% if metaTagGroups is empty %}
+
+		<p>{{ "Create your first Meta Tag Group."|t }}</p>
+
+	{% else %}
+
+		<table class="data" id="metaTemplate">
+			<thead>
+				<th style="padding-left:9px;width:35%">Custom Meta Tag Groups <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
+				<th style="width:15%;">URL Pattern</th>
+				<th style="width:15%;">{{ "Meta Tags"|t }} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span></th>
+				<th style="width:15%;">{{ "Main Entity"|t }} <span class="info">{{ "Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span></th>
+				<th class="thin"></th>
+			</thead>
+
+			{% for metaTagGroup in metaTagGroups %}
+
+				<tr id="results" data-id="{{ metaTagGroup.id }}" data-name="{{ metaTagGroup.name|t }}">
+					<td>
+						<strong style="display:inline-block;padding:7px 10px;">
+							<span class="status live"></span>
+							<a href="{{ url('sproutseo/metatags/' ~ metaTagGroup.id) }}">
+								{{ metaTagGroup.name }}
+							</a>
+						</strong>
+					</td>
+					<td>
+						<code>something/(.*)</code>
+					</td>
+					<td>
+						<span class="status live"></span> <a href="#">Edit Meta Tags</a>
+					</td>
+					<td>
+						<span class="status disabled"></span>
+
+						{{ forms.select({
+							name: 'sitemap_fields[SOMETHING][schemaMap]',
+							options: schemaMaps,
+							value: (sitemap.schemaMap is defined ? sitemap.schemaMap : 0.5),
+							errors: "",
+							required: false
+						}) }}
+					</td>
+					<td class="thin">
+						<a class="delete icon" title="{{ 'Delete'|t }}"></a>
+					</td>
+				</tr>
+
+			{% endfor %}
+
+		</table>
+
+	{% endif %}
+
+	<style type="text/css">
+	.sitemap-custom-url:focus {
+		border: 1px solid rgba(0, 0, 0, 0.15);
+		padding: 6px 4px;
+		outline: none;
+	}
+	.sitemap-custom-url {
+		display: inline-block;
+		margin-left:-4px;
+		width: 85%;
+		border: none;
+		padding: 7px 5px;
+		background: #fff;
+		overflow: hidden;
+	}
+	.sitemap-settings {
+		margin-top: 30px;
+	}
+	.sitemap-settings:first-of-type {
+		margin-top: 0;
+	}
+	.sitemap-settings:last-of-type {
+		margin-bottom: 30px;
+	}
+	</style>
+
+{% endset %}
+
+{% includeJsResource "sproutseo/js/sitemap.js" %}
+
+{% set js %}
+	new Craft.SproutSeoSitemap();
+
+	new Craft.AdminTable({
+		tableSelector: '#custom-pages',
+		deleteAction: 'sproutSeo/sitemap/deleteCustomPage',
+		onDeleteObject: function(id)
+		{
+			if($('#custom-pages').find('tbody').find('tr').size() == 0)
+			{
+				$('#custom-pages').show();
+				$('#custom-pages').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4"><p>Add your first custom page.</p></td></tr>');
+			}
+		}
+	});
+{% endset %}
+
+{% includeJs js %}
