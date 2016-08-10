@@ -219,7 +219,6 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			{
 				if(isset($_POST['fields'][$field->handle]))
 				{
-					$type = $field->type;
 					if ($field->type == 'Assets')
 					{
 						$value = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
