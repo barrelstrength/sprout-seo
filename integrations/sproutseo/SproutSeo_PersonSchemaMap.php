@@ -33,7 +33,6 @@ class SproutSeo_PersonSchemaMap extends BaseSproutSeoSchemaMap
 		}
 
 		$schema['name']                = isset($person['name']) ? $person['name'] : null;
-		$schema['name']                = isset($person['name']) ? $person['name'] : null;
 		$schema['alternateEntityName'] = isset($person['alternateEntityName']) ? $person['alternateEntityName'] : null;
 		$schema['description']         = isset($person['description']) ? $person['description'] : null;
 		$schema['url']                 = isset($person['url']) ? $person['url'] : null;
