@@ -17,6 +17,35 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Get our Meta Model
 		$metaTags = sproutSeo()->metaTags->getMetaTagGroupById($metaTagGroupId);
 
+		//Check if is metadata GET
+		if (isset($_GET['metatag']))
+		{
+			$metatag = $_GET['metatag'];
+			$metatag = explode(',', $metatag);
+
+			if (count($metatag) == 2)
+			{
+				$elementGroupId = $metatag[1];
+				$type = explode('-', $metatag[0]);
+				$type = $type[0];
+				/*
+				// Just trying to get the url
+				$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
+				$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $type);
+
+				if ($elementInfo != null)
+				{
+					$elementGroupId = $elementInfo['elementGroupId'];
+					$criteria                    = craft()->elements->getCriteria($elementInfo['elementType']);
+					$criteria->{$elementGroupId} = $elementGroupId;
+				}
+				*/
+				$metaTags->url = $type;
+				$metaTags->name = ucfirst($type);
+				$metaTags->handle = $type;
+			}
+		}
+
 		$twitterImageElements = array();
 		$ogImageElements      = array();
 

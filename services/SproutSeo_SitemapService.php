@@ -384,7 +384,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 * @return array
 	 * @internal param $sitemaps array from hook
 	 */
-	private function getElementInfo($sitemaps, $sitemapSettingsType)
+	public function getElementInfo($sitemaps, $sitemapSettingsType)
 	{
 		$elementInfo = array();
 

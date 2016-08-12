@@ -75,7 +75,15 @@
 							<code>something/(.*)</code>
 						</td>
 						<td>
-							<span class="status live"></span> <a href="#">Edit Meta Tags</a>
+							{% set new = true %}
+							<span class="status live"></span>
+							<a class="metadata-link" data-link="{{ sitemapId }},{{ elementGroup.id }}">
+								{% if new %}
+								{{"New Meta Tag"|t}}
+								{% else %}
+								{{"Edit Meta Tag"|t}}
+								{% endif %}
+							</a>
 						</td>
 						<td>
 							<span class="status disabled"></span>
@@ -95,7 +103,7 @@
 			</tbody>
 		</table>
 		<br>
-		
+
 	{% endfor %}
 
 	{% if customPages|length %}
@@ -246,7 +254,7 @@
 
 {% endset %}
 
-{% includeJsResource "sproutseo/js/sitemap.js" %}
+{% includeJsResource "sproutseo/js/metadata.js" %}
 
 {% set js %}
 	new Craft.SproutSeoSitemap();
