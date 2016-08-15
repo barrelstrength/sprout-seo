@@ -56,6 +56,37 @@ class SproutSeo_SchemaModel extends BaseModel
 		return $this->type != '' ? $this->type : 'Organization';
 	}
 
+	protected function getIdentity()
+	{
+		$structuredData = $this->prepareSchemaObject();
+
+		$schema = $this->{$this->schemaId};
+
+		$structuredData['name']                = isset($schema['name']) ? $schema['name'] : null;
+		$structuredData['description']         = isset($schema['description']) ? $schema['description'] : null;
+		$structuredData['url']                 = isset($schema['url']) ? $schema['url'] : null;
+		$structuredData['logo']                = isset($schema['logo']) ? $schema['logo'] : null;
+		$structuredData['keywords']            = isset($schema['keywords']) ? $schema['keywords'] : null;
+		$structuredData['alternateEntityName'] = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
+
+		$structuredData['organizationSubTypes']    = array();
+		$structuredData['organizationSubTypes'][0] = isset($schema['organizationSubTypes'][0]) ? $schema['organizationSubTypes'][0] : null;
+		$structuredData['organizationSubTypes'][1] = isset($schema['organizationSubTypes'][1]) ? $schema['organizationSubTypes'][1] : null;
+		$structuredData['organizationSubTypes'][2] = isset($schema['organizationSubTypes'][2]) ? $schema['organizationSubTypes'][2] : null;
+
+		$structuredData['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
+		$structuredData['foundingDate']        = isset($schema['foundingDate']) ? $schema['foundingDate'] : null;
+		$structuredData['foundingLocation']    = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
+
+		$structuredData['openingHours'] = isset($schema['openingHours']) ? $schema['openingHours'] : null;
+
+		//Person
+		$structuredData['gender']     = isset($schema['gender']) ? $schema['gender'] : null;
+		$structuredData['birthplace'] = isset($schema['birthplace']) ? $schema['birthplace'] : null;
+
+		return $structuredData;
+	}
+
 	protected function getMeta()
 	{
 		return $this->meta;
