@@ -57,6 +57,7 @@ class SproutSeo_MetaTagsController extends BaseController
 
 				$metaTags->name = $groupName.' '.ucfirst($type);
 				$metaTags->handle = strtolower($groupName).ucfirst($type);
+				$metaTags->handle = str_replace(' ', '', $metaTags->handle);
 			}
 		}
 

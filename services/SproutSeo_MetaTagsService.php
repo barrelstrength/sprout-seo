@@ -363,4 +363,42 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 
 		return $record->deleteByPk($id);
 	}
+
+	/**
+	 * Returns metadata group info
+	 * @param array $info
+	 * @return array
+	 */
+	public function getMetadataInfo($info)
+	{
+		$element = null;
+
+		if ($info)
+		{
+			$type = explode('-', $info['sitemapId']);
+			$type = $type[0];
+			// Just trying to get the url
+			$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
+			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $type);
+			$locale = craft()->i18n->getLocaleById(craft()->language);
+
+			$elementGroup              = $elementInfo['elementGroupId'];
+			$criteria                  = craft()->elements->getCriteria($elementInfo['elementType']);
+			$criteria->{$elementGroup} = $info['elementGroupId'];
+
+			$criteria->limit   = null;
+			$criteria->enabled = true;
+			$criteria->locale  = $locale->id;
+
+			// FindRow because we just support one locale
+			$element = $criteria->findRow();
+
+			if ($element)
+			{
+				$element = $element[0];
+			}
+		}
+
+		return $element;
+	}
 }

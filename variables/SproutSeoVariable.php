@@ -145,6 +145,16 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * Returns metadata group info
+	 *
+	 * @return array
+	 */
+	public function getMetadataInfo($info)
+	{
+		return sproutSeo()->metaTags->getMetadataInfo($info);
+	}
+
+	/**
 	 * Returns all custom names
 	 *
 	 * @return array of Sections
