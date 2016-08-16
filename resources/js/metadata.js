@@ -18,6 +18,8 @@
 		$ping: null,
 		$metadaLinks: null,
 		$metatag: null,
+		$isNew : null,
+		$metadataId: null,
 
 		$addCustomPageButton: null,
 
@@ -40,7 +42,17 @@
 		{
 			changedElement = ev.target;
 			this.metatag   = $(changedElement).data('link');
-			Craft.redirectTo(Craft.getUrl('sproutseo/metatags/new', 'metatag='+this.metatag));
+			this.isNew   = $(changedElement).data('isnew');
+			this.metadataId   = $(changedElement).data('metadataid');
+
+			if (this.isNew)
+			{
+				Craft.redirectTo(Craft.getUrl('sproutseo/metatags/new', 'metatag='+this.metatag));
+			}
+			else
+			{
+				Craft.redirectTo(Craft.getUrl('sproutseo/metatags/'+this.metadataId));
+			}
 		},
 
 		onChange: function(ev)

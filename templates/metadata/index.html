@@ -15,9 +15,9 @@
 {% endmacro %}
 {% import _self as checkbox %}
 
-{% set customPages = craft.sproutSeo.getAllCustomPages() %}
 {% set sitemaps    = craft.sproutSeo.getAllSitemaps() %}
 {% set customNames = craft.sproutSeo.getAllCustomNames() %}
+{% set sitemapUrls = {} %}
 
 {% set extraPageHeaderHtml %}
 	<div class="buttons">
@@ -80,13 +80,13 @@
 							</strong>
 						</td>
 						<td>
-							<code>{{metadataInfo.urlFormat}}</code>
+							<code>{{metadataInfo.element.urlFormat}}</code>
 						</td>
+						{% set sitemapUrls = sitemapUrls|merge([metadataInfo.element.urlFormat]) %}
 						<td>
-							{% set new = true %}
 							<span class="status live"></span>
-							<a class="metadata-link" data-link="{{ elementGroup.name }},{{ sitemapId }},{{ elementGroup.id }}">
-								{% if new %}
+							<a class="metadata-link" data-isnew="{{metadataInfo.isNew}}" data-metadataid="{{metadataInfo.metadataId}}" data-link="{{ elementGroup.name }},{{ sitemapId }},{{ elementGroup.id }}">
+								{% if metadataInfo.isNew %}
 								{{"New Meta Tag"|t}}
 								{% else %}
 								{{"Edit Meta Tag"|t}}
@@ -114,71 +114,7 @@
 
 	{% endfor %}
 
-	{% if customPages|length %}
-
-	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
-		<thead>
-		<th style="padding-left:9px;width:35%">Custom Pages <span class="info">{{ "Custom Pages..."|t }}</span></th>
-		<th style="width:15%;">URL Pattern</th>
-		<th style="width:15%;">{{ "Meta Tags"|t }} {% if loop.index == 1 %} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span>{% endif %}</th>
-		<th style="width:15%;">{{ "Main Entity"|t }} {% if loop.index == 1 %} <span class="info">{{ "Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span>{% endif %}</th>
-		<th class="thin"></th>
-		</thead>
-		<tbody>
-
-			{% for page in customPages %}
-				{% set sitemapId = "customUrl-"~page.id %}
-
-				<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
-					<td>
-						<div style="display:inline-block;padding:7px 0 7px 10px;">
-						{% if (page.enabled is defined and page.enabled == 1) %}
-							<span class="status live"></span>
-						{% else %}
-							<span class="status disabled"></span>
-						{% endif %}
-						</div>
-
-						<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
-
-						<input type="text" name="sitemap_fields[{{ sitemapId }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
-					</td>
-					<td>
-						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
-							options: priorityList,
-							value: (page.priority is defined ? page.priority : 0.5),
-							errors: "",
-							required: false
-						}) }}
-					</td>
-					<td>
-						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
-							options: frequencyList,
-							value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
-							errors: "",
-							required: false
-						}) }}
-					</td>
-					<td style="text-align: center;">
-						<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
-					</td>
-					{# <td></td> #}
-					<td>
-						<a class="delete icon" title="Delete"></a>
-					</td>
-				</tr>
-
-			{% endfor %}
-
-		</tbody>
-	</table>
-
-	{% endif %}
-
-
-	{% set metaTagGroups = craft.sproutSeo.getMetaTagGroups %}
+	{% set metaTagGroups = craft.sproutSeo.getCustomMetaTagGroups(sitemapUrls) %}
 
 	{% if metaTagGroups is empty %}
 
@@ -207,10 +143,10 @@
 						</strong>
 					</td>
 					<td>
-						<code>something/(.*)</code>
+						<code>{{metaTagGroup.url}}</code>
 					</td>
 					<td>
-						<span class="status live"></span> <a href="#">Edit Meta Tags</a>
+						<span class="status live"></span> <a href="metatags/{{metaTagGroup.id}}">Edit Meta Tags</a>
 					</td>
 					<td>
 						<span class="status disabled"></span>

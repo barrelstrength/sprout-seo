@@ -18,7 +18,7 @@
 {% set fullPageForm = true %}
 
 {% if craft.request.getSegment(3) == 'new' %}
-	{% set saveShortcutRedirect = url('sproutseo/metatags') %}
+	{% set saveShortcutRedirect = url('sproutseo/metadata') %}
 {% else %}
 	{% set saveShortcutRedirect = url('sproutseo/metatags/' ~ metaTagGroupId) %}
 {% endif %}
@@ -43,7 +43,7 @@
 			<div id="fields" class="pane">
 
 				<input type="hidden" name="action" value="sproutSeo/metaTags/saveMetaTagGroup">
-				<input type="hidden" name="redirect" value="sproutseo/metatags">
+				<input type="hidden" name="redirect" value="sproutseo/metadata">
 
 				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
 

@@ -93,6 +93,16 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * Returns all templates
+	 * @param array $urls to avoid
+	 * @return mixed
+	 */
+	public function getCustomMetaTagGroups($urls)
+	{
+		return sproutSeo()->metaTags->getCustomMetaTagGroups($urls);
+	}
+
+	/**
 	 * Returns a specific template if found
 	 *
 	 * @param int $id

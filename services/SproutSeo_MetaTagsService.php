@@ -170,6 +170,23 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get all Meta Tag Groups from the database.
+	 *
+	 * @return array
+	 */
+	public function getCustomMetaTagGroups($urls)
+	{
+		$results = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_metataggroups')
+			->where(array('not in','url',$urls))
+			->order('name')
+			->queryAll();
+
+		return SproutSeo_MetaTagsModel::populateModels($results);
+	}
+
+	/**
 	 * Get a specific Meta Tag Group from the database based on ID
 	 *
 	 * @param $id
@@ -371,6 +388,12 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 */
 	public function getMetadataInfo($info)
 	{
+		$response = array(
+			'element' => null,
+			'isNew'   => true,
+			'metadataId' => ''
+		);
+
 		$element = null;
 
 		if ($info)
@@ -396,9 +419,19 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 			if ($element)
 			{
 				$element = $element[0];
+				// check if exists in sproutseo_metataggroups
+				$metataggroups = $this->getMetaTagGroupByUrl($element->urlFormat);
+
+				if ($metataggroups->url)
+				{
+					$response['isNew'] = false;
+					$response['metadataId'] = $metataggroups->id;
+				}
 			}
 		}
 
-		return $element;
+		$response['element'] = $element;
+
+		return $response;
 	}
 }

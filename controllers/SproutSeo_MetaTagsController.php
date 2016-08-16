@@ -44,7 +44,8 @@ class SproutSeo_MetaTagsController extends BaseController
 						'elementGroupId' => $elementGroupId
 					);
 
-					$element = sproutSeo()->metaTags->getMetadataInfo($groupInfo);
+					$response = sproutSeo()->metaTags->getMetadataInfo($groupInfo);
+					$element  = $response['element'];
 
 					if ($element)
 					{
