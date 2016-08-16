@@ -36,22 +36,19 @@ class SproutSeo_MetaTagsController extends BaseController
 
 				if ($elementInfo != null)
 				{
-					$locale = craft()->i18n->getLocaleById(craft()->language);
+					$elementGroup = $elementInfo['elementGroupId'];
 
-					$elementGroup              = $elementInfo['elementGroupId'];
-					$criteria                  = craft()->elements->getCriteria($elementInfo['elementType']);
-					$criteria->{$elementGroup} = $elementGroupId;
+					$groupInfo = array(
+						'groupName' => $elementGroup,
+						'sitemapId' => $metatag[1],
+						'elementGroupId' => $elementGroupId
+					);
 
-					$criteria->limit   = null;
-					$criteria->enabled = true;
-					$criteria->locale  = $locale->id;
-
-					// FindRow because we just support one locale
-					$element = $criteria->findRow();
+					$element = sproutSeo()->metaTags->getMetadataInfo($groupInfo);
 
 					if ($element)
 					{
-						$metaTags->url = $element[0]->urlFormat;
+						$metaTags->url = $element->urlFormat;
 					}
 				}
 
