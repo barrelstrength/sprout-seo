@@ -23,26 +23,40 @@ class SproutSeo_MetaTagsController extends BaseController
 			$metatag = $_GET['metatag'];
 			$metatag = explode(',', $metatag);
 
-			if (count($metatag) == 2)
+			if (count($metatag) == 3)
 			{
-				$elementGroupId = $metatag[1];
-				$type = explode('-', $metatag[0]);
+				$elementGroupId = $metatag[2];
+				$groupName = $metatag[0];
+				$type = explode('-', $metatag[1]);
 				$type = $type[0];
-				/*
+
 				// Just trying to get the url
 				$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
 				$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $type);
 
 				if ($elementInfo != null)
 				{
-					$elementGroupId = $elementInfo['elementGroupId'];
-					$criteria                    = craft()->elements->getCriteria($elementInfo['elementType']);
-					$criteria->{$elementGroupId} = $elementGroupId;
+					$locale = craft()->i18n->getLocaleById(craft()->language);
+
+					$elementGroup              = $elementInfo['elementGroupId'];
+					$criteria                  = craft()->elements->getCriteria($elementInfo['elementType']);
+					$criteria->{$elementGroup} = $elementGroupId;
+
+					$criteria->limit   = null;
+					$criteria->enabled = true;
+					$criteria->locale  = $locale->id;
+
+					// FindRow because we just support one locale
+					$element = $criteria->findRow();
+
+					if ($element)
+					{
+						$metaTags->url = $element[0]->urlFormat;
+					}
 				}
-				*/
-				$metaTags->url = $type;
-				$metaTags->name = ucfirst($type);
-				$metaTags->handle = $type;
+
+				$metaTags->name = $groupName.' '.ucfirst($type);
+				$metaTags->handle = strtolower($groupName).ucfirst($type);
 			}
 		}
 
