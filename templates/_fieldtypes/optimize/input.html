@@ -1,77 +1,79 @@
 {% import "_includes/forms" as forms %}
 
-		<div class="sproutseo-box-optimized">
+<div class="sproutseo-box-optimized">
 
-			{% if settings.optimizedTitleField == 'manually' %}
-				{{ forms.textField({
-					label: "Meta Title"|t,
-					instructions: "The Title of your content which will appear in search results and social sharing."|t,
-					name: 'sproutseo_fields[title]',
-					maxlength: 60,
-					showCharsLeft: true,
-					value: values.title,
-					errors: "",
-					placeholder: siteName,
-					class: 'nicetext'
-				}) }}
-			{% endif %}
+	{% if settings.optimizedTitleField == 'manually' %}
+		{{ forms.textField({
+			label: "Meta Title"|t,
+			instructions: "The Title of your content which will appear in search results and social sharing."|t,
+			name: 'sproutseo_fields[title]',
+			maxlength: 60,
+			showCharsLeft: true,
+			value: values.title,
+			errors: "",
+			placeholder: siteName,
+			class: 'nicetext'
+		}) }}
+	{% endif %}
 
-			{% if settings.optimizedDescriptionField == 'manually' %}
-				{{ forms.textareaField({
-					label: "Meta Description"|t,
-					instructions: "A description of your content which will appear in search results and social sharing."|t,
-					name: 'sproutseo_fields[description]',
-					maxlength: 160,
-					showCharsLeft: true,
-					value: values.description,
-					errors: "",
-					placeholder: "The official website of " ~ siteName
-				}) }}
-			{% endif %}
+	{% if settings.optimizedDescriptionField == 'manually' %}
+		{{ forms.textareaField({
+			label: "Meta Description"|t,
+			instructions: "A description of your content which will appear in search results and social sharing."|t,
+			name: 'sproutseo_fields[description]',
+			maxlength: 160,
+			showCharsLeft: true,
+			value: values.description,
+			errors: "",
+			placeholder: "The official website of " ~ siteName
+		}) }}
+	{% endif %}
 
-			{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
+	{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
 
-			{{ forms.textField({
-				label: "Keywords"|t,
-				instructions: "The primary keywords or phrases that describe your website."|t,
-				id: 'keywords',
-				name: 'sproutseo_fields[keywords]',
-				value: keywordsValue,
-				errors: ''
-			}) }}
+	{{ forms.textField({
+		label: "Keywords"|t,
+		instructions: "The primary keywords or phrases that describe your website."|t,
+		id: 'keywords',
+		name: 'sproutseo_fields[keywords]',
+		value: keywordsValue,
+		errors: ''
+	}) }}
 
-			{% if settings.optimizedImageField == 'manually' %}
-				{{ forms.field({
-					label: 'Meta Image'|t,
-					instructions: 'A featured image that represents your content that will display in social sharing.'
-				}, forms.elementSelect({
-					elements: metaImageElements,
-					sourceElementId: [values.metaImage],
-					elementType: elementType,
-					id: 'metaImage',
-					name: 'sproutseo_fields[metaImage]',
-					jsClass: 'Craft.AssetSelectInput',
-					addButtonLabel: 'Select Image'|t,
-					limit: 1,
-					criteria: {"localeEnabled":null}
-				})) }}
-			{% endif %}
+	{% if settings.optimizedImageField == 'manually' %}
+		{{ forms.field({
+			label: 'Meta Image'|t,
+			instructions: 'A featured image that represents your content that will display in social sharing.'
+		}, forms.elementSelect({
+			elements: metaImageElements,
+			sourceElementId: [values.metaImage],
+			elementType: elementType,
+			id: 'metaImage',
+			name: 'sproutseo_fields[metaImage]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image'|t,
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
+	{% endif %}
 
-		</div>
+</div>
 
-{% if settings.displayPreview %}
-	<ul class="sproutseo-preview-btns">
-		<li class="selected">Search</li>
-		<li>Facebook</li>
-		<li>Twitter</li>
-	</ul>
+{% if fieldContext == 'field' %}
+	{% if settings.displayPreview %}
+		<ul class="sproutseo-preview-btns">
+			<li class="selected">Search</li>
+			<li>Facebook</li>
+			<li>Twitter</li>
+		</ul>
 
-	{% include 'sproutseo/_fieldtypes/optimize/previews/search' %}
+		{% include 'sproutseo/_fieldtypes/optimize/previews/search' %}
 
-	{#{% include 'sproutseo/_fieldtypes/optimize/previews/opengraph' %}#}
+		{#{% include 'sproutseo/_fieldtypes/optimize/previews/opengraph' %}#}
 
-	{#{% include 'sproutseo/_fieldtypes/optimize/previews/twittercard' %}#}
+		{#{% include 'sproutseo/_fieldtypes/optimize/previews/twittercard' %}#}
 
+	{% endif %}
 {% endif %}
 
 {% if settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
@@ -79,20 +81,20 @@
 		<div class="buttons">
 			<div id="btngroup" class="btngroup sproutseo-advancedoption-btns">
 
-				{% if settings.showGeo %}
-					<div class="btn" id="btn-geo" data-type="geo"><i class="sproutseo-icon icon-location">&#xe804;</i> Geo</div>
-				{% endif %}
-
-				{% if settings.showRobots %}
-					<div class="btn" id="btn-robots" data-type="robots"><i class="sproutseo-icon icon-search">&#xe800;</i> Robots</div>
-				{% endif %}
-
 				{% if settings.showOpenGraph %}
 					<div class="btn" id="btn-openGraph" data-type="openGraph"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
 				{% endif %}
 
 				{% if settings.showTwitter %}
 					<div class="btn" id="btn-twitterCard" data-type="twitterCard"><i class="sproutseo-icon icon-twitter">&#xe801;</i> Twitter Card</div>
+				{% endif %}
+
+				{% if settings.showGeo %}
+					<div class="btn" id="btn-geo" data-type="geo"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
+				{% endif %}
+
+				{% if settings.showRobots %}
+					<div class="btn" id="btn-robots" data-type="robots"><i class="sproutseo-icon icon-search">&#xe800;</i> Robots</div>
 				{% endif %}
 
 			</div>
@@ -110,36 +112,6 @@
 <div class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
 
 	<div class="blocks">
-
-		<div class="matrixblock fields-geo"
-			{% if not values.region
-				 and not values.placename
-				 and not values.placename
-				 and not values.latitude
-				 and not values.longitude %} style="display:none;" {% endif %}
-		>
-
-			<div class="titlebar">
-				<div class="blocktype"><i class="sproutseo-icon icon-location">&#xe804;</i> Geo</div>
-				<div class="preview"></div>
-			</div>
-
-			{% include 'sproutseo/_partials/fields/geo' %}
-
-		</div>
-
-		<div class="matrixblock fields-robots"
-			{% if not values.canonical
-			and not values.robots %} style="display:none;" {% endif %}
-		>
-
-			<div class="titlebar">
-				<div class="blocktype"><i class="sproutseo-icon icon-search">&#xe800;</i> Robots</div>
-			</div>
-
-			{% include 'sproutseo/_partials/fields/robots' %}
-
-		</div>
 
 		<div class="matrixblock fields-openGraph"
 			{% if not values.ogType
@@ -172,6 +144,35 @@
 			</div>
 
 			{% include 'sproutseo/_partials/fields/twitter-card' %}
+
+		</div>
+
+		<div class="matrixblock fields-geo"
+			{% if not values.region
+			and not values.placename
+			and not values.latitude
+			and not values.longitude %} style="display:none;" {% endif %}
+		>
+
+			<div class="titlebar">
+				<div class="blocktype"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
+				<div class="preview"></div>
+			</div>
+
+			{% include 'sproutseo/_partials/fields/geo' %}
+
+		</div>
+
+		<div class="matrixblock fields-robots"
+			{% if not values.canonical
+			and not values.robots %} style="display:none;" {% endif %}
+		>
+
+			<div class="titlebar">
+				<div class="blocktype"><i class="sproutseo-icon icon-search">&#xe800;</i> Robots</div>
+			</div>
+
+			{% include 'sproutseo/_partials/fields/robots' %}
 
 		</div>
 

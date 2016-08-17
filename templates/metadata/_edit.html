@@ -5,12 +5,12 @@
 	{% if not metaTagGroupId is empty %}
 		{{ metaTags.name }}
 	{% else %}
-		{{ "New Meta Tag Group"|t }}
+		{{ "New Metadata Section"|t }}
 	{% endif %}
 {% endset %}
 
 {% set crumbs = [
-{ label: "Globals"|t, url: url('sproutseo/metatags') }
+{ label: "Metadata"|t, url: url('sproutseo/metadata') }
 ] %}
 
 {% set centered = true %}
@@ -118,19 +118,79 @@
 				}) }}
 			</div>
 
+			<div class="pane meta">
+				{% set priorityList = {
+				'1.0': '1.0 ↑ Highest'|t,
+				'0.9': '0.9',
+				'0.8': '0.8',
+				'0.7': '0.7',
+				'0.6': '0.6',
+				'0.5': '0.5',
+				'0.4': '0.4',
+				'0.3': '0.3',
+				'0.2': '0.2',
+				'0.1': '0.1',
+				'0.0': '0.0 ↓ Lowest'|t
+				} %}
+
+				{% set frequencyList = {
+				'always': 'Always'|t,
+				'hourly': 'Hourly'|t,
+				'daily': 'Daily'|t,
+				'weekly': 'Weekly'|t,
+				'monthly': 'Monthly'|t,
+				'yearly': 'Yearly'|t,
+				'never': 'Never'|t
+				} %}
+
+				{{ forms.selectField({
+					label: "Priority"|t,
+					name: 'sitemap_fields[???][priority]',
+					options: priorityList,
+					value: (sitemap.priority is defined ? sitemap.priority : 0.5),
+					errors: "",
+					required: false
+				}) }}
+
+				{{ forms.selectField({
+					label: "Change Frequency"|t,
+					name: 'sitemap_fields[???][changeFrequency]',
+					options: frequencyList,
+					value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
+					errors: "",
+					required: false
+				}) }}
+
+				{{ forms.lightswitchField({
+					label: "Sitemap Enabled"|t,
+					name: 'sitemapEnabled',
+					on: true,
+					onLabel: "Enable"|t,
+				}) }}
+
+			</div>
+
+			<div class="pane meta">
+				{% if settings.displayPreview %}
+					<ul class="sproutseo-preview-btns">
+					<li class="selected">Search</li>
+					<li>Facebook</li>
+					<li>Twitter</li>
+					</ul>
+
+					{% include 'sproutseo/_fieldtypes/optimize/previews/search' %}
+
+					{#{% include 'sproutseo/_fieldtypes/optimize/previews/opengraph' %}#}
+
+					{#{% include 'sproutseo/_fieldtypes/optimize/previews/twittercard' %}#}
+
+				{% endif %}
+			</div>
+
 		</div>
 	</div>
 
 {% endblock %}
-
-{% set sidebar %}
-
-	<nav class="last">
-
-	</nav>
-
-
-{% endset %}
 
 {% if metaTags.name is not defined or not metaTags.handle %}
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}

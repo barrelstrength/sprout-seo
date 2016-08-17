@@ -14,7 +14,7 @@
 
 {% set extraPageHeaderHtml %}
 	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('sproutseo/metadata/new') }}">{{ "New Meta Tag Group"|t }}</a>
+		<a class="btn submit add icon" href="{{ url('sproutseo/metadata/new') }}">{{ "New page"|t }}</a>
 	</div>
 {% endset %}
 
@@ -85,11 +85,13 @@
 						<td>
 							<span class="sprout-metatags-status" style="color:#ccc;">
 								<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
-								<span class="sproutseo-icon icon-location">&#xe804;</span>
-								<span class="sproutseo-icon icon-search">&#xe800;</span>
 								<span class="sproutseo-icon icon-facebook">&#xe802;</span>
 								<span class="sproutseo-icon icon-twitter">&#xe801;</span>
+								<span class="sproutseo-icon icon-location">&#xe803;</span>
+								<span class="sproutseo-icon icon-search">&#xe800;</span>
+								&nbsp;&nbsp;
 								<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
+								<span class="sproutseo-icon icon-sitemap">&#xf0e8;</span>
 							</span>
 						</td>
 						<td>
@@ -117,7 +119,7 @@
 
 		<table class="data" id="metaTemplate">
 			<thead>
-				<th style="padding-left:9px;width:35%">{{ "Custom Meta Tag Groups"|t }} <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
+				<th style="padding-left:9px;width:35%">{{ "Custom Pages"|t }} <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
 				<th style="width:35%;">{{ "URL Pattern"|t }}</th>
 				<th style="width:30%;">{{ "Optimized Metadata"|t }} <span class="info">{{ "Each icon represents a type of metadata. A green icon indicates that this type of metadata is in place." }}</span></th>
 				<th class="thin"></th>
@@ -140,11 +142,13 @@
 					<td>
 						<span class="sprout-metatags-status" style="color:#ccc;">
 							<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
-							<span class="sproutseo-icon icon-location">&#xe804;</span>
-							<span class="sproutseo-icon icon-search">&#xe800;</span>
 							<span class="sproutseo-icon icon-facebook">&#xe802;</span>
 							<span class="sproutseo-icon icon-twitter">&#xe801;</span>
+							<span class="sproutseo-icon icon-location">&#xe803;</span>
+							<span class="sproutseo-icon icon-search">&#xe800;</span>
+							&nbsp;&nbsp;
 							<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
+							<span class="sproutseo-icon icon-sitemap">&#xf0e8;</span>
 						</span>
 					</td>
 					<td class="thin">

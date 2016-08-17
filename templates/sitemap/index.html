@@ -109,7 +109,11 @@
 						<td style="text-align: center;">
 							<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
 						</td>
-						<td></td>
+						<td>
+							{# @todo - find a better way to get the columns to be even. This tag is
+							unnecessary aside from helping to style the table column widths evenly. #}
+							<span style="display: inline-block;width:13px;"></span>
+						</td>
 					</tr>
 				{% endif %}
 			{% endfor %}
@@ -123,11 +127,10 @@
 
 	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
 		<thead>
-			<th style="padding-left:9px;width:62%">{{ "Custom URLs"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+			<th style="padding-left:9px;width:62%">{{ "Custom Pages"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
 			<th style="width:15%;">{{ "Priority"|t }}</th>
 			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
 			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
-			{# <th style="width:8%;"></th> #}
 			<th class="thin"></th>
 		</thead>
 		<tbody>
