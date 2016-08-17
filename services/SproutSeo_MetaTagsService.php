@@ -413,8 +413,8 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 			$criteria->enabled = true;
 			$criteria->locale  = $locale->id;
 
-			// FindRow because we just support one locale
-			$element = $criteria->findRow();
+			// Support one locale for now
+			$element = $criteria->find();
 
 			if ($element)
 			{
@@ -430,6 +430,10 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 					$response['isNew'] = false;
 					$response['metadataId'] = $metataggroups->id;
 				}
+			}
+			else
+			{
+				$element = null;
 			}
 		}
 

@@ -55,51 +55,52 @@
 					} %}
 
 					{% set metadataInfo = craft.sproutSeo.getMetadataInfo(groupInfo) %}
-					{% set sitemapUrls = sitemapUrls|merge([metadataInfo.element.urlFormat]) %}
+					{% if metadataInfo.element %}
+						{% set sitemapUrls = sitemapUrls|merge([metadataInfo.element.urlFormat]) %}
+						<tr data-rowid="{{ sitemapId }}" data-type="section">
+							<td>
+								<strong style="display:inline-block;padding:7px 10px;">
+									{% if (metadataInfo.isNew is defined and not metadataInfo.isNew) %}
+										<span class="status live"></span>
+									{% else %}
+										<span class="status disabled"></span>
+									{% endif %}
 
-					<tr data-rowid="{{ sitemapId }}" data-type="section">
-						<td>
-							<strong style="display:inline-block;padding:7px 10px;">
-								{% if (metadataInfo.isNew is defined and not metadataInfo.isNew) %}
-									<span class="status live"></span>
+									<a class="metadata-link" data-isnew="{{ metadataInfo.isNew }}" data-metadataid="{{ metadataInfo.metadataId }}" data-link="{{ elementGroup.name }},{{ sitemapId }},{{ elementGroup.id }}">
+										{{ elementGroup.name }}
+									</a>
+
+									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
+									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
+
+								</strong>
+							</td>
+							<td>
+								{% if metadataInfo.element.urlFormat == '__home__' %}
+									<span data-icon="home" title="Homepage"></span>
 								{% else %}
-									<span class="status disabled"></span>
+									<code>{{ metadataInfo.element.urlFormat }}</code>
 								{% endif %}
-
-								<a class="metadata-link" data-isnew="{{ metadataInfo.isNew }}" data-metadataid="{{ metadataInfo.metadataId }}" data-link="{{ elementGroup.name }},{{ sitemapId }},{{ elementGroup.id }}">
-									{{ elementGroup.name }}
-								</a>
-
-								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
-								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
-
-							</strong>
-						</td>
-						<td>
-							{% if metadataInfo.element.urlFormat == '__home__' %}
-								<span data-icon="home" title="Homepage"></span>
-							{% else %}
-								<code>{{ metadataInfo.element.urlFormat }}</code>
-							{% endif %}
-						</td>
-						<td>
-							<span class="sprout-metatags-status" style="color:#ccc;">
-								<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
-								<span class="sproutseo-icon icon-facebook">&#xe802;</span>
-								<span class="sproutseo-icon icon-twitter">&#xe801;</span>
-								<span class="sproutseo-icon icon-location">&#xe803;</span>
-								<span class="sproutseo-icon icon-search">&#xe800;</span>
-								&nbsp;&nbsp;
-								<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
-								<span class="sproutseo-icon icon-sitemap">&#xf0e8;</span>
-							</span>
-						</td>
-						<td>
-							{# @todo - find a better way to get the columns to be even. This tag is
-							unnecessary aside from helping to style the table column widths evenly. #}
-							<span style="display: inline-block;width:13px;"></span>
-						</td>
-					</tr>
+							</td>
+							<td>
+								<span class="sprout-metatags-status" style="color:#ccc;">
+									<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
+									<span class="sproutseo-icon icon-facebook">&#xe802;</span>
+									<span class="sproutseo-icon icon-twitter">&#xe801;</span>
+									<span class="sproutseo-icon icon-location">&#xe803;</span>
+									<span class="sproutseo-icon icon-search">&#xe800;</span>
+									&nbsp;&nbsp;
+									<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
+									<span class="sproutseo-icon icon-sitemap">&#xf0e8;</span>
+								</span>
+							</td>
+							<td>
+								{# @todo - find a better way to get the columns to be even. This tag is
+								unnecessary aside from helping to style the table column widths evenly. #}
+								<span style="display: inline-block;width:13px;"></span>
+							</td>
+						</tr>
+					{% endif %}
 				{% endif %}
 			{% endfor %}
 			</tbody>
