@@ -4,7 +4,7 @@
 {% set title = "Metadata"|t %}
 
 {% set schemaMaps = {
-	'': ''|t,
+	'': 'Select...'|t,
 	'schemaMapId1': 'News Article'|t,
 	'productType1': 'Product One'|t,
 	'productType2': 'Product Two'|t,
@@ -32,10 +32,10 @@
 		<table class="data fullwidth sitemap-settings">
 			{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
 			<thead>
-				<th style="padding-left:9px;width:35%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
-				<th style="width:15%;">URL Pattern</th>
-				<th style="width:15%;">{{ "Meta Tags"|t }} {% if loop.index == 1 %} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span>{% endif %}</th>
-				<th style="width:15%;">{{ "Main Entity"|t }} {% if loop.index == 1 %} <span class="info">{{ "Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span>{% endif %}</th>
+				<th style="width:30%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
+				<th style="width:30%;">URL Pattern</th>
+				<th style="width:20%;">{{ "Meta Tags"|t }} {% if loop.index == 1 %} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span>{% endif %}</th>
+				<th style="width:20%;">{{ "Structured Data"|t }} {% if loop.index == 1 %} <span class="info">{{ "Define your Main Entity. Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span>{% endif %}</th>
 				<th class="thin"></th>
 			</thead>
 			<tbody>
@@ -80,7 +80,11 @@
 							</strong>
 						</td>
 						<td>
-							<code>{{metadataInfo.element.urlFormat}}</code>
+							{% if metadataInfo.element.urlFormat == '__home__' %}
+								<span data-icon="home" title="Homepage"></span>
+							{% else %}
+								<code>{{ metadataInfo.element.urlFormat }}</code>
+							{% endif %}
 						</td>
 						{% set sitemapUrls = sitemapUrls|merge([metadataInfo.element.urlFormat]) %}
 						<td>
@@ -94,8 +98,6 @@
 							</a>
 						</td>
 						<td>
-							<span class="status disabled"></span>
-
 							{{ forms.select({
 								name: 'sitemap_fields[' ~ sitemapId ~ '][schemaMap]',
 								options: schemaMaps,
@@ -104,7 +106,11 @@
 								required: false
 							}) }}
 						</td>
-						<td></td>
+						<td>
+							{# @todo - find a better way to get the columns to be even. This tag is
+							unnecessary aside from helping to style the table column widths evenly. #}
+							<span style="display: inline-block;width:13px;"></span>
+						</td>
 					</tr>
 				{% endif %}
 			{% endfor %}
@@ -124,10 +130,10 @@
 
 		<table class="data" id="metaTemplate">
 			<thead>
-				<th style="padding-left:9px;width:35%">Custom Meta Tag Groups <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
-				<th style="width:15%;">URL Pattern</th>
-				<th style="width:15%;">{{ "Meta Tags"|t }} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span></th>
-				<th style="width:15%;">{{ "Main Entity"|t }} <span class="info">{{ "Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span></th>
+				<th style="width:30%">Custom Meta Tag Groups <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
+				<th style="width:30%;">URL Pattern</th>
+				<th style="width:20%;">{{ "Meta Tags"|t }} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span></th>
+				<th style="width:20%;">{{ "Structured Data"|t }} <span class="info">{{ "Define your Main Entity. Map the element that displays on this page to a Structured Data schema for improved metadata." }}</span></th>
 				<th class="thin"></th>
 			</thead>
 
@@ -149,8 +155,6 @@
 						<span class="status live"></span> <a href="metatags/{{metaTagGroup.id}}">Edit Meta Tags</a>
 					</td>
 					<td>
-						<span class="status disabled"></span>
-
 						{{ forms.select({
 							name: 'sitemap_fields[SOMETHING][schemaMap]',
 							options: schemaMaps,
@@ -201,7 +205,7 @@
 {% includeJsResource "sproutseo/js/metadata.js" %}
 
 {% set js %}
-	new Craft.SproutSeoSitemap();
+	{#new Craft.SproutSeoSitemap();#}
 
 	new Craft.AdminTable({
 		tableSelector: '#custom-pages',
