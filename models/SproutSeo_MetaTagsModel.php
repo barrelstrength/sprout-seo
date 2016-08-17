@@ -196,25 +196,6 @@ class SproutSeo_MetaTagsModel extends BaseModel
 		return array();
 	}
 
-	/**
-	 * @return array|\CDbDataReader|mixed
-	 */
-	protected function getGlobalFallback()
-	{
-		$globalFallback = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_metataggroups')
-			->where('globalFallback=:globalFallback', array(':globalFallback' => 1))
-			->queryRow();
-
-		if (!empty($globalFallback))
-		{
-			return $globalFallback;
-		}
-
-		return array();
-	}
-
 	protected function getBasicMetaTagData()
 	{
 		$tagData = array();
