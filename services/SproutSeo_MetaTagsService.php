@@ -418,8 +418,6 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 
 			if ($element)
 			{
-				//@todo - this fails if there are no Entries in a Section or no Categories in a Category Group
-				// need to add a better check or logic around $element[0]
 				$element = $element[0];
 
 				// check if exists in sproutseo_metataggroups
