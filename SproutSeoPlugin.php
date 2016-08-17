@@ -179,6 +179,7 @@ class SproutSeoPlugin extends BasePlugin
 			'sproutseo/settings'                          => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
+			'sproutseo/settings/(?P<settingsTemplate>.*)/new' => 'sproutseo/settings/schema/_edit',
 			'sproutseo/settings/(?P<settingsTemplate>.*)' => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),

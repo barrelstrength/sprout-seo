@@ -1,0 +1,72 @@
+{% extends "sproutseo/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Structured Data"|t %}
+
+{% set schemaHandle = craft.request.getSegment(3) ?? 'schema' %}
+{% set selectedSidebarItem = schemaHandle %}
+
+{% set content %}
+
+	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
+		<thead>
+			<th style="width:25%;">{{ "Name"|t }}</th>
+			<th style="width:25%;">{{ "Schema Type"|t }}</th>
+			<th style="width:50%;">{{ "Objects"|t }}</th>
+			<th class="thin rightalign nowrap"></th>
+		</thead>
+		<tbody>
+
+			<tr>
+				<td>
+					<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">Organization</a>
+				</td>
+				<td>
+					<code>Organization</code>
+				</td>
+				<td>
+					How do we communicate what objects/variables are required?
+				</td>
+				<td>
+					<span class="light" data-icon="globe"></span>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">Person</a>
+				</td>
+				<td>
+					<code>Person</code>
+				</td>
+				<td>
+					How do we communicate what objects/variables are required?
+				</td>
+				<td>
+					<span class="light" data-icon="globe"></span>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">Custom Integration Recipe Type</a>
+				</td>
+				<td>
+					<code>Recipe</code>
+				</td>
+				<td>
+					How do we communicate what objects/variables are required?
+				</td>
+				<td>
+					<div class="btn small fullwidth formsubmit" data-action="sproutSeo/schema/installSchemaMap">Install</div>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+
+	<div class="buttons">
+		<a class="btn submit add icon" href="{{ url('sproutseo/meta/new') }}">{{ "New Schema"|t }}</a>
+	</div>
+
+{% endset %}
