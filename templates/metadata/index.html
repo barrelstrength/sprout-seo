@@ -60,7 +60,7 @@
 					<tr data-rowid="{{ sitemapId }}" data-type="section">
 						<td>
 							<strong style="display:inline-block;padding:7px 10px;">
-								{% if (sitemap.enabled is defined and sitemap.enabled == 1) %}
+								{% if (metadataInfo.isNew is defined and not metadataInfo.isNew) %}
 									<span class="status live"></span>
 								{% else %}
 									<span class="status disabled"></span>
