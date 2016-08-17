@@ -98,6 +98,26 @@
 				</div>
 
 			</div>
+
+			<div class="pane meta">
+
+				{% set schemaMaps = {
+					'': 'Select...'|t,
+					'schemaMapId1': 'News Article'|t,
+					'productType1': 'Product One'|t,
+					'productType2': 'Product Two'|t,
+				} %}
+
+				{{ forms.selectField({
+					label: "Main Entity <span class='info'>Define your Main Entity. Map the primary element that displays on this page to a Structured Data schema for improved metadata.</span>"|t,
+					name: 'sitemap_fields[???][schemaMap]',
+					options: schemaMaps,
+					value: (sitemap.schemaMap is defined ? sitemap.schemaMap : 0.5),
+					errors: "",
+					required: false
+				}) }}
+			</div>
+
 		</div>
 	</div>
 

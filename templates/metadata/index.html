@@ -3,13 +3,6 @@
 
 {% set title = "Metadata"|t %}
 
-{% set schemaMaps = {
-	'': 'Select...'|t,
-	'schemaMapId1': 'News Article'|t,
-	'productType1': 'Product One'|t,
-	'productType2': 'Product Two'|t,
-} %}
-
 {% macro isSelected(target) %}
 	{% if target %}checked="checked"{% endif %}
 {% endmacro %}
@@ -32,10 +25,9 @@
 		<table class="data fullwidth sitemap-settings">
 			{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
 			<thead>
-				<th style="width:30%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
-				<th style="width:30%;">URL Pattern</th>
-				<th style="width:20%;">{{ "Meta Tags"|t }} {% if loop.index == 1 %} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span>{% endif %}</th>
-				<th style="width:20%;">{{ "Structured Data"|t }} {% if loop.index == 1 %} <span class="info">{{ "Define your Main Entity. Map the primary element that displays on this page to a Structured Data schema for improved metadata." }}</span>{% endif %}</th>
+				<th style="padding-left:9px;width:35%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap. Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section. Identify the Main Entity schema you wish to match to this URL."|t }}</span></th>
+				<th style="width:35%;">{{ "URL Pattern"|t }}</th>
+				<th style="width:30%;">{{ "Optimized Metadata"|t }} {% if loop.index == 1 %} <span class="info">{{ "Each icon represents a type of metadata. A green icon indicates that this type of metadata is in place." }}</span>{% endif %}</th>
 				<th class="thin"></th>
 			</thead>
 			<tbody>
@@ -63,6 +55,7 @@
 					} %}
 
 					{% set metadataInfo = craft.sproutSeo.getMetadataInfo(groupInfo) %}
+					{% set sitemapUrls = sitemapUrls|merge([metadataInfo.element.urlFormat]) %}
 
 					<tr data-rowid="{{ sitemapId }}" data-type="section">
 						<td>
@@ -72,7 +65,10 @@
 								{% else %}
 									<span class="status disabled"></span>
 								{% endif %}
-								{{ elementGroup.name }}
+
+								<a class="metadata-link" data-isnew="{{ metadataInfo.isNew }}" data-metadataid="{{ metadataInfo.metadataId }}" data-link="{{ elementGroup.name }},{{ sitemapId }},{{ elementGroup.id }}">
+									{{ elementGroup.name }}
+								</a>
 
 								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
 								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
@@ -86,25 +82,15 @@
 								<code>{{ metadataInfo.element.urlFormat }}</code>
 							{% endif %}
 						</td>
-						{% set sitemapUrls = sitemapUrls|merge([metadataInfo.element.urlFormat]) %}
 						<td>
-							<span class="status live"></span>
-							<a class="metadata-link" data-isnew="{{metadataInfo.isNew}}" data-metadataid="{{metadataInfo.metadataId}}" data-link="{{ elementGroup.name }},{{ sitemapId }},{{ elementGroup.id }}">
-								{% if metadataInfo.isNew %}
-								{{"New Meta Tag"|t}}
-								{% else %}
-								{{"Edit Meta Tag"|t}}
-								{% endif %}
-							</a>
-						</td>
-						<td>
-							{{ forms.select({
-								name: 'sitemap_fields[' ~ sitemapId ~ '][schemaMap]',
-								options: schemaMaps,
-								value: (sitemap.schemaMap is defined ? sitemap.schemaMap : 0.5),
-								errors: "",
-								required: false
-							}) }}
+							<span class="sprout-metatags-status" style="color:#ccc;">
+								<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
+								<span class="sproutseo-icon icon-location">&#xe804;</span>
+								<span class="sproutseo-icon icon-search">&#xe800;</span>
+								<span class="sproutseo-icon icon-facebook">&#xe802;</span>
+								<span class="sproutseo-icon icon-twitter">&#xe801;</span>
+								<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
+							</span>
 						</td>
 						<td>
 							{# @todo - find a better way to get the columns to be even. This tag is
@@ -120,6 +106,7 @@
 
 	{% endfor %}
 
+
 	{% set metaTagGroups = craft.sproutSeo.getCustomMetaTagGroups(sitemapUrls) %}
 
 	{% if metaTagGroups is empty %}
@@ -130,10 +117,9 @@
 
 		<table class="data" id="metaTemplate">
 			<thead>
-				<th style="width:30%">Custom Meta Tag Groups <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
-				<th style="width:30%;">URL Pattern</th>
-				<th style="width:20%;">{{ "Meta Tags"|t }} <span class="info">{{ "Prepare fallback Meta Tags if any meta values are not present for content within the matching domain section." }}</span></th>
-				<th style="width:20%;">{{ "Structured Data"|t }} <span class="info">{{ "Define your Main Entity. Map the element that displays on this page to a Structured Data schema for improved metadata." }}</span></th>
+				<th style="padding-left:9px;width:35%">{{ "Custom Meta Tag Groups"|t }} <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
+				<th style="width:35%;">{{ "URL Pattern"|t }}</th>
+				<th style="width:30%;">{{ "Optimized Metadata"|t }} <span class="info">{{ "Each icon represents a type of metadata. A green icon indicates that this type of metadata is in place." }}</span></th>
 				<th class="thin"></th>
 			</thead>
 
@@ -152,16 +138,14 @@
 						<code>{{metaTagGroup.url}}</code>
 					</td>
 					<td>
-						<span class="status live"></span> <a href="metatags/{{metaTagGroup.id}}">Edit Meta Tags</a>
-					</td>
-					<td>
-						{{ forms.select({
-							name: 'sitemap_fields[SOMETHING][schemaMap]',
-							options: schemaMaps,
-							value: (sitemap.schemaMap is defined ? sitemap.schemaMap : 0.5),
-							errors: "",
-							required: false
-						}) }}
+						<span class="sprout-metatags-status" style="color:#ccc;">
+							<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
+							<span class="sproutseo-icon icon-location">&#xe804;</span>
+							<span class="sproutseo-icon icon-search">&#xe800;</span>
+							<span class="sproutseo-icon icon-facebook">&#xe802;</span>
+							<span class="sproutseo-icon icon-twitter">&#xe801;</span>
+							<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
+						</span>
 					</td>
 					<td class="thin">
 						<a class="delete icon" title="{{ 'Delete'|t }}"></a>
@@ -202,10 +186,11 @@
 
 {% endset %}
 
+{% includeCssResource "sproutseo/css/fields.css" %}
 {% includeJsResource "sproutseo/js/metadata.js" %}
 
 {% set js %}
-	{#new Craft.SproutSeoSitemap();#}
+	new Craft.SproutSeoSitemap();
 
 	new Craft.AdminTable({
 		tableSelector: '#custom-pages',

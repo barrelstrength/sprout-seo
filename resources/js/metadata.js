@@ -16,7 +16,7 @@
 		$changeFrequency: null,
 		$enabled: null,
 		$ping: null,
-		$metadaLinks: null,
+		$metadataLinks: null,
 		$metatag: null,
 		$isNew : null,
 		$metadataId: null,
@@ -28,17 +28,17 @@
 			this.$checkboxes = $('.sitemap-settings input[type="checkbox"]');
 			this.$selectDropdowns = $('.sitemap-settings select');
 			this.$customPageUrls = $('.sitemap-settings input.sitemap-custom-url');
-			this.$metadaLinks = $('.metadata-link');
+			this.$metadataLinks = $('.metadata-link');
 			// this.$addCustomPageButton = $('#add-custom-page');
 
 			this.addListener(this.$checkboxes, 'change', 'onChange');
 			this.addListener(this.$selectDropdowns, 'change', 'onChange');
 			this.addListener(this.$customPageUrls, 'change', 'onChange');
-			this.addListener(this.$metadaLinks, 'click', 'redirectToMetada');
+			this.addListener(this.$metadataLinks, 'click', 'redirectToMetadata');
 			// this.addListener(this.$addCustomPageButton, 'click', 'addCustomPage');
 		},
 
-		redirectToMetada: function(ev)
+		redirectToMetadata: function(ev)
 		{
 			changedElement = ev.target;
 			this.metatag   = $(changedElement).data('link');
@@ -47,11 +47,11 @@
 
 			if (this.isNew)
 			{
-				Craft.redirectTo(Craft.getUrl('sproutseo/metatags/new', 'metatag='+this.metatag));
+				Craft.redirectTo(Craft.getUrl('sproutseo/metadata/new', 'metatag='+this.metatag));
 			}
 			else
 			{
-				Craft.redirectTo(Craft.getUrl('sproutseo/metatags/'+this.metadataId));
+				Craft.redirectTo(Craft.getUrl('sproutseo/metadata/'+this.metadataId));
 			}
 		},
 
