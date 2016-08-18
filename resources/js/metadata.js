@@ -51,7 +51,7 @@
 			}
 			else
 			{
-				Craft.redirectTo(Craft.getUrl('sproutseo/metadata/'+this.metadataId));
+				Craft.redirectTo(Craft.getUrl('sproutseo/metadata/'+this.metadataId, 'metatag='+this.metatag));
 			}
 		},
 

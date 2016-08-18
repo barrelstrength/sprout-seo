@@ -309,6 +309,25 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
+	 * @param string $type
+	 * @param string $elementGroupId
+	 *
+	 * @return array
+	 */
+	public function getSiteMapByTypeAndElementGroupId($type, $elementGroupId)
+	{
+		$sitemap = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_sitemap')
+			->where('elementGroupId =:elementGroupId and type = :type', array(
+				':type' => $type,
+				':elementGroupId' => $elementGroupId))
+			->queryRow();
+
+		return $sitemap;
+	}
+
+	/**
 	 * @return array|\CDbDataReader
 	 */
 	public function getAllCustomPages()

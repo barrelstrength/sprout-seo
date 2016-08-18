@@ -17,6 +17,8 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Get our Meta Model
 		$metaTags = sproutSeo()->metaTags->getMetaTagGroupById($metaTagGroupId);
 
+		$sitemap = new SproutSeo_SitemapModel();
+
 		//Check if is metadata GET
 		if (isset($_GET['metatag']))
 		{
@@ -28,34 +30,46 @@ class SproutSeo_MetaTagsController extends BaseController
 				$elementGroupId = $metatag[2];
 				$groupName = $metatag[0];
 				$type = explode('-', $metatag[1]);
-				$type = $type[0];
+				$elementType = $type[0];
 
-				// Just trying to get the url
-				$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
-				$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $type);
-
-				if ($elementInfo != null)
+				if ($metaTagGroupId == 'new')
 				{
-					$elementGroup = $elementInfo['elementGroupId'];
+					// Just trying to get the url
+					$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
+					$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $elementType);
 
-					$groupInfo = array(
-						'groupName' => $elementGroup,
-						'sitemapId' => $metatag[1],
-						'elementGroupId' => $elementGroupId
-					);
-
-					$response = sproutSeo()->metaTags->getMetadataInfo($groupInfo);
-					$element  = $response['element'];
-
-					if ($element)
+					if ($elementInfo != null)
 					{
-						$metaTags->url = $element->urlFormat;
+						$elementGroup = $elementInfo['elementGroupId'];
+
+						$groupInfo = array(
+							'groupName' => $elementGroup,
+							'sitemapId' => $metatag[1],
+							'elementGroupId' => $elementGroupId
+						);
+
+						$response = sproutSeo()->metaTags->getMetadataInfo($groupInfo);
+						$element  = $response['element'];
+
+						if ($element)
+						{
+							$metaTags->url = $element->urlFormat;
+						}
+					}
+
+					$metaTags->name = ucfirst($groupName).' '.ucfirst($elementType);
+					$metaTags->handle = strtolower($groupName).ucfirst($elementType);
+					$metaTags->handle = str_replace(' ', '', $metaTags->handle);
+				}
+				else
+				{
+					$row = sproutSeo()->sitemap->getSiteMapByTypeAndElementGroupId($elementType, $elementGroupId);
+
+					if ($row)
+					{
+						$sitemap = SproutSeo_SitemapModel::populateModel($row);
 					}
 				}
-
-				$metaTags->name = $groupName.' '.ucfirst($type);
-				$metaTags->handle = strtolower($groupName).ucfirst($type);
-				$metaTags->handle = str_replace(' ', '', $metaTags->handle);
 			}
 		}
 
@@ -107,7 +121,8 @@ class SproutSeo_MetaTagsController extends BaseController
 			'twitterImageElements' => $twitterImageElements,
 			'assetsSourceExists'   => $assetsSourceExists,
 			'elementType'          => $elementType,
-			'settings'             => $settings
+			'settings'             => $settings,
+			'sitemap'              => $sitemap
 		));
 	}
 
@@ -124,6 +139,7 @@ class SproutSeo_MetaTagsController extends BaseController
 		$model = new SproutSeo_MetaTagsModel();
 
 		$metaTags = craft()->request->getPost('sproutseo_fields');
+		$sitemap = craft()->request->getPost('sitemap_fields');
 
 		// Check if this is a new or existing Meta Tag Group
 		$metaTags['id'] = (isset($metaTags['id']) ? $metaTags['id'] : null);

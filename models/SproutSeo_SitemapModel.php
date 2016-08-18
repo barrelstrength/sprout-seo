@@ -15,6 +15,7 @@ class SproutSeo_SitemapModel extends BaseModel
 			'priority'        => array(AttributeType::String, 'maxLength' => 7),
 			'enabled'         => array(AttributeType::Bool),
 			'ping'            => array(AttributeType::Bool, 'default' => 0),
+			'schemaMap'       => array(AttributeType::String),
 			'dateUpdated'     => AttributeType::DateTime,
 			'dateCreated'     => AttributeType::DateTime,
 			'uid'             => AttributeType::String,

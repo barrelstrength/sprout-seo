@@ -46,6 +46,7 @@
 				<input type="hidden" name="redirect" value="sproutseo/metadata">
 
 				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
+				<input type="hidden" name="sitemap_fields[id]" value="{{ sitemap.id }}">
 
 
 				{% include 'sproutseo/_fieldtypes/optimize/input' %}
@@ -101,12 +102,7 @@
 
 			<div class="pane meta">
 
-				{% set schemaMaps = {
-					'': 'Select...'|t,
-					'schemaMapId1': 'News Article'|t,
-					'productType1': 'Product One'|t,
-					'productType2': 'Product Two'|t,
-				} %}
+				{% set schemaMaps = craft.sproutSeo.getSchemaMapsArray() %}
 
 				{{ forms.selectField({
 					label: "Main Entity <span class='info'>Define your Main Entity. Map the primary element that displays on this page to a Structured Data schema for improved metadata.</span>"|t,
@@ -145,26 +141,26 @@
 
 				{{ forms.selectField({
 					label: "Priority"|t,
-					name: 'sitemap_fields[???][priority]',
+					name: 'sitemap_fields[priority]',
 					options: priorityList,
-					value: (sitemap.priority is defined ? sitemap.priority : 0.5),
+					value: (sitemap.priority ? sitemap.priority : 0.5),
 					errors: "",
 					required: false
 				}) }}
 
 				{{ forms.selectField({
 					label: "Change Frequency"|t,
-					name: 'sitemap_fields[???][changeFrequency]',
+					name: 'sitemap_fields[changeFrequency]',
 					options: frequencyList,
-					value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
+					value: (sitemap.changeFrequency ? sitemap.changeFrequency : 'weekly'),
 					errors: "",
 					required: false
 				}) }}
 
 				{{ forms.lightswitchField({
 					label: "Sitemap Enabled"|t,
-					name: 'sitemapEnabled',
-					on: true,
+					name: 'sitemap_fields[enabled]',
+					on: (sitemap.enabled is defined ? sitemap.enabled : false),
 					onLabel: "Enable"|t,
 				}) }}
 

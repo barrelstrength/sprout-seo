@@ -587,4 +587,26 @@ class SproutSeoVariable
 
 		return $schemaMaps;
 	}
+
+	/**
+	 * Returns registerSproutSeoSchemaMaps hook
+	 *
+	 *@return array
+	*/
+	public function getSchemaMapsArray()
+	{
+		$schemaMaps = $this->getSchemaMaps();
+		$schemas    = array(''=>'Select...');
+
+		foreach ($schemaMaps as $schemasByPlugin)
+		{
+			foreach ($schemasByPlugin as $schema)
+			{
+				$type = $schema->getType();
+				$schemas[$type] = $schema->getName();
+			}
+		}
+
+		return $schemas;
+	}
 }
