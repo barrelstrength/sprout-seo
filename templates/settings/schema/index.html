@@ -5,6 +5,7 @@
 
 {% set schemaHandle = craft.request.getSegment(3) ?? 'schema' %}
 {% set selectedSidebarItem = schemaHandle %}
+{% set schemaMaps = craft.sproutSeo.getSchemaMaps() %}
 
 {% set content %}
 
@@ -17,51 +18,24 @@
 		</thead>
 		<tbody>
 
-			<tr>
-				<td>
-					<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">Organization</a>
-				</td>
-				<td>
-					<code>Organization</code>
-				</td>
-				<td>
-					How do we communicate what objects/variables are required?
-				</td>
-				<td>
-					<span class="light" data-icon="globe"></span>
-				</td>
-			</tr>
-
-			<tr>
-				<td>
-					<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">Person</a>
-				</td>
-				<td>
-					<code>Person</code>
-				</td>
-				<td>
-					How do we communicate what objects/variables are required?
-				</td>
-				<td>
-					<span class="light" data-icon="globe"></span>
-				</td>
-			</tr>
-
-			<tr>
-				<td>
-					<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">Custom Integration Recipe Type</a>
-				</td>
-				<td>
-					<code>Recipe</code>
-				</td>
-				<td>
-					How do we communicate what objects/variables are required?
-				</td>
-				<td>
-					<div class="btn small fullwidth formsubmit" data-action="sproutSeo/schema/installSchemaMap">Install</div>
-				</td>
-			</tr>
-
+			{% for schemaMapsByPlugin in schemaMaps  %}
+				{% for schemaMap in schemaMapsByPlugin  %}
+					<tr>
+						<td>
+							<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">{{ schemaMap.getName() }}</a>
+						</td>
+						<td>
+							<code>{{ schemaMap.getType() }}</code>
+						</td>
+						<td>
+							How do we communicate what objects/variables are required?
+						</td>
+						<td>
+							<span class="light" data-icon="globe"></span>
+						</td>
+					</tr>
+				{% endfor %}
+			{% endfor %}
 		</tbody>
 	</table>
 

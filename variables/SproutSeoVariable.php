@@ -575,4 +575,16 @@ class SproutSeoVariable
 
 		return SproutSeoOptimizeHelper::prepRobotsForSettings($robots);
 	}
+
+	/**
+	 * Returns registerSproutSeoSchemaMaps hook
+	 *
+	 *@return array
+	*/
+	public function getSchemaMaps()
+	{
+		$schemaMaps = craft()->plugins->call('registerSproutSeoSchemaMaps');
+
+		return $schemaMaps;
+	}
 }
