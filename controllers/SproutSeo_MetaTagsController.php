@@ -72,6 +72,11 @@ class SproutSeo_MetaTagsController extends BaseController
 				}
 			}
 		}
+		else if (isset($_GET['sitemapId']))
+		{
+			$sitemap = sproutSeo()->sitemap->getSitemapById($_GET['sitemapId']);
+			$metaTags->url = $sitemap->url;
+		}
 
 		$twitterImageElements = array();
 		$ogImageElements      = array();

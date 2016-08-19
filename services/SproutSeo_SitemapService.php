@@ -189,6 +189,26 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Returns sitemap given id
+	 *
+	 * @param integer $id
+	 */
+	public function getSitemapById($id)
+	{
+		$sitemap = null;
+
+		$sitemap = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_sitemap')
+			->where('id = :id', array(':id'=>$id))
+			->queryRow();
+
+		$sitemap = is_null($sitemap) ? null : SproutSeo_SitemapModel::populateModel($sitemap);
+
+		return $sitemap;
+	}
+
+	/**
 	 * Get all sitemaps registered on the registerSproutSeoSitemap hook
 	 *
 	 * @return array

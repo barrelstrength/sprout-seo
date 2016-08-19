@@ -187,6 +187,22 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get all custom sitemap urls.
+	 *
+	 * @return array
+	 */
+	public function getCustomSiteMaps($urls)
+	{
+		$results = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_sitemap')
+			->where(array('not in','url',$urls))
+			->queryAll();
+
+		return SproutSeo_SitemapModel::populateModels($results);
+	}
+
+	/**
 	 * Get a specific Meta Tag Group from the database based on ID
 	 *
 	 * @param $id

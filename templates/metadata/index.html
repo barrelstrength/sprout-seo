@@ -125,20 +125,55 @@
 				<th style="width:30%;">{{ "Optimized Metadata"|t }} <span class="info">{{ "Each icon represents a type of metadata. A green icon indicates that this type of metadata is in place." }}</span></th>
 				<th class="thin"></th>
 			</thead>
+			{% set customUrls = {} %}
 
 			{% for metaTagGroup in metaTagGroups %}
-
+				{% set customUrls = customUrls|merge([metaTagGroup.url]) %}
 				<tr id="results" data-id="{{ metaTagGroup.id }}" data-name="{{ metaTagGroup.name|t }}">
 					<td>
 						<strong style="display:inline-block;padding:7px 10px;">
 							<span class="status live"></span>
-							<a href="{{ url('sproutseo/metatags/' ~ metaTagGroup.id) }}">
+							<a href="{{ url('sproutseo/metadata/' ~ metaTagGroup.id) }}">
 								{{ metaTagGroup.name }}
 							</a>
 						</strong>
 					</td>
 					<td>
 						<code>{{metaTagGroup.url}}</code>
+					</td>
+					<td>
+						<span class="sprout-metatags-status" style="color:#ccc;">
+							<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
+							<span class="sproutseo-icon icon-facebook">&#xe802;</span>
+							<span class="sproutseo-icon icon-twitter">&#xe801;</span>
+							<span class="sproutseo-icon icon-location">&#xe803;</span>
+							<span class="sproutseo-icon icon-search">&#xe800;</span>
+							&nbsp;&nbsp;
+							<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
+							<span class="sproutseo-icon icon-sitemap">&#xf0e8;</span>
+						</span>
+					</td>
+					<td class="thin">
+						<a class="delete icon" title="{{ 'Delete'|t }}"></a>
+					</td>
+				</tr>
+
+			{% endfor %}
+
+			{% set customSiteMaps = craft.sproutSeo.getCustomSiteMaps(customUrls) %}
+
+			{% for customSitemap in customSiteMaps %}
+				<tr id="results" data-id="{{ customSitemap.id }}" data-name="{{ customSitemap.url|t }}">
+					<td>
+						<strong style="display:inline-block;padding:7px 10px;">
+							<span class="status"></span>
+							<a href="{{ url('sproutseo/metadata/new', {'sitemapId': customSitemap.id }) }}">
+								{{ customSitemap.url }}
+							</a>
+						</strong>
+					</td>
+					<td>
+						<code>{{customSitemap.url}}</code>
 					</td>
 					<td>
 						<span class="sprout-metatags-status" style="color:#ccc;">

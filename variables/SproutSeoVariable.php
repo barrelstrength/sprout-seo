@@ -103,6 +103,16 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * Returns all templates
+	 * @param array $urls to avoid
+	 * @return mixed
+	 */
+	public function getCustomSiteMaps($urls)
+	{
+		return sproutSeo()->metaTags->getCustomSiteMaps($urls);
+	}
+
+	/**
 	 * Returns a specific template if found
 	 *
 	 * @param int $id
