@@ -443,6 +443,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 				{
 					$response['isNew'] = false;
 					$response['metadataId'] = $metataggroups->id;
+					$response['metataggroup'] = $metataggroups;
 				}
 			}
 			else

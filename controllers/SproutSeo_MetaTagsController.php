@@ -10,6 +10,7 @@ class SproutSeo_MetaTagsController extends BaseController
 	 */
 	public function actionEditMetaTagGroup(array $variables = array())
 	{
+		$isCustom = true;
 		// Determine what we're working with
 		$segment        = craft()->request->getSegment(3);
 		$metaTagGroupId = ($segment == 'new') ? null : $segment;
@@ -22,6 +23,7 @@ class SproutSeo_MetaTagsController extends BaseController
 		//Check if is metadata GET
 		if (isset($_GET['metatag']))
 		{
+			$isCustom = false;
 			$metatag = $_GET['metatag'];
 			$metatag = explode(',', $metatag);
 
@@ -127,6 +129,7 @@ class SproutSeo_MetaTagsController extends BaseController
 			'assetsSourceExists'   => $assetsSourceExists,
 			'elementType'          => $elementType,
 			'settings'             => $settings,
+			'isCustom'             => $isCustom,
 			'sitemap'              => $sitemap
 		));
 	}

@@ -38,6 +38,11 @@ class SproutSeo_SitemapRecord extends BaseRecord
 				'required' => true
 			),
 			'schemaMap' => array(AttributeType::String),
+			'isCustom'  => array(
+				AttributeType::Bool,
+				'default'  => false,
+				'required' => true
+			),
 		);
 	}
 

@@ -11,6 +11,38 @@ class SproutSeo_MetaTagsModel extends BaseModel
 
 	protected function defineAttributes()
 	{
+		$sitemap = array (
+			'elementGroupId'  => array(AttributeType::Number),
+			'type'            => array(AttributeType::String),
+			'priority'        => array(
+				AttributeType::Number,
+				'maxLength' => 2,
+				'decimals'  => 1,
+				'default'   => '0.5',
+				'required'  => true
+			),
+			'changeFrequency' => array(
+				AttributeType::String,
+				'maxLength' => 7,
+				'default'   => 'weekly',
+				'required'  => true
+			),
+			'enabled'         => array(
+				AttributeType::Bool,
+				'default'  => false,
+				'required' => true
+			),
+			'isCustom'         => array(
+				AttributeType::Bool,
+				'default'  => false,
+				'required' => true
+			),
+			'schemaMap'       => array(AttributeType::String),
+			'dateUpdated'     => array(AttributeType::DateTime),
+			'dateCreated'     => array(AttributeType::DateTime),
+			'uid'             => array(AttributeType::String),
+		);
+
 		$metaTags = array(
 			'id'             => array(AttributeType::Number),
 			'entryId'        => array(AttributeType::Number),
@@ -79,6 +111,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 		);
 
 		$attributes = array_merge(
+			$sitemap,
 			$metaTags,
 			$this->basicMeta,
 			$this->robotsMeta,

@@ -19,6 +19,35 @@ class SproutSeo_MetaTagGroupRecord extends BaseRecord
 				AttributeType::String,
 				'required' => true
 			),
+			//sitemap data
+			'elementGroupId'  => array(AttributeType::Number),
+			'type'            => array(AttributeType::String),
+			'priority'        => array(
+				AttributeType::Number,
+				'maxLength' => 2,
+				'decimals'  => 1,
+				'default'   => '0.5',
+				'required'  => true
+			),
+			'changeFrequency' => array(
+				AttributeType::String,
+				'maxLength' => 7,
+				'default'   => 'weekly',
+				'required'  => true
+			),
+			'enabled'         => array(
+				AttributeType::Bool,
+				'default'  => false,
+				'required' => true
+			),
+			'schemaMap'       => array(AttributeType::String),
+			'isCustom'         => array(
+				AttributeType::Bool,
+				'default'  => false,
+				'required' => true
+			),
+			// end sitemap
+
 			'appendSiteName' => array(AttributeType::String),
 			'url'            => array(AttributeType::String),
 

@@ -9,45 +9,51 @@ namespace Craft;
 class SproutSeo_SitemapService extends BaseApplicationComponent
 {
 	/**
-	 * @param SproutSeo_SitemapModel $attributes
+	 * @param SproutSeo_MetaTagsModel $attributes
 	 *
 	 * @return mixed|null|string
 	 */
 	public function saveSitemap(SproutSeo_SitemapModel $attributes)
 	{
-		$row       = array();
-		$isNew     = false;
 		$sitemapId = null;
 
 		$keys = explode("-", $attributes->id);
 		$type = $keys[0];
 
-		if (isset($keys) && $keys[1] == "new")
-		{
-			$isNew = true;
-		}
+		$model = new SproutSeo_SitemapModel();
+
+		$info = array(
+			'groupName' => $type,
+			'sitemapId' => $type.'-1',
+			'elementGroupId' => $attributes->elementGroupId
+		);
+
+		$elementInfo = sproutSeo()->metaTags->getMetadataInfo($info);
+		$isNew       = $elementInfo['isNew'];
 
 		if (!$isNew)
 		{
-			$sitemapId = $keys[1];
+			$sitemapId = $elementInfo['metadataId'];
 
 			$row = craft()->db->createCommand()
-				->select('*')
-				->from('sproutseo_sitemap')
-				->where('id=:id', array(':id' => $sitemapId))
-				->queryRow();
-		}
+					->select('*')
+					->from('sproutseo_metataggroups')
+					->where('id=:id', array(':id' => $sitemapId))
+					->queryRow();
 
-		$model = SproutSeo_SitemapModel::populateModel($row);
+			$model = SproutSeo_SitemapModel::populateModel($row);
+		}
 
 		$model->id              = $sitemapId;
 		$model->elementGroupId  = (isset($attributes->elementGroupId)) ? $attributes->elementGroupId : null;
-		$model->url             = (isset($attributes->url)) ? $attributes->url : null;
+		$model->url             = (isset($elementInfo['element']->urlFormat)) ? $elementInfo['element']->urlFormat : null;
 		$model->priority        = $attributes->priority;
 		$model->changeFrequency = $attributes->changeFrequency;
 		$model->type            = $type != "customUrl" ? $type : null;
+		$model->name            = $type;
+		$model->handle          = $type;
+		$model->isCustom        = 0;
 		$model->enabled         = ($attributes->enabled == 'true') ? 1 : 0;
-		$model->ping            = ($attributes->ping == 'true') ? 1 : 0;
 		$model->dateUpdated     = DateTimeHelper::currentTimeForDb();
 		$model->uid             = StringHelper::UUID();
 
@@ -55,7 +61,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			$model->dateCreated = DateTimeHelper::currentTimeForDb();
 
-			craft()->db->createCommand()->insert('sproutseo_sitemap', $model->getAttributes());
+			craft()->db->createCommand()->insert('sproutseo_metataggroups', $model->getAttributes());
 
 			return craft()->db->lastInsertID;
 		}
@@ -63,7 +69,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			$result = craft()->db->createCommand()
 				->update(
-					'sproutseo_sitemap',
+					'sproutseo_metataggroups',
 					$model->getAttributes(),
 					'id=:id', array(
 						':id' => $model->id
@@ -321,30 +327,11 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	{
 		$sitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_sitemap')
+			->from('sproutseo_metataggroups')
 			->where('elementGroupId iS NOT NULL and type = :type', array(':type' => $type))
 			->queryAll();
 
 		return $sitemaps;
-	}
-
-	/**
-	 * @param string $type
-	 * @param string $elementGroupId
-	 *
-	 * @return array
-	 */
-	public function getSiteMapByTypeAndElementGroupId($type, $elementGroupId)
-	{
-		$sitemap = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_sitemap')
-			->where('elementGroupId =:elementGroupId and type = :type', array(
-				':type' => $type,
-				':elementGroupId' => $elementGroupId))
-			->queryRow();
-
-		return $sitemap;
 	}
 
 	/**
@@ -354,8 +341,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	{
 		$customPages = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_sitemap')
-			->where('url IS NOT NULL')
+			->from('sproutseo_metataggroups')
+			->where('isCustom = 1')
 			->queryAll();
 
 		return $customPages;
