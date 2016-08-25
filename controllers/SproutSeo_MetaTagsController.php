@@ -32,6 +32,9 @@ class SproutSeo_MetaTagsController extends BaseController
 				$type = explode('-', $metatag[1]);
 				$elementType = $type[0];
 
+				$metaTags->elementGroupId = $elementGroupId;
+				$metaTags->type = $elementType;
+
 				if ($segment == 'new')
 				{
 					// Just trying to get the url

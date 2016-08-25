@@ -46,6 +46,8 @@
 				<input type="hidden" name="redirect" value="sproutseo/metadata">
 				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
 				<input type="hidden" name="sproutseo_fields[isCustom]" value="{{ isCustom }}">
+				<input type="hidden" name="sproutseo_fields[type]" value="{{ metaTags.type }}">
+				<input type="hidden" name="sproutseo_fields[elementGroupId]" value="{{ metaTags.elementGroupId }}">
 
 				{% include 'sproutseo/_fieldtypes/optimize/input' %}
 

@@ -73,48 +73,57 @@
 					{# elementGroup => type- #}
 					{% set sitemapId = type|lower~'-'~ sitemapId %}
 
-					<tr data-rowid="{{ sitemapId }}" data-type="section">
-						<td>
-							<strong style="display:inline-block;padding:7px 10px;">
-								{% if (sitemap.enabled is defined and sitemap.enabled == 1) %}
-									<span class="status live"></span>
-								{% else %}
-									<span class="status disabled"></span>
-								{% endif %}
-								{{ elementGroup.name }}
+					{% set groupInfo = {
+						'groupName': elementGroup.name,
+						'sitemapId': sitemapId,
+						'elementGroupId': elementGroup.id
+					} %}
 
-								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
-								<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
+					{% set metadataInfo = craft.sproutSeo.getMetadataInfo(groupInfo) %}
+					{% if metadataInfo.element %}
+						<tr data-rowid="{{ sitemapId }}" data-type="section">
+							<td>
+								<strong style="display:inline-block;padding:7px 10px;">
+									{% if (metadataInfo.isNew is defined and not metadataInfo.isNew == 1) %}
+										<span class="status live"></span>
+									{% else %}
+										<span class="status disabled"></span>
+									{% endif %}
+									{{ elementGroup.name }}
 
-							</strong>
-						</td>
-						<td>
-							{{ forms.selectField({
-								name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
-								options: priorityList,
-								value: (sitemap.priority is defined ? sitemap.priority : 0.5),
-								errors: "",
-								required: false
-							}) }}
-						</td>
-						<td>
-							{{ forms.selectField({
-								name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
-								options: frequencyList,
-								value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
-								errors: "",
-								required: false
-							}) }}
-						</td>
-						<td style="text-align: center;">
-							<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
-						</td>
-						<td>
-							{# @todo - find a better way to get the columns to be even. This tag is
-							unnecessary aside from helping to style the table column widths evenly. #}
-							<span style="display: inline-block;width:13px;"></span>
-						</td>
-					</tr>
+									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
+									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
+
+								</strong>
+							</td>
+							<td>
+								{{ forms.selectField({
+									name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
+									options: priorityList,
+									value: (sitemap.priority is defined ? sitemap.priority : 0.5),
+									errors: "",
+									required: false
+								}) }}
+							</td>
+							<td>
+								{{ forms.selectField({
+									name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
+									options: frequencyList,
+									value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
+									errors: "",
+									required: false
+								}) }}
+							</td>
+							<td style="text-align: center;">
+								<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
+							</td>
+							<td>
+								{# @todo - find a better way to get the columns to be even. This tag is
+								unnecessary aside from helping to style the table column widths evenly. #}
+								<span style="display: inline-block;width:13px;"></span>
+							</td>
+						</tr>
+					{% endif %}
 				{% endif %}
 			{% endfor %}
 			</tbody>
