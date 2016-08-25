@@ -18,8 +18,6 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Get our Meta Model
 		$metaTags = sproutSeo()->metaTags->getMetaTagGroupById($metaTagGroupId);
 
-		$sitemap = new SproutSeo_SitemapModel();
-
 		//Check if is metadata GET
 		if (isset($_GET['metatag']))
 		{
@@ -34,7 +32,7 @@ class SproutSeo_MetaTagsController extends BaseController
 				$type = explode('-', $metatag[1]);
 				$elementType = $type[0];
 
-				if ($metaTagGroupId == 'new')
+				if ($segment == 'new')
 				{
 					// Just trying to get the url
 					$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
@@ -63,21 +61,7 @@ class SproutSeo_MetaTagsController extends BaseController
 					$metaTags->handle = strtolower($groupName).ucfirst($elementType);
 					$metaTags->handle = str_replace(' ', '', $metaTags->handle);
 				}
-				else
-				{
-					$row = sproutSeo()->sitemap->getSiteMapByTypeAndElementGroupId($elementType, $elementGroupId);
-
-					if ($row)
-					{
-						$sitemap = SproutSeo_SitemapModel::populateModel($row);
-					}
-				}
 			}
-		}
-		else if (isset($_GET['sitemapId']))
-		{
-			$sitemap = sproutSeo()->sitemap->getSitemapById($_GET['sitemapId']);
-			$metaTags->url = $sitemap->url;
 		}
 
 		$twitterImageElements = array();
@@ -129,8 +113,7 @@ class SproutSeo_MetaTagsController extends BaseController
 			'assetsSourceExists'   => $assetsSourceExists,
 			'elementType'          => $elementType,
 			'settings'             => $settings,
-			'isCustom'             => $isCustom,
-			'sitemap'              => $sitemap
+			'isCustom'             => $isCustom
 		));
 	}
 

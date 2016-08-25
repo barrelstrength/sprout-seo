@@ -66,9 +66,17 @@
 										<span class="status disabled"></span>
 									{% endif %}
 
-									<a class="metadata-link" data-isnew="{{ metadataInfo.isNew }}" data-metadataid="{{ metadataInfo.metadataId }}" data-link="{{ elementGroup.handle }},{{ sitemapId }},{{ elementGroup.id }}">
+									{% if metadataInfo.isNew %}
+										<a class="metadata-link" data-isnew="{{ metadataInfo.isNew }}" data-metadataid="{{ metadataInfo.metadataId }}" data-link="{{ elementGroup.handle }},{{ sitemapId }},{{ elementGroup.id }}">
+											{{ elementGroup.name }}
+										</a>
+									{% else %}
+
+									<a href = "metadata/{{ metadataInfo.metadataId }}">
 										{{ elementGroup.name }}
 									</a>
+
+								{% endif %}
 
 									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
 									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">

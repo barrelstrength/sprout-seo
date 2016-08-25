@@ -44,11 +44,8 @@
 
 				<input type="hidden" name="action" value="sproutSeo/metaTags/saveMetaTagGroup">
 				<input type="hidden" name="redirect" value="sproutseo/metadata">
-
 				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
 				<input type="hidden" name="sproutseo_fields[isCustom]" value="{{ isCustom }}">
-				<input type="hidden" name="sitemap_fields[id]" value="{{ sitemap.id }}">
-
 
 				{% include 'sproutseo/_fieldtypes/optimize/input' %}
 
@@ -107,9 +104,9 @@
 
 				{{ forms.selectField({
 					label: "Main Entity <span class='info'>Define your Main Entity. Map the primary element that displays on this page to a Structured Data schema for improved metadata.</span>"|t,
-					name: 'sitemap_fields[???][schemaMap]',
+					name: 'sproutseo_fields[schemaMap]',
 					options: schemaMaps,
-					value: (sitemap.schemaMap is defined ? sitemap.schemaMap : 0.5),
+					value: (metaTags.schemaMap is defined ? metaTags.schemaMap : 0.5),
 					errors: "",
 					required: false
 				}) }}
@@ -142,26 +139,26 @@
 
 				{{ forms.selectField({
 					label: "Priority"|t,
-					name: 'sitemap_fields[priority]',
+					name: 'sproutseo_fields[priority]',
 					options: priorityList,
-					value: (sitemap.priority ? sitemap.priority : 0.5),
+					value: (metaTags.priority ? metaTags.priority : 0.5),
 					errors: "",
 					required: false
 				}) }}
 
 				{{ forms.selectField({
 					label: "Change Frequency"|t,
-					name: 'sitemap_fields[changeFrequency]',
+					name: 'sproutseo_fields[changeFrequency]',
 					options: frequencyList,
-					value: (sitemap.changeFrequency ? sitemap.changeFrequency : 'weekly'),
+					value: (metaTags.changeFrequency ? metaTags.changeFrequency : 'weekly'),
 					errors: "",
 					required: false
 				}) }}
 
 				{{ forms.lightswitchField({
 					label: "Sitemap Enabled"|t,
-					name: 'sitemap_fields[enabled]',
-					on: (sitemap.enabled is defined ? sitemap.enabled : false),
+					name: 'sproutseo_fields[enabled]',
+					on: (metaTags.enabled is defined ? metaTags.enabled : false),
 					onLabel: "Enable"|t,
 				}) }}
 
