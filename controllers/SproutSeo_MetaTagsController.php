@@ -21,7 +21,6 @@ class SproutSeo_MetaTagsController extends BaseController
 		//Check if is metadata GET
 		if (isset($_GET['metatag']))
 		{
-			$isCustom = false;
 			$metatag = $_GET['metatag'];
 			$metatag = explode(',', $metatag);
 
@@ -73,6 +72,11 @@ class SproutSeo_MetaTagsController extends BaseController
 		if (isset($variables['metaTags']))
 		{
 			$metaTags = $variables['metaTags'];
+		}
+
+		if ($metaTags->type && $metaTags->elementGroupId)
+		{
+			$isCustom = false;
 		}
 
 		// Set up our asset fields

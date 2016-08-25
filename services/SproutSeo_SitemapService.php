@@ -50,8 +50,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$model->priority        = $attributes->priority;
 		$model->changeFrequency = $attributes->changeFrequency;
 		$model->type            = $type != "customUrl" ? $type : null;
-		$model->name            = $type;
-		$model->handle          = $type;
+		$model->name            = $attributes->id;
+		$model->handle          = str_replace("-", "", $attributes->id);
 		$model->isCustom        = 0;
 		$model->enabled         = ($attributes->enabled == 'true') ? 1 : 0;
 		$model->dateUpdated     = DateTimeHelper::currentTimeForDb();
