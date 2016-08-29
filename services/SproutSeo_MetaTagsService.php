@@ -53,7 +53,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 *
 	 * 1) Entry Override (Set by adding `id` override in Twig template code and using Meta Fields)
 	 * 2) On-Page Override (Set in Twig template code)
-	 * 3) Default (Set in control panel)
+	 * 3) Default (Set in control panel by url Metadata option)
 	 * 4) Global Fallback (Set in control panel)
 	 * 5) Blank (Automatic)
 	 *
@@ -133,9 +133,9 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 			case SproutSeo_MetaLevels::MetaTagsGroup:
 				if ($entry)
 				{
-					$slug = $entry->slug;
+					$uri = $entry->uri;
 
-					sproutSeo()->optimize->templateMeta = array('slug' => $slug);
+					sproutSeo()->optimize->templateMeta = array('uri' => $uri);
 				}
 				break;
 			case SproutSeo_MetaLevels::Entry:
@@ -256,19 +256,39 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 */
 	public function getMetaTagGroupByUrl($url)
 	{
-		$query = craft()->db->createCommand()
+		$metatags = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_metataggroups')
-			->where('url=:url', array(':url' => $url))
-			->queryRow();
+			->queryAll();
 
-		if (isset($query))
+		$model = new SproutSeo_MetaTagsModel();
+
+		if ($metatags)
 		{
-			$model = SproutSeo_MetaTagsModel::populateModel($query);
-		}
-		else
-		{
-			return new SproutSeo_MetaTagsModel();
+			foreach ($metatags as $metatag)
+			{
+				// is regex?
+				if (strpos($metatag['url'], '{slug}') !== false)
+				{
+					$pattern = str_replace('{slug}','(.*)',$metatag['url']);
+					// Use backticks as delimiters as they are invalid characters for URLs
+					$oldUrlPattern = "`" . $pattern . "`";
+
+					if (preg_match($oldUrlPattern, $url))
+					{
+						$model = SproutSeo_MetaTagsModel::populateModel($metatag);
+						break;
+					}
+				}
+				else
+				{
+					if ($metatag['url'] == $url)
+					{
+						$model = SproutSeo_MetaTagsModel::populateModel($metatag);
+						break;
+					}
+				}
+			}
 		}
 
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;

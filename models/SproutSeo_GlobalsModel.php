@@ -14,6 +14,7 @@ class SproutSeo_GlobalsModel extends BaseElementModel
 			'id'        => array(AttributeType::Number),
 			'locale'    => array(AttributeType::Locale),
 			'identity'  => array(AttributeType::Mixed),
+			'meta'      => array(AttributeType::Mixed),
 			'ownership' => array(AttributeType::Mixed),
 			'contacts'  => array(AttributeType::Mixed),
 			'social'    => array(AttributeType::Mixed),

@@ -219,9 +219,9 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	 */
 	protected function getMetaTagsGroup($overrideInfo)
 	{
-		if (isset($overrideInfo['slug']))
+		if (isset($overrideInfo['uri']))
 		{
-			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByUrl($overrideInfo['slug']);
+			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByUrl($overrideInfo['uri']);
 
 			return $metaTagsModel->getAttributes();
 		}

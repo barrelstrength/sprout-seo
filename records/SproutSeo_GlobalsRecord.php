@@ -13,6 +13,7 @@ class SproutSeo_GlobalsRecord extends BaseRecord
 		return array(
 			'locale'    => array(AttributeType::Locale, 'required' => true),
 			'identity'  => array(AttributeType::Mixed),
+			'meta'      => array(AttributeType::Mixed),
 			'ownership' => array(AttributeType::Mixed),
 			'contacts'  => array(AttributeType::Mixed),
 			'social'    => array(AttributeType::Mixed),
