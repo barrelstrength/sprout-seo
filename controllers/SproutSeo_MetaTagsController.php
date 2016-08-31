@@ -149,8 +149,8 @@ class SproutSeo_MetaTagsController extends BaseController
 		}
 
 		// Make our images single IDs instead of an array
-		$metaTags['ogImage']      = (!empty($metaTags['ogImage']) ? $metaTags['ogImage'][0] : null);
-		$metaTags['twitterImage'] = (!empty($metaTags['twitterImage']) ? $metaTags['twitterImage'][0] : null);
+		$metaTags['ogImage']      = (!empty($metaTags['metaImage']) ? $metaTags['metaImage'][0] : null);
+		$metaTags['twitterImage'] = (!empty($metaTags['metaImage']) ? $metaTags['metaImage'][0] : null);
 		$metaTags['metaImage']    = (!empty($metaTags['metaImage']) ? $metaTags['metaImage'][0] : null);
 
 		$model->setAttributes($metaTags);
