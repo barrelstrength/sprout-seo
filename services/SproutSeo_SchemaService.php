@@ -111,7 +111,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		// @todo - also ensure that we have a where clause that confirms we have a schema map setting
 		$enabledMatchingSitemap = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_sitemap')
+			->from('sproutseo_metataggroups')
 			->where('enabled = 1')
 			->andWhere('elementGroupId = ' . $matchedElementGroupId)
 			->andWhere('type = "' . $matchedElementGroupType . '"')
