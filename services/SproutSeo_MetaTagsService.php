@@ -179,7 +179,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		$results = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_metataggroups')
-			->where(array('not in','url',$urls))
+			->where(array('not in', 'url', $urls))
 			->order('name')
 			->queryAll();
 
@@ -196,7 +196,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		$results = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_sitemap')
-			->where(array('not in','url',$urls))
+			->where(array('not in', 'url', $urls))
 			->queryAll();
 
 		return SproutSeo_SitemapModel::populateModels($results);
@@ -319,9 +319,15 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 			$record = $this->metaRecord->create();
 		}
 
-		// @todo - Can we improve how validation is handled here?
-		// Setting the second argument to 'false' allows us to save unsafe attributes
+		// @todo - is there a better way to do this flip/flop?
+		$model->dateUpdated = $record->dateUpdated;
+		$model->dateCreated = $record->dateCreated;
+		$model->uid         = $record->uid;
+
 		$record->setAttributes($model->getAttributes(), false);
+		$record->dateUpdated = $model->dateUpdated;
+		$record->dateCreated = $model->dateCreated;
+		$record->uid         = $model->uid;
 
 		if ($record->save())
 		{
@@ -419,14 +425,16 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 
 	/**
 	 * Returns metadata group info
+	 *
 	 * @param array $info
+	 *
 	 * @return array
 	 */
 	public function getMetadataInfo($info)
 	{
 		$response = array(
-			'element' => null,
-			'isNew'   => true,
+			'element'    => null,
+			'isNew'      => true,
 			'metadataId' => ''
 		);
 
@@ -437,9 +445,9 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 			$type = explode('-', $info['sitemapId']);
 			$type = $type[0];
 			// Just trying to get the url
-			$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
+			$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
 			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $type);
-			$locale = craft()->i18n->getLocaleById(craft()->language);
+			$locale      = craft()->i18n->getLocaleById(craft()->language);
 
 			$elementGroup              = $elementInfo['elementGroupId'];
 			$criteria                  = craft()->elements->getCriteria($elementInfo['elementType']);
@@ -461,8 +469,8 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 
 				if ($metataggroups->url)
 				{
-					$response['isNew'] = false;
-					$response['metadataId'] = $metataggroups->id;
+					$response['isNew']        = false;
+					$response['metadataId']   = $metataggroups->id;
 					$response['metataggroup'] = $metataggroups;
 				}
 			}
