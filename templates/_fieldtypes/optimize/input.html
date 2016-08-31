@@ -114,12 +114,7 @@
 	<div class="blocks">
 
 		<div class="matrixblock fields-openGraph"
-			{% if not values.ogType
-				and not values.ogTitle
-				and not values.ogUrl and not values.ogLocale
-				and not values.ogAudio and not values.ogVideo
-				and not values.ogImage and not values.ogDescription
-				and not values.ogSiteName %} style="display:none;" {% endif %}
+			{% if not values.ogType %} style="display:none;" {% endif %}
 		>
 
 			<div class="titlebar">
@@ -132,11 +127,7 @@
 		</div>
 
 		<div class="matrixblock fields-twitterCard"
-			{% if not values.twitterSite
-				and not values.twitterCreator and not values.twitterTitle
-				and not values.twitterDescription and not values.twitterPlayer
-				and not values.twitterPlayerStream and not values.twitterPlayerStreamContentType
-				and not values.twitterPlayerHeight and not values.twitterPlayerWidth %} style="display:none;" {% endif %}
+			{% if not values.twitterCard %} style="display:none;" {% endif %}
 		>
 
 			<div class="titlebar">
@@ -164,8 +155,7 @@
 		</div>
 
 		<div class="matrixblock fields-robots"
-			{% if not values.canonical
-			and not values.robots %} style="display:none;" {% endif %}
+			{% if not values.robots %} style="display:none;" {% endif %}
 		>
 
 			<div class="titlebar">

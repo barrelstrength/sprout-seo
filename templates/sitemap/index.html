@@ -49,14 +49,16 @@
 		<table class="data fullwidth sitemap-settings">
 			{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
 			<thead>
-				<th style="padding-left:9px;width:62%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
-				<th style="width:35%;">{{ "URL Pattern"|t }}</th>
+				<th style="padding-left:9px;width:30%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
+				<th style="width:32%;">{{ "URL Pattern"|t }}</th>
 				<th style="width:15%;">{{ "Priority"|t }} {% if loop.index == 1 %} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span>{% endif %}</th>
-				<th style="width:15%;">{{ "Change Frequency"|t }}{% if loop.index == 1 %}  <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span> {% endif %}</th>
+				<th style="width:15%;">{{ "Change Frequency"|t }} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span></th>
 				<th style="width:8%;text-align: center;">{{ "Enabled"|t }} {% if loop.index == 1 %}<span class="info">{{ "Make the content in this section appear in your sitemap."|t }}</span>{% endif %}</th>
 				<th class="thin"></th>
 			</thead>
 			<tbody>
+
+			{#{% if loop.index == 1 %} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span>{% endif %}#}
 
 			{% for elementGroup in elementGroups %}
 				{% if elementGroup.name is defined %}
@@ -144,7 +146,8 @@
 
 	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
 		<thead>
-			<th style="padding-left:9px;width:62%">{{ "Custom Pages"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+			<th style="padding-left:9px;width:30%">{{ "Custom Pages"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+			<th style="width:32%;">{{ "URL Pattern"|t }}</th>
 			<th style="width:15%;">{{ "Priority"|t }}</th>
 			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
 			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
@@ -167,7 +170,14 @@
 
 						<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
 
-						<input type="text" name="sitemap_fields[{{ sitemapId }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
+						<strong>{{ page.title }}</strong>
+
+					</td>
+					<td>
+						<code>
+							{#<input type="text" name="sitemap_fields[{{ sitemapId }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">#}
+							{{ page.url }}
+						</code>
 					</td>
 					<td>
 						{{ forms.selectField({
@@ -190,7 +200,6 @@
 					<td style="text-align: center;">
 						<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
 					</td>
-					{# <td></td> #}
 					<td>
 						<a class="delete icon" title="Delete"></a>
 					</td>
@@ -204,20 +213,20 @@
 	{% endif %}
 
 	<style type="text/css">
-	.sitemap-custom-url:focus {
-		border: 1px solid rgba(0, 0, 0, 0.15);
-		padding: 6px 4px;
-		outline: none;
-	}
-	.sitemap-custom-url {
-		display: inline-block;
-		margin-left:-4px;
-		width: 85%;
-		border: none;
-		padding: 7px 5px;
-		background: #fff;
-		overflow: hidden;
-	}
+	/*.sitemap-custom-url:focus {*/
+		/*border: 1px solid rgba(0, 0, 0, 0.15);*/
+		/*padding: 6px 4px;*/
+		/*outline: none;*/
+	/*}*/
+	/*.sitemap-custom-url {*/
+		/*display: inline-block;*/
+		/*margin-left:-4px;*/
+		/*width: 85%;*/
+		/*border: none;*/
+		/*padding: 7px 5px;*/
+		/*background: #fff;*/
+		/*overflow: hidden;*/
+	/*}*/
 	.sitemap-settings {
 		margin-top: 30px;
 	}
