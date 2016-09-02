@@ -21,13 +21,9 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	 */
 	public function getStructureDataHtml()
 	{
-		$schema = $this->getGlobals();
-
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
-		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema', array(
-			'schema' => $schema
-		));
+		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema');
 
 		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
@@ -37,101 +33,104 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	/**
 	 * @return mixed
 	 */
-	public function getMainEntityStructuredDataHtml($context = null)
+	public function getMainEntityStructuredDataHtml($sitemapInfo)
 	{
-		if (!isset($context))
+		$schema = '';
+
+		if (isset($sitemapInfo['contentTable']) && isset($sitemapInfo['elementGroupId']))
 		{
-			return null;
+			$matchedElementGroupId   = $sitemapInfo['elementGroupId'];
+			$matchedElementGroupType = $sitemapInfo['contentTable'];
+
+			$enabledMatchingSitemap = sproutSeo()->metaTags->getMetaTagGroupByInfo(
+				$matchedElementGroupType,
+				$matchedElementGroupId
+			);
+
+			if ($enabledMatchingSitemap)
+			{
+				// Prepare our Matched Element with the Main Entity Schema Map
+				// Now we can grab the saved schemaMap setting from our sitemap and build our JSON-LD
+				// $schemaMap = $enabledMatchingSitemap['mainEntitySchemaMapId']
+				// @todo - fix hard coded Schema Map. Make dynamic.
+				$schemaMap = new SproutSeo_NewsArticleSchemaMap();
+
+				$schema = $schemaMap->getSchema();
+			}
 		}
 
-		// Get all registered sitemap integrations
-		//
-		// We will use these to determine if an available variable being loaded
-		// matches a matchedElementVariable supported by one of the sitemaps. As
-		// we can only have one Main Entity on the page, we assume that if the URL
-		// being loaded has a match that it's the main entity on the page. We use
-		// the first match we find.
-		$sitemaps                  = craft()->plugins->call('registerSproutSeoSitemap');
-		$matchedElementsByVariable = array();
-		$matchedElementsByType     = array();
+		return $schema;
+	}
 
-		// Loop through all of our sitemap integrations and create an array of our matched element variables
-		foreach ($sitemaps as $plugin)
+	public function getSitemapInfo($context)
+	{
+		$sitemapInfo = array();
+
+		if (isset($context))
 		{
-			foreach ($plugin as $type => $element)
-			{
-				if (isset($element['matchedElementVariable']))
-				{
-					// Create an array of all matched elements using the Element Variable as the key
-					$matchedElementsByVariable[$element['matchedElementVariable']]         = $element;
-					$matchedElementsByVariable[$element['matchedElementVariable']]['type'] = $type;
+			$sitemaps                  = craft()->plugins->call('registerSproutSeoSitemap');
+			$contentTable 						 = null;
+			$elmentModel  						 = null;
+			$matchedElementByVariable  = array();
 
-					// Create an array of all matched elements using the Group Type as the key
-					$matchedElementsByType[$type] = $element;
+			// Loop through all of our sitemap integrations and create an array of our matched element variables
+			foreach ($sitemaps as $plugin)
+			{
+				foreach ($plugin as $definedContentTable => $element)
+				{
+					if (isset($element['matchedElementVariable']))
+					{
+						$matchedElementVariable = $element['matchedElementVariable'];
+
+						if (isset($context[$matchedElementVariable]))
+						{
+							$matchedElementByVariable = $element;
+							$contentTable              = $definedContentTable;
+							$elmentModel               = $context[$matchedElementVariable];
+							break 2;
+						}
+					}
+				}
+			}
+
+			if ($matchedElementByVariable && $contentTable && $elmentModel)
+			{
+				$elementGroup = isset($matchedElementByVariable['elementGroupId']) ?
+					$matchedElementByVariable['elementGroupId'] :
+					null;
+				$elementType  = isset($matchedElementByVariable['elementType']) ?
+					$matchedElementByVariable['elementType'] :
+					null;
+
+				if (isset($elmentModel->{$elementGroup}) && $elementType)
+				{
+					$locale = craft()->i18n->getLocaleById(craft()->language);
+
+					$criteria  = craft()->elements->getCriteria($elementType);
+					$criteria->{$elementGroup} = $elmentModel->{$elementGroup};
+					$criteria->limit           = null;
+					$criteria->enabled         = true;
+					$criteria->locale          = $locale->id;
+					// Support one locale for now
+					$results = $criteria->find();
+
+					if (count($results) > 0)
+					{
+						$result = $results[0];
+
+						$sitemapInfo = array(
+							'hookInfo'       => $matchedElementByVariable,
+							'urlFormat'      => $result->urlFormat,
+							'elementModel'   => $elmentModel,
+							'contentTable'   => $contentTable,
+							'elementGroupId' => $elmentModel->{$elementGroup}
+						);
+					}
 				}
 			}
 		}
 
-		// If we don't have any matched elements, this page doesn't have any Main Entity Structured Data
-		if (empty($matchedElementsByVariable))
-		{
-			return null;
-		}
-
-		// If we do have matched elements, let's grab their element data from the $context
-		$matchedVariables    = array_intersect_key($context, $matchedElementsByVariable);
-		$matchedVariableKeys = array_keys($matchedVariables);
-		$matchedVariableName = reset($matchedVariableKeys);
-		$matchedVariable     = reset($matchedVariables);
-
-		// Let's also grab all the integration settings for the matched variable so we can get more info below
-		$matchedVariableSettings = array_intersect_key($matchedElementsByVariable, $context);
-		$matchedVariableSetting  = reset($matchedVariableSettings);
-
-		if (!$matchedVariableSetting)
-		{
-			return null;
-		}
-
-		$elementGroupId          = $matchedVariableSetting['elementGroupId'];
-		$matchedElementGroupId   = $matchedVariable->{$elementGroupId};
-		$matchedElementGroupType = $matchedVariableSetting['type'];
-
-		if (!$matchedElementGroupId or !$matchedElementGroupType)
-		{
-			return null;
-		}
-
-		// Get all enabled sitemaps.
-		//
-		// We will need to make sure that the Entity we find has an enabled sitemap
-		// and that sitemap has defined what the Main Entity Schema Map should be.
-		// @todo - can we potentially store the matchedElementVariable info
-		// in a way we can grab it with this query and simplify the above logic?
-		// @todo - also ensure that we have a where clause that confirms we have a schema map setting
-		$enabledMatchingSitemap = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_metataggroups')
-			->where('enabled = 1')
-			->andWhere('elementGroupId = ' . $matchedElementGroupId)
-			->andWhere('type = "' . $matchedElementGroupType . '"')
-			->queryRow();
-
-		if (!$enabledMatchingSitemap)
-		{
-			// Nothing to see here!
-			return null;
-		}
-
-		// Prepare our Matched Element with the Main Entity Schema Map
-		// Now we can grab the saved schemaMap setting from our sitemap and build our JSON-LD
-		// $schemaMap = $enabledMatchingSitemap['mainEntitySchemaMapId']
-		// @todo - fix hard coded Schema Map. Make dynamic.
-		$schemaMap = new SproutSeo_NewsArticleSchemaMap(array(
-			$matchedVariableName => $matchedVariable
-		));
-
-		return $schemaMap->getSchema();
+		return $sitemapInfo;
 	}
 
 	/**

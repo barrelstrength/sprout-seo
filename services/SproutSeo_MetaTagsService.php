@@ -27,11 +27,9 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 *
 	 * @return string
 	 */
-	public function getMetaTagHtml()
+	public function getMetaTagHtml($prioritizedMetaTagModel)
 	{
 		$globals = sproutSeo()->schema->getGlobals();
-
-		$prioritizedMetaTagModel = $this->getOptimizedMeta();
 
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
@@ -64,7 +62,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 * @return array
 	 * @throws \Exception
 	 */
-	public function getOptimizedMeta()
+	public function getPrioritizedMetaTagModel($sitemapInfo)
 	{
 		$metaLevels = SproutSeo_MetaLevels::getConstants();
 
@@ -86,7 +84,9 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		{
 			$metaTagModel = new SproutSeo_MetaTagsModel();
 
-			$metaTagModel = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate($meta));
+			$metaTagModel = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate(
+				$meta, $sitemapInfo)
+			);
 
 			$prioritizeMetaLevels[$meta] = $metaTagModel;
 
@@ -124,25 +124,25 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function getMetaTagsFromTemplate($type = null)
+	public function getMetaTagsFromTemplate($type = null, $sitemapInfo)
 	{
-		$entry = isset(sproutSeo()->optimize->context['entry']) ? sproutSeo()->optimize->context['entry'] : null;
-
 		switch ($type)
 		{
 			case SproutSeo_MetaLevels::MetaTagsGroup:
-				if ($entry)
+				if (isset($sitemapInfo['contentTable']) && isset($sitemapInfo['elementGroupId']))
 				{
-					$uri = $entry->uri;
-
-					sproutSeo()->optimize->templateMeta = array('uri' => $uri);
+					sproutSeo()->optimize->templateMeta = $sitemapInfo;
 				}
 				break;
 			case SproutSeo_MetaLevels::Entry:
-				if ($entry)
+				if (isset($sitemapInfo['elementModel']))
 				{
-					//this will support any element
-					sproutSeo()->optimize->templateMeta = array('entryId' => $entry->id);
+					$elementModel = $sitemapInfo['elementModel'];
+
+					if (isset($elementModel->id))
+					{
+						sproutSeo()->optimize->templateMeta = array('entryId' => $elementModel->id);
+					}
 				}
 				break;
 		}
@@ -254,41 +254,21 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 *
 	 * @return BaseModel|SproutSeo_MetaTagsModel
 	 */
-	public function getMetaTagGroupByUrl($url)
+	public function getMetaTagGroupByInfo($type, $elementGroupId)
 	{
-		$metatags = craft()->db->createCommand()
+		$metatag = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_metataggroups')
-			->queryAll();
+			->where('type=:type and elementGroupId=:elementGroupId',
+				array(':type' => $type, ':elementGroupId'=>$elementGroupId)
+			)
+			->queryRow();
 
 		$model = new SproutSeo_MetaTagsModel();
 
-		if ($metatags)
+		if ($metatag )
 		{
-			foreach ($metatags as $metatag)
-			{
-				// is regex?
-				if (strpos($metatag['url'], '{slug}') !== false)
-				{
-					$pattern = str_replace('{slug}','(.*)',$metatag['url']);
-					// Use backticks as delimiters as they are invalid characters for URLs
-					$oldUrlPattern = "`" . $pattern . "`";
-
-					if (preg_match($oldUrlPattern, $url))
-					{
-						$model = SproutSeo_MetaTagsModel::populateModel($metatag);
-						break;
-					}
-				}
-				else
-				{
-					if ($metatag['url'] == $url)
-					{
-						$model = SproutSeo_MetaTagsModel::populateModel($metatag);
-						break;
-					}
-				}
-			}
+			$model = SproutSeo_MetaTagsModel::populateModel($metatag);
 		}
 
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
@@ -465,7 +445,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 				$element = $element[0];
 
 				// check if exists in sproutseo_metataggroups
-				$metataggroups = $this->getMetaTagGroupByUrl($element->urlFormat);
+				$metataggroups = $this->getMetaTagGroupByInfo($type, $info['elementGroupId']);
 
 				if ($metataggroups->url)
 				{

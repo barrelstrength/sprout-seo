@@ -219,14 +219,18 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	 */
 	protected function getMetaTagsGroup($overrideInfo)
 	{
-		if (isset($overrideInfo['uri']))
-		{
-			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByUrl($overrideInfo['uri']);
+		$attributes = array();
 
-			return $metaTagsModel->getAttributes();
+		if ($overrideInfo)
+		{
+			$elementGroupId = $overrideInfo['elementGroupId'];
+			$type           = $overrideInfo['contentTable'];
+
+			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByInfo($type, $elementGroupId);
+			$attributes    = $metaTagsModel->getAttributes();
 		}
 
-		return array();
+		return $attributes;
 	}
 
 	protected function getBasicMetaTagData()
