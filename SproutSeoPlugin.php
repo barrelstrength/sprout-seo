@@ -232,7 +232,7 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
-	 * 'name_of_the_craft_content_table' => array(
+	 * 'name_of_the_craft_element_table' => array(
 	 * 		'name' => Name that will display in the sitemps and metada UI
 	 *		'matchedElementVariable'  => How it's called from the templates
 	 *

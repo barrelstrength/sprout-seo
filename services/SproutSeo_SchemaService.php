@@ -70,7 +70,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		{
 			$sitemaps                  = craft()->plugins->call('registerSproutSeoSitemap');
 			$contentTable 						 = null;
-			$elmentModel  						 = null;
+			$elementModel  						 = null;
 			$matchedElementByVariable  = array();
 
 			// Loop through all of our sitemap integrations and create an array of our matched element variables
@@ -86,14 +86,14 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 						{
 							$matchedElementByVariable = $element;
 							$contentTable              = $definedContentTable;
-							$elmentModel               = $context[$matchedElementVariable];
+							$elementModel               = $context[$matchedElementVariable];
 							break 2;
 						}
 					}
 				}
 			}
 
-			if ($matchedElementByVariable && $contentTable && $elmentModel)
+			if ($matchedElementByVariable && $contentTable && $elementModel)
 			{
 				$elementGroup = isset($matchedElementByVariable['elementGroupId']) ?
 					$matchedElementByVariable['elementGroupId'] :
@@ -102,12 +102,12 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 					$matchedElementByVariable['elementType'] :
 					null;
 
-				if (isset($elmentModel->{$elementGroup}) && $elementType)
+				if (isset($elementModel->{$elementGroup}) && $elementType)
 				{
 					$locale = craft()->i18n->getLocaleById(craft()->language);
 
 					$criteria  = craft()->elements->getCriteria($elementType);
-					$criteria->{$elementGroup} = $elmentModel->{$elementGroup};
+					$criteria->{$elementGroup} = $elementModel->{$elementGroup};
 					$criteria->limit           = null;
 					$criteria->enabled         = true;
 					$criteria->locale          = $locale->id;
@@ -121,9 +121,9 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 						$sitemapInfo = array(
 							'hookInfo'       => $matchedElementByVariable,
 							'urlFormat'      => $result->urlFormat,
-							'elementModel'   => $elmentModel,
+							'elementModel'   => $elementModel,
 							'contentTable'   => $contentTable,
-							'elementGroupId' => $elmentModel->{$elementGroup}
+							'elementGroupId' => $elementModel->{$elementGroup}
 						);
 					}
 				}
