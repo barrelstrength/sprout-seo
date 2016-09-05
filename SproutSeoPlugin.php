@@ -106,29 +106,33 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_NewsArticleSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 
-		if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
+		if (!craft()->isConsole())
 		{
-			$url = craft()->request->getUrl();
-			// check if the request url needs redirect
-			$redirect = sproutSeo()->redirects->getRedirect($url);
-
-			if ($redirect)
+			if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
 			{
-				craft()->request->redirect($redirect->newUrl, true, $redirect->method);
-			}
-		}
+				$url = craft()->request->getUrl();
 
-		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutseo')
-		{
-			craft()->templates->includeJsResource('sproutseo/js/SproutBase.js');
-			craft()->templates->includeJs("new Craft.SproutBase({
-				pluginName: 'Sprout SEO',
-				pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo',
-				pluginVersion: '" . $this->getVersion() . "',
-				pluginDescription: '" . $this->getDescription() . "',
-				developerName: '(Barrel Strength)',
-				developerUrl: '" . $this->getDeveloperUrl() . "'
-			})");
+				// check if the request url needs redirect
+				$redirect = sproutSeo()->redirects->getRedirect($url);
+
+				if ($redirect)
+				{
+					craft()->request->redirect($redirect->newUrl, true, $redirect->method);
+				}
+			}
+
+			if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutseo')
+			{
+				craft()->templates->includeJsResource('sproutseo/js/SproutBase.js');
+				craft()->templates->includeJs("new Craft.SproutBase({
+					pluginName: 'Sprout SEO',
+					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo',
+					pluginVersion: '" . $this->getVersion() . "',
+					pluginDescription: '" . $this->getDescription() . "',
+					developerName: '(Barrel Strength)',
+					developerUrl: '" . $this->getDeveloperUrl() . "'
+				})");
+			}
 		}
 	}
 
