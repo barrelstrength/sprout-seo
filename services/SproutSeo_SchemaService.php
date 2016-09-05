@@ -37,10 +37,10 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	{
 		$schema = '';
 
-		if (isset($sitemapInfo['contentTable']) && isset($sitemapInfo['elementGroupId']))
+		if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
 		{
 			$matchedElementGroupId   = $sitemapInfo['elementGroupId'];
-			$matchedElementGroupType = $sitemapInfo['contentTable'];
+			$matchedElementGroupType = $sitemapInfo['elementTable'];
 
 			$enabledMatchingSitemap = sproutSeo()->metaTags->getMetaTagGroupByInfo(
 				$matchedElementGroupType,
@@ -69,14 +69,14 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		if (isset($context))
 		{
 			$sitemaps                  = craft()->plugins->call('registerSproutSeoSitemap');
-			$contentTable 						 = null;
+			$elementTable 						 = null;
 			$elementModel  						 = null;
 			$matchedElementByVariable  = array();
 
 			// Loop through all of our sitemap integrations and create an array of our matched element variables
 			foreach ($sitemaps as $plugin)
 			{
-				foreach ($plugin as $definedContentTable => $element)
+				foreach ($plugin as $definedElementTable => $element)
 				{
 					if (isset($element['matchedElementVariable']))
 					{
@@ -85,15 +85,15 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 						if (isset($context[$matchedElementVariable]))
 						{
 							$matchedElementByVariable = $element;
-							$contentTable              = $definedContentTable;
-							$elementModel               = $context[$matchedElementVariable];
+							$elementTable             = $definedElementTable;
+							$elementModel             = $context[$matchedElementVariable];
 							break 2;
 						}
 					}
 				}
 			}
 
-			if ($matchedElementByVariable && $contentTable && $elementModel)
+			if ($matchedElementByVariable && $elementTable && $elementModel)
 			{
 				$elementGroup = isset($matchedElementByVariable['elementGroupId']) ?
 					$matchedElementByVariable['elementGroupId'] :
@@ -122,7 +122,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 							'hookInfo'       => $matchedElementByVariable,
 							'urlFormat'      => $result->urlFormat,
 							'elementModel'   => $elementModel,
-							'contentTable'   => $contentTable,
+							'elementTable'   => $elementTable,
 							'elementGroupId' => $elementModel->{$elementGroup}
 						);
 					}

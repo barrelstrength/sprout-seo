@@ -129,7 +129,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		switch ($type)
 		{
 			case SproutSeo_MetaLevels::MetaTagsGroup:
-				if (isset($sitemapInfo['contentTable']) && isset($sitemapInfo['elementGroupId']))
+				if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
 				{
 					sproutSeo()->optimize->templateMeta = $sitemapInfo;
 				}

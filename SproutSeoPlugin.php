@@ -236,12 +236,17 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
+	 * Returns supported sitemap urls by default.
+	 *
 	 * 'name_of_the_craft_element_table' => array(
-	 * 		'name' => Name that will display in the sitemps and metada UI
-	 *		'matchedElementVariable'  => How it's called from the templates
+	 * 		'name' => Name that will display in the sitemaps and metada UI
+	 *    'elementType' => Element Type class name
+	 *    'elementGroupId' => column name for the element id
+	 *    'service' => service class name
+	 *    'method'  => method name to get all elements
+	 *		'matchedElementVariable'  => Variable name to be called from the templates
 	 *
-	 *
-	 *
+	 * @return array
 	 */
 	public function registerSproutSeoSitemap()
 	{

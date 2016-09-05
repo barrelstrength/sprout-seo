@@ -224,9 +224,9 @@ class SproutSeo_MetaTagsModel extends BaseModel
 		if ($overrideInfo)
 		{
 			$elementGroupId = $overrideInfo['elementGroupId'];
-			$type           = $overrideInfo['contentTable'];
+			$elementTable   = $overrideInfo['elementTable'];
 
-			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByInfo($type, $elementGroupId);
+			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByInfo($elementTable, $elementGroupId);
 			$attributes    = $metaTagsModel->getAttributes();
 		}
 
