@@ -26,23 +26,26 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 	// Do we really need the @methodName syntax? or do we just write this in PHP?
 	public function getAttributes()
 	{
+		$elementModel = $this->sitemapInfo['elementModel'];
+		$prioritized  = $this->sitemapInfo['prioritizedMetaTagModel'];
+
 		return array(
 			"mainEntityOfPage" => array(
 				"@type" => "WebPage",
-			  "@id" => "https://google.com/article"
+			  "@id" => $elementModel->url
 			),
-			"headline" => "Article headline",
+			"headline" => $prioritized->title,
 			"image" => array(
 				"@type" => "ImageObject",
 			  "url" => "https://google.com/thumbnail1.jpg",
 			  "height" => 800,
 			  "width" => 800
 			),
-			"datePublished" => "2015-02-05T08:00:00+08:00",
-			"dateModified" => "2015-02-05T09:20:00+08:00",
+			"datePublished" => $elementModel->dateCreated,
+			"dateModified" => $elementModel->dateUpdated,
 			"author" => array(
 				"@type" => "Person",
-			  "name" => "John Doe"
+			  "name" => $elementModel->author->name
 			),
 			"publisher" => array(
 				"@type" => "Organization",
@@ -54,7 +57,7 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 			    "height" => 60
 				)
 			),
-			"description" => "A most wonderful article"
+			"description" => $prioritized->description
 		);
 	}
 }

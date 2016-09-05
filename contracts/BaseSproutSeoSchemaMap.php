@@ -4,13 +4,19 @@ namespace Craft;
 abstract class BaseSproutSeoSchemaMap
 {
 	public $attributes;
+	public $sitemapInfo;
 	private $isContext;
 
-	public function __construct($attributes = null, $isContext = true)
+	public function __construct($attributes = null, $isContext = true, $sitemapInfo = null)
 	{
 		if (isset($attributes))
 		{
 			$this->attributes = $attributes;
+		}
+
+		if (isset($sitemapInfo))
+		{
+			$this->sitemapInfo = $sitemapInfo;
 		}
 
 		if (isset($isContext))
@@ -41,9 +47,9 @@ abstract class BaseSproutSeoSchemaMap
 	 */
 	abstract public function getType();
 
-	// Does syntax user a generic `object` or do we need to assume 
+	// Does syntax user a generic `object` or do we need to assume
 	// we know specifically what the variable is called?
-	// 
+	//
 	// Have some out of box helper methods like getFirst()
 	// Do we really need the @methodName syntax? or do we just write this in PHP?
 	public function getAttributes()
@@ -107,7 +113,7 @@ abstract class BaseSproutSeoSchemaMap
 	 *
 	 * @return null
 	 */
-	public function getMockData() 
+	public function getMockData()
 	{
 		return null;
 	}

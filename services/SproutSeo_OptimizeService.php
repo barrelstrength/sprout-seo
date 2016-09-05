@@ -23,11 +23,15 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$this->context = $context;
 		$path          = craft()->request->getPath();
 
+		$globals = sproutSeo()->schema->getGlobals();
+
 		// get the sitemap info + urlFormat + $context->entry  $context->product ..
 		$sitemapInfo = sproutSeo()->schema->getSitemapInfo($context);
 
 		// Get our meta values
 		$prioritizedMetaTagModel = sproutSeo()->metaTags->getPrioritizedMetaTagModel($sitemapInfo);
+		$sitemapInfo['prioritizedMetaTagModel'] = $prioritizedMetaTagModel;
+		$sitemapInfo['globals'] = $globals;
 
 		$metaHtml = sproutSeo()->metaTags->getMetaTagHtml($prioritizedMetaTagModel);
 
@@ -35,7 +39,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// to create Structured Data ($context->entry, $context->product, etc)
 
 		// Get our structured data values
-		$schemaHtml = sproutSeo()->schema->getStructureDataHtml();
+		$schemaHtml = sproutSeo()->schema->getStructureDataHtml($sitemapInfo);
 
 		// Process our Structured Data Schema Maps with the objects they match up with in the context
 		$mainEntitySchemaHtml = sproutSeo()->schema->getMainEntityStructuredDataHtml($sitemapInfo);

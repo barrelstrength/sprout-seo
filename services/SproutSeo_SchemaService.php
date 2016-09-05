@@ -19,11 +19,15 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	/**
 	 * @return string
 	 */
-	public function getStructureDataHtml()
+	public function getStructureDataHtml($sitemapInfo)
 	{
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
-		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema');
+		$rawHtml = $this->getKnowledgeGraphLinkedData($sitemapInfo);
+
+		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema',
+			array('jsonLd'=>$rawHtml)
+		);
 
 		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
@@ -49,13 +53,13 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 
 			if ($enabledMatchingSitemap)
 			{
-				// Prepare our Matched Element with the Main Entity Schema Map
-				// Now we can grab the saved schemaMap setting from our sitemap and build our JSON-LD
-				// $schemaMap = $enabledMatchingSitemap['mainEntitySchemaMapId']
-				// @todo - fix hard coded Schema Map. Make dynamic.
-				$schemaMap = new SproutSeo_NewsArticleSchemaMap();
+				if ($enabledMatchingSitemap->schemaMap)
+				{
+					$class = 'Craft\SproutSeo_'.$enabledMatchingSitemap->schemaMap.'SchemaMap';
+					$schemaMap = new $class($enabledMatchingSitemap, true, $sitemapInfo);
 
-				$schema = $schemaMap->getSchema();
+					$schema = $schemaMap->getSchema();
+				}
 			}
 		}
 
@@ -182,11 +186,11 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		}
 	}
 
-	public function getKnowledgeGraphLinkedData()
+	public function getKnowledgeGraphLinkedData($sitemapInfo)
 	{
 		$output = null;
 
-		$globals = sproutSeo()->schema->getGlobals();
+		$globals = $sitemapInfo['globals'];
 
 		if ($identityType = $globals->identity['@type'])
 		{
@@ -195,7 +199,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 
 			$identitySchema = new $schemaModel(array(
 				'globals' => $globals
-			));
+			), true, $sitemapInfo);
 
 			$output = $identitySchema->getSchema();
 		}
