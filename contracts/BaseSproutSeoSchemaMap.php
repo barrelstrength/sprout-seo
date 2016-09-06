@@ -7,9 +7,9 @@ abstract class BaseSproutSeoSchemaMap
 	public $sitemapInfo;
 	private $isContext;
 
-	public function __construct($attributes = null, $isContext = true, $sitemapInfo = null)
+	public function __construct(array $attributes = null, bool $isContext = true, $sitemapInfo = null)
 	{
-		if (isset($attributes))
+		if (!empty($attributes))
 		{
 			$this->attributes = $attributes;
 		}
@@ -52,9 +52,10 @@ abstract class BaseSproutSeoSchemaMap
 	//
 	// Have some out of box helper methods like getFirst()
 	// Do we really need the @methodName syntax? or do we just write this in PHP?
+	// @todo - rename to getProperties()
 	public function getAttributes()
 	{
-		return null;
+		return array();
 	}
 
 	// Should we let integrations give users a chance to set setings in the CP UI?
@@ -68,7 +69,7 @@ abstract class BaseSproutSeoSchemaMap
 	 *
 	 * @return string
 	 */
-	public function getSchema()
+	final public function getSchema()
 	{
 		$attributes = $this->getAttributes();
 
