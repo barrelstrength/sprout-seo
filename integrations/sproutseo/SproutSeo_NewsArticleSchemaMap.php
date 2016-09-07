@@ -28,36 +28,54 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 	{
 		$elementModel = $this->sitemapInfo['elementModel'];
 		$prioritized  = $this->sitemapInfo['prioritizedMetaTagModel'];
+		// improve type time and name (improve all pass to a variable then return.)
 
-		return array(
+		$jsonLd = array(
 			"mainEntityOfPage" => array(
 				"@type" => "WebPage",
-			  "@id" => $elementModel->url
+				"@id" => $elementModel->url
 			),
-			"headline" => $prioritized->title,
-			"image" => array(
-				"@type" => "ImageObject",
-			  "url" => "https://google.com/thumbnail1.jpg",
-			  "height" => 800,
-			  "width" => 800
-			),
-			"datePublished" => $elementModel->dateCreated,
-			"dateModified" => $elementModel->dateUpdated,
-			"author" => array(
-				"@type" => "Person",
-			  "name" => isset($elementModel->author->name) ? $elementModel->author->name : null
-			),
-			"publisher" => array(
-				"@type" => "Organization",
-			  "name" => "Google",
-			  "logo" => array(
-					"@type" => "ImageObject",
-			    "url" => "https://google.com/logo.jpg",
-			    "width" => 600,
-			    "height" => 60
-				)
-			),
-			"description" => $prioritized->description
+			"headline" => $prioritized->title
 		);
+
+		if (isset($prioritized->ogImage))
+		{
+			$jsonLd['image'] = array(
+				"@type" => "ImageObject",
+				"url" => $prioritized->ogImage,
+				"height" => $prioritized->ogImageHeight,
+				"width" => $prioritized->ogImageWidth
+			);
+		}
+
+		$jsonLd['datePublished'] = $this->getDateFromDatetime($elementModel->dateCreated);
+		$jsonLd['dateModified']  = $this->getDateFromDatetime($elementModel->dateUpdated);
+
+		if (isset($elementModel->author->name))
+		{
+			$jsonLd['author'] = array(
+				"@type" => "Person",
+				"name" => $elementModel->author->name
+			);
+		}
+
+		// How get the publisher?
+		if (false)
+		{
+			$jsonLd['publisher'] = array(
+				"@type" => "Organization",
+				"name" => "Google",
+				"logo" => array(
+					"@type" => "ImageObject",
+					"url" => "https://google.com/logo.jpg",
+					"width" => 600,
+					"height" => 60
+				)
+			);
+		}
+
+		$jsonLd['description'] = $prioritized->description;
+
+		return $jsonLd;
 	}
 }

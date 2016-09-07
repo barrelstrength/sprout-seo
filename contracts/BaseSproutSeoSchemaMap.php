@@ -117,4 +117,44 @@ abstract class BaseSproutSeoSchemaMap
 	{
 		return null;
 	}
+
+	public function getDateFromDatetime($dateTime)
+	{
+		$date = null;
+
+		if ($dateTime)
+		{
+			$date = $dateTime->format('Y-m-d');
+		}
+
+		return $date;
+	}
+
+	/**
+	 * Returns jsonLd for a image object id
+	 * @param $imageId int
+	 * @return mixed
+	 */
+	public function getSchemaImageById($imageId)
+	{
+		$image = craft()->assets->getFileById($imageId);
+		$schema = "";
+
+		if ($image)
+		{
+			$asset = array(
+				"url"    => SproutSeoOptimizeHelper::getAssetUrl($image->id),
+				"width"  => $image->getWidth(),
+				"height" => $image->getHeight()
+			);
+
+			$imageObjectSchemaMap = new SproutSeo_ImageObjectSchemaMap(array(
+				'image' => $asset
+			), false);
+
+			$schema = $imageObjectSchemaMap->getSchema();
+		}
+
+		return $schema;
+	}
 }

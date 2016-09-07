@@ -40,24 +40,9 @@ class SproutSeo_PersonSchemaMap extends BaseSproutSeoSchemaMap
 		$schema['email']               = isset($person['email']) ? $person['email'] : null;
 
 		// @todo - consider renaming identity logo to the more generic "image" label
-		if (isset($person['logo'][0]))
+		if (isset($schema['logo'][0]))
 		{
-			$logo = craft()->assets->getFileById($person['logo'][0]);
-
-			if ($logo)
-			{
-				$logo = array(
-					"url"    => SproutSeoOptimizeHelper::getAssetUrl($logo->id),
-					"width"  => $logo->getWidth(),
-					"height" => $logo->getHeight()
-				);
-
-				$imageObjectSchemaMap = new SproutSeo_ImageObjectSchemaMap(array(
-					'image' => $logo
-				), false);
-
-				$schema['image'] = $imageObjectSchemaMap->getSchema();
-			}
+			$schema['image'] = $this->getSchemaImageById($schema['logo'][0]);
 		}
 
 		$schema['gender']              = isset($person['gender']) ? $person['gender'] : null;

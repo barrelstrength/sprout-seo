@@ -43,22 +43,7 @@ class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
 
 		if (isset($schema['logo'][0]))
 		{
-			$logo = craft()->assets->getFileById($schema['logo'][0]);
-
-			if ($logo)
-			{
-				$logo = array(
-					"url"    => SproutSeoOptimizeHelper::getAssetUrl($logo->id),
-					"width"  => $logo->getWidth(),
-					"height" => $logo->getHeight()
-				);
-
-				$imageObjectSchemaMap = new SproutSeo_ImageObjectSchemaMap(array(
-					'image' => $logo
-				), false);
-
-				$jsonLd['logo'] = $imageObjectSchemaMap->getSchema();
-			}
+			$jsonLd['logo'] = $this->getSchemaImageById($schema['logo'][0]);
 		}
 
 		// Add Corporate Contacts
