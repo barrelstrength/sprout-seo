@@ -24,8 +24,8 @@ class SproutSeo_PersonSchemaMap extends BaseSproutSeoSchemaMap
 	 */
 	public function getAttributes()
 	{
-		$person = $this->attributes['globals']['identity'];
-		$socialProfiles = $this->attributes['globals']['social'];
+		$person = $this->sitemapInfo['globals']['identity'];
+		$socialProfiles = $this->sitemapInfo['globals']['social'];
 
 		if (!$person)
 		{

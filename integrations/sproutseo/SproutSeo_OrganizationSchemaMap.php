@@ -31,8 +31,8 @@ class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
 	// Do we really need the @methodName syntax? or do we just write this in PHP?
 	public function getAttributes()
 	{
-		$schema         = $this->attributes['globals']['identity'];
-		$socialProfiles = $this->attributes['globals']['social'];
+		$schema         = $this->sitemapInfo['globals']['identity'];
+		$socialProfiles = $this->sitemapInfo['globals']['social'];
 
 		$jsonLd['name']                = isset($schema['name']) ? $schema['name'] : null;
 		$jsonLd['alternateEntityName'] = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
@@ -62,7 +62,7 @@ class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
 		}
 
 		// Add Corporate Contacts
-		$contacts = $this->attributes['globals']['contacts'];
+		$contacts = $this->sitemapInfo['globals']['contacts'];
 
 		if ($contacts)
 		{

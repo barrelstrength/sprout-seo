@@ -45,7 +45,7 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 			"dateModified" => $elementModel->dateUpdated,
 			"author" => array(
 				"@type" => "Person",
-			  "name" => $elementModel->author->name
+			  "name" => isset($elementModel->author->name) ? $elementModel->author->name : null
 			),
 			"publisher" => array(
 				"@type" => "Organization",
