@@ -28,7 +28,6 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 	{
 		$elementModel = $this->sitemapInfo['elementModel'];
 		$prioritized  = $this->sitemapInfo['prioritizedMetaTagModel'];
-		// improve type time and name (improve all pass to a variable then return.)
 
 		$jsonLd = array(
 			"mainEntityOfPage" => array(
