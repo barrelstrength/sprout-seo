@@ -105,7 +105,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$urls            = array();
 		$enabledSitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_sitemap')
+			->from('sproutseo_metataggroups')
 			->where('enabled = 1 and elementGroupId is not null')
 			->queryAll();
 
@@ -162,9 +162,9 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		// Fetching all custom pages defined in Sprout SEO
 		$customUrls = craft()->db->createCommand()
 			->select('url, priority, changeFrequency as frequency, dateUpdated')
-			->from('sproutseo_sitemap')
+			->from('sproutseo_metataggroups')
 			->where('enabled = 1')
-			->andWhere('url is not null')
+			->andWhere('url is not null and isCustom = 1')
 			->queryAll();
 
 		foreach ($customUrls as $customEntry)
