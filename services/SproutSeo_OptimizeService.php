@@ -29,7 +29,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$sitemapInfo = sproutSeo()->schema->getSitemapInfo($context);
 
 		// Get our meta values
-		$prioritizedMetaTagModel = sproutSeo()->metaTags->getPrioritizedMetaTagModel($sitemapInfo);
+		$prioritizedMetaTagModel = sproutSeo()->metaTags->getPrioritizedMetaTagModel(
+			$sitemapInfo
+		);
 		$sitemapInfo['prioritizedMetaTagModel'] = $prioritizedMetaTagModel;
 		$sitemapInfo['globals'] = $globals;
 

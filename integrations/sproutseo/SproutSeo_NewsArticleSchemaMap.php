@@ -28,6 +28,7 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 	{
 		$elementModel = $this->sitemapInfo['elementModel'];
 		$prioritized  = $this->sitemapInfo['prioritizedMetaTagModel'];
+		$globals      = $this->sitemapInfo['globals'];
 
 		$jsonLd = array(
 			"mainEntityOfPage" => array(
@@ -58,19 +59,22 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 			);
 		}
 
-		// How get the publisher?
-		if (false)
+		if ($globals['identity']['@type'])
 		{
 			$jsonLd['publisher'] = array(
-				"@type" => "Organization",
-				"name" => "Google",
-				"logo" => array(
-					"@type" => "ImageObject",
-					"url" => "https://google.com/logo.jpg",
-					"width" => 600,
-					"height" => 60
-				)
+				"@type" => $globals['identity']['@type'],
+				"name" => $globals['identity']['name']
 			);
+
+			if (isset($prioritized->ogImage))
+			{
+				$jsonLd['publisher']["logo"] = array(
+					"@type"  => "ImageObject",
+					"url"    => $prioritized->ogImage,
+					"height" => $prioritized->ogImageHeight,
+					"width"  => $prioritized->ogImageWidth
+				);
+			}
 		}
 
 		$jsonLd['description'] = $prioritized->description;

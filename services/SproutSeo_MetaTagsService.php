@@ -126,12 +126,14 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 */
 	public function getMetaTagsFromTemplate($type = null, $sitemapInfo)
 	{
+		$response = array();
+
 		switch ($type)
 		{
 			case SproutSeo_MetaLevels::MetaTagsGroup:
 				if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
 				{
-					sproutSeo()->optimize->templateMeta = $sitemapInfo;
+					$response = $sitemapInfo;
 				}
 				break;
 			case SproutSeo_MetaLevels::Entry:
@@ -141,13 +143,16 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 
 					if (isset($elementModel->id))
 					{
-						sproutSeo()->optimize->templateMeta = array('entryId' => $elementModel->id);
+						$response = array('entryId' => $elementModel->id);
 					}
 				}
 				break;
+			case SproutSeo_MetaLevels::Code:
+				$response = sproutSeo()->optimize->templateMeta;
+				break;
 		}
 
-		return sproutSeo()->optimize->templateMeta;
+		return $response;
 	}
 
 	// Global Meta Tags

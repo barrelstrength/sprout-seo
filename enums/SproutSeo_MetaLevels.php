@@ -21,13 +21,13 @@ abstract class SproutSeo_MetaLevels extends BaseEnum
 	const MetaTagsGroup = 'metaTagsGroup';
 
 	/**
-	 * codeOverrideMetaTagModel
-	 */
-	const Code = 'code';
-
-	/**
 	 * Highest Priority
-	 * entryOverrideMetaTagModel --High--
+	 * entryOverrideMetaTagModel
 	 */
 	const Entry = 'entry';
+
+	/**
+	 * codeOverrideMetaTagModel  --High--
+	 */
+	const Code = 'code';
 }
