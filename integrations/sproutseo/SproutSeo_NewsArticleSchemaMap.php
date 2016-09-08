@@ -59,7 +59,7 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 			);
 		}
 
-		if ($globals['identity']['@type'])
+		if (isset($globals['identity']['@type']))
 		{
 			$jsonLd['publisher'] = array(
 				"@type" => $globals['identity']['@type'],
