@@ -124,7 +124,7 @@ class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
 			$jsonLd['foundingDate'] = $foundingDate->format('Y-m-d');
 		}
 
-		$structuredData['foundingLocation'] = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
+		$jsonLd['foundingLocation'] = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
 
 		// Add Social Profile Links
 		if (count($socialProfiles))
@@ -136,7 +136,7 @@ class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
 				$profileUrls[] = $socialProfile['url'];
 			}
 
-			$schema['sameAs'] = array_values($profileUrls);
+			$jsonLd['sameAs'] = array_values($profileUrls);
 		}
 
 		return array_filter($jsonLd);
