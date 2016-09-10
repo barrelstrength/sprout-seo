@@ -48,13 +48,13 @@
 			class: 'nicetext'
 		}) }}
 
-		<div id="toggle-alternate" class="{{ (schema['alternateEntityName'] is defined and schema.alternateEntityName ?:
+		<div id="toggle-alternate" class="{{ (schema['alternateName'] is defined and schema.alternateName ?:
 		'hidden' ) }}">
 			{{ forms.textField({
 				label: "Alternate Name"|t,
 				instructions: "An alternate name you want search engines to consider (i.e. such as a legal name or nickname)."|t,
-				name: 'sproutseo[schema][identity][alternateEntityName]',
-				value: schema['alternateEntityName'] is defined ? schema.alternateEntityName : null,
+				name: 'sproutseo[schema][identity][alternateName]',
+				value: schema['alternateName'] is defined ? schema.alternateName : null,
 				errors: '',
 				maxlength: 60,
 				showCharsLeft: true,

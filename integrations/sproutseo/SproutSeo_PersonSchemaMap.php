@@ -33,16 +33,16 @@ class SproutSeo_PersonSchemaMap extends BaseSproutSeoSchemaMap
 		}
 
 		$schema['name']                = isset($person['name']) ? $person['name'] : null;
-		$schema['alternateEntityName'] = isset($person['alternateEntityName']) ? $person['alternateEntityName'] : null;
+		$schema['alternateName'] = isset($person['alternateName']) ? $person['alternateName'] : null;
 		$schema['description']         = isset($person['description']) ? $person['description'] : null;
 		$schema['url']                 = isset($person['url']) ? $person['url'] : null;
 		$schema['telephone']           = isset($person['telephone']) ? $person['telephone'] : null;
 		$schema['email']               = isset($person['email']) ? $person['email'] : null;
 
 		// @todo - consider renaming identity logo to the more generic "image" label
-		if (isset($schema['logo'][0]))
+		if (isset($person['logo'][0]))
 		{
-			$schema['image'] = $this->getSchemaImageById($schema['logo'][0]);
+			$schema['image'] = $this->getSchemaImageById($person['logo'][0]);
 		}
 
 		$schema['gender']              = isset($person['gender']) ? $person['gender'] : null;

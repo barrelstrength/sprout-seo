@@ -34,12 +34,12 @@ class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
 		$schema         = $this->sitemapInfo['globals']['identity'];
 		$socialProfiles = $this->sitemapInfo['globals']['social'];
 
-		$jsonLd['name']                = isset($schema['name']) ? $schema['name'] : null;
-		$jsonLd['alternateEntityName'] = isset($schema['alternateEntityName']) ? $schema['alternateEntityName'] : null;
-		$jsonLd['description']         = isset($schema['description']) ? $schema['description'] : null;
-		$jsonLd['url']                 = isset($schema['url']) ? $schema['url'] : null;
-		$jsonLd['telephone']           = isset($schema['telephone']) ? $schema['telephone'] : null;
-		$jsonLd['email']               = isset($schema['email']) ? $schema['email'] : null;
+		$jsonLd['name']          = isset($schema['name']) ? $schema['name'] : null;
+		$jsonLd['alternateName'] = isset($schema['alternateName']) ? $schema['alternateName'] : null;
+		$jsonLd['description']   = isset($schema['description']) ? $schema['description'] : null;
+		$jsonLd['url']           = isset($schema['url']) ? $schema['url'] : null;
+		$jsonLd['telephone']     = isset($schema['telephone']) ? $schema['telephone'] : null;
+		$jsonLd['email']         = isset($schema['email']) ? $schema['email'] : null;
 
 		if (isset($schema['logo'][0]))
 		{
