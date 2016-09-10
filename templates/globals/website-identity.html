@@ -319,7 +319,7 @@
 		}
 
 		$( "#identityType" ).change(function() {
-
+			console.log(this.value);
 			if(this.value === 'Person')
 			{
 				$( ".person-info" ).removeClass('hidden');
@@ -335,6 +335,11 @@
 			{
 				$( ".organization-info" ).removeClass('hidden');
 				$( ".person-info" ).addClass('hidden');
+
+				if ($( "#first" ).val() == 'LocalBusiness')
+				{
+					$( "#localbusiness" ).removeClass('hidden');
+				}
 			}
 			else
 			{
@@ -343,6 +348,17 @@
 			}
 		});
 
+		$( "#first" ).change(function() {
+			console.log(this.value);
+			if(this.value === 'LocalBusiness')
+			{
+				$( "#localbusiness" ).removeClass('hidden');
+			}
+			else
+			{
+				$( "#localbusiness" ).addClass('hidden');
+			}
+		});
 	});
 
 {% endincludejs %}
