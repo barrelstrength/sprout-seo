@@ -94,7 +94,9 @@ class SproutSeoVariable
 
 	/**
 	 * Returns all templates
+	 *
 	 * @param array $urls to avoid
+	 *
 	 * @return mixed
 	 */
 	public function getCustomMetaTagGroups($urls)
@@ -104,7 +106,9 @@ class SproutSeoVariable
 
 	/**
 	 * Returns all templates
+	 *
 	 * @param array $urls to avoid
+	 *
 	 * @return mixed
 	 */
 	public function getCustomSiteMaps($urls)
@@ -218,11 +222,10 @@ class SproutSeoVariable
 		return $element != null ? $element : false;
 	}
 
-
 	public function getOrganizationOptions()
 	{
-		$tree = file_get_contents(CRAFT_PLUGINS_PATH . 'sproutseo/resources/jsonld/tree.jsonld');
-		$json = json_decode($tree, true);
+		$tree       = file_get_contents(CRAFT_PLUGINS_PATH . 'sproutseo/resources/jsonld/tree.jsonld');
+		$json       = json_decode($tree, true);
 		$jsonByName = array();
 
 		foreach ($json['children'] as $key => $value)
@@ -275,148 +278,148 @@ class SproutSeoVariable
 			case 'contacts':
 
 				$options = array(
-						array(
-							'label' => "Select Type...",
-							'value' => ''
-						),
-						array(
-							'label' => "Customer Service",
-							'value' => 'customer service'
-						),
-						array(
-							'label' => "Technical Support",
-							'value' => 'technical support'
-						),
-						array(
-							'label' => "Billing Support",
-							'value' => 'billing support'
-						),
-						array(
-							'label' => "Bill Payment",
-							'value' => 'bill payment'
-						),
-						array(
-							'label' => "Sales",
-							'value' => 'sales'
-						),
-						array(
-							'label' => "Reservations",
-							'value' => 'reservations'
-						),
-						array(
-							'label' => "Credit Card Support",
-							'value' => 'credit card support'
-						),
-						array(
-							'label' => "Emergency",
-							'value' => 'emergency'
-						),
-						array(
-							'label' => "Baggage Tracking",
-							'value' => 'baggage tracking'
-						),
-						array(
-							'label' => "Roadside Assistance",
-							'value' => 'roadside assistance'
-						),
-						array(
-							'label' => "Package Tracking",
-							'value' => 'package tracking'
-						)
-					);
+					array(
+						'label' => "Select Type...",
+						'value' => ''
+					),
+					array(
+						'label' => "Customer Service",
+						'value' => 'customer service'
+					),
+					array(
+						'label' => "Technical Support",
+						'value' => 'technical support'
+					),
+					array(
+						'label' => "Billing Support",
+						'value' => 'billing support'
+					),
+					array(
+						'label' => "Bill Payment",
+						'value' => 'bill payment'
+					),
+					array(
+						'label' => "Sales",
+						'value' => 'sales'
+					),
+					array(
+						'label' => "Reservations",
+						'value' => 'reservations'
+					),
+					array(
+						'label' => "Credit Card Support",
+						'value' => 'credit card support'
+					),
+					array(
+						'label' => "Emergency",
+						'value' => 'emergency'
+					),
+					array(
+						'label' => "Baggage Tracking",
+						'value' => 'baggage tracking'
+					),
+					array(
+						'label' => "Roadside Assistance",
+						'value' => 'roadside assistance'
+					),
+					array(
+						'label' => "Package Tracking",
+						'value' => 'package tracking'
+					)
+				);
 
 				break;
 
 			case 'social':
 
 				$options = array(
-						array(
-							'label' => "Select...",
-							'value' => ''
-						),
-						array(
-							'label' => "Facebook",
-							'value' => 'Facebook'
-						),
-						array(
-							'label' => "Twitter",
-							'value' => 'Twitter'
-						),
-						array(
-							'label' => "Google+",
-							'value' => 'Google+'
-						),
-						array(
-							'label' => "Instagram",
-							'value' => 'Instagram',
-							'icon' => 'ABCD'
-						),
-						array(
-							'label' => "YouTube",
-							'value' => 'YouTube'
-						),
-						array(
-							'label' => "LinkedIn",
-							'value' => 'LinkedIn'
-						),
-						array(
-							'label' => "Myspace",
-							'value' => 'Myspace'
-						),
-						array(
-							'label' => "Pinterest",
-							'value' => 'Pinterest'
-						),
-						array(
-							'label' => "SoundCloud",
-							'value' => 'SoundCloud'
-						),
-						array(
-							'label' => "Tumblr",
-							'value' => 'Tumblr'
-						)
-					);
+					array(
+						'label' => "Select...",
+						'value' => ''
+					),
+					array(
+						'label' => "Facebook",
+						'value' => 'Facebook'
+					),
+					array(
+						'label' => "Twitter",
+						'value' => 'Twitter'
+					),
+					array(
+						'label' => "Google+",
+						'value' => 'Google+'
+					),
+					array(
+						'label' => "Instagram",
+						'value' => 'Instagram',
+						'icon'  => 'ABCD'
+					),
+					array(
+						'label' => "YouTube",
+						'value' => 'YouTube'
+					),
+					array(
+						'label' => "LinkedIn",
+						'value' => 'LinkedIn'
+					),
+					array(
+						'label' => "Myspace",
+						'value' => 'Myspace'
+					),
+					array(
+						'label' => "Pinterest",
+						'value' => 'Pinterest'
+					),
+					array(
+						'label' => "SoundCloud",
+						'value' => 'SoundCloud'
+					),
+					array(
+						'label' => "Tumblr",
+						'value' => 'Tumblr'
+					)
+				);
 
 				break;
 
 			case 'ownership':
 
 				$options = array(
-						array(
-							'label' => "Select...",
-							'value' => ''
-						),
-						array(
-							'label' => "Bing Webmaster Tools",
-							'value' => 'bingWebmasterTools',
-							'metaTagName' => 'msvalidate.01'
-						),
-						array(
-							'label' => "Facebook App ID",
-							'value' => 'facebookAppId',
-							'metaTagName' => 'fb:app_id'
-						),
-						array(
-							'label' => "Facebook Page",
-							'value' => 'FacebookPage',
-							'metaTagName' => 'fb:app_id'
-						),
-						array(
-							'label' => "Google Search Console",
-							'value' => 'googleSearchConsole',
-							'metaTagName' => 'google-site-verification'
-						),
-						array(
-							'label' => "Pinterest",
-							'value' => 'pinterest', '
+					array(
+						'label' => "Select...",
+						'value' => ''
+					),
+					array(
+						'label'       => "Bing Webmaster Tools",
+						'value'       => 'bingWebmasterTools',
+						'metaTagName' => 'msvalidate.01'
+					),
+					array(
+						'label'       => "Facebook App ID",
+						'value'       => 'facebookAppId',
+						'metaTagName' => 'fb:app_id'
+					),
+					array(
+						'label'       => "Facebook Page",
+						'value'       => 'FacebookPage',
+						'metaTagName' => 'fb:app_id'
+					),
+					array(
+						'label'       => "Google Search Console",
+						'value'       => 'googleSearchConsole',
+						'metaTagName' => 'google-site-verification'
+					),
+					array(
+						'label' => "Pinterest",
+						'value' => 'pinterest', '
 							metaTagName' => 'p:domain_verify'
-						),
-						array(
-							'label' => "Yandex Webmaster Tools",
-							'value' => 'yandexWebmasterTools',
-							'metaTagName' => 'yandex-verification'
-						)
-					);
+					),
+					array(
+						'label'       => "Yandex Webmaster Tools",
+						'value'       => 'yandexWebmasterTools',
+						'metaTagName' => 'yandex-verification'
+					)
+				);
 
 				break;
 		}
@@ -429,7 +432,7 @@ class SproutSeoVariable
 		$schemaGlobals = sproutSeo()->schema->getGlobals();
 		$options       = $this->getGlobalOptions($schemaType);
 
-		array_push($options, array('optgroup'=>'Custom'));
+		array_push($options, array('optgroup' => 'Custom'));
 
 		$schemas = $schemaGlobals->{$schemaType} != null ? $schemaGlobals->{$schemaType} : array();
 
@@ -437,11 +440,11 @@ class SproutSeoVariable
 		{
 			if (!$this->isCustomValue($schemaType, $schema[$handle]))
 			{
-				array_push($options, array('label'=>$schema[$handle], 'value'=>$schema[$handle]));
+				array_push($options, array('label' => $schema[$handle], 'value' => $schema[$handle]));
 			}
 		}
 
-		array_push($options, array('label'=>'Add Custom', 'value'=>'custom'));
+		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
 
 		return $options;
 	}
@@ -487,14 +490,14 @@ class SproutSeoVariable
 		$schemaGlobals = sproutSeo()->schema->getGlobals();
 		$gender        = $schemaGlobals[$schemaType]['gender'];
 
-		array_push($options, array('optgroup'=>'Custom'));
+		array_push($options, array('optgroup' => 'Custom'));
 
-		if (!array_key_exists($gender, array('female'=>0, 'male'=>1)))
+		if (!array_key_exists($gender, array('female' => 0, 'male' => 1)) && $gender != '')
 		{
-			array_push($options, array('label'=>$gender, 'value'=>$gender));
+			array_push($options, array('label' => $gender, 'value' => $gender));
 		}
 
-		array_push($options, array('label'=>'Add Custom', 'value'=>'custom'));
+		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
 
 		return $options;
 	}
@@ -502,15 +505,15 @@ class SproutSeoVariable
 	/**
 	 * Returns all plain fields available given a type
 	 *
-	 *@return array
-	*/
+	 * @return array
+	 */
 	public function getOptimizedOptions($type = "PlainText", $handle = null, $settings = null)
 	{
 		$options = array();
 		$fields  = craft()->fields->getAllFields();
 
 		$options[''] = "Select...";
-		$options[] = array('optgroup' => "Dynamic Meta");
+		$options[]   = array('optgroup' => "Dynamic Meta");
 
 		if ($handle == 'optimizedTitleField')
 		{
@@ -521,8 +524,8 @@ class SproutSeoVariable
 		{
 			if ($field->type == $type)
 			{
-				$context = explode(":", $field->context);
-				$context = isset($context[0]) ? $context[0] : 'global';
+				$context             = explode(":", $field->context);
+				$context             = isset($context[0]) ? $context[0] : 'global';
 				$options[$field->id] = $field->name;
 			}
 		}
@@ -537,17 +540,17 @@ class SproutSeoVariable
 			$options['custom'] = 'Add Custom';
 		}
 
-		$options[] = array('optgroup' => "Advanced Meta");
+		$options[]           = array('optgroup' => "Advanced Meta");
 		$options['manually'] = 'Manually';
 
-		return  $options;
+		return $options;
 	}
 
 	/**
 	 * Returns all plain fields available given a type
 	 *
-	 *@return array
-	*/
+	 * @return array
+	 */
 	public function getOptimizedTitleOptions($settings)
 	{
 		return $this->getOptimizedOptions('PlainText', 'optimizedTitleField', $settings);
@@ -556,8 +559,8 @@ class SproutSeoVariable
 	/**
 	 * Returns all plain fields available given a type
 	 *
-	 *@return array
-	*/
+	 * @return array
+	 */
 	public function getOptimizedDescriptionOptions($settings)
 	{
 		return $this->getOptimizedOptions('PlainText', 'optimizedDescriptionField', $settings);
@@ -566,8 +569,8 @@ class SproutSeoVariable
 	/**
 	 * Returns all plain fields available given a type
 	 *
-	 *@return array
-	*/
+	 * @return array
+	 */
 	public function getOptimizedAssetsOptions()
 	{
 		return $this->getOptimizedOptions("Assets");
@@ -576,8 +579,8 @@ class SproutSeoVariable
 	/**
 	 * Returns all plain fields available given a type
 	 *
-	 *@return array
-	*/
+	 * @return array
+	 */
 	public function getGlobalRobots()
 	{
 		$globals = sproutSeo()->schema->getGlobals();
@@ -589,8 +592,8 @@ class SproutSeoVariable
 	/**
 	 * Returns registerSproutSeoSchemaMaps hook
 	 *
-	 *@return array
-	*/
+	 * @return array
+	 */
 	public function getSchemaMaps()
 	{
 		$schemaMaps = craft()->plugins->call('registerSproutSeoSchemaMaps');
@@ -601,18 +604,18 @@ class SproutSeoVariable
 	/**
 	 * Returns registerSproutSeoSchemaMaps hook
 	 *
-	 *@return array
-	*/
+	 * @return array
+	 */
 	public function getSchemaMapsArray()
 	{
 		$schemaMaps = $this->getSchemaMaps();
-		$schemas    = array(''=>'Select...');
+		$schemas    = array('' => 'Select...');
 
 		foreach ($schemaMaps as $schemasByPlugin)
 		{
 			foreach ($schemasByPlugin as $schema)
 			{
-				$type = $schema->getType();
+				$type           = $schema->getType();
 				$schemas[$type] = $schema->getName();
 			}
 		}

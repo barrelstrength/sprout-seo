@@ -268,13 +268,16 @@
 				<div class="input">
 
 					<div class="field sprout-selectother">
-						{%set optionsTest = craft.sproutseo.getGenderOptions() %}
+
+						{%set genderOptions = craft.sproutseo.getGenderOptions() %}
+
 						{{ sproutFields.selectOther({
 							name: 'sproutseo[schema][identity][gender]',
-							options: optionsTest ,
+							options: genderOptions ,
 							value: schema['gender'] is defined ? schema.gender : null,
 							otherPlaceholderText: 'Custom Type'|t
 						}) }}
+
 					</div>
 				</div>
 			</div>
