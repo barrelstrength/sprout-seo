@@ -187,36 +187,36 @@ class SproutSeoOptimizeHelper
 			}
 		}
 
-		if (!empty($model->metaImage))
+		if (!empty($model->optimizedImage))
 		{
 			// If twitterImage starts with "http", roll with it
 			// If not, then process what we have to try to extract the URL
-			if (substr($model->metaImage, 0, 4) !== "http")
+			if (substr($model->optimizedImage, 0, 4) !== "http")
 			{
-				if (!is_numeric($model->metaImage))
+				if (!is_numeric($model->optimizedImage))
 				{
-					throw new \Exception('Meta Image override value "' . $model->metaImage . '" must be an	absolute url.');
+					throw new \Exception('Meta Image override value "' . $model->optimizedImage . '" must be an	absolute url.');
 				}
 
-				$metaImage = craft()->elements->getElementById($model->metaImage);
+				$optimizedImage = craft()->elements->getElementById($model->optimizedImage);
 
-				if (!empty($metaImage))
+				if (!empty($optimizedImage))
 				{
-					$imageUrl = (string) ($metaImage->url);
+					$imageUrl = (string) ($optimizedImage->url);
 					// check to se	e if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
 					{
-						$model->metaImage = $metaImage->url;
+						$model->optimizedImage = $optimizedImage->url;
 					}
 					else
 					{
-						$model->metaImage = UrlHelper::getSiteUrl($metaImage->url);
+						$model->optimizedImage = UrlHelper::getSiteUrl($optimizedImage->url);
 					}
 				}
 				else
 				{
 					// If our selected asset was deleted, make sure it is null
-					$model->metaImage = null;
+					$model->optimizedImage = null;
 				}
 			}
 		}
@@ -234,19 +234,20 @@ class SproutSeoOptimizeHelper
 				throw new \Exception('Meta Image override value "' . $id . '" must be an	absolute url.');
 			}
 
-			$metaImage = craft()->elements->getElementById($id);
+			$asset = craft()->elements->getElementById($id);
 
-			if (!empty($metaImage))
+			if (!empty($asset))
 			{
-				$imageUrl = (string) ($metaImage->url);
-				// check to se	e if Asset already has full Site Url in folder Url
+				$imageUrl = (string) ($asset->url);
+
+				// check to see if Asset already has full Site Url in folder Url
 				if (strpos($imageUrl, "http") !== false)
 				{
-					$url = $metaImage->url;
+					$url = $asset->url;
 				}
 				else
 				{
-					$url = UrlHelper::getSiteUrl($metaImage->url);
+					$url = UrlHelper::getSiteUrl($asset->url);
 				}
 			}
 			else

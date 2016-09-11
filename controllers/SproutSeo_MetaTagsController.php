@@ -27,17 +27,17 @@ class SproutSeo_MetaTagsController extends BaseController
 			if (count($metatag) == 3)
 			{
 				$elementGroupId = $metatag[2];
-				$groupName = $metatag[0];
-				$type = explode('-', $metatag[1]);
-				$elementType = $type[0];
+				$groupName      = $metatag[0];
+				$type           = explode('-', $metatag[1]);
+				$elementType    = $type[0];
 
 				$metaTags->elementGroupId = $elementGroupId;
-				$metaTags->type = $elementType;
+				$metaTags->type           = $elementType;
 
 				if ($segment == 'new')
 				{
 					// Just trying to get the url
-					$sitemaps = craft()->plugins->call('registerSproutSeoSitemap');
+					$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
 					$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $elementType);
 
 					if ($elementInfo != null)
@@ -45,8 +45,8 @@ class SproutSeo_MetaTagsController extends BaseController
 						$elementGroup = $elementInfo['elementGroupId'];
 
 						$groupInfo = array(
-							'groupName' => $elementGroup,
-							'sitemapId' => $metatag[1],
+							'groupName'      => $elementGroup,
+							'sitemapId'      => $metatag[1],
 							'elementGroupId' => $elementGroupId
 						);
 
@@ -59,8 +59,8 @@ class SproutSeo_MetaTagsController extends BaseController
 						}
 					}
 
-					$metaTags->name = ucfirst($groupName).' '.ucfirst($elementType);
-					$metaTags->handle = strtolower($groupName).ucfirst($elementType);
+					$metaTags->name   = ucfirst($groupName) . ' ' . ucfirst($elementType);
+					$metaTags->handle = strtolower($groupName) . ucfirst($elementType);
 					$metaTags->handle = str_replace(' ', '', $metaTags->handle);
 				}
 			}
@@ -110,7 +110,6 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Set elementType
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
-
 		$this->renderTemplate('sproutseo/metadata/_edit', array(
 			'metaImageElements'    => $metaImageElements,
 			'metaTagGroupId'       => $metaTagGroupId,
@@ -137,7 +136,7 @@ class SproutSeo_MetaTagsController extends BaseController
 		$model = new SproutSeo_MetaTagsModel();
 
 		$metaTags = craft()->request->getPost('sproutseo_fields');
-		$sitemap = craft()->request->getPost('sitemap_fields');
+		$sitemap  = craft()->request->getPost('sitemap_fields');
 
 		// Check if this is a new or existing Meta Tag Group
 		$metaTags['id'] = (isset($metaTags['id']) ? $metaTags['id'] : null);
@@ -149,9 +148,11 @@ class SproutSeo_MetaTagsController extends BaseController
 		}
 
 		// Make our images single IDs instead of an array
-		$metaTags['ogImage']      = (!empty($metaTags['metaImage']) ? $metaTags['metaImage'][0] : null);
-		$metaTags['twitterImage'] = (!empty($metaTags['metaImage']) ? $metaTags['metaImage'][0] : null);
-		$metaTags['metaImage']    = (!empty($metaTags['metaImage']) ? $metaTags['metaImage'][0] : null);
+		$optimizedImage = (!empty($metaTags['optimizedImage']) ? $metaTags['optimizedImage'][0] : null);
+
+		$metaTags['optimizedImage'] = $optimizedImage;
+		$metaTags['ogImage']        = $optimizedImage;
+		$metaTags['twitterImage']   = $optimizedImage;
 
 		$model->setAttributes($metaTags);
 

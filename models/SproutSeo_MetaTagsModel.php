@@ -11,7 +11,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 
 	protected function defineAttributes()
 	{
-		$sitemap = array (
+		$sitemap = array(
 			'elementGroupId'  => array(AttributeType::Number),
 			'type'            => array(AttributeType::String),
 			'priority'        => array(
@@ -32,7 +32,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 				'default'  => false,
 				'required' => true
 			),
-			'isCustom'         => array(
+			'isCustom'        => array(
 				AttributeType::Bool,
 				'default'  => false,
 				'required' => true
@@ -56,14 +56,15 @@ class SproutSeo_MetaTagsModel extends BaseModel
 		);
 
 		$this->basicMeta = array(
-			'title'        => array(AttributeType::String),
-			'elementTitle' => array(AttributeType::String),
-			'description'  => array(AttributeType::String),
-			'metaImage'    => array(AttributeType::String),
-			'keywords'     => array(AttributeType::String),
-			'author'       => array(AttributeType::String),
-			'publisher'    => array(AttributeType::String),
-			'locale'       => array(AttributeType::String),
+			'optimizedTitle'       => array(AttributeType::String),
+			'optimizedDescription' => array(AttributeType::String),
+			'optimizedImage'       => array(AttributeType::String),
+			'title'                => array(AttributeType::String),
+			'description'          => array(AttributeType::String),
+			'keywords'             => array(AttributeType::String),
+			'author'               => array(AttributeType::String),
+			'publisher'            => array(AttributeType::String),
+			'locale'               => array(AttributeType::String),
 		);
 
 		$this->robotsMeta = array(
@@ -80,18 +81,18 @@ class SproutSeo_MetaTagsModel extends BaseModel
 		);
 
 		$this->openGraphMeta = array(
-			'ogTitle'       => array(AttributeType::String),
 			'ogType'        => array(AttributeType::String),
+			'ogSiteName'    => array(AttributeType::String),
+			'ogAuthor'      => array(AttributeType::String),
+			'ogPublisher'   => array(AttributeType::String),
 			'ogUrl'         => array(AttributeType::String),
+			'ogTitle'       => array(AttributeType::String),
+			'ogDescription' => array(AttributeType::String),
 			'ogImage'       => array(AttributeType::String),
 			'ogImageSecure' => array(AttributeType::String),
 			'ogImageWidth'  => array(AttributeType::String),
 			'ogImageHeight' => array(AttributeType::String),
 			'ogImageType'   => array(AttributeType::String),
-			'ogAuthor'      => array(AttributeType::String),
-			'ogPublisher'   => array(AttributeType::String),
-			'ogSiteName'    => array(AttributeType::String),
-			'ogDescription' => array(AttributeType::String),
 			'ogAudio'       => array(AttributeType::String),
 			'ogVideo'       => array(AttributeType::String),
 			'ogLocale'      => array(AttributeType::String),
@@ -100,10 +101,10 @@ class SproutSeo_MetaTagsModel extends BaseModel
 		$this->twitterCardsMeta = array(
 			'twitterCard'                    => array(AttributeType::String),
 			'twitterSite'                    => array(AttributeType::String),
-			'twitterTitle'                   => array(AttributeType::String),
 			'twitterCreator'                 => array(AttributeType::String),
-			'twitterDescription'             => array(AttributeType::String),
 			'twitterUrl'                     => array(AttributeType::String),
+			'twitterTitle'                   => array(AttributeType::String),
+			'twitterDescription'             => array(AttributeType::String),
 			'twitterImage'                   => array(AttributeType::String),
 			'twitterPlayer'                  => array(AttributeType::String),
 			'twitterPlayerStream'            => array(AttributeType::String),

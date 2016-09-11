@@ -12,8 +12,9 @@ class m160616_000000_sproutSeo_addOptimizeFieldDataColumns extends BaseMigration
 	{
 		$tableName   = 'sproutseo_metatagcontent';
 		$columnsName = array(
-			array('name' => 'elementTitle', 'after' => 'title'),
-			array('name' => 'metaImage', 'after' => 'description')
+			array('name' => 'optimizedTitle', 'before' => 'title'),
+			array('name' => 'optimizedDescription', 'before' => 'title'),
+			array('name' => 'optimizedImage', 'before' => 'title')
 		);
 
 		foreach ($columnsName as $key => $column)

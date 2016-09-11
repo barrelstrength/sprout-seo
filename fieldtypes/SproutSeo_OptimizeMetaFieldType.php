@@ -108,9 +108,9 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		// Make sure all of our images are strings (twitter/og)
 		// We need to do this in case another seo field with images exists
-		$attributes['twitterImage'] = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
-		$attributes['ogImage']      = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
-		$attributes['metaImage']    = (!empty($attributes['metaImage']) ? $attributes['metaImage'][0] : null);
+		$attributes['optimizedImage'] = (!empty($attributes['optimizedImage']) ? $attributes['optimizedImage'][0] : null);
+		$attributes['ogImage']        = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
+		$attributes['twitterImage']   = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
 
 		// Validate any setting of the field type
 		$settings = $this->getSettings();
@@ -123,54 +123,65 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			$attributes['ogTitle']      = $attributes['title'];
 			$attributes['twitterTitle'] = $attributes['title'];
 		}
-		else if ($settings['optimizedTitleField'] != 'manually')
+		else
 		{
-			//it's an field id.
-			if (is_numeric($settings['optimizedTitleField']))
+			if ($settings['optimizedTitleField'] != 'manually')
 			{
-				$title = $this->_getElementField($settings['optimizedTitleField']);
-			}
-			else if ($settings['optimizedTitleField'] == 'element-title' && $entryId)
-			{
-				$entry = craft()->elements->getElementById($entryId);
-
-				if ($entry)
+				//it's an field id.
+				if (is_numeric($settings['optimizedTitleField']))
 				{
-					$title = $entry->title;
+					$title = $this->_getElementField($settings['optimizedTitleField']);
 				}
-			}
-			else
-			{
-				$title = craft()->templates->renderObjectTemplate($settings['optimizedTitleField'], $this->element);
+				else
+				{
+					// @todo - why do we need to test this against a string 'element-title'?
+					if ($settings['optimizedTitleField'] == 'element-title' && $entryId)
+					{
+						$entry = craft()->elements->getElementById($entryId);
+
+						if ($entry)
+						{
+							$title = $entry->title;
+						}
+					}
+					else
+					{
+						$title = craft()->templates->renderObjectTemplate($settings['optimizedTitleField'], $this->element);
+					}
+				}
 			}
 		}
 
-		$attributes['title']        = $title;
-		$attributes['elementTitle'] = $title;
+		$attributes['title']          = $title;
+		$attributes['optimizedTitle'] = $title;
 		// Title - validations ends
 
 		// Description - validations begins
-		$ogDescription = null;
+		$ogDescription      = null;
 		$twitterDescription = null;
 
+		// @todo - we should probably be using $attributes['optimizedDescription'] here
 		if ($settings['optimizedDescriptionField'] == 'manually' && $attributes['description'])
 		{
 			$ogDescription      = $attributes['description'];
 			$twitterDescription = $attributes['description'];
 		}
-		else if ($settings['optimizedDescriptionField'] != 'manually')
+		else
 		{
-			//it's an field id.
-			if (is_numeric($settings['optimizedDescriptionField']))
+			if ($settings['optimizedDescriptionField'] != 'manually')
 			{
-				$ogDescription = $this->_getElementField($settings['optimizedDescriptionField']);
-				$twitterDescription = $ogDescription;
-			}
-			//it's a custom value
-			else
-			{
-				$ogDescription      = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
-				$twitterDescription = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
+				//it's an field id.
+				if (is_numeric($settings['optimizedDescriptionField']))
+				{
+					$ogDescription      = $this->_getElementField($settings['optimizedDescriptionField']);
+					$twitterDescription = $ogDescription;
+				}
+				//it's a custom value
+				else
+				{
+					$ogDescription      = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
+					$twitterDescription = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
+				}
 			}
 		}
 
@@ -181,18 +192,21 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		// Image Field - validations begins
 		$metaImage = null;
-		if ($settings['optimizedImageField'] == 'manually' && $attributes['metaImage'])
+		if ($settings['optimizedImageField'] == 'manually' && $attributes['optimizedImage'])
 		{
-			$metaImage = $attributes['metaImage'];
+			$metaImage = $attributes['optimizedImage'];
 		}
-		else if ($settings['optimizedImageField'] != 'manually')
+		else
 		{
-			$metaImage = $this->_getElementField($settings['optimizedImageField']);
+			if ($settings['optimizedImageField'] != 'manually')
+			{
+				$metaImage = $this->_getElementField($settings['optimizedImageField']);
+			}
 		}
 
-		$attributes['ogImage']      = $metaImage;
-		$attributes['twitterImage'] = $metaImage;
-		$attributes['metaImage']    = $metaImage;
+		$attributes['optimizedImage'] = $metaImage;
+		$attributes['ogImage']        = $metaImage;
+		$attributes['twitterImage']   = $metaImage;
 		// Image Field - validations ends
 
 		// Update or create our Meta Tag Content entry
@@ -217,7 +231,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 			if ($field)
 			{
-				if(isset($_POST['fields'][$field->handle]))
+				if (isset($_POST['fields'][$field->handle]))
 				{
 					if ($field->type == 'Assets')
 					{
