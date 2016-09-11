@@ -129,7 +129,7 @@ class SproutSeo_SchemaController extends BaseController
 			$globalFallbackMetaTags->ogAuthor      = '';
 			$globalFallbackMetaTags->ogPublisher   = '';
 			$globalFallbackMetaTags->ogTitle       = $metaTitle;
-			$globalFallbackMetaTags->description   = $metaDescription;
+			$globalFallbackMetaTags->ogDescription = $metaDescription;
 			$globalFallbackMetaTags->ogImage       = $metaImage;
 			$globalFallbackMetaTags->ogImageSecure = '';
 			$globalFallbackMetaTags->ogImageWidth  = '';
