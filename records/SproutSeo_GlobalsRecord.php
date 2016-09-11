@@ -17,6 +17,7 @@ class SproutSeo_GlobalsRecord extends BaseRecord
 			'ownership' => array(AttributeType::Mixed),
 			'contacts'  => array(AttributeType::Mixed),
 			'social'    => array(AttributeType::Mixed),
+			'robots'    => array(AttributeType::Mixed)
 		);
 	}
 

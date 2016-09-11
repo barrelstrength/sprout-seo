@@ -64,9 +64,55 @@ class SproutSeoOptimizeHelper
 		return StringHelper::arrayToString($robotsArray);
 	}
 
+	/**
+	 * @param null $robots
+	 *
+	 * @return null|string
+	 */
+	public static function getRobotsMetaValue($robots = null)
+	{
+		if (!isset($robots))
+		{
+			return null;
+		}
+
+		if (is_string($robots))
+		{
+			return $robots;
+		}
+
+		$robotsMetaValue = '';
+
+		foreach ($robots as $key => $value)
+		{
+			if ($value == '')
+			{
+				continue;
+			}
+
+			if ($robotsMetaValue == '')
+			{
+				$robotsMetaValue .= $key;
+			}
+			else
+			{
+				$robotsMetaValue .= ',' . $key;
+			}
+		}
+
+		return $robotsMetaValue;
+	}
+
 	public static function prepRobotsForSettings($robotsString)
 	{
-		$arrayRobots = explode(",", $robotsString);
+		$robotsArray = explode(",", $robotsString);
+
+		$robotsSettings = array();
+
+		foreach ($robotsArray as $key => $value)
+		{
+			$robotsSettings[$value] = 1;
+		}
 
 		$robots = array(
 			'noindex'      => 0,
@@ -77,14 +123,12 @@ class SproutSeoOptimizeHelper
 			'noydir'       => 0,
 		);
 
-		if (count($arrayRobots) == 6)
+		foreach ($robots as $key => $value)
 		{
-			$robots['noindex']      = $arrayRobots[0];
-			$robots['nofollow']     = $arrayRobots[1];
-			$robots['noarchive']    = $arrayRobots[2];
-			$robots['noimageindex'] = $arrayRobots[3];
-			$robots['noodp']        = $arrayRobots[4];
-			$robots['noydir']       = $arrayRobots[5];
+			if (isset($robotsSettings[$key]))
+			{
+				$robots[$key] = 1;
+			}
 		}
 
 		return $robots;
@@ -255,6 +299,60 @@ class SproutSeoOptimizeHelper
 				// If our selected asset was deleted, make sure it is null
 				$url = null;
 			}
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Check our Social Profile settings for a Twitter profile.
+	 * Return the first Twitter profile as an @profileName
+	 *
+	 * @param $socialProfiles
+	 *
+	 * @return null|string
+	 */
+	public static function getTwitterProfileName($socialProfiles = array())
+	{
+		if (!isset($socialProfiles))
+		{
+			return null;
+		}
+
+		$twitterProfileName = null;
+
+		foreach ($socialProfiles as $profile)
+		{
+			$socialProfileNameFromPost     = isset($profile[0]) ? $profile[0] : null;
+			$socialProfileNameFromSettings = isset($profile['profileName']) ? $profile['profileName'] : null;
+
+			// Support syntax for both POST data being saved and previous saved social settings
+			if ($socialProfileNameFromPost == 'Twitter' or $socialProfileNameFromSettings == 'Twitter')
+			{
+				$twitterUrlFromPost = isset($socialProfileNameFromPost) ? $profile[1] : null;
+				$twitterUrl         = isset($socialProfileNameFromSettings) ? $profile['url'] : $twitterUrlFromPost;
+
+				$twitterProfileName = '@' . substr($twitterUrl, strrpos($twitterUrl, '/') + 1);
+
+				break;
+			}
+		}
+
+		return $twitterProfileName;
+	}
+
+	/**
+	 * Return the URL from our Globals settings if it exists. Otherwise return the Craft siteUrl value.
+	 *
+	 * @param null $url
+	 *
+	 * @return null|string
+	 */
+	public static function getGlobalSiteUrl($url = null)
+	{
+		if (!$url)
+		{
+			return UrlHelper::getSiteUrl();
 		}
 
 		return $url;

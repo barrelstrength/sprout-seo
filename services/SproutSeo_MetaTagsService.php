@@ -114,7 +114,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 			$prioritizeMetaLevels[SproutSeo_MetaLevels::Entry]
 		);
 
-		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::prepRobotsAsString($prioritizedMetaTagModel->robots);
+		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::getRobotsMetaValue($prioritizedMetaTagModel->robots);
 
 		return $prioritizedMetaTagModel;
 	}

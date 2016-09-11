@@ -18,6 +18,7 @@ class SproutSeo_GlobalsModel extends BaseElementModel
 			'ownership' => array(AttributeType::Mixed),
 			'contacts'  => array(AttributeType::Mixed),
 			'social'    => array(AttributeType::Mixed),
+			'robots'    => array(AttributeType::Mixed)
 		);
 	}
 }

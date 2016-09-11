@@ -13,6 +13,7 @@ class SproutSeo_SchemaModel extends BaseModel
 			'identity'  => AttributeType::Mixed,
 			'contacts'  => AttributeType::Mixed,
 			'social'    => AttributeType::Mixed,
+			'robots'    => AttributeType::Mixed,
 
 			// @todo - move to a meta tag model
 			'ownership' => AttributeType::Mixed,
@@ -150,6 +151,13 @@ class SproutSeo_SchemaModel extends BaseModel
 		}
 
 		return $profileLinks;
+	}
+
+	protected function getRobots()
+	{
+		$robots = $this->{$this->schemaId};
+
+		return $robots;
 	}
 
 	protected function getOwnership()
