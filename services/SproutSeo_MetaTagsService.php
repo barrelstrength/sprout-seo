@@ -27,7 +27,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 *
 	 * @return string
 	 */
-	public function getMetaTagHtml($prioritizedMetaTagModel)
+	public function getMetaTagHtml(SproutSeo_MetaTagsModel $prioritizedMetaTagModel)
 	{
 		$globals = sproutSeo()->schema->getGlobals();
 
