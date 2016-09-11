@@ -46,8 +46,9 @@
 
 	{% for type, elementGroups in sitemaps %}
 
+		{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
+
 		<table class="data fullwidth sitemap-settings">
-			{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
 			<thead>
 				<th style="padding-left:9px;width:30%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
 				<th style="width:32%;">{{ "URL Pattern"|t }}</th>
@@ -61,6 +62,7 @@
 			{#{% if loop.index == 1 %} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span>{% endif %}#}
 
 			{% for elementGroup in elementGroups %}
+
 				{% if elementGroup.name is defined %}
 					{% set sitemap = null %}
 					{% if elementGroup.settings is defined %}
@@ -87,11 +89,13 @@
 						<tr data-rowid="{{ sitemapId }}" data-type="section">
 							<td>
 								<strong style="display:inline-block;padding:7px 10px;">
-									{% if (metadataInfo.isNew is defined and not metadataInfo.isNew == 1) %}
+
+									{% if elementGroup.settings is defined and elementGroup.settings.enabled %}
 										<span class="status live"></span>
 									{% else %}
 										<span class="status disabled"></span>
 									{% endif %}
+
 									{{ elementGroup.name }}
 
 									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
@@ -247,13 +251,12 @@
 
 	new Craft.AdminTable({
 		tableSelector: '#custom-pages',
-		deleteAction: 'sproutSeo/sitemap/deleteCustomPage',
+		deleteAction: 'sproutSeo/metadata/deleteMetadataGroupById',
 		onDeleteObject: function(id)
 		{
 			if($('#custom-pages').find('tbody').find('tr').size() == 0)
 			{
-				$('#custom-pages').show();
-				$('#custom-pages').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4"><p>Add your first custom page.</p></td></tr>');
+				$('#custom-pages').hide();
 			}
 		}
 	});

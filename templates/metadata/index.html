@@ -58,7 +58,8 @@
 						<tr data-rowid="{{ sitemapId }}" data-type="section">
 							<td>
 								<strong style="display:inline-block;padding:7px 10px;">
-									{% if (metadataInfo.isNew is defined and not metadataInfo.isNew) %}
+
+									{% if elementGroup.settings is defined and elementGroup.settings.enabled %}
 										<span class="status live"></span>
 									{% else %}
 										<span class="status disabled"></span>
@@ -116,13 +117,9 @@
 
 	{% set metadataGroups = craft.sproutSeo.getAllCustomPages() %}
 
-	{% if metadataGroups is empty %}
+	{% if metadataGroups is not empty %}
 
-		<p>{{ "Create your first Metadata Group."|t }}</p>
-
-	{% else %}
-
-		<table class="data" id="metaTemplate">
+		<table class="data" id="custom-pages">
 			<thead>
 				<th style="padding-left:9px;width:35%">{{ "Custom Pages"|t }} <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
 				<th style="width:35%;">{{ "URL Pattern"|t }}</th>
@@ -134,7 +131,13 @@
 				<tr id="results" data-id="{{ metadataGroup.id }}" data-name="{{ metadataGroup.name|t }}">
 					<td>
 						<strong style="display:inline-block;padding:7px 10px;">
-							<span class="status live"></span>
+
+							{% if metadataGroup is defined and metadataGroup.enabled %}
+								<span class="status live"></span>
+							{% else %}
+								<span class="status disabled"></span>
+							{% endif %}
+
 							<a href="{{ url('sproutseo/metadata/' ~ metadataGroup.id) }}">
 								{{ metadataGroup.name }}
 							</a>
@@ -201,13 +204,12 @@
 
 	new Craft.AdminTable({
 		tableSelector: '#custom-pages',
-		deleteAction: 'sproutSeo/sitemap/deleteCustomPage',
+		deleteAction: 'sproutSeo/metadata/deleteMetadataGroupById',
 		onDeleteObject: function(id)
 		{
 			if($('#custom-pages').find('tbody').find('tr').size() == 0)
 			{
-				$('#custom-pages').show();
-				$('#custom-pages').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4"><p>Add your first custom page.</p></td></tr>');
+				$('#custom-pages').hide();
 			}
 		}
 	});
