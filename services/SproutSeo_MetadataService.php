@@ -347,10 +347,10 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 *
 	 * @param $attributes
 	 */
-	public function createMetaTagContent($attributes)
+	public function createMetadataContent($attributes)
 	{
 		craft()->db->createCommand()
-			->insert('sproutseo_metatagcontent', $attributes);
+			->insert('sproutseo_metadatacontent', $attributes);
 	}
 
 	/**
@@ -361,11 +361,11 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 *
 	 * @return BaseModel
 	 */
-	public function getMetaTagContentByEntryId($entryId, $locale)
+	public function getMetadataContentByEntryId($entryId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metatagcontent')
+			->from('sproutseo_metadatacontent')
 			->where('entryId = :entryId', array(':entryId' => $entryId))
 			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
@@ -381,10 +381,10 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 * @param $id
 	 * @param $attributes
 	 */
-	public function updateMetaTagContent($id, $attributes)
+	public function updateMetadataContent($id, $attributes)
 	{
 		craft()->db->createCommand()
-			->update('sproutseo_metatagcontent',
+			->update('sproutseo_metadatacontent',
 				$attributes,
 				'id = :id', array(':id' => $id)
 			);
@@ -397,9 +397,9 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 *
 	 * @return int
 	 */
-	public function deleteMetaTagContentById($id = null)
+	public function deleteMetadataContentById($id = null)
 	{
-		$record = new SproutSeo_MetaTagContentRecord();
+		$record = new SproutSeo_MetadataContentRecord();
 
 		return $record->deleteByPk($id);
 	}

@@ -67,7 +67,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$model = sproutSeo()->metadata->getMetaTagContentByEntryId($entryId, $locale);
+		$model = sproutSeo()->metadata->getMetadataContentByEntryId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -88,7 +88,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				sproutSeo()->metadata->deleteMetaTagContentById($model->id);
+				sproutSeo()->metadata->deleteMetadataContentById($model->id);
 			}
 
 			return;
@@ -212,11 +212,11 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// Update or create our Meta Tag Content entry
 		if ($model->entryId)
 		{
-			sproutSeo()->metadata->updateMetaTagContent($model->id, $attributes);
+			sproutSeo()->metadata->updateMetadataContent($model->id, $attributes);
 		}
 		else
 		{
-			sproutSeo()->metadata->createMetaTagContent($attributes);
+			sproutSeo()->metadata->createMetadataContent($attributes);
 		}
 	}
 
@@ -263,7 +263,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$values = sproutSeo()->metadata->getMetaTagContentByEntryId($entryId, $locale);
+		$values = sproutSeo()->metadata->getMetadataContentByEntryId($entryId, $locale);
 
 		$ogImageElements      = array();
 		$metaImageElements    = array();

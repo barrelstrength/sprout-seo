@@ -188,7 +188,7 @@ class SproutSeo_MetadataModel extends BaseModel
 		{
 			// @todo - revisit when adding internationalization
 			$locale        = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$entryOverride = sproutSeo()->metadata->getMetaTagContentByEntryId($overrideInfo['entryId'], $locale);
+			$entryOverride = sproutSeo()->metadata->getMetadataContentByEntryId($overrideInfo['entryId'], $locale);
 
 			return $entryOverride->getAttributes();
 		}

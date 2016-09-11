@@ -1,13 +1,13 @@
 <?php
 namespace Craft;
 
-class m160522_000000_sproutSeo_renameOverridesToMetaTagContent extends BaseMigration
+class m160522_000000_sproutSeo_renameOverridesToMetadataContent extends BaseMigration
 {
 	public function safeup()
 	{
 		// The Table you wish to add. 'craft_' prefix will be added automatically.
 		$oldTableName = 'sproutseo_overrides';
-		$newTableName = 'sproutseo_metatagcontent';
+		$newTableName = 'sproutseo_metadatacontent';
 
 		if (!craft()->db->tableExists($newTableName))
 		{

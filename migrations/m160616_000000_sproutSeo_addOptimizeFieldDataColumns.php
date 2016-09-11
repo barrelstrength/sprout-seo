@@ -10,7 +10,7 @@ class m160616_000000_sproutSeo_addOptimizeFieldDataColumns extends BaseMigration
 	 */
 	public function safeUp()
 	{
-		$tableName   = 'sproutseo_metatagcontent';
+		$tableName   = 'sproutseo_metadatacontent';
 		$columnsName = array(
 			array('name' => 'optimizedTitle', 'before' => 'title'),
 			array('name' => 'optimizedDescription', 'before' => 'title'),
