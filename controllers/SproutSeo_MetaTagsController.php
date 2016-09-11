@@ -80,6 +80,12 @@ class SproutSeo_MetaTagsController extends BaseController
 		}
 
 		// Set up our asset fields
+		if (isset($metaTags->optimizedImage))
+		{
+			$asset             = craft()->elements->getElementById($metaTags->optimizedImage);
+			$metaImageElements = array($asset);
+		}
+
 		if (isset($metaTags->ogImage))
 		{
 			$asset           = craft()->elements->getElementById($metaTags->ogImage);
@@ -90,12 +96,6 @@ class SproutSeo_MetaTagsController extends BaseController
 		{
 			$asset                = craft()->elements->getElementById($metaTags->twitterImage);
 			$twitterImageElements = array($asset);
-		}
-
-		if (isset($metaTags->metaImage))
-		{
-			$asset             = craft()->elements->getElementById($metaTags->metaImage);
-			$metaImageElements = array($asset);
 		}
 
 		$metaTags->robots = ($metaTags->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($metaTags->robots) : SproutSeoOptimizeHelper::prepRobotsForSettings($metaTags->robots);
@@ -144,8 +144,18 @@ class SproutSeo_MetaTagsController extends BaseController
 		// Convert Checkbox Array into comma-delimited String
 		if (isset($metaTags['robots']))
 		{
-			$metaTags['robots'] = SproutSeoOptimizeHelper::prepRobotsAsString($metaTags['robots']);
+			$metaTags['robots'] = SproutSeoOptimizeHelper::getRobotsMetaValue($metaTags['robots']);
 		}
+
+		$optimizedTitle       = (!empty($metaTags['optimizedTitle']) ? $metaTags['optimizedTitle'] : null);
+		$optimizedDescription = (!empty($metaTags['optimizedDescription']) ? $metaTags['optimizedDescription'] : null);
+
+		$metaTags['title']              = $optimizedTitle;
+		$metaTags['ogTitle']            = $optimizedTitle;
+		$metaTags['twitterTitle']       = $optimizedTitle;
+		$metaTags['description']        = $optimizedDescription;
+		$metaTags['ogDescription']      = $optimizedDescription;
+		$metaTags['twitterDescription'] = $optimizedDescription;
 
 		// Make our images single IDs instead of an array
 		$optimizedImage = (!empty($metaTags['optimizedImage']) ? $metaTags['optimizedImage'][0] : null);

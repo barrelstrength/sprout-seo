@@ -11,11 +11,11 @@ class SproutSeo_MetaTagGroupRecord extends BaseRecord
 	protected function defineAttributes()
 	{
 		return array(
-			'name'           => array(
+			'name'            => array(
 				AttributeType::String,
 				'required' => true
 			),
-			'handle'         => array(
+			'handle'          => array(
 				AttributeType::String,
 				'required' => true
 			),
@@ -41,7 +41,7 @@ class SproutSeo_MetaTagGroupRecord extends BaseRecord
 				'required' => true
 			),
 			'schemaMap'       => array(AttributeType::String),
-			'isCustom'         => array(
+			'isCustom'        => array(
 				AttributeType::Bool,
 				'default'  => false,
 				'required' => true
@@ -51,11 +51,14 @@ class SproutSeo_MetaTagGroupRecord extends BaseRecord
 			'appendSiteName' => array(AttributeType::String),
 			'url'            => array(AttributeType::String),
 
-			'title'       => array(AttributeType::String),
-			'description' => array(AttributeType::String),
-			'keywords'    => array(AttributeType::String),
-			'author'      => array(AttributeType::String),
-			'publisher'   => array(AttributeType::String),
+			'optimizedTitle'       => array(AttributeType::String),
+			'optimizedDescription' => array(AttributeType::String),
+			'optimizedImage'       => array(AttributeType::String),
+			'title'                => array(AttributeType::String),
+			'description'          => array(AttributeType::String),
+			'keywords'             => array(AttributeType::String),
+			'author'               => array(AttributeType::String),
+			'publisher'            => array(AttributeType::String),
 
 			'robots'    => array(AttributeType::String),
 			'canonical' => array(AttributeType::String),

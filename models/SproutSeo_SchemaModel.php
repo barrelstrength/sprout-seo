@@ -63,11 +63,11 @@ class SproutSeo_SchemaModel extends BaseModel
 
 		$schema = $this->{$this->schemaId};
 
-		$structuredData['name']                = isset($schema['name']) ? $schema['name'] : null;
-		$structuredData['description']         = isset($schema['description']) ? $schema['description'] : null;
-		$structuredData['url']                 = isset($schema['url']) ? $schema['url'] : null;
-		$structuredData['logo']                = isset($schema['logo']) ? $schema['logo'] : null;
-		$structuredData['keywords']            = isset($schema['keywords']) ? $schema['keywords'] : null;
+		$structuredData['name']          = isset($schema['name']) ? $schema['name'] : null;
+		$structuredData['description']   = isset($schema['description']) ? $schema['description'] : null;
+		$structuredData['url']           = isset($schema['url']) ? $schema['url'] : null;
+		$structuredData['logo']          = isset($schema['logo']) ? $schema['logo'] : null;
+		$structuredData['keywords']      = isset($schema['keywords']) ? $schema['keywords'] : null;
 		$structuredData['alternateName'] = isset($schema['alternateName']) ? $schema['alternateName'] : null;
 
 		$structuredData['telephone'] = isset($schema['telephone']) ? $schema['telephone'] : null;

@@ -28,12 +28,6 @@ class SproutSeo_SchemaController extends BaseController
 
 		$schemaTypes = explode(',', $schemaType);
 
-		// @todo - can we enforce this in a better place?
-		if (isset($postData['identity']['url']) && $postData['identity']['url'] == "")
-		{
-			$postData['identity']['url'] = UrlHelper::getSiteUrl();
-		}
-
 		$schema = SproutSeo_SchemaModel::populateModel($postData);
 
 		$globalFallbackMetaTags = $this->populateGlobalFallbackMetaTags($postData);
@@ -108,56 +102,64 @@ class SproutSeo_SchemaController extends BaseController
 
 	public function populateGlobalFallbackMetaTags($postData)
 	{
+		$oldGlobals        = sproutSeo()->schema->getGlobals();
+		$oldIdentity       = isset($oldGlobals) ? $oldGlobals->identity : null;
+		$identity          = isset($postData['identity']) ? $postData['identity'] : $oldIdentity;
+		$oldSocialProfiles = isset($oldGlobals) ? $oldGlobals->social : array();
+
 		$globalFallbackMetaTags = new SproutSeo_MetaTagsModel();
-		$siteName = craft()->getSiteName();
+		$siteName               = craft()->getSiteName();
 
-		if (isset($postData['identity']))
+		$urlSetting = isset($postData['identity']['url']) ? $postData['identity']['url'] : null;
+		$siteUrl    = SproutSeoOptimizeHelper::getGlobalSiteUrl($urlSetting);
+
+		$socialProfiles     = isset($postData['social']) ? $postData['social'] : $oldSocialProfiles;
+		$twitterProfileName = SproutSeoOptimizeHelper::getTwitterProfileName($socialProfiles);
+
+		$robots          = isset($postData['robots']) ? $postData['robots'] : $oldGlobals->robots;
+		$robotsMetaValue = SproutSeoOptimizeHelper::getRobotsMetaValue($robots);
+
+		if ($identity)
 		{
-			$metaTitle       = $postData['identity']['name'];
-			$metaDescription = $postData['identity']['description'];
-			$metaKeywords    = $postData['identity']['keywords'];
-			$metaImage       = isset($postData['identity']['logo'][0]) ? $postData['identity']['logo'][0] : null;
-
 			// @todo - appendSiteName?
-			$globalFallbackMetaTags->title       = $metaTitle;
-			$globalFallbackMetaTags->description = $metaDescription;
-			$globalFallbackMetaTags->keywords    = $metaKeywords;
+			$identityName         = $identity['name'];
+			$optimizedTitle       = $identityName;
+			$optimizedDescription = $identity['description'];
+			$optimizedImage       = isset($identity['logo'][0]) ? $identity['logo'][0] : null;
 
+			$globalFallbackMetaTags->optimizedTitle       = $optimizedTitle;
+			$globalFallbackMetaTags->optimizedDescription = $optimizedDescription;
+			$globalFallbackMetaTags->optimizedImage       = $optimizedImage;
+
+			$globalFallbackMetaTags->title       = $optimizedTitle;
+			$globalFallbackMetaTags->description = $optimizedDescription;
+			$globalFallbackMetaTags->keywords    = $identity['keywords'];
+
+			$globalFallbackMetaTags->robots    = $robotsMetaValue;
+			$globalFallbackMetaTags->canonical = $siteUrl;
+
+			$globalFallbackMetaTags->region    = ""; // @todo - add location info
+			$globalFallbackMetaTags->placename = "";
+			$globalFallbackMetaTags->position  = "";
+			$globalFallbackMetaTags->latitude  = "";
+			$globalFallbackMetaTags->longitude = "";
 
 			$globalFallbackMetaTags->ogType        = 'website';
 			$globalFallbackMetaTags->ogSiteName    = $siteName;
-			$globalFallbackMetaTags->ogAuthor      = '';
-			$globalFallbackMetaTags->ogPublisher   = '';
-			$globalFallbackMetaTags->ogTitle       = $metaTitle;
-			$globalFallbackMetaTags->ogDescription = $metaDescription;
-			$globalFallbackMetaTags->ogImage       = $metaImage;
-			$globalFallbackMetaTags->ogImageSecure = '';
-			$globalFallbackMetaTags->ogImageWidth  = '';
-			$globalFallbackMetaTags->ogImageHeight = '';
-			$globalFallbackMetaTags->ogImageType   = '';
+			$globalFallbackMetaTags->ogUrl         = $siteUrl;
+			$globalFallbackMetaTags->ogAuthor      = $identityName;
+			$globalFallbackMetaTags->ogPublisher   = $identityName;
+			$globalFallbackMetaTags->ogTitle       = $optimizedTitle;
+			$globalFallbackMetaTags->ogDescription = $optimizedDescription;
+			$globalFallbackMetaTags->ogImage       = $optimizedImage;
 
 			$globalFallbackMetaTags->twitterCard        = 'summary';
-			$globalFallbackMetaTags->twitterTitle       = $metaTitle;
-			$globalFallbackMetaTags->twitterDescription = $metaDescription;
-			$globalFallbackMetaTags->twitterImage       = $metaImage;
-		}
-
-		if (isset($postData['social']))
-		{
-			$socialProfiles = $postData['social'];
-
-			foreach ($socialProfiles as $profile)
-			{
-				if ($profile[0] == 'Twitter')
-				{
-					$twitterUrl  = $profile[1];
-					$twitterName = '@' . substr($twitterUrl, strrpos($twitterUrl, '/') + 1);
-
-					$globalFallbackMetaTags->twitterSite    = $twitterName;
-					$globalFallbackMetaTags->twitterCreator = $twitterName;
-					break;
-				}
-			}
+			$globalFallbackMetaTags->twitterSite        = $twitterProfileName;
+			$globalFallbackMetaTags->twitterCreator     = $twitterProfileName;
+			$globalFallbackMetaTags->twitterUrl         = $siteUrl;
+			$globalFallbackMetaTags->twitterTitle       = $optimizedTitle;
+			$globalFallbackMetaTags->twitterDescription = $optimizedDescription;
+			$globalFallbackMetaTags->twitterImage       = $optimizedImage;
 		}
 
 		return $globalFallbackMetaTags;
