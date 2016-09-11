@@ -49,7 +49,6 @@ class SproutSeo_SchemaController extends BaseController
 		else
 		{
 			craft()->userSession->setError(Craft::t('Unable to save schema.'));
-			Craft::dd($schema->getErrors());
 			craft()->urlManager->setRouteVariables(array(
 				'schema' => $schema
 			));
