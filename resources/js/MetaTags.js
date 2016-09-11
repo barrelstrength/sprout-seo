@@ -30,7 +30,7 @@
 
 			// TWITTER
 			// select the twitter dropdown so we can grab the value later
-			this.$twitterDropdown = $('#metatags-twitter select[name="sproutseo_fields[twitterCard]"]');
+			this.$twitterDropdown = $('#metatags-twitter select[name="sproutseo[metadata][twitterCard]"]');
 			// grab the value of the current twitter select option
 			this.$savedTwitterSelectOption = $(this.$twitterDropdown).val();
 			// assign the appendage to twitter element
@@ -42,7 +42,7 @@
 
 			// FACEBOOK
 			// select the twitter dropdown so we can grab the value later
-			this.$facebookDropdown = $('#metatags-facebook select[name="sproutseo_fields[ogType]"]');
+			this.$facebookDropdown = $('#metatags-facebook select[name="sproutseo[metadata][ogType]"]');
 			// grab the value of the current twitter select option
 			this.$savedFacebookSelectOption = $(this.$facebookDropdown).val();
 			// assign the appendage to twitter element

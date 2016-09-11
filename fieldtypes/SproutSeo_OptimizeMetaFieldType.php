@@ -53,16 +53,16 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 	 */
 	public function onAfterElementSave()
 	{
-		// grab only the basic fields
-		$fields = (isset($_POST['fields']['sproutseo_fields'])) ? $_POST['fields']['sproutseo_fields'] : null;
+		$fields = craft()->request->getPost('fields.sproutseo.metadata');
 
 		if (!isset($fields))
 		{
 			return;
 		}
 
-		$entryId = (isset($_POST['entryId']) && $_POST['entryId'] != "")
-			? $_POST['entryId']
+		$entryId = craft()->request->getPost('entryId');
+		$entryId = (isset($entryId) && $entryId != "")
+			? $entryId
 			: $this->element->id;
 
 		$locale = $this->element->locale;
@@ -71,7 +71,8 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
-		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value)
+
+		foreach ($fields as $key => $value)
 		{
 			if ($value)
 			{
@@ -118,10 +119,10 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// Title - validations begins
 		$title = null;
 
-		if ($settings['optimizedTitleField'] == 'manually' && $attributes['title'])
+		if ($settings['optimizedTitleField'] == 'manually' && $attributes['optimizedTitle'])
 		{
-			$attributes['ogTitle']      = $attributes['title'];
-			$attributes['twitterTitle'] = $attributes['title'];
+			$attributes['ogTitle']      = $attributes['optimizedTitle'];
+			$attributes['twitterTitle'] = $attributes['optimizedTitle'];
 		}
 		else
 		{
@@ -161,22 +162,22 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$twitterDescription = null;
 
 		// @todo - we should probably be using $attributes['optimizedDescription'] here
-		if ($settings['optimizedDescriptionField'] == 'manually' && $attributes['description'])
+		if ($settings['optimizedDescriptionField'] == 'manually' && $attributes['optimizedDescription'])
 		{
-			$ogDescription      = $attributes['description'];
-			$twitterDescription = $attributes['description'];
+			$ogDescription      = $attributes['optimizedDescription'];
+			$twitterDescription = $attributes['optimizedDescription'];
 		}
 		else
 		{
 			if ($settings['optimizedDescriptionField'] != 'manually')
 			{
-				//it's an field id.
+				// it's a field id.
 				if (is_numeric($settings['optimizedDescriptionField']))
 				{
 					$ogDescription      = $this->_getElementField($settings['optimizedDescriptionField']);
 					$twitterDescription = $ogDescription;
 				}
-				//it's a custom value
+				// it's a custom value
 				else
 				{
 					$ogDescription      = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
@@ -223,10 +224,11 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 	private function _getElementField($id)
 	{
 		$value = null;
-		//it's an field id.
+
+		// it's a field id.
 		if (is_numeric($id))
 		{
-			//Let's check if the field exists in the entry
+			// Let's check if the field exists in the entry
 			$field = craft()->fields->getFieldById($id);
 
 			if ($field)
@@ -270,16 +272,16 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$twitterImageElements = array();
 
 		// Set up our asset fields
+		if (isset($values->optimizedImage))
+		{
+			$asset             = craft()->elements->getElementById($values->optimizedImage);
+			$metaImageElements = array($asset);
+		}
+
 		if (isset($values->ogImage))
 		{
 			$asset           = craft()->elements->getElementById($values->ogImage);
 			$ogImageElements = array($asset);
-		}
-
-		if (isset($values->metaImage))
-		{
-			$asset             = craft()->elements->getElementById($values->metaImage);
-			$metaImageElements = array($asset);
 		}
 
 		if (isset($values->twitterImage))
@@ -303,7 +305,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$fieldId = 'fields-' . $name . '-field';
 
-		$name = "sproutseo_fields[$name]";
+		$name = "sproutseo[metadata][$name]";
 
 		$settings = $this->getSettings();
 

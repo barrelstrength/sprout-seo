@@ -139,8 +139,7 @@ class SproutSeo_MetadataController extends BaseController
 
 		$model = new SproutSeo_MetadataModel();
 
-		$metaTags = craft()->request->getPost('sproutseo_fields');
-		$sitemap  = craft()->request->getPost('sitemap_fields');
+		$metaTags = craft()->request->getPost('sproutseo.metadata');
 
 		// Check if this is a new or existing Metadata Group
 		$metaTags['id'] = (isset($metaTags['id']) ? $metaTags['id'] : null);

@@ -5,7 +5,7 @@
 	{{ forms.textField({
 		label: "Title"|t,
 		instructions: "The Title of your content which will appear in search results"|t,
-		name: 'sproutseo_fields[title]',
+		name: 'sproutseo[metadata][title]',
 		maxlength: 60,
 		showCharsLeft: true,
 		value: values.title,
@@ -17,7 +17,7 @@
 	{{ forms.textField({
 		label: "Description"|t,
 		instructions: "A description of your content which will appear in search results."|t,
-		name: 'sproutseo_fields[description]',
+		name: 'sproutseo[metadata][description]',
 		maxlength: 160,
 		showCharsLeft: true,
 		value: values.description,
@@ -29,7 +29,7 @@
 	{{ forms.textField({
 		label: "Keywords"|t,
 		instructions: "A list of keywords that describe your content"|t,
-		name: 'sproutseo_fields[keywords]',
+		name: 'sproutseo[metadata][keywords]',
 		value: values.keywords,
 		errors: "",
 		required: false

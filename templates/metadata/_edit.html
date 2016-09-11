@@ -44,10 +44,10 @@
 
 				<input type="hidden" name="action" value="sproutSeo/metadata/saveMetadataGroup">
 				<input type="hidden" name="redirect" value="sproutseo/metadata">
-				<input type="hidden" name="sproutseo_fields[id]" value="{{ metadataGroupId }}">
-				<input type="hidden" name="sproutseo_fields[isCustom]" value="{{ isCustom }}">
-				<input type="hidden" name="sproutseo_fields[type]" value="{{ metaTags.type }}">
-				<input type="hidden" name="sproutseo_fields[elementGroupId]" value="{{ metaTags.elementGroupId }}">
+				<input type="hidden" name="sproutseo[metadata][id]" value="{{ metadataGroupId }}">
+				<input type="hidden" name="sproutseo[metadata][isCustom]" value="{{ isCustom }}">
+				<input type="hidden" name="sproutseo[metadata][type]" value="{{ metaTags.type }}">
+				<input type="hidden" name="sproutseo[metadata][elementGroupId]" value="{{ metaTags.elementGroupId }}">
 
 				{% include 'sproutseo/_fieldtypes/optimize/input' %}
 
@@ -59,7 +59,7 @@
 				{{ forms.textField({
 					label: "Name <span class='info'>Human readable Metadata Group name</span>"|t,
 					id: "name",
-					name: 'sproutseo_fields[name]',
+					name: 'sproutseo[metadata][name]',
 					value: metaTags.name,
 					errors: metaTags.getErrors('name'),
 					required: true
@@ -68,7 +68,7 @@
 				{{ forms.textField({
 					label: "Handle <span class='info'>Name you will use to refer to this meta-tag group in your templates</span>"|t,
 					id: "handle",
-					name: 'sproutseo_fields[handle]',
+					name: 'sproutseo[metadata][handle]',
 					value: metaTags.handle,
 					errors: metaTags.getErrors('handle'),
 					required: true
@@ -77,7 +77,7 @@
 				{{ forms.textField({
 					label: "URL"|t,
 					id: "url",
-					name: 'sproutseo_fields[url]',
+					name: 'sproutseo[metadata][url]',
 					value: (metaTags.url == '__home__') ? "/" : metaTags.url,
 					errors: metaTags.getErrors('url'),
 					required: true
@@ -85,7 +85,7 @@
 
 				{{ forms.lightswitchField({
 					label: "Site Name <span class='info'>Append Site Name '" ~ siteName ~ "' to all Titles</span>"|t,
-					name: 'sproutseo_fields[appendSiteName]',
+					name: 'sproutseo[metadata][appendSiteName]',
 					on: metaTags.appendSiteName
 				}) }}
 
@@ -94,7 +94,7 @@
 					<div class="left">
 						{{ forms.lightswitch({
 							id: 'enabled',
-							name: 'sproutseo_fields[enabled]',
+							name: 'sproutseo[metadata][enabled]',
 							on:  (metaTags.enabled is defined ? metaTags.enabled : false)
 						}) }}
 					</div>
@@ -118,7 +118,7 @@
 
 				{{ forms.selectField({
 					label: "Main Entity <span class='info'>Define your Main Entity. Map the primary element that displays on this page to a Structured Data schema for improved metadata.</span>"|t,
-					name: 'sproutseo_fields[schemaMap]',
+					name: 'sproutseo[metadata][schemaMap]',
 					options: schemaMaps,
 					value: (metaTags.schemaMap is defined ? metaTags.schemaMap : 0.5),
 					errors: "",
@@ -153,7 +153,7 @@
 
 				{{ forms.selectField({
 					label: "Priority"|t,
-					name: 'sproutseo_fields[priority]',
+					name: 'sproutseo[metadata][priority]',
 					options: priorityList,
 					value: (metaTags.priority ? metaTags.priority : 0.5),
 					errors: "",
@@ -162,7 +162,7 @@
 
 				{{ forms.selectField({
 					label: "Change Frequency"|t,
-					name: 'sproutseo_fields[changeFrequency]',
+					name: 'sproutseo[metadata][changeFrequency]',
 					options: frequencyList,
 					value: (metaTags.changeFrequency ? metaTags.changeFrequency : 'weekly'),
 					errors: "",

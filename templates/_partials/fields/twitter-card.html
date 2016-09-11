@@ -13,7 +13,7 @@
 		{{ forms.selectField({
 			label: 'Twitter Card Type'|t,
 			instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
-			name: 'sproutseo_fields[twitterCard]',
+			name: 'sproutseo[metadata][twitterCard]',
 			options: twitterCardOptions,
 			value: (values.twitterCard is defined ? values.twitterCard : 'summary'),
 			errors: "",
@@ -24,7 +24,7 @@
 			{{ forms.textField({
 				label: "Creator"|t,
 				instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
-				name: 'sproutseo_fields[twitterCreator]',
+				name: 'sproutseo[metadata][twitterCreator]',
 				value: values.twitterCreator,
 				errors: "",
 				required: false,
@@ -39,7 +39,7 @@
 			{{ forms.textField({
 				label: "Player"|t,
 				instructions: "HTTPS URL to iframe player. This must be a HTTPS URL which does not generate mixed content warnings in a web browser."|t,
-				name: 'sproutseo_fields[twitterPlayer]',
+				name: 'sproutseo[metadata][twitterPlayer]',
 				value: values.twitterPlayer,
 				errors: "",
 				required: false
@@ -49,7 +49,7 @@
 				label: "Stream"|t,
 				instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrations directly. If
 						provided, the stream must be delivered in the MPEG-4 container format."|t,
-				name: 'sproutseo_fields[twitterPlayerStream]',
+				name: 'sproutseo[metadata][twitterPlayerStream]',
 				value: values.twitterPlayerStream,
 				errors: "",
 				required: false
@@ -58,7 +58,7 @@
 			{{ forms.textField({
 				label: "Stream Content Type"|t,
 				instructions: "The MIME type subtype combination that describes the content contained in twitter player stream."|t,
-				name: 'sproutseo_fields[twitterPlayerStreamContentType]',
+				name: 'sproutseo[metadata][twitterPlayerStreamContentType]',
 				value: values.twitterPlayerStreamContentType,
 				errors: "",
 				required: false
@@ -67,7 +67,7 @@
 			{{ forms.textField({
 				label: "Height"|t,
 				instructions: "Height of IFRAME specified in twitter player in pixels."|t,
-				name: 'sproutseo_fields[twitterPlayerHeight]',
+				name: 'sproutseo[metadata][twitterPlayerHeight]',
 				value: values.twitterPlayerHeight,
 				errors: "",
 				required: false
@@ -76,7 +76,7 @@
 			{{ forms.textField({
 				label: "Width"|t,
 				instructions: 'Width of IFRAME specified in twitter player in pixels.'|t,
-				name: 'sproutseo_fields[twitterPlayerWidth]',
+				name: 'sproutseo[metadata][twitterPlayerWidth]',
 				value: values.twitterPlayerWidth,
 				errors: "",
 				required: false

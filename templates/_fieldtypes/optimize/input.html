@@ -6,7 +6,7 @@
 		{{ forms.textField({
 			label: "Meta Title"|t,
 			instructions: "The Title of your content which will appear in search results and social sharing."|t,
-			name: 'sproutseo_fields[optimizedTitle]',
+			name: 'sproutseo[metadata][optimizedTitle]',
 			maxlength: 60,
 			showCharsLeft: true,
 			value: values.title,
@@ -20,7 +20,7 @@
 		{{ forms.textareaField({
 			label: "Meta Description"|t,
 			instructions: "A description of your content which will appear in search results and social sharing."|t,
-			name: 'sproutseo_fields[optimizedDescription]',
+			name: 'sproutseo[metadata][optimizedDescription]',
 			maxlength: 160,
 			showCharsLeft: true,
 			value: values.description,
@@ -35,7 +35,7 @@
 		label: "Keywords"|t,
 		instructions: "The primary keywords or phrases that describe your website."|t,
 		id: 'keywords',
-		name: 'sproutseo_fields[keywords]',
+		name: 'sproutseo[metadata][keywords]',
 		value: keywordsValue,
 		errors: ''
 	}) }}
@@ -49,7 +49,7 @@
 			sourceElementId: [values.optimizedImage],
 			elementType: elementType,
 			id: 'optimizedImage',
-			name: 'sproutseo_fields[optimizedImage]',
+			name: 'sproutseo[metadata][optimizedImage]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image'|t,
 			limit: 1,

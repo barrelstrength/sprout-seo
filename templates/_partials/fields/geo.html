@@ -7,27 +7,27 @@
 		instructions: 'The geo.region expects codes for <a
 						href="http://geotags.com/iso3166/countries.html" target="_blank">Country Names and Subdivisions</a>. The <a
 						href="http://geotags.com/geo/DMS3.html" target="_blank">GeoTag Generator</a> can help pick appropriate codes.'|t,
-		name: "sproutseo_fields[region]",
+		name: "sproutseo[metadata][region]",
 		value: values.region
 	}) }}
 
 	{{ forms.textField({
 		label: "Placename"|t,
 		instructions: 'The Placename field is typically used for city, county, and state names.'|t,
-		name: "sproutseo_fields[placename]",
+		name: "sproutseo[metadata][placename]",
 		value: values.placename
 	}) }}
 
 	{{ forms.textField({
 		label: "Latitude"|t,
-		name: "sproutseo_fields[latitude]",
+		name: "sproutseo[metadata][latitude]",
 		value: values.latitude,
 		placeholder: '38.403440'
 	}) }}
 
 	{{ forms.textField({
 		label: "Longitude"|t,
-		name: "sproutseo_fields[longitude]",
+		name: "sproutseo[metadata][longitude]",
 		value: values.longitude,
 		placeholder: '-122.823676'
 	}) }}
