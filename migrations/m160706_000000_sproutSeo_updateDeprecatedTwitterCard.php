@@ -11,7 +11,7 @@ class m160706_000000_sproutSeo_updateDeprecatedTwitterCard extends BaseMigration
 	public function safeUp()
 	{
 		$tableNames = array(
-			'sproutseo_metataggroups',
+			'sproutseo_metadatagroups',
 			'sproutseo_metatagcontent'
 		);
 

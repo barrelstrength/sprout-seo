@@ -1,11 +1,11 @@
 <?php
 namespace Craft;
 
-class SproutSeo_MetaTagGroupRecord extends BaseRecord
+class SproutSeo_MetadataGroupRecord extends BaseRecord
 {
 	public function getTableName()
 	{
-		return 'sproutseo_metataggroups';
+		return 'sproutseo_metadatagroups';
 	}
 
 	protected function defineAttributes()
@@ -19,7 +19,8 @@ class SproutSeo_MetaTagGroupRecord extends BaseRecord
 				AttributeType::String,
 				'required' => true
 			),
-			//sitemap data
+
+			// sitemap data
 			'elementGroupId'  => array(AttributeType::Number),
 			'type'            => array(AttributeType::String),
 			'priority'        => array(

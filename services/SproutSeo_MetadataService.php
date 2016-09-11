@@ -6,16 +6,16 @@ namespace Craft;
  *
  * @package Craft
  */
-class SproutSeo_MetaTagsService extends BaseApplicationComponent
+class SproutSeo_MetadataService extends BaseApplicationComponent
 {
-	protected $metaRecord;
+	protected $metadataGroupRecord;
 
 	public function __construct($metaRecord = null)
 	{
-		$this->metaRecord = $metaRecord;
-		if (is_null($this->metaRecord))
+		$this->metadataGroupRecord = $metaRecord;
+		if (is_null($this->metadataGroupRecord))
 		{
-			$this->metaRecord = SproutSeo_MetaTagGroupRecord::model();
+			$this->metadataGroupRecord = SproutSeo_MetadataGroupRecord::model();
 		}
 	}
 
@@ -27,7 +27,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 *
 	 * @return string
 	 */
-	public function getMetaTagHtml(SproutSeo_MetaTagsModel $prioritizedMetaTagModel)
+	public function getMetaTagHtml(SproutSeo_MetadataModel $prioritizedMetaTagModel)
 	{
 		$globals = sproutSeo()->schema->getGlobals();
 
@@ -64,14 +64,14 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	 */
 	public function getPrioritizedMetaTagModel($sitemapInfo)
 	{
-		$metaLevels = SproutSeo_MetaLevels::getConstants();
+		$metaLevels = SproutSeo_MetaTagLevels::getConstants();
 
 		foreach ($metaLevels as $key => $metaLevel)
 		{
 			$prioritizeMetaLevels[$metaLevel] = null;
 		}
 
-		$prioritizedMetaTagModel = new SproutSeo_MetaTagsModel();
+		$prioritizedMetaTagModel = new SproutSeo_MetadataModel();
 
 		sproutSeo()->optimize->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
@@ -82,7 +82,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 
 		foreach ($prioritizeMetaLevels as $meta => $model)
 		{
-			$metaTagModel = new SproutSeo_MetaTagsModel();
+			$metaTagModel = new SproutSeo_MetadataModel();
 
 			$metaTagModel = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate(
 				$meta, $sitemapInfo)
@@ -109,9 +109,9 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		// @todo - reorganize how this stuff works / robots need love.
 		$prioritizedMetaTagModel->title = SproutSeoOptimizeHelper::prepareAppendedSiteName(
 			$prioritizedMetaTagModel,
-			$prioritizeMetaLevels[SproutSeo_MetaLevels::MetaTagsGroup],
-			$prioritizeMetaLevels[SproutSeo_MetaLevels::Global],
-			$prioritizeMetaLevels[SproutSeo_MetaLevels::Entry]
+			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::MetadataGroup],
+			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::Global],
+			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::Entry]
 		);
 
 		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::getRobotsMetaValue($prioritizedMetaTagModel->robots);
@@ -130,13 +130,13 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 
 		switch ($type)
 		{
-			case SproutSeo_MetaLevels::MetaTagsGroup:
+			case SproutSeo_MetaTagLevels::MetadataGroup:
 				if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
 				{
 					$response = $sitemapInfo;
 				}
 				break;
-			case SproutSeo_MetaLevels::Entry:
+			case SproutSeo_MetaTagLevels::Entry:
 				if (isset($sitemapInfo['elementModel']))
 				{
 					$elementModel = $sitemapInfo['elementModel'];
@@ -147,7 +147,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 					}
 				}
 				break;
-			case SproutSeo_MetaLevels::Code:
+			case SproutSeo_MetaTagLevels::Code:
 				$response = sproutSeo()->optimize->templateMeta;
 				break;
 		}
@@ -159,7 +159,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	// =========================================================================
 
 	/**
-	 * Get all Meta Tag Groups from the database.
+	 * Get all Metadata Groups from the database.
 	 *
 	 * @return array
 	 */
@@ -167,15 +167,15 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	{
 		$results = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metataggroups')
+			->from('sproutseo_metadatagroups')
 			->order('name')
 			->queryAll();
 
-		return SproutSeo_MetaTagsModel::populateModels($results);
+		return SproutSeo_MetadataModel::populateModels($results);
 	}
 
 	/**
-	 * Get all Meta Tag Groups from the database.
+	 * Get all Metadata Groups from the database.
 	 *
 	 * @return array
 	 */
@@ -183,12 +183,12 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	{
 		$results = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metataggroups')
+			->from('sproutseo_metadatagroups')
 			->where(array('not in', 'url', $urls))
 			->order('name')
 			->queryAll();
 
-		return SproutSeo_MetaTagsModel::populateModels($results);
+		return SproutSeo_MetadataModel::populateModels($results);
 	}
 
 	/**
@@ -208,45 +208,41 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get a specific Meta Tag Group from the database based on ID
+	 * Get a specific Metadata Group from the database based on ID
 	 *
 	 * @param $id
 	 *
-	 * @return BaseModel|SproutSeo_MetaTagsModel
+	 * @return BaseModel|SproutSeo_MetadataModel
 	 */
-	public function getMetaTagGroupById($id)
+	public function getMetadataGroupById($id)
 	{
-		if ($record = $this->metaRecord->findByPk($id))
+		if ($record = $this->metadataGroupRecord->findByPk($id))
 		{
-			return SproutSeo_MetaTagsModel::populateModel($record);
+			return SproutSeo_MetadataModel::populateModel($record);
 		}
-		else
-		{
-			return new SproutSeo_MetaTagsModel();
-		}
+
+		return new SproutSeo_MetadataModel();
 	}
 
 	/**
 	 * @param $handle
 	 *
-	 * @return BaseModel|SproutSeo_MetaTagsModel
+	 * @return BaseModel|SproutSeo_MetadataModel
 	 */
-	public function getMetaTagGroupByHandle($handle)
+	public function getMetadataGroupByHandle($handle)
 	{
 		$query = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metataggroups')
+			->from('sproutseo_metadatagroups')
 			->where('handle=:handle', array(':handle' => $handle))
 			->queryRow();
 
-		if (isset($query))
+		if (!isset($query))
 		{
-			$model = SproutSeo_MetaTagsModel::populateModel($query);
+			return new SproutSeo_MetadataModel();
 		}
-		else
-		{
-			return new SproutSeo_MetaTagsModel();
-		}
+
+		$model = SproutSeo_MetadataModel::populateModel($query);
 
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
 		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
@@ -257,23 +253,23 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	/**
 	 * @param $url
 	 *
-	 * @return BaseModel|SproutSeo_MetaTagsModel
+	 * @return BaseModel|SproutSeo_MetadataModel
 	 */
-	public function getMetaTagGroupByInfo($type, $elementGroupId)
+	public function getMetadataGroupByInfo($type, $elementGroupId)
 	{
-		$metatag = craft()->db->createCommand()
+		$metadataGroup = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metataggroups')
+			->from('sproutseo_metadatagroups')
 			->where('type=:type and elementGroupId=:elementGroupId',
 				array(':type' => $type, ':elementGroupId'=>$elementGroupId)
 			)
 			->queryRow();
 
-		$model = new SproutSeo_MetaTagsModel();
+		$model = new SproutSeo_MetadataModel();
 
-		if ($metatag )
+		if ($metadataGroup)
 		{
-			$model = SproutSeo_MetaTagsModel::populateModel($metatag);
+			$model = SproutSeo_MetadataModel::populateModel($metadataGroup);
 		}
 
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
@@ -283,16 +279,16 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param SproutSeo_MetaTagsModel $model
+	 * @param SproutSeo_MetadataModel $model
 	 *
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function saveMetaTagGroup(SproutSeo_MetaTagsModel $model)
+	public function saveMetadataGroup(SproutSeo_MetadataModel $model)
 	{
 		if ($id = $model->getAttribute('id'))
 		{
-			if (null === ($record = $this->metaRecord->findByPk($id)))
+			if (null === ($record = $this->metadataGroupRecord->findByPk($id)))
 			{
 				throw new Exception(Craft::t('Can\'t find default with ID "{id}"', array(
 					'id' => $id
@@ -301,7 +297,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 		}
 		else
 		{
-			$record = $this->metaRecord->create();
+			$record = $this->metadataGroupRecord->create();
 		}
 
 		// @todo - is there a better way to do this flip/flop?
@@ -330,15 +326,15 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Delete a Meta Tag Group by ID
+	 * Delete a Metadata Group by ID
 	 *
 	 * @param int
 	 *
 	 * @return bool
 	 */
-	public function deleteMetaTagGroupById($id = null)
+	public function deleteMetadataGroupById($id = null)
 	{
-		$record = new SproutSeo_MetaTagGroupRecord;
+		$record = new SproutSeo_MetadataGroupRecord;
 
 		return $record->deleteByPk($id);
 	}
@@ -374,7 +370,7 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
 
-		$model = SproutSeo_MetaTagsModel::populateModel($query);
+		$model = SproutSeo_MetadataModel::populateModel($query);
 
 		return $model;
 	}
@@ -449,8 +445,8 @@ class SproutSeo_MetaTagsService extends BaseApplicationComponent
 			{
 				$element = $element[0];
 
-				// check if exists in sproutseo_metataggroups
-				$metataggroups = $this->getMetaTagGroupByInfo($type, $info['elementGroupId']);
+				// check if exists in sproutseo_metadatagroups
+				$metataggroups = $this->getMetadataGroupByInfo($type, $info['elementGroupId']);
 
 				if ($metataggroups->url)
 				{

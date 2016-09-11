@@ -107,7 +107,7 @@ class SproutSeo_SchemaController extends BaseController
 		$identity          = isset($postData['identity']) ? $postData['identity'] : $oldIdentity;
 		$oldSocialProfiles = isset($oldGlobals) ? $oldGlobals->social : array();
 
-		$globalFallbackMetaTags = new SproutSeo_MetaTagsModel();
+		$globalFallbackMetaTags = new SproutSeo_MetadataModel();
 		$siteName               = craft()->getSiteName();
 
 		$urlSetting = isset($postData['identity']['url']) ? $postData['identity']['url'] : null;

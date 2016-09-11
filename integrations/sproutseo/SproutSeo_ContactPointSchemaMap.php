@@ -22,7 +22,7 @@ class SproutSeo_ContactPointSchemaMap extends BaseSproutSeoSchemaMap
 	/**
 	 * @return array|null
 	 */
-	public function getAttributes()
+	public function getProperties()
 	{
 		$contact = $this->attributes['contact'];
 

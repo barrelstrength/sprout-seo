@@ -29,7 +29,7 @@ class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
 	//
 	// Have some out of box helper methods like getFirst()
 	// Do we really need the @methodName syntax? or do we just write this in PHP?
-	public function getAttributes()
+	public function getProperties()
 	{
 		$schema         = $this->sitemapInfo['globals']['identity'];
 		$socialProfiles = $this->sitemapInfo['globals']['social'];

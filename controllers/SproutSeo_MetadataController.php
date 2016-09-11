@@ -1,69 +1,73 @@
 <?php
 namespace Craft;
 
-class SproutSeo_MetaTagsController extends BaseController
+class SproutSeo_MetadataController extends BaseController
 {
 	/**
-	 * Edit a Meta Tag Group
+	 * Edit a Metadata Group
 	 *
 	 * @throws HttpException
 	 */
-	public function actionEditMetaTagGroup(array $variables = array())
+	public function actionMetadataGroupEditTemplate(array $variables = array())
 	{
 		$isCustom = true;
+
 		// Determine what we're working with
-		$segment        = craft()->request->getSegment(3);
-		$metaTagGroupId = ($segment == 'new') ? null : $segment;
+		$segment         = craft()->request->getSegment(3);
+		$metadataGroupId = ($segment == 'new') ? null : $segment;
 
 		// Get our Meta Model
-		$metaTags = sproutSeo()->metaTags->getMetaTagGroupById($metaTagGroupId);
+		$metaTags = sproutSeo()->metadata->getMetadataGroupById($metadataGroupId);
 
-		//Check if is metadata GET
-		if (isset($_GET['metatag']))
+		// Check if we need to create a new metadata group from an existing url enabled section
+		// This appears to be for when a Metadata Group is clicked on for the first time.
+		// We pass additional info to the page to build the right record in the db.
+		// /sproutseo/metadata/new?metatag=secondGroupOfCategories,categories-new-1,2
+		if (craft()->request->getSegment(3) == 'new')
 		{
-			$metatag = $_GET['metatag'];
-			$metatag = explode(',', $metatag);
+			//'metadatagroupname' => 'Field Test'
+			//'elementgrouphandle' => 'fieldTest'
+			//'sitemapid' => 'sections-new-2'
+			//'elementgroupid' => '9'
+			//'metadataId' => ''
+			//'metatag' => 'fieldTest,sections-new-2,9'
 
-			if (count($metatag) == 3)
+			$metadatagroupname = craft()->request->getPost('metadatagroupname');
+			$elementGroupId    = craft()->request->getPost('elementgroupid');
+			$groupName         = craft()->request->getPost('elementgrouphandle');
+			$sitemapId         = craft()->request->getPost('sitemapid');
+			$type              = explode('-', $sitemapId);
+			$elementType       = $type[0];
+
+			$metaTags->elementGroupId = $elementGroupId;
+			$metaTags->type           = $elementType;
+
+			// Just trying to get the url
+			$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
+			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $elementType);
+
+			if ($elementInfo != null)
 			{
-				$elementGroupId = $metatag[2];
-				$groupName      = $metatag[0];
-				$type           = explode('-', $metatag[1]);
-				$elementType    = $type[0];
+				$elementGroup = $elementInfo['elementGroupId'];
 
-				$metaTags->elementGroupId = $elementGroupId;
-				$metaTags->type           = $elementType;
+				$groupInfo = array(
+					'groupName'      => $elementGroup,
+					'sitemapId'      => $sitemapId,
+					'elementGroupId' => $elementGroupId
+				);
 
-				if ($segment == 'new')
+				$response = sproutSeo()->metadata->getMetadataInfo($groupInfo);
+				$element  = $response['element'];
+
+				if ($element)
 				{
-					// Just trying to get the url
-					$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
-					$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $elementType);
-
-					if ($elementInfo != null)
-					{
-						$elementGroup = $elementInfo['elementGroupId'];
-
-						$groupInfo = array(
-							'groupName'      => $elementGroup,
-							'sitemapId'      => $metatag[1],
-							'elementGroupId' => $elementGroupId
-						);
-
-						$response = sproutSeo()->metaTags->getMetadataInfo($groupInfo);
-						$element  = $response['element'];
-
-						if ($element)
-						{
-							$metaTags->url = $element->urlFormat;
-						}
-					}
-
-					$metaTags->name   = ucfirst($groupName) . ' ' . ucfirst($elementType);
-					$metaTags->handle = strtolower($groupName) . ucfirst($elementType);
-					$metaTags->handle = str_replace(' ', '', $metaTags->handle);
+					$metaTags->url = $element->urlFormat;
 				}
 			}
+
+			$metaTags->name   = $metadatagroupname;
+			$metaTags->handle = strtolower($groupName) . ucfirst($elementType);
+			$metaTags->handle = str_replace(' ', '', $metaTags->handle);
 		}
 
 		$twitterImageElements = array();
@@ -112,7 +116,7 @@ class SproutSeo_MetaTagsController extends BaseController
 
 		$this->renderTemplate('sproutseo/metadata/_edit', array(
 			'metaImageElements'    => $metaImageElements,
-			'metaTagGroupId'       => $metaTagGroupId,
+			'metadataGroupId'      => $metadataGroupId,
 			'metaTags'             => $metaTags,
 			'ogImageElements'      => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
@@ -124,21 +128,21 @@ class SproutSeo_MetaTagsController extends BaseController
 	}
 
 	/**
-	 * Save a Meta Tag Group
+	 * Save a Metadata Group
 	 *
 	 * @throws Exception
 	 * @throws HttpException
 	 */
-	public function actionSaveMetaTagGroup()
+	public function actionSaveMetadataGroup()
 	{
 		$this->requirePostRequest();
 
-		$model = new SproutSeo_MetaTagsModel();
+		$model = new SproutSeo_MetadataModel();
 
 		$metaTags = craft()->request->getPost('sproutseo_fields');
 		$sitemap  = craft()->request->getPost('sitemap_fields');
 
-		// Check if this is a new or existing Meta Tag Group
+		// Check if this is a new or existing Metadata Group
 		$metaTags['id'] = (isset($metaTags['id']) ? $metaTags['id'] : null);
 
 		// Convert Checkbox Array into comma-delimited String
@@ -166,14 +170,15 @@ class SproutSeo_MetaTagsController extends BaseController
 
 		$model->setAttributes($metaTags);
 
-		if (sproutSeo()->metaTags->saveMetaTagGroup($model))
+		if (sproutSeo()->metadata->saveMetadataGroup($model))
 		{
-			craft()->userSession->setNotice(Craft::t('New Meta Tag Group saved.'));
+			craft()->userSession->setNotice(Craft::t('New Metadata Group saved.'));
 			$this->redirectToPostedUrl();
 		}
 		else
 		{
-			craft()->userSession->setError(Craft::t("Couldn't save the Meta Tag Group."));
+			craft()->userSession->setError(Craft::t("Couldn't save the Metadata Group."));
+
 			// Send the field back to the template
 			craft()->urlManager->setRouteVariables(array(
 				'metaTags' => $model
@@ -182,18 +187,18 @@ class SproutSeo_MetaTagsController extends BaseController
 	}
 
 	/**
-	 * Delete Meta Tag Group
+	 * Delete Metadata Group
 	 *
 	 * @throws HttpException
 	 */
-	public function actionDeleteMetaTagGroupById()
+	public function actionDeleteMetadataGroupById()
 	{
 		$this->requirePostRequest();
 		$this->requireAjaxRequest();
 
-		$metaTagGroupId = craft()->request->getRequiredPost('id');
+		$metadataGroupId = craft()->request->getRequiredPost('id');
 
-		$result = sproutSeo()->metaTags->deleteMetaTagGroupById($metaTagGroupId);
+		$result = sproutSeo()->metadata->deleteMetadataGroupById($metadataGroupId);
 
 		$this->returnJson(array(
 			'success' => $result >= 0 ? true : false

@@ -29,14 +29,14 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$sitemapInfo = sproutSeo()->schema->getSitemapInfo($context);
 
 		// Get our meta values
-		$prioritizedMetaTagModel = sproutSeo()->metaTags->getPrioritizedMetaTagModel(
+		$prioritizedMetaTagModel = sproutSeo()->metadata->getPrioritizedMetaTagModel(
 			$sitemapInfo
 		);
 
 		$sitemapInfo['prioritizedMetaTagModel'] = $prioritizedMetaTagModel;
 		$sitemapInfo['globals'] = $globals;
 
-		$metaHtml = sproutSeo()->metaTags->getMetaTagHtml($prioritizedMetaTagModel);
+		$metaHtml = sproutSeo()->metadata->getMetaTagHtml($prioritizedMetaTagModel);
 
 		// Check the Twig $context for any values we need to process
 		// to create Structured Data ($context->entry, $context->product, etc)
@@ -72,9 +72,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Prepare the default field type settings for the Meta Tag Group context.
+	 * Prepare the default field type settings for the Metadata Group context.
 	 *
-	 * Display all of our fields manually for the Meta Tag Groups
+	 * Display all of our fields manually for the Metadata Groups
 	 *
 	 * @return array
 	 */

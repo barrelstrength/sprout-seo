@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_MetaTagsModel extends BaseModel
+class SproutSeo_MetadataModel extends BaseModel
 {
 	protected $basicMeta = array();
 	protected $robotsMeta = array();
@@ -46,25 +46,25 @@ class SproutSeo_MetaTagsModel extends BaseModel
 		// @todo - do we need all these values here? Some could just be assigned elsewhere:
 		// name => title, url => canonical, default not in use...
 		$metaTags = array(
-			'id'             => array(AttributeType::Number),
-			'entryId'        => array(AttributeType::Number),
-			'default'        => array(AttributeType::String),
-			'name'           => array(AttributeType::String),
-			'handle'         => array(AttributeType::String),
-			'appendSiteName' => array(AttributeType::String, 'default' => null),
-			'url'            => array(AttributeType::String),
-		);
-
-		$this->basicMeta = array(
+			'id'                   => array(AttributeType::Number),
+			'entryId'              => array(AttributeType::Number),
+			'default'              => array(AttributeType::String),
+			'name'                 => array(AttributeType::String),
+			'handle'               => array(AttributeType::String),
+			'appendSiteName'       => array(AttributeType::String, 'default' => null),
+			'url'                  => array(AttributeType::String),
 			'optimizedTitle'       => array(AttributeType::String),
 			'optimizedDescription' => array(AttributeType::String),
 			'optimizedImage'       => array(AttributeType::String),
-			'title'                => array(AttributeType::String),
-			'description'          => array(AttributeType::String),
-			'keywords'             => array(AttributeType::String),
-			'author'               => array(AttributeType::String),
-			'publisher'            => array(AttributeType::String),
-			'locale'               => array(AttributeType::String),
+		);
+
+		$this->basicMeta = array(
+			'title'       => array(AttributeType::String),
+			'description' => array(AttributeType::String),
+			'keywords'    => array(AttributeType::String),
+			'author'      => array(AttributeType::String),
+			'publisher'   => array(AttributeType::String),
+			'locale'      => array(AttributeType::String),
 		);
 
 		$this->robotsMeta = array(
@@ -150,19 +150,19 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	{
 		switch ($type)
 		{
-			case SproutSeo_MetaLevels::Entry:
+			case SproutSeo_MetaTagLevels::Entry:
 				$this->setAttributes($this->getEntryOverride($overrideInfo));
 				break;
 
-			case SproutSeo_MetaLevels::Code:
+			case SproutSeo_MetaTagLevels::Code:
 				$this->setAttributes($this->getCodeOverride($overrideInfo));
 				break;
 
-			case SproutSeo_MetaLevels::MetaTagsGroup:
-				$this->setAttributes($this->getMetaTagsGroup($overrideInfo));
+			case SproutSeo_MetaTagLevels::MetadataGroup:
+				$this->setAttributes($this->getMetadataGroup($overrideInfo));
 				break;
 
-			case SproutSeo_MetaLevels::Global:
+			case SproutSeo_MetaTagLevels::Global:
 				$globals                = sproutSeo()->schema->getGlobals();
 				$globalFallbackMetaTags = $globals->meta;
 
@@ -188,7 +188,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 		{
 			// @todo - revisit when adding internationalization
 			$locale        = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$entryOverride = sproutSeo()->metaTags->getMetaTagContentByEntryId($overrideInfo['entryId'], $locale);
+			$entryOverride = sproutSeo()->metadata->getMetaTagContentByEntryId($overrideInfo['entryId'], $locale);
 
 			return $entryOverride->getAttributes();
 		}
@@ -201,7 +201,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	 *
 	 * @param $overrideInfo
 	 *
-	 * @return SproutSeo_MetaTagsModel
+	 * @return SproutSeo_MetadataModel
 	 */
 	protected function getCodeOverride($overrideInfo)
 	{
@@ -214,13 +214,13 @@ class SproutSeo_MetaTagsModel extends BaseModel
 	}
 
 	/**
-	 * Create our default Meta Tag Group SproutSeo_MetaTagsModel
+	 * Create our default Metadata Group SproutSeo_MetaTagsModel
 	 *
 	 * @param $overrideInfo
 	 *
-	 * @return SproutSeo_MetaTagsModel
+	 * @return SproutSeo_MetadataModel
 	 */
-	protected function getMetaTagsGroup($overrideInfo)
+	protected function getMetadataGroup($overrideInfo)
 	{
 		$attributes = array();
 
@@ -229,7 +229,7 @@ class SproutSeo_MetaTagsModel extends BaseModel
 			$elementGroupId = $overrideInfo['elementGroupId'];
 			$elementTable   = $overrideInfo['elementTable'];
 
-			$metaTagsModel = sproutSeo()->metaTags->getMetaTagGroupByInfo($elementTable, $elementGroupId);
+			$metaTagsModel = sproutSeo()->metadata->getMetadataGroupByInfo($elementTable, $elementGroupId);
 			$attributes    = $metaTagsModel->getAttributes();
 		}
 

@@ -1,12 +1,33 @@
 <?php
 namespace Craft;
 
+/**
+ * Class BaseSproutSeoSchemaMap
+ */
 abstract class BaseSproutSeoSchemaMap
 {
+	/**
+	 * @var array
+	 */
 	public $attributes;
+
+	/**
+	 * @var null
+	 */
 	public $sitemapInfo;
+
+	/**
+	 * @var bool
+	 */
 	private $isContext;
 
+	/**
+	 * BaseSproutSeoSchemaMap constructor.
+	 *
+	 * @param array|null $attributes
+	 * @param bool       $isContext
+	 * @param null       $sitemapInfo
+	 */
 	public function __construct(array $attributes = null, bool $isContext = true, $sitemapInfo = null)
 	{
 		if (!empty($attributes))
@@ -47,22 +68,13 @@ abstract class BaseSproutSeoSchemaMap
 	 */
 	abstract public function getType();
 
-	// Does syntax user a generic `object` or do we need to assume
-	// we know specifically what the variable is called?
-	//
-	// Have some out of box helper methods like getFirst()
-	// Do we really need the @methodName syntax? or do we just write this in PHP?
-	// @todo - rename to getProperties()
-	public function getAttributes()
+	/**
+	 * @return array
+	 */
+	public function getProperties()
 	{
 		return array();
 	}
-
-	// Should we let integrations give users a chance to set setings in the CP UI?
-	// public function getSettings()
-	// {
-	//    ??
-	// }
 
 	/**
 	 * Convert Schema Map attributes to valid JSON-LD
@@ -71,8 +83,7 @@ abstract class BaseSproutSeoSchemaMap
 	 */
 	final public function getSchema()
 	{
-		$attributes = $this->getAttributes();
-
+		$attributes = $this->getProperties();
 
 		if ($this->isContext)
 		{
@@ -98,7 +109,6 @@ abstract class BaseSproutSeoSchemaMap
 <script type="application/ld+json">
 ' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
 </script>';
-
 		}
 		else
 		{
@@ -119,6 +129,14 @@ abstract class BaseSproutSeoSchemaMap
 		return null;
 	}
 
+	// Helper Methods
+	// =========================================================================
+
+	/**
+	 * @param $dateTime
+	 *
+	 * @return null
+	 */
 	public function getDateFromDatetime($dateTime)
 	{
 		$date = null;
@@ -133,12 +151,14 @@ abstract class BaseSproutSeoSchemaMap
 
 	/**
 	 * Returns jsonLd for a image object id
+	 *
 	 * @param $imageId int
+	 *
 	 * @return mixed
 	 */
 	public function getSchemaImageById($imageId)
 	{
-		$image = craft()->assets->getFileById($imageId);
+		$image  = craft()->assets->getFileById($imageId);
 		$schema = "";
 
 		if ($image)

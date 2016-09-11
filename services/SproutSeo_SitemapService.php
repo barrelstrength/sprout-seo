@@ -9,7 +9,7 @@ namespace Craft;
 class SproutSeo_SitemapService extends BaseApplicationComponent
 {
 	/**
-	 * @param SproutSeo_MetaTagsModel $attributes
+	 * @param SproutSeo_MetadataModel $attributes
 	 *
 	 * @return mixed|null|string
 	 */
@@ -28,7 +28,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			'elementGroupId' => $attributes->elementGroupId
 		);
 
-		$elementInfo = sproutSeo()->metaTags->getMetadataInfo($info);
+		$elementInfo = sproutSeo()->metadata->getMetadataInfo($info);
 		$isNew       = $elementInfo['isNew'];
 
 		if (!$isNew)
@@ -37,7 +37,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 			$row = craft()->db->createCommand()
 					->select('*')
-					->from('sproutseo_metataggroups')
+					->from('sproutseo_metadatagroups')
 					->where('id=:id', array(':id' => $sitemapId))
 					->queryRow();
 
@@ -61,7 +61,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			$model->dateCreated = DateTimeHelper::currentTimeForDb();
 
-			craft()->db->createCommand()->insert('sproutseo_metataggroups', $model->getAttributes());
+			craft()->db->createCommand()->insert('sproutseo_metadatagroups', $model->getAttributes());
 
 			return craft()->db->lastInsertID;
 		}
@@ -69,7 +69,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			$result = craft()->db->createCommand()
 				->update(
-					'sproutseo_metataggroups',
+					'sproutseo_metadatagroups',
 					$model->getAttributes(),
 					'id=:id', array(
 						':id' => $model->id
@@ -105,7 +105,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$urls            = array();
 		$enabledSitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metataggroups')
+			->from('sproutseo_metadatagroups')
 			->where('enabled = 1 and elementGroupId is not null')
 			->queryAll();
 
@@ -162,7 +162,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		// Fetching all custom pages defined in Sprout SEO
 		$customUrls = craft()->db->createCommand()
 			->select('url, priority, changeFrequency as frequency, dateUpdated')
-			->from('sproutseo_metataggroups')
+			->from('sproutseo_metadatagroups')
 			->where('enabled = 1')
 			->andWhere('url is not null and isCustom = 1')
 			->queryAll();
@@ -327,7 +327,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	{
 		$sitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metataggroups')
+			->from('sproutseo_metadatagroups')
 			->where('elementGroupId iS NOT NULL and type = :type', array(':type' => $type))
 			->queryAll();
 
@@ -341,7 +341,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	{
 		$customPages = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metataggroups')
+			->from('sproutseo_metadatagroups')
 			->where('isCustom = 1')
 			->queryAll();
 

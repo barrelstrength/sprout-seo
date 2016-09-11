@@ -67,7 +67,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$model = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
+		$model = sproutSeo()->metadata->getMetaTagContentByEntryId($entryId, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -88,7 +88,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				sproutSeo()->metaTags->deleteMetaTagContentById($model->id);
+				sproutSeo()->metadata->deleteMetaTagContentById($model->id);
 			}
 
 			return;
@@ -96,7 +96,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		if (isset($fields['robots']))
 		{
-			$fields['robots'] = SproutSeoOptimizeHelper::prepRobotsAsString($fields['robots']);
+			$fields['robots'] = SproutSeoOptimizeHelper::getRobotsMetaValue($fields['robots']);
 		}
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
@@ -212,11 +212,11 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		// Update or create our Meta Tag Content entry
 		if ($model->entryId)
 		{
-			sproutSeo()->metaTags->updateMetaTagContent($model->id, $attributes);
+			sproutSeo()->metadata->updateMetaTagContent($model->id, $attributes);
 		}
 		else
 		{
-			sproutSeo()->metaTags->createMetaTagContent($attributes);
+			sproutSeo()->metadata->createMetaTagContent($attributes);
 		}
 	}
 
@@ -263,7 +263,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$values = sproutSeo()->metaTags->getMetaTagContentByEntryId($entryId, $locale);
+		$values = sproutSeo()->metadata->getMetaTagContentByEntryId($entryId, $locale);
 
 		$ogImageElements      = array();
 		$metaImageElements    = array();

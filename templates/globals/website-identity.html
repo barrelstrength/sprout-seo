@@ -89,7 +89,7 @@
 			label: "URL"|t,
 			instructions: "The URL of your official website."|t,
 			name: 'sproutseo[schema][identity][url]',
-			value: schema['url'] is defined ? schema.url : siteUrl,
+			value: schema['url'] is defined and schema['url'] != "" ? schema.url : siteUrl,
 			errors: '',
 			required: true
 		}) }}

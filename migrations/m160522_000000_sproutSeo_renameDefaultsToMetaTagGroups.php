@@ -7,7 +7,7 @@ class m160522_000000_sproutSeo_renameDefaultsToMetaTagGroups extends BaseMigrati
 	{
 		// The Table you wish to add. 'craft_' prefix will be added automatically.
 		$oldTableName = 'sproutseo_defaults';
-		$newTableName = 'sproutseo_metataggroups';
+		$newTableName = 'sproutseo_metadatagroups';
 
 		if (!craft()->db->tableExists($newTableName))
 		{

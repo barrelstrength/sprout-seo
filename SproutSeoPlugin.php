@@ -161,10 +161,10 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		return array(
 			'sproutseo/metadata/new'                     => array(
-				'action' => 'sproutSeo/metaTags/editMetaTagGroup'
+				'action' => 'sproutSeo/metadata/metadataGroupEditTemplate'
 			),
-			'sproutseo/metadata/(?P<metaTagGroupId>\d+)' => array(
-				'action' => 'sproutSeo/metaTags/editMetaTagGroup'
+			'sproutseo/metadata/(?P<metadataGroupId>\d+)' => array(
+				'action' => 'sproutSeo/metadata/metadataGroupEditTemplate'
 			),
 
 			'sproutseo/schema/new' =>

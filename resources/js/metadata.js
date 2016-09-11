@@ -2,62 +2,55 @@
 
 	Craft.SproutSeoSitemap = Garnish.Base.extend(
 	{
-
-		$checkboxes: null,
+		$checkboxes:      null,
 		$selectDropdowns: null,
 
 		$customPageUrls: null,
 
-		$status: null,
-		$id: null,
-		$elementGroupId: null,
-		$url: null,
-		$priority: null,
-		$changeFrequency: null,
-		$enabled: null,
-		$ping: null,
-		$metadataLinks: null,
-		$metatag: null,
-		$isNew : null,
-		$metadataId: null,
+		$status:                null,
+		$id:                    null,
+		$elementGroupId:        null,
+		$url:                   null,
+		$priority:              null,
+		$changeFrequency:       null,
+		$enabled:               null,
+		$ping:                  null,
+		$newMetaDataGroupLinks: null,
 
 		$addCustomPageButton: null,
 
-		init: function()
-		{
-			this.$checkboxes = $('.sitemap-settings input[type="checkbox"]');
-			this.$selectDropdowns = $('.sitemap-settings select');
-			this.$customPageUrls = $('.sitemap-settings input.sitemap-custom-url');
-			this.$metadataLinks = $('.metadata-link');
-			// this.$addCustomPageButton = $('#add-custom-page');
+		init: function() {
+			this.$checkboxes            = $('.sitemap-settings input[type="checkbox"]');
+			this.$selectDropdowns       = $('.sitemap-settings select');
+			this.$customPageUrls        = $('.sitemap-settings input.sitemap-custom-url');
+			this.$newMetaDataGroupLinks = $('.metadatagroup-isnew');
 
 			this.addListener(this.$checkboxes, 'change', 'onChange');
 			this.addListener(this.$selectDropdowns, 'change', 'onChange');
 			this.addListener(this.$customPageUrls, 'change', 'onChange');
-			this.addListener(this.$metadataLinks, 'click', 'redirectToMetadata');
-			// this.addListener(this.$addCustomPageButton, 'click', 'addCustomPage');
+			this.addListener(this.$newMetaDataGroupLinks, 'click', 'redirectToMetadataGroupEditPage');
 		},
 
-		redirectToMetadata: function(ev)
-		{
-			changedElement = ev.target;
-			this.metatag   = $(changedElement).data('link');
-			this.isNew   = $(changedElement).data('isnew');
-			this.metadataId   = $(changedElement).data('metadataid');
+		redirectToMetadataGroupEditPage: function(event) {
 
-			if (this.isNew)
-			{
-				Craft.redirectTo(Craft.getUrl('sproutseo/metadata/new', 'metatag='+this.metatag));
-			}
-			else
-			{
-				Craft.redirectTo(Craft.getUrl('sproutseo/metadata/'+this.metadataId, 'metatag='+this.metatag));
-			}
+			target    = event.target;
+			isNew     = $(target).data('isnew');
+			submitUrl = Craft.getUrl('sproutseo/metadata/new');
+
+			data = {
+				"metadatagroupname":  $(target).data('metadatagroupname'),
+				"elementgrouphandle": $(target).data('elementgrouphandle'),
+				"sitemapid":          $(target).data('sitemapid'),
+				"elementgroupid":     $(target).data('elementgroupid'),
+				"metadataId":         $(target).data('metadataid'),
+				"metatag":            $(target).data('link')
+			};
+
+			this.postForm(submitUrl, data);
 		},
 
-		onChange: function(ev)
-		{
-			changedElement = ev.target;
+		onChange: function(event) {
+			changedElement = event.target;
 			rowId          = $(changedElement).closest('tr').data('rowid');
 
 			this.status          = $('tr[data-rowid="' + rowId + '"] td span.status');
@@ -69,6 +62,7 @@
 			this.enabled         = $('input[name="sitemap_fields[' + rowId + '][enabled]"]').is(":checked");
 			this.ping            = $('input[name="sitemap_fields[' + rowId + '][ping]"]').is(":checked");
 
+			// @todo - clean these up
 			console.log('new request');
 			console.log(this.status);
 			console.log(this.id);
@@ -81,14 +75,12 @@
 			console.log(this.categoryGroupId);
 			console.log('end request');
 
-			if (this.enabled)
-			{
+			if (this.enabled) {
 				this.status.removeClass('disabled');
 				this.status.addClass('live');
 				$('input[name="sitemap_fields[' + rowId + '][ping]"]').attr("disabled", false);
 			}
-			else
-			{
+			else {
 				this.status.removeClass('live');
 				this.status.addClass('disabled');
 				$('input[name="sitemap_fields[' + rowId + '][ping]"]').prop('checked', false);
@@ -97,25 +89,22 @@
 			}
 
 			Craft.postActionRequest('sproutSeo/sitemap/saveSitemap', {
-				id: this.id,
-				elementGroupId: this.elementGroupId,
-				url: this.url,
-				priority: this.priority,
+				id:              this.id,
+				elementGroupId:  this.elementGroupId,
+				url:             this.url,
+				priority:        this.priority,
 				changeFrequency: this.changeFrequency,
-				enabled: this.enabled,
-				ping: this.ping,
-			}, $.proxy(function(response, textStatus)
-			{
-				if (textStatus == 'success')
-				{
-					if (response.lastInsertId)
-					{
-						var keys = rowId.split("-");
-						var type = keys[0];
-						var newRowId = type+"-"+response.lastInsertId;
+				enabled:         this.enabled,
+				ping:            this.ping,
+			}, $.proxy(function(response, textStatus) {
+				if (textStatus == 'success') {
+					if (response.lastInsertId) {
+						var keys     = rowId.split("-");
+						var type     = keys[0];
+						var newRowId = type + "-" + response.lastInsertId;
 						$(changedElement).closest('tr').data('rowid', newRowId);
 
-						$('input[name="sitemap_fields[' + rowId  + '][id]"]').val(newRowId);
+						$('input[name="sitemap_fields[' + rowId + '][id]"]').val(newRowId);
 						$('input[name="sitemap_fields[' + rowId + '][id]"]').attr('name', 'sitemap_fields[' + newRowId + '][id]');
 						$('input[name="sitemap_fields[' + rowId + '][elementGroupId]"]').attr('name', 'sitemap_fields[' + newRowId + '][elementGroupId]');
 						$('input[name="sitemap_fields[' + rowId + '][url]"]').attr('name', 'sitemap_fields[' + newRowId + '][url]');
@@ -126,13 +115,35 @@
 
 						Craft.cp.displayNotice(Craft.t("Sitemap setting saved."));
 					}
-					else
-					{
+					else {
 						Craft.cp.displayError(Craft.t('Unable to save Sitemap setting.'));
 					}
 				}
 			}, this))
 		},
+
+		postForm: function(action, nameValueObj) {
+
+			var form    = document.createElement("form");
+			var i, input, prop;
+			form.method = "post";
+			form.action = action;
+
+			// Loop through properties: name-value pairs
+			for (prop in nameValueObj) {
+				input       = document.createElement("input");
+				input.name  = prop;
+				input.value = nameValueObj[prop];
+				input.type  = "hidden";
+				form.appendChild(input);
+			}
+
+			//document.body.appendChild(form); <-- Could be needed by some browsers?
+
+			form.submit();
+
+			return form;
+		}
 
 	});
 

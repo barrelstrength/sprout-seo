@@ -19,7 +19,7 @@ class SproutSeo_ImageObjectSchemaMap extends BaseSproutSeoSchemaMap
 		return 'ImageObject';
 	}
 
-	public function getAttributes()
+	public function getProperties()
 	{
 		$image = $this->attributes['image'];
 

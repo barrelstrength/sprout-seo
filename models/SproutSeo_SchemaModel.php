@@ -11,12 +11,11 @@ class SproutSeo_SchemaModel extends BaseModel
 		return array(
 			'meta'      => AttributeType::Mixed,
 			'identity'  => AttributeType::Mixed,
+			'ownership' => AttributeType::Mixed,
 			'contacts'  => AttributeType::Mixed,
 			'social'    => AttributeType::Mixed,
 			'robots'    => AttributeType::Mixed,
-
-			// @todo - move to a meta tag model
-			'ownership' => AttributeType::Mixed,
+			'settings'  => AttributeType::Mixed,
 		);
 	}
 
@@ -153,13 +152,6 @@ class SproutSeo_SchemaModel extends BaseModel
 		return $profileLinks;
 	}
 
-	protected function getRobots()
-	{
-		$robots = $this->{$this->schemaId};
-
-		return $robots;
-	}
-
 	protected function getOwnership()
 	{
 		$ownership = $this->{$this->schemaId};
@@ -167,13 +159,19 @@ class SproutSeo_SchemaModel extends BaseModel
 		return $ownership;
 	}
 
-	// Custom Schema Types
-	// =========================================================================
-
-	public function getSchemaMap($object, $mapId)
+	protected function getRobots()
 	{
+		$robots = $this->{$this->schemaId};
+
+		return $robots;
 	}
 
+	protected function getSettings()
+	{
+		$settings = $this->{$this->schemaId};
+
+		return $settings;
+	}
 
 	// Protected Methods
 	// =========================================================================

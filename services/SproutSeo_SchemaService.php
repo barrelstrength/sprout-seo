@@ -46,7 +46,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 			$matchedElementGroupId   = $sitemapInfo['elementGroupId'];
 			$matchedElementGroupType = $sitemapInfo['elementTable'];
 
-			$enabledMatchingSitemap = sproutSeo()->metaTags->getMetaTagGroupByInfo(
+			$enabledMatchingSitemap = sproutSeo()->metadata->getMetadataGroupByInfo(
 				$matchedElementGroupType,
 				$matchedElementGroupId
 			);

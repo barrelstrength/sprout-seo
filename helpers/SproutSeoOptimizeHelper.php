@@ -5,7 +5,7 @@ class SproutSeoOptimizeHelper
 {
 	/**
 	 * @param $prioritizedMetaTagModel
-	 * @param $metaTagsGroupModel
+	 * @param $MetadataGroupModel
 	 * @param $globalFallbackMetaTagModel
 	 * @param $entryOverrideMetaTagModel
 	 *
@@ -13,15 +13,15 @@ class SproutSeoOptimizeHelper
 	 */
 	public static function prepareAppendedSiteName(
 		$prioritizedMetaTagModel,
-		$metaTagsGroupMetaTagModel,
+		$MetadataGroupMetaTagModel,
 		$globalFallbackMetaTagModel,
 		$entryOverrideMetaTagModel
 	)
 	{
-		// Does a selected Meta Tag Group override the Global Fallback appendSiteName value?
-		$appendSiteName = is_null($metaTagsGroupMetaTagModel->appendSiteName)
+		// Does a selected Metadata Group override the Global Fallback appendSiteName value?
+		$appendSiteName = is_null($MetadataGroupMetaTagModel->appendSiteName)
 			? $globalFallbackMetaTagModel->appendSiteName
-			: $metaTagsGroupMetaTagModel->appendSiteName;
+			: $MetadataGroupMetaTagModel->appendSiteName;
 
 		$appendSiteName = is_null(
 			$entryOverrideMetaTagModel->title) ?
@@ -59,12 +59,9 @@ class SproutSeoOptimizeHelper
 		return $model->position;
 	}
 
-	public static function prepRobotsAsString($robotsArray)
-	{
-		return StringHelper::arrayToString($robotsArray);
-	}
-
 	/**
+	 * Return a comma delimited string of robots meta settings
+	 *
 	 * @param null $robots
 	 *
 	 * @return null|string
@@ -103,6 +100,13 @@ class SproutSeoOptimizeHelper
 		return $robotsMetaValue;
 	}
 
+	/**
+	 * Return an array of all robots settings set to their boolean value of on or off
+	 *
+	 * @param $robotsString
+	 *
+	 * @return array
+	 */
 	public static function prepRobotsForSettings($robotsString)
 	{
 		$robotsArray = explode(",", $robotsString);
@@ -141,7 +145,7 @@ class SproutSeoOptimizeHelper
 	 *
 	 * @throws \Exception
 	 */
-	public static function prepareAssetUrls(SproutSeo_MetaTagsModel &$model)
+	public static function prepareAssetUrls(SproutSeo_MetadataModel &$model)
 	{
 		// If a code override for ogImageSecure is provided, make sure it's an absolute URL
 		if (!empty($model->ogImageSecure))

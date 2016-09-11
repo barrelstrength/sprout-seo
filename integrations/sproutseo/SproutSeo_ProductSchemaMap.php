@@ -27,7 +27,7 @@ class SproutSeo_ProductSchemaMap extends BaseSproutSeoSchemaMap
 	//
 	// Have some out of box helper methods like getFirst()
 	// Do we really need the @methodName syntax? or do we just write this in PHP?
-	public function getAttributes()
+	public function getProperties()
 	{
 		return array(
 			'name'        => 'product.title',

@@ -2,7 +2,7 @@
 {% import "_includes/forms" as forms %}
 
 {% set title %}
-	{% if not metaTagGroupId is empty %}
+	{% if not metadataGroupId is empty %}
 		{{ metaTags.name }}
 	{% else %}
 		{{ "New Metadata Section"|t }}
@@ -20,13 +20,13 @@
 {% if craft.request.getSegment(3) == 'new' %}
 	{% set saveShortcutRedirect = url('sproutseo/metadata') %}
 {% else %}
-	{% set saveShortcutRedirect = url('sproutseo/metadata/' ~ metaTagGroupId) %}
+	{% set saveShortcutRedirect = url('sproutseo/metadata/' ~ metadataGroupId) %}
 {% endif %}
 
-{# Set a field context so we can manage field visibility between the SEO Meta Tag Groups and the Field Types #}
+{# Set a field context so we can manage field visibility between the SEO Metadata Groups and the Field Types #}
 {% set fieldContext = 'metaTagGroups' %}
 
-{# Map the `metaTags` object to `values` so we can use the same templates for SEO Meta Tag Groups and the Field Types #}
+{# Map the `metaTags` object to `values` so we can use the same templates for SEO Metadata Groups and the Field Types #}
 
 {% set values = metaTags %}
 
@@ -42,9 +42,9 @@
 		<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
 			<div id="fields" class="pane">
 
-				<input type="hidden" name="action" value="sproutSeo/metaTags/saveMetaTagGroup">
+				<input type="hidden" name="action" value="sproutSeo/metadata/saveMetadataGroup">
 				<input type="hidden" name="redirect" value="sproutseo/metadata">
-				<input type="hidden" name="sproutseo_fields[id]" value="{{ metaTagGroupId }}">
+				<input type="hidden" name="sproutseo_fields[id]" value="{{ metadataGroupId }}">
 				<input type="hidden" name="sproutseo_fields[isCustom]" value="{{ isCustom }}">
 				<input type="hidden" name="sproutseo_fields[type]" value="{{ metaTags.type }}">
 				<input type="hidden" name="sproutseo_fields[elementGroupId]" value="{{ metaTags.elementGroupId }}">
@@ -57,7 +57,7 @@
 			<div class="pane meta">
 
 				{{ forms.textField({
-					label: "Name <span class='info'>Human readable Meta Tag Group name</span>"|t,
+					label: "Name <span class='info'>Human readable Metadata Group name</span>"|t,
 					id: "name",
 					name: 'sproutseo_fields[name]',
 					value: metaTags.name,

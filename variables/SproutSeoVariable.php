@@ -54,7 +54,7 @@ class SproutSeoVariable
 	 */
 	public function optimize()
 	{
-		$output = sproutSeo()->metaTags->getMetaTagHtml();
+		$output = sproutSeo()->metadata->getMetaTagHtml();
 
 		return TemplateHelper::getRaw($output);
 	}
@@ -89,7 +89,7 @@ class SproutSeoVariable
 	 */
 	public function getMetaTagGroups()
 	{
-		return sproutSeo()->metaTags->getMetaTagGroups();
+		return sproutSeo()->metadata->getMetaTagGroups();
 	}
 
 	/**
@@ -101,7 +101,7 @@ class SproutSeoVariable
 	 */
 	public function getCustomMetaTagGroups($urls)
 	{
-		return sproutSeo()->metaTags->getCustomMetaTagGroups($urls);
+		return sproutSeo()->metadata->getCustomMetaTagGroups($urls);
 	}
 
 	/**
@@ -113,7 +113,7 @@ class SproutSeoVariable
 	 */
 	public function getCustomSiteMaps($urls)
 	{
-		return sproutSeo()->metaTags->getCustomSiteMaps($urls);
+		return sproutSeo()->metadata->getCustomSiteMaps($urls);
 	}
 
 	/**
@@ -125,17 +125,17 @@ class SproutSeoVariable
 	 */
 	public function getMetaTagGroupById($id)
 	{
-		return sproutSeo()->metaTags->getMetaTagGroupById($id);
+		return sproutSeo()->metadata->getMetadataGroupById($id);
 	}
 
 	/**
 	 * @param $handle
 	 *
-	 * @return SproutSeo_MetaTagsModel
+	 * @return SproutSeo_MetadataModel
 	 */
 	public function getMetaTagGroupByHandle($handle)
 	{
-		return sproutSeo()->metaTags->getMetaTagGroupByHandle($handle);
+		return sproutSeo()->metadata->getMetadataGroupByHandle($handle);
 	}
 
 	/**
@@ -175,7 +175,7 @@ class SproutSeoVariable
 	 */
 	public function getMetadataInfo($info)
 	{
-		return sproutSeo()->metaTags->getMetadataInfo($info);
+		return sproutSeo()->metadata->getMetadataInfo($info);
 	}
 
 	/**
