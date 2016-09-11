@@ -43,6 +43,8 @@ class SproutSeo_MetaTagsModel extends BaseModel
 			'uid'             => array(AttributeType::String),
 		);
 
+		// @todo - do we need all these values here? Some could just be assigned elsewhere:
+		// name => title, url => canonical, default not in use...
 		$metaTags = array(
 			'id'             => array(AttributeType::Number),
 			'entryId'        => array(AttributeType::Number),

@@ -109,7 +109,6 @@ class SproutSeo_SchemaController extends BaseController
 	public function populateGlobalFallbackMetaTags($postData)
 	{
 		$globalFallbackMetaTags = new SproutSeo_MetaTagsModel();
-
 		$siteName = craft()->getSiteName();
 
 		if (isset($postData['identity']))
@@ -119,10 +118,11 @@ class SproutSeo_SchemaController extends BaseController
 			$metaKeywords    = $postData['identity']['keywords'];
 			$metaImage       = isset($postData['identity']['logo'][0]) ? $postData['identity']['logo'][0] : null;
 
-			// appendSiteName?  useAlternateName?
+			// @todo - appendSiteName?
 			$globalFallbackMetaTags->title       = $metaTitle;
 			$globalFallbackMetaTags->description = $metaDescription;
 			$globalFallbackMetaTags->keywords    = $metaKeywords;
+
 
 			$globalFallbackMetaTags->ogType        = 'website';
 			$globalFallbackMetaTags->ogSiteName    = $siteName;
