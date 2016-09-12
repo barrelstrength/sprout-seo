@@ -412,16 +412,20 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $type);
 			$locale      = craft()->i18n->getLocaleById(craft()->language);
 
-			$elementGroup              = $elementInfo['elementGroupId'];
-			$criteria                  = craft()->elements->getCriteria($elementInfo['elementType']);
-			$criteria->{$elementGroup} = $info['elementGroupId'];
+			// If we don't have an elementGroupId, we're working with a Custom Metadata Page
+			if (isset($elementInfo['elementGroupId']))
+			{
+				$elementGroup              = $elementInfo['elementGroupId'];
+				$criteria                  = craft()->elements->getCriteria($elementInfo['elementType']);
+				$criteria->{$elementGroup} = $info['elementGroupId'];
 
-			$criteria->limit   = null;
-			$criteria->enabled = true;
-			$criteria->locale  = $locale->id;
+				$criteria->limit   = null;
+				$criteria->enabled = true;
+				$criteria->locale  = $locale->id;
 
-			// Support one locale for now
-			$element = $criteria->find();
+				// Support one locale for now
+				$element = $criteria->find();
+			}
 
 			if ($element)
 			{
