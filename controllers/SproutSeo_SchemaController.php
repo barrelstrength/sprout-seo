@@ -121,7 +121,6 @@ class SproutSeo_SchemaController extends BaseController
 
 		if ($identity)
 		{
-			// @todo - appendSiteName?
 			$identityName         = $identity['name'];
 			$optimizedTitle       = $identityName;
 			$optimizedDescription = $identity['description'];

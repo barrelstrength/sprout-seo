@@ -3,9 +3,12 @@
 <div class="sproutseo-box-optimized">
 
 	{% if settings.optimizedTitleField == 'manually' %}
+
+		{% set appendTitleValueInstructions = " <a href='#' class='fieldtoggle instructionstoggle' data-target='toggle-appendtitlevalue'>Append dynamic value to Meta Titles</a>."|t %}
+
 		{{ forms.textField({
 			label: "Meta Title"|t,
-			instructions: "The Title of your content which will appear in search results and social sharing."|t,
+			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'metaTagGroups' ? appendTitleValueInstructions : ""),
 			name: 'sproutseo[metadata][optimizedTitle]',
 			maxlength: 60,
 			showCharsLeft: true,
@@ -14,6 +17,22 @@
 			placeholder: siteName,
 			class: 'nicetext'
 		}) }}
+
+	{% endif %}
+
+	{% if fieldContext == 'metaTagGroups' %}
+		<div id="toggle-appendtitlevalue" class="{{ (values['appendTitleValue'] is defined and values.appendTitleValue ?:
+		'hidden' ) }}">
+			{{ forms.textField({
+				label: "Appended Meta Title"|t,
+				instructions: "Append a custom value at the end of all Meta Titles in this Metadata Group, i.e. <i>Article Title - " ~ siteName ~ "</i>. This setting overrides the <a href='" ~ cpUrl('sproutseo/globals/customization') ~ "'>default setting</a> and will apply to all titles within this Metadata Group."|t,
+				name: 'sproutseo[metadata][appendTitleValue]',
+				value: values.appendTitleValue ?? null,
+				placeholder: 'Keywords {divider} {siteName}',
+				errors: '',
+				class: 'nicetext'
+			}) }}
+		</div>
 	{% endif %}
 
 	{% if settings.optimizedDescriptionField == 'manually' %}
@@ -28,17 +47,6 @@
 			placeholder: "The official website of " ~ siteName
 		}) }}
 	{% endif %}
-
-	{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
-
-	{{ forms.textField({
-		label: "Keywords"|t,
-		instructions: "The primary keywords or phrases that describe your website."|t,
-		id: 'keywords',
-		name: 'sproutseo[metadata][keywords]',
-		value: keywordsValue,
-		errors: ''
-	}) }}
 
 	{% if settings.optimizedImageField == 'manually' %}
 		{{ forms.field({
@@ -56,6 +64,18 @@
 			criteria: {"localeEnabled":null}
 		})) }}
 	{% endif %}
+
+
+	{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
+
+	{{ forms.textField({
+		label: "Keywords"|t,
+		instructions: "The primary keywords or phrases that describe your website."|t,
+		id: 'keywords',
+		name: 'sproutseo[metadata][keywords]',
+		value: keywordsValue,
+		errors: ''
+	}) }}
 
 </div>
 

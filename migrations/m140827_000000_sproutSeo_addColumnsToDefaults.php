@@ -15,7 +15,7 @@ class m140827_000000_sproutSeo_addColumnsToDefaults extends BaseMigration
 	{
 		// specify columns and AttributeType
 		$newColumnsAppend = array(
-			'appendSiteName' => ColumnType::Varchar,
+			'appendTitleValue' => ColumnType::Varchar,
 		);
 
 		$newColumnsAuthorPublisher = array(

@@ -74,26 +74,6 @@
 			placeholder: "The official website of " ~ siteName
 		}) }}
 
-		{% set keywordsValue = schema['keywords'] is defined ? schema.keywords : null %}
-
-		{{ forms.textField({
-			label: "Keywords"|t,
-			instructions: "The primary keywords or phrases that describe your website."|t,
-			id: 'keywords',
-			name: 'sproutseo[schema][identity][keywords]',
-			value: keywordsValue,
-			errors: ''
-		}) }}
-
-		{{ forms.textField({
-			label: "URL"|t,
-			instructions: "The URL of your official website."|t,
-			name: 'sproutseo[schema][identity][url]',
-			value: schema['url'] is defined and schema['url'] != "" ? schema.url : siteUrl,
-			errors: '',
-			required: true
-		}) }}
-
 		{{ forms.field({
 			label: 'Image'|t,
 			instructions: "The preferred logo or profile picture for your website."|t,
@@ -110,12 +90,24 @@
 			criteria: {"localeEnabled":null}
 		})) }}
 
+		{% set keywordsValue = schema['keywords'] is defined ? schema.keywords : null %}
+
 		{{ forms.textField({
-			label: "Telephone"|t,
-			instructions: 'The preferred telephone number for your website.'|t,
-			name: 'sproutseo[schema][identity][telephone]',
-			value: schema['telephone'] is defined ? schema.telephone : null,
+			label: "Keywords"|t,
+			instructions: "The primary keywords or phrases that describe your website."|t,
+			id: 'keywords',
+			name: 'sproutseo[schema][identity][keywords]',
+			value: keywordsValue,
 			errors: ''
+		}) }}
+
+		{{ forms.textField({
+			label: "URL"|t,
+			instructions: "The URL of your official website. Defaults to the same value as Site URL in Settings->General."|t,
+			name: 'sproutseo[schema][identity][url]',
+			value: schema['url'] is defined and schema['url'] != "" ? schema.url : siteUrl,
+			errors: '',
+			required: true
 		}) }}
 
 		{{ forms.textField({
@@ -123,6 +115,14 @@
 			instructions: 'The preferred email address for your website.'|t,
 			name: 'sproutseo[schema][identity][email]',
 			value: schema['email'] is defined ? schema.email : null,
+			errors: ''
+		}) }}
+
+		{{ forms.textField({
+			label: "Telephone"|t,
+			instructions: 'The preferred telephone number for your website.'|t,
+			name: 'sproutseo[schema][identity][telephone]',
+			value: schema['telephone'] is defined ? schema.telephone : null,
 			errors: ''
 		}) }}
 

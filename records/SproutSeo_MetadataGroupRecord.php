@@ -49,7 +49,7 @@ class SproutSeo_MetadataGroupRecord extends BaseRecord
 			),
 			// end sitemap
 
-			'appendSiteName' => array(AttributeType::String),
+			'appendTitleValue' => array(AttributeType::String),
 			'url'            => array(AttributeType::String),
 
 			'optimizedTitle'       => array(AttributeType::String),

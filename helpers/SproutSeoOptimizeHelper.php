@@ -13,26 +13,51 @@ class SproutSeoOptimizeHelper
 	 */
 	public static function prepareAppendedSiteName(
 		$prioritizedMetaTagModel,
-		$MetadataGroupMetaTagModel,
-		$globalFallbackMetaTagModel,
-		$entryOverrideMetaTagModel
+		$metadataGroupMetaTagModel,
+		$globalFallbackMetaTagModel
 	)
 	{
-		// Does a selected Metadata Group override the Global Fallback appendSiteName value?
-		$appendSiteName = is_null($MetadataGroupMetaTagModel->appendSiteName)
-			? $globalFallbackMetaTagModel->appendSiteName
-			: $MetadataGroupMetaTagModel->appendSiteName;
+		$globals  = sproutSeo()->schema->getGlobals();
+		$settings = $globals->settings;
 
-		$appendSiteName = is_null(
-			$entryOverrideMetaTagModel->title) ?
-			$appendSiteName :
-			$entryOverrideMetaTagModel->title;
+		$globalAppendTitleValue = $settings['appendTitleValue'];
+		$seoDivider             = $settings['seoDivider'];
 
-		if ($appendSiteName)
+		// @todo - should this logic happen while populating the $globalFallbackMetaTagModel?
+		switch ($globalAppendTitleValue)
 		{
-			$divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
+			case 'custom':
+				$globalAppendTitleValue = $globalAppendTitleValue;
+				break;
 
-			return $prioritizedMetaTagModel->title . " " . $divider . " " . craft()->getInfo('siteName');
+			case 'sitename':
+				$globalAppendTitleValue = craft()->getInfo('siteName');
+				break;
+
+			default:
+				$globalAppendTitleValue = null;
+				break;
+		}
+
+		// @todo - can probably make logic more concise
+		if ($metadataGroupMetaTagModel->appendTitleValue != '')
+		{
+			$appendTitleValue = $metadataGroupMetaTagModel->appendTitleValue;
+		}
+		else
+		{
+			$appendTitleValue = $globalAppendTitleValue;
+		}
+
+		if ($appendTitleValue)
+		{
+			// Add support for using {divider} and {siteName} in the Metadata Group 'Appended Meta Title' setting
+			$appendTitleValue = craft()->templates->renderObjectTemplate($appendTitleValue, array(
+				'siteName' => craft()->getInfo('siteName'),
+				'divider'  => $seoDivider
+			));
+
+			return $prioritizedMetaTagModel->title . " " . $seoDivider . " " . $appendTitleValue;
 		}
 
 		return $prioritizedMetaTagModel->title;

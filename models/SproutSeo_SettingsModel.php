@@ -8,7 +8,7 @@ class SproutSeo_SettingsModel extends BaseModel
 	{
 		return array(
 			'pluginNameOverride' => AttributeType::String,
-			'appendSiteName'     => AttributeType::Bool,
+			'appendTitleValue'     => AttributeType::Bool,
 			'seoDivider'         => AttributeType::String,
 			'templateFolder'     => AttributeType::String,
 			'pingServices'       => AttributeType::Mixed,

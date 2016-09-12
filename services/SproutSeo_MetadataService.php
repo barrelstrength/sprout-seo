@@ -106,12 +106,10 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 			}
 		}
 
-		// @todo - reorganize how this stuff works / robots need love.
 		$prioritizedMetaTagModel->title = SproutSeoOptimizeHelper::prepareAppendedSiteName(
 			$prioritizedMetaTagModel,
 			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::MetadataGroup],
-			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::Global],
-			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::Entry]
+			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::Global]
 		);
 
 		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::getRobotsMetaValue($prioritizedMetaTagModel->robots);

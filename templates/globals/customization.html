@@ -17,33 +17,67 @@
 		<input type="hidden" name="schemaType" value="{{ schemaTypeFormSubmit }}">
 
 		{{ forms.selectField({
+			label: 'Append value to all Meta Titles'|t,
+			instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. <i>Article Title - " ~ siteName ~ "</i>"|t,
+			id: 'seoDivider',
+			name: 'sproutseo[schema][settings][appendTitleValue]',
+			options: {
+				1 : {
+					'value' : '',
+					'label' : 'None'
+				},
+				2 : {
+					'value' : 'sitename',
+					'label' : 'Site Name'
+				},
+				3: {
+					'optgroup': 'Custom'
+				},
+				4 : {
+					'value' : 'custom',
+					'label' : 'Add Custom'
+				}
+			},
+			value : settings.appendTitleValue ?? null,
+			first: true,
+			errors: ''
+		}) }}
+
+		{{ forms.selectField({
 			label: 'Select the character that will be used between Title segments'|t,
-			instructions: "This character will be used in between your title segments, i.e. Blog Post Title – Website Name."|t,
+			instructions: "This character will be used in between your title segments, i.e. <i>Blog Post Title – " ~ siteName ~ "</i>"|t,
 			id: 'seoDivider',
 			name: 'sproutseo[schema][settings][seoDivider]',
 			options: {
 				1 : {
 					'value' : '-',
-					'label' : 'Dash -'
+					'label' : '-'
 				},
 				2 : {
 					'value' : '•',
-					'label' : 'Bullet •'
+					'label' : '•'
 				},
 				3 : {
 					'value' : '|',
-					'label' : 'Pipe |'
+					'label' : '|'
 				},
 				4 : {
 					'value' : '/',
-					'label' : 'Forward Slash /'
+					'label' : '/'
 				},
 				5 : {
 					'value' : ':',
-					'label' : 'Colon :'
+					'label' : ':'
+				},
+				6: {
+					'optgroup': 'Custom'
+				},
+				7 : {
+					'value' : 'custom',
+					'label' : 'Add Custom'
 				}
 			},
-			value : settings.seoDivider,
+			value : settings.seoDivider ?? null,
 			first: true,
 			errors: ''
 		}) }}
@@ -56,11 +90,11 @@
 
 		{{ forms.selectField({
 			label: 'Default Open Graph Type'|t,
-			instructions: 'Select your default Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
+			instructions: 'Select your default Open Graph Type for individual entries using the Sprout SEO Optimize field. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
     target="_blank">How Open Graph Stories work.</a>'|t,
 			name: 'sproutseo[schema][settings][defaultOgType]',
 			options: ogTypesOptions,
-			value: settings['defaultOgType'] is defined ? settings.defaultOgType : null,
+			value: settings.defaultOgType ?? 'article',
 			errors: "",
 			required: false
 		}) }}
@@ -74,10 +108,10 @@
 
 		{{ forms.selectField({
 			label: 'Default Twitter Card Type'|t,
-			instructions: 'Select your default Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
+			instructions: 'Select your default Twitter Card Type for individual entries using the Sprout SEO Optimize field.. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
 			name: 'sproutseo[schema][settings][defaultTwitterCard]',
 			options: twitterCardOptions,
-			value: settings['defaultTwitterCard'] ? settings.defaultTwitterCard : 'summary',
+			value: settings.defaultTwitterCard ?? 'summary',
 			errors: "",
 			required: false
 		}) }}

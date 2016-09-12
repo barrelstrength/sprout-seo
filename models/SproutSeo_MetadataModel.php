@@ -51,7 +51,7 @@ class SproutSeo_MetadataModel extends BaseModel
 			'default'              => array(AttributeType::String),
 			'name'                 => array(AttributeType::String),
 			'handle'               => array(AttributeType::String),
-			'appendSiteName'       => array(AttributeType::String, 'default' => null),
+			'appendTitleValue'       => array(AttributeType::String, 'default' => null),
 			'url'                  => array(AttributeType::String),
 			'optimizedTitle'       => array(AttributeType::String),
 			'optimizedDescription' => array(AttributeType::String),
