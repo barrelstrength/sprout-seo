@@ -45,7 +45,7 @@
 				<input type="hidden" name="action" value="sproutSeo/metadata/saveMetadataGroup">
 				<input type="hidden" name="redirect" value="sproutseo/metadata">
 				<input type="hidden" name="sproutseo[metadata][id]" value="{{ metadataGroupId }}">
-				<input type="hidden" name="sproutseo[metadata][isCustom]" value="{{ isCustom }}">
+				<input type="hidden" name="sproutseo[metadata][isSitemapCustomPage]" value="{{ isSitemapCustomPage }}">
 				<input type="hidden" name="sproutseo[metadata][type]" value="{{ metaTags.type }}">
 				<input type="hidden" name="sproutseo[metadata][elementGroupId]" value="{{ metaTags.elementGroupId }}">
 
@@ -77,7 +77,7 @@
 				{{ forms.textField({
 					label: "URL"|t,
 					id: "url",
-					name: 'sproutseo[metadata][url]',
+					name: 'sproutseo[metadata][sitemapUrl]',
 					value: (metaTags.url == '__home__') ? "/" : metaTags.url,
 					errors: metaTags.getErrors('url'),
 					required: true
@@ -147,18 +147,18 @@
 
 				{{ forms.selectField({
 					label: "Priority"|t,
-					name: 'sproutseo[metadata][priority]',
+					name: 'sproutseo[metadata][sitemapPriority]',
 					options: priorityList,
-					value: (metaTags.priority ? metaTags.priority : 0.5),
+					value: (metaTags.sitemapPriority ? metaTags.sitemapPriority : 0.5),
 					errors: "",
 					required: false
 				}) }}
 
 				{{ forms.selectField({
 					label: "Change Frequency"|t,
-					name: 'sproutseo[metadata][changeFrequency]',
+					name: 'sproutseo[metadata][sitemapChangeFrequency]',
 					options: frequencyList,
-					value: (metaTags.changeFrequency ? metaTags.changeFrequency : 'weekly'),
+					value: (metaTags.sitemapChangeFrequency ? metaTags.sitemapChangeFrequency : 'weekly'),
 					errors: "",
 					required: false
 				}) }}

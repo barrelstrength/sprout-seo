@@ -10,7 +10,7 @@ class SproutSeo_MetadataController extends BaseController
 	 */
 	public function actionMetadataGroupEditTemplate(array $variables = array())
 	{
-		$isCustom = true;
+		$isSitemapCustomPage = true;
 
 		// Determine what we're working with
 		$segment         = craft()->request->getSegment(3);
@@ -80,7 +80,7 @@ class SproutSeo_MetadataController extends BaseController
 
 		if ($metaTags->type && $metaTags->elementGroupId)
 		{
-			$isCustom = false;
+			$isSitemapCustomPage = false;
 		}
 
 		// Set up our asset fields
@@ -123,7 +123,7 @@ class SproutSeo_MetadataController extends BaseController
 			'assetsSourceExists'   => $assetsSourceExists,
 			'elementType'          => $elementType,
 			'settings'             => $settings,
-			'isCustom'             => $isCustom
+			'isSitemapCustomPage'  => $isSitemapCustomPage
 		));
 	}
 

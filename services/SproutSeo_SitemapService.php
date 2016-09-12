@@ -23,8 +23,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$model = new SproutSeo_SitemapModel();
 
 		$info = array(
-			'groupName' => $type,
-			'sitemapId' => $type.'-1',
+			'groupName'      => $type,
+			'sitemapId'      => $type . '-1',
 			'elementGroupId' => $attributes->elementGroupId
 		);
 
@@ -36,26 +36,26 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			$sitemapId = $elementInfo['metadataId'];
 
 			$row = craft()->db->createCommand()
-					->select('*')
-					->from('sproutseo_metadatagroups')
-					->where('id=:id', array(':id' => $sitemapId))
-					->queryRow();
+				->select('*')
+				->from('sproutseo_metadatagroups')
+				->where('id=:id', array(':id' => $sitemapId))
+				->queryRow();
 
 			$model = SproutSeo_SitemapModel::populateModel($row);
 		}
 
-		$model->id              = $sitemapId;
-		$model->elementGroupId  = (isset($attributes->elementGroupId)) ? $attributes->elementGroupId : null;
-		$model->url             = (isset($elementInfo['element']->urlFormat)) ? $elementInfo['element']->urlFormat : null;
-		$model->priority        = $attributes->priority;
-		$model->changeFrequency = $attributes->changeFrequency;
-		$model->type            = $type != "customUrl" ? $type : null;
-		$model->name            = $attributes->id;
-		$model->handle          = str_replace("-", "", $attributes->id);
-		$model->isCustom        = 0;
-		$model->enabled         = ($attributes->enabled == 'true') ? 1 : 0;
-		$model->dateUpdated     = DateTimeHelper::currentTimeForDb();
-		$model->uid             = StringHelper::UUID();
+		$model->id                     = $sitemapId;
+		$model->name                   = $attributes->id;
+		$model->handle                 = str_replace("-", "", $attributes->id);
+		$model->type                   = $type != "customUrl" ? $type : null;
+		$model->elementGroupId         = (isset($attributes->elementGroupId)) ? $attributes->elementGroupId : null;
+		$model->sitemapUrl             = (isset($elementInfo['element']->urlFormat)) ? $elementInfo['element']->urlFormat : null;
+		$model->sitemapPriority        = $attributes->sitemapPriority;
+		$model->sitemapChangeFrequency = $attributes->sitemapChangeFrequency;
+		$model->isSitemapCustomPage    = 0;
+		$model->enabled                = ($attributes->enabled == 'true') ? 1 : 0;
+		$model->dateUpdated            = DateTimeHelper::currentTimeForDb();
+		$model->uid                    = StringHelper::UUID();
 
 		if ($isNew)
 		{
@@ -78,18 +78,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 			return $model->id;
 		}
-	}
-
-	/**
-	 * @param SproutSeo_SitemapModel $customPage
-	 *
-	 * @return int
-	 */
-	public function saveCustomPage(SproutSeo_SitemapModel $customPage)
-	{
-		$result = craft()->db->createCommand()->insert('sproutseo_sitemap', $customPage->getAttributes());
-
-		return $result;
 	}
 
 	/**
@@ -152,8 +140,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 						'url'       => $element->getUrl(),
 						'locale'    => $locale->id,
 						'modified'  => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
-						'priority'  => $sitemapSettings['priority'],
-						'frequency' => $sitemapSettings['changeFrequency'],
+						'priority'  => $sitemapSettings['sitemapPriority'],
+						'frequency' => $sitemapSettings['sitemapChangeFrequency'],
 					);
 				}
 			}
@@ -161,10 +149,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		// Fetching all custom pages defined in Sprout SEO
 		$customUrls = craft()->db->createCommand()
-			->select('url, priority, changeFrequency as frequency, dateUpdated')
+			->select('sitemapUrl as url, sitemapPriority as priority, sitemapChangeFrequency as frequency, dateUpdated')
 			->from('sproutseo_metadatagroups')
 			->where('enabled = 1')
-			->andWhere('url is not null and isCustom = 1')
+			->andWhere('url is not null and isSitemapCustomPage = 1')
 			->queryAll();
 
 		foreach ($customUrls as $customEntry)
@@ -195,26 +183,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Returns sitemap given id
-	 *
-	 * @param integer $id
-	 */
-	public function getSitemapById($id)
-	{
-		$sitemap = null;
-
-		$sitemap = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_sitemap')
-			->where('id = :id', array(':id'=>$id))
-			->queryRow();
-
-		$sitemap = is_null($sitemap) ? null : SproutSeo_SitemapModel::populateModel($sitemap);
-
-		return $sitemap;
-	}
-
-	/**
 	 * Get all sitemaps registered on the registerSproutSeoSitemap hook
 	 *
 	 * @return array
@@ -237,7 +205,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 					if (method_exists($class, $method))
 					{
-						$elements                    = craft()->{$service}->{$method}();
+						$elements = craft()->{$service}->{$method}();
 
 						if (!empty($elements))
 						{
@@ -342,22 +310,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$customPages = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_metadatagroups')
-			->where('isCustom = 1')
+			->where('isSitemapCustomPage = 1')
 			->queryAll();
 
 		return $customPages;
-	}
-
-	/**
-	 * @param $id
-	 *
-	 * @return int
-	 */
-	public function deleteCustomPageById($id)
-	{
-		$record = new SproutSeo_SitemapRecord;
-
-		return $record->deleteByPk($id);
 	}
 
 	/**

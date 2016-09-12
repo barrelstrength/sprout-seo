@@ -12,35 +12,38 @@ class SproutSeo_MetadataModel extends BaseModel
 	protected function defineAttributes()
 	{
 		$sitemap = array(
-			'elementGroupId'  => array(AttributeType::Number),
-			'type'            => array(AttributeType::String),
-			'priority'        => array(
+			'elementGroupId' => array(AttributeType::Number),
+			'type'           => array(AttributeType::String),
+
+			'sitemapUrl'             => array(AttributeType::String),
+			'sitemapPriority'        => array(
 				AttributeType::Number,
 				'maxLength' => 2,
 				'decimals'  => 1,
 				'default'   => '0.5',
 				'required'  => true
 			),
-			'changeFrequency' => array(
+			'sitemapChangeFrequency' => array(
 				AttributeType::String,
 				'maxLength' => 7,
 				'default'   => 'weekly',
 				'required'  => true
 			),
-			'enabled'         => array(
+
+			'enabled'             => array(
 				AttributeType::Bool,
 				'default'  => false,
 				'required' => true
 			),
-			'isCustom'        => array(
+			'isSitemapCustomPage' => array(
 				AttributeType::Bool,
 				'default'  => false,
 				'required' => true
 			),
-			'schemaMap'       => array(AttributeType::String),
-			'dateUpdated'     => array(AttributeType::DateTime),
-			'dateCreated'     => array(AttributeType::DateTime),
-			'uid'             => array(AttributeType::String),
+			'schemaMap'           => array(AttributeType::String),
+			'dateUpdated'         => array(AttributeType::DateTime),
+			'dateCreated'         => array(AttributeType::DateTime),
+			'uid'                 => array(AttributeType::String),
 		);
 
 		// @todo - do we need all these values here? Some could just be assigned elsewhere:
@@ -51,7 +54,7 @@ class SproutSeo_MetadataModel extends BaseModel
 			'default'              => array(AttributeType::String),
 			'name'                 => array(AttributeType::String),
 			'handle'               => array(AttributeType::String),
-			'appendTitleValue'       => array(AttributeType::String, 'default' => null),
+			'appendTitleValue'     => array(AttributeType::String, 'default' => null),
 			'url'                  => array(AttributeType::String),
 			'optimizedTitle'       => array(AttributeType::String),
 			'optimizedDescription' => array(AttributeType::String),

@@ -112,18 +112,18 @@
 							</td>
 							<td>
 								{{ forms.selectField({
-									name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
+									name: 'sitemap_fields[' ~ sitemapId ~ '][sitemapPriority]',
 									options: priorityList,
-									value: (sitemap.priority is defined ? sitemap.priority : 0.5),
+									value: (sitemap.sitemapPriority is defined ? sitemap.sitemapPriority : 0.5),
 									errors: "",
 									required: false
 								}) }}
 							</td>
 							<td>
 								{{ forms.selectField({
-									name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
+									name: 'sitemap_fields[' ~ sitemapId ~ '][sitemapChangeFrequency]',
 									options: frequencyList,
-									value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
+									value: (sitemap.sitemapChangeFrequency is defined ? sitemap.sitemapChangeFrequency : 'weekly'),
 									errors: "",
 									required: false
 								}) }}
@@ -162,7 +162,7 @@
 			{% for page in customPages %}
 				{% set sitemapId = "customUrl-"~page.id %}
 
-				<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
+				<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.sitemapUrl }}">
 					<td>
 						<div style="display:inline-block;padding:7px 0 7px 10px;">
 						{% if (page.enabled is defined and page.enabled == 1) %}
@@ -179,24 +179,23 @@
 					</td>
 					<td>
 						<code>
-							{#<input type="text" name="sitemap_fields[{{ sitemapId }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">#}
-							{{ page.url }}
+							{{ page.sitemapUrl }}
 						</code>
 					</td>
 					<td>
 						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
+							name: 'sitemap_fields[' ~ sitemapId ~ '][sitemapPriority]',
 							options: priorityList,
-							value: (page.priority is defined ? page.priority : 0.5),
+							value: (page.sitemapPriority is defined ? page.sitemapPriority : 0.5),
 							errors: "",
 							required: false
 						}) }}
 					</td>
 					<td>
 						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
+							name: 'sitemap_fields[' ~ sitemapId ~ '][sitemapChangeFrequency]',
 							options: frequencyList,
-							value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
+							value: (page.sitemapChangeFrequency is defined ? page.sitemapChangeFrequency : 'weekly'),
 							errors: "",
 							required: false
 						}) }}

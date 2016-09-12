@@ -7,15 +7,15 @@
 
 		$customPageUrls: null,
 
-		$status:                null,
-		$id:                    null,
-		$elementGroupId:        null,
-		$url:                   null,
-		$priority:              null,
-		$changeFrequency:       null,
-		$enabled:               null,
-		$ping:                  null,
-		$newMetaDataGroupLinks: null,
+		$status:                 null,
+		$id:                     null,
+		$elementGroupId:         null,
+		$sitemapUrl:             null,
+		$sitemapPriority:        null,
+		$sitemapChangeFrequency: null,
+		$enabled:                null,
+		$ping:                   null,
+		$newMetaDataGroupLinks:  null,
 
 		$addCustomPageButton: null,
 
@@ -53,23 +53,23 @@
 			changedElement = event.target;
 			rowId          = $(changedElement).closest('tr').data('rowid');
 
-			this.status          = $('tr[data-rowid="' + rowId + '"] td span.status');
-			this.id              = $('input[name="sitemap_fields[' + rowId + '][id]"]').val();
-			this.elementGroupId  = $('input[name="sitemap_fields[' + rowId + '][elementGroupId]"]').val();
-			this.url             = $('input[name="sitemap_fields[' + rowId + '][url]"]').val();
-			this.priority        = $('select[name="sitemap_fields[' + rowId + '][priority]"]').val();
-			this.changeFrequency = $('select[name="sitemap_fields[' + rowId + '][changeFrequency]"]').val();
-			this.enabled         = $('input[name="sitemap_fields[' + rowId + '][enabled]"]').is(":checked");
-			this.ping            = $('input[name="sitemap_fields[' + rowId + '][ping]"]').is(":checked");
+			this.status                 = $('tr[data-rowid="' + rowId + '"] td span.status');
+			this.id                     = $('input[name="sitemap_fields[' + rowId + '][id]"]').val();
+			this.elementGroupId         = $('input[name="sitemap_fields[' + rowId + '][elementGroupId]"]').val();
+			this.sitemapUrl             = $('input[name="sitemap_fields[' + rowId + '][sitemapUrl]"]').val();
+			this.sitemapPriority        = $('select[name="sitemap_fields[' + rowId + '][sitemapPriority]"]').val();
+			this.sitemapChangeFrequency = $('select[name="sitemap_fields[' + rowId + '][sitemapChangeFrequency]"]').val();
+			this.enabled                = $('input[name="sitemap_fields[' + rowId + '][enabled]"]').is(":checked");
+			this.ping                   = $('input[name="sitemap_fields[' + rowId + '][ping]"]').is(":checked");
 
 			// @todo - clean these up
 			console.log('new request');
 			console.log(this.status);
 			console.log(this.id);
 			console.log(this.elementGroupId);
-			console.log(this.url);
-			console.log(this.priority);
-			console.log(this.changeFrequency);
+			console.log(this.sitemapUrl);
+			console.log(this.sitemapPriority);
+			console.log(this.sitemapChangeFrequency);
 			console.log(this.enabled);
 			console.log(this.ping);
 			console.log(this.categoryGroupId);
@@ -89,13 +89,13 @@
 			}
 
 			Craft.postActionRequest('sproutSeo/sitemap/saveSitemap', {
-				id:              this.id,
-				elementGroupId:  this.elementGroupId,
-				url:             this.url,
-				priority:        this.priority,
-				changeFrequency: this.changeFrequency,
-				enabled:         this.enabled,
-				ping:            this.ping,
+				id:                     this.id,
+				elementGroupId:         this.elementGroupId,
+				sitemapUrl:             this.sitemapUrl,
+				sitemapPriority:        this.sitemapPriority,
+				sitemapChangeFrequency: this.sitemapChangeFrequency,
+				enabled:                this.enabled,
+				ping:                   this.ping,
 			}, $.proxy(function(response, textStatus) {
 				if (textStatus == 'success') {
 					if (response.lastInsertId) {
@@ -107,9 +107,9 @@
 						$('input[name="sitemap_fields[' + rowId + '][id]"]').val(newRowId);
 						$('input[name="sitemap_fields[' + rowId + '][id]"]').attr('name', 'sitemap_fields[' + newRowId + '][id]');
 						$('input[name="sitemap_fields[' + rowId + '][elementGroupId]"]').attr('name', 'sitemap_fields[' + newRowId + '][elementGroupId]');
-						$('input[name="sitemap_fields[' + rowId + '][url]"]').attr('name', 'sitemap_fields[' + newRowId + '][url]');
-						$('select[name="sitemap_fields[' + rowId + '][priority]"]').attr('name', 'sitemap_fields[' + newRowId + '][priority]');
-						$('select[name="sitemap_fields[' + rowId + '][changeFrequency]"]').attr('name', 'sitemap_fields[' + newRowId + '][changeFrequency]');
+						$('input[name="sitemap_fields[' + rowId + '][sitemapUrl]"]').attr('name', 'sitemap_fields[' + newRowId + '][sitemapUrl]');
+						$('select[name="sitemap_fields[' + rowId + '][sitemapPriority]"]').attr('name', 'sitemap_fields[' + newRowId + '][sitemapPriority]');
+						$('select[name="sitemap_fields[' + rowId + '][sitemapChangeFrequency]"]').attr('name', 'sitemap_fields[' + newRowId + '][sitemapChangeFrequency]');
 						$('input[name="sitemap_fields[' + rowId + '][enabled]"]').attr('name', 'sitemap_fields[' + newRowId + '][enabled]');
 						$('input[name="sitemap_fields[' + rowId + '][ping]"]').attr('name', 'sitemap_fields[' + newRowId + '][ping]');
 
