@@ -54,13 +54,13 @@
 			rowId          = $(changedElement).closest('tr').data('rowid');
 
 			this.status                 = $('tr[data-rowid="' + rowId + '"] td span.status');
-			this.id                     = $('input[name="sitemap_fields[' + rowId + '][id]"]').val();
-			this.elementGroupId         = $('input[name="sitemap_fields[' + rowId + '][elementGroupId]"]').val();
-			this.sitemapUrl             = $('input[name="sitemap_fields[' + rowId + '][sitemapUrl]"]').val();
-			this.sitemapPriority        = $('select[name="sitemap_fields[' + rowId + '][sitemapPriority]"]').val();
-			this.sitemapChangeFrequency = $('select[name="sitemap_fields[' + rowId + '][sitemapChangeFrequency]"]').val();
-			this.enabled                = $('input[name="sitemap_fields[' + rowId + '][enabled]"]').is(":checked");
-			this.ping                   = $('input[name="sitemap_fields[' + rowId + '][ping]"]').is(":checked");
+			this.id                     = $('input[name="sproutseo[sitemap][' + rowId + '][id]"]').val();
+			this.elementGroupId         = $('input[name="sproutseo[sitemap][' + rowId + '][elementGroupId]"]').val();
+			this.sitemapUrl             = $('input[name="sproutseo[sitemap][' + rowId + '][sitemapUrl]"]').val();
+			this.sitemapPriority        = $('select[name="sproutseo[sitemap][' + rowId + '][sitemapPriority]"]').val();
+			this.sitemapChangeFrequency = $('select[name="sproutseo[sitemap][' + rowId + '][sitemapChangeFrequency]"]').val();
+			this.enabled                = $('input[name="sproutseo[sitemap][' + rowId + '][enabled]"]').is(":checked");
+			this.ping                   = $('input[name="sproutseo[sitemap][' + rowId + '][ping]"]').is(":checked");
 
 			// @todo - clean these up
 			console.log('new request');
@@ -77,13 +77,13 @@
 			if (this.enabled) {
 				this.status.removeClass('disabled');
 				this.status.addClass('live');
-				$('input[name="sitemap_fields[' + rowId + '][ping]"]').attr("disabled", false);
+				$('input[name="sproutseo[sitemap][' + rowId + '][ping]"]').attr("disabled", false);
 			}
 			else {
 				this.status.removeClass('live');
 				this.status.addClass('disabled');
-				$('input[name="sitemap_fields[' + rowId + '][ping]"]').prop('checked', false);
-				$('input[name="sitemap_fields[' + rowId + '][ping]"]').attr("disabled", true);
+				$('input[name="sproutseo[sitemap][' + rowId + '][ping]"]').prop('checked', false);
+				$('input[name="sproutseo[sitemap][' + rowId + '][ping]"]').attr("disabled", true);
 				this.ping = false;
 			}
 
@@ -103,14 +103,14 @@
 						var newRowId = type + "-" + response.lastInsertId;
 						$(changedElement).closest('tr').data('rowid', newRowId);
 
-						$('input[name="sitemap_fields[' + rowId + '][id]"]').val(newRowId);
-						$('input[name="sitemap_fields[' + rowId + '][id]"]').attr('name', 'sitemap_fields[' + newRowId + '][id]');
-						$('input[name="sitemap_fields[' + rowId + '][elementGroupId]"]').attr('name', 'sitemap_fields[' + newRowId + '][elementGroupId]');
-						$('input[name="sitemap_fields[' + rowId + '][sitemapUrl]"]').attr('name', 'sitemap_fields[' + newRowId + '][sitemapUrl]');
-						$('select[name="sitemap_fields[' + rowId + '][sitemapPriority]"]').attr('name', 'sitemap_fields[' + newRowId + '][sitemapPriority]');
-						$('select[name="sitemap_fields[' + rowId + '][sitemapChangeFrequency]"]').attr('name', 'sitemap_fields[' + newRowId + '][sitemapChangeFrequency]');
-						$('input[name="sitemap_fields[' + rowId + '][enabled]"]').attr('name', 'sitemap_fields[' + newRowId + '][enabled]');
-						$('input[name="sitemap_fields[' + rowId + '][ping]"]').attr('name', 'sitemap_fields[' + newRowId + '][ping]');
+						$('input[name="sproutseo[sitemap][' + rowId + '][id]"]').val(newRowId);
+						$('input[name="sproutseo[sitemap][' + rowId + '][id]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][id]');
+						$('input[name="sproutseo[sitemap][' + rowId + '][elementGroupId]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][elementGroupId]');
+						$('input[name="sproutseo[sitemap][' + rowId + '][sitemapUrl]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][sitemapUrl]');
+						$('select[name="sproutseo[sitemap][' + rowId + '][sitemapPriority]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][sitemapPriority]');
+						$('select[name="sproutseo[sitemap][' + rowId + '][sitemapChangeFrequency]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][sitemapChangeFrequency]');
+						$('input[name="sproutseo[sitemap][' + rowId + '][enabled]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][enabled]');
+						$('input[name="sproutseo[sitemap][' + rowId + '][ping]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][ping]');
 
 						Craft.cp.displayNotice(Craft.t("Sitemap setting saved."));
 					}

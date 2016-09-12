@@ -98,8 +98,8 @@
 
 									{{ elementGroup.name }}
 
-									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
-									<input type="hidden" name="sitemap_fields[{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
+									<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][id]" value="{{ sitemapId }}">
+									<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
 
 								</strong>
 							</td>
@@ -112,7 +112,7 @@
 							</td>
 							<td>
 								{{ forms.selectField({
-									name: 'sitemap_fields[' ~ sitemapId ~ '][sitemapPriority]',
+									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapPriority]',
 									options: priorityList,
 									value: (sitemap.sitemapPriority is defined ? sitemap.sitemapPriority : 0.5),
 									errors: "",
@@ -121,7 +121,7 @@
 							</td>
 							<td>
 								{{ forms.selectField({
-									name: 'sitemap_fields[' ~ sitemapId ~ '][sitemapChangeFrequency]',
+									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapChangeFrequency]',
 									options: frequencyList,
 									value: (sitemap.sitemapChangeFrequency is defined ? sitemap.sitemapChangeFrequency : 'weekly'),
 									errors: "",
@@ -129,7 +129,7 @@
 								}) }}
 							</td>
 							<td style="text-align: center;">
-								<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
+								<input type="checkbox" name="sproutseo[sitemap][{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
 							</td>
 							<td>
 								{# @todo - find a better way to get the columns to be even. This tag is
@@ -172,7 +172,7 @@
 						{% endif %}
 						</div>
 
-						<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
+						<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][id]" value="{{ sitemapId }}">
 
 						<strong>{{ page.title }}</strong>
 
@@ -184,7 +184,7 @@
 					</td>
 					<td>
 						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ sitemapId ~ '][sitemapPriority]',
+							name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapPriority]',
 							options: priorityList,
 							value: (page.sitemapPriority is defined ? page.sitemapPriority : 0.5),
 							errors: "",
@@ -193,7 +193,7 @@
 					</td>
 					<td>
 						{{ forms.selectField({
-							name: 'sitemap_fields[' ~ sitemapId ~ '][sitemapChangeFrequency]',
+							name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapChangeFrequency]',
 							options: frequencyList,
 							value: (page.sitemapChangeFrequency is defined ? page.sitemapChangeFrequency : 'weekly'),
 							errors: "",
@@ -201,7 +201,7 @@
 						}) }}
 					</td>
 					<td style="text-align: center;">
-						<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
+						<input type="checkbox" name="sproutseo[sitemap][{{ sitemapId }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
 					</td>
 					<td>
 						<a class="delete icon" title="Delete"></a>
