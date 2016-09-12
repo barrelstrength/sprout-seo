@@ -434,7 +434,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 				// check if exists in sproutseo_metadatagroups
 				$metataggroups = $this->getMetadataGroupByInfo($type, $info['elementGroupId']);
 
-				if ($metataggroups->url)
+				if ($metataggroups->sitemapUrl)
 				{
 					$response['isNew']        = false;
 					$response['metadataId']   = $metataggroups->id;

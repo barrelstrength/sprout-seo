@@ -61,7 +61,7 @@ class SproutSeo_MetadataController extends BaseController
 
 				if ($element)
 				{
-					$metaTags->url = $element->urlFormat;
+					$metaTags->sitemapUrl = $element->urlFormat;
 				}
 			}
 
