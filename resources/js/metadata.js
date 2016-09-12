@@ -72,7 +72,6 @@
 			console.log(this.sitemapChangeFrequency);
 			console.log(this.enabled);
 			console.log(this.ping);
-			console.log(this.categoryGroupId);
 			console.log('end request');
 
 			if (this.enabled) {
