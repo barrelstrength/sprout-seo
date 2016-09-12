@@ -611,6 +611,8 @@ class SproutSeoVariable
 		$schemaMaps = $this->getSchemaMaps();
 		$schemas    = array('' => 'Select...');
 
+		array_push($schemas, array('optgroup' => 'Basic'));
+
 		foreach ($schemaMaps as $schemasByPlugin)
 		{
 			foreach ($schemasByPlugin as $schema)
@@ -619,6 +621,8 @@ class SproutSeoVariable
 				$schemas[$type] = $schema->getName();
 			}
 		}
+
+		array_push($schemas, array('optgroup' => 'Custom'));
 
 		return $schemas;
 	}

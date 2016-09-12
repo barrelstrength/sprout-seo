@@ -65,7 +65,6 @@
 		})) }}
 	{% endif %}
 
-
 	{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
 
 	{{ forms.textField({
@@ -75,6 +74,18 @@
 		name: 'sproutseo[metadata][keywords]',
 		value: keywordsValue,
 		errors: ''
+	}) }}
+
+	{% set schemaMaps = craft.sproutSeo.getSchemaMapsArray() %}
+
+	{{ forms.selectField({
+		label: "Main Entity"|t,
+		instructions: "Map the primary element that displays on this page to a Structured Data schema. Select a basic or custom mapping."|t,
+		name: 'sproutseo[metadata][schemaMap]',
+		options: schemaMaps,
+		value: (metaTags.schemaMap is defined ? metaTags.schemaMap : 0.5),
+		errors: "",
+		required: false
 	}) }}
 
 </div>

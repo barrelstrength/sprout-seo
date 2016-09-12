@@ -107,20 +107,6 @@
 			</div>
 
 			<div class="pane meta">
-
-				{% set schemaMaps = craft.sproutSeo.getSchemaMapsArray() %}
-
-				{{ forms.selectField({
-					label: "Main Entity <span class='info'>Define your Main Entity. Map the primary element that displays on this page to a Structured Data schema for improved metadata.</span>"|t,
-					name: 'sproutseo[metadata][schemaMap]',
-					options: schemaMaps,
-					value: (metaTags.schemaMap is defined ? metaTags.schemaMap : 0.5),
-					errors: "",
-					required: false
-				}) }}
-			</div>
-
-			<div class="pane meta">
 				{% set priorityList = {
 				'1.0': '1.0 ↑ Highest'|t,
 				'0.9': '0.9',
