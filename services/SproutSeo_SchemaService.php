@@ -56,7 +56,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 				if ($enabledMatchingSitemap->schemaMap)
 				{
 					$class = 'Craft\SproutSeo_'.$enabledMatchingSitemap->schemaMap.'SchemaMap';
-					$schemaMap = new $class($enabledMatchingSitemap, true, $sitemapInfo);
+					$schemaMap = new $class($enabledMatchingSitemap->getAttributes(), true, $sitemapInfo);
 
 					$schema = $schemaMap->getSchema();
 				}
