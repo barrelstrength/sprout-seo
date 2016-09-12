@@ -21,6 +21,20 @@
 			required: false
 		}) }}
 
+		{{ forms.textField({
+			label: "Audio"|t,
+			instructions: "A URL to an audio file to accompany this content."|t,
+			name: "sproutseo[metadata][ogAudio]",
+			value: values.ogAudio
+		}) }}
+
+		{{ forms.textField({
+			label: "Video"|t,
+			instructions: "A URL to a video file that complements this content."|t,
+			name: "sproutseo[metadata][ogVideo]",
+			value: values.ogVideo
+		}) }}
+
 	</div>
 
 </div>
