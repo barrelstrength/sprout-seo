@@ -1,5 +1,5 @@
 {# This needs to be here to make sure the checkboxes work properly #}
-<input type="hidden" name="sproutseo[schema][robots]" value="">
+<input type="hidden" name="sproutseo[" ~ robotsNamespace ~ "][robots]" value="">
 
 {% set robotsCheckboxes %}
 	<table class="data" style="width: auto;">
@@ -14,7 +14,7 @@
 			<td class="centeralign">
 				<div>
 					{{ forms.lightswitch({
-						name: 'sproutseo[schema][robots][noindex]',
+						name: 'sproutseo[' ~ robotsNamespace ~ '][robots][noindex]',
 						on:   values.robots.noindex,
 						small: true
 					}) }}
@@ -30,7 +30,7 @@
 			<td class="centeralign">
 				<div>
 					{{ forms.lightswitch({
-						name: 'sproutseo[schema][robots][nofollow]',
+						name: 'sproutseo[' ~ robotsNamespace ~ '][robots][nofollow]',
 						on:   values.robots.nofollow,
 						small: true
 					}) }}
@@ -46,7 +46,7 @@
 			<td class="centeralign">
 				<div>
 					{{ forms.lightswitch({
-						name: 'sproutseo[schema][robots][noarchive]',
+						name: 'sproutseo[' ~ robotsNamespace ~ '][robots][noarchive]',
 						on:   values.robots.noarchive,
 						small: true
 					}) }}
@@ -62,7 +62,7 @@
 			<td class="centeralign">
 				<div>
 					{{ forms.lightswitch({
-						name: 'sproutseo[schema][robots][noimageindex]',
+						name: 'sproutseo[' ~ robotsNamespace ~ '][robots][noimageindex]',
 						on:   values.robots.noimageindex,
 						small: true
 					}) }}
@@ -78,7 +78,7 @@
 			<td class="centeralign">
 				<div>
 					{{ forms.lightswitch({
-						name: 'sproutseo[schema][robots][noodp]',
+						name: 'sproutseo[' ~ robotsNamespace ~ '][robots][noodp]',
 						on:   values.robots.noodp,
 						small: true
 					}) }}
@@ -94,7 +94,7 @@
 			<td class="centeralign">
 				<div>
 					{{ forms.lightswitch({
-						name: 'sproutseo[schema][robots][noydir]',
+						name: 'sproutseo[' ~ robotsNamespace ~ '][robots][noydir]',
 						on:   values.robots.noydir ,
 						small: true
 					}) }}

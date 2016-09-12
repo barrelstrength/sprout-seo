@@ -16,6 +16,7 @@
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
 		<input type="hidden" name="schemaType" value="{{ schemaTypeFormSubmit }}">
 
+		{% set robotsNamespace = 'schema' %}
 		{% include 'sproutseo/_partials/fields/robots' %}
 
 		<hr>
