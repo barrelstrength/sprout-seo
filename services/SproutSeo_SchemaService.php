@@ -40,26 +40,18 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	public function getMainEntityStructuredDataHtml($sitemapInfo)
 	{
 		$schema = '';
+		$prioritizedMetaTagModel = $sitemapInfo['prioritizedMetaTagModel'];
 
-		if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
+		if ($prioritizedMetaTagModel)
 		{
-			$matchedElementGroupId   = $sitemapInfo['elementGroupId'];
-			$matchedElementGroupType = $sitemapInfo['elementTable'];
-
-			$enabledMatchingSitemap = sproutSeo()->metadata->getMetadataGroupByInfo(
-				$matchedElementGroupType,
-				$matchedElementGroupId
-			);
+			$enabledMatchingSitemap = $prioritizedMetaTagModel->schemaMap;
 
 			if ($enabledMatchingSitemap)
 			{
-				if ($enabledMatchingSitemap->schemaMap)
-				{
-					$class = 'Craft\SproutSeo_'.$enabledMatchingSitemap->schemaMap.'SchemaMap';
-					$schemaMap = new $class($enabledMatchingSitemap->getAttributes(), true, $sitemapInfo);
+				$class = 'Craft\SproutSeo_'.$enabledMatchingSitemap.'SchemaMap';
+				$schemaMap = new $class($prioritizedMetaTagModel->getAttributes(), true, $sitemapInfo);
 
-					$schema = $schemaMap->getSchema();
-				}
+				$schema = $schemaMap->getSchema();
 			}
 		}
 
