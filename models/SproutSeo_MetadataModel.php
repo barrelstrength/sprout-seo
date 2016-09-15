@@ -59,6 +59,7 @@ class SproutSeo_MetadataModel extends BaseModel
 			'optimizedTitle'       => array(AttributeType::String),
 			'optimizedDescription' => array(AttributeType::String),
 			'optimizedImage'       => array(AttributeType::String),
+			'customizationSettings'=> array(AttributeType::String),
 		);
 
 		$this->basicMeta = array(
@@ -379,5 +380,26 @@ class SproutSeo_MetadataModel extends BaseModel
 		);
 
 		return $tagNames[$handle];
+	}
+
+	/**
+	 * Returns
+	 * @return array
+	**/
+	public function getCustomizationSettings()
+	{
+		$response = array(
+			'openGraphMetadataGroupEnabled'   => 1,
+			'twitterCardMetadataGroupEnabled' => 1,
+			'geoMetadataGroupEnabled'         => 1,
+			'robotsMetadataGroupEnabled'      => 1
+		);
+
+		if ($this->customizationSettings)
+		{
+			$response = json_decode($this->customizationSettings ,true);
+		}
+
+		return $response;
 	}
 }

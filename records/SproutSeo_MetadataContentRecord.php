@@ -16,6 +16,7 @@ class SproutSeo_MetadataContentRecord extends BaseRecord
 			'optimizedTitle'       => array(AttributeType::String, 'required' => false),
 			'optimizedDescription' => array(AttributeType::String, 'required' => false),
 			'optimizedImage'       => array(AttributeType::String, 'required' => false),
+			'customizationSettings'=> array(AttributeType::String),
 			'title'                => array(AttributeType::String),
 			'description'          => array(AttributeType::String),
 			'keywords'             => array(AttributeType::String),

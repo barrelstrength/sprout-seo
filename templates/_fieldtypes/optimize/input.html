@@ -1,6 +1,14 @@
 {% import "_includes/forms" as forms %}
 
 <div class="sproutseo-box-optimized">
+	{% set customizationSettings = values.getCustomizationSettings() %}
+
+	{{ forms.hidden({
+			name: 'sproutseo[metadata][customizationSettings]',
+			id: 'customizationSettings',
+			value: customizationSettings|json_encode,
+			errors: "",
+		}) }}
 
 	{% if settings.optimizedTitleField == 'manually' %}
 
@@ -83,7 +91,7 @@
 		instructions: "Map the primary element that displays on this page to a Structured Data schema. Select a basic or custom mapping."|t,
 		name: 'sproutseo[metadata][schemaMap]',
 		options: schemaMaps,
-		value: (metaTags.schemaMap is defined ? metaTags.schemaMap : 0.5),
+		value: values.schemaMap,
 		errors: "",
 		required: false
 	}) }}
@@ -146,7 +154,7 @@
 	<div class="blocks">
 
 		<div class="matrixblock fields-openGraph"
-			{% if not values.ogType %} style="display:none;" {% endif %}
+			{% if customizationSettings.openGraphMetadataGroupEnabled == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
 		>
 
 			<div class="titlebar">
@@ -159,7 +167,7 @@
 		</div>
 
 		<div class="matrixblock fields-twitterCard"
-			{% if not values.twitterCard %} style="display:none;" {% endif %}
+			{% if customizationSettings.twitterCardMetadataGroupEnabled == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
 		>
 
 			<div class="titlebar">
@@ -169,12 +177,8 @@
 			{% include 'sproutseo/_partials/fields/twitter-card' %}
 
 		</div>
-
 		<div class="matrixblock fields-geo"
-			{% if not values.region
-			and not values.placename
-			and not values.latitude
-			and not values.longitude %} style="display:none;" {% endif %}
+			{% if customizationSettings.geoMetadataGroupEnabled == 0 or not settings.showGeo %} style="display:none;" {% endif %}
 		>
 
 			<div class="titlebar">
@@ -187,7 +191,7 @@
 		</div>
 
 		<div class="matrixblock fields-robots"
-			{% if not values.robots %} style="display:none;" {% endif %}
+			{% if customizationSettings.robotsMetadataGroupEnabled == 0 or not settings.showRobots %} style="display:none;" {% endif %}
 		>
 
 			<div class="titlebar">
@@ -225,15 +229,44 @@ feel like they are part of the natural flow of fields #}
 
 	$( document ).ready(function() {
 
-		function toggleActive(div)
+		function getScenario()
 		{
-			if (div.hasClass("active"))
+			if ($("input[name='fields[sproutseo][metadata][customizationSettings]']").length)
 			{
-				div.removeClass("active");
+				return $("input[name='fields[sproutseo][metadata][customizationSettings]']");
 			}
 			else
 			{
+				return $("input[name='sproutseo[metadata][customizationSettings]']");
+			}
+		}
+
+		function getCustomizationSettings()
+		{
+			return $.parseJSON(getScenario().val());
+		}
+
+		function setCustomizationSettings(values)
+		{
+			var value = JSON.stringify(values);
+			getScenario().val(value);
+		}
+
+		function toggleActive(div, divId)
+		{
+			var customizationSettings = getCustomizationSettings();
+
+			if (div.hasClass("active"))
+			{
+				customizationSettings[divId+"MetadataGroupEnabled"] = 0;
+				div.removeClass("active");
+				setCustomizationSettings(customizationSettings);
+			}
+			else
+			{
+				customizationSettings[divId+"MetadataGroupEnabled"] = 1;
 				div.addClass("active");
+				setCustomizationSettings(customizationSettings);
 			}
 		}
 
@@ -248,24 +281,32 @@ feel like they are part of the natural flow of fields #}
 
 			// Metadata Group Settings
 			var btn = $("#btn-"+divId);
-			toggleActive(btn);
+			if (btn.length)
+			{
+				toggleActive(btn, divId);
+			}
 
 			// Optimize Field Settings
 			var fieldsBtn = $("#fields-btn-"+divId);
-			toggleActive(fieldsBtn);
+			if (fieldsBtn.length)
+			{
+				toggleActive(fieldsBtn, divId);
+			}
 
 			return false; // avoid parents divs if you have nested divs
 		});
 
 		// Checking active class
-		var fields = ["geo","robots","openGraph","twitterCard"]
+		var fields = ["openGraph","geo","robots","twitterCard"];
+		var customizationSettings = getCustomizationSettings();
+
 		for (var i = 0; i < fields.length; i++)
 		{
-			var field = $(".fields-"+fields[i]+":visible");
-
-			if(field.length)
+			if(customizationSettings[fields[i]+"MetadataGroupEnabled"]==1)
 			{
 				$("#btn-"+fields[i]).addClass("active");
+				// Optimize Field Settings
+				$("#fields-btn-"+fields[i]).addClass("active");
 			}
 		}
 	});
