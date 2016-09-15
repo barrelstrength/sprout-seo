@@ -305,21 +305,23 @@
 		});
 
 			// check if we need load depending dropdowns
-		if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[0])
+		if (schema)
 		{
-			$('#first').val(schema.organizationSubTypes[0]).change();
-		}
-		if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[1])
-		{
-			$('#second').val(schema.organizationSubTypes[1]).change();
-		}
-		if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[2])
-		{
-			$('#third').val(schema.organizationSubTypes[2]).change();
+			if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[0])
+			{
+				$('#first').val(schema.organizationSubTypes[0]).change();
+			}
+			if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[1])
+			{
+				$('#second').val(schema.organizationSubTypes[1]).change();
+			}
+			if (schema.hasOwnProperty('organizationSubTypes') && schema.organizationSubTypes[2])
+			{
+				$('#third').val(schema.organizationSubTypes[2]).change();
+			}
 		}
 
 		$( "#identityType" ).change(function() {
-			console.log(this.value);
 			if(this.value === 'Person')
 			{
 				$( ".person-info" ).removeClass('hidden');
