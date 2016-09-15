@@ -118,7 +118,7 @@ class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
 
 		$jsonLd['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
 
-		if (isset($schema['foundingDate']['date']))
+		if (isset($schema['foundingDate']['date']) && $schema['foundingDate']['date'])
 		{
 			$foundingDate           = DateTime::createFromString($schema['foundingDate']);
 			$jsonLd['foundingDate'] = $foundingDate->format('Y-m-d');

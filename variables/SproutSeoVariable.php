@@ -626,4 +626,44 @@ class SproutSeoVariable
 
 		return $schemas;
 	}
+
+	/**
+	 * Returns global contacts
+	 *
+	 * @return array
+	 */
+	public function getContacts()
+	{
+		$contacts = sproutSeo()->schema->getGlobals()->contacts;
+
+		$contacts = $contacts ? $contacts : array();
+
+		foreach($contacts as &$contact)
+		{
+			$contact['type'] = $contact['contactType'];
+			unset($contact['contactType']);
+		}
+
+		return $contacts;
+	}
+
+	/**
+	 * Returns global social profiles
+	 *
+	 * @return array
+	 */
+	public function getSocialProfiles()
+	{
+		$socials = sproutSeo()->schema->getGlobals()->social;
+
+		$socials = $socials ? $socials : array();
+
+		foreach($socials as &$social)
+		{
+			$social['name'] = $social['profileName'];
+			unset($social['profileName']);
+		}
+
+		return $socials;
+	}
 }
