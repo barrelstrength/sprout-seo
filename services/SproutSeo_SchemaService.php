@@ -146,6 +146,7 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		$results['contacts']  = isset($results['contacts']) ? JsonHelper::decode($results['contacts']) : null;
 		$results['ownership'] = isset($results['ownership']) ? JsonHelper::decode($results['ownership']) : null;
 		$results['social']    = isset($results['social']) ? JsonHelper::decode($results['social']) : null;
+		$results['robots']    = isset($results['robots']) ? JsonHelper::decode($results['robots']) : null;
 
 		$schema = SproutSeo_SchemaModel::populateModel($results);
 

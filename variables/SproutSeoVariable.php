@@ -584,9 +584,9 @@ class SproutSeoVariable
 	public function getGlobalRobots()
 	{
 		$globals = sproutSeo()->schema->getGlobals();
-		$robots  = $globals->robots;
+		$robots  = SproutSeoOptimizeHelper::getRobotsMetaValue($globals->robots);
 
-		return $robots;
+		return SproutSeoOptimizeHelper::prepRobotsForSettings($robots);
 	}
 
 	/**
