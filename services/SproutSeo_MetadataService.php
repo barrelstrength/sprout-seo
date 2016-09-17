@@ -257,42 +257,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
 		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
 
-		// Clear out any settings for our Metadata Group Level if
-		// the Advanced Customization block for those settings is not enabled
-		// @todo - we can probably refactor and simplify this repeat logic
-		$customizationSettings = $model->getCustomizationSettings();
-
-		if (!$customizationSettings['openGraphMetadataGroupEnabled'])
-		{
-			foreach ($model['openGraphMeta'] as $attribute => $value)
-			{
-				$model[$attribute] = null;
-			}
-		}
-
-		if (!$customizationSettings['twitterCardMetadataGroupEnabled'])
-		{
-			foreach ($model['twitterCardsMeta'] as $attribute => $value)
-			{
-				$model[$attribute] = null;
-			}
-		}
-
-		if (!$customizationSettings['geoMetadataGroupEnabled'])
-		{
-			foreach ($model['geographicMeta'] as $attribute => $value)
-			{
-				$model[$attribute] = null;
-			}
-		}
-
-		if (!$customizationSettings['robotsMetadataGroupEnabled'])
-		{
-			foreach ($model['robotsMeta'] as $attribute => $value)
-			{
-				$model[$attribute] = null;
-			}
-		}
+		$model = $this->enforceDisabledCustomizationSettings($model);
 
 		return $model;
 	}
@@ -391,6 +356,8 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		$model = SproutSeo_MetadataModel::populateModel($query);
 
+		$model = $this->enforceDisabledCustomizationSettings($model);
+
 		return $model;
 	}
 
@@ -487,5 +454,55 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		$response['element'] = $element;
 
 		return $response;
+	}
+
+	public function enforceDisabledCustomizationSettings($model)
+	{
+		if (!craft()->request->isSiteRequest())
+		{
+			return $model;
+		}
+
+		// Clear out any settings for our Metadata Group Level if
+		// the Advanced Customization block for those settings is not enabled
+		// @todo - we can probably refactor and simplify this repeat logic
+		// @todo - we may want to make this logic more independent of this method as well
+		// this doesn't cause any issue right now, but we don't always want to remove
+		// the data below. Perhaps distinguish between front-end and back-end?
+		$customizationSettings = $model->getCustomizationSettings();
+
+		if (!$customizationSettings['openGraphMetadataGroupEnabled'])
+		{
+			foreach ($model['openGraphMeta'] as $attribute => $value)
+			{
+				$model[$attribute] = null;
+			}
+		}
+
+		if (!$customizationSettings['twitterCardMetadataGroupEnabled'])
+		{
+			foreach ($model['twitterCardsMeta'] as $attribute => $value)
+			{
+				$model[$attribute] = null;
+			}
+		}
+
+		if (!$customizationSettings['geoMetadataGroupEnabled'])
+		{
+			foreach ($model['geographicMeta'] as $attribute => $value)
+			{
+				$model[$attribute] = null;
+			}
+		}
+
+		if (!$customizationSettings['robotsMetadataGroupEnabled'])
+		{
+			foreach ($model['robotsMeta'] as $attribute => $value)
+			{
+				$model[$attribute] = null;
+			}
+		}
+
+		return $model;
 	}
 }
