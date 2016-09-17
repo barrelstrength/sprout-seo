@@ -154,12 +154,12 @@ class SproutSeo_MetadataModel extends BaseModel
 	{
 		switch ($type)
 		{
-			case SproutSeo_MetaTagLevels::Entry:
-				$this->setAttributes($this->getEntryOverride($overrideInfo));
-				break;
-
 			case SproutSeo_MetaTagLevels::Code:
 				$this->setAttributes($this->getCodeOverride($overrideInfo));
+				break;
+
+			case SproutSeo_MetaTagLevels::Entry:
+				$this->setAttributes($this->getEntryOverride($overrideInfo));
 				break;
 
 			case SproutSeo_MetaTagLevels::MetadataGroup:
