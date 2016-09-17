@@ -14,7 +14,7 @@ abstract class SproutSeo_MetaTagLevels extends BaseEnum
 	 *
 	 * globalFallbackMetaTagModel()
 	 */
-	const Global = 'global';
+	const GlobalFallback = 'global';
 
 	/**
 	 * metadataGroupMetaTagModel
