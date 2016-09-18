@@ -584,9 +584,9 @@ class SproutSeoVariable
 	public function getGlobalRobots()
 	{
 		$globals = sproutSeo()->schema->getGlobals();
-		$robots  = $globals->robots;
+		$robots  = SproutSeoOptimizeHelper::getRobotsMetaValue($globals->robots);
 
-		return $robots;
+		return SproutSeoOptimizeHelper::prepRobotsForSettings($robots);
 	}
 
 	/**
@@ -638,7 +638,7 @@ class SproutSeoVariable
 
 		$contacts = $contacts ? $contacts : array();
 
-		foreach($contacts as &$contact)
+		foreach ($contacts as &$contact)
 		{
 			$contact['type'] = $contact['contactType'];
 			unset($contact['contactType']);
@@ -658,7 +658,7 @@ class SproutSeoVariable
 
 		$socials = $socials ? $socials : array();
 
-		foreach($socials as &$social)
+		foreach ($socials as &$social)
 		{
 			$social['name'] = $social['profileName'];
 			unset($social['profileName']);

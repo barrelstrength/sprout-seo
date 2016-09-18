@@ -109,7 +109,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		$prioritizedMetaTagModel->title = SproutSeoOptimizeHelper::prepareAppendedSiteName(
 			$prioritizedMetaTagModel,
 			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::MetadataGroup],
-			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::Global]
+			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::GlobalFallback]
 		);
 
 		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::getRobotsMetaValue($prioritizedMetaTagModel->robots);
@@ -256,6 +256,43 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
 		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
+
+		// Clear out any settings for our Metadata Group Level if
+		// the Advanced Customization block for those settings is not enabled
+		// @todo - we can probably refactor and simplify this repeat logic
+		$customizationSettings = $model->getCustomizationSettings();
+
+		if (!$customizationSettings['openGraphMetadataGroupEnabled'])
+		{
+			foreach ($model['openGraphMeta'] as $attribute => $value)
+			{
+				$model[$attribute] = null;
+			}
+		}
+
+		if (!$customizationSettings['twitterCardMetadataGroupEnabled'])
+		{
+			foreach ($model['twitterCardsMeta'] as $attribute => $value)
+			{
+				$model[$attribute] = null;
+			}
+		}
+
+		if (!$customizationSettings['geoMetadataGroupEnabled'])
+		{
+			foreach ($model['geographicMeta'] as $attribute => $value)
+			{
+				$model[$attribute] = null;
+			}
+		}
+
+		if (!$customizationSettings['robotsMetadataGroupEnabled'])
+		{
+			foreach ($model['robotsMeta'] as $attribute => $value)
+			{
+				$model[$attribute] = null;
+			}
+		}
 
 		return $model;
 	}

@@ -28,7 +28,7 @@ abstract class BaseSproutSeoSchemaMap
 	 * @param bool       $isContext
 	 * @param null       $sitemapInfo
 	 */
-	public function __construct(array $attributes = null, bool $isContext = true, $sitemapInfo = null)
+	public function __construct(array $attributes = null, $isContext = true, $sitemapInfo = null)
 	{
 		if (!empty($attributes))
 		{
@@ -105,9 +105,14 @@ abstract class BaseSproutSeoSchemaMap
 		if ($this->isContext)
 		{
 			// Return the JSON-LD script tag and full context
+			// @todo Craft 3.0 - clean up logic once we can ditch PHP 5.3
+			$output = (version_compare(PHP_VERSION, '5.4.0', '>='))
+			  ? json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+				: str_replace('\\/', '/', json_encode($schema));
+
 			return '
 <script type="application/ld+json">
-' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . '
+' . $output . '
 </script>';
 		}
 		else
