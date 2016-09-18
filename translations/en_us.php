@@ -37,7 +37,6 @@ return array (
 	'Change Frequency' => 'Change Frequency',
 	'Enabled' => 'Enabled',
 	'Make the content in this section appear in your sitemap.' => 'Make the content in this section appear in your sitemap.',
-	'Ping on Save' => 'Ping on Save',
 	'Custom Pages' => 'Custom Pages',
 	'Custom URL' => 'Custom URL',
 );
