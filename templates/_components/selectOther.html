@@ -11,6 +11,7 @@
 
 	<div class="{{ class }}">
 		<select
+			style="width: 50%;"
 			{%- if config.id is defined %} id="{{ config.id }}"{% endif %}
 			{%- if config.toggle is defined and config.toggle %} class="fieldtoggle"{% endif %}
 			{%- if config.name is defined %} name="{{ config.name }}"{% endif %}
