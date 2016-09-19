@@ -1,23 +1,26 @@
 {% import "_includes/forms" as forms %}
 
+{% set pluginSettings = craft.sproutSeo.getSettings() %}
+
 <div class="sproutseo-box-optimized">
 	{% set customizationSettings = values.getCustomizationSettings() %}
 
 	{{ forms.hidden({
-			name: 'sproutseo[metadata][customizationSettings]',
-			id: 'customizationSettings',
-			value: customizationSettings|json_encode,
-			errors: "",
-		}) }}
+		name: 'sproutseo[metadata][customizationSettings]',
+		id: 'customizationSettings',
+		value: customizationSettings|json_encode,
+		errors: "",
+	}) }}
 
 	{% if settings.optimizedTitleField == 'manually' %}
 
 		{% set appendTitleValueInstructions = " <a href='#' class='fieldtoggle instructionstoggle' data-target='toggle-appendtitlevalue'>Append dynamic value to Meta Titles</a>."|t %}
 
 		{{ forms.textField({
-			label: "Meta Title"|t,
+			label: "Optimized Meta Title"|t,
 			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'metaTagGroups' ? appendTitleValueInstructions : ""),
 			name: 'sproutseo[metadata][optimizedTitle]',
+			id: 'sproutseo-optimizedtitle',
 			maxlength: 60,
 			showCharsLeft: true,
 			value: values.title,
@@ -45,11 +48,12 @@
 
 	{% if settings.optimizedDescriptionField == 'manually' %}
 		{{ forms.textareaField({
-			label: "Meta Description"|t,
+			label: "Optimized Meta Description"|t,
 			instructions: "A description of your content which will appear in search results and social sharing."|t,
 			name: 'sproutseo[metadata][optimizedDescription]',
 			maxlength: 160,
 			showCharsLeft: true,
+			id: 'sproutseo-optimizeddescription',
 			value: values.description,
 			errors: "",
 			placeholder: "The official website of " ~ siteName
@@ -58,8 +62,9 @@
 
 	{% if settings.optimizedImageField == 'manually' %}
 		{{ forms.field({
-			label: 'Meta Image'|t,
-			instructions: 'A featured image that represents your content that will display in social sharing.'
+			label: 'Optimized Meta Image'|t,
+			instructions: 'A featured image that represents your content that will display in social sharing.'|t,
+			id: 'sproutseo-optimizedimage',
 		}, forms.elementSelect({
 			elements: metaImageElements,
 			sourceElementId: [values.optimizedImage],
@@ -73,28 +78,33 @@
 		})) }}
 	{% endif %}
 
-	{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
+	{% if settings.optimizedKeywordsField == 'manually' %}
+		{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
 
-	{{ forms.textField({
-		label: "Keywords"|t,
-		instructions: "The primary keywords or phrases that describe your website."|t,
-		id: 'keywords',
-		name: 'sproutseo[metadata][keywords]',
-		value: keywordsValue,
-		errors: ''
-	}) }}
+		{{ forms.textField({
+			label: "Optimized Meta Keywords"|t,
+			instructions: "The primary keywords or phrases that describe your website."|t,
+			id: 'sproutseo-optimizedkeywords',
+			name: 'sproutseo[metadata][optimizedKeywords]',
+			value: keywordsValue,
+			errors: ''
+		}) }}
+	{% endif %}
 
-	{% set schemaMaps = craft.sproutSeo.getSchemaMapsArray() %}
+	{% if fieldContext == 'field' and pluginSettings.advancedCustomization and settings.showMainEntity %}
+		{% set schemaMaps = craft.sproutSeo.getSchemaMapsArray() %}
 
-	{{ forms.selectField({
-		label: "Main Entity"|t,
-		instructions: "Map the primary element that displays on this page to a Structured Data schema. Select a basic or custom mapping."|t,
-		name: 'sproutseo[metadata][schemaMap]',
-		options: schemaMaps,
-		value: values.schemaMap,
-		errors: "",
-		required: false
-	}) }}
+		{{ forms.selectField({
+			label: 'Main Entity'|t,
+			instructions: 'Map the primary element that displays on this page to a Structured Data schema. Select a basic or custom mapping.'|t,
+			id: 'sproutseo-mainentity',
+			name: 'sproutseo[metadata][schemaMap]',
+			options: schemaMaps,
+			value: values.schemaMap,
+			errors: "",
+			required: false
+		}) }}
+	{% endif %}
 
 </div>
 
@@ -115,97 +125,119 @@
 	{% endif %}
 {% endif %}
 
-{% if settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
-	{% set advancedSeoButtons %}
-		<div class="buttons">
-			<div id="btngroup" class="btngroup sproutseo-advancedoption-btns">
+{% if fieldContext == 'field' and pluginSettings.advancedCustomization  %}
 
-				{% if settings.showOpenGraph %}
-					<div class="btn" id="btn-openGraph" data-type="openGraph"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
-				{% endif %}
+	{% if settings.showBasicMeta or settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
+		{% set advancedSeoButtons %}
+			<div class="buttons">
+				<div id="btngroup" class="btngroup sproutseo-advancedoption-btns">
 
-				{% if settings.showTwitter %}
-					<div class="btn" id="btn-twitterCard" data-type="twitterCard"><i class="sproutseo-icon icon-twitter">&#xe801;</i> Twitter Card</div>
-				{% endif %}
+					{% if settings.showBasicMeta %}
+						<div class="btn" id="btn-basicMeta" data-type="basicMeta"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
+					{% endif %}
 
-				{% if settings.showGeo %}
-					<div class="btn" id="btn-geo" data-type="geo"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
-				{% endif %}
+					{% if settings.showOpenGraph %}
+						<div class="btn" id="btn-openGraph" data-type="openGraph"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
+					{% endif %}
 
-				{% if settings.showRobots %}
-					<div class="btn" id="btn-robots" data-type="robots"><i class="sproutseo-icon icon-search">&#xe800;</i> Robots</div>
-				{% endif %}
+					{% if settings.showTwitter %}
+						<div class="btn" id="btn-twitterCard" data-type="twitterCard"><i class="sproutseo-icon icon-twitter">&#xe801;</i> Twitter Card</div>
+					{% endif %}
+
+					{% if settings.showGeo %}
+						<div class="btn" id="btn-geo" data-type="geo"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
+					{% endif %}
+
+					{% if settings.showRobots %}
+						<div class="btn" id="btn-robots" data-type="robots"><i class="sproutseo-icon icon-robots">&#xe806;</i> Robots</div>
+					{% endif %}
+
+				</div>
+				<div class="btn add icon menubtn hidden">Add a block</div>
+			</div>
+		{% endset %}
+
+		{{ forms.field({
+			label: 'SEO Optimization'|t,
+			instructions: 'If you have more specific SEO needs, you can further customize your meta data with the following fields.'|t,
+			id: 'sproutseo-advancedcustomizationfields',
+		}, advancedSeoButtons) }}
+	{%endif%}
+
+
+
+	<div class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
+
+		<div class="blocks">
+
+			<div class="matrixblock fields-basicMeta"
+				{% if customizationSettings.basicMetaMetadataGroupEnabled == 0 or not settings.showBasicMeta %} style="display:none;" {% endif %}
+			>
+
+				<div class="titlebar">
+					<div class="blocktype"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
+				</div>
+
+				{% include 'sproutseo/_partials/fields/input' %}
+
 
 			</div>
-			<div class="btn add icon menubtn hidden">Add a block</div>
-		</div>
-	{% endset %}
 
-	{{ forms.field({
-		label: 'Advanced Customization'|t,
-		instructions: 'If you have more specific SEO needs, you can further customize your meta data with the following fields.'
-	}, advancedSeoButtons) }}
-{%endif%}
+			<div class="matrixblock fields-openGraph"
+				{% if customizationSettings.openGraphMetadataGroupEnabled == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
+			>
+
+				<div class="titlebar">
+					<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
+				</div>
+
+				{% include 'sproutseo/_partials/fields/open-graph' %}
 
 
-
-<div class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
-
-	<div class="blocks">
-
-		<div class="matrixblock fields-openGraph"
-			{% if customizationSettings.openGraphMetadataGroupEnabled == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
-		>
-
-			<div class="titlebar">
-				<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
 			</div>
 
-			{% include 'sproutseo/_partials/fields/open-graph' %}
+			<div class="matrixblock fields-twitterCard"
+				{% if customizationSettings.twitterCardMetadataGroupEnabled == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
+			>
 
+				<div class="titlebar">
+					<div class="blocktype"><i class="sproutseo-icon icon-twitter">&#xe801;</i> Twitter Card</div>
+				</div>
 
-		</div>
+				{% include 'sproutseo/_partials/fields/twitter-card' %}
 
-		<div class="matrixblock fields-twitterCard"
-			{% if customizationSettings.twitterCardMetadataGroupEnabled == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
-		>
+			</div>
+			<div class="matrixblock fields-geo"
+				{% if customizationSettings.geoMetadataGroupEnabled == 0 or not settings.showGeo %} style="display:none;" {% endif %}
+			>
 
-			<div class="titlebar">
-				<div class="blocktype"><i class="sproutseo-icon icon-twitter">&#xe801;</i> Twitter Card</div>
+				<div class="titlebar">
+					<div class="blocktype"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
+					<div class="preview"></div>
+				</div>
+
+				{% include 'sproutseo/_partials/fields/geo' %}
+
 			</div>
 
-			{% include 'sproutseo/_partials/fields/twitter-card' %}
+			<div class="matrixblock fields-robots"
+				{% if customizationSettings.robotsMetadataGroupEnabled == 0 or not settings.showRobots %} style="display:none;" {% endif %}
+			>
 
-		</div>
-		<div class="matrixblock fields-geo"
-			{% if customizationSettings.geoMetadataGroupEnabled == 0 or not settings.showGeo %} style="display:none;" {% endif %}
-		>
+				<div class="titlebar">
+					<div class="blocktype"><i class="sproutseo-icon icon-robots">&#xe806;</i> Robots</div>
+				</div>
 
-			<div class="titlebar">
-				<div class="blocktype"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
-				<div class="preview"></div>
+				{% set robotsNamespace = 'metadata' %}
+				{% include 'sproutseo/_partials/fields/robots' %}
+
 			</div>
-
-			{% include 'sproutseo/_partials/fields/geo' %}
-
-		</div>
-
-		<div class="matrixblock fields-robots"
-			{% if customizationSettings.robotsMetadataGroupEnabled == 0 or not settings.showRobots %} style="display:none;" {% endif %}
-		>
-
-			<div class="titlebar">
-				<div class="blocktype"><i class="sproutseo-icon icon-search">&#xe800;</i> Robots</div>
-			</div>
-
-			{% set robotsNamespace = 'metadata' %}
-			{% include 'sproutseo/_partials/fields/robots' %}
 
 		</div>
 
 	</div>
 
-</div>
+{% endif %}
 
 <style>
 	{# Hide the Heading of our Field so all our grouped sub-fields
@@ -297,7 +329,7 @@ feel like they are part of the natural flow of fields #}
 		});
 
 		// Checking active class
-		var fields = ["openGraph","geo","robots","twitterCard"];
+		var fields = ["basicMeta","openGraph","geo","robots","twitterCard"];
 		var customizationSettings = getCustomizationSettings();
 
 		for (var i = 0; i < fields.length; i++)
@@ -309,11 +341,164 @@ feel like they are part of the natural flow of fields #}
 				$("#fields-btn-"+fields[i]).addClass("active");
 			}
 		}
+
+		{# @todo - Add an [seo] flag to all SEO-related fields. Possibly add a #}
+		{#HUD with info on what the cascade and priority and actual value that #}
+		{#will be output will be#}
+
+		function updateLocaleBadge(value, target)
+		{
+			if (value == '')
+			{
+				$(target).css('color', '#ffffff');
+				$(target).css('background-color', '#da5a47');
+
+				{#$(target).css('color', '#8f98a3');#}
+				{#$(target).css('background-color', '#ebedef');#}
+			}
+			else
+			{
+				$(target).css('color', '#8f98a3');
+				$(target).css('background-color', '#ebedef');
+
+				{#$(target).css('color', '#ffffff');
+				$(target).css('background-color', '#27AE60');#}
+			}
+		}
+
+		function appendSeoBadge(fieldId)
+    {
+			var labelId = '#fields-' + fieldId + '-label';
+
+			$(labelId).append(seoButton);
+		}
+
+		function addSeoBadgeListener(fieldId)
+		{
+			var spanId = '#fields-' + fieldId + '-label span.sproutseo.locale';
+			var fieldInput = '#fields-' + fieldId + '-field input';
+			var fieldTextarea = '#fields-' + fieldId + '-field textarea';
+			var fieldSelect = '#fields-' + fieldId + '-field select';
+			var fieldElementSelect = '#fields-' + fieldId + '-field input';
+
+			$(fieldInput).on('keyup', function() {
+				updateLocaleBadge($(this).val(), spanId);
+			});
+
+			$(fieldTextarea).on('keyup', function() {
+				updateLocaleBadge($(this).val(), spanId);
+			});
+
+			$(fieldSelect).on('change', function() {
+				updateLocaleBadge($(this).val(), spanId);
+			});
+
+			$(fieldElementSelect).eq(1).on('change', function() {
+				alert('waa');
+				updateLocaleBadge($(this).val(), spanId);
+			});
+		}
+
+		function initSeoBadge(fieldId)
+		{
+			var spanId = '#fields-' + fieldId + '-label span.sproutseo.locale';
+			var fieldInput = '#fields-' + fieldId + '-field input';
+			var fieldTextarea = '#fields-' + fieldId + '-field textarea';
+			var fieldSelect = '#fields-' + fieldId + '-field select';
+			var fieldElementSelect = '#fields-' + fieldId + '-field .elementselect';
+
+			if ($(fieldInput).length && $(fieldInput).val() != '')
+			{
+				updateLocaleBadge($(fieldInput).val(), spanId);
+			}
+
+			if ($(fieldTextarea).length && $(fieldTextarea).val() != '')
+			{
+				updateLocaleBadge($(fieldTextarea).val(), spanId);
+			}
+
+			if ($(fieldSelect).length && $(fieldSelect).val() != '')
+			{
+				updateLocaleBadge($(fieldSelect).val(), spanId);
+			}
+
+			if ($(fieldElementSelect).length &&
+          $(fieldElementSelect).find('.elements').children().length > 0)
+			{
+				updateLocaleBadge(true, spanId);
+			}
+		}
+
+		var seoButton = '<span class="sproutseo locale">seo</span>';
+		var seoFieldIds = [];
+		var seoLabels = [];
+		var seoInputs = [];
+
+		seoFieldIds.push('sproutseo-mainentity');
+		seoFieldIds.push('sproutseo-advancedcustomizationfields');
+
+		{% if settings.optimizedTitleField == 'elementTitle' %}
+			var spanId = '#title-label span.sproutseo.locale';
+			var titleId = '#title-label';
+			var titleInput = '#title-field input';
+
+			$(titleId).append(seoButton);
+
+			$('#title-field input').on('keyup', function() {
+				updateLocaleBadge($(this).val(), '#title-label span.sproutseo.locale');
+			});
+
+			if ($(titleInput).val() != '')
+			{
+				updateLocaleBadge($(titleInput).val(), spanId);
+			}
+		{% endif %}
+
+		{% if settings.optimizedTitleField == 'manually' %}
+			seoFieldIds.push('sproutseo-optimizedtitle');
+		{% endif %}
+
+		{% if settings.optimizedDescriptionField == 'manually' %}
+			seoFieldIds.push('sproutseo-optimizeddescription');
+		{% endif %}
+
+		{% if settings.optimizedImageField == 'manually' %}
+			seoFieldIds.push('sproutseo-optimizedimage');
+		{% endif %}
+
+		{% if settings.optimizedKeywordsField == 'manually' %}
+			seoFieldIds.push('sproutseo-optimizedkeywords');
+		{% endif %}
+
+		{% set optimizedTitleFieldModel = craft.fields.getFieldById(settings.optimizedTitleField) %}
+		{% if optimizedTitleFieldModel %}
+			seoFieldIds.push('{{ optimizedTitleFieldModel.handle }}');
+		{% endif %}
+
+		{% set optimizedDescriptionFieldModel = craft.fields.getFieldById(settings.optimizedDescriptionField) %}
+		{% if optimizedDescriptionFieldModel %}
+			seoFieldIds.push('{{ optimizedDescriptionFieldModel.handle }}');
+		{% endif %}
+
+		{% set optimizedImageFieldModel = craft.fields.getFieldById(settings.optimizedImageField) %}
+		{% if optimizedImageFieldModel %}
+			seoFieldIds.push('{{ optimizedImageFieldModel.handle }}');
+		{% endif %}
+
+		$.each(seoFieldIds, function(key, value) {
+			appendSeoBadge(value);
+			addSeoBadgeListener(value);
+			initSeoBadge(value);
+		});
+
+		{#new Garnish.HUD(mainEntityLabel, "<div>[red] no meta values exist. [orange] global or metadata group values exist [grey] unique metadata at the element level exists.</div>");#}
+
 	});
 
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
 {% endincludejs %}
+
 
 
 

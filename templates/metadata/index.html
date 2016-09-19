@@ -90,16 +90,13 @@
 								{% endif %}
 							</td>
 							<td>
-								<span class="sprout-metadata-status" style="color:#ccc;">
-									<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
+								<div class="sprout-metadata-status" style="color:#ccc;">
+									<span class="sproutseo-icon icon-search">&#xe800;</span>
 									<span class="sproutseo-icon icon-facebook">&#xe802;</span>
 									<span class="sproutseo-icon icon-twitter">&#xe801;</span>
-									<span class="sproutseo-icon icon-location">&#xe803;</span>
-									<span class="sproutseo-icon icon-search">&#xe800;</span>
-									&nbsp;&nbsp;
-									<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
-									<span class="sproutseo-icon icon-sitemap">&#xf0e8;</span>
-								</span>
+									<span class="sproutseo-icon icon-edit">&#xe805;</span>
+									<span class="sproutseo-icon icon-sitemap {% if elementGroup.settings is defined and elementGroup.settings.enabled %}sproutseo-status-pass{% endif %}">&#xf0e8;</span>
+								</div>
 							</td>
 							<td>
 								{# @todo - find a better way to get the columns to be even. This tag is
@@ -191,6 +188,36 @@
 	}
 	.sitemap-settings:last-of-type {
 		margin-bottom: 30px;
+	}
+
+	/* Optimized Meta Icons */
+	.sprout-metadata-status {
+		position: relative;
+	}
+	.sprout-metadata-status span {
+		display: inline-block;
+		position: absolute;
+	}
+	.sprout-metadata-status .icon-search {
+
+	}
+	.sprout-metadata-status .icon-facebook {
+		padding-left: 16px;
+		top: 1px;
+	}
+	.sprout-metadata-status .icon-twitter {
+		padding-left: 32px;
+		top: 1px;
+	}
+	.sprout-metadata-status .icon-edit {
+		padding-left: 50px;
+		top: 1px;
+	}
+	.sprout-metadata-status .icon-sitemap {
+		padding-left: 67px;
+	}
+	.sproutseo-status-pass {
+		color: #27AE60;
 	}
 	</style>
 
