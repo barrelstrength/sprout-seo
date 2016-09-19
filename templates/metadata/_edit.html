@@ -62,7 +62,7 @@
 					name: 'sproutseo[metadata][name]',
 					value: metaTags.name,
 					errors: metaTags.getErrors('name'),
-					required: true
+					disabled: isSitemapCustomPage ? false : true
 				}) }}
 
 				{{ forms.textField({
@@ -71,7 +71,7 @@
 					name: 'sproutseo[metadata][handle]',
 					value: metaTags.handle,
 					errors: metaTags.getErrors('handle'),
-					required: true
+					disabled: isSitemapCustomPage ? false : true
 				}) }}
 
 				{{ forms.textField({
@@ -80,7 +80,7 @@
 					name: 'sproutseo[metadata][sitemapUrl]',
 					value: (metaTags.sitemapUrl == '__home__') ? "/" : metaTags.sitemapUrl,
 					errors: metaTags.getErrors('sitemapUrl'),
-					required: true
+					disabled: isSitemapCustomPage ? false : true
 				}) }}
 
 				{% set statusInput %}
