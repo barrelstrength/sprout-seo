@@ -181,6 +181,10 @@
 
 {% set js %}
 
+	$('#sproutseo-optimizedkeywords-field input').tagEditor({
+		animateDelete: 20
+	});
+
 	new Craft.SproutSeoMetaTags();
 
 {% endset %}

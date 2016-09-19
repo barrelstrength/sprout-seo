@@ -301,10 +301,6 @@ feel like they are part of the natural flow of fields #}
 			}
 		}
 
-		$('#keywords-field input, #fields-keywords-field input').tagEditor({
-			animateDelete: 20
-		});
-
 		$(".sproutseo-advancedoption-btns div").click(function()
 		{
 			var divId = $(this).attr("data-type");
@@ -486,6 +482,10 @@ feel like they are part of the natural flow of fields #}
 		{% endif %}
 
 		{% if settings.optimizedKeywordsField == 'manually' %}
+			$('#fields-sproutseo-optimizedkeywords-field input').tagEditor({
+				animateDelete: 20
+			});
+
 			seoFieldIds.push('sproutseo-optimizedkeywords');
 		{% endif %}
 
