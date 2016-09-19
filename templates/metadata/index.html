@@ -144,16 +144,13 @@
 						<code>{{ metadataGroup.sitemapUrl }}</code>
 					</td>
 					<td>
-						<span class="sprout-metadata-status" style="color:#ccc;">
-							<span data-icon="world" title="Basic" style="color:#27AE60;"></span>
+						<div class="sprout-metadata-status" style="color:#ccc;">
+							<span class="sproutseo-icon icon-search">&#xe800;</span>
 							<span class="sproutseo-icon icon-facebook">&#xe802;</span>
 							<span class="sproutseo-icon icon-twitter">&#xe801;</span>
-							<span class="sproutseo-icon icon-location">&#xe803;</span>
-							<span class="sproutseo-icon icon-search">&#xe800;</span>
-							&nbsp;&nbsp;
-							<span data-icon="field" title="{{ 'Sprout SEO Optimize Field exists'|t }}"></span>
-							<span class="sproutseo-icon icon-sitemap">&#xf0e8;</span>
-						</span>
+							<span class="sproutseo-icon icon-edit">&#xe805;</span>
+							<span class="sproutseo-icon icon-sitemap {% if elementGroup.settings is defined and elementGroup.settings.enabled %}sproutseo-status-pass{% endif %}">&#xf0e8;</span>
+						</div>
 					</td>
 					<td class="thin">
 						<a class="delete icon" title="{{ 'Delete'|t }}"></a>
@@ -193,6 +190,7 @@
 	/* Optimized Meta Icons */
 	.sprout-metadata-status {
 		position: relative;
+		margin-top: -7px;
 	}
 	.sprout-metadata-status span {
 		display: inline-block;
