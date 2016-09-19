@@ -102,6 +102,10 @@ class SproutSeo_SchemaController extends BaseController
 
 	public function populateGlobalFallbackMetaTags($postData)
 	{
+		$settings = craft()->plugins->getPlugin('sproutseo')->getSettings();
+		$locale   = craft()->i18n->getLocaleById(craft()->language);
+		$localeId = $locale->id;
+
 		$oldGlobals        = sproutSeo()->schema->getGlobals();
 		$oldIdentity       = isset($oldGlobals) ? $oldGlobals->identity : null;
 		$identity          = isset($postData['identity']) ? $postData['identity'] : $oldIdentity;
@@ -118,6 +122,11 @@ class SproutSeo_SchemaController extends BaseController
 
 		$robots          = isset($postData['robots']) ? $postData['robots'] : $oldGlobals->robots;
 		$robotsMetaValue = SproutSeoOptimizeHelper::getRobotsMetaValue($robots);
+
+		if ($settings->localeIdOverride)
+		{
+			$localeId = $settings->localeIdOverride;
+		}
 
 		if ($identity)
 		{
@@ -151,6 +160,7 @@ class SproutSeo_SchemaController extends BaseController
 			$globalFallbackMetaTags->ogTitle       = $optimizedTitle;
 			$globalFallbackMetaTags->ogDescription = $optimizedDescription;
 			$globalFallbackMetaTags->ogImage       = $optimizedImage;
+			$globalFallbackMetaTags->ogLocale      = $localeId;
 
 			$globalFallbackMetaTags->twitterCard        = 'summary';
 			$globalFallbackMetaTags->twitterSite        = $twitterProfileName;
