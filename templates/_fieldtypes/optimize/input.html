@@ -349,6 +349,7 @@ feel like they are part of the natural flow of fields #}
 		{
 			if (value == '')
 			{
+				{# Turn badge red #}
 				$(target).css('color', '#ffffff');
 				$(target).css('background-color', '#da5a47');
 
@@ -357,11 +358,13 @@ feel like they are part of the natural flow of fields #}
 			}
 			else
 			{
-				$(target).css('color', '#8f98a3');
-				$(target).css('background-color', '#ebedef');
+				{# Turn badge grey #}
+				{#$(target).css('color', '#8f98a3');#}
+				{#$(target).css('background-color', '#ebedef');#}
 
-				{#$(target).css('color', '#ffffff');
-				$(target).css('background-color', '#27AE60');#}
+				{# Turn badge green #}
+				$(target).css('color', '#ffffff');
+				$(target).css('background-color', '#27AE60');
 			}
 		}
 
@@ -378,7 +381,10 @@ feel like they are part of the natural flow of fields #}
 			var fieldInput = '#fields-' + fieldId + '-field input';
 			var fieldTextarea = '#fields-' + fieldId + '-field textarea';
 			var fieldSelect = '#fields-' + fieldId + '-field select';
-			var fieldElementSelect = '#fields-' + fieldId + '-field input';
+
+			var fieldElementSelect = '#fields-' + fieldId;
+			var fieldElementSelectInput = '#fields-' + fieldId + '-field .elementselect';
+			var fieldElementSelectSpanId = '#fields-' + fieldId + '-label span.sproutseo.locale';
 
 			$(fieldInput).on('keyup', function() {
 				updateLocaleBadge($(this).val(), spanId);
@@ -392,10 +398,16 @@ feel like they are part of the natural flow of fields #}
 				updateLocaleBadge($(this).val(), spanId);
 			});
 
-			$(fieldElementSelect).eq(1).on('change', function() {
-				alert('waa');
-				updateLocaleBadge($(this).val(), spanId);
-			});
+			if ($(fieldElementSelectInput).length)
+			{
+				$(fieldElementSelect).data('elementSelect').on('selectElements', function(e) {
+					updateLocaleBadge(true, fieldElementSelectSpanId);
+				});
+
+				$(fieldElementSelect).data('elementSelect').on('removeElements', function(e) {
+					updateLocaleBadge('', fieldElementSelectSpanId);
+				});
+			}
 		}
 
 		function initSeoBadge(fieldId)
@@ -404,7 +416,9 @@ feel like they are part of the natural flow of fields #}
 			var fieldInput = '#fields-' + fieldId + '-field input';
 			var fieldTextarea = '#fields-' + fieldId + '-field textarea';
 			var fieldSelect = '#fields-' + fieldId + '-field select';
-			var fieldElementSelect = '#fields-' + fieldId + '-field .elementselect';
+
+			var fieldElementSelect = '#fields-' + fieldId + '-field input';
+			var fieldElementSelectInput = '#fields-' + fieldId + '-field .elementselect';
 
 			if ($(fieldInput).length && $(fieldInput).val() != '')
 			{
@@ -421,10 +435,16 @@ feel like they are part of the natural flow of fields #}
 				updateLocaleBadge($(fieldSelect).val(), spanId);
 			}
 
-			if ($(fieldElementSelect).length &&
-          $(fieldElementSelect).find('.elements').children().length > 0)
+			if ($(fieldElementSelectInput).length)
 			{
-				updateLocaleBadge(true, spanId);
+				if ($(fieldElementSelect).eq(1).length && $(fieldElementSelect).eq(1).val() != '')
+				{
+					updateLocaleBadge(true, spanId);
+				}
+				else
+				{
+					updateLocaleBadge('', spanId);
+				}
 			}
 		}
 
