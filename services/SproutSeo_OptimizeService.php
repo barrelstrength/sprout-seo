@@ -34,7 +34,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		);
 
 		$sitemapInfo['prioritizedMetaTagModel'] = $prioritizedMetaTagModel;
-		$sitemapInfo['globals'] = $globals;
+		$sitemapInfo['globals']                 = $globals;
 
 		$metaHtml = sproutSeo()->metadata->getMetaTagHtml($prioritizedMetaTagModel);
 
@@ -84,11 +84,14 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			'optimizedTitleField'       => 'manually',
 			'optimizedDescriptionField' => 'manually',
 			'optimizedImageField'       => 'manually',
-			'displayPreview'            => true,
-			'showGeo'                   => true,
-			'showRobots'                => true,
+			'optimizedKeywordsField'    => 'manually',
+			'showMainEntity'            => true,
+			'showBasicMeta'             => false,
 			'showOpenGraph'             => true,
 			'showTwitter'               => true,
+			'showGeo'                   => true,
+			'showRobots'                => true,
+			'displayPreview'            => true,
 		);
 	}
 }

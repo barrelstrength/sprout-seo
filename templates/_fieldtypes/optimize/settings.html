@@ -1,71 +1,179 @@
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
 
+{% set pluginSettings = craft.sproutSeo.getSettings() %}
 {% set optimizedTitleOptions = craft.sproutSeo.getOptimizedTitleOptions(settings) %}
 
 <div class="field">
-
 	<div class="heading">
-		<label for="siteOwnerType">{{ "Meta Tag Title Field"|t}}</label>
+		<label for="siteOwnerType">{{ "Optimized Meta Tag Title Field"|t}}</label>
 		<p class="instructions">
 			{{"Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select
 	'Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t}}
 		</p>
 	</div>
-
 	<div class="input">
-
 		<div class="field sprout-selectother">
 			{{ sproutFields.selectOther({
 				name: 'optimizedTitleField',
 				id: 'optimizedTitleField',
 				options: optimizedTitleOptions ,
 				value: settings.optimizedTitleField is defined ? settings.optimizedTitleField : null,
-				otherPlaceholderText: 'Custom twig code'|t
+				otherPlaceholderText: 'Custom title pattern. Twig code allowed, i.e. {title} - {customField}'|t
 			}) }}
 		</div>
 	</div>
 </div>
 
-
 {% set optimizedDescriptionOptions = craft.sproutSeo.getOptimizedDescriptionOptions(settings) %}
 
 <div class="field">
-
 	<div class="heading">
-		<label for="siteOwnerType">{{ "Meta Tag Description Field"|t}}</label>
+		<label for="siteOwnerType">{{ "Optimized Meta Tag Description Field"|t}}</label>
 		<p class="instructions">
 			{{"Select the field to use for your basic, Open Graph, and Twitter Card meta tag descriptions. Select
 	'Manually' if you want the Optimize field to display a custom Description Field for your content editors to manage."|t}}
 		</p>
 	</div>
-
 	<div class="input">
-
 		<div class="field sprout-selectother">
 			{{ sproutFields.selectOther({
 				name: 'optimizedDescriptionField',
 				id: 'optimizedDescriptionField',
 				options: optimizedDescriptionOptions ,
 				value: settings.optimizedDescriptionField is defined ? settings.optimizedDescriptionField : 'manually',
-				otherPlaceholderText: 'Custom twig code'|t
+				otherPlaceholderText: 'Custom title pattern. Twig code allowed, i.e. {title} - {customField}'|t
 			}) }}
 		</div>
 	</div>
 </div>
 
-{% set optimizedImageOptions = craft.sproutSeo.getOptimizedAssetsOptions %}
+{% set optimizedImageOptions = craft.sproutSeo.getOptimizedAssetsOptions() %}
 
 {{ forms.selectField({
-	label: "Meta Tag Feature Image Field"|t,
-	instructions: "Select the Assets field to use for your basic, Open Graph, and Twitter Card meta tag feature image.
-	Select 'Manually' if you want the Optimize field to display a custom Feature Image Field for your content editors to
-	manage."|t,
+	label: "Optimized Meta Tag Feature Image Field"|t,
+	instructions: "Select the Assets field to use for your basic, Open Graph, and Twitter Card meta tag feature image. Select 'Manually' if you want the Optimize field to display a custom Feature Image Field for your content editors to manage."|t,
 	id: 'optimizedImageField',
 	name: 'optimizedImageField',
 	options: optimizedImageOptions,
 	value: settings.optimizedImageField is defined ? settings.optimizedImageField : 'manually',
 }) }}
+
+{% set optimizedKeywordOptions = [
+	{ optgroup: 'Add Custom Field' },
+	{ value: 'top5', label: "Generate Top 5 Keywords" },
+	{ value: 'top3', label: "Generate Top 3 Keywords" },
+	{ value: 'manually', label: "Manually" }
+] %}
+
+{{ forms.selectField({
+	label: "Optimized Meta Keywords Field"|t,
+	instructions: "Generate keywords and key phrases dynamically based on an algorithm or add them manually."|t,
+	id: 'optimizedKeywordsField',
+	name: 'optimizedKeywordsField',
+	options: optimizedKeywordOptions,
+	value: settings.optimizedKeywordsField is defined ? settings.optimizedKeywordsField : 'manually',
+}) }}
+
+{% if pluginSettings.advancedCustomization %}
+
+	<hr>
+
+	{% set advancedInput %}
+		<table class="data" style="width: auto;">
+			<thead>
+			<tr>
+				<th scope="col">{{ "Meta Tag Type"|t }}</th>
+				<th scope="col">{{ "Editable?"|t }}</th>
+			</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><label for="showMainEntity">{{ "Allow Main Entity to be edited?"|t }}</label></td>
+					<td class="centeralign">
+						<div>
+							{{ forms.lightswitch({
+								name: 'showMainEntity',
+								on:   settings.showMainEntity,
+								small: true
+							}) }}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="showBasicMeta">{{ "Allow Basic Meta fields to be edited?"|t }}</label></td>
+					<td class="centeralign">
+						<div>
+							{{ forms.lightswitch({
+								name: 'showBasicMeta',
+								on:   settings.showBasicMeta,
+								small: true
+							}) }}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="showOpenGraph">{{ "Allow Open Graph fields to be edited?"|t }}</label></td>
+					<td class="centeralign">
+						<div>
+							{{ forms.lightswitch({
+								name: 'showOpenGraph',
+								on:   settings.showOpenGraph,
+								small: true
+							}) }}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="showTwitter">{{ "Allow Twitter fields to be edited?"|t }}</label></td>
+					<td class="centeralign">
+						<div>
+							{{ forms.lightswitch({
+								name: 'showTwitter',
+								on:   settings.showTwitter,
+								small: true
+							}) }}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="showGeo">{{ "Allow Geo fields to be edited?"|t }}</label></td>
+					<td class="centeralign">
+						<div>
+							{{ forms.lightswitch({
+								name: 'showGeo',
+								on:   settings.showGeo,
+								small: true
+							}) }}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="showRobots">{{ "Allow Robots fields to be edited?"|t }}</label></td>
+					<td class="centeralign">
+						<div>
+							{{ forms.lightswitch({
+								name: 'showRobots',
+								on:   settings.showRobots,
+								small: true
+							}) }}
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+	{% endset %}
+
+	{{ forms.field({
+		label: "Enable Advanced SEO Optimization?"|t,
+		instructions: "Allow custom, page-specific overrides for each type of metadata. For most sites, the optimized settings above and a focus on quality content will be enough for a comprehensive SEO strategy."|t,
+		errors: ''
+	}, advancedInput) }}
+
+{% endif %}
+
+<hr>
 
 {{ forms.lightswitchField({
 	label: "Display Preview?"|t,
@@ -75,75 +183,6 @@
 	name: 'displayPreview',
 	on: settings.displayPreview,
 }) }}
-
-<hr>
-
-{% set advancedInput %}
-	<table class="data" style="width: auto;">
-		<thead>
-		<tr>
-			<th scope="col">{{ "Meta Tag Type"|t }}</th>
-			<th scope="col">{{ "Editable?"|t }}</th>
-		</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td><label for="showGeo">{{ "Allow Geo Fields to be edited?"|t }}</label></td>
-				<td class="centeralign">
-					<div>
-						{{ forms.lightswitch({
-							name: 'showGeo',
-							on:   settings.showGeo,
-							small: true
-						}) }}
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td><label for="showRobots">{{ "Allow Robots Fields to be edited?"|t }}</label></td>
-				<td class="centeralign">
-					<div>
-						{{ forms.lightswitch({
-							name: 'showRobots',
-							on:   settings.showRobots,
-							small: true
-						}) }}
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td><label for="showOpenGraph">{{ "Allow Open Graph Fields to be edited?"|t }}</label></td>
-				<td class="centeralign">
-					<div>
-						{{ forms.lightswitch({
-							name: 'showOpenGraph',
-							on:   settings.showOpenGraph,
-							small: true
-						}) }}
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td><label for="showTwitter">{{ "Allow Twitter Fields to be edited?"|t }}</label></td>
-				<td class="centeralign">
-					<div>
-						{{ forms.lightswitch({
-							name: 'showTwitter',
-							on:   settings.showTwitter,
-							small: true
-						}) }}
-					</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-{% endset %}
-
-{{ forms.field({
-	label: "Display Advanced Customization Options?"|t,
-	errors: ''
-}, advancedInput) }}
 
 {% includeJsResource 'sproutseo/js/SproutFields.js' %}
 

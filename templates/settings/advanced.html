@@ -4,15 +4,62 @@
 {% set title = "Meta Settings"|t %}
 
 {% set settings = craft.sproutSeo.getSettings() %}
+{% set localeOptions = craft.sproutSeo.getLocaleOptions() %}
 
 {% set content %}
 
-  <form method="post" accept-charset="UTF-8" data-saveshortcut data-saveshortcut-redirect="sproutseo/settings/meta">
+  {{ forms.field({
+    label: "Advanced Settings"|t,
+    instructions: "Sprout SEO provides you with powerful, comprehensive management of all types of metadata from your Control Panel and the ability to setup sensible, reusable defaults with existing fields. This makes preparing metadata for search and social sharing more predictable and leads to good SEO and an easy to manage content experience. Some folks, however, want to have more custom control over each bit of metadata. This requires a more complicated UI, more complicated codebase, and more time necessary to curate, prepare, post, and maintain content. If you'd like to go down that path and have the necessary budget, team, or training processes to do it well, go ahead and enable these settings."|t,
+  }, null) }}
+
+  <hr>
+
+  <form method="post" accept-charset="UTF-8" data-saveshortcut data-saveshortcut-redirect="sproutseo/settings/advanced">
     {{ getCsrfInput() }}
     <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
 
-
     {% namespace 'settings' %}
+
+      {{ forms.lightswitchField({
+        label: "Override default locale behavior"|t,
+        instructions: "Locales in Craft can be used for multi-language or multi-site behavior. If you are using Craft's Locales for multi-site behavior, enable this setting to choose your website locale. If you are using locales as intended for language-specific content, leave this setting disabled."|t,
+        name: 'toggleLocaleOverride',
+        toggle: 'settings-localeoverride',
+        on: settings.localeIdOverride ? true : false,
+        onLabel: "Enable"|t
+      }) }}
+
+      <div id="settings-localeoverride" class="{{ (not settings.localeIdOverride ? "hidden") }}">
+
+        {{ forms.selectField({
+          label: 'Website locale'|t,
+          instructions: "Choose the locale to use for all of your multi-site content."|t,
+          id: 'localeIdOverride',
+          name: 'localeIdOverride',
+          options: localeOptions,
+          value : settings.localeIdOverride ?? '',
+          errors: '',
+          first: true
+        }) }}
+
+      </div>
+
+      {{ forms.lightswitchField({
+        label: "Enable field settings for Advanced SEO Optimization"|t,
+        instructions: "Advanced SEO Optimization allows you to optionally give your content editors control to add more specific overrides for each type of metadata."|t,
+        name: 'advancedCustomization',
+        on: settings.advancedCustomization,
+        onLabel: "Enable"|t
+      }) }}
+
+      {{ forms.lightswitchField({
+        label: "Enable code overrides in your Twig templates"|t,
+        instructions: "Code overrides are off by default because they should only be necessary when advanced customization of your metadata is needed. Setting this to off by default is meant to encourage you to consider how to solve your problem in a more user-friendly, budget-friendly way, before going down this path."|t,
+        name: 'enableCodeOverrides',
+        on: settings.enableCodeOverrides,
+        onLabel: "Enable"|t
+      }) }}
 
       {{ forms.lightswitchField({
         label: "Enable custom meta tag template"|t,
@@ -20,8 +67,7 @@
         name: 'toggleTemplateFolderOverride',
         toggle: 'settings-defaulttemplateoverride',
         on: (settings.templateFolder is empty ? false : true),
-        onLabel: "Enable"|t,
-        first: true
+        onLabel: "Enable"|t
       }) }}
 
       <div id="settings-defaulttemplateoverride" class="{{ (settings.templateFolder is empty ? "hidden") }}">
@@ -35,6 +81,7 @@
         }) }}
 
       </div>
+
 
     {% endnamespace %}
 

@@ -513,11 +513,11 @@ class SproutSeoVariable
 		$fields  = craft()->fields->getAllFields();
 
 		$options[''] = "Select...";
-		$options[]   = array('optgroup' => "Dynamic Meta");
+		$options[]   = array('optgroup' => "Use Existing Field");
 
 		if ($handle == 'optimizedTitleField')
 		{
-			$options['element-title'] = "Title";
+			$options['elementTitle'] = "Title";
 		}
 
 		foreach ($fields as $key => $field)
@@ -530,6 +530,8 @@ class SproutSeoVariable
 			}
 		}
 
+		$options[]           = array('optgroup' => "Add Custom Field");
+
 		if (!isset($options[$settings[$handle]]) && $settings[$handle] != 'manually')
 		{
 			$options[$settings[$handle]] = $settings[$handle];
@@ -537,11 +539,10 @@ class SproutSeoVariable
 
 		if ($type != 'Assets')
 		{
-			$options['custom'] = 'Add Custom';
+			$options['custom'] = 'Custom Format';
 		}
 
-		$options[]           = array('optgroup' => "Advanced Meta");
-		$options['manually'] = 'Manually';
+		$options['manually'] = 'Manual Field';
 
 		return $options;
 	}
@@ -587,6 +588,26 @@ class SproutSeoVariable
 		$robots  = SproutSeoOptimizeHelper::getRobotsMetaValue($globals->robots);
 
 		return SproutSeoOptimizeHelper::prepRobotsForSettings($robots);
+	}
+
+	public function getLocaleOptions()
+	{
+		$locales = array(
+			array(
+				'value' => '',
+				'label' => 'Select locale...'
+			)
+		);
+
+		foreach (craft()->i18n->getAllLocales() as $locale)
+		{
+			array_push($locales, array(
+				'value' => $locale->id,
+				'label' => $locale->name . " (" . $locale->id . ")"
+			));
+		}
+
+		return $locales;
 	}
 
 	/**

@@ -43,11 +43,31 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 				$seoSettings->ogType;
 		}
 
-		if (isset($settings["templateFolder"]))
+		if (isset($settings["localeIdOverride"]))
 		{
-			$seoSettings->templateFolder = $settings["templateFolder"] != null ?
-				$settings["templateFolder"] :
-				$seoSettings->templateFolder;
+			$seoSettings->localeIdOverride = isset($settings["localeIdOverride"]) ?
+				$settings["localeIdOverride"] :
+				$seoSettings->localeIdOverride;
+		}
+
+		if (isset($settings["advancedCustomization"]))
+		{
+			$seoSettings->advancedCustomization = isset($settings["advancedCustomization"]) ?
+				$settings["advancedCustomization"] :
+				$seoSettings->advancedCustomization;
+		}
+
+		if (isset($settings['toggleTemplateFolderOverride']) and isset($settings["templateFolder"]))
+		{
+			if (isset($settings['toggleTemplateFolderOverride']) and $settings['toggleTemplateFolderOverride'] == 0)
+			{
+				$seoSettings->templateFolder = null;
+			}
+
+			if (isset($settings['toggleTemplateFolderOverride']) and $settings['toggleTemplateFolderOverride'] == 1)
+			{
+				$seoSettings->templateFolder = isset($settings["templateFolder"]) ? $settings["templateFolder"] : $seoSettings->templateFolder;
+			}
 		}
 
 		$settings = JsonHelper::encode($seoSettings);

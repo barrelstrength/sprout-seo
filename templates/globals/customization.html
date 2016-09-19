@@ -17,33 +17,6 @@
 		<input type="hidden" name="schemaType" value="{{ schemaTypeFormSubmit }}">
 
 		{{ forms.selectField({
-			label: 'Append value to all Meta Titles'|t,
-			instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. <i>Article Title - " ~ siteName ~ "</i>"|t,
-			id: 'seoDivider',
-			name: 'sproutseo[schema][settings][appendTitleValue]',
-			options: {
-				1 : {
-					'value' : '',
-					'label' : 'None'
-				},
-				2 : {
-					'value' : 'sitename',
-					'label' : 'Site Name'
-				},
-				3: {
-					'optgroup': 'Custom'
-				},
-				4 : {
-					'value' : 'custom',
-					'label' : 'Add Custom'
-				}
-			},
-			value : settings.appendTitleValue ?? null,
-			first: true,
-			errors: ''
-		}) }}
-
-		{{ forms.selectField({
 			label: 'Select the character that will be used between Title segments'|t,
 			instructions: "This character will be used in between your title segments, i.e. <i>Blog Post Title – " ~ siteName ~ "</i>"|t,
 			id: 'seoDivider',
@@ -78,6 +51,33 @@
 				}
 			},
 			value : settings.seoDivider ?? null,
+			first: true,
+			errors: ''
+		}) }}
+
+		{{ forms.selectField({
+			label: 'Append value to all Meta Titles'|t,
+			instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. <i>Article Title - " ~ siteName ~ "</i>"|t,
+			id: 'seoDivider',
+			name: 'sproutseo[schema][settings][appendTitleValue]',
+			options: {
+				1 : {
+					'value' : '',
+					'label' : 'None'
+				},
+				2 : {
+					'value' : 'sitename',
+					'label' : 'Site Name'
+				},
+				3: {
+					'optgroup': 'Custom'
+				},
+				4 : {
+					'value' : 'custom',
+					'label' : 'Add Custom'
+				}
+			},
+			value : settings.appendTitleValue ?? null,
 			first: true,
 			errors: ''
 		}) }}

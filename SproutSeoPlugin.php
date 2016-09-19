@@ -145,12 +145,15 @@ class SproutSeoPlugin extends BasePlugin
 		// in the plugin table so in order to use getSettings() we need
 		// these defined here
 		return array(
-			'pluginNameOverride' => AttributeType::String,
-			'seoDivider'         => array(AttributeType::String, 'default' => '-'),
-			'structureId'        => array(AttributeType::Number, 'default' => null),
-			'twitterCard'        => array(AttributeType::String, 'default' => null),
-			'ogType'             => array(AttributeType::String, 'default' => null),
-			'templateFolder'     => array(AttributeType::String, 'default' => null)
+			'pluginNameOverride'    => AttributeType::String,
+			'seoDivider'            => array(AttributeType::String, 'default' => '-'),
+			'structureId'           => array(AttributeType::Number, 'default' => null),
+			'twitterCard'           => array(AttributeType::String, 'default' => null),
+			'ogType'                => array(AttributeType::String, 'default' => null),
+			'localeIdOverride'      => array(AttributeType::String, 'default' => null),
+			'enableCodeOverrides'   => array(AttributeType::Bool, 'default' => false),
+			'advancedCustomization' => array(AttributeType::Bool, 'default' => false),
+			'templateFolder'        => array(AttributeType::String, 'default' => null),
 		);
 	}
 
@@ -160,7 +163,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/metadata/new'                     => array(
+			'sproutseo/metadata/new'                      => array(
 				'action' => 'sproutSeo/metadata/metadataGroupEditTemplate'
 			),
 			'sproutseo/metadata/(?P<metadataGroupId>\d+)' => array(
@@ -174,26 +177,26 @@ class SproutSeoPlugin extends BasePlugin
 				'action' => 'sproutSeo/schema/schemaEditTemplate'
 			),
 
-			'sproutseo/sitemap'                           => array(
+			'sproutseo/sitemap'                               => array(
 				'action' => 'sproutSeo/sitemap/sitemapIndex'
 			),
-			'sproutseo/sitemap/newPage'                   => array(
+			'sproutseo/sitemap/newPage'                       => array(
 				'action' => 'sproutSeo/sitemap/editSitemap'
 			),
-			'sproutseo/settings'                          => array(
+			'sproutseo/settings'                              => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
 			'sproutseo/settings/(?P<settingsTemplate>.*)/new' => 'sproutseo/settings/schema/_edit',
-			'sproutseo/settings/(?P<settingsTemplate>.*)' => array(
+			'sproutseo/settings/(?P<settingsTemplate>.*)'     => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
-			'sproutseo/redirects'                         => array(
+			'sproutseo/redirects'                             => array(
 				'action' => 'sproutSeo/redirects/redirectIndex'
 			),
-			'sproutseo/redirects/new'                     => array(
+			'sproutseo/redirects/new'                         => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			),
-			'sproutseo/redirects/(?P<redirectId>\d+)'     => array(
+			'sproutseo/redirects/(?P<redirectId>\d+)'         => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			)
 		);
@@ -239,12 +242,12 @@ class SproutSeoPlugin extends BasePlugin
 	 * Returns supported sitemap urls by default.
 	 *
 	 * 'name_of_the_craft_element_table' => array(
-	 * 		'name' => Name that will display in the sitemaps and metada UI
+	 *    'name' => Name that will display in the sitemaps and metada UI
 	 *    'elementType' => Element Type class name
 	 *    'elementGroupId' => column name for the element id
 	 *    'service' => service class name
 	 *    'method'  => method name to get all elements
-	 *		'matchedElementVariable'  => Variable name to be called from the templates
+	 *    'matchedElementVariable'  => Variable name to be called from the templates
 	 *
 	 * @return array
 	 */
