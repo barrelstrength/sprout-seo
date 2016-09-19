@@ -1,5 +1,6 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
+{% import "sproutseo/_components/selectOther" as sproutFields %}
 
 {% set title = "Default Settings"|t %}
 
@@ -55,32 +56,31 @@
 			errors: ''
 		}) }}
 
-		{{ forms.selectField({
-			label: 'Append value to all Meta Titles'|t,
-			instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. <i>Article Title - " ~ siteName ~ "</i>"|t,
-			id: 'seoDivider',
-			name: 'sproutseo[schema][settings][appendTitleValue]',
-			options: {
-				1 : {
-					'value' : '',
-					'label' : 'None'
-				},
-				2 : {
-					'value' : 'sitename',
-					'label' : 'Site Name'
-				},
-				3: {
-					'optgroup': 'Custom'
-				},
-				4 : {
-					'value' : 'custom',
-					'label' : 'Add Custom'
-				}
-			},
-			value : settings.appendTitleValue ?? null,
-			first: true,
-			errors: ''
-		}) }}
+		<div class="field">
+
+			<div class="heading">
+				<label for="siteOwnerType">{{ 'Append value to all Meta Titles'|t}}</label>
+				<div class="instructions"><p>{{"Append your website name or a custom value at the end of all of your Meta Titles, i.e."|t}}<i> {{"Article Title - " ~ siteName|t }} </i></p></div>
+			</div>
+
+			<div class="input">
+
+				<div class="field sprout-selectother">
+					{% set titleOpions = craft.sproutSeo.getAppenedMetaTitleOptions() %}
+
+					{{ sproutFields.selectOther({
+						name: 'sproutseo[schema][settings][appendTitleValue]',
+						id: 'seoDivider',
+						options: titleOpions ,
+						value: settings.appendTitleValue is defined ? settings.appendTitleValue : null,
+						otherPlaceholderText: 'Custom title'|t
+					}) }}
+
+				</div>
+			</div>
+		</div>
+
+
 
 		{% set ogTypesOptions = {
 			'' : 'Select Open Graph Type...'|t,
@@ -124,4 +124,11 @@
 
 	</form>
 
+	{% includeJsResource 'sproutseo/js/SproutFields.js' %}
+
+	{% includejs %}
+		$(document).ready(function() {
+			Craft.SproutFields.initFields($("#content"));
+		});
+	{% endincludejs %}
 {% endset %}

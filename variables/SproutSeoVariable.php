@@ -502,6 +502,34 @@ class SproutSeoVariable
 		return $options;
 	}
 
+	public function getAppenedMetaTitleOptions()
+	{
+		$options = array(
+			array(
+				'label' => "Select...",
+				'value' => ''
+			),
+			array(
+				'label' => "Site Name",
+				'value' => 'sitename'
+			)
+		);
+
+		$schemaGlobals    = sproutSeo()->schema->getGlobals();
+		$appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
+
+		array_push($options, array('optgroup' => 'Custom'));
+
+		if (!array_key_exists($appendTitleValue, array('sitename' => 0)) && $appendTitleValue != '')
+		{
+			array_push($options, array('label' => $appendTitleValue, 'value' => $appendTitleValue));
+		}
+
+		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
+
+		return $options;
+	}
+
 	/**
 	 * Returns all plain fields available given a type
 	 *
