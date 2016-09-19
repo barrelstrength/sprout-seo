@@ -41,25 +41,28 @@ class SproutSeo_MetadataModel extends BaseModel
 				'required' => true
 			),
 			'schemaMap'           => array(AttributeType::String),
-			'dateUpdated'         => array(AttributeType::DateTime),
-			'dateCreated'         => array(AttributeType::DateTime),
-			'uid'                 => array(AttributeType::String),
+
+			'locale'      => array(AttributeType::String),
+			'dateUpdated' => array(AttributeType::DateTime),
+			'dateCreated' => array(AttributeType::DateTime),
+			'uid'         => array(AttributeType::String),
 		);
 
 		// @todo - do we need all these values here? Some could just be assigned elsewhere:
 		// name => title, url => canonical, default not in use...
 		$metaTags = array(
-			'id'                   => array(AttributeType::Number),
-			'entryId'              => array(AttributeType::Number),
-			'default'              => array(AttributeType::String),
-			'name'                 => array(AttributeType::String),
-			'handle'               => array(AttributeType::String),
-			'appendTitleValue'     => array(AttributeType::String, 'default' => null),
-			'url'                  => array(AttributeType::String),
-			'optimizedTitle'       => array(AttributeType::String),
-			'optimizedDescription' => array(AttributeType::String),
-			'optimizedImage'       => array(AttributeType::String),
-			'customizationSettings'=> array(AttributeType::String),
+			'id'                    => array(AttributeType::Number),
+			'entryId'               => array(AttributeType::Number),
+			'default'               => array(AttributeType::String),
+			'name'                  => array(AttributeType::String),
+			'handle'                => array(AttributeType::String),
+			'appendTitleValue'      => array(AttributeType::String, 'default' => null),
+			'url'                   => array(AttributeType::String),
+			'optimizedTitle'        => array(AttributeType::String),
+			'optimizedDescription'  => array(AttributeType::String),
+			'optimizedImage'        => array(AttributeType::String),
+			'optimizedKeywords'     => array(AttributeType::String),
+			'customizationSettings' => array(AttributeType::String),
 		);
 
 		$this->basicMeta = array(
@@ -68,7 +71,6 @@ class SproutSeo_MetadataModel extends BaseModel
 			'keywords'    => array(AttributeType::String),
 			'author'      => array(AttributeType::String),
 			'publisher'   => array(AttributeType::String),
-			'locale'      => array(AttributeType::String),
 		);
 
 		$this->robotsMeta = array(
@@ -348,18 +350,18 @@ class SproutSeo_MetadataModel extends BaseModel
 			'position'                       => 'geo.position',
 
 			// Open Graph
-			'ogTitle'                        => 'og:title',
 			'ogType'                         => 'og:type',
+			'ogSiteName'                     => 'og:site_name',
+			'ogAuthor'                       => 'og:author',
+			'ogPublisher'                    => 'og:publisher',
 			'ogUrl'                          => 'og:url',
+			'ogTitle'                        => 'og:title',
+			'ogDescription'                  => 'og:description',
 			'ogImage'                        => 'og:image',
 			'ogImageSecure'                  => 'og:image:secure_url',
 			'ogImageWidth'                   => 'og:image:width',
 			'ogImageHeight'                  => 'og:image:height',
 			'ogImageType'                    => 'og:image:type',
-			'ogAuthor'                       => 'og:author',
-			'ogPublisher'                    => 'og:publisher',
-			'ogSiteName'                     => 'og:site_name',
-			'ogDescription'                  => 'og:description',
 			'ogAudio'                        => 'og:audio',
 			'ogVideo'                        => 'og:video',
 			'ogLocale'                       => 'og:locale',
@@ -384,20 +386,22 @@ class SproutSeo_MetadataModel extends BaseModel
 
 	/**
 	 * Returns
+	 *
 	 * @return array
-	**/
+	 **/
 	public function getCustomizationSettings()
 	{
 		$response = array(
-			'openGraphMetadataGroupEnabled'   => 1,
-			'twitterCardMetadataGroupEnabled' => 1,
-			'geoMetadataGroupEnabled'         => 1,
-			'robotsMetadataGroupEnabled'      => 1
+			'basicMetaMetadataGroupEnabled'   => 0,
+			'openGraphMetadataGroupEnabled'   => 0,
+			'twitterCardMetadataGroupEnabled' => 0,
+			'geoMetadataGroupEnabled'         => 0,
+			'robotsMetadataGroupEnabled'      => 0
 		);
 
 		if ($this->customizationSettings)
 		{
-			$response = json_decode($this->customizationSettings ,true);
+			$response = json_decode($this->customizationSettings, true);
 		}
 
 		return $response;
