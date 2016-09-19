@@ -33,11 +33,14 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			'optimizedTitleField'       => array(AttributeType::String),
 			'optimizedDescriptionField' => array(AttributeType::String),
 			'optimizedImageField'       => array(AttributeType::String),
+			'optimizedKeywordsField'    => array(AttributeType::String),
 			'displayPreview'            => array(AttributeType::Bool, 'default' => true),
-			'showGeo'                   => array(AttributeType::Bool, 'default' => true),
-			'showRobots'                => array(AttributeType::Bool, 'default' => true),
-			'showOpenGraph'             => array(AttributeType::Bool, 'default' => true),
-			'showTwitter'               => array(AttributeType::Bool, 'default' => true)
+			'showMainEntity'            => array(AttributeType::Bool, 'default' => false),
+			'showBasicMeta'             => array(AttributeType::Bool, 'default' => false),
+			'showOpenGraph'             => array(AttributeType::Bool, 'default' => false),
+			'showTwitter'               => array(AttributeType::Bool, 'default' => false),
+			'showGeo'                   => array(AttributeType::Bool, 'default' => false),
+			'showRobots'                => array(AttributeType::Bool, 'default' => false),
 		);
 	}
 
@@ -46,208 +49,6 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		return craft()->templates->render('sproutseo/_fieldtypes/optimize/settings', array(
 			'settings' => $this->getSettings()
 		));
-	}
-
-	/**
-	 * Performs any additional actions after the element has been saved.
-	 */
-	public function onAfterElementSave()
-	{
-		$fields = craft()->request->getPost('fields.sproutseo.metadata');
-
-		if (!isset($fields))
-		{
-			return;
-		}
-
-		$entryId = craft()->request->getPost('entryId');
-		$entryId = (isset($entryId) && $entryId != "")
-			? $entryId
-			: $this->element->id;
-
-		$locale = $this->element->locale;
-
-		$model = sproutSeo()->metadata->getMetadataContentByEntryId($entryId, $locale);
-
-		// Test to see if we have any values in our Sprout SEO fields
-		$saveSproutSeoFields = false;
-
-		foreach ($fields as $key => $value)
-		{
-			if ($value)
-			{
-				$saveSproutSeoFields = true;
-				continue;
-			}
-		}
-
-		// If we don't have any values in our Sprout SEO fields
-		// don't add a record to the database
-		// but if a record already exists, we also should delete it.
-		if (!$saveSproutSeoFields)
-		{
-			// Remove record since it is now blank
-			if ($model->id)
-			{
-				sproutSeo()->metadata->deleteMetadataContentById($model->id);
-			}
-
-			return;
-		}
-
-		if (isset($fields['robots']))
-		{
-			$fields['robots'] = SproutSeoOptimizeHelper::getRobotsMetaValue($fields['robots']);
-		}
-
-		// Add the entry ID to the field data we will submit for Sprout SEO
-		$attributes['entryId'] = $entryId;
-		$attributes['locale']  = $locale;
-
-		// Grab all the other Sprout SEO fields.
-		$attributes = array_merge($attributes, $fields);
-
-		// Make sure all of our images are strings (twitter/og)
-		// We need to do this in case another seo field with images exists
-		$attributes['optimizedImage'] = (!empty($attributes['optimizedImage']) ? $attributes['optimizedImage'][0] : null);
-		$attributes['ogImage']        = (!empty($attributes['ogImage']) ? $attributes['ogImage'][0] : null);
-		$attributes['twitterImage']   = (!empty($attributes['twitterImage']) ? $attributes['twitterImage'][0] : null);
-
-		// Validate any setting of the field type
-		$settings = $this->getSettings();
-
-		// Title - validations begins
-		$title = null;
-
-		if ($settings['optimizedTitleField'] == 'manually' && $attributes['optimizedTitle'])
-		{
-			$attributes['ogTitle']      = $attributes['optimizedTitle'];
-			$attributes['twitterTitle'] = $attributes['optimizedTitle'];
-		}
-		else
-		{
-			if ($settings['optimizedTitleField'] != 'manually')
-			{
-				//it's an field id.
-				if (is_numeric($settings['optimizedTitleField']))
-				{
-					$title = $this->_getElementField($settings['optimizedTitleField']);
-				}
-				else
-				{
-					// @todo - why do we need to test this against a string 'element-title'?
-					if ($settings['optimizedTitleField'] == 'element-title' && $entryId)
-					{
-						$entry = craft()->elements->getElementById($entryId);
-
-						if ($entry)
-						{
-							$title = $entry->title;
-						}
-					}
-					else
-					{
-						$title = craft()->templates->renderObjectTemplate($settings['optimizedTitleField'], $this->element);
-					}
-				}
-			}
-		}
-
-		$attributes['title']          = $title;
-		$attributes['optimizedTitle'] = $title;
-		// Title - validations ends
-
-		// Description - validations begins
-		$ogDescription      = null;
-		$twitterDescription = null;
-
-		// @todo - we should probably be using $attributes['optimizedDescription'] here
-		if ($settings['optimizedDescriptionField'] == 'manually' && $attributes['optimizedDescription'])
-		{
-			$ogDescription      = $attributes['optimizedDescription'];
-			$twitterDescription = $attributes['optimizedDescription'];
-		}
-		else
-		{
-			if ($settings['optimizedDescriptionField'] != 'manually')
-			{
-				// it's a field id.
-				if (is_numeric($settings['optimizedDescriptionField']))
-				{
-					$ogDescription      = $this->_getElementField($settings['optimizedDescriptionField']);
-					$twitterDescription = $ogDescription;
-				}
-				// it's a custom value
-				else
-				{
-					$ogDescription      = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
-					$twitterDescription = craft()->templates->renderObjectTemplate($settings['optimizedDescriptionField'], $this->element);
-				}
-			}
-		}
-
-		$attributes['ogDescription']      = $ogDescription;
-		$attributes['twitterDescription'] = $twitterDescription;
-		$attributes['description']        = $ogDescription != null ? $ogDescription : null;
-		// Description - validations ends
-
-		// Image Field - validations begins
-		$metaImage = null;
-		if ($settings['optimizedImageField'] == 'manually' && $attributes['optimizedImage'])
-		{
-			$metaImage = $attributes['optimizedImage'];
-		}
-		else
-		{
-			if ($settings['optimizedImageField'] != 'manually')
-			{
-				$metaImage = $this->_getElementField($settings['optimizedImageField']);
-			}
-		}
-
-		$attributes['optimizedImage'] = $metaImage;
-		$attributes['ogImage']        = $metaImage;
-		$attributes['twitterImage']   = $metaImage;
-		// Image Field - validations ends
-
-		// Update or create our Meta Tag Content entry
-		if ($model->entryId)
-		{
-			sproutSeo()->metadata->updateMetadataContent($model->id, $attributes);
-		}
-		else
-		{
-			sproutSeo()->metadata->createMetadataContent($attributes);
-		}
-	}
-
-	private function _getElementField($id)
-	{
-		$value = null;
-
-		// it's a field id.
-		if (is_numeric($id))
-		{
-			// Let's check if the field exists in the entry
-			$field = craft()->fields->getFieldById($id);
-
-			if ($field)
-			{
-				if (isset($_POST['fields'][$field->handle]))
-				{
-					if ($field->type == 'Assets')
-					{
-						$value = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
-					}
-					else
-					{
-						$value = $_POST['fields'][$field->handle];
-					}
-				}
-			}
-		}
-
-		return $value;
 	}
 
 	/**
@@ -321,5 +122,224 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			'fieldContext'         => 'field',
 			'settings'             => $settings
 		));
+	}
+
+	/**
+	 * Performs any additional actions after the element has been saved.
+	 */
+	public function onAfterElementSave()
+	{
+		$fields = craft()->request->getPost('fields.sproutseo.metadata');
+
+		if (!isset($fields))
+		{
+			return;
+		}
+
+		$locale = $this->element->locale;
+
+		// Get existing or new MetadataModel
+		$model = sproutSeo()->metadata->getMetadataContentByEntryId($this->element->id, $locale);
+
+		// Test to see if we have any values in our Sprout SEO fields
+		$saveSproutSeoFields = false;
+
+		foreach ($fields as $key => $value)
+		{
+			if ($value)
+			{
+				$saveSproutSeoFields = true;
+				continue;
+			}
+		}
+
+		// If we don't have any values in our Sprout SEO fields
+		// don't add a record to the database
+		// If a record already exists, we should delete it.
+		if (!$saveSproutSeoFields)
+		{
+			// Remove record since it is now blank
+			if ($model->id)
+			{
+				sproutSeo()->metadata->deleteMetadataContentById($model->id);
+			}
+
+			return;
+		}
+
+		if (isset($fields['robots']))
+		{
+			$fields['robots'] = SproutSeoOptimizeHelper::getRobotsMetaValue($fields['robots']);
+		}
+
+		// Add the entry ID to the field data we will submit for Sprout SEO
+		$attributes['entryId'] = $this->element->id;
+		$attributes['locale']  = $locale;
+
+		// Grab all the other Sprout SEO fields.
+		$attributes = array_merge($attributes, $fields);
+
+		$settings   = $this->getSettings();
+		$attributes = $this->processOptimizedTitle($attributes, $settings);
+		$attributes = $this->processOptimizedDescription($attributes, $settings);
+		$attributes = $this->processOptimizedFeatureImage($attributes, $settings);
+
+		$model->setAttributes($attributes);
+
+		$model = sproutSeo()->metadata->updateOptimizedAndAdvancedMetaValues($model);
+
+		$columns = array_intersect_key($model->getAttributes(), $attributes);
+
+		// Update or create our Meta Tag Content entry
+		if ($model->id)
+		{
+			sproutSeo()->metadata->updateMetadataContent($model->id, $columns);
+		}
+		else
+		{
+			sproutSeo()->metadata->createMetadataContent($columns);
+		}
+	}
+
+	protected function processOptimizedTitle($attributes, $settings)
+	{
+		$title = null;
+
+		$optimizedTitleFieldSetting = $settings['optimizedTitleField'];
+
+		switch (true)
+		{
+			// Element Title
+			case ($optimizedTitleFieldSetting == 'elementTitle' && $this->element->id):
+
+				$title = $this->element->title;
+
+				break;
+
+			// Manual Title
+			case ($optimizedTitleFieldSetting == 'manually'):
+
+				$title = ($attributes['optimizedTitle']) ? $attributes['optimizedTitle'] : null;
+
+				break;
+
+			// Custom Field
+			case (is_numeric($optimizedTitleFieldSetting)):
+
+				$title = $this->getElementField($optimizedTitleFieldSetting);
+
+				break;
+
+			// Custom Value
+			default:
+
+				$title = craft()->templates->renderObjectTemplate($optimizedTitleFieldSetting, $this->element);
+
+				break;
+		}
+
+		$attributes['optimizedTitle'] = $title;
+		$attributes['title']          = $title;
+		$attributes['ogTitle']        = $title;
+		$attributes['twitterTitle']   = $title;
+
+		return $attributes;
+	}
+
+	protected function processOptimizedDescription($attributes, $settings)
+	{
+		$description = null;
+
+		$optimizedDescriptionFieldSetting = $settings['optimizedDescriptionField'];
+
+		switch (true)
+		{
+			// Manual Description
+			case ($optimizedDescriptionFieldSetting == 'manually'):
+
+				$description = ($attributes['optimizedDescription']) ? $attributes['optimizedDescription'] : null;
+
+				break;
+
+			// Custom Description
+			case (is_numeric($optimizedDescriptionFieldSetting)):
+
+				$description = $this->getElementField($optimizedDescriptionFieldSetting);
+
+				break;
+
+			// Custom Value
+			default:
+
+				$description = craft()->templates->renderObjectTemplate($optimizedDescriptionFieldSetting, $this->element);
+
+				break;
+		}
+
+		$attributes['optimizedDescription'] = $description;
+		$attributes['description']          = $description;
+		$attributes['ogDescription']        = $description;
+		$attributes['twitterDescription']   = $description;
+
+		return $attributes;
+	}
+
+	protected function processOptimizedFeatureImage($attributes, $settings)
+	{
+		$image = null;
+
+		$optimizedImageFieldSetting = $settings['optimizedImageField'];
+
+		switch (true)
+		{
+			// Manual Image
+			case ($optimizedImageFieldSetting == 'manually'):
+
+				$image = !empty($attributes['optimizedImage']) ? $attributes['optimizedImage'][0] : null;
+
+				break;
+
+			// Custom Image Field
+			case (is_numeric($optimizedImageFieldSetting)):
+
+				$image = $this->getElementField($optimizedImageFieldSetting);
+
+				break;
+		}
+
+		$attributes['optimizedImage'] = $image;
+		$attributes['ogImage']        = $image;
+		$attributes['twitterImage']   = $image;
+
+		return $attributes;
+	}
+
+	private function getElementField($id)
+	{
+		$value = null;
+
+		// it's a field id.
+		if (is_numeric($id))
+		{
+			// Let's check if the field exists in the entry
+			$field = craft()->fields->getFieldById($id);
+
+			if ($field)
+			{
+				if (isset($_POST['fields'][$field->handle]))
+				{
+					if ($field->type == 'Assets')
+					{
+						$value = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
+					}
+					else
+					{
+						$value = $_POST['fields'][$field->handle];
+					}
+				}
+			}
+		}
+
+		return $value;
 	}
 }

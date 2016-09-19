@@ -25,13 +25,6 @@ class SproutSeo_MetadataController extends BaseController
 		// /sproutseo/metadata/new?metatag=secondGroupOfCategories,categories-new-1,2
 		if (craft()->request->getSegment(3) == 'new')
 		{
-			//'metadatagroupname' => 'Field Test'
-			//'elementgrouphandle' => 'fieldTest'
-			//'sitemapid' => 'sections-new-2'
-			//'elementgroupid' => '9'
-			//'metadataId' => ''
-			//'metatag' => 'fieldTest,sections-new-2,9'
-
 			$metadatagroupname = craft()->request->getPost('metadatagroupname');
 			$elementGroupId    = craft()->request->getPost('elementgroupid');
 			$groupName         = craft()->request->getPost('elementgrouphandle');
@@ -150,24 +143,9 @@ class SproutSeo_MetadataController extends BaseController
 			$metaTags['robots'] = SproutSeoOptimizeHelper::getRobotsMetaValue($metaTags['robots']);
 		}
 
-		$optimizedTitle       = (!empty($metaTags['optimizedTitle']) ? $metaTags['optimizedTitle'] : null);
-		$optimizedDescription = (!empty($metaTags['optimizedDescription']) ? $metaTags['optimizedDescription'] : null);
-
-		$metaTags['title']              = $optimizedTitle;
-		$metaTags['ogTitle']            = $optimizedTitle;
-		$metaTags['twitterTitle']       = $optimizedTitle;
-		$metaTags['description']        = $optimizedDescription;
-		$metaTags['ogDescription']      = $optimizedDescription;
-		$metaTags['twitterDescription'] = $optimizedDescription;
-
-		// Make our images single IDs instead of an array
-		$optimizedImage = (!empty($metaTags['optimizedImage']) ? $metaTags['optimizedImage'][0] : null);
-
-		$metaTags['optimizedImage'] = $optimizedImage;
-		$metaTags['ogImage']        = $optimizedImage;
-		$metaTags['twitterImage']   = $optimizedImage;
-
 		$model->setAttributes($metaTags);
+
+		$model = sproutSeo()->metadata->updateOptimizedAndAdvancedMetaValues($model);
 
 		if (sproutSeo()->metadata->saveMetadataGroup($model))
 		{

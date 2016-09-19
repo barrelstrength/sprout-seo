@@ -243,7 +243,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 			->select('*')
 			->from('sproutseo_metadatagroups')
 			->where('type=:type and elementGroupId=:elementGroupId',
-				array(':type' => $type, ':elementGroupId'=>$elementGroupId)
+				array(':type' => $type, ':elementGroupId' => $elementGroupId)
 			)
 			->queryRow();
 
@@ -256,8 +256,6 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
 		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
-
-		$model = $this->enforceDisabledCustomizationSettings($model);
 
 		return $model;
 	}
@@ -356,8 +354,6 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		$model = SproutSeo_MetadataModel::populateModel($query);
 
-		$model = $this->enforceDisabledCustomizationSettings($model);
-
 		return $model;
 	}
 
@@ -411,6 +407,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		{
 			$type = explode('-', $info['sitemapId']);
 			$type = $type[0];
+
 			// Just trying to get the url
 			$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
 			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $type);
@@ -456,26 +453,38 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		return $response;
 	}
 
-	public function enforceDisabledCustomizationSettings($model)
+	public function updateOptimizedAndAdvancedMetaValues($model)
 	{
-		if (!craft()->request->isSiteRequest())
-		{
-			return $model;
-		}
+		$globals        = sproutSeo()->schema->getGlobals();
+		$globalSettings = $globals->settings;
 
-		// Clear out any settings for our Metadata Group Level if
-		// the Advanced Customization block for those settings is not enabled
-		// @todo - we can probably refactor and simplify this repeat logic
-		// @todo - we may want to make this logic more independent of this method as well
-		// this doesn't cause any issue right now, but we don't always want to remove
-		// the data below. Perhaps distinguish between front-end and back-end?
-		$customizationSettings = $model->getCustomizationSettings();
+		// Prepare our optimized variables
+		// -------------------------------------------------------------
+		$optimizedTitle       = (!empty($model->optimizedTitle) ? $model->optimizedTitle : null);
+		$optimizedDescription = (!empty($model->optimizedDescription) ? $model->optimizedDescription : null);
+
+		// Make our images single IDs instead of an array
+		$optimizedImage          = (!empty($model->optimizedImage and is_array($model->optimizedImage)) ? $model['optimizedImage'][0] : $model->optimizedImage);
+		$model['optimizedImage'] = $optimizedImage;
+
+		// Set null values for any Advanced SEO Optimization
+		// override fields whose blocks have been disabled
+		// -------------------------------------------------------------
+		$customizationSettings = JsonHelper::decode($model->customizationSettings);
+
+		if (!$customizationSettings['basicMetaMetadataGroupEnabled'])
+		{
+			foreach ($model['basicMeta'] as $attribute => $value)
+			{
+				$model->{$attribute} = null;
+			}
+		}
 
 		if (!$customizationSettings['openGraphMetadataGroupEnabled'])
 		{
 			foreach ($model['openGraphMeta'] as $attribute => $value)
 			{
-				$model[$attribute] = null;
+				$model->{$attribute} = null;
 			}
 		}
 
@@ -483,7 +492,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		{
 			foreach ($model['twitterCardsMeta'] as $attribute => $value)
 			{
-				$model[$attribute] = null;
+				$model->{$attribute} = null;
 			}
 		}
 
@@ -491,7 +500,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		{
 			foreach ($model['geographicMeta'] as $attribute => $value)
 			{
-				$model[$attribute] = null;
+				$model->{$attribute} = null;
 			}
 		}
 
@@ -499,9 +508,25 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		{
 			foreach ($model['robotsMeta'] as $attribute => $value)
 			{
-				$model[$attribute] = null;
+				$model->{$attribute} = null;
 			}
 		}
+
+		// Set any values that don't yet exist to the optimized values
+		// -------------------------------------------------------------
+		$model->title        = !is_null($model->title) ? $model->title : $optimizedTitle;
+		$model->ogTitle      = !is_null($model->ogTitle) ? $model->ogTitle : $optimizedTitle;
+		$model->twitterTitle = !is_null($model->twitterTitle) ? $model->twitterTitle : $optimizedTitle;
+
+		$model->description        = !is_null($model->description) ? $model->description : $optimizedDescription;
+		$model->ogDescription      = !is_null($model->ogDescription) ? $model->ogDescription : $optimizedDescription;
+		$model->twitterDescription = !is_null($model->twitterDescription) ? $model->twitterDescription : $optimizedDescription;
+
+		$model->ogImage      = !is_null($model->ogImage) ? $model->ogImage : $optimizedImage;
+		$model->twitterImage = !is_null($model->twitterImage) ? $model->twitterImage : $optimizedImage;
+
+		$model->ogType      = !is_null($model->ogType) ? $model->ogType : $globalSettings['defaultOgType'];
+		$model->twitterCard = !is_null($model->twitterCard) ? $model->twitterCard : $globalSettings['defaultTwitterCard'];
 
 		return $model;
 	}
