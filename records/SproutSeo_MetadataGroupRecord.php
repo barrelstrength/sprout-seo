@@ -53,6 +53,7 @@ class SproutSeo_MetadataGroupRecord extends BaseRecord
 			'optimizedTitle'       => array(AttributeType::String),
 			'optimizedDescription' => array(AttributeType::String),
 			'optimizedImage'       => array(AttributeType::String),
+			'optimizedKeywords'    => array(AttributeType::String),
 			'customizationSettings'=> array(AttributeType::String),
 
 			'title'                => array(AttributeType::String),
