@@ -515,14 +515,66 @@ class SproutSeoVariable
 			)
 		);
 
-		$schemaGlobals    = sproutSeo()->schema->getGlobals();
-		$appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
+		$schemaGlobals = sproutSeo()->schema->getGlobals();
 
-		array_push($options, array('optgroup' => 'Custom'));
-
-		if (!array_key_exists($appendTitleValue, array('sitename' => 0)) && $appendTitleValue != '')
+		if (isset($schemaGlobals['settings']['appendTitleValue']))
 		{
-			array_push($options, array('label' => $appendTitleValue, 'value' => $appendTitleValue));
+			$appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
+
+			array_push($options, array('optgroup' => 'Custom'));
+
+			if (!array_key_exists($appendTitleValue, array('sitename' => 0)) && $appendTitleValue != '')
+			{
+				array_push($options, array('label' => $appendTitleValue, 'value' => $appendTitleValue));
+			}
+		}
+
+		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
+
+		return $options;
+	}
+
+	public function getCharacterSegmentOptions()
+	{
+		$options = array(
+			array(
+				'label' => "Select...",
+				'value' => ''
+			),
+			array(
+				'label' => "-",
+				'value' => '-'
+			),
+			array(
+				'label' => "•",
+				'value' => '•'
+			),
+			array(
+				'label' => "|",
+				'value' => '|'
+			),
+			array(
+				'label' => "/",
+				'value' => '/'
+			),
+			array(
+				'label' => ":",
+				'value' => ':'
+			),
+		);
+
+		$schemaGlobals = sproutSeo()->schema->getGlobals();
+
+		if (isset($schemaGlobals['settings']['seoDivider']))
+		{
+			$seoDivider    = $schemaGlobals['settings']['seoDivider'];
+
+			array_push($options, array('optgroup' => 'Custom'));
+
+			if (!array_key_exists($seoDivider, array('-'=>0, '•'=>1, '|'=>2, '/'=>3, ':'=>4)) && $seoDivider != '')
+			{
+				array_push($options, array('label' => $seoDivider, 'value' => $seoDivider));
+			}
 		}
 
 		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
