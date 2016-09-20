@@ -55,14 +55,14 @@
 		</div>
 		<div class="item" data-position="right" data-colspan="1">
 			<div class="pane meta">
-
 				{{ forms.textField({
 					label: "Name <span class='info'>Human readable Metadata Group name</span>"|t,
 					id: "name",
 					name: 'sproutseo[metadata][name]',
 					value: metaTags.name,
 					errors: metaTags.getErrors('name'),
-					disabled: isSitemapCustomPage ? false : true
+					readonly: not isNew,
+					class: not isNew ? 'disabled' : ''
 				}) }}
 
 				{{ forms.textField({
@@ -71,7 +71,8 @@
 					name: 'sproutseo[metadata][handle]',
 					value: metaTags.handle,
 					errors: metaTags.getErrors('handle'),
-					disabled: isSitemapCustomPage ? false : true
+					readonly: not isNew,
+					class: not isNew ? 'disabled' : ''
 				}) }}
 
 				{{ forms.textField({
@@ -80,7 +81,8 @@
 					name: 'sproutseo[metadata][sitemapUrl]',
 					value: (metaTags.sitemapUrl == '__home__') ? "/" : metaTags.sitemapUrl,
 					errors: metaTags.getErrors('sitemapUrl'),
-					disabled: isSitemapCustomPage ? false : true
+					readonly: not isNew,
+					class: not isNew ? 'disabled' : ''
 				}) }}
 
 				{% set statusInput %}
@@ -190,3 +192,4 @@
 {% endset %}
 
 {% includeJs js %}
+
