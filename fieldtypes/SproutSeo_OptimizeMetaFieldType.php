@@ -62,11 +62,11 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
-		$entryId = $this->element->id;
+		$elementId = $this->element->id;
 
 		$locale = $this->element->locale;
 
-		$values = sproutSeo()->metadata->getMetadataContentByEntryId($entryId, $locale);
+		$values = sproutSeo()->metadata->getMetadataContentByElementId($elementId, $locale);
 
 		$ogImageElements      = array();
 		$metaImageElements    = array();
@@ -139,7 +139,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$locale = $this->element->locale;
 
 		// Get existing or new MetadataModel
-		$model = sproutSeo()->metadata->getMetadataContentByEntryId($this->element->id, $locale);
+		$model = sproutSeo()->metadata->getMetadataContentByElementId($this->element->id, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -173,7 +173,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		}
 
 		// Add the entry ID to the field data we will submit for Sprout SEO
-		$attributes['entryId'] = $this->element->id;
+		$attributes['elementId'] = $this->element->id;
 		$attributes['locale']  = $locale;
 
 		// Grab all the other Sprout SEO fields.

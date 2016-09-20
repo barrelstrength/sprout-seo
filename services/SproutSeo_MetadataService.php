@@ -141,7 +141,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 					if (isset($elementModel->id))
 					{
-						$response = array('entryId' => $elementModel->id);
+						$response = array('elementId' => $elementModel->id);
 					}
 				}
 				break;
@@ -338,17 +338,17 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	/**
 	 * Get a Meta Tag Content record by Entry ID
 	 *
-	 * @param $entryId
+	 * @param $elementId
 	 * @param $locale
 	 *
 	 * @return BaseModel
 	 */
-	public function getMetadataContentByEntryId($entryId, $locale)
+	public function getMetadataContentByElementId($elementId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_metadatacontent')
-			->where('entryId = :entryId', array(':entryId' => $entryId))
+			->where('elementId = :elementId', array(':elementId' => $elementId))
 			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
 

@@ -170,7 +170,7 @@
 		<div class="blocks">
 
 			<div class="matrixblock fields-basicMeta"
-				{% if customizationSettings.basicMetaMetadataGroupEnabled == 0 or not settings.showBasicMeta %} style="display:none;" {% endif %}
+				{% if (customizationSettings.basicMetaMetadataGroupEnabled is defined and customizationSettings.basicMetaMetadataGroupEnabled == 0) or not settings.showBasicMeta %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">

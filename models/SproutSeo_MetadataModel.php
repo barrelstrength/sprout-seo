@@ -52,7 +52,7 @@ class SproutSeo_MetadataModel extends BaseModel
 		// name => title, url => canonical, default not in use...
 		$metaTags = array(
 			'id'                    => array(AttributeType::Number),
-			'entryId'               => array(AttributeType::Number),
+			'elementId'               => array(AttributeType::Number),
 			'default'               => array(AttributeType::String),
 			'name'                  => array(AttributeType::String),
 			'handle'                => array(AttributeType::String),
@@ -190,11 +190,11 @@ class SproutSeo_MetadataModel extends BaseModel
 	 */
 	protected function getEntryOverride($overrideInfo)
 	{
-		if (isset($overrideInfo['entryId']))
+		if (isset($overrideInfo['elementId']))
 		{
 			// @todo - revisit when adding internationalization
 			$locale        = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$entryOverride = sproutSeo()->metadata->getMetadataContentByEntryId($overrideInfo['entryId'], $locale);
+			$entryOverride = sproutSeo()->metadata->getMetadataContentByElementId($overrideInfo['elementId'], $locale);
 
 			return $entryOverride->getAttributes();
 		}
