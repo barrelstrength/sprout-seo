@@ -17,8 +17,10 @@ class SproutSeo_MetadataController extends BaseController
 		$metadataGroupId = ($segment == 'new') ? null : $segment;
 
 		// Get our Meta Model
-		$metaTags = sproutSeo()->metadata->getMetadataGroupById($metadataGroupId);
-		$isNew    = $metaTags->id != null ? false : true;
+		$metaTags    = sproutSeo()->metadata->getMetadataGroupById($metadataGroupId);
+		$isNew       = $metaTags->id != null ? false : true;
+		$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
+		$elementInfo = null;
 
 		// Check if we need to create a new metadata group from an existing url enabled section
 		// This appears to be for when a Metadata Group is clicked on for the first time.
@@ -37,7 +39,6 @@ class SproutSeo_MetadataController extends BaseController
 			$metaTags->type           = $elementType;
 
 			// Just trying to get the url
-			$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
 			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $elementType);
 
 			if ($elementInfo != null)
@@ -108,6 +109,11 @@ class SproutSeo_MetadataController extends BaseController
 		// Set elementType
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
+		if (!$isNew)
+		{
+			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $metaTags->type);
+		}
+
 		$this->renderTemplate('sproutseo/metadata/_edit', array(
 			'metaImageElements'    => $metaImageElements,
 			'metadataGroupId'      => $metadataGroupId,
@@ -118,7 +124,8 @@ class SproutSeo_MetadataController extends BaseController
 			'elementType'          => $elementType,
 			'settings'             => $settings,
 			'isSitemapCustomPage'  => $isSitemapCustomPage,
-			'isNew'                => $isNew or $isSitemapCustomPage
+			'isNew'                => $isNew or $isSitemapCustomPage,
+			'elementInfo'          => $elementInfo
 		));
 	}
 

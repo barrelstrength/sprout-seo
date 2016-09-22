@@ -379,8 +379,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					if (isset($settings['elementType']) && isset($settings['elementGroupId']))
 					{
 						$elementInfo = array(
-							"elementType"    => $settings['elementType'],
-							"elementGroupId" => $settings['elementGroupId'],
+							"elementType"            => $settings['elementType'],
+							"elementGroupId"         => $settings['elementGroupId'],
+							"matchedElementVariable" => $settings['matchedElementVariable'],
+							"name"                   => $settings['name'],
 						);
 
 						return $elementInfo;
