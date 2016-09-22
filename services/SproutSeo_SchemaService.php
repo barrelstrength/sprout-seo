@@ -295,6 +295,21 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 		return $array;
 	}
 
+	public function getGooglePlus($socials)
+	{
+		$googlePlus = null;
+
+		foreach ($socials as $key => $social)
+		{
+			if ($social['profileName'] == "Google+")
+			{
+				$googlePlus = $social['url'];
+			}
+		}
+
+		return $googlePlus;
+	}
+
 	/**
 	 * @param array $oldArray
 	 * @param       $replaceKey

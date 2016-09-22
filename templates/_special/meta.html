@@ -11,6 +11,9 @@
 	<meta name='{{ name }}' content='{{ value }}' />
 {% endswitch %}
 {% endfor %}
+{% if googlePlus is defined and googlePlus %}
+	<link rel="publisher" href="{{googlePlus}}" />
+{% endif %}
 {% for name, value in meta.robots %}
 {% switch name %}
 {% case "canonical" %}

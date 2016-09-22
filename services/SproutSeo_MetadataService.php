@@ -31,11 +31,14 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	{
 		$globals = sproutSeo()->schema->getGlobals();
 
+		$googlePlus = sproutSeo()->schema->getGooglePlus($globals['social']);
+
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
 		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
-			'globals' => $globals,
-			'meta'    => $prioritizedMetaTagModel->getMetaTagData()
+			'globals'    => $globals,
+			'meta'       => $prioritizedMetaTagModel->getMetaTagData(),
+			'googlePlus' => $googlePlus
 		));
 
 		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
