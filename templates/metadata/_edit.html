@@ -55,6 +55,7 @@
 		</div>
 		<div class="item" data-position="right" data-colspan="1">
 			<div class="pane meta">
+
 				{{ forms.textField({
 					label: "Name <span class='info'>Human readable Metadata Group name</span>"|t,
 					id: "name",
@@ -84,6 +85,24 @@
 					readonly: not isNew,
 					class: not isNew ? 'disabled' : ''
 				}) }}
+
+				<div class="field">
+					<div class="heading">
+						<label>{{ "URL Group"|t }}</label>
+					</div>
+					<div class="input">
+						<h6>{{ elementInfo is not empty ? elementInfo['name'] : "Custom Page"|t }}</h6>
+					</div>
+				</div>
+
+				<div class="field">
+					<div class="heading">
+						<label>{{ "Element"|t }} <span class="info">{% if elementInfo is not empty %}{{ "The Matched Element variable <code>{matchedElement}</code> is available to your URL-enabled pages"|t({ 'matchedElement' : elementInfo['matchedElementVariable'] })|raw }}{% else %}{{ "Custom Pages do not have any pre-prepared Elements available to the page"|t }}{% endif %}</span></label>
+					</div>
+					<div class="input">
+						<h6>{{ elementInfo is not empty ? elementInfo['matchedElementVariable'] : "–" }}</h6>
+					</div>
+				</div>
 
 				{% set statusInput %}
 
@@ -151,10 +170,6 @@
 					required: false
 				}) }}
 
-			</div>
-
-			<div class="pane meta">
-				{{"Select a mapping for the "~elementInfo['name']~" "~elementInfo['matchedElementVariable']~" variable." }}
 			</div>
 
 			<div class="pane meta">
