@@ -1,7 +1,7 @@
 {% extends "sproutseo/_layouts/sitemap" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = "Sitemap"|t %}
+{% set title = "Sitemap Metadata"|t %}
 
 {% set priorityList = {
 	'1.0': '1.0 ↑ Highest'|t,
@@ -27,94 +27,190 @@
 	'never': 'Never'|t
 } %}
 
-{% macro isSelected(target) %}
-	{% if target %}checked="checked"{% endif %}
-{% endmacro %}
-{% import _self as checkbox %}
-
+{% set pluginSettings = craft.sproutSeo.getSettings() %}
 {% set customPages = craft.sproutSeo.getAllCustomPages() %}
 {% set sitemaps    = craft.sproutSeo.getAllSitemaps() %}
 {% set customNames = craft.sproutSeo.getAllCustomNames() %}
 
 {% set extraPageHeaderHtml %}
-	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('sproutseo/metadata/new') }}">New page</a>
-	</div>
+
 {% endset %}
 
-{% set content %}
+{% set body %}
 
-	{% for type, elementGroups in sitemaps %}
+	<div class="pane">
 
-		{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
+		<div class="header" style="display: flex;align-items: center;">
+			<div style="flex-grow: 1;flex-">
+				<h3 style="text-transform: uppercase;">URL-Enabled Sections</h3>
+			</div>
+		</div>
 
-		<table class="data fullwidth sitemap-settings">
-			<thead>
-				<th style="padding-left:9px;width:30%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
-				<th style="width:32%;">{{ "URL Pattern"|t }}</th>
-				<th style="width:15%;">{{ "Priority"|t }} {% if loop.index == 1 %} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span>{% endif %}</th>
-				<th style="width:15%;">{{ "Change Frequency"|t }} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span></th>
-				<th style="width:8%;text-align: center;">{{ "Enabled"|t }} {% if loop.index == 1 %}<span class="info">{{ "Make the content in this section appear in your sitemap."|t }}</span>{% endif %}</th>
-				<th class="thin"></th>
-			</thead>
-			<tbody>
+		{% for type, elementGroups in sitemaps %}
 
-			{#{% if loop.index == 1 %} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span>{% endif %}#}
+			{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
 
-			{% for elementGroup in elementGroups %}
+			<table class="data fullwidth sitemap-settings">
+				<thead>
+					<th style="padding-left:9px;width:30%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
+					<th style="width:32%;">{{ "URL Pattern"|t }}</th>
+					<th style="width:15%;">{{ "Priority"|t }} {% if loop.index == 1 %} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span>{% endif %}</th>
+					<th style="width:15%;">{{ "Change Frequency"|t }} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span></th>
+					<th style="width:8%;text-align: center;">{{ "Enabled"|t }} {% if loop.index == 1 %}<span class="info">{{ "Make the content in this section appear in your sitemap."|t }}</span>{% endif %}</th>
+					<th class="thin"></th>
+				</thead>
+				<tbody>
 
-				{% if elementGroup.name is defined %}
-					{% set sitemap = null %}
-					{% if elementGroup.settings is defined %}
-						{% set sitemap = elementGroup.settings %}
-					{% endif %}
+				{#{% if loop.index == 1 %} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span>{% endif %}#}
 
-					{% if sitemap.id is defined %}
-						{% set sitemapId = sitemap.id %}
-					{% else %}
-					  {% set sitemapId = 'new-' ~ loop.index %}
-					{% endif %}
+				{% for elementGroup in elementGroups %}
 
-					{# elementGroup => type- #}
-					{% set sitemapId = type|lower~'-'~ sitemapId %}
+					{% if elementGroup.name is defined %}
+						{% set sitemap = null %}
+						{% if elementGroup.settings is defined %}
+							{% set sitemap = elementGroup.settings %}
+						{% endif %}
 
-					{% set groupInfo = {
-						'groupName': elementGroup.name,
-						'sitemapId': sitemapId,
-						'elementGroupId': elementGroup.id
-					} %}
+						{% if sitemap.id is defined %}
+							{% set sitemapId = sitemap.id %}
+						{% else %}
+						  {% set sitemapId = 'new-' ~ loop.index %}
+						{% endif %}
 
-					{% set metadataInfo = craft.sproutSeo.getMetadataInfo(groupInfo) %}
-					{% if metadataInfo.element %}
-						<tr data-rowid="{{ sitemapId }}" data-type="section">
-							<td>
-								<strong style="display:inline-block;padding:7px 10px;">
+						{# elementGroup => type- #}
+						{% set sitemapId = type|lower~'-'~ sitemapId %}
 
-									{% if elementGroup.settings is defined and elementGroup.settings.enabled %}
-										<span class="status live"></span>
+						{% set groupInfo = {
+							'groupName': elementGroup.name,
+							'sitemapId': sitemapId,
+							'elementGroupId': elementGroup.id
+						} %}
+
+						{% set metadataInfo = craft.sproutSeo.getMetadataInfo(groupInfo) %}
+						{% if metadataInfo.element %}
+							<tr data-rowid="{{ sitemapId }}" data-type="section">
+								<td>
+									<strong style="display:inline-block;padding:7px 10px;">
+
+										{% if elementGroup.settings is defined and elementGroup.settings.enabled %}
+											<span class="status live"></span>
+										{% else %}
+											<span class="status disabled"></span>
+										{% endif %}
+
+										{{ elementGroup.name }}
+
+										<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][id]" value="{{ sitemapId }}">
+										<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
+
+									</strong>
+								</td>
+								<td>
+									{% if metadataInfo.element.urlFormat == '__home__' %}
+										<span data-icon="home" title="Homepage"></span>
 									{% else %}
-										<span class="status disabled"></span>
+										<code>{{ metadataInfo.element.urlFormat }}</code>
 									{% endif %}
+								</td>
+								<td>
+									{{ forms.selectField({
+										name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapPriority]',
+										options: priorityList,
+										value: (sitemap.sitemapPriority is defined ? sitemap.sitemapPriority : 0.5),
+										errors: "",
+										required: false
+									}) }}
+								</td>
+								<td>
+									{{ forms.selectField({
+										name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapChangeFrequency]',
+										options: frequencyList,
+										value: (sitemap.sitemapChangeFrequency is defined ? sitemap.sitemapChangeFrequency : 'weekly'),
+										errors: "",
+										required: false
+									}) }}
+								</td>
+								<td style="text-align: center;">
+									{{ forms.lightswitch({
+										name: 'sproutseo[sitemap][' ~ sitemapId ~ '][enabled]',
+										on: sitemap.enabled is defined and sitemap.enabled == 1 ? true : false,
+										small: true
+									}) }}
+								</td>
+								<td>
+									{# @todo - find a better way to get the columns to be even. This tag is
+									unnecessary aside from helping to style the table column widths evenly. #}
+									<span style="display: inline-block;width:13px;"></span>
+								</td>
+							</tr>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+				</tbody>
+			</table>
 
-									{{ elementGroup.name }}
+			<br>
 
-									<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][id]" value="{{ sitemapId }}">
-									<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
+		{% endfor %}
 
-								</strong>
+	</div>
+
+	{% if pluginSettings.enableCustomSections %}
+
+		{% if customPages|length %}
+
+		<div class="pane">
+
+			<div class="header" style="display: flex;align-items: center;">
+				<div style="flex-grow: 1;flex-">
+					<h3 style="text-transform: uppercase;">Custom Sections</h3>
+				</div>
+				<div style="flex-shrink: 0;">
+					<div class="buttons right">
+						<a class="btn submit add icon" href="{{ url('sproutseo/metadata/new') }}">{{ "New section"|t }}</a>
+					</div>
+				</div>
+			</div>
+
+			<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
+				<thead>
+					<th style="padding-left:9px;width:30%">{{ "Custom Sections"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
+					<th style="width:32%;">{{ "URL Pattern"|t }}</th>
+					<th style="width:15%;">{{ "Priority"|t }}</th>
+					<th style="width:15%;">{{ "Change Frequency"|t }}</th>
+					<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
+					<th class="thin"></th>
+				</thead>
+				<tbody>
+
+					{% for page in customPages %}
+						{% set sitemapId = "customUrl-"~page.id %}
+
+						<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.sitemapUrl }}">
+							<td>
+								<div style="display:inline-block;padding:7px 0 7px 10px;">
+								{% if (page.enabled is defined and page.enabled == 1) %}
+									<span class="status live"></span>
+								{% else %}
+									<span class="status disabled"></span>
+								{% endif %}
+								</div>
+
+								<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][id]" value="{{ sitemapId }}">
+
+								<strong>{{ page.title }}</strong>
+
 							</td>
 							<td>
-								{% if metadataInfo.element.urlFormat == '__home__' %}
-									<span data-icon="home" title="Homepage"></span>
-								{% else %}
-									<code>{{ metadataInfo.element.urlFormat }}</code>
-								{% endif %}
+								<code>
+									{{ page.sitemapUrl }}
+								</code>
 							</td>
 							<td>
 								{{ forms.selectField({
 									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapPriority]',
 									options: priorityList,
-									value: (sitemap.sitemapPriority is defined ? sitemap.sitemapPriority : 0.5),
+									value: (page.sitemapPriority is defined ? page.sitemapPriority : 0.5),
 									errors: "",
 									required: false
 								}) }}
@@ -123,95 +219,31 @@
 								{{ forms.selectField({
 									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapChangeFrequency]',
 									options: frequencyList,
-									value: (sitemap.sitemapChangeFrequency is defined ? sitemap.sitemapChangeFrequency : 'weekly'),
+									value: (page.sitemapChangeFrequency is defined ? page.sitemapChangeFrequency : 'weekly'),
 									errors: "",
 									required: false
 								}) }}
 							</td>
 							<td style="text-align: center;">
-								<input type="checkbox" name="sproutseo[sitemap][{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
+								{{ forms.lightswitch({
+									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][enabled]',
+									on: page.enabled is defined and page.enabled == 1 ? true : false,
+									small: true
+								}) }}
 							</td>
 							<td>
-								{# @todo - find a better way to get the columns to be even. This tag is
-								unnecessary aside from helping to style the table column widths evenly. #}
-								<span style="display: inline-block;width:13px;"></span>
+								<a class="delete icon" title="Delete"></a>
 							</td>
 						</tr>
-					{% endif %}
-				{% endif %}
-			{% endfor %}
-			</tbody>
-		</table>
-		<br>
 
-	{% endfor %}
+					{% endfor %}
 
-	{% if customPages|length %}
+				</tbody>
+			</table>
 
-	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
-		<thead>
-			<th style="padding-left:9px;width:30%">{{ "Custom Pages"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
-			<th style="width:32%;">{{ "URL Pattern"|t }}</th>
-			<th style="width:15%;">{{ "Priority"|t }}</th>
-			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
-			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
-			<th class="thin"></th>
-		</thead>
-		<tbody>
+		</div>
 
-			{% for page in customPages %}
-				{% set sitemapId = "customUrl-"~page.id %}
-
-				<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.sitemapUrl }}">
-					<td>
-						<div style="display:inline-block;padding:7px 0 7px 10px;">
-						{% if (page.enabled is defined and page.enabled == 1) %}
-							<span class="status live"></span>
-						{% else %}
-							<span class="status disabled"></span>
-						{% endif %}
-						</div>
-
-						<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][id]" value="{{ sitemapId }}">
-
-						<strong>{{ page.title }}</strong>
-
-					</td>
-					<td>
-						<code>
-							{{ page.sitemapUrl }}
-						</code>
-					</td>
-					<td>
-						{{ forms.selectField({
-							name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapPriority]',
-							options: priorityList,
-							value: (page.sitemapPriority is defined ? page.sitemapPriority : 0.5),
-							errors: "",
-							required: false
-						}) }}
-					</td>
-					<td>
-						{{ forms.selectField({
-							name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapChangeFrequency]',
-							options: frequencyList,
-							value: (page.sitemapChangeFrequency is defined ? page.sitemapChangeFrequency : 'weekly'),
-							errors: "",
-							required: false
-						}) }}
-					</td>
-					<td style="text-align: center;">
-						<input type="checkbox" name="sproutseo[sitemap][{{ sitemapId }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
-					</td>
-					<td>
-						<a class="delete icon" title="Delete"></a>
-					</td>
-				</tr>
-
-			{% endfor %}
-
-		</tbody>
-	</table>
+		{% endif %}
 
 	{% endif %}
 

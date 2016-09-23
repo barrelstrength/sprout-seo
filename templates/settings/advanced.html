@@ -62,6 +62,14 @@
       }) }}
 
       {{ forms.lightswitchField({
+        label: "Enable custom Section Metadata and Sitemap Metadata sections"|t,
+        instructions: "By default, Section and Sitemap metadata is enabled for all URL-enabled Sections. If you need to manage Sections with Custom URL requirements, enable this setting."|t,
+        name: 'enableCustomSections',
+        on: (settings.enableCustomSections is empty ? false : true),
+        onLabel: "Enable"|t
+      }) }}
+
+      {{ forms.lightswitchField({
         label: "Enable custom meta tag template"|t,
         instructions: "Enable this setting if you wish to override the default meta tag templates and provide your own custom templates."|t,
         name: 'toggleTemplateFolderOverride',

@@ -151,6 +151,7 @@ class SproutSeoPlugin extends BasePlugin
 			'twitterCard'           => array(AttributeType::String, 'default' => null),
 			'ogType'                => array(AttributeType::String, 'default' => null),
 			'localeIdOverride'      => array(AttributeType::String, 'default' => null),
+			'enableCustomSections'  => array(AttributeType::Bool, 'default' => false),
 			'enableCodeOverrides'   => array(AttributeType::Bool, 'default' => false),
 			'advancedCustomization' => array(AttributeType::Bool, 'default' => false),
 			'templateFolder'        => array(AttributeType::String, 'default' => null),

@@ -57,6 +57,20 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 				$seoSettings->advancedCustomization;
 		}
 
+		if (isset($settings["enableCodeOverrides"]))
+		{
+			$seoSettings->enableCodeOverrides = isset($settings["enableCodeOverrides"]) ?
+				$settings["enableCodeOverrides"] :
+				$seoSettings->enableCodeOverrides;
+		}
+
+		if (isset($settings["enableCustomSections"]))
+		{
+			$seoSettings->enableCustomSections = isset($settings["enableCustomSections"]) ?
+				$settings["enableCustomSections"] :
+				$seoSettings->enableCustomSections;
+		}
+
 		if (isset($settings['toggleTemplateFolderOverride']) and isset($settings["templateFolder"]))
 		{
 			if (isset($settings['toggleTemplateFolderOverride']) and $settings['toggleTemplateFolderOverride'] == 0)

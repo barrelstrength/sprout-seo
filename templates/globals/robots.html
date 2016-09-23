@@ -1,8 +1,6 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = "Robots"|t %}
-
 {% set settings = craft.sproutSeo.getSettings() %}
 {% set values = { robots : craft.sproutSeo.getGlobalRobots } %}
 

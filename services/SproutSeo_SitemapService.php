@@ -53,7 +53,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$model->sitemapPriority        = $attributes->sitemapPriority;
 		$model->sitemapChangeFrequency = $attributes->sitemapChangeFrequency;
 		$model->isSitemapCustomPage    = 0;
-		$model->enabled                = ($attributes->enabled == 'true') ? 1 : 0;
+		$model->enabled                = ($attributes->enabled == 1) ? 1 : 0;
 		$model->dateUpdated            = DateTimeHelper::currentTimeForDb();
 		$model->uid                    = StringHelper::UUID();
 
@@ -67,7 +67,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 		else
 		{
-			$result = craft()->db->createCommand()
+			craft()->db->createCommand()
 				->update(
 					'sproutseo_metadatagroups',
 					$model->getAttributes(),

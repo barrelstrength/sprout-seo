@@ -11,6 +11,7 @@ class SproutSeo_SettingsModel extends BaseModel
 			'appendTitleValue'      => AttributeType::Bool,
 			'seoDivider'            => AttributeType::String,
 			'localeIdOverride'      => AttributeType::String,
+			'enableCustomSections'  => AttributeType::Bool,
 			'enableCodeOverrides'   => AttributeType::Bool,
 			'advancedCustomization' => AttributeType::Bool,
 			'templateFolder'        => AttributeType::String,

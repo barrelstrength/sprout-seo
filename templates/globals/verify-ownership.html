@@ -2,8 +2,6 @@
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
 
-{% set title = "Verify Ownership"|t %}
-
 {% set content %}
 	{% set schemaType = "ownership" %}
 	{% set verifyOwnershipOptions = craft.sproutSeo.getFinalOptions(schemaType, 'service') %}

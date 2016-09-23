@@ -2,27 +2,27 @@
 
 	Craft.SproutSeoSitemap = Garnish.Base.extend(
 	{
-		$checkboxes:      null,
+		$lightswitches:   null,
 		$selectDropdowns: null,
 
 		$customPageUrls: null,
 
-		$status:          null,
-		$id:              null,
-		$elementGroupId:  null,
+		$status:                 null,
+		$id:                     null,
+		$elementGroupId:         null,
 		$sitemapUrl:             null,
 		$sitemapPriority:        null,
 		$sitemapChangeFrequency: null,
-		$enabled:         null,
+		$enabled:                null,
 
 		$addCustomPageButton: null,
 
 		init: function() {
-			this.$checkboxes      = $('.sitemap-settings input[type="checkbox"]');
+			this.$lightswitches   = $('.sitemap-settings .lightswitch');
 			this.$selectDropdowns = $('.sitemap-settings select');
 			this.$customPageUrls  = $('.sitemap-settings input.sitemap-custom-url');
 
-			this.addListener(this.$checkboxes, 'change', 'onChange');
+			this.addListener(this.$lightswitches, 'click', 'onChange');
 			this.addListener(this.$selectDropdowns, 'change', 'onChange');
 			this.addListener(this.$customPageUrls, 'change', 'onChange');
 		},
@@ -37,19 +37,19 @@
 			this.sitemapUrl             = $('input[name="sproutseo[sitemap][' + rowId + '][sitemapUrl]"]').val();
 			this.sitemapPriority        = $('select[name="sproutseo[sitemap][' + rowId + '][sitemapPriority]"]').val();
 			this.sitemapChangeFrequency = $('select[name="sproutseo[sitemap][' + rowId + '][sitemapChangeFrequency]"]').val();
-			this.enabled                = $('input[name="sproutseo[sitemap][' + rowId + '][enabled]"]').is(":checked");
+			this.enabled                = $('input[name="sproutseo[sitemap][' + rowId + '][enabled]"]').val();
 
 			// @todo - clean up logging
-			console.log('new request');
-			console.log(this.status);
-			console.log(this.id);
-			console.log(this.elementGroupId);
-			console.log(this.sitemapUrl);
-			console.log(this.sitemapPriority);
-			console.log(this.sitemapChangeFrequency);
+			//console.log('new request');
+			//console.log(this.status);
+			//console.log(this.id);
+			//console.log(this.elementGroupId);
+			//console.log(this.sitemapUrl);
+			//console.log(this.sitemapPriority);
+			//console.log(this.sitemapChangeFrequency);
 			console.log(this.enabled);
-			console.log(this.categoryGroupId);
-			console.log('end request');
+			//console.log(this.categoryGroupId);
+			//console.log('end request');
 
 			if (this.enabled) {
 				this.status.removeClass('disabled');
@@ -68,6 +68,7 @@
 				sitemapChangeFrequency: this.sitemapChangeFrequency,
 				enabled:                this.enabled,
 			}, $.proxy(function(response, textStatus) {
+
 				if (textStatus == 'success') {
 					if (response.lastInsertId) {
 						var keys     = rowId.split("-");
