@@ -11,7 +11,7 @@ class SproutSeo_MetadataContentRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'entryId'               => array(AttributeType::Number, 'required' => true),
+			'elementId'             => array(AttributeType::Number, 'required' => true),
 			'locale'                => array(AttributeType::Locale, 'required' => true),
 			'optimizedTitle'        => array(AttributeType::String, 'required' => false),
 			'optimizedDescription'  => array(AttributeType::String, 'required' => false),
