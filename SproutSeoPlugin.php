@@ -87,7 +87,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSettingsUrl()
 	{
-		return 'sproutseo/settings';
+		return 'sproutseo/settings/general';
 	}
 
 	/* --------------------------------------------------------------
