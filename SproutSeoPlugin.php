@@ -297,6 +297,45 @@ class SproutSeoPlugin extends BasePlugin
 		sproutSeo()->redirects->installDefaultSettings();
 		sproutSeo()->schema->installDefaultGlobals();
 	}
+
+	/**
+	 * Override SproutImportPlugin::log() method to allow the logging of
+	 * multiple messages and arrays
+	 *
+	 * Examples:
+	 *
+	 * Standard log:
+	 * SproutImportPlugin::log($msg);
+	 *
+	 * Enhanced log:
+	 * $messages['thing1'] = Craft::t('Something happened');
+	 * $messages['thing2'] = $entry->getErrors();
+	 * SproutImportPlugin::log($messages);
+	 *
+	 * @param string $messages
+	 * @param string $level
+	 * @param bool   $force
+	 *
+	 * @return null - writes log to logfile
+	 */
+	public static function log($messages, $level = LogLevel::Info, $force = false)
+	{
+		$msg = "";
+
+		if (is_array($messages))
+		{
+			foreach ($messages as $message)
+			{
+				$msg .= PHP_EOL . print_r($message, true);
+			}
+		}
+		else
+		{
+			$msg = $messages;
+		}
+
+		parent::log($msg, $level = LogLevel::Info, $force = false);
+	}
 }
 
 /**
