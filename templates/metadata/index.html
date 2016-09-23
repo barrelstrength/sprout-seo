@@ -186,69 +186,9 @@
 
 	{% endif %}
 
-	<style type="text/css">
-	.sitemap-custom-url:focus {
-		border: 1px solid rgba(0, 0, 0, 0.15);
-		padding: 6px 4px;
-		outline: none;
-	}
-	.sitemap-custom-url {
-		display: inline-block;
-		margin-left:-4px;
-		width: 85%;
-		border: none;
-		padding: 7px 5px;
-		background: #fff;
-		overflow: hidden;
-	}
-	.sitemap-settings {
-		margin-top: 30px;
-	}
-	.sitemap-settings:first-of-type {
-		margin-top: 0;
-	}
-	.sitemap-settings:last-of-type {
-		margin-bottom: 30px;
-	}
-
-	/* Optimized Meta Icons */
-	.sprout-metadata-status {
-		position: relative;
-		margin-top: -7px;
-	}
-	.sprout-metadata-status span {
-		display: inline-block;
-		position: absolute;
-	}
-
-	.sprout-metadata-status .icon-sitemap {
-
-	}
-	.sprout-metadata-status .icon-edit {
-		padding-left: 21px;
-		top: 1px;
-	}
-	.sprout-metadata-status .icon-search {
-		padding-left: 40px;
-	}
-	.sprout-metadata-status .icon-facebook {
-		padding-left: 57px;
-		top: 1px;
-	}
-	.sprout-metadata-status .icon-twitter {
-		padding-left: 75px;
-		top: 1px;
-	}
-
-
-	.sproutseo-status-pass {
-		/*color: #27AE60; // enabled green*/
-		color: #29323d; // home icon dark grey
-	}
-	</style>
-
 {% endset %}
 
+{% includeCssResource "sproutseo/css/sproutseo.css" %}
 {% includeCssResource "sproutseo/css/fields.css" %}
 {% includeJsResource "sproutseo/js/metadata.js" %}
 
