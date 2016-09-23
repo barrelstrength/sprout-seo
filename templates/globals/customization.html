@@ -15,43 +15,31 @@
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
 		<input type="hidden" name="schemaType" value="{{ schemaTypeFormSubmit }}">
 
-		<div class="field">
-			<div class="heading">
-				<label for="siteOwnerType">{{ 'Select the character that will be used between Title segments'|t}}</label>
-				<div class="instructions"><p>{{"This character will be used in between your title segments, i.e. "|t}}<i> {{ "Blog Post Title – "  ~ siteName|t }} </i></p></div>
-			</div>
-			<div class="input">
-				<div class="field sprout-selectother">
-					{% set dividerOptions = craft.sproutSeo.getCharacterSegmentOptions() %}
+		{% set dividerOptions = craft.sproutSeo.getCharacterSegmentOptions() %}
 
-					{{ sproutFields.selectOther({
-						name: 'sproutseo[schema][settings][seoDivider]',
-						options: dividerOptions ,
-						value: settings.seoDivider is defined ? settings.seoDivider : null,
-						otherPlaceholderText: 'Custom divider'|t
-					}) }}
-				</div>
-			</div>
-		</div>
+		{{ forms.field({
+			label: 'Select the character that will be used between Title segments'|t,
+			instructions: "This character will be used in between your title segments, i.e. Blog Post Title – {sitename}"|t({ 'sitename': siteName }),
+			first: true,
+		}, sproutFields.selectOther({
+			name: 'sproutseo[schema][settings][seoDivider]',
+			options: dividerOptions ,
+			value: settings.seoDivider is defined ? settings.seoDivider : null,
+			otherPlaceholderText: 'Custom Divider'|t
+		})) }}
 
-		<div class="field">
-			<div class="heading">
-				<label for="siteOwnerType">{{ 'Append value to all Meta Titles'|t}}</label>
-				<div class="instructions"><p>{{"Append your website name or a custom value at the end of all of your Meta Titles, i.e."|t}}<i> {{"Article Title - " ~ siteName|t }} </i></p></div>
-			</div>
-			<div class="input">
-				<div class="field sprout-selectother">
-					{% set titleOptions = craft.sproutSeo.getAppenedMetaTitleOptions() %}
+		{% set titleOptions = craft.sproutSeo.getAppenedMetaTitleOptions() %}
 
-					{{ sproutFields.selectOther({
-						name: 'sproutseo[schema][settings][appendTitleValue]',
-						options: titleOptions ,
-						value: settings.appendTitleValue is defined ? settings.appendTitleValue : null,
-						otherPlaceholderText: 'Custom title'|t
-					}) }}
-				</div>
-			</div>
-		</div>
+		{{ forms.field({
+			label: 'Append value to all Meta Titles'|t,
+			instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. Article Title - {sitename}"|t({ 'sitename': siteName }),
+			first: true,
+		}, sproutFields.selectOther({
+			name: 'sproutseo[schema][settings][appendTitleValue]',
+			options: titleOptions ,
+			value: settings.appendTitleValue is defined ? settings.appendTitleValue : null,
+			otherPlaceholderText: 'Custom Value'|t
+		})) }}
 
 		{% set ogTypesOptions = {
 			'' : 'Select Open Graph Type...'|t,

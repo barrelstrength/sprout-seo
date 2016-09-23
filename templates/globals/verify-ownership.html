@@ -46,39 +46,30 @@
 			<tbody>
 
 			{% for property in globals.ownership %}
+
 				<tr data-id="{{ loop.index }}">
-
 					<td>
-
-						<div class="field sprout-selectother">
-							{{ sproutFields.selectOther({
-								name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][0]',
-								options: verifyOwnershipOptions,
-								value: property.service
-							}) }}
-						</div>
-
+						{{ sproutFields.selectOther({
+							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][0]',
+							options: verifyOwnershipOptions,
+							value: property.service,
+							otherPlaceholderText: 'Name of Service'|t
+						}) }}
 					</td>
 					<td>
-
 						{{ forms.text({
 							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][1]',
 							value: property.metaTag,
 							errors: ''
 						}) }}
-
 					</td>
-
 					<td>
-
 						{{ forms.text({
 							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][2]',
 							value: property.verificationCode,
 							errors: ''
 						}) }}
-
 					</td>
-
 					<td class="thin action"><a class="move icon" title="Reorder"></a></td>
 					<td class="thin action"><a class="delete icon" title="Delete"></a></td>
 				</tr>

@@ -46,18 +46,15 @@
 			<tbody>
 
 				{% for contact in globals.contacts %}
+
 				<tr data-id="{{ loop.index }}">
-
 					<td>
-
-						<div class="field sprout-selectother">
-							{{ sproutFields.selectOther({
-								name: 'sproutseo[schema][contacts][' ~ loop.index ~ '][0]',
-								options: contactOptions,
-								value: contact.contactType,
-								otherPlaceholderText: 'Custom Type'|t
-							}) }}
-						</div>
+						{{ sproutFields.selectOther({
+							name: 'sproutseo[schema][contacts][' ~ loop.index ~ '][0]',
+							options: contactOptions,
+							value: contact.contactType,
+							otherPlaceholderText: 'Custom Contact Type'|t
+						}) }}
 					</td>
 					<td>
 						{{ forms.text({

@@ -257,28 +257,18 @@
 		{# These fields should only display when 'Person' is selected #}
 		<div class="person-info {% if globals.getType() == 'Organization' %}hidden{% endif %}">
 
-			<div class="field">
+			{% set genderOptions = craft.sproutseo.getGenderOptions() %}
 
-				<div class="heading">
-					<label for="siteOwnerType">{{ "Gender"|t}}</label>
-				</div>
+			{{ forms.field({
+				label: "Gender"|t,
+				first: true,
+			}, sproutFields.selectOther({
+				name: 'sproutseo[schema][identity][gender]',
+				options: genderOptions ,
+				value: schema['gender'] is defined ? schema.gender : null,
+				otherPlaceholderText: 'Custom Gender'|t
+			})) }}
 
-				<div class="input">
-
-					<div class="field sprout-selectother">
-
-						{%set genderOptions = craft.sproutseo.getGenderOptions() %}
-
-						{{ sproutFields.selectOther({
-							name: 'sproutseo[schema][identity][gender]',
-							options: genderOptions ,
-							value: schema['gender'] is defined ? schema.gender : null,
-							otherPlaceholderText: 'Custom Type'|t
-						}) }}
-
-					</div>
-				</div>
-			</div>
 			<hr>
 
 		</div>
