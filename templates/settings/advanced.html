@@ -23,7 +23,7 @@
 
       {{ forms.lightswitchField({
         label: "Override default locale behavior"|t,
-        instructions: "Locales in Craft can be used for multi-language or multi-site behavior. If you are using Craft's Locales for multi-site behavior, enable this setting to choose your website locale. If you are using locales as intended for language-specific content, leave this setting disabled."|t,
+        instructions: "By default we assume you are using Craft Locales to manage multiple languages on your site. Locales in Craft, however, can be used for multi-language or multi-site behavior. If you are using Craft's Locales for multi-site behavior, enable this setting and select your website locale."|t,
         name: 'toggleLocaleOverride',
         toggle: 'settings-localeoverride',
         on: settings.localeIdOverride ? true : false,
