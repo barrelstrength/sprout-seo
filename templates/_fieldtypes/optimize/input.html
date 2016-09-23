@@ -126,7 +126,7 @@
 	{% endif %}
 {% endif %}
 
-{% if fieldContext == 'metaTagGroups' or (fieldContext == 'field' and pluginSettings.advancedCustomization) %}
+{% if pluginSettings.advancedCustomization %}
 
 	{% if settings.showBasicMeta or settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
 		{% set advancedSeoButtons %}
