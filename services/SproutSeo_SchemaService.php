@@ -254,8 +254,10 @@ class SproutSeo_SchemaService extends BaseApplicationComponent
 	{
 		$tableName = "sproutseo_globals";
 
+		$locale = craft()->i18n->getLocaleById(craft()->language);
+
 		$result = craft()->db->createCommand()->insert($tableName, array(
-				'locale'    => null,
+				'locale'    => $locale,
 				'identity'  => null,
 				'ownership' => null,
 				'contacts'  => null,
