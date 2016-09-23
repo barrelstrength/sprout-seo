@@ -270,10 +270,10 @@ class SproutSeoPlugin extends BasePlugin
 				'method'                 => 'getAllGroups',
 				'matchedElementVariable' => 'category'
 			),
-			'commerce_product' => array(
+			'commerce_products' => array(
 				'name'                   => "Commerce Products",
 				'elementType'            => 'Commerce_Product',
-				'elementGroupId'         => 'productTypeId',
+				'elementGroupId'         => 'typeId',
 				'service'                => 'commerce_productTypes',
 				'method'                 => 'getAllProductTypes',
 				'matchedElementVariable' => 'product'
