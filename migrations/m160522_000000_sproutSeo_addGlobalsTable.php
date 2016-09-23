@@ -17,10 +17,13 @@ class m160522_000000_sproutSeo_addGlobalsTable extends BaseMigration
 			craft()->db->createCommand()->createTable($tableName, array(
 				'id'          => array('column' => ColumnType::PK, 'null' => false),
 				'locale'      => array('column' => ColumnType::Locale, 'null' => false),
+				'meta'        => array('column' => ColumnType::Text, 'null' => true),
 				'identity'    => array('column' => ColumnType::Text, 'null' => true),
 				'ownership'   => array('column' => ColumnType::Text, 'null' => true),
 				'contacts'    => array('column' => ColumnType::Text, 'null' => true),
 				'social'      => array('column' => ColumnType::Text, 'null' => true),
+				'robots'      => array('column' => ColumnType::Text, 'null' => true),
+				'settings'      => array('column' => ColumnType::Text, 'null' => true),
 				'dateCreated' => array('column' => ColumnType::DateTime, 'null' => false),
 				'dateUpdated' => array('column' => ColumnType::DateTime, 'null' => false),
 				'uid'         => array('column' => 'char(36)', 'null' => false, 'default' => '0'),

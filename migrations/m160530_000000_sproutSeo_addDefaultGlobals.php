@@ -29,7 +29,10 @@ class m160530_000000_sproutSeo_addDefaultGlobals extends BaseMigration
 					'identity'  => null,
 					'ownership' => null,
 					'contacts'  => null,
-					'social'    => null
+					'social'    => null,
+					'meta'      => null,
+					'robots'    => null,
+					'settings'  => null,
 				));
 
 				SproutSeoPlugin::log("Added default value to globals", LogLevel::Info, true);

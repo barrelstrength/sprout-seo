@@ -3,7 +3,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m160706_000000_sproutSeo_updateDeprecatedTwitterCard extends BaseMigration
+class m160928_000025_sproutSeo_updateDeprecatedTwitterCard extends BaseMigration
 {
 	/**
 	 * @return bool
