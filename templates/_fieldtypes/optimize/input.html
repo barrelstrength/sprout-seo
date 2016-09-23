@@ -341,107 +341,106 @@ feel like they are part of the natural flow of fields #}
 		{#HUD with info on what the cascade and priority and actual value that #}
 		{#will be output will be#}
 
-		function updateLocaleBadge(value, target)
-		{
-			if (value == '')
-			{
+		{#function updateLocaleBadge(value, target)#}
+		{#{#}
+			{#if (value == '')#}
+			{#{#}
 				{# Turn badge red #}
-				$(target).css('color', '#ffffff');
-				$(target).css('background-color', '#da5a47');
+				{#$(target).css('color', '#ffffff');#}
+				{#$(target).css('background-color', '#da5a47');#}
 
 				{#$(target).css('color', '#8f98a3');#}
 				{#$(target).css('background-color', '#ebedef');#}
-			}
-			else
-			{
+			{#}#}
+			{#else#}
+			{#{#}
 				{# Turn badge grey #}
 				{#$(target).css('color', '#8f98a3');#}
 				{#$(target).css('background-color', '#ebedef');#}
 
 				{# Turn badge green #}
-				$(target).css('color', '#ffffff');
-				$(target).css('background-color', '#27AE60');
-			}
-		}
+				{#$(target).css('color', '#ffffff');#}
+				{#$(target).css('background-color', '#27AE60');#}
+			{#}#}
+		{#}#}
+
+		{#function addSeoBadgeListener(fieldId)#}
+		{#{#}
+			{#var spanId = '#fields-' + fieldId + '-label span.sproutseo.locale';#}
+			{#var fieldInput = '#fields-' + fieldId + '-field input';#}
+			{#var fieldTextarea = '#fields-' + fieldId + '-field textarea';#}
+			{#var fieldSelect = '#fields-' + fieldId + '-field select';#}
+
+			{#var fieldElementSelect = '#fields-' + fieldId;#}
+			{#var fieldElementSelectInput = '#fields-' + fieldId + '-field .elementselect';#}
+			{#var fieldElementSelectSpanId = '#fields-' + fieldId + '-label span.sproutseo.locale';#}
+
+			{#$(fieldInput).on('keyup', function() {#}
+				{#updateLocaleBadge($(this).val(), spanId);#}
+			{#});#}
+
+			{#$(fieldTextarea).on('keyup', function() {#}
+				{#updateLocaleBadge($(this).val(), spanId);#}
+			{#});#}
+
+			{#$(fieldSelect).on('change', function() {#}
+				{#updateLocaleBadge($(this).val(), spanId);#}
+			{#});#}
+
+			{#if ($(fieldElementSelectInput).length)#}
+			{#{#}
+				{#$(fieldElementSelect).data('elementSelect').on('selectElements', function(e) {#}
+					{#updateLocaleBadge(true, fieldElementSelectSpanId);#}
+				{#});#}
+
+				{#$(fieldElementSelect).data('elementSelect').on('removeElements', function(e) {#}
+					{#updateLocaleBadge('', fieldElementSelectSpanId);#}
+				{#});#}
+			{#}#}
+		{#}#}
+
+		{#function initSeoBadge(fieldId)#}
+		{#{#}
+			{#var spanId = '#fields-' + fieldId + '-label span.sproutseo.locale';#}
+			{#var fieldInput = '#fields-' + fieldId + '-field input';#}
+			{#var fieldTextarea = '#fields-' + fieldId + '-field textarea';#}
+			{#var fieldSelect = '#fields-' + fieldId + '-field select';#}
+
+			{#var fieldElementSelect = '#fields-' + fieldId + '-field input';#}
+			{#var fieldElementSelectInput = '#fields-' + fieldId + '-field .elementselect';#}
+
+			{#if ($(fieldInput).length && $(fieldInput).val() != '')#}
+			{#{#}
+				{#updateLocaleBadge($(fieldInput).val(), spanId);#}
+			{#}#}
+
+			{#if ($(fieldTextarea).length && $(fieldTextarea).val() != '')#}
+			{#{#}
+				{#updateLocaleBadge($(fieldTextarea).val(), spanId);#}
+			{#}#}
+
+			{#if ($(fieldSelect).length && $(fieldSelect).val() != '')#}
+			{#{#}
+				{#updateLocaleBadge($(fieldSelect).val(), spanId);#}
+			{#}#}
+
+			{#if ($(fieldElementSelectInput).length)#}
+			{#{#}
+				{#if ($(fieldElementSelect).eq(1).length && $(fieldElementSelect).eq(1).val() != '')#}
+				{#{#}
+					{#updateLocaleBadge(true, spanId);#}
+				{#}#}
+				{#else#}
+				{#{#}
+					{#updateLocaleBadge('', spanId);#}
+				{#}#}
+			{#}#}
+		{#}#}
 
 		function appendSeoBadge(fieldId)
-    {
+		{
 			var labelId = '#fields-' + fieldId + '-label';
-
 			$(labelId).append(seoButton);
-		}
-
-		function addSeoBadgeListener(fieldId)
-		{
-			var spanId = '#fields-' + fieldId + '-label span.sproutseo.locale';
-			var fieldInput = '#fields-' + fieldId + '-field input';
-			var fieldTextarea = '#fields-' + fieldId + '-field textarea';
-			var fieldSelect = '#fields-' + fieldId + '-field select';
-
-			var fieldElementSelect = '#fields-' + fieldId;
-			var fieldElementSelectInput = '#fields-' + fieldId + '-field .elementselect';
-			var fieldElementSelectSpanId = '#fields-' + fieldId + '-label span.sproutseo.locale';
-
-			$(fieldInput).on('keyup', function() {
-				updateLocaleBadge($(this).val(), spanId);
-			});
-
-			$(fieldTextarea).on('keyup', function() {
-				updateLocaleBadge($(this).val(), spanId);
-			});
-
-			$(fieldSelect).on('change', function() {
-				updateLocaleBadge($(this).val(), spanId);
-			});
-
-			if ($(fieldElementSelectInput).length)
-			{
-				$(fieldElementSelect).data('elementSelect').on('selectElements', function(e) {
-					updateLocaleBadge(true, fieldElementSelectSpanId);
-				});
-
-				$(fieldElementSelect).data('elementSelect').on('removeElements', function(e) {
-					updateLocaleBadge('', fieldElementSelectSpanId);
-				});
-			}
-		}
-
-		function initSeoBadge(fieldId)
-		{
-			var spanId = '#fields-' + fieldId + '-label span.sproutseo.locale';
-			var fieldInput = '#fields-' + fieldId + '-field input';
-			var fieldTextarea = '#fields-' + fieldId + '-field textarea';
-			var fieldSelect = '#fields-' + fieldId + '-field select';
-
-			var fieldElementSelect = '#fields-' + fieldId + '-field input';
-			var fieldElementSelectInput = '#fields-' + fieldId + '-field .elementselect';
-
-			if ($(fieldInput).length && $(fieldInput).val() != '')
-			{
-				updateLocaleBadge($(fieldInput).val(), spanId);
-			}
-
-			if ($(fieldTextarea).length && $(fieldTextarea).val() != '')
-			{
-				updateLocaleBadge($(fieldTextarea).val(), spanId);
-			}
-
-			if ($(fieldSelect).length && $(fieldSelect).val() != '')
-			{
-				updateLocaleBadge($(fieldSelect).val(), spanId);
-			}
-
-			if ($(fieldElementSelectInput).length)
-			{
-				if ($(fieldElementSelect).eq(1).length && $(fieldElementSelect).eq(1).val() != '')
-				{
-					updateLocaleBadge(true, spanId);
-				}
-				else
-				{
-					updateLocaleBadge('', spanId);
-				}
-			}
 		}
 
 		var seoButton = '<span class="sproutseo locale">seo</span>';
@@ -459,14 +458,14 @@ feel like they are part of the natural flow of fields #}
 
 			$(titleId).append(seoButton);
 
-			$('#title-field input').on('keyup', function() {
-				updateLocaleBadge($(this).val(), '#title-label span.sproutseo.locale');
-			});
+			{#$('#title-field input').on('keyup', function() {#}
+				{#updateLocaleBadge($(this).val(), '#title-label span.sproutseo.locale');#}
+			{#});#}
 
-			if ($(titleInput).val() != '')
-			{
-				updateLocaleBadge($(titleInput).val(), spanId);
-			}
+			{#if ($(titleInput).val() != '')#}
+			{#{#}
+				{#updateLocaleBadge($(titleInput).val(), spanId);#}
+			{#}#}
 		{% endif %}
 
 		{% if settings.optimizedTitleField == 'manually' %}
@@ -506,8 +505,8 @@ feel like they are part of the natural flow of fields #}
 
 		$.each(seoFieldIds, function(key, value) {
 			appendSeoBadge(value);
-			addSeoBadgeListener(value);
-			initSeoBadge(value);
+			{#addSeoBadgeListener(value);#}
+			{#initSeoBadge(value);#}
 		});
 
 		{#new Garnish.HUD(mainEntityLabel, "<div>[red] no meta values exist. [orange] global or metadata group values exist [grey] unique metadata at the element level exists.</div>");#}
