@@ -60,10 +60,12 @@
 }) }}
 
 {% set optimizedKeywordOptions = [
+	{ value: '', label: "Select..." },
 	{ optgroup: 'Add Custom Field' },
+	{ value: 'manually', label: "Display Editable Field" },
+	{ optgroup: 'Define Custom Pattern' },
 	{ value: 'top5', label: "Generate Top 5 Keywords" },
-	{ value: 'top3', label: "Generate Top 3 Keywords" },
-	{ value: 'manually', label: "Manually" }
+	{ value: 'top3', label: "Generate Top 3 Keywords" }
 ] %}
 
 {{ forms.selectField({

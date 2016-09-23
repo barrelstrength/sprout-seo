@@ -567,11 +567,11 @@ class SproutSeoVariable
 
 		if (isset($schemaGlobals['settings']['seoDivider']))
 		{
-			$seoDivider    = $schemaGlobals['settings']['seoDivider'];
+			$seoDivider = $schemaGlobals['settings']['seoDivider'];
 
 			array_push($options, array('optgroup' => 'Custom'));
 
-			if (!array_key_exists($seoDivider, array('-'=>0, '•'=>1, '|'=>2, '/'=>3, ':'=>4)) && $seoDivider != '')
+			if (!array_key_exists($seoDivider, array('-' => 0, '•' => 1, '|' => 2, '/' => 3, ':' => 4)) && $seoDivider != '')
 			{
 				array_push($options, array('label' => $seoDivider, 'value' => $seoDivider));
 			}
@@ -610,7 +610,11 @@ class SproutSeoVariable
 			}
 		}
 
-		$options[]           = array('optgroup' => "Add Custom Field");
+		$options[] = array('optgroup' => "Add Custom Field");
+
+		$options['manually'] = 'Display Editable Field';
+
+		$options[] = array('optgroup' => "Define Custom Pattern");
 
 		if (!isset($options[$settings[$handle]]) && $settings[$handle] != 'manually')
 		{
@@ -619,10 +623,8 @@ class SproutSeoVariable
 
 		if ($type != 'Assets')
 		{
-			$options['custom'] = 'Custom Format';
+			$options['custom'] = 'Add Custom Format';
 		}
-
-		$options['manually'] = 'Manual Field';
 
 		return $options;
 	}
