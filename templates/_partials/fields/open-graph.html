@@ -22,6 +22,18 @@
 		}) }}
 
 		{{ forms.textField({
+			label: "Title"|t,
+			name: "sproutseo[metadata][ogTitle]",
+			value: values.ogTitle
+		}) }}
+
+		{{ forms.textareaField({
+			label: "Description"|t,
+			name: "sproutseo[metadata][ogDescription]",
+			value: values.ogDescription
+		}) }}
+
+		{{ forms.textField({
 			label: "Audio"|t,
 			instructions: "A URL to an audio file to accompany this content."|t,
 			name: "sproutseo[metadata][ogAudio]",
