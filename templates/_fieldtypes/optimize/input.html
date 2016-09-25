@@ -1,5 +1,46 @@
 {% import "_includes/forms" as forms %}
 
+{% macro infoIcon(params) %}
+	{% set label = params.label ?? null %}
+	{% set search = params.search ?? false %}
+	{% set structured = params.search ?? false %}
+	{% set openGraph = params.openGraph ?? false %}
+	{% set twitterCard = params.twitterCard ?? false %}
+	{% set geo = params.geo ?? false %}
+	{% set robots = params.robots ?? false %}
+	{% set priority = params.priority ?? null %}
+	{% set message = params.message ?? null %}
+
+	<span class="info sproutseo-info">
+		<div class="sprout-info-body sproutseo-metalevel-hud">
+			<h6>{{ label }} Scope</h6>
+			{% if search %}<span class="sproutseo-icon icon-search">&#xe800;</span> Search<br>{% endif %}
+			{% if structured %}<span class="sproutseo-icon icon-puzzle">&#xf12e;</span> Structured Data<br>{% endif %}
+
+			{% if openGraph %}<span class="sproutseo-icon icon-facebook">&#xe802;</span> Open Graph<br>{% endif %}
+			{% if twitterCard %}<span class="sproutseo-icon icon-twitter">&#xe801;</span> Twitter Card<br>{% endif %}
+			{% if geo %}<span class="sproutseo-icon icon-location">&#xe803;</span> Geo<br>{% endif %}
+			{% if robots %}<span class="sproutseo-icon icon-robots">&#xe806;</span> Robots<br>{% endif %}
+
+			{% if message %}<p><i>{{ message }}</i></p>{% endif %}
+			<hr style="margin-left:-24px;margin-right:-24px;">
+			<h6>{{ label }} Priority</h6>
+			<ul class="sproutseo-metalevel-list">
+				<li>
+					<span class="sproutseo-metalevel-number {% if priority == 'globals' %}active{% endif %}">3</span> {% if priority == 'globals' %}<b>Globals</b>{% else %}Globals{% endif %}
+				</li>
+				<li>
+					<span class="sproutseo-metalevel-number {% if priority == 'sections' %}active{% endif %}">2</span> {% if priority == 'sections' %}<b>Sections</b>{% else %}Sections{% endif %}
+				</li>
+				<li>
+					<span class="sproutseo-metalevel-number {% if priority == 'pages' %}active{% endif %}">1</span> {% if priority == 'pages' %}<b>Pages</b>{% else %}Pages{% endif %}
+				</li>
+			</ul>
+		</div>
+	</span>
+{% endmacro %}
+{% import _self as sprout %}
+
 {% set pluginSettings = craft.sproutSeo.getSettings() %}
 
 <div class="sproutseo-box-optimized">
@@ -17,7 +58,13 @@
 		{% set appendTitleValueInstructions = " <a href='#' class='fieldtoggle instructionstoggle' data-target='toggle-appendtitlevalue'>Append dynamic value to Meta Titles</a>."|t %}
 
 		{{ forms.textField({
-			label: "Optimized Meta Title"|t,
+			label: 'Meta Title'|t ~ sprout.infoIcon({
+				label: "Meta Title"|t,
+				search: true,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+			}),
 			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'metaTagGroups' ? appendTitleValueInstructions : ""),
 			name: 'sproutseo[metadata][optimizedTitle]',
 			id: 'sproutseo-optimizedtitle',
@@ -36,7 +83,11 @@
 		<div id="toggle-appendtitlevalue" class="{{ (values['appendTitleValue'] is defined and values.appendTitleValue ?:
 		'hidden' ) }}">
 			{{ forms.textField({
-				label: "Appended Meta Title"|t,
+				label: "Appended Meta Title"|t ~ sprout.infoIcon({
+					label: "Appended Meta Title"|t,
+					search: true,
+					priority: 'sections'
+				}),
 				instructions: "Append a custom value at the end of all Meta Titles in this Metadata Group, i.e. <i>Article Title - " ~ siteName ~ "</i>. This setting overrides the <a href='" ~ cpUrl('sproutseo/globals/customization') ~ "'>default setting</a> and will apply to all titles within this Metadata Group."|t,
 				name: 'sproutseo[metadata][appendTitleValue]',
 				value: values.appendTitleValue ?? null,
@@ -49,7 +100,13 @@
 
 	{% if settings.optimizedDescriptionField == 'manually' %}
 		{{ forms.textareaField({
-			label: "Optimized Meta Description"|t,
+			label: 'Meta Description'|t ~ sprout.infoIcon({
+				label: "Meta Description"|t,
+				search: true,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+			}),
 			instructions: "A description of your content which will appear in search results and social sharing."|t,
 			name: 'sproutseo[metadata][optimizedDescription]',
 			maxlength: 160,
@@ -63,7 +120,12 @@
 
 	{% if settings.optimizedImageField == 'manually' %}
 		{{ forms.field({
-			label: 'Optimized Meta Image'|t,
+			label: 'Meta Image'|t ~ sprout.infoIcon({
+				label: "Meta Image"|t,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+			}),
 			instructions: 'A featured image that represents your content that will display in social sharing.'|t,
 			id: 'sproutseo-optimizedimage',
 		}, forms.elementSelect({
@@ -83,7 +145,11 @@
 		{% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
 
 		{{ forms.textField({
-			label: "Optimized Meta Keywords"|t,
+			label: "Meta Keywords"|t ~ sprout.infoIcon({
+				label: "Meta Keywords"|t,
+				search: true,
+				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+			}),
 			instructions: "The primary keywords or phrases that describe your website."|t,
 			id: 'sproutseo-optimizedkeywords',
 			name: 'sproutseo[metadata][optimizedKeywords]',
@@ -96,7 +162,12 @@
 		{% set schemaMaps = craft.sproutSeo.getSchemaMapsArray() %}
 
 		{{ forms.selectField({
-			label: 'Main Entity'|t,
+			label: 'Main Entity'|t ~ sprout.infoIcon({
+				label: "Meta Image"|t,
+				search: true,
+				structured: true,
+				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+			}),
 			instructions: 'Map the primary element that displays on this page to a Structured Data schema. Select a basic or custom mapping.'|t,
 			id: 'sproutseo-mainentity',
 			name: 'sproutseo[metadata][schemaMap]',
@@ -187,7 +258,13 @@
 			>
 
 				<div class="titlebar">
-					<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
+					<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph {{ sprout.infoIcon({
+							label: "Open Graph"|t,
+							openGraph: true,
+							priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages',
+							message: 'All fields in this block take priority for the Open Graph metadata at the Section level.'|t
+						}) }}
+					</div>
 				</div>
 
 				{% include 'sproutseo/_partials/fields/open-graph' %}
