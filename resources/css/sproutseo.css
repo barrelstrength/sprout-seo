@@ -49,43 +49,85 @@
 /* Craft.InfoIcon styles - copied from Craft .info
 ------------------------------------------------------------ */
 
-.sprout-info {
-	font-size: 0;
-	vertical-align: top;
+.sproutseo-info:before {
+	border-radius: 3px;
+	background: #ebedef;
+	color: #8f98a3;
+	padding: 0 4px;
+	margin-left: 7px;
+	vertical-align: baseline;
 	display: inline-block;
-	cursor: pointer;
-}
-.sprout-info:before {
-	font-family: 'Craft';
+	position: relative;
+	top: 1px;
+
 	speak: none;
-	-webkit-font-feature-settings: "liga", "dlig";
-	-moz-font-feature-settings: "liga=1, dlig=1";
-	-moz-font-feature-settings: "liga", "dlig";
-	-ms-font-feature-settings: "liga", "dlig";
-	-o-font-feature-settings: "liga", "dlig";
-	font-feature-settings: "liga", "dlig";
-	text-rendering: optimizeLegibility;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
-	direction: ltr;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	display: inline-block;
-	text-align: center;
-	font-style: normal;
-	vertical-align: middle;
-	word-wrap: normal !important;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	content: 'info';
-	color: #b9bfc6;
-	font-size: 13px;
+	font-weight: bold;
+	line-height: 18px;
+
+	font-family: HelveticaNeue, sans-serif;
+	font-size: 11px;
+	content: "seo";
+
+	-webkit-font-smoothing: auto;
+	-webkit-user-select: text;
 }
-.sprout-info-container {
+
+.info.sproutseo-info:hover:before {
+	background-color: #0d78f2;
+	color: #fff;
+}
+
+/* Add support for multiline Craft.InfoIcon body content */
+.info .sprout-info-body {
 	display: none;
+}
+.info-hud .sprout-info-body {
+	display: block;
+}
+
+/* Sprout SEO Info HUD
+------------------------------------------------------------ */
+
+.sproutseo-metalevel-hud h6 {
+	margin-bottom: 4px;
+}
+
+ul.sproutseo-metalevel-list li {
+	margin-bottom: 2px;
+}
+
+.sproutseo-metalevel-number {
+	display:inline-block;
+	margin-right: 2px;
+
+	border-radius:50%;
+	color: #8f98a3;
+	background-color: #ebedef;
+	font-weight: bold;
+
+	font-size:10px;
+}
+
+.sproutseo-metalevel-number:before,
+.sproutseo-metalevel-number:after {
+	content:'\200B';
+	display:inline-block;
+	line-height:0px;
+
+	padding-top:20%;
+	padding-bottom:20%;
+}
+
+.sproutseo-metalevel-number:before {
+	padding-left:6px;
+}
+.sproutseo-metalevel-number:after {
+	padding-right:6px;
+}
+
+.sproutseo-metalevel-number.active {
+	background-color: #00b007;
+	color: #fff;
 }
 
 /* Sections & Sitemap
@@ -173,4 +215,151 @@
 }
 .sitemap-settings:last-of-type {
 	margin-bottom: 30px;
+}
+
+/* Preview Buttons for Example Search, Facebook, & Twitter results
+------------------------------------------------------------ */
+
+.sproutseo-preview-btns {
+	text-align: right;
+	margin-bottom: -1px;
+}
+.sproutseo-preview-btns li {
+	display: inline-block;
+	box-shadow: 0 0 0 1px #e3e5e8;
+	padding: 3px 5px 2px;
+	font-size: 12px;
+	margin-right: -3px;
+	background-image: linear-gradient(#f7f7f8, #f4f5f6);
+}
+.sproutseo-preview-btns li.selected {
+	background-color: #fff;
+	background-image: none;
+	border-bottom: 1px solid #fff;
+}
+
+/* Example Google Results */
+.google-result-border {
+	border-bottom: 1px solid rgba(0,0,0,0.07);
+	border-top: 1px solid rgba(0,0,0,0.07);
+	font-family: arial, sans-serif;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	padding-top: 20px;
+}
+.google-result-heading {
+	color: #1a0dab;
+	font-family: arial, sans-serif;
+	font-size: 18px;
+	font-weight: normal;
+	margin-bottom: 0;
+}
+.google-result-cite {
+	color: #006621;
+	display: inline-block;
+	font-family: arial, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+}
+.google-result-identity {
+	color: #777;
+	cursor: pointer;
+	display: inline-block;
+	font-family: arial, sans-serif;
+	font-size: 14px;
+}
+.google-result-description {
+	color: #545454;
+	font-family: arial, sans-serif;
+	font-size: 13px;
+}
+
+/*.action-menu .mn-dwn-arw {*/
+/*border-color: #006621 transparent;*/
+/*margin-top: -4px;*/
+/*margin-left: 3px;*/
+/*left: 0;*/
+/*}*/
+/*.mn-dwn-arw {*/
+/*border-width: 5px 4px 0 4px !important;*/
+/*border-color: #909090 transparent;*/
+/*border-style: solid;*/
+/*border-width: 4px 4px 0 4px;*/
+/*width: 0;*/
+/*height: 0;*/
+/*margin-left: -2px;*/
+/*top: 50%;*/
+/*margin-top: -2px;*/
+/*position: absolute;*/
+/*}*/
+
+/* Override hr on matrix blocks to display nicely */
+.pane hr {
+	margin: 14px -14px;
+}
+
+
+/* field-related styles
+------------------------------------------------------------ */
+
+/* .sproutseo-box {
+	background-color: #f5f5f5;
+	background-color: rgb(235, 237, 239);
+	border:1px solid #ebebeb;
+	padding:20px;
+	padding-top: 21px;
+}
+ */
+#fields-twitterImage {
+	margin-bottom: 21px;
+}
+
+.sproutseo-fields {
+	margin-bottom: 28px;
+}
+
+.sproutseo-matrixfields .titlebar .blocktype {
+	margin-left: -24px;
+}
+.sproutseo-advancedoption-btns div,
+.sproutseo-advancedoption-btns .sproutseo-icon {
+	opacity: .65;
+}
+.sproutseo-advancedoption-btns div.active,
+.sproutseo-advancedoption-btns .active .sproutseo-icon {
+	opacity: 1;
+}
+
+/* website-identity.html styles
+------------------------------------------------------------ */
+
+div.inline-item {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+}
+.inline-item > div > label {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+}
+
+/* Override default a tag fieldtoggle behavior to play more nicely with instructions text */
+body.ltr a.instructionstoggle {
+	padding-left: 0;
+}
+a.instructionstoggle {
+	display: inline;
+}
+a.instructionstoggle:before {
+	content: '';
+}
+
+a.fieldtoggle.instructionstoggle {
+	color: #0d78f2;
+}
+/* Space the Website Identify Fields */
+.identitytype-dropdown .input {
+	height: 32px; /* necessary to stop on select event adjusting height */
+	margin-top: 5px;
 }

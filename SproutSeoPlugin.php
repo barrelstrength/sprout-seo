@@ -123,7 +123,7 @@ class SproutSeoPlugin extends BasePlugin
 
 			if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutseo')
 			{
-				craft()->templates->includeJsResource('sproutseo/js/SproutBase.js');
+				craft()->templates->includeJsResource('sproutseo/js/sproutbase.js');
 				craft()->templates->includeJs("new Craft.SproutBase({
 					pluginName: 'Sprout SEO',
 					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo',

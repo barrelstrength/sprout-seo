@@ -279,7 +279,7 @@
 
 	</form>
 
-{% includeJsResource 'sproutseo/js/SproutFields.js' %}
+{% includeJsResource 'sproutseo/js/sproutfields.js' %}
 
 {% includejs %}
 	var items = {{ organizationItems|json_encode|raw }};
@@ -355,10 +355,10 @@
 
 {% endset %}
 
-{% includeJsResource  "sproutseo/js/depending/script.js" %}
+{% includeCssResource  "sproutseo/css/sproutseo.css" %}
+{% includeCssResource  "sproutseo/css/lib/jquery.tag-editor.css" %}
 
-{% includeCssResource  "sproutseo/css/fields.css" %}
-{% includeCssResource  "sproutseo/css/jquery.tag-editor.css" %}
-{% includeJsResource  "sproutseo/js/jquery.caret.min.js" %}
-{% includeJsResource  "sproutseo/js/jquery.tag-editor.min.js" %}
+{% includeJsResource  "sproutseo/js/lib/jquery.caret.min.js" %}
+{% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
+{% includeJsResource  "sproutseo/js/websiteidentity.js" %}
 
