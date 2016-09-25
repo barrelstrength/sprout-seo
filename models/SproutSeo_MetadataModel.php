@@ -156,19 +156,19 @@ class SproutSeo_MetadataModel extends BaseModel
 	{
 		switch ($type)
 		{
-			case SproutSeo_MetaTagLevels::Code:
+			case SproutSeo_MetadataLevels::CodeMetadata:
 				$this->setAttributes($this->getCodeOverride($overrideInfo));
 				break;
 
-			case SproutSeo_MetaTagLevels::Entry:
+			case SproutSeo_MetadataLevels::ElementMetadata:
 				$this->setAttributes($this->getEntryOverride($overrideInfo));
 				break;
 
-			case SproutSeo_MetaTagLevels::MetadataGroup:
+			case SproutSeo_MetadataLevels::SectionMetadata:
 				$this->setAttributes($this->getMetadataGroup($overrideInfo));
 				break;
 
-			case SproutSeo_MetaTagLevels::GlobalMetadata:
+			case SproutSeo_MetadataLevels::GlobalMetadata:
 				$globals                = sproutSeo()->schema->getGlobals();
 				$globalMetadata = $globals->meta;
 

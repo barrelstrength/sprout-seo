@@ -67,7 +67,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 */
 	public function getPrioritizedMetaTagModel($sitemapInfo)
 	{
-		$metaLevels = SproutSeo_MetaTagLevels::getConstants();
+		$metaLevels = SproutSeo_MetadataLevels::getConstants();
 
 		foreach ($metaLevels as $key => $metaLevel)
 		{
@@ -111,8 +111,8 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		$prioritizedMetaTagModel->title = SproutSeoOptimizeHelper::prepareAppendedSiteName(
 			$prioritizedMetaTagModel,
-			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::MetadataGroup],
-			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::GlobalMetadata]
+			$prioritizeMetaLevels[SproutSeo_MetadataLevels::SectionMetadata],
+			$prioritizeMetaLevels[SproutSeo_MetadataLevels::GlobalMetadata]
 		);
 
 		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::getRobotsMetaValue($prioritizedMetaTagModel->robots);
@@ -131,13 +131,13 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		switch ($type)
 		{
-			case SproutSeo_MetaTagLevels::MetadataGroup:
+			case SproutSeo_MetadataLevels::SectionMetadata:
 				if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
 				{
 					$response = $sitemapInfo;
 				}
 				break;
-			case SproutSeo_MetaTagLevels::Entry:
+			case SproutSeo_MetadataLevels::ElementMetadata:
 				if (isset($sitemapInfo['elementModel']))
 				{
 					$elementModel = $sitemapInfo['elementModel'];
@@ -148,7 +148,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 					}
 				}
 				break;
-			case SproutSeo_MetaTagLevels::Code:
+			case SproutSeo_MetadataLevels::CodeMetadata:
 				$response = sproutSeo()->optimize->templateMeta;
 				break;
 		}

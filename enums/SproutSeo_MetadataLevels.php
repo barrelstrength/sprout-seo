@@ -2,17 +2,12 @@
 namespace Craft;
 
 /**
- * The Method class is an abstract class that defines the different meta levels available
+ * All supported Metadata Levels to establish which metadata gets priority
  */
-abstract class SproutSeo_MetaTagLevels extends BaseEnum
+abstract class SproutSeo_MetadataLevels extends BaseEnum
 {
 	// Constants
 	// =========================================================================
-
-	//
-	// SectionMetadata
-	// ElementMetadata
-	// CodeMetadata
 
 	/**
 	 * Lowest Priority
@@ -24,17 +19,17 @@ abstract class SproutSeo_MetaTagLevels extends BaseEnum
 	/**
 	 * sectionMetadataModel()
 	 */
-	const MetadataGroup = 'MetadataGroup';
+	const SectionMetadata = 'MetadataGroup';
 
 	/**
 	 * elementMetadataModel()
 	 */
-	const Entry = 'entry';
+	const ElementMetadata = 'entry';
 
 	/**
 	 * Highest Priority
 	 *
 	 * codeMetadataModel()
 	 */
-	const Code = 'code';
+	const CodeMetadata = 'code';
 }
