@@ -147,20 +147,20 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			}
 		}
 
-		// Fetching all custom pages defined in Sprout SEO
-		$customUrls = craft()->db->createCommand()
+		// Fetching all Custom Section Metadata defined in Sprout SEO
+		$customSectionMetadata = craft()->db->createCommand()
 			->select('sitemapUrl as url, sitemapPriority as priority, sitemapChangeFrequency as frequency, dateUpdated')
 			->from('sproutseo_metadatagroups')
 			->where('enabled = 1')
-			->andWhere('url is not null and isSitemapCustomPage = 1')
+			->andWhere('sitemapUrl is not null and isSitemapCustomPage = 1')
 			->queryAll();
 
-		foreach ($customUrls as $customEntry)
+		foreach ($customSectionMetadata as $customSection)
 		{
 			// Adding each custom location indexed by its URL
-			$modified                  = new DateTime($customEntry['dateUpdated']);
-			$customEntry['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
-			$urls[$customEntry['url']] = craft()->config->parseEnvironmentString($customEntry);
+			$modified                  = new DateTime($customSection['dateUpdated']);
+			$customSection['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
+			$urls[$customSection['url']] = craft()->config->parseEnvironmentString($customSection);
 		}
 
 		$urls = $this->getLocalizedSitemapStructure($urls);
@@ -170,12 +170,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		craft()->templates->setTemplatesPath(dirname(__FILE__) . '/../templates/');
 
-		$source = craft()->templates->render(
-			'_special/sitemap', array(
-				'entries' => $urls,
-				'options' => is_array($options) ? $options : array(),
-			)
-		);
+		$source = craft()->templates->render('_special/sitemap', array(
+			'elements' => $urls,
+			'options' => is_array($options) ? $options : array(),
+		));
 
 		craft()->path->setTemplatesPath($path);
 
@@ -340,7 +338,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			}
 			else
 			{
-				// Looping through each entry and adding it as primary and creating its alternates
+				// Looping through each element and adding it as primary and creating its alternates
 				foreach ($locations as $index => $location)
 				{
 					// Add secondary locations as alternatives to primary

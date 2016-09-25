@@ -50,20 +50,17 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 * Prioritize our meta data
 	 * ------------------------------------------------------------
 	 *
-	 * Loop through and select the highest ranking value for each attribute in our SproutSeo_MetaData model
+	 * Loop through and select the highest ranking value for each attribute in our SproutSeo_MetadataModel
 	 *
-	 * 1) Entry Override (Set by adding `id` override in Twig template code and using Meta Fields)
-	 * 2) On-Page Override (Set in Twig template code)
-	 * 3) Default (Set in control panel by url Metadata option)
-	 * 4) Global Fallback (Set in control panel)
-	 * 5) Blank (Automatic)
+	 * 1) Code Metadata
+	 * 2) Element Metadata
+	 * 3) Section Metadata
+	 * 4) Global Metadata
+	 * 5) Blank
 	 *
-	 * Once we have added all the content we need to be outputting to our array we will loop through that array and create the HTML we will output to our page.
+	 * @param $sitemapInfo
 	 *
-	 * While we don't define HTML in our PHP as much as possible, the goal here is to be as easy to use as possible on the front end so we want to simplify the front end code to a single function and wrangle what we need to here.
-	 *
-	 * @return array
-	 * @throws \Exception
+	 * @return SproutSeo_MetadataModel
 	 */
 	public function getPrioritizedMetaTagModel($sitemapInfo)
 	{
@@ -347,7 +344,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get a Meta Tag Content record by Entry ID
+	 * Get a Meta Tag Content record by Element ID
 	 *
 	 * @param $elementId
 	 * @param $locale

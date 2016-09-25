@@ -310,7 +310,7 @@ class SproutSeoPlugin extends BasePlugin
 	 *
 	 * Enhanced log:
 	 * $messages['thing1'] = Craft::t('Something happened');
-	 * $messages['thing2'] = $entry->getErrors();
+	 * $messages['thing2'] = $model->getErrors();
 	 * SproutImportPlugin::log($messages);
 	 *
 	 * @param string $messages

@@ -66,7 +66,7 @@ class SproutSeo_MetadataContentRecord extends BaseRecord
 	public function defineIndexes()
 	{
 		return array(
-			array('columns' => array('entryId, locale'), 'unique' => true),
+			array('columns' => array('elementId, locale'), 'unique' => true),
 		);
 	}
 }

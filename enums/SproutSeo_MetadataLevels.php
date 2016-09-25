@@ -24,7 +24,7 @@ abstract class SproutSeo_MetadataLevels extends BaseEnum
 	/**
 	 * elementMetadataModel()
 	 */
-	const ElementMetadata = 'entry';
+	const ElementMetadata = 'element';
 
 	/**
 	 * Highest Priority

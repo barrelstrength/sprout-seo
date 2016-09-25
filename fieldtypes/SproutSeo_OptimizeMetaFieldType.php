@@ -172,7 +172,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			$fields['robots'] = SproutSeoOptimizeHelper::getRobotsMetaValue($fields['robots']);
 		}
 
-		// Add the entry ID to the field data we will submit for Sprout SEO
+		// Add the element ID to the field data we will submit for Sprout SEO
 		$attributes['elementId'] = $this->element->id;
 		$attributes['locale']  = $locale;
 
@@ -190,7 +190,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$columns = array_intersect_key($model->getAttributes(), $attributes);
 
-		// Update or create our Meta Tag Content entry
+		// Update or create our Meta Tag Content
 		if ($model->id)
 		{
 			sproutSeo()->metadata->updateMetadataContent($model->id, $columns);
