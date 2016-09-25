@@ -30,9 +30,9 @@ class SproutSeo_SchemaController extends BaseController
 
 		$schema = SproutSeo_SchemaModel::populateModel($postData);
 
-		$globalFallbackMetaTags = $this->populateGlobalFallbackMetaTags($postData);
+		$globalMetadata = $this->populateGlobalMetadata($postData);
 
-		$schema->meta = JsonHelper::encode($globalFallbackMetaTags);
+		$schema->meta = JsonHelper::encode($globalMetadata);
 
 		if (sproutSeo()->schema->saveSchema($schemaTypes, $schema))
 		{
@@ -100,7 +100,7 @@ class SproutSeo_SchemaController extends BaseController
 		}
 	}
 
-	public function populateGlobalFallbackMetaTags($postData)
+	public function populateGlobalMetadata($postData)
 	{
 		$settings = craft()->plugins->getPlugin('sproutseo')->getSettings();
 		$locale   = craft()->i18n->getLocaleById(craft()->language);
@@ -111,7 +111,7 @@ class SproutSeo_SchemaController extends BaseController
 		$identity          = isset($postData['identity']) ? $postData['identity'] : $oldIdentity;
 		$oldSocialProfiles = isset($oldGlobals) ? $oldGlobals->social : array();
 
-		$globalFallbackMetaTags = new SproutSeo_MetadataModel();
+		$globalMetadata = new SproutSeo_MetadataModel();
 		$siteName               = craft()->getSiteName();
 
 		$urlSetting = isset($postData['identity']['url']) ? $postData['identity']['url'] : null;
@@ -135,42 +135,42 @@ class SproutSeo_SchemaController extends BaseController
 			$optimizedDescription = $identity['description'];
 			$optimizedImage       = isset($identity['logo'][0]) ? $identity['logo'][0] : null;
 
-			$globalFallbackMetaTags->optimizedTitle       = $optimizedTitle;
-			$globalFallbackMetaTags->optimizedDescription = $optimizedDescription;
-			$globalFallbackMetaTags->optimizedImage       = $optimizedImage;
+			$globalMetadata->optimizedTitle       = $optimizedTitle;
+			$globalMetadata->optimizedDescription = $optimizedDescription;
+			$globalMetadata->optimizedImage       = $optimizedImage;
 
-			$globalFallbackMetaTags->title       = $optimizedTitle;
-			$globalFallbackMetaTags->description = $optimizedDescription;
-			$globalFallbackMetaTags->keywords    = $identity['keywords'];
+			$globalMetadata->title       = $optimizedTitle;
+			$globalMetadata->description = $optimizedDescription;
+			$globalMetadata->keywords    = $identity['keywords'];
 
-			$globalFallbackMetaTags->robots    = $robotsMetaValue;
-			$globalFallbackMetaTags->canonical = $siteUrl;
+			$globalMetadata->robots    = $robotsMetaValue;
+			$globalMetadata->canonical = $siteUrl;
 
-			$globalFallbackMetaTags->region    = ""; // @todo - add location info
-			$globalFallbackMetaTags->placename = "";
-			$globalFallbackMetaTags->position  = "";
-			$globalFallbackMetaTags->latitude  = "";
-			$globalFallbackMetaTags->longitude = "";
+			$globalMetadata->region    = ""; // @todo - add location info
+			$globalMetadata->placename = "";
+			$globalMetadata->position  = "";
+			$globalMetadata->latitude  = "";
+			$globalMetadata->longitude = "";
 
-			$globalFallbackMetaTags->ogType        = 'website';
-			$globalFallbackMetaTags->ogSiteName    = $siteName;
-			$globalFallbackMetaTags->ogUrl         = $siteUrl;
-			$globalFallbackMetaTags->ogAuthor      = $identityName;
-			$globalFallbackMetaTags->ogPublisher   = $identityName;
-			$globalFallbackMetaTags->ogTitle       = $optimizedTitle;
-			$globalFallbackMetaTags->ogDescription = $optimizedDescription;
-			$globalFallbackMetaTags->ogImage       = $optimizedImage;
-			$globalFallbackMetaTags->ogLocale      = $localeId;
+			$globalMetadata->ogType        = 'website';
+			$globalMetadata->ogSiteName    = $siteName;
+			$globalMetadata->ogUrl         = $siteUrl;
+			$globalMetadata->ogAuthor      = $identityName;
+			$globalMetadata->ogPublisher   = $identityName;
+			$globalMetadata->ogTitle       = $optimizedTitle;
+			$globalMetadata->ogDescription = $optimizedDescription;
+			$globalMetadata->ogImage       = $optimizedImage;
+			$globalMetadata->ogLocale      = $localeId;
 
-			$globalFallbackMetaTags->twitterCard        = 'summary';
-			$globalFallbackMetaTags->twitterSite        = $twitterProfileName;
-			$globalFallbackMetaTags->twitterCreator     = $twitterProfileName;
-			$globalFallbackMetaTags->twitterUrl         = $siteUrl;
-			$globalFallbackMetaTags->twitterTitle       = $optimizedTitle;
-			$globalFallbackMetaTags->twitterDescription = $optimizedDescription;
-			$globalFallbackMetaTags->twitterImage       = $optimizedImage;
+			$globalMetadata->twitterCard        = 'summary';
+			$globalMetadata->twitterSite        = $twitterProfileName;
+			$globalMetadata->twitterCreator     = $twitterProfileName;
+			$globalMetadata->twitterUrl         = $siteUrl;
+			$globalMetadata->twitterTitle       = $optimizedTitle;
+			$globalMetadata->twitterDescription = $optimizedDescription;
+			$globalMetadata->twitterImage       = $optimizedImage;
 		}
 
-		return $globalFallbackMetaTags;
+		return $globalMetadata;
 	}
 }

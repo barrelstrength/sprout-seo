@@ -4,17 +4,16 @@ namespace Craft;
 class SproutSeoOptimizeHelper
 {
 	/**
-	 * @param $prioritizedMetaTagModel
-	 * @param $MetadataGroupModel
-	 * @param $globalFallbackMetaTagModel
-	 * @param $entryOverrideMetaTagModel
+	 * @param $prioritizedMetadataModel
+	 * @param $sectionMetadataModel
+	 * @param $globalMetadataModel
 	 *
 	 * @return string
 	 */
 	public static function prepareAppendedSiteName(
-		$prioritizedMetaTagModel,
-		$metadataGroupMetaTagModel,
-		$globalFallbackMetaTagModel
+		$prioritizedMetadataModel,
+		$sectionMetadataModel,
+		$globalMetadataModel
 	)
 	{
 		$globals  = sproutSeo()->schema->getGlobals();
@@ -23,7 +22,7 @@ class SproutSeoOptimizeHelper
 		$globalAppendTitleValue = $settings['appendTitleValue'];
 		$seoDivider             = $settings['seoDivider'];
 
-		// @todo - should this logic happen while populating the $globalFallbackMetaTagModel?
+		// @todo - should this logic happen while populating the $globalMetadataModel?
 		switch ($globalAppendTitleValue)
 		{
 			case 'custom':
@@ -40,9 +39,9 @@ class SproutSeoOptimizeHelper
 		}
 
 		// @todo - can probably make logic more concise
-		if ($metadataGroupMetaTagModel->appendTitleValue != '')
+		if ($sectionMetadataModel->appendTitleValue != '')
 		{
-			$appendTitleValue = $metadataGroupMetaTagModel->appendTitleValue;
+			$appendTitleValue = $sectionMetadataModel->appendTitleValue;
 		}
 		else
 		{
@@ -57,10 +56,10 @@ class SproutSeoOptimizeHelper
 				'divider'  => $seoDivider
 			));
 
-			return $prioritizedMetaTagModel->title . " " . $seoDivider . " " . $appendTitleValue;
+			return $prioritizedMetadataModel->title . " " . $seoDivider . " " . $appendTitleValue;
 		}
 
-		return $prioritizedMetaTagModel->title;
+		return $prioritizedMetadataModel->title;
 	}
 
 	/**

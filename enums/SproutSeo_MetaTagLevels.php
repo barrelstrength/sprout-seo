@@ -9,27 +9,32 @@ abstract class SproutSeo_MetaTagLevels extends BaseEnum
 	// Constants
 	// =========================================================================
 
+	//
+	// SectionMetadata
+	// ElementMetadata
+	// CodeMetadata
+
 	/**
 	 * Lowest Priority
 	 *
-	 * globalFallbackMetaTagModel()
+	 * globalMetadataModel()
 	 */
-	const GlobalFallback = 'global';
+	const GlobalMetadata = 'global';
 
 	/**
-	 * metadataGroupMetaTagModel
+	 * sectionMetadataModel()
 	 */
 	const MetadataGroup = 'MetadataGroup';
 
 	/**
-	 * entryOverrideMetaTagModel
+	 * elementMetadataModel()
 	 */
 	const Entry = 'entry';
 
 	/**
 	 * Highest Priority
 	 *
-	 * codeOverrideMetaTagModel
+	 * codeMetadataModel()
 	 */
 	const Code = 'code';
 }

@@ -112,7 +112,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		$prioritizedMetaTagModel->title = SproutSeoOptimizeHelper::prepareAppendedSiteName(
 			$prioritizedMetaTagModel,
 			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::MetadataGroup],
-			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::GlobalFallback]
+			$prioritizeMetaLevels[SproutSeo_MetaTagLevels::GlobalMetadata]
 		);
 
 		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::getRobotsMetaValue($prioritizedMetaTagModel->robots);
@@ -240,7 +240,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 *
 	 * @return BaseModel|SproutSeo_MetadataModel
 	 */
-	public function getMetadataGroupByInfo($type, $elementGroupId)
+	public function getMetadataGroupByInfo($type, $elementGroupId, $elementModel = null)
 	{
 		$metadataGroup = craft()->db->createCommand()
 			->select('*')
@@ -259,6 +259,14 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
 		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
+
+		if (craft()->request->isSiteRequest())
+		{
+			//Craft::dd($model->optimizedTitle);
+			//$model->optimizedTitle = craft()->templates->renderObjectTemplate($model->optimizedTitle, $elementModel);
+			//Craft::dd($model->optimizedTitle);
+
+		}
 
 		return $model;
 	}
@@ -467,7 +475,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		$optimizedDescription = (!empty($model->optimizedDescription) ? $model->optimizedDescription : null);
 
 		// Make our images single IDs instead of an array
-		$optimizedImage          = (!empty($model->optimizedImage and is_array($model->optimizedImage)) ? $model['optimizedImage'][0] : $model->optimizedImage);
+		$optimizedImage          = (!empty($model->optimizedImage) and is_array($model->optimizedImage)) ? $model['optimizedImage'][0] : $model->optimizedImage;
 		$model['optimizedImage'] = $optimizedImage;
 
 		// Set null values for any Advanced SEO Optimization

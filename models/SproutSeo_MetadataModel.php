@@ -168,11 +168,11 @@ class SproutSeo_MetadataModel extends BaseModel
 				$this->setAttributes($this->getMetadataGroup($overrideInfo));
 				break;
 
-			case SproutSeo_MetaTagLevels::GlobalFallback:
+			case SproutSeo_MetaTagLevels::GlobalMetadata:
 				$globals                = sproutSeo()->schema->getGlobals();
-				$globalFallbackMetaTags = $globals->meta;
+				$globalMetadata = $globals->meta;
 
-				$this->setAttributes($globalFallbackMetaTags);
+				$this->setAttributes($globalMetadata);
 				break;
 		}
 
@@ -234,8 +234,9 @@ class SproutSeo_MetadataModel extends BaseModel
 		{
 			$elementGroupId = $overrideInfo['elementGroupId'];
 			$elementTable   = $overrideInfo['elementTable'];
+			$elementModel   = $overrideInfo['elementModel'];
 
-			$metaTagsModel = sproutSeo()->metadata->getMetadataGroupByInfo($elementTable, $elementGroupId);
+			$metaTagsModel = sproutSeo()->metadata->getMetadataGroupByInfo($elementTable, $elementGroupId, $elementModel);
 			$attributes    = $metaTagsModel->getAttributes();
 		}
 
