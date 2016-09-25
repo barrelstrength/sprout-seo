@@ -314,15 +314,14 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		return $attributes;
 	}
 
-	private function getElementField($id)
+	private function getElementField($fieldId)
 	{
 		$value = null;
 
-		// it's a field id.
-		if (is_numeric($id))
+		if (is_numeric($fieldId))
 		{
-			// Let's check if the field exists in the entry
-			$field = craft()->fields->getFieldById($id);
+			// Does the field exist on the element?
+			$field = craft()->fields->getFieldById($fieldId);
 
 			if ($field)
 			{
