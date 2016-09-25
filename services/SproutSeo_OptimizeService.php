@@ -21,7 +21,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// Grab our path, we're going to figure out what SEO meta data and
 		// what Structured Data we need to output on the page based on this path
 		$this->context = $context;
-		$path          = craft()->request->getPath();
 
 		$globals = sproutSeo()->schema->getGlobals();
 
@@ -37,9 +36,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$sitemapInfo['globals']                 = $globals;
 
 		$metaHtml = sproutSeo()->metadata->getMetaTagHtml($prioritizedMetaTagModel);
-
-		// Check the Twig $context for any values we need to process
-		// to create Structured Data ($context->entry, $context->product, etc)
 
 		// Get our structured data values
 		$schemaHtml = sproutSeo()->schema->getStructureDataHtml($sitemapInfo);
