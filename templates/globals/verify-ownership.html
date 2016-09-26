@@ -2,24 +2,24 @@
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
 
+{% set verifyOwnershipOptions = craft.sproutSeo.getFinalOptions('ownership', 'service') %}
+
+{% set cols = [
+	{
+		type: 'selectOther',
+		options: verifyOwnershipOptions
+	},
+	{
+		type: 'textual',
+	},
+	{
+		type: 'textual',
+	}
+] %}
+
+{% set globals = craft.sproutSeo.getGlobalMetadata() %}
+
 {% set content %}
-	{% set schemaType = "ownership" %}
-	{% set verifyOwnershipOptions = craft.sproutSeo.getFinalOptions(schemaType, 'service') %}
-
-	{% set cols = [
-		{
-			type: 'selectOther',
-			options: verifyOwnershipOptions
-		},
-		{
-			type: 'textual',
-		},
-		{
-			type: 'textual',
-		}
-	] %}
-
-	{% set globals = craft.sproutSeo.getGlobalMetadata() %}
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
@@ -30,7 +30,7 @@
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut>
 		{{ getCsrfInput() }}
-		<input type="hidden" name="action" value="sproutSeo/metadata/saveVerifyOwnership">
+		<input type="hidden" name="action" value="sproutSeo/globals/saveVerifyOwnership">
 		<input type="hidden" name="redirect" value="sproutseo/globals/verify-ownership">
 
 		<table id="sproutseo-schema-ownership" class="data fullwidth">

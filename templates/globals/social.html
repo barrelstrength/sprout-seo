@@ -2,25 +2,23 @@
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
 
+{% set socialProfileOptions = craft.sproutSeo.getFinalOptions('social', 'profileName') %}
+
+{% set cols = [
+	{
+		type: 'selectOther',
+		heading: 'Profile',
+		options: socialProfileOptions
+	},
+	{
+		type: 'textual',
+		heading: 'URL'
+	}
+] %}
+
+{% set globals = craft.sproutSeo.getGlobalMetadata() %}
+
 {% set content %}
-
-	{% set schemaTypeFormSubmit = "meta,social" %}
-	{% set schemaType = "social" %}
-	{% set socialProfileOptions = craft.sproutSeo.getFinalOptions(schemaType, 'profileName') %}
-
-	{% set cols = [
-		{
-			type: 'selectOther',
-			heading: 'Profile',
-			options: socialProfileOptions
-		},
-		{
-			type: 'textual',
-			heading: 'URL'
-		}
-	] %}
-
-	{% set globals = craft.sproutSeo.getGlobalMetadata() %}
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
@@ -33,7 +31,7 @@
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/globals/saveGlobals">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
-		<input type="hidden" name="schemaType" value="{{ schemaTypeFormSubmit }}">
+		<input type="hidden" name="globalKeys" value="meta,social">
 
 		<table id="sproutseo-schema-social" class="data fullwidth collapsible">
 			<thead>

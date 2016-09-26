@@ -4,19 +4,19 @@
 
 {% set settings = craft.sproutSeo.getSettings() %}
 
-{% set content %}
-	{% set schemaType = "contacts" %}
-	{% set contactOptions = craft.sproutSeo.getFinalOptions(schemaType, 'contactType') %}
+{% set contactOptions = craft.sproutSeo.getFinalOptions("contacts", 'contactType') %}
 
-	{% set cols = [
-		{
-			type: 'selectOther',
-			options: contactOptions
-		},
-		{
-			type: 'textual'
-		}
-	] %}
+{% set cols = [
+	{
+		type: 'selectOther',
+		options: contactOptions
+	},
+	{
+		type: 'textual'
+	}
+] %}
+
+{% set content %}
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
@@ -32,7 +32,7 @@
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/globals/saveGlobals">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
-		<input type="hidden" name="schemaType" value="{{schemaType}}">
+		<input type="hidden" name="globalKeys" value="contacts">
 
 		<table id="sproutseo-schema-contacts" class="data fullwidth">
 			<thead>

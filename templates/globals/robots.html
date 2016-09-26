@@ -6,15 +6,13 @@
 
 {% set content %}
 
-	{% set schemaTypeFormSubmit = "meta,robots" %}
-
 	<form method="post" accept-charset="UTF-8" data-saveshortcut>
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/globals/saveGlobals">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
-		<input type="hidden" name="schemaType" value="{{ schemaTypeFormSubmit }}">
+		<input type="hidden" name="globalKeys" value="meta,robots">
 
-		{% set robotsNamespace = 'schema' %}
+		{% set robotsNamespace = 'globals' %}
 		{% include 'sproutseo/_partials/fields/robots' %}
 
 		<hr>

@@ -40,6 +40,54 @@ class SproutSeo_GlobalsController extends BaseController
 	}
 
 	/**
+	 * Save the Verify Ownership Structured Data to the database
+	 *
+	 * @throws HttpException
+	 */
+	public function actionSaveVerifyOwnership()
+	{
+		$this->requirePostRequest();
+
+		$ownershipMeta = craft()->request->getPost('sproutseo.meta.ownership');
+		$globalKeys    = 'ownership';
+
+		// Remove empty items from multi-dimensional array
+		$ownershipMeta = array_filter(array_map('array_filter', $ownershipMeta));
+
+		$ownershipMetaWithKeys = array();
+
+		foreach ($ownershipMeta as $key => $meta)
+		{
+			// @todo - add proper validation and return errors to template
+			if (count($meta) == 3)
+			{
+				$ownershipMetaWithKeys[$key]['service']          = $meta[0];
+				$ownershipMetaWithKeys[$key]['metaTag']          = $meta[1];
+				$ownershipMetaWithKeys[$key]['verificationCode'] = $meta[2];
+			}
+		}
+
+		$globals = SproutSeo_GlobalsModel::populateModel(array(
+			$globalKeys => $ownershipMetaWithKeys
+		));
+
+		if (sproutSeo()->globals->saveGlobals(array($globalKeys), $globals))
+		{
+			craft()->userSession->setNotice(Craft::t('Globals saved.'));
+
+			$this->redirectToPostedUrl($globals);
+		}
+		else
+		{
+			craft()->userSession->setError(Craft::t('Unable to save globals.'));
+
+			craft()->urlManager->setRouteVariables(array(
+				'globals' => $globals
+			));
+		}
+	}
+
+	/**
 	 * @param $postData
 	 *
 	 * @return SproutSeo_MetadataModel

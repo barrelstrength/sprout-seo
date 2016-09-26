@@ -6,7 +6,7 @@ class SproutSeo_GlobalsModel extends BaseModel
 	/**
 	 * @var null
 	 */
-	public $schemaId = null;
+	public $globalKey = null;
 
 	/**
 	 * @var null
@@ -44,7 +44,7 @@ class SproutSeo_GlobalsModel extends BaseModel
 	{
 		if ($target)
 		{
-			$this->schemaId = $target;
+			$this->globalKey = $target;
 		}
 
 		$targetMethod = 'get' . ucfirst($target);
@@ -70,7 +70,7 @@ class SproutSeo_GlobalsModel extends BaseModel
 	{
 		$structuredData = $this->prepareSchemaObject();
 
-		$schema = $this->{$this->schemaId};
+		$schema = $this->{$this->globalKey};
 
 		$structuredData['name']          = isset($schema['name']) ? $schema['name'] : null;
 		$structuredData['description']   = isset($schema['description']) ? $schema['description'] : null;
@@ -102,7 +102,7 @@ class SproutSeo_GlobalsModel extends BaseModel
 
 	protected function prepareSchemaObject()
 	{
-		$this->type = $this->{$this->schemaId}['@type'];
+		$this->type = $this->{$this->globalKey}['@type'];
 
 		return array(
 			"@context" => "http://schema.org",
@@ -133,7 +133,7 @@ class SproutSeo_GlobalsModel extends BaseModel
 
 	protected function getContacts()
 	{
-		$contacts = $this->{$this->schemaId};
+		$contacts = $this->{$this->globalKey};
 
 		$contactPoints = array();
 
@@ -154,7 +154,7 @@ class SproutSeo_GlobalsModel extends BaseModel
 
 	protected function getSocial()
 	{
-		$profiles = $this->{$this->schemaId};
+		$profiles = $this->{$this->globalKey};
 
 		$profileLinks = array();
 
@@ -174,21 +174,21 @@ class SproutSeo_GlobalsModel extends BaseModel
 
 	protected function getOwnership()
 	{
-		$ownership = $this->{$this->schemaId};
+		$ownership = $this->{$this->globalKey};
 
 		return $ownership;
 	}
 
 	protected function getRobots()
 	{
-		$robots = $this->{$this->schemaId};
+		$robots = $this->{$this->globalKey};
 
 		return $robots;
 	}
 
 	protected function getSettings()
 	{
-		$settings = $this->{$this->schemaId};
+		$settings = $this->{$this->globalKey};
 
 		return $settings;
 	}
