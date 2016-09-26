@@ -212,7 +212,11 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					if (method_exists($class, $method))
 					{
 						$elements                    = craft()->{$service}->{$method}();
-						$sitemapGroupSettings[$type] = $elements;
+
+						if (!empty($elements))
+						{
+							$sitemapGroupSettings[$type] = $elements;
+						}
 					}
 					else
 					{
