@@ -8,164 +8,38 @@ namespace Craft;
  */
 class SproutSeo_MetadataService extends BaseApplicationComponent
 {
-	protected $metadataGroupRecord;
+	/**
+	 * @var BaseRecord|object
+	 */
+	protected $sectionMetadataRecord;
 
+	/**
+	 * SproutSeo_MetadataService constructor.
+	 *
+	 * @param null $metaRecord
+	 */
 	public function __construct($metaRecord = null)
 	{
-		$this->metadataGroupRecord = $metaRecord;
-		if (is_null($this->metadataGroupRecord))
+		$this->sectionMetadataRecord = $metaRecord;
+		if (is_null($this->sectionMetadataRecord))
 		{
-			$this->metadataGroupRecord = SproutSeo_MetadataGroupRecord::model();
+			$this->sectionMetadataRecord = SproutSeo_SectionMetadataRecord::model();
 		}
 	}
 
-	// Meta Tags Output
+	// Section Metadata
 	// =========================================================================
 
 	/**
-	 * @param $overrideInfo
-	 *
-	 * @return string
-	 */
-	public function getMetaTagHtml(SproutSeo_MetadataModel $prioritizedMetaTagModel)
-	{
-		$globals = sproutSeo()->schema->getGlobals();
-
-		$googlePlus = sproutSeo()->schema->getGooglePlus($globals['social']);
-
-		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
-
-		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
-			'globals'    => $globals,
-			'meta'       => $prioritizedMetaTagModel->getMetaTagData(),
-			'googlePlus' => $googlePlus
-		));
-
-		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
-
-		return $output;
-	}
-
-	/**
-	 * Prioritize our meta data
-	 * ------------------------------------------------------------
-	 *
-	 * Loop through and select the highest ranking value for each attribute in our SproutSeo_MetadataModel
-	 *
-	 * 1) Code Metadata
-	 * 2) Element Metadata
-	 * 3) Section Metadata
-	 * 4) Global Metadata
-	 * 5) Blank
-	 *
-	 * @param $sitemapInfo
-	 *
-	 * @return SproutSeo_MetadataModel
-	 */
-	public function getPrioritizedMetaTagModel($sitemapInfo)
-	{
-		$metaLevels = SproutSeo_MetadataLevels::getConstants();
-
-		foreach ($metaLevels as $key => $metaLevel)
-		{
-			$prioritizeMetaLevels[$metaLevel] = null;
-		}
-
-		$prioritizedMetaTagModel = new SproutSeo_MetadataModel();
-
-		sproutSeo()->optimize->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
-
-		// Default to the Current URL
-		$prioritizedMetaTagModel->canonical  = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
-		$prioritizedMetaTagModel->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
-		$prioritizedMetaTagModel->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetaTagModel);
-
-		foreach ($prioritizeMetaLevels as $meta => $model)
-		{
-			$metaTagModel = new SproutSeo_MetadataModel();
-
-			$metaTagModel = $metaTagModel->setMeta($meta, $this->getMetaTagsFromTemplate(
-				$meta, $sitemapInfo)
-			);
-
-			$prioritizeMetaLevels[$meta] = $metaTagModel;
-
-			foreach ($prioritizedMetaTagModel->getAttributes() as $key => $value)
-			{
-				// Test for a value on each of our models in their order of priority
-				if ($metaTagModel->getAttribute($key))
-				{
-					$prioritizedMetaTagModel[$key] = $metaTagModel[$key];
-				}
-
-				// Make sure all our strings are trimmed
-				if (is_string($prioritizedMetaTagModel[$key]))
-				{
-					$prioritizedMetaTagModel[$key] = trim($prioritizedMetaTagModel[$key]);
-				}
-			}
-		}
-
-		$prioritizedMetaTagModel->title = SproutSeoOptimizeHelper::prepareAppendedSiteName(
-			$prioritizedMetaTagModel,
-			$prioritizeMetaLevels[SproutSeo_MetadataLevels::SectionMetadata],
-			$prioritizeMetaLevels[SproutSeo_MetadataLevels::GlobalMetadata]
-		);
-
-		$prioritizedMetaTagModel->robots = SproutSeoOptimizeHelper::getRobotsMetaValue($prioritizedMetaTagModel->robots);
-
-		return $prioritizedMetaTagModel;
-	}
-
-	/**
-	 * Store our template meta data in a place so we can access when we need to
+	 * Get all Section Metadata from the database.
 	 *
 	 * @return array
 	 */
-	public function getMetaTagsFromTemplate($type = null, $sitemapInfo)
-	{
-		$response = array();
-
-		switch ($type)
-		{
-			case SproutSeo_MetadataLevels::SectionMetadata:
-				if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
-				{
-					$response = $sitemapInfo;
-				}
-				break;
-			case SproutSeo_MetadataLevels::ElementMetadata:
-				if (isset($sitemapInfo['elementModel']))
-				{
-					$elementModel = $sitemapInfo['elementModel'];
-
-					if (isset($elementModel->id))
-					{
-						$response = array('elementId' => $elementModel->id);
-					}
-				}
-				break;
-			case SproutSeo_MetadataLevels::CodeMetadata:
-				$response = sproutSeo()->optimize->templateMeta;
-				break;
-		}
-
-		return $response;
-	}
-
-	// Global Meta Tags
-	// =========================================================================
-
-	/**
-	 * Get all Metadata Groups from the database.
-	 *
-	 * @return array
-	 */
-	public function getMetaTagGroups()
+	public function getSectionMetadata()
 	{
 		$results = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metadatagroups')
+			->from('sproutseo_metadata_sections')
 			->order('name')
 			->queryAll();
 
@@ -173,32 +47,15 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all Metadata Groups from the database.
-	 *
-	 * @return array
-	 */
-	public function getCustomMetaTagGroups($urls)
-	{
-		$results = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_metadatagroups')
-			->where(array('not in', 'url', $urls))
-			->order('name')
-			->queryAll();
-
-		return SproutSeo_MetadataModel::populateModels($results);
-	}
-
-	/**
-	 * Get a specific Metadata Group from the database based on ID
+	 * Get a specific Section Metadata from the database based on ID
 	 *
 	 * @param $id
 	 *
 	 * @return BaseModel|SproutSeo_MetadataModel
 	 */
-	public function getMetadataGroupById($id)
+	public function getSectionMetadataById($id)
 	{
-		if ($record = $this->metadataGroupRecord->findByPk($id))
+		if ($record = $this->sectionMetadataRecord->findByPk($id))
 		{
 			return SproutSeo_MetadataModel::populateModel($record);
 		}
@@ -211,11 +68,11 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 *
 	 * @return BaseModel|SproutSeo_MetadataModel
 	 */
-	public function getMetadataGroupByHandle($handle)
+	public function getSectionMetadataByHandle($handle)
 	{
 		$query = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metadatagroups')
+			->from('sproutseo_metadata_sections')
 			->where('handle=:handle', array(':handle' => $handle))
 			->queryRow();
 
@@ -226,7 +83,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		$model = SproutSeo_MetadataModel::populateModel($query);
 
-		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
+		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($model->robots) : null;
 		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
 
 		return $model;
@@ -237,11 +94,11 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 *
 	 * @return BaseModel|SproutSeo_MetadataModel
 	 */
-	public function getMetadataGroupByInfo($type, $elementGroupId, $elementModel = null)
+	public function getSectionMetadataByInfo($type, $elementGroupId, $elementModel = null)
 	{
-		$metadataGroup = craft()->db->createCommand()
+		$sectionMetadata = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metadatagroups')
+			->from('sproutseo_metadata_sections')
 			->where('type=:type and elementGroupId=:elementGroupId',
 				array(':type' => $type, ':elementGroupId' => $elementGroupId)
 			)
@@ -249,12 +106,12 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 		$model = new SproutSeo_MetadataModel();
 
-		if ($metadataGroup)
+		if ($sectionMetadata)
 		{
-			$model = SproutSeo_MetadataModel::populateModel($metadataGroup);
+			$model = SproutSeo_MetadataModel::populateModel($sectionMetadata);
 		}
 
-		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($model->robots) : null;
+		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($model->robots) : null;
 		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);
 
 		if (craft()->request->isSiteRequest())
@@ -262,10 +119,26 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 			//Craft::dd($model->optimizedTitle);
 			//$model->optimizedTitle = craft()->templates->renderObjectTemplate($model->optimizedTitle, $elementModel);
 			//Craft::dd($model->optimizedTitle);
-
 		}
 
 		return $model;
+	}
+
+	/**
+	 * Get all Section Metadata from the database.
+	 *
+	 * @return array
+	 */
+	public function getCustomSectionMetadata($urls)
+	{
+		$results = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_metadata_sections')
+			->where(array('not in', 'url', $urls))
+			->order('name')
+			->queryAll();
+
+		return SproutSeo_MetadataModel::populateModels($results);
 	}
 
 	/**
@@ -274,11 +147,11 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function saveMetadataGroup(SproutSeo_MetadataModel $model)
+	public function saveSectionMetadata(SproutSeo_MetadataModel $model)
 	{
 		if ($id = $model->getAttribute('id'))
 		{
-			if (null === ($record = $this->metadataGroupRecord->findByPk($id)))
+			if (null === ($record = $this->sectionMetadataRecord->findByPk($id)))
 			{
 				throw new Exception(Craft::t('Can\'t find default with ID "{id}"', array(
 					'id' => $id
@@ -287,7 +160,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		}
 		else
 		{
-			$record = $this->metadataGroupRecord->create();
+			$record = $this->sectionMetadataRecord->create();
 		}
 
 		// @todo - is there a better way to do this flip/flop?
@@ -316,92 +189,29 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Delete a Metadata Group by ID
+	 * Delete a Section Metadata by ID
 	 *
 	 * @param int
 	 *
 	 * @return bool
 	 */
-	public function deleteMetadataGroupById($id = null)
+	public function deleteSectionMetadataById($id = null)
 	{
-		$record = new SproutSeo_MetadataGroupRecord;
-
-		return $record->deleteByPk($id);
-	}
-
-	// Meta Tag Content
-	// =========================================================================
-
-	/**
-	 * Create a new Meta Tag Content record
-	 *
-	 * @param $attributes
-	 */
-	public function createMetadataContent($attributes)
-	{
-		craft()->db->createCommand()
-			->insert('sproutseo_metadatacontent', $attributes);
-	}
-
-	/**
-	 * Get a Meta Tag Content record by Element ID
-	 *
-	 * @param $elementId
-	 * @param $locale
-	 *
-	 * @return BaseModel
-	 */
-	public function getMetadataContentByElementId($elementId, $locale)
-	{
-		$query = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_metadatacontent')
-			->where('elementId = :elementId', array(':elementId' => $elementId))
-			->andWhere('locale = :locale', array(':locale' => $locale))
-			->queryRow();
-
-		$model = SproutSeo_MetadataModel::populateModel($query);
-
-		return $model;
-	}
-
-	/**
-	 * Update a Meta Tag Content record
-	 *
-	 * @param $id
-	 * @param $attributes
-	 */
-	public function updateMetadataContent($id, $attributes)
-	{
-		craft()->db->createCommand()
-			->update('sproutseo_metadatacontent',
-				$attributes,
-				'id = :id', array(':id' => $id)
-			);
-	}
-
-	/**
-	 * Delete a Meta Tag Content record
-	 *
-	 * @param null $id
-	 *
-	 * @return int
-	 */
-	public function deleteMetadataContentById($id = null)
-	{
-		$record = new SproutSeo_MetadataContentRecord();
+		$record = new SproutSeo_SectionMetadataRecord();
 
 		return $record->deleteByPk($id);
 	}
 
 	/**
-	 * Returns metadata group info
+	 * Returns Section Metadata Info
+	 *
+	 * @todo - clarify what "info" is
 	 *
 	 * @param array $info
 	 *
 	 * @return array
 	 */
-	public function getMetadataInfo($info)
+	public function getSectionMetadataInfo($info)
 	{
 		$response = array(
 			'element'    => null,
@@ -418,7 +228,7 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 			// Just trying to get the url
 			$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
-			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $type);
+			$elementInfo = sproutSeo()->sitemap->getSectionMetadataElementInfo($sitemaps, $type);
 			$locale      = craft()->i18n->getLocaleById(craft()->language);
 
 			// If we don't have an elementGroupId, we're working with a Custom Metadata Page
@@ -440,14 +250,14 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 			{
 				$element = $element[0];
 
-				// check if exists in sproutseo_metadatagroups
-				$metataggroups = $this->getMetadataGroupByInfo($type, $info['elementGroupId']);
+				// check if exists in sproutseo_metadata_sections
+				$sectionMetadata = $this->getSectionMetadataByInfo($type, $info['elementGroupId']);
 
-				if ($metataggroups->sitemapUrl)
+				if ($sectionMetadata->url)
 				{
-					$response['isNew']        = false;
-					$response['metadataId']   = $metataggroups->id;
-					$response['metataggroup'] = $metataggroups;
+					$response['isNew']           = false;
+					$response['metadataId']      = $sectionMetadata->id;
+					$response['sectionmetadata'] = $sectionMetadata;
 				}
 			}
 			else
@@ -461,81 +271,107 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 		return $response;
 	}
 
-	public function updateOptimizedAndAdvancedMetaValues($model)
+	// Element Metadata
+	// =========================================================================
+
+	/**
+	 * Create an Element Metadata record
+	 *
+	 * @param $attributes
+	 */
+	public function createElementMetadata($attributes)
 	{
-		$globals        = sproutSeo()->schema->getGlobals();
-		$globalSettings = $globals->settings;
+		craft()->db->createCommand()
+			->insert('sproutseo_metadata_elements', $attributes);
+	}
 
-		// Prepare our optimized variables
-		// -------------------------------------------------------------
-		$optimizedTitle       = (!empty($model->optimizedTitle) ? $model->optimizedTitle : null);
-		$optimizedDescription = (!empty($model->optimizedDescription) ? $model->optimizedDescription : null);
+	/**
+	 * Get an Element Metadata by Element ID
+	 *
+	 * @param $elementId
+	 * @param $locale
+	 *
+	 * @return BaseModel
+	 */
+	public function getElementMetadataByElementId($elementId, $locale)
+	{
+		$query = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_metadata_elements')
+			->where('elementId = :elementId', array(':elementId' => $elementId))
+			->andWhere('locale = :locale', array(':locale' => $locale))
+			->queryRow();
 
-		// Make our images single IDs instead of an array
-		$optimizedImage          = (!empty($model->optimizedImage) and is_array($model->optimizedImage)) ? $model['optimizedImage'][0] : $model->optimizedImage;
-		$model['optimizedImage'] = $optimizedImage;
-
-		// Set null values for any Advanced SEO Optimization
-		// override fields whose blocks have been disabled
-		// -------------------------------------------------------------
-		$customizationSettings = JsonHelper::decode($model->customizationSettings);
-
-		if (!$customizationSettings['basicMetaMetadataGroupEnabled'])
-		{
-			foreach ($model['basicMeta'] as $attribute => $value)
-			{
-				$model->{$attribute} = null;
-			}
-		}
-
-		if (!$customizationSettings['openGraphMetadataGroupEnabled'])
-		{
-			foreach ($model['openGraphMeta'] as $attribute => $value)
-			{
-				$model->{$attribute} = null;
-			}
-		}
-
-		if (!$customizationSettings['twitterCardMetadataGroupEnabled'])
-		{
-			foreach ($model['twitterCardsMeta'] as $attribute => $value)
-			{
-				$model->{$attribute} = null;
-			}
-		}
-
-		if (!$customizationSettings['geoMetadataGroupEnabled'])
-		{
-			foreach ($model['geographicMeta'] as $attribute => $value)
-			{
-				$model->{$attribute} = null;
-			}
-		}
-
-		if (!$customizationSettings['robotsMetadataGroupEnabled'])
-		{
-			foreach ($model['robotsMeta'] as $attribute => $value)
-			{
-				$model->{$attribute} = null;
-			}
-		}
-
-		// Set any values that don't yet exist to the optimized values
-		// -------------------------------------------------------------
-		$model->title        = !is_null($model->title) ? $model->title : $optimizedTitle;
-		$model->ogTitle      = !is_null($model->ogTitle) ? $model->ogTitle : $optimizedTitle;
-		$model->twitterTitle = !is_null($model->twitterTitle) ? $model->twitterTitle : $optimizedTitle;
-
-		$model->description        = !is_null($model->description) ? $model->description : $optimizedDescription;
-		$model->ogDescription      = !is_null($model->ogDescription) ? $model->ogDescription : $optimizedDescription;
-		$model->twitterDescription = !is_null($model->twitterDescription) ? $model->twitterDescription : $optimizedDescription;
-
-		$model->ogImage      = !is_null($model->ogImage) ? $model->ogImage : $optimizedImage;
-		$model->twitterImage = !is_null($model->twitterImage) ? $model->twitterImage : $optimizedImage;
-
-		$model->ogType      = !is_null($model->ogType) ? $model->ogType : $globalSettings['defaultOgType'];
-		$model->twitterCard = !is_null($model->twitterCard) ? $model->twitterCard : $globalSettings['defaultTwitterCard'];
+		$model = SproutSeo_MetadataModel::populateModel($query);
 
 		return $model;
+	}
+
+	/**
+	 * Update am Element Metadata record
+	 *
+	 * @param $id
+	 * @param $attributes
+	 */
+	public function updateElementMetadata($id, $attributes)
+	{
+		craft()->db->createCommand()
+			->update('sproutseo_metadata_elements',
+				$attributes,
+				'id = :id', array(':id' => $id)
+			);
+	}
+
+	/**
+	 * Delete an Element Metadata record
+	 *
+	 * @param null $id
+	 *
+	 * @return int
+	 */
+	public function deleteElementMetadataById($id = null)
+	{
+		$record = new SproutSeo_ElementMetadataRecord();
+
+		return $record->deleteByPk($id);
+	}
+
+	// Code Metadata
+	// =========================================================================
+
+	/**
+	 * Store our codeMetadata in a place so we can access when we need to
+	 *
+	 * @return array
+	 */
+	public function getCodeMetadata($type = null, $sitemapInfo)
+	{
+		$response = array();
+
+		switch ($type)
+		{
+			case SproutSeo_MetadataLevels::SectionMetadata:
+				if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
+				{
+					$response = $sitemapInfo;
+				}
+				break;
+			case SproutSeo_MetadataLevels::ElementMetadata:
+				if (isset($sitemapInfo['elementModel']))
+				{
+					$elementModel = $sitemapInfo['elementModel'];
+
+					if (isset($elementModel->id))
+					{
+						$response = array('elementId' => $elementModel->id);
+					}
+				}
+				break;
+			case SproutSeo_MetadataLevels::CodeMetadata:
+				$response = sproutSeo()->optimize->codeMetadata;
+				break;
+		}
+
+		return $response;
 	}
 }

@@ -13,6 +13,9 @@ class SproutSeoVariable
 	 */
 	protected $plugin;
 
+	/**
+	 * SproutSeoVariable constructor.
+	 */
 	public function __construct()
 	{
 		$this->plugin = craft()->plugins->getPlugin('sproutseo');
@@ -54,7 +57,7 @@ class SproutSeoVariable
 	 */
 	public function optimize()
 	{
-		$output = sproutSeo()->metadata->getMetaTagHtml();
+		$output = sproutSeo()->optimize->getMetaTagHtml();
 
 		return TemplateHelper::getRaw($output);
 	}
@@ -66,9 +69,9 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedMeta()
 	{
-		$prioritizedMetaTagModel = sproutSeo()->optimize->getOptimizedMeta();
+		$prioritizedMetadataModel = sproutSeo()->optimize->getOptimizedMeta();
 
-		return $prioritizedMetaTagModel->getMetaTagData();
+		return $prioritizedMetadataModel->getMetaTagData();
 	}
 
 	/**
@@ -87,9 +90,9 @@ class SproutSeoVariable
 	 *
 	 * @return mixed
 	 */
-	public function getMetaTagGroups()
+	public function getSectionMetadata()
 	{
-		return sproutSeo()->metadata->getMetaTagGroups();
+		return sproutSeo()->metadata->getSectionMetadata();
 	}
 
 	/**
@@ -99,9 +102,9 @@ class SproutSeoVariable
 	 *
 	 * @return mixed
 	 */
-	public function getCustomMetaTagGroups($urls)
+	public function getCustomSectionMetadata($urls)
 	{
-		return sproutSeo()->metadata->getCustomMetaTagGroups($urls);
+		return sproutSeo()->metadata->getCustomSectionMetadata($urls);
 	}
 
 	/**
@@ -123,9 +126,9 @@ class SproutSeoVariable
 	 *
 	 * @return null|mixed
 	 */
-	public function getMetaTagGroupById($id)
+	public function getSectionMetadataById($id)
 	{
-		return sproutSeo()->metadata->getMetadataGroupById($id);
+		return sproutSeo()->metadata->getSectionMetadataById($id);
 	}
 
 	/**
@@ -133,9 +136,9 @@ class SproutSeoVariable
 	 *
 	 * @return SproutSeo_MetadataModel
 	 */
-	public function getMetaTagGroupByHandle($handle)
+	public function getSectionMetadataByHandle($handle)
 	{
-		return sproutSeo()->metadata->getMetadataGroupByHandle($handle);
+		return sproutSeo()->metadata->getSectionMetadataByHandle($handle);
 	}
 
 	/**
@@ -169,13 +172,14 @@ class SproutSeoVariable
 	}
 
 	/**
-	 * Returns metadata group info
+	 * Returns Section Metadata info
+	 * @todo - clarify what "info" is
 	 *
 	 * @return array
 	 */
-	public function getMetadataInfo($info)
+	public function getSectionMetadataInfo($info)
 	{
-		return sproutSeo()->metadata->getMetadataInfo($info);
+		return sproutSeo()->metadata->getSectionMetadataInfo($info);
 	}
 
 	/**
@@ -188,26 +192,41 @@ class SproutSeoVariable
 		return sproutSeo()->sitemap->getAllCustomNames();
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function getDivider()
 	{
 		return craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 	}
 
+	/**
+	 * @return BaseModel
+	 */
 	public function getSettings()
 	{
 		return craft()->plugins->getPlugin('sproutseo')->getSettings();
 	}
 
-	public function getGlobals()
+	/**
+	 * @return BaseModel
+	 */
+	public function getGlobalMetadata()
 	{
-		return sproutSeo()->schema->getGlobals();
+		return sproutSeo()->globals->getGlobalMetadata();
 	}
 
+	/**
+	 * @return \Twig_Markup
+	 */
 	public function getKnowledgeGraphLinkedData()
 	{
 		return sproutSeo()->schema->getKnowledgeGraphLinkedData();
 	}
 
+	/**
+	 * @return IElementType|null
+	 */
 	public function getAssetElementType()
 	{
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
@@ -215,6 +234,11 @@ class SproutSeoVariable
 		return $elementType;
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return bool|BaseElementModel|null
+	 */
 	public function getElementById($id)
 	{
 		$element = craft()->elements->getElementById($id);
@@ -222,6 +246,9 @@ class SproutSeoVariable
 		return $element != null ? $element : false;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getOrganizationOptions()
 	{
 		$tree       = file_get_contents(CRAFT_PLUGINS_PATH . 'sproutseo/resources/jsonld/tree.jsonld');
@@ -245,6 +272,11 @@ class SproutSeoVariable
 		return $jsonByName;
 	}
 
+	/**
+	 * @param $string
+	 *
+	 * @return DateTime
+	 */
 	public function getDate($string)
 	{
 		$date = new DateTime($string);
@@ -252,6 +284,11 @@ class SproutSeoVariable
 		return $date;
 	}
 
+	/**
+	 * @param $description
+	 *
+	 * @return mixed|string
+	 */
 	public function getJsonName($description)
 	{
 		$name = preg_replace('/(?<!^)([A-Z])/', ' \\1', $description);
@@ -427,9 +464,15 @@ class SproutSeoVariable
 		return $options;
 	}
 
+	/**
+	 * @param $schemaType
+	 * @param $handle
+	 *
+	 * @return array
+	 */
 	public function getFinalOptions($schemaType, $handle)
 	{
-		$schemaGlobals = sproutSeo()->schema->getGlobals();
+		$schemaGlobals = sproutSeo()->globals->getGlobalMetadata();
 		$options       = $this->getGlobalOptions($schemaType);
 
 		array_push($options, array('optgroup' => 'Custom'));
@@ -469,6 +512,9 @@ class SproutSeoVariable
 		return false;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getGenderOptions()
 	{
 		$schemaType = "identity";
@@ -487,7 +533,7 @@ class SproutSeoVariable
 			)
 		);
 
-		$schemaGlobals = sproutSeo()->schema->getGlobals();
+		$schemaGlobals = sproutSeo()->globals->getGlobalMetadata();
 		$gender        = $schemaGlobals[$schemaType]['gender'];
 
 		array_push($options, array('optgroup' => 'Custom'));
@@ -502,7 +548,10 @@ class SproutSeoVariable
 		return $options;
 	}
 
-	public function getAppenedMetaTitleOptions()
+	/**
+	 * @return array
+	 */
+	public function getAppendMetaTitleOptions()
 	{
 		$options = array(
 			array(
@@ -515,7 +564,7 @@ class SproutSeoVariable
 			)
 		);
 
-		$schemaGlobals = sproutSeo()->schema->getGlobals();
+		$schemaGlobals = sproutSeo()->globals->getGlobalMetadata();
 
 		if (isset($schemaGlobals['settings']['appendTitleValue']))
 		{
@@ -534,7 +583,10 @@ class SproutSeoVariable
 		return $options;
 	}
 
-	public function getCharacterSegmentOptions()
+	/**
+	 * @return array
+	 */
+	public function getSeoDividerOptions()
 	{
 		$options = array(
 			array(
@@ -563,7 +615,7 @@ class SproutSeoVariable
 			),
 		);
 
-		$schemaGlobals = sproutSeo()->schema->getGlobals();
+		$schemaGlobals = sproutSeo()->globals->getGlobalMetadata();
 
 		if (isset($schemaGlobals['settings']['seoDivider']))
 		{
@@ -666,12 +718,15 @@ class SproutSeoVariable
 	 */
 	public function getGlobalRobots()
 	{
-		$globals = sproutSeo()->schema->getGlobals();
-		$robots  = SproutSeoOptimizeHelper::getRobotsMetaValue($globals->robots);
+		$globals = sproutSeo()->globals->getGlobalMetadata();
+		$robots  = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($globals->robots);
 
-		return SproutSeoOptimizeHelper::prepRobotsForSettings($robots);
+		return SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($robots);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getLocaleOptions()
 	{
 		$locales = array(
@@ -709,7 +764,7 @@ class SproutSeoVariable
 	 *
 	 * @return array
 	 */
-	public function getSchemaMapsArray()
+	public function getSchemaMapOptions()
 	{
 		$schemaMaps = $this->getSchemaMaps();
 		$schemas    = array('' => 'Select...');
@@ -737,7 +792,7 @@ class SproutSeoVariable
 	 */
 	public function getContacts()
 	{
-		$contacts = sproutSeo()->schema->getGlobals()->contacts;
+		$contacts = sproutSeo()->globals->getGlobalMetadata()->contacts;
 
 		$contacts = $contacts ? $contacts : array();
 
@@ -757,7 +812,7 @@ class SproutSeoVariable
 	 */
 	public function getSocialProfiles()
 	{
-		$socials = sproutSeo()->schema->getGlobals()->social;
+		$socials = sproutSeo()->globals->getGlobalMetadata()->social;
 
 		$socials = $socials ? $socials : array();
 

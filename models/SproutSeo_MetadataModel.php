@@ -3,46 +3,49 @@ namespace Craft;
 
 class SproutSeo_MetadataModel extends BaseModel
 {
-	protected $basicMeta = array();
+
+	/**
+	 * @var array
+	 */
+	protected $searchMeta = array();
+
+	/**
+	 * @var array
+	 */
 	protected $robotsMeta = array();
+
+	/**
+	 * @var array
+	 */
 	protected $geographicMeta = array();
+
+	/**
+	 * @var array
+	 */
 	protected $openGraphMeta = array();
+
+	/**
+	 * @var array
+	 */
 	protected $twitterCardsMeta = array();
 
+	/**
+	 * @return array
+	 */
 	protected function defineAttributes()
 	{
 		$sitemap = array(
-			'elementGroupId' => array(AttributeType::Number),
-			'type'           => array(AttributeType::String),
+			'elementGroupId'      => array(AttributeType::Number),
+			'type'                => array(AttributeType::String),
+			'enabled'             => array(AttributeType::Bool, 'default' => false, 'required' => true),
+			'isSitemapCustomPage' => array(AttributeType::Bool, 'default' => false, 'required' => true),
+			'url'                 => array(AttributeType::String),
+			'priority'            => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
+			'changeFrequency'     => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
 
-			'sitemapUrl'             => array(AttributeType::String),
-			'sitemapPriority'        => array(
-				AttributeType::Number,
-				'maxLength' => 2,
-				'decimals'  => 1,
-				'default'   => '0.5',
-				'required'  => true
-			),
-			'sitemapChangeFrequency' => array(
-				AttributeType::String,
-				'maxLength' => 7,
-				'default'   => 'weekly',
-				'required'  => true
-			),
+			'locale'    => array(AttributeType::String),
+			'schemaMap' => array(AttributeType::String),
 
-			'enabled'             => array(
-				AttributeType::Bool,
-				'default'  => false,
-				'required' => true
-			),
-			'isSitemapCustomPage' => array(
-				AttributeType::Bool,
-				'default'  => false,
-				'required' => true
-			),
-			'schemaMap'           => array(AttributeType::String),
-
-			'locale'      => array(AttributeType::String),
 			'dateUpdated' => array(AttributeType::DateTime),
 			'dateCreated' => array(AttributeType::DateTime),
 			'uid'         => array(AttributeType::String),
@@ -52,7 +55,7 @@ class SproutSeo_MetadataModel extends BaseModel
 		// name => title, url => canonical, default not in use...
 		$metaTags = array(
 			'id'                    => array(AttributeType::Number),
-			'elementId'               => array(AttributeType::Number),
+			'elementId'             => array(AttributeType::Number),
 			'default'               => array(AttributeType::String),
 			'name'                  => array(AttributeType::String),
 			'handle'                => array(AttributeType::String),
@@ -65,7 +68,7 @@ class SproutSeo_MetadataModel extends BaseModel
 			'customizationSettings' => array(AttributeType::String),
 		);
 
-		$this->basicMeta = array(
+		$this->searchMeta = array(
 			'title'       => array(AttributeType::String),
 			'description' => array(AttributeType::String),
 			'keywords'    => array(AttributeType::String),
@@ -122,7 +125,7 @@ class SproutSeo_MetadataModel extends BaseModel
 		$attributes = array_merge(
 			$sitemap,
 			$metaTags,
-			$this->basicMeta,
+			$this->searchMeta,
 			$this->robotsMeta,
 			$this->geographicMeta,
 			$this->openGraphMeta,
@@ -132,15 +135,19 @@ class SproutSeo_MetadataModel extends BaseModel
 		return $attributes;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getMetaTagData()
 	{
 		$metaTagData = array();
 
-		$metaTagData['basic']     = $this->getBasicMetaTagData();
-		$metaTagData['robots']    = $this->getRobotsMetaTagData();
-		$metaTagData['geo']       = $this->getGeographicMetaTagData();
-		$metaTagData['openGraph'] = $this->getOpenGraphMetaTagData();
-		$metaTagData['twitter']   = $this->getTwitterCardMetaTagData();
+		$metaTagData['search']      = $this->getSearchMetaTagData();
+		$metaTagData['robots']      = $this->getRobotsMetaTagData();
+		$metaTagData['geo']         = $this->getGeographicMetaTagData();
+		$metaTagData['openGraph']   = $this->getOpenGraphMetaTagData();
+		$metaTagData['twitterCard'] = $this->getTwitterCardMetaTagData();
+		$metaTagData['googlePlus']  = $this->getGooglePlusMetaTagData();
 
 		return $metaTagData;
 	}
@@ -152,27 +159,24 @@ class SproutSeo_MetadataModel extends BaseModel
 	 * @return $this
 	 * @throws \Exception
 	 */
-	public function setMeta($type = 'global', $overrideInfo = array())
+	public function setMeta($type = SproutSeo_MetadataLevels::GlobalMetadata, $overrideInfo = array())
 	{
 		switch ($type)
 		{
 			case SproutSeo_MetadataLevels::CodeMetadata:
-				$this->setAttributes($this->getCodeOverride($overrideInfo));
+				$this->setAttributes($this->prepareCodeMetadata($overrideInfo));
 				break;
 
 			case SproutSeo_MetadataLevels::ElementMetadata:
-				$this->setAttributes($this->getElementMetadata($overrideInfo));
+				$this->setAttributes($this->prepareElementMetadata($overrideInfo));
 				break;
 
 			case SproutSeo_MetadataLevels::SectionMetadata:
-				$this->setAttributes($this->getMetadataGroup($overrideInfo));
+				$this->setAttributes($this->prepareSectionMetadata($overrideInfo));
 				break;
 
 			case SproutSeo_MetadataLevels::GlobalMetadata:
-				$globals                = sproutSeo()->schema->getGlobals();
-				$globalMetadata = $globals->meta;
-
-				$this->setAttributes($globalMetadata);
+				$this->setAttributes($this->prepareGlobalMetadata());
 				break;
 		}
 
@@ -182,19 +186,52 @@ class SproutSeo_MetadataModel extends BaseModel
 	}
 
 	/**
-	 * Get Meta Tag Content based on an Element ID
+	 * @return mixed
+	 */
+	protected function prepareGlobalMetadata()
+	{
+		$globals = sproutSeo()->globals->getGlobalMetadata();
+
+		return $globals->meta;
+	}
+
+	/**
+	 * Create our default Section Metadata SproutSeo_MetaTagsModel
+	 *
+	 * @param $overrideInfo
+	 *
+	 * @return SproutSeo_MetadataModel
+	 */
+	protected function prepareSectionMetadata($overrideInfo)
+	{
+		$attributes = array();
+
+		if ($overrideInfo)
+		{
+			$elementGroupId = $overrideInfo['elementGroupId'];
+			$elementTable   = $overrideInfo['elementTable'];
+			$elementModel   = $overrideInfo['elementModel'];
+
+			$metaTagsModel = sproutSeo()->metadata->getSectionMetadataByInfo($elementTable, $elementGroupId, $elementModel);
+			$attributes    = $metaTagsModel->getAttributes();
+		}
+
+		return $attributes;
+	}
+
+	/**
+	 * Get Element Metadata based on an Element ID
 	 *
 	 * @param $overrideInfo
 	 *
 	 * @return array
 	 */
-	protected function getElementMetadata($overrideInfo)
+	protected function prepareElementMetadata($overrideInfo)
 	{
 		if (isset($overrideInfo['elementId']))
 		{
-			// @todo - revisit when adding internationalization
-			$locale        = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$elementMetadata = sproutSeo()->metadata->getMetadataContentByElementId($overrideInfo['elementId'], $locale);
+			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
+			$elementMetadata = sproutSeo()->metadata->getElementMetadataByElementId($overrideInfo['elementId'], $locale);
 
 			return $elementMetadata->getAttributes();
 		}
@@ -209,7 +246,7 @@ class SproutSeo_MetadataModel extends BaseModel
 	 *
 	 * @return SproutSeo_MetadataModel
 	 */
-	protected function getCodeOverride($overrideInfo)
+	protected function prepareCodeMetadata($overrideInfo)
 	{
 		if (!empty($overrideInfo))
 		{
@@ -220,34 +257,13 @@ class SproutSeo_MetadataModel extends BaseModel
 	}
 
 	/**
-	 * Create our default Metadata Group SproutSeo_MetaTagsModel
-	 *
-	 * @param $overrideInfo
-	 *
-	 * @return SproutSeo_MetadataModel
+	 * @return array
 	 */
-	protected function getMetadataGroup($overrideInfo)
-	{
-		$attributes = array();
-
-		if ($overrideInfo)
-		{
-			$elementGroupId = $overrideInfo['elementGroupId'];
-			$elementTable   = $overrideInfo['elementTable'];
-			$elementModel   = $overrideInfo['elementModel'];
-
-			$metaTagsModel = sproutSeo()->metadata->getMetadataGroupByInfo($elementTable, $elementGroupId, $elementModel);
-			$attributes    = $metaTagsModel->getAttributes();
-		}
-
-		return $attributes;
-	}
-
-	protected function getBasicMetaTagData()
+	protected function getSearchMetaTagData()
 	{
 		$tagData = array();
 
-		foreach ($this->basicMeta as $key => $value)
+		foreach ($this->searchMeta as $key => $value)
 		{
 			if ($this->{$key})
 			{
@@ -259,6 +275,9 @@ class SproutSeo_MetadataModel extends BaseModel
 		return $tagData;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function getRobotsMetaTagData()
 	{
 		$tagData = array();
@@ -281,6 +300,9 @@ class SproutSeo_MetadataModel extends BaseModel
 		return $tagData;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function getGeographicMetaTagData()
 	{
 		$tagData = array();
@@ -308,6 +330,9 @@ class SproutSeo_MetadataModel extends BaseModel
 		return $tagData;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function getOpenGraphMetaTagData()
 	{
 		$tagData = array();
@@ -324,6 +349,9 @@ class SproutSeo_MetadataModel extends BaseModel
 		return $tagData;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function getTwitterCardMetaTagData()
 	{
 		$tagData = array();
@@ -340,6 +368,21 @@ class SproutSeo_MetadataModel extends BaseModel
 		return $tagData;
 	}
 
+	/**
+	 * @return null
+	 */
+	public function getGooglePlusMetaTagData()
+	{
+		$tagData = SproutSeoOptimizeHelper::getGooglePlusPage();
+
+		return $tagData;
+	}
+
+	/**
+	 * @param $handle
+	 *
+	 * @return mixed
+	 */
 	protected function getMetaTagName($handle)
 	{
 		// Map tag names to their handles
@@ -386,18 +429,16 @@ class SproutSeo_MetadataModel extends BaseModel
 	}
 
 	/**
-	 * Returns
-	 *
 	 * @return array
 	 **/
 	public function getCustomizationSettings()
 	{
 		$response = array(
-			'basicMetaMetadataGroupEnabled'   => 0,
-			'openGraphMetadataGroupEnabled'   => 0,
-			'twitterCardMetadataGroupEnabled' => 0,
-			'geoMetadataGroupEnabled'         => 0,
-			'robotsMetadataGroupEnabled'      => 0
+			'searchMetaSectionMetadataEnabled'  => 0,
+			'openGraphSectionMetadataEnabled'   => 0,
+			'twitterCardSectionMetadataEnabled' => 0,
+			'geoSectionMetadataEnabled'         => 0,
+			'robotsSectionMetadataEnabled'      => 0
 		);
 
 		if ($this->customizationSettings)

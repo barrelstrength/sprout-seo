@@ -4,66 +4,26 @@ namespace Craft;
 class SproutSeoOptimizeHelper
 {
 	/**
-	 * @param $prioritizedMetadataModel
-	 * @param $sectionMetadataModel
-	 * @param $globalMetadataModel
+	 * Return the URL from our Globals settings if it exists. Otherwise return the Craft siteUrl value.
 	 *
-	 * @return string
+	 * @param null $url
+	 *
+	 * @return null|string
 	 */
-	public static function prepareAppendedSiteName(
-		$prioritizedMetadataModel,
-		$sectionMetadataModel,
-		$globalMetadataModel
-	)
+	public static function getGlobalMetadataSiteUrl($url = null)
 	{
-		$globals  = sproutSeo()->schema->getGlobals();
-		$settings = $globals->settings;
-
-		$globalAppendTitleValue = $settings['appendTitleValue'];
-		$seoDivider             = $settings['seoDivider'];
-
-		// @todo - should this logic happen while populating the $globalMetadataModel?
-		switch ($globalAppendTitleValue)
+		if (!$url)
 		{
-			case 'custom':
-				$globalAppendTitleValue = $globalAppendTitleValue;
-				break;
-
-			case 'sitename':
-				$globalAppendTitleValue = craft()->getInfo('siteName');
-				break;
-
-			default:
-				$globalAppendTitleValue = null;
-				break;
+			return UrlHelper::getSiteUrl();
 		}
 
-		// @todo - can probably make logic more concise
-		if ($sectionMetadataModel->appendTitleValue != '')
-		{
-			$appendTitleValue = $sectionMetadataModel->appendTitleValue;
-		}
-		else
-		{
-			$appendTitleValue = $globalAppendTitleValue;
-		}
-
-		if ($appendTitleValue)
-		{
-			// Add support for using {divider} and {siteName} in the Metadata Group 'Appended Meta Title' setting
-			$appendTitleValue = craft()->templates->renderObjectTemplate($appendTitleValue, array(
-				'siteName' => craft()->getInfo('siteName'),
-				'divider'  => $seoDivider
-			));
-
-			return $prioritizedMetadataModel->title . " " . $seoDivider . " " . $appendTitleValue;
-		}
-
-		return $prioritizedMetadataModel->title;
+		return $url;
 	}
 
 	/**
 	 * Set the default canonical URL to be the current URL
+	 *
+	 * @return string
 	 */
 	public static function prepareCanonical()
 	{
@@ -72,6 +32,10 @@ class SproutSeoOptimizeHelper
 
 	/**
 	 * Set the geo 'position' attribute based on the 'latitude' and 'longitude'
+	 *
+	 * @param $model
+	 *
+	 * @return string
 	 */
 	public static function prepareGeoPosition($model)
 	{
@@ -90,7 +54,7 @@ class SproutSeoOptimizeHelper
 	 *
 	 * @return null|string
 	 */
-	public static function getRobotsMetaValue($robots = null)
+	public static function prepareRobotsMetadataValue($robots = null)
 	{
 		if (!isset($robots))
 		{
@@ -131,7 +95,7 @@ class SproutSeoOptimizeHelper
 	 *
 	 * @return array
 	 */
-	public static function prepRobotsForSettings($robotsString)
+	public static function prepareRobotsMetadataForSettings($robotsString)
 	{
 		$robotsArray = explode(",", $robotsString);
 
@@ -165,7 +129,7 @@ class SproutSeoOptimizeHelper
 	/**
 	 * @todo - improve how images are being handled here
 	 *
-	 * @param $prioritizedMetaTagModel
+	 * @param SproutSeo_MetadataModel $model
 	 *
 	 * @throws \Exception
 	 */
@@ -294,6 +258,12 @@ class SproutSeoOptimizeHelper
 		}
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return mixed|null|string
+	 * @throws \Exception
+	 */
 	public static function getAssetUrl($id)
 	{
 		$url = null;
@@ -370,19 +340,191 @@ class SproutSeoOptimizeHelper
 	}
 
 	/**
-	 * Return the URL from our Globals settings if it exists. Otherwise return the Craft siteUrl value.
+	 * @param $socials
 	 *
-	 * @param null $url
-	 *
-	 * @return null|string
+	 * @return null
 	 */
-	public static function getGlobalSiteUrl($url = null)
+	public static function getGooglePlusPage()
 	{
-		if (!$url)
+		$googlePlus = null;
+
+		$globals = sproutSeo()->globals->getGlobalMetadata();
+
+		foreach ($globals['social'] as $key => $socialProfile)
 		{
-			return UrlHelper::getSiteUrl();
+			if ($socialProfile['profileName'] == "Google+")
+			{
+				$googlePlusUrl = $socialProfile['url'];
+			}
 		}
 
-		return $url;
+		return $googlePlusUrl;
+	}
+
+	/**
+	 * @param $prioritizedMetadataModel
+	 * @param $sectionMetadataModel
+	 * @param $globalMetadataModel
+	 *
+	 * @return string
+	 */
+	public static function prepareAppendedTitleValue(
+		$prioritizedMetadataModel,
+		$sectionMetadataModel,
+		$globalMetadataModel
+	)
+	{
+		$globals  = sproutSeo()->globals->getGlobalMetadata();
+		$settings = $globals->settings;
+
+		// @todo - appendTitleValue should be saved/updated with globals so we don't have to make an extra query here
+		$globalAppendTitleValue = $settings['appendTitleValue'];
+		$seoDivider             = $settings['seoDivider'];
+
+		// @todo - should this logic happen while populating the $globalMetadataModel?
+		switch ($globalAppendTitleValue)
+		{
+			case 'custom':
+				$globalAppendTitleValue = $globalAppendTitleValue;
+				break;
+
+			case 'sitename':
+				$globalAppendTitleValue = craft()->getInfo('siteName');
+				break;
+
+			default:
+				$globalAppendTitleValue = null;
+				break;
+		}
+
+		// @todo - can probably make logic more concise
+		if ($sectionMetadataModel->appendTitleValue != '')
+		{
+			$appendTitleValue = $sectionMetadataModel->appendTitleValue;
+		}
+		else
+		{
+			$appendTitleValue = $globalAppendTitleValue;
+		}
+
+		if ($appendTitleValue)
+		{
+			// Add support for using {divider} and {siteName} in the Section Metadata 'Append Meta Title' setting
+			$appendTitleValue = craft()->templates->renderObjectTemplate($appendTitleValue, array(
+				'siteName' => craft()->getInfo('siteName'),
+				'divider'  => $seoDivider
+			));
+
+			return $prioritizedMetadataModel->title . " " . $seoDivider . " " . $appendTitleValue;
+		}
+
+		return $prioritizedMetadataModel->title;
+	}
+
+	/**
+	 * @param $model
+	 *
+	 * @return mixed
+	 */
+	public static function updateOptimizedAndAdvancedMetaValues($model)
+	{
+		$globals        = sproutSeo()->globals->getGlobalMetadata();
+		$globalSettings = $globals->settings;
+
+		// Prepare our optimized variables
+		// -------------------------------------------------------------
+		$optimizedTitle       = (!empty($model->optimizedTitle) ? $model->optimizedTitle : null);
+		$optimizedDescription = (!empty($model->optimizedDescription) ? $model->optimizedDescription : null);
+
+		// Make our images single IDs instead of an array
+		$optimizedImage          = (!empty($model->optimizedImage) and is_array($model->optimizedImage)) ? $model['optimizedImage'][0] : $model->optimizedImage;
+		$model['optimizedImage'] = $optimizedImage;
+
+		// Set null values for any Advanced SEO Optimization
+		// override fields whose blocks have been disabled
+		// -------------------------------------------------------------
+		$customizationSettings = JsonHelper::decode($model->customizationSettings);
+
+		if (!$customizationSettings['searchMetaSectionMetadataEnabled'])
+		{
+			foreach ($model['searchMeta'] as $attribute => $value)
+			{
+				$model->{$attribute} = null;
+			}
+		}
+
+		if (!$customizationSettings['openGraphSectionMetadataEnabled'])
+		{
+			foreach ($model['openGraphMeta'] as $attribute => $value)
+			{
+				$model->{$attribute} = null;
+			}
+		}
+
+		if (!$customizationSettings['twitterCardSectionMetadataEnabled'])
+		{
+			foreach ($model['twitterCardsMeta'] as $attribute => $value)
+			{
+				$model->{$attribute} = null;
+			}
+		}
+
+		if (!$customizationSettings['geoSectionMetadataEnabled'])
+		{
+			foreach ($model['geographicMeta'] as $attribute => $value)
+			{
+				$model->{$attribute} = null;
+			}
+		}
+
+		if (!$customizationSettings['robotsSectionMetadataEnabled'])
+		{
+			foreach ($model['robotsMeta'] as $attribute => $value)
+			{
+				$model->{$attribute} = null;
+			}
+		}
+
+		// Set any values that don't yet exist to the optimized values
+		// -------------------------------------------------------------
+		$model->title        = !is_null($model->title) ? $model->title : $optimizedTitle;
+		$model->ogTitle      = !is_null($model->ogTitle) ? $model->ogTitle : $optimizedTitle;
+		$model->twitterTitle = !is_null($model->twitterTitle) ? $model->twitterTitle : $optimizedTitle;
+
+		$model->description        = !is_null($model->description) ? $model->description : $optimizedDescription;
+		$model->ogDescription      = !is_null($model->ogDescription) ? $model->ogDescription : $optimizedDescription;
+		$model->twitterDescription = !is_null($model->twitterDescription) ? $model->twitterDescription : $optimizedDescription;
+
+		$model->ogImage      = !is_null($model->ogImage) ? $model->ogImage : $optimizedImage;
+		$model->twitterImage = !is_null($model->twitterImage) ? $model->twitterImage : $optimizedImage;
+
+		$model->ogType      = !is_null($model->ogType) ? $model->ogType : $globalSettings['defaultOgType'];
+		$model->twitterCard = !is_null($model->twitterCard) ? $model->twitterCard : $globalSettings['defaultTwitterCard'];
+
+		return $model;
+	}
+
+	/**
+	 * Prepare the default field type settings for the Section Metadata context.
+	 *
+	 * Display all of our fields manually for the Section Metadatas
+	 *
+	 * @return array
+	 */
+	public static function getDefaultFieldTypeSettings()
+	{
+		return array(
+			'optimizedTitleField'       => 'manually',
+			'optimizedDescriptionField' => 'manually',
+			'optimizedImageField'       => 'manually',
+			'optimizedKeywordsField'    => 'manually',
+			'showMainEntity'            => true,
+			'showSearchMeta'            => false,
+			'showOpenGraph'             => true,
+			'showTwitter'               => true,
+			'showGeo'                   => true,
+			'showRobots'                => true,
+			'displayPreview'            => true,
+		);
 	}
 }

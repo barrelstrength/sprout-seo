@@ -2,15 +2,15 @@
 {% import "_includes/forms" as forms %}
 
 {% set title %}
-	{% if not metadataGroupId is empty %}
-		{{ metaTags.name }}
+	{% if not sectionMetadataId is empty %}
+		{{ sectionMetadata.name }}
 	{% else %}
 		{{ "New Metadata Section"|t }}
 	{% endif %}
 {% endset %}
 
 {% set crumbs = [
-	{ label: "Metadata"|t, url: url('sproutseo/metadata') }
+	{ label: "Section Metadata"|t, url: url('sproutseo/sections') }
 ] %}
 
 {% set centered = true %}
@@ -18,17 +18,17 @@
 {% set fullPageForm = true %}
 
 {% if craft.request.getSegment(3) == 'new' %}
-	{% set saveShortcutRedirect = url('sproutseo/metadata') %}
+	{% set saveShortcutRedirect = url('sproutseo/sections') %}
 {% else %}
-	{% set saveShortcutRedirect = url('sproutseo/metadata/' ~ metadataGroupId) %}
+	{% set saveShortcutRedirect = url('sproutseo/sections/' ~ sectionMetadataId) %}
 {% endif %}
 
-{# Set a field context so we can manage field visibility between the SEO Metadata Groups and the Field Types #}
-{% set fieldContext = 'metaTagGroups' %}
+{# Set a field context so we can manage field visibility between the SEO Section Metadatas and the Field Types #}
+{% set fieldContext = 'sectionMetadata' %}
 
-{# Map the `metaTags` object to `values` so we can use the same templates for SEO Metadata Groups and the Field Types #}
-
-{% set values = metaTags %}
+{# Map the `sectionMetadata` object to `values` so we can use the
+   same templates for Section Metadata Sections and the Optimize Field Type #}
+{% set values = sectionMetadata %}
 
 {% block saveButton %}
 	<div class="buttons">
@@ -42,14 +42,14 @@
 		<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
 			<div id="fields" class="pane">
 
-				<input type="hidden" name="action" value="sproutSeo/metadata/saveMetadataGroup">
-				<input type="hidden" name="redirect" value="sproutseo/metadata">
-				<input type="hidden" name="sproutseo[metadata][id]" value="{{ metadataGroupId }}">
+				<input type="hidden" name="action" value="sproutSeo/metadata/saveSectionMetadata">
+				<input type="hidden" name="redirect" value="sproutseo/sections">
+				<input type="hidden" name="sproutseo[metadata][id]" value="{{ sectionMetadataId }}">
 				<input type="hidden" name="sproutseo[metadata][isSitemapCustomPage]" value="{{ isSitemapCustomPage }}">
-				<input type="hidden" name="sproutseo[metadata][type]" value="{{ metaTags.type }}">
-				<input type="hidden" name="sproutseo[metadata][elementGroupId]" value="{{ metaTags.elementGroupId }}">
+				<input type="hidden" name="sproutseo[metadata][type]" value="{{ sectionMetadata.type }}">
+				<input type="hidden" name="sproutseo[metadata][elementGroupId]" value="{{ sectionMetadata.elementGroupId }}">
 
-				{% include 'sproutseo/_fieldtypes/optimize/input' %}
+				{% include 'sproutseo/_fieldtypes/elementmetadata/input' %}
 
 			</div>
 		</div>
@@ -57,11 +57,11 @@
 			<div class="pane meta">
 
 				{{ forms.textField({
-					label: "Name <span class='info'>Human readable Metadata Group name</span>"|t,
+					label: "Name <span class='info'>Human readable Section name</span>"|t,
 					id: "name",
 					name: 'sproutseo[metadata][name]',
-					value: metaTags.name,
-					errors: metaTags.getErrors('name'),
+					value: sectionMetadata.name,
+					errors: sectionMetadata.getErrors('name'),
 					readonly: not isNew,
 					class: not isNew ? 'disabled' : ''
 				}) }}
@@ -70,8 +70,8 @@
 					label: "Handle <span class='info'>Name you will use to refer to this meta-tag group in your templates</span>"|t,
 					id: "handle",
 					name: 'sproutseo[metadata][handle]',
-					value: metaTags.handle,
-					errors: metaTags.getErrors('handle'),
+					value: sectionMetadata.handle,
+					errors: sectionMetadata.getErrors('handle'),
 					readonly: not isNew,
 					class: not isNew ? 'disabled' : ''
 				}) }}
@@ -79,9 +79,9 @@
 				{{ forms.textField({
 					label: "URL"|t,
 					id: "url",
-					name: 'sproutseo[metadata][sitemapUrl]',
-					value: (metaTags.sitemapUrl == '__home__') ? "/" : metaTags.sitemapUrl,
-					errors: metaTags.getErrors('sitemapUrl'),
+					name: 'sproutseo[metadata][url]',
+					value: (sectionMetadata.url == '__home__') ? "/" : sectionMetadata.url,
+					errors: sectionMetadata.getErrors('url'),
 					readonly: not isNew,
 					class: not isNew ? 'disabled' : ''
 				}) }}
@@ -110,12 +110,12 @@
 						{{ forms.lightswitch({
 							id: 'enabled',
 							name: 'sproutseo[metadata][enabled]',
-							on:  (metaTags.enabled is defined ? metaTags.enabled : false)
+							on:  (sectionMetadata.enabled is defined ? sectionMetadata.enabled : false)
 						}) }}
 					</div>
 
 					<div class="right">
-						<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutSeo/metadata/deleteMetadataGroupById" data-confirm="Are you sure you want to delete this Section Metadata and all of it's data?" data-redirect="sproutseo/metadata">
+						<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutSeo/metadata/deleteSectionMetadataById" data-confirm="Are you sure you want to delete this Section Metadata and all of it's data?" data-redirect="sproutseo/sections">
 					</div>
 
 				{% endset %}
@@ -154,18 +154,18 @@
 
 				{{ forms.selectField({
 					label: "Priority"|t,
-					name: 'sproutseo[metadata][sitemapPriority]',
+					name: 'sproutseo[metadata][priority]',
 					options: priorityList,
-					value: (metaTags.sitemapPriority ? metaTags.sitemapPriority : 0.5),
+					value: (sectionMetadata.priority ? sectionMetadata.priority : 0.5),
 					errors: "",
 					required: false
 				}) }}
 
 				{{ forms.selectField({
 					label: "Change Frequency"|t,
-					name: 'sproutseo[metadata][sitemapChangeFrequency]',
+					name: 'sproutseo[metadata][changeFrequency]',
 					options: frequencyList,
-					value: (metaTags.sitemapChangeFrequency ? metaTags.sitemapChangeFrequency : 'weekly'),
+					value: (sectionMetadata.changeFrequency ? sectionMetadata.changeFrequency : 'weekly'),
 					errors: "",
 					required: false
 				}) }}
@@ -180,11 +180,11 @@
 					<li>Twitter</li>
 					</ul>
 
-					{% include 'sproutseo/_fieldtypes/optimize/previews/search' %}
+					{% include 'sproutseo/_fieldtypes/elementmetadata/previews/search' %}
 
-					{#{% include 'sproutseo/_fieldtypes/optimize/previews/opengraph' %}#}
+					{#{% include 'sproutseo/_fieldtypes/elementmetadata/previews/opengraph' %}#}
 
-					{#{% include 'sproutseo/_fieldtypes/optimize/previews/twittercard' %}#}
+					{#{% include 'sproutseo/_fieldtypes/elementmetadata/previews/twittercard' %}#}
 
 				{% endif %}
 			</div>
@@ -194,7 +194,7 @@
 
 {% endblock %}
 
-{% if metaTags.name is not defined or not metaTags.handle %}
+{% if sectionMetadata.name is not defined or not sectionMetadata.handle %}
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
 {% endif %}
 

@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
+class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 {
 	/**
 	 * FieldType name
@@ -10,7 +10,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 	 */
 	public function getName()
 	{
-		return Craft::t('Sprout SEO Optimize');
+		return Craft::t('Element Metadata');
 	}
 
 	/**
@@ -36,7 +36,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			'optimizedKeywordsField'    => array(AttributeType::String),
 			'displayPreview'            => array(AttributeType::Bool, 'default' => true),
 			'showMainEntity'            => array(AttributeType::Bool, 'default' => false),
-			'showBasicMeta'             => array(AttributeType::Bool, 'default' => false),
+			'showSearchMeta'            => array(AttributeType::Bool, 'default' => false),
 			'showOpenGraph'             => array(AttributeType::Bool, 'default' => false),
 			'showTwitter'               => array(AttributeType::Bool, 'default' => false),
 			'showGeo'                   => array(AttributeType::Bool, 'default' => false),
@@ -44,9 +44,12 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getSettingsHtml()
 	{
-		return craft()->templates->render('sproutseo/_fieldtypes/optimize/settings', array(
+		return craft()->templates->render('sproutseo/_fieldtypes/elementmetadata/settings', array(
 			'settings' => $this->getSettings()
 		));
 	}
@@ -66,7 +69,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$values = sproutSeo()->metadata->getMetadataContentByElementId($elementId, $locale);
+		$values = sproutSeo()->metadata->getElementMetadataByElementId($elementId, $locale);
 
 		$ogImageElements      = array();
 		$metaImageElements    = array();
@@ -95,7 +98,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$sources            = craft()->assets->findFolders();
 		$assetsSourceExists = count($sources);
 
-		$values['robots'] = SproutSeoOptimizeHelper::prepRobotsForSettings($values->robots);
+		$values['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($values->robots);
 
 		// Set elementType
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
@@ -110,7 +113,9 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$settings = $this->getSettings();
 
-		return craft()->templates->render('sproutseo/_fieldtypes/optimize/input', array(
+		// @todo - what are the ogImageElements, twitterImageElements, etc being used for?
+		// they don't appear to be used in the elementdata/input template...
+		return craft()->templates->render('sproutseo/_fieldtypes/elementmetadata/input', array(
 			'name'                 => $name,
 			'values'               => $values,
 			'ogImageElements'      => $ogImageElements,
@@ -139,7 +144,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		$locale = $this->element->locale;
 
 		// Get existing or new MetadataModel
-		$model = sproutSeo()->metadata->getMetadataContentByElementId($this->element->id, $locale);
+		$model = sproutSeo()->metadata->getElementMetadataByElementId($this->element->id, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -161,7 +166,7 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				sproutSeo()->metadata->deleteMetadataContentById($model->id);
+				sproutSeo()->metadata->deleteElementMetadataById($model->id);
 			}
 
 			return;
@@ -169,12 +174,12 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		if (isset($fields['robots']))
 		{
-			$fields['robots'] = SproutSeoOptimizeHelper::getRobotsMetaValue($fields['robots']);
+			$fields['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
 		}
 
 		// Add the element ID to the field data we will submit for Sprout SEO
 		$attributes['elementId'] = $this->element->id;
-		$attributes['locale']  = $locale;
+		$attributes['locale']    = $locale;
 
 		// Grab all the other Sprout SEO fields.
 		$attributes = array_merge($attributes, $fields);
@@ -186,21 +191,26 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 
 		$model->setAttributes($attributes);
 
-		$model = sproutSeo()->metadata->updateOptimizedAndAdvancedMetaValues($model);
+		$model = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($model);
 
 		$columns = array_intersect_key($model->getAttributes(), $attributes);
 
-		// Update or create our Meta Tag Content
 		if ($model->id)
 		{
-			sproutSeo()->metadata->updateMetadataContent($model->id, $columns);
+			sproutSeo()->metadata->updateElementMetadata($model->id, $columns);
 		}
 		else
 		{
-			sproutSeo()->metadata->createMetadataContent($columns);
+			sproutSeo()->metadata->createElementMetadata($columns);
 		}
 	}
 
+	/**
+	 * @param $attributes
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
 	protected function processOptimizedTitle($attributes, $settings)
 	{
 		$title = null;
@@ -246,6 +256,12 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		return $attributes;
 	}
 
+	/**
+	 * @param $attributes
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
 	protected function processOptimizedDescription($attributes, $settings)
 	{
 		$description = null;
@@ -284,6 +300,12 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		return $attributes;
 	}
 
+	/**
+	 * @param $attributes
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
 	protected function processOptimizedFeatureImage($attributes, $settings)
 	{
 		$image = null;
@@ -314,6 +336,11 @@ class SproutSeo_OptimizeMetaFieldType extends BaseFieldType
 		return $attributes;
 	}
 
+	/**
+	 * @param $fieldId
+	 *
+	 * @return null
+	 */
 	private function getElementField($fieldId)
 	{
 		$value = null;

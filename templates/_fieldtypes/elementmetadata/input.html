@@ -63,9 +63,9 @@
 				search: true,
 				openGraph: true,
 				twitterCard: true,
-				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
 			}),
-			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'metaTagGroups' ? appendTitleValueInstructions : ""),
+			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'sectionMetadata' ? appendTitleValueInstructions : ""),
 			name: 'sproutseo[metadata][optimizedTitle]',
 			id: 'sproutseo-optimizedtitle',
 			maxlength: 60,
@@ -79,16 +79,16 @@
 
 	{% endif %}
 
-	{% if fieldContext == 'metaTagGroups' %}
+	{% if fieldContext == 'sectionMetadata' %}
 		<div id="toggle-appendtitlevalue" class="{{ (values['appendTitleValue'] is defined and values.appendTitleValue ?:
 		'hidden' ) }}">
 			{{ forms.textField({
-				label: "Appended Meta Title"|t ~ sprout.infoIcon({
-					label: "Appended Meta Title"|t,
+				label: "Append Meta Title"|t ~ sprout.infoIcon({
+					label: "Append Meta Title"|t,
 					search: true,
 					priority: 'sections'
 				}),
-				instructions: "Append a custom value at the end of all Meta Titles in this Metadata Group, i.e. <i>Article Title - " ~ siteName ~ "</i>. This setting overrides the <a href='" ~ cpUrl('sproutseo/globals/customization') ~ "'>default setting</a> and will apply to all titles within this Metadata Group."|t,
+				instructions: "Append a custom value at the end of all Meta Titles in this Section Metadata, i.e. <i>Article Title - " ~ siteName ~ "</i>. This setting overrides the <a href='" ~ cpUrl('sproutseo/globals/customization') ~ "'>default setting</a> and will apply to all titles within this Section Metadata."|t,
 				name: 'sproutseo[metadata][appendTitleValue]',
 				value: values.appendTitleValue ?? null,
 				placeholder: 'Keywords {divider} {siteName}',
@@ -105,7 +105,7 @@
 				search: true,
 				openGraph: true,
 				twitterCard: true,
-				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
 			}),
 			instructions: "A description of your content which will appear in search results and social sharing."|t,
 			name: 'sproutseo[metadata][optimizedDescription]',
@@ -124,7 +124,7 @@
 				label: "Meta Image"|t,
 				openGraph: true,
 				twitterCard: true,
-				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
 			}),
 			instructions: 'A featured image that represents your content that will display in social sharing.'|t,
 			id: 'sproutseo-optimizedimage',
@@ -148,7 +148,7 @@
 			label: "Meta Keywords"|t ~ sprout.infoIcon({
 				label: "Meta Keywords"|t,
 				search: true,
-				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
 			}),
 			instructions: "The primary keywords or phrases that describe your website."|t,
 			id: 'sproutseo-optimizedkeywords',
@@ -158,15 +158,15 @@
 		}) }}
 	{% endif %}
 
-	{% if fieldContext == 'metaTagGroups' or (fieldContext == 'field' and pluginSettings.advancedCustomization and settings.showMainEntity) %}
-		{% set schemaMaps = craft.sproutSeo.getSchemaMapsArray() %}
+	{% if fieldContext == 'sectionMetadata' or (fieldContext == 'field' and pluginSettings.advancedCustomization and settings.showMainEntity) %}
+		{% set schemaMaps = craft.sproutSeo.getSchemaMapOptions() %}
 
 		{{ forms.selectField({
 			label: 'Main Entity'|t ~ sprout.infoIcon({
 				label: "Meta Image"|t,
 				search: true,
 				structured: true,
-				priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
 			}),
 			instructions: 'Map the primary element that displays on this page to a Structured Data schema. Select a basic or custom mapping.'|t,
 			id: 'sproutseo-mainentity',
@@ -188,24 +188,24 @@
 			<li>Twitter</li>
 		</ul>
 
-		{% include 'sproutseo/_fieldtypes/optimize/previews/search' %}
+		{% include 'sproutseo/_fieldtypes/elementmetadata/previews/search' %}
 
-		{#{% include 'sproutseo/_fieldtypes/optimize/previews/opengraph' %}#}
+		{#{% include 'sproutseo/_fieldtypes/elementmetadata/previews/opengraph' %}#}
 
-		{#{% include 'sproutseo/_fieldtypes/optimize/previews/twittercard' %}#}
+		{#{% include 'sproutseo/_fieldtypes/elementmetadata/previews/twittercard' %}#}
 
 	{% endif %}
 {% endif %}
 
 {% if pluginSettings.advancedCustomization %}
 
-	{% if settings.showBasicMeta or settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
+	{% if settings.showSearchMeta or settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
 		{% set advancedSeoButtons %}
 			<div class="buttons">
 				<div id="btngroup" class="btngroup sproutseo-advancedoption-btns">
 
-					{% if settings.showBasicMeta %}
-						<div class="btn" id="btn-basicMeta" data-type="basicMeta"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
+					{% if settings.showSearchMeta %}
+						<div class="btn" id="btn-searchMeta" data-type="searchMeta"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
 					{% endif %}
 
 					{% if settings.showOpenGraph %}
@@ -240,8 +240,8 @@
 
 		<div class="blocks">
 
-			<div class="matrixblock fields-basicMeta"
-				{% if (customizationSettings.basicMetaMetadataGroupEnabled is defined and customizationSettings.basicMetaMetadataGroupEnabled == 0) or not settings.showBasicMeta %} style="display:none;" {% endif %}
+			<div class="matrixblock fields-searchMeta"
+				{% if (customizationSettings.searchMetaSectionMetadataEnabled is defined and customizationSettings.searchMetaSectionMetadataEnabled == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -250,18 +250,17 @@
 
 				{% include 'sproutseo/_partials/fields/input' %}
 
-
 			</div>
 
 			<div class="matrixblock fields-openGraph"
-				{% if customizationSettings.openGraphMetadataGroupEnabled == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
+				{% if customizationSettings.openGraphSectionMetadataEnabled == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
 					<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph {{ sprout.infoIcon({
 							label: "Open Graph"|t,
 							openGraph: true,
-							priority: (fieldContext == 'metaTagGroups') ? 'sections' : 'pages',
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages',
 							message: 'All fields in this block take priority for the Open Graph metadata at the Section level.'|t
 						}) }}
 					</div>
@@ -273,7 +272,7 @@
 			</div>
 
 			<div class="matrixblock fields-twitterCard"
-				{% if customizationSettings.twitterCardMetadataGroupEnabled == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
+				{% if customizationSettings.twitterCardSectionMetadataEnabled == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -284,7 +283,7 @@
 
 			</div>
 			<div class="matrixblock fields-geo"
-				{% if customizationSettings.geoMetadataGroupEnabled == 0 or not settings.showGeo %} style="display:none;" {% endif %}
+				{% if customizationSettings.geoSectionMetadataEnabled == 0 or not settings.showGeo %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -297,7 +296,7 @@
 			</div>
 
 			<div class="matrixblock fields-robots"
-				{% if customizationSettings.robotsMetadataGroupEnabled == 0 or not settings.showRobots %} style="display:none;" {% endif %}
+				{% if customizationSettings.robotsSectionMetadataEnabled == 0 or not settings.showRobots %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -365,13 +364,13 @@ feel like they are part of the natural flow of fields #}
 
 			if (div.hasClass("active"))
 			{
-				customizationSettings[divId+"MetadataGroupEnabled"] = 0;
+				customizationSettings[divId+"SectionMetadataEnabled"] = 0;
 				div.removeClass("active");
 				setCustomizationSettings(customizationSettings);
 			}
 			else
 			{
-				customizationSettings[divId+"MetadataGroupEnabled"] = 1;
+				customizationSettings[divId+"SectionMetadataEnabled"] = 1;
 				div.addClass("active");
 				setCustomizationSettings(customizationSettings);
 			}
@@ -382,7 +381,7 @@ feel like they are part of the natural flow of fields #}
 			var divId = $(this).attr("data-type");
 			$(".fields-"+divId).toggle();
 
-			// Metadata Group Settings
+			// Section Metadata Settings
 			var btn = $("#btn-"+divId);
 			if (btn.length)
 			{
@@ -400,12 +399,12 @@ feel like they are part of the natural flow of fields #}
 		});
 
 		// Checking active class
-		var fields = ["basicMeta","openGraph","geo","robots","twitterCard"];
+		var fields = ["searchMeta","openGraph","geo","robots","twitterCard"];
 		var customizationSettings = getCustomizationSettings();
 
 		for (var i = 0; i < fields.length; i++)
 		{
-			if(customizationSettings[fields[i]+"MetadataGroupEnabled"]==1)
+			if(customizationSettings[fields[i]+"SectionMetadataEnabled"]==1)
 			{
 				$("#btn-"+fields[i]).addClass("active");
 				// Optimize Field Settings
@@ -584,9 +583,6 @@ feel like they are part of the natural flow of fields #}
 			{#addSeoBadgeListener(value);#}
 			{#initSeoBadge(value);#}
 		});
-
-		{#new Garnish.HUD(mainEntityLabel, "<div>[red] no meta values exist. [orange] global or metadata group values exist [grey] unique metadata at the element level exists.</div>");#}
-
 	});
 
 	new Craft.SproutSeoOpenGraph();

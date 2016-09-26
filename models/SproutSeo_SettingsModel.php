@@ -3,7 +3,6 @@ namespace Craft;
 
 class SproutSeo_SettingsModel extends BaseModel
 {
-
 	protected function defineAttributes()
 	{
 		return array(

@@ -3,9 +3,36 @@ namespace Craft;
 
 class SproutSeo_OptimizeService extends BaseApplicationComponent
 {
-	public $divider;
+	/**
+	 * @var
+	 */
 	public $context;
-	public $templateMeta = array();
+
+	/**
+	 * @var
+	 */
+	public $divider;
+
+	/**
+	 * @var array
+	 */
+	public $codeMetadata = array();
+
+	/**
+	 * Add values to the master $this->codeMetadata array
+	 *
+	 * @param $meta
+	 */
+	public function updateMeta($meta)
+	{
+		if (count($meta))
+		{
+			foreach ($meta as $key => $value)
+			{
+				$this->codeMetadata[$key] = $value;
+			}
+		}
+	}
 
 	/**
 	 * Get all metadata (Meta Tags and Structured Data) for the page
@@ -17,77 +44,185 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	public function getMetadata(&$context)
 	{
 		$optimizedMetadata = null;
+		$this->context     = $context;
 
-		// Grab our path, we're going to figure out what SEO meta data and
-		// what Structured Data we need to output on the page based on this path
-		$this->context = $context;
-
-		$globals = sproutSeo()->schema->getGlobals();
+		$globals = sproutSeo()->globals->getGlobalMetadata();
 
 		// get the sitemap info + urlFormat + $context->entry  $context->product ..
-		$sitemapInfo = sproutSeo()->schema->getSitemapInfo($context);
+		$sitemapInfo = sproutSeo()->sitemap->getSitemapInfo($context);
 
 		// Get our meta values
-		$prioritizedMetaTagModel = sproutSeo()->metadata->getPrioritizedMetaTagModel(
-			$sitemapInfo
-		);
+		$prioritizedMetadataModel = $this->getPrioritizedMetadataModel($sitemapInfo);
 
-		$sitemapInfo['prioritizedMetaTagModel'] = $prioritizedMetaTagModel;
-		$sitemapInfo['globals']                 = $globals;
-
-		$metaHtml = sproutSeo()->metadata->getMetaTagHtml($prioritizedMetaTagModel);
-
-		// Get our structured data values
-		$schemaHtml = sproutSeo()->schema->getStructureDataHtml($sitemapInfo);
-
-		// Process our Structured Data Schema Maps with the objects they match up with in the context
-		$mainEntitySchemaHtml = sproutSeo()->schema->getMainEntityStructuredDataHtml($sitemapInfo);
+		$sitemapInfo['prioritizedMetadataModel'] = $prioritizedMetadataModel;
+		$sitemapInfo['globals']                  = $globals;
 
 		// Prepare our html for the template
-		$optimizedMetadata .= $metaHtml;
-		$optimizedMetadata .= $schemaHtml;
-		$optimizedMetadata .= $mainEntitySchemaHtml;
+		$optimizedMetadata .= $this->getMetaTagHtml($prioritizedMetadataModel);
+		$optimizedMetadata .= $this->getStructuredDataHtml($sitemapInfo);
+		$optimizedMetadata .= $this->getMainEntityStructuredDataHtml($sitemapInfo);
 
 		return TemplateHelper::getRaw($optimizedMetadata);
 	}
 
 	/**
-	 * Add values to the master $this->templateMeta array
+	 * Prioritize our meta data
+	 * ------------------------------------------------------------
 	 *
-	 * @param $meta
+	 * Loop through and select the highest ranking value for each attribute in our SproutSeo_MetadataModel
+	 *
+	 * 1) Code Metadata
+	 * 2) Element Metadata
+	 * 3) Section Metadata
+	 * 4) Global Metadata
+	 * 5) Blank
+	 *
+	 * @param $sitemapInfo
+	 *
+	 * @return SproutSeo_MetadataModel
 	 */
-	public function updateMeta($meta)
+	public function getPrioritizedMetadataModel($sitemapInfo)
 	{
-		if (count($meta))
+		$metaLevels = SproutSeo_MetadataLevels::getConstants();
+
+		$prioritizedMetadataLevels = array();
+
+		foreach ($metaLevels as $key => $metaLevel)
 		{
-			foreach ($meta as $key => $value)
+			$prioritizedMetadataLevels[$metaLevel] = null;
+		}
+
+		$prioritizedMetadataModel = new SproutSeo_MetadataModel();
+
+		sproutSeo()->optimize->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
+
+		// Default to the Current URL
+		$prioritizedMetadataModel->canonical  = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+		$prioritizedMetadataModel->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+		$prioritizedMetadataModel->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+
+		foreach ($prioritizedMetadataLevels as $level => $model)
+		{
+			$metadataModel = new SproutSeo_MetadataModel();
+
+			$codeMetadata = sproutSeo()->metadata->getCodeMetadata($level, $sitemapInfo);
+
+			$metadataModel = $metadataModel->setMeta($level, $codeMetadata);
+
+			$prioritizedMetadataLevels[$level] = $metadataModel;
+
+			foreach ($prioritizedMetadataModel->getAttributes() as $key => $value)
 			{
-				$this->templateMeta[$key] = $value;
+				// Test for a value on each of our models in their order of priority
+				if ($metadataModel->getAttribute($key))
+				{
+					$prioritizedMetadataModel[$key] = $metadataModel[$key];
+				}
+
+				// Make sure all our strings are trimmed
+				if (is_string($prioritizedMetadataModel[$key]))
+				{
+					$prioritizedMetadataModel[$key] = trim($prioritizedMetadataModel[$key]);
+				}
 			}
 		}
+
+		$prioritizedMetadataModel->title = SproutSeoOptimizeHelper::prepareAppendedTitleValue(
+			$prioritizedMetadataModel,
+			$prioritizedMetadataLevels[SproutSeo_MetadataLevels::SectionMetadata],
+			$prioritizedMetadataLevels[SproutSeo_MetadataLevels::GlobalMetadata]
+		);
+
+		$prioritizedMetadataModel->robots = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($prioritizedMetadataModel->robots);
+
+		return $prioritizedMetadataModel;
 	}
 
 	/**
-	 * Prepare the default field type settings for the Metadata Group context.
+	 * @param SproutSeo_MetadataModel $prioritizedMetadataModel
 	 *
-	 * Display all of our fields manually for the Metadata Groups
-	 *
-	 * @return array
+	 * @return string
 	 */
-	public function getDefaultFieldTypeSettings()
+	public function getMetaTagHtml(SproutSeo_MetadataModel $prioritizedMetadataModel)
 	{
-		return array(
-			'optimizedTitleField'       => 'manually',
-			'optimizedDescriptionField' => 'manually',
-			'optimizedImageField'       => 'manually',
-			'optimizedKeywordsField'    => 'manually',
-			'showMainEntity'            => true,
-			'showBasicMeta'             => false,
-			'showOpenGraph'             => true,
-			'showTwitter'               => true,
-			'showGeo'                   => true,
-			'showRobots'                => true,
-			'displayPreview'            => true,
+		$globals = sproutSeo()->globals->getGlobalMetadata();
+
+		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
+
+		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
+			'globals' => $globals,
+			'meta'    => $prioritizedMetadataModel->getMetaTagData()
+		));
+
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+
+		return $output;
+	}
+
+	/**
+	 * @param $sitemapInfo
+	 *
+	 * @return string
+	 */
+	public function getStructuredDataHtml($sitemapInfo)
+	{
+		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
+
+		$rawHtml = $this->getKnowledgeGraphLinkedData($sitemapInfo);
+
+		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema',
+			array('jsonLd'=>$rawHtml)
 		);
+
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+
+		return $schemaHtml;
+	}
+
+	/**
+	 * @param $sitemapInfo
+	 *
+	 * @return string
+	 */
+	public function getMainEntityStructuredDataHtml($sitemapInfo)
+	{
+		$schema = '';
+		$prioritizedMetadataModel = $sitemapInfo['prioritizedMetadataModel'];
+
+		if ($prioritizedMetadataModel)
+		{
+			$enabledMatchingSitemap = $prioritizedMetadataModel->schemaMap;
+
+			if ($enabledMatchingSitemap)
+			{
+				$class = 'Craft\SproutSeo_'.$enabledMatchingSitemap.'SchemaMap';
+				$schemaMap = new $class($prioritizedMetadataModel->getAttributes(), true, $sitemapInfo);
+
+				$schema = $schemaMap->getSchema();
+			}
+		}
+
+		return $schema;
+	}
+
+	public function getKnowledgeGraphLinkedData($sitemapInfo)
+	{
+		$output = null;
+
+		$globals = $sitemapInfo['globals'];
+
+		if ($identityType = $globals->identity['@type'])
+		{
+			// Determine if we have an Organization or Person Schema Type
+			$schemaModel = 'Craft\SproutSeo_' . $identityType . 'SchemaMap';
+
+			$identitySchema = new $schemaModel(array(
+				'globals' => $globals
+			), true, $sitemapInfo);
+
+			$output = $identitySchema->getSchema();
+		}
+
+		return TemplateHelper::getRaw($output);
 	}
 }

@@ -4,42 +4,36 @@ namespace Craft;
 class SproutSeo_MetadataController extends BaseController
 {
 	/**
-	 * Edit a Metadata Group
+	 * Edit Section Metadata
 	 *
 	 * @throws HttpException
 	 */
-	public function actionMetadataGroupEditTemplate(array $variables = array())
+	public function actionSectionMetadataEditTemplate(array $variables = array())
 	{
 		$isSitemapCustomPage = true;
+		$segment             = craft()->request->getSegment(3);
+		$sectionMetadataId   = ($segment == 'new') ? null : $segment;
 
-		// Determine what we're working with
-		$segment         = craft()->request->getSegment(3);
-		$metadataGroupId = ($segment == 'new') ? null : $segment;
+		// Get our Section Metadata Model
+		$sectionMetadata = sproutSeo()->metadata->getSectionMetadataById($sectionMetadataId);
+		$isNew           = $sectionMetadata->id != null ? false : true;
+		$sitemaps        = craft()->plugins->call('registerSproutSeoSitemap');
+		$elementInfo     = null;
 
-		// Get our Meta Model
-		$metaTags    = sproutSeo()->metadata->getMetadataGroupById($metadataGroupId);
-		$isNew       = $metaTags->id != null ? false : true;
-		$sitemaps    = craft()->plugins->call('registerSproutSeoSitemap');
-		$elementInfo = null;
-
-		// Check if we need to create a new metadata group from an existing url enabled section
-		// This appears to be for when a Metadata Group is clicked on for the first time.
-		// We pass additional info to the page to build the right record in the db.
-		// /sproutseo/metadata/new?metatag=secondGroupOfCategories,categories-new-1,2
 		if (craft()->request->getSegment(3) == 'new')
 		{
-			$metadatagroupname = craft()->request->getPost('metadatagroupname');
-			$elementGroupId    = craft()->request->getPost('elementgroupid');
-			$groupName         = craft()->request->getPost('elementgrouphandle');
-			$sitemapId         = craft()->request->getPost('sitemapid');
-			$type              = explode('-', $sitemapId);
-			$elementType       = $type[0];
+			$sectionmetadataname = craft()->request->getPost('sectionmetadataname');
+			$elementGroupId      = craft()->request->getPost('elementgroupid');
+			$groupName           = craft()->request->getPost('elementgrouphandle');
+			$sitemapId           = craft()->request->getPost('sitemapid');
+			$type                = explode('-', $sitemapId);
+			$elementType         = $type[0];
 
-			$metaTags->elementGroupId = $elementGroupId;
-			$metaTags->type           = $elementType;
+			$sectionMetadata->elementGroupId = $elementGroupId;
+			$sectionMetadata->type           = $elementType;
 
 			// Just trying to get the url
-			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $elementType);
+			$elementInfo = sproutSeo()->sitemap->getSectionMetadataElementInfo($sitemaps, $elementType);
 
 			if ($elementInfo != null)
 			{
@@ -51,73 +45,73 @@ class SproutSeo_MetadataController extends BaseController
 					'elementGroupId' => $elementGroupId
 				);
 
-				$response = sproutSeo()->metadata->getMetadataInfo($groupInfo);
+				$response = sproutSeo()->metadata->getSectionMetadataInfo($groupInfo);
 				$element  = $response['element'];
 
 				if ($element)
 				{
-					$metaTags->sitemapUrl = $element->urlFormat;
+					$sectionMetadata->url = $element->urlFormat;
 				}
 			}
 
-			$metaTags->name   = $metadatagroupname;
-			$metaTags->handle = strtolower($groupName) . ucfirst($elementType);
-			$metaTags->handle = str_replace(' ', '', $metaTags->handle);
+			$sectionMetadata->name   = $sectionmetadataname;
+			$sectionMetadata->handle = strtolower($groupName) . ucfirst($elementType);
+			$sectionMetadata->handle = str_replace(' ', '', $sectionMetadata->handle);
 		}
 
 		$twitterImageElements = array();
 		$ogImageElements      = array();
 
-		if (isset($variables['metaTags']))
+		if (isset($variables['sectionMetadata']))
 		{
-			$metaTags = $variables['metaTags'];
+			$sectionMetadata = $variables['sectionMetadata'];
 		}
 
-		if ($metaTags->type && $metaTags->elementGroupId)
+		if ($sectionMetadata->type && $sectionMetadata->elementGroupId)
 		{
 			$isSitemapCustomPage = false;
 		}
 
 		// Set up our asset fields
-		if (isset($metaTags->optimizedImage))
+		if (isset($sectionMetadata->optimizedImage))
 		{
-			$asset             = craft()->elements->getElementById($metaTags->optimizedImage);
+			$asset             = craft()->elements->getElementById($sectionMetadata->optimizedImage);
 			$metaImageElements = array($asset);
 		}
 
-		if (isset($metaTags->ogImage))
+		if (isset($sectionMetadata->ogImage))
 		{
-			$asset           = craft()->elements->getElementById($metaTags->ogImage);
+			$asset           = craft()->elements->getElementById($sectionMetadata->ogImage);
 			$ogImageElements = array($asset);
 		}
 
-		if (isset($metaTags->twitterImage))
+		if (isset($sectionMetadata->twitterImage))
 		{
-			$asset                = craft()->elements->getElementById($metaTags->twitterImage);
+			$asset                = craft()->elements->getElementById($sectionMetadata->twitterImage);
 			$twitterImageElements = array($asset);
 		}
 
-		$metaTags->robots = ($metaTags->robots) ? SproutSeoOptimizeHelper::prepRobotsForSettings($metaTags->robots) : SproutSeoOptimizeHelper::prepRobotsForSettings($metaTags->robots);
+		$sectionMetadata->robots = ($sectionMetadata->robots) ? SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($sectionMetadata->robots) : SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($sectionMetadata->robots);
 
 		// Set assetsSourceExists
 		$sources            = craft()->assets->findFolders();
 		$assetsSourceExists = count($sources);
 
-		//get optimized settigns
-		$settings = sproutSeo()->optimize->getDefaultFieldTypeSettings();
+		//get optimized settings
+		$settings = SproutSeoOptimizeHelper::getDefaultFieldTypeSettings();
 
 		// Set elementType
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
 		if (!$isNew)
 		{
-			$elementInfo = sproutSeo()->sitemap->getElementInfo($sitemaps, $metaTags->type);
+			$elementInfo = sproutSeo()->sitemap->getSectionMetadataElementInfo($sitemaps, $sectionMetadata->type);
 		}
 
-		$this->renderTemplate('sproutseo/metadata/_edit', array(
+		$this->renderTemplate('sproutseo/sections/_edit', array(
+			'sectionMetadataId'    => $sectionMetadataId,
+			'sectionMetadata'      => $sectionMetadata,
 			'metaImageElements'    => $metaImageElements,
-			'metadataGroupId'      => $metadataGroupId,
-			'metaTags'             => $metaTags,
 			'ogImageElements'      => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
 			'assetsSourceExists'   => $assetsSourceExists,
@@ -130,64 +124,113 @@ class SproutSeo_MetadataController extends BaseController
 	}
 
 	/**
-	 * Save a Metadata Group
+	 * Save Section Metadata Section
 	 *
 	 * @throws Exception
 	 * @throws HttpException
 	 */
-	public function actionSaveMetadataGroup()
+	public function actionSaveSectionMetadata()
 	{
 		$this->requirePostRequest();
 
 		$model = new SproutSeo_MetadataModel();
 
-		$metaTags = craft()->request->getPost('sproutseo.metadata');
+		$sectionMetadata = craft()->request->getPost('sproutseo.metadata');
 
-		// Check if this is a new or existing Metadata Group
-		$metaTags['id'] = (isset($metaTags['id']) ? $metaTags['id'] : null);
+		// Check if this is a new or existing Section Metadata
+		$sectionMetadata['id'] = (isset($sectionMetadata['id']) ? $sectionMetadata['id'] : null);
 
 		// Convert Checkbox Array into comma-delimited String
-		if (isset($metaTags['robots']))
+		if (isset($sectionMetadata['robots']))
 		{
-			$metaTags['robots'] = SproutSeoOptimizeHelper::getRobotsMetaValue($metaTags['robots']);
+			$sectionMetadata['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($sectionMetadata['robots']);
 		}
 
-		$model->setAttributes($metaTags);
+		$model->setAttributes($sectionMetadata);
 
-		$model = sproutSeo()->metadata->updateOptimizedAndAdvancedMetaValues($model);
+		$model = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($model);
 
-		if (sproutSeo()->metadata->saveMetadataGroup($model))
+		if (sproutSeo()->metadata->saveSectionMetadata($model))
 		{
-			craft()->userSession->setNotice(Craft::t('New Metadata Group saved.'));
+			craft()->userSession->setNotice(Craft::t('Section Metadata saved.'));
+
 			$this->redirectToPostedUrl();
 		}
 		else
 		{
-			craft()->userSession->setError(Craft::t("Couldn't save the Metadata Group."));
+			craft()->userSession->setError(Craft::t("Couldn't save the Section Metadata."));
 
-			// Send the field back to the template
 			craft()->urlManager->setRouteVariables(array(
-				'metaTags' => $model
+				'sectionMetadata' => $model
 			));
 		}
 	}
 
 	/**
-	 * Delete Metadata Group
+	 * Delete Section Metadata Section
 	 *
 	 * @throws HttpException
 	 */
-	public function actionDeleteMetadataGroupById()
+	public function actionDeleteSectionMetadataById()
 	{
 		$this->requirePostRequest();
 		$this->requireAjaxRequest();
 
-		$metadataGroupId = craft()->request->getRequiredPost('id');
+		$sectionMetadataId = craft()->request->getRequiredPost('id');
 
-		$result = sproutSeo()->metadata->deleteMetadataGroupById($metadataGroupId);
+		$result = sproutSeo()->metadata->deleteSectionMetadataById($sectionMetadataId);
 
 		$this->returnJson(array(
 			'success' => $result >= 0 ? true : false
 		));
+	}
+
+	/**
+	 * Save the Verify Ownership Structured Data to the database
+	 *
+	 * @throws HttpException
+	 */
+	public function actionSaveVerifyOwnership()
+	{
+		$this->requirePostRequest();
+
+		$ownershipMeta = craft()->request->getPost('sproutseo.meta.ownership');
+		$schemaType    = 'ownership';
+
+		// Remove empty items from multi-dimensional array
+		$ownershipMeta = array_filter(array_map('array_filter', $ownershipMeta));
+
+		$ownershipMetaWithKeys = array();
+
+		foreach ($ownershipMeta as $key => $meta)
+		{
+			// @todo - add proper validation and return errors to template
+			if (count($meta) == 3)
+			{
+				$ownershipMetaWithKeys[$key]['service']          = $meta[0];
+				$ownershipMetaWithKeys[$key]['metaTag']          = $meta[1];
+				$ownershipMetaWithKeys[$key]['verificationCode'] = $meta[2];
+			}
+		}
+
+		$schema = SproutSeo_GlobalsModel::populateModel(array(
+				$schemaType => $ownershipMetaWithKeys
+			)
+		);
+
+		if (sproutSeo()->schema->saveSchema(array($schemaType), $schema))
+		{
+			craft()->userSession->setNotice(Craft::t('Schema saved.'));
+
+			$this->redirectToPostedUrl($schema);
+		}
+		else
+		{
+			craft()->userSession->setError(Craft::t('Unable to save schema.'));
+
+			craft()->urlManager->setRouteVariables(array(
+				'schema' => $schema
+			));
+		}
 	}
 }

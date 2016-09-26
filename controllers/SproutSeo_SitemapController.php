@@ -32,12 +32,12 @@ class SproutSeo_SitemapController extends BaseController
 	{
 		$this->requireAjaxRequest();
 
-		$sitemapSettings['id']                     = craft()->request->getPost('id');
-		$sitemapSettings['elementGroupId']         = craft()->request->getPost('elementGroupId');
-		$sitemapSettings['sitemapUrl']             = craft()->request->getPost('sitemapUrl');
-		$sitemapSettings['sitemapPriority']        = craft()->request->getRequiredPost('sitemapPriority');
-		$sitemapSettings['sitemapChangeFrequency'] = craft()->request->getRequiredPost('sitemapChangeFrequency');
-		$sitemapSettings['enabled']                = craft()->request->getRequiredPost('enabled');
+		$sitemapSettings['id']              = craft()->request->getPost('id');
+		$sitemapSettings['elementGroupId']  = craft()->request->getPost('elementGroupId');
+		$sitemapSettings['url']             = craft()->request->getPost('url');
+		$sitemapSettings['priority']        = craft()->request->getRequiredPost('priority');
+		$sitemapSettings['changeFrequency'] = craft()->request->getRequiredPost('changeFrequency');
+		$sitemapSettings['enabled']         = craft()->request->getRequiredPost('enabled');
 
 		$model = SproutSeo_SitemapModel::populateModel($sitemapSettings);
 

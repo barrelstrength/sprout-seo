@@ -86,7 +86,7 @@
 							'elementGroupId': elementGroup.id
 						} %}
 
-						{% set metadataInfo = craft.sproutSeo.getMetadataInfo(groupInfo) %}
+						{% set metadataInfo = craft.sproutSeo.getSectionMetadataInfo(groupInfo) %}
 						{% if metadataInfo.element %}
 							<tr data-rowid="{{ sitemapId }}" data-type="section">
 								<td>
@@ -114,18 +114,18 @@
 								</td>
 								<td>
 									{{ forms.selectField({
-										name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapPriority]',
+										name: 'sproutseo[sitemap][' ~ sitemapId ~ '][priority]',
 										options: priorityList,
-										value: (sitemap.sitemapPriority is defined ? sitemap.sitemapPriority : 0.5),
+										value: (sitemap.priority is defined ? sitemap.priority : 0.5),
 										errors: "",
 										required: false
 									}) }}
 								</td>
 								<td>
 									{{ forms.selectField({
-										name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapChangeFrequency]',
+										name: 'sproutseo[sitemap][' ~ sitemapId ~ '][changeFrequency]',
 										options: frequencyList,
-										value: (sitemap.sitemapChangeFrequency is defined ? sitemap.sitemapChangeFrequency : 'weekly'),
+										value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
 										errors: "",
 										required: false
 									}) }}
@@ -167,7 +167,7 @@
 				</div>
 				<div style="flex-shrink: 0;">
 					<div class="buttons right">
-						<a class="btn submit add icon" href="{{ url('sproutseo/metadata/new') }}">{{ "New section"|t }}</a>
+						<a class="btn submit add icon" href="{{ url('sproutseo/sections/new') }}">{{ "New section"|t }}</a>
 					</div>
 				</div>
 			</div>
@@ -186,7 +186,7 @@
 					{% for page in customPages %}
 						{% set sitemapId = "customUrl-"~page.id %}
 
-						<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.sitemapUrl }}">
+						<tr data-rowid="{{ sitemapId }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
 							<td>
 								<div style="display:inline-block;padding:7px 0 7px 10px;">
 								{% if (page.enabled is defined and page.enabled == 1) %}
@@ -203,23 +203,23 @@
 							</td>
 							<td>
 								<code>
-									{{ page.sitemapUrl }}
+									{{ page.url }}
 								</code>
 							</td>
 							<td>
 								{{ forms.selectField({
-									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapPriority]',
+									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][priority]',
 									options: priorityList,
-									value: (page.sitemapPriority is defined ? page.sitemapPriority : 0.5),
+									value: (page.priority is defined ? page.priority : 0.5),
 									errors: "",
 									required: false
 								}) }}
 							</td>
 							<td>
 								{{ forms.selectField({
-									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][sitemapChangeFrequency]',
+									name: 'sproutseo[sitemap][' ~ sitemapId ~ '][changeFrequency]',
 									options: frequencyList,
-									value: (page.sitemapChangeFrequency is defined ? page.sitemapChangeFrequency : 'weekly'),
+									value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
 									errors: "",
 									required: false
 								}) }}
@@ -282,7 +282,7 @@
 
 	new Craft.AdminTable({
 		tableSelector: '#custom-pages',
-		deleteAction: 'sproutSeo/metadata/deleteMetadataGroupById',
+		deleteAction: 'sproutSeo/metadata/deleteSectionMetadataById',
 		onDeleteObject: function(id)
 		{
 			if($('#custom-pages').find('tbody').find('tr').size() == 0)

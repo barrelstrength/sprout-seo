@@ -7,39 +7,37 @@
 
 		$customPageUrls: null,
 
-		$status:                 null,
-		$id:                     null,
-		$elementGroupId:         null,
-		$sitemapUrl:             null,
-		$sitemapPriority:        null,
-		$sitemapChangeFrequency: null,
-		$enabled:                null,
-		$newMetaDataGroupLinks:  null,
+		$status:                  null,
+		$id:                      null,
+		$elementGroupId:          null,
+		$url:                     null,
+		$priority:                null,
+		$changeFrequency:         null,
+		$enabled:                 null,
+		$newSectionMetadataLinks: null,
 
 		$addCustomPageButton: null,
 
 		init: function() {
-			this.$checkboxes            = $('.sitemap-settings input[type="checkbox"]');
-			this.$selectDropdowns       = $('.sitemap-settings select');
-			this.$customPageUrls        = $('.sitemap-settings input.sitemap-custom-url');
-			this.$newMetaDataGroupLinks = $('.metadatagroup-isnew');
+			this.$checkboxes              = $('.sitemap-settings input[type="checkbox"]');
+			this.$selectDropdowns         = $('.sitemap-settings select');
+			this.$customPageUrls          = $('.sitemap-settings input.sitemap-custom-url');
+			this.$newSectionMetadataLinks = $('.sectionmetadata-isnew');
 
-			this.addListener(this.$newMetaDataGroupLinks, 'click', 'redirectToMetadataGroupEditPage');
+			this.addListener(this.$newSectionMetadataLinks, 'click', 'redirectToSectionMetadataEditTemplate');
 		},
 
-		redirectToMetadataGroupEditPage: function(event) {
+		redirectToSectionMetadataEditTemplate: function(event) {
 
 			target    = event.target;
 			isNew     = $(target).data('isnew');
-			submitUrl = Craft.getUrl('sproutseo/metadata/new');
+			submitUrl = Craft.getUrl('sproutseo/sections/new');
 
 			data = {
-				"metadatagroupname":  $(target).data('metadatagroupname'),
-				"elementgrouphandle": $(target).data('elementgrouphandle'),
-				"sitemapid":          $(target).data('sitemapid'),
-				"elementgroupid":     $(target).data('elementgroupid'),
-				"metadataId":         $(target).data('metadataid'),
-				"metatag":            $(target).data('link')
+				"sectionmetadataname": $(target).data('sectionmetadataname'),
+				"elementgrouphandle":  $(target).data('elementgrouphandle'),
+				"sitemapid":           $(target).data('sitemapid'),
+				"elementgroupid":      $(target).data('elementgroupid')
 			};
 
 			this.postForm(submitUrl, data);

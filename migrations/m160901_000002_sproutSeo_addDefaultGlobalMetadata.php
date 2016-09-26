@@ -3,14 +3,14 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m160530_000000_sproutSeo_addDefaultGlobals extends BaseMigration
+class m160901_000002_sproutSeo_addDefaultGlobalMetadata extends BaseMigration
 {
 	/**
 	 * @return bool
 	 */
 	public function safeUp()
 	{
-		$tableName = 'sproutseo_globals';
+		$tableName = 'sproutseo_metadata_globals';
 
 		if (craft()->db->tableExists($tableName))
 		{

@@ -1,14 +1,14 @@
 <?php
 namespace Craft;
 
-class m160522_000000_sproutSeo_addGlobalsTable extends BaseMigration
+class m160901_000001_sproutSeo_addGlobalMetadataTable extends BaseMigration
 {
 	/**
 	 * @return bool
 	 */
 	public function safeUp()
 	{
-		$tableName = 'sproutseo_globals';
+		$tableName = 'sproutseo_metadata_globals';
 
 		if (!craft()->db->tableExists($tableName))
 		{
@@ -23,7 +23,7 @@ class m160522_000000_sproutSeo_addGlobalsTable extends BaseMigration
 				'contacts'    => array('column' => ColumnType::Text, 'null' => true),
 				'social'      => array('column' => ColumnType::Text, 'null' => true),
 				'robots'      => array('column' => ColumnType::Text, 'null' => true),
-				'settings'      => array('column' => ColumnType::Text, 'null' => true),
+				'settings'    => array('column' => ColumnType::Text, 'null' => true),
 				'dateCreated' => array('column' => ColumnType::DateTime, 'null' => false),
 				'dateUpdated' => array('column' => ColumnType::DateTime, 'null' => false),
 				'uid'         => array('column' => 'char(36)', 'null' => false, 'default' => '0'),

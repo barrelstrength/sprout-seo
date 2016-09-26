@@ -26,11 +26,11 @@
 		</div>
 	</div>
 
-	{% set globals = craft.sproutSeo.getGlobals() %}
+	{% set globals = craft.sproutSeo.getGlobalMetadata() %}
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut>
 		{{ getCsrfInput() }}
-		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
+		<input type="hidden" name="action" value="sproutSeo/globals/saveGlobals">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
 		<input type="hidden" name="schemaType" value="{{schemaType}}">
 
@@ -50,7 +50,7 @@
 				<tr data-id="{{ loop.index }}">
 					<td>
 						{{ sproutFields.selectOther({
-							name: 'sproutseo[schema][contacts][' ~ loop.index ~ '][0]',
+							name: 'sproutseo[globals][contacts][' ~ loop.index ~ '][0]',
 							options: contactOptions,
 							value: contact.contactType,
 							otherPlaceholderText: 'Custom Contact Type'|t
@@ -58,7 +58,7 @@
 					</td>
 					<td>
 						{{ forms.text({
-							name: 'sproutseo[schema][contacts][' ~ loop.index ~ '][1]',
+							name: 'sproutseo[globals][contacts][' ~ loop.index ~ '][1]',
 							value: contact.telephone,
 							errors: ''
 						}) }}
@@ -102,7 +102,7 @@
 	(function() {
 
 		var tableId = 'sproutseo-schema-contacts';
-		var baseName = 'sproutseo[schema][contacts]';
+		var baseName = 'sproutseo[globals][contacts]';
 		var columns = {{ cols|json_encode|raw }};
 		var settings = {};
 

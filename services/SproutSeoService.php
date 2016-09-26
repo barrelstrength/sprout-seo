@@ -19,6 +19,11 @@ class SproutSeoService extends BaseApplicationComponent
 	public $metadata;
 
 	/**
+	 * @var SproutSeo_GlobalsService
+	 */
+	public $globals;
+
+	/**
 	 * @var SproutSeo_SchemaService
 	 */
 	public $schema;
@@ -44,6 +49,7 @@ class SproutSeoService extends BaseApplicationComponent
 
 		$this->optimize  = Craft::app()->getComponent('sproutSeo_optimize');
 		$this->metadata  = Craft::app()->getComponent('sproutSeo_metadata');
+		$this->globals   = Craft::app()->getComponent('sproutSeo_globals');
 		$this->schema    = Craft::app()->getComponent('sproutSeo_schema');
 		$this->sitemap   = Craft::app()->getComponent('sproutSeo_sitemap');
 		$this->settings  = Craft::app()->getComponent('sproutSeo_settings');

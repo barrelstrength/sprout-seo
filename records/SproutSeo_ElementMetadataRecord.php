@@ -1,11 +1,11 @@
 <?php
 namespace Craft;
 
-class SproutSeo_MetadataContentRecord extends BaseRecord
+class SproutSeo_ElementMetadataRecord extends BaseRecord
 {
 	public function getTableName()
 	{
-		return 'sproutseo_metadatacontent';
+		return 'sproutseo_metadata_elements';
 	}
 
 	public function defineAttributes()

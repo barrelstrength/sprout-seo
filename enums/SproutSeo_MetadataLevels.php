@@ -10,26 +10,32 @@ abstract class SproutSeo_MetadataLevels extends BaseEnum
 	// =========================================================================
 
 	/**
-	 * Lowest Priority
+	 * GlobalMetadata
 	 *
-	 * globalMetadataModel()
+	 * UI Names: Globals, Global Metadata
+	 * Internal Names: GlobalMetadata, globalMetadataModel
+	 * Priority: 3, Lowest Priority
 	 */
 	const GlobalMetadata = 'global';
 
 	/**
-	 * sectionMetadataModel()
+	 * UI Names: Sections, Section Metadata
+	 * Internal Names: SectionMetadata, Section Metadata Sections, sectionMetadataModel
+	 * Priority: 2
 	 */
-	const SectionMetadata = 'MetadataGroup';
+	const SectionMetadata = 'section';
 
 	/**
-	 * elementMetadataModel()
+	 * UI Names: Pages, SEO Optimize FieldType, Element Metadata
+	 * Internal Names: ElementMetadata, $elementMetadataModel
+	 * Priority: 1
 	 */
 	const ElementMetadata = 'element';
 
 	/**
-	 * Highest Priority
-	 *
-	 * codeMetadataModel()
+	 * UI Names: Code Metadata, Code Overrides, Template Overrides
+	 * Internal Names: CodeMetadata, $codeMetadataModel
+	 * Priority: 0, Highest Priority
 	 */
 	const CodeMetadata = 'code';
 }

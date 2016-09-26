@@ -7,13 +7,13 @@
 
 		$customPageUrls: null,
 
-		$status:                 null,
-		$id:                     null,
-		$elementGroupId:         null,
-		$sitemapUrl:             null,
-		$sitemapPriority:        null,
-		$sitemapChangeFrequency: null,
-		$enabled:                null,
+		$status:          null,
+		$id:              null,
+		$elementGroupId:  null,
+		$url:             null,
+		$priority:        null,
+		$changeFrequency: null,
+		$enabled:         null,
 
 		$addCustomPageButton: null,
 
@@ -31,23 +31,23 @@
 			changedElement = ev.target;
 			rowId          = $(changedElement).closest('tr').data('rowid');
 
-			this.status                 = $('tr[data-rowid="' + rowId + '"] td span.status');
-			this.id                     = $('input[name="sproutseo[sitemap][' + rowId + '][id]"]').val();
-			this.elementGroupId         = $('input[name="sproutseo[sitemap][' + rowId + '][elementGroupId]"]').val();
-			this.sitemapUrl             = $('input[name="sproutseo[sitemap][' + rowId + '][sitemapUrl]"]').val();
-			this.sitemapPriority        = $('select[name="sproutseo[sitemap][' + rowId + '][sitemapPriority]"]').val();
-			this.sitemapChangeFrequency = $('select[name="sproutseo[sitemap][' + rowId + '][sitemapChangeFrequency]"]').val();
-			this.enabled                = $('input[name="sproutseo[sitemap][' + rowId + '][enabled]"]').val();
+			this.status          = $('tr[data-rowid="' + rowId + '"] td span.status');
+			this.id              = $('input[name="sproutseo[sitemap][' + rowId + '][id]"]').val();
+			this.elementGroupId  = $('input[name="sproutseo[sitemap][' + rowId + '][elementGroupId]"]').val();
+			this.url             = $('input[name="sproutseo[sitemap][' + rowId + '][url]"]').val();
+			this.priority        = $('select[name="sproutseo[sitemap][' + rowId + '][priority]"]').val();
+			this.changeFrequency = $('select[name="sproutseo[sitemap][' + rowId + '][changeFrequency]"]').val();
+			this.enabled         = $('input[name="sproutseo[sitemap][' + rowId + '][enabled]"]').val();
 
 			// @todo - clean up logging
 			//console.log('new request');
 			//console.log(this.status);
 			//console.log(this.id);
 			//console.log(this.elementGroupId);
-			//console.log(this.sitemapUrl);
-			//console.log(this.sitemapPriority);
-			//console.log(this.sitemapChangeFrequency);
-			console.log(this.enabled);
+			//console.log(this.url);
+			//console.log(this.priority);
+			//console.log(this.changeFrequency);
+			//console.log(this.enabled);
 			//console.log(this.categoryGroupId);
 			//console.log('end request');
 
@@ -61,12 +61,12 @@
 			}
 
 			Craft.postActionRequest('sproutSeo/sitemap/saveSitemap', {
-				id:                     this.id,
-				elementGroupId:         this.elementGroupId,
-				sitemapUrl:             this.sitemapUrl,
-				sitemapPriority:        this.sitemapPriority,
-				sitemapChangeFrequency: this.sitemapChangeFrequency,
-				enabled:                this.enabled,
+				id:              this.id,
+				elementGroupId:  this.elementGroupId,
+				url:             this.url,
+				priority:        this.priority,
+				changeFrequency: this.changeFrequency,
+				enabled:         this.enabled,
 			}, $.proxy(function(response, textStatus) {
 
 				if (textStatus == 'success') {
@@ -79,9 +79,9 @@
 						$('input[name="sproutseo[sitemap][' + rowId + '][id]"]').val(newRowId);
 						$('input[name="sproutseo[sitemap][' + rowId + '][id]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][id]');
 						$('input[name="sproutseo[sitemap][' + rowId + '][elementGroupId]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][elementGroupId]');
-						$('input[name="sproutseo[sitemap][' + rowId + '][sitemapUrl]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][sitemapUrl]');
-						$('select[name="sproutseo[sitemap][' + rowId + '][sitemapPriority]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][sitemapPriority]');
-						$('select[name="sproutseo[sitemap][' + rowId + '][sitemapChangeFrequency]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][sitemapChangeFrequency]');
+						$('input[name="sproutseo[sitemap][' + rowId + '][url]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][url]');
+						$('select[name="sproutseo[sitemap][' + rowId + '][priority]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][priority]');
+						$('select[name="sproutseo[sitemap][' + rowId + '][changeFrequency]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][changeFrequency]');
 						$('input[name="sproutseo[sitemap][' + rowId + '][enabled]"]').attr('name', 'sproutseo[sitemap][' + newRowId + '][enabled]');
 
 						Craft.cp.displayNotice(Craft.t("Sitemap setting saved."));

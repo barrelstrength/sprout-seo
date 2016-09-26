@@ -3,14 +3,9 @@
 
 {% set title = "Section Metadata"|t %}
 
-{% macro isSelected(target) %}
-	{% if target %}checked="checked"{% endif %}
-{% endmacro %}
-{% import _self as checkbox %}
-
 {% set pluginSettings = craft.sproutSeo.getSettings() %}
-{% set sitemaps    = craft.sproutSeo.getAllSitemaps() %}
-{% set customNames = craft.sproutSeo.getAllCustomNames() %}
+{% set sitemaps       = craft.sproutSeo.getAllSitemaps() %}
+{% set customNames    = craft.sproutSeo.getAllCustomNames() %}
 
 {% set body %}
 
@@ -56,8 +51,10 @@
 							'elementGroupId': elementGroup.id
 						} %}
 
-						{% set metadataInfo = craft.sproutSeo.getMetadataInfo(groupInfo) %}
-						{% if metadataInfo.element %}
+						{# @todo - can we update this to use a defined model? #}
+						{% set sectionMetadataInfo = craft.sproutSeo.getSectionMetadataInfo(groupInfo) %}
+
+						{% if sectionMetadataInfo.element %}
 							<tr data-rowid="{{ sitemapId }}" data-type="section">
 								<td>
 									<strong style="display:inline-block;padding:7px 10px;">
@@ -68,13 +65,13 @@
 											<span class="status disabled"></span>
 										{% endif %}
 
-										{% if metadataInfo.isNew %}
-											<a class="metadatagroup-isnew" data-isnew="{{ metadataInfo.isNew }}" data-metadataid="{{ metadataInfo.metadataId }}" data-elementgrouphandle="{{ elementGroup.handle }}" data-sitemapid="{{ sitemapId }}" data-elementgroupid="{{ elementGroup.id }}" data-metadatagroupname="{{ elementGroup.name }}" data-link="{{ elementGroup.handle }},{{ sitemapId }},{{ elementGroup.id }}">
+										{% if sectionMetadataInfo.isNew %}
+											<a class="sectionmetadata-isnew" data-isnew="{{ sectionMetadataInfo.isNew }}" data-elementgrouphandle="{{ elementGroup.handle }}" data-sitemapid="{{ sitemapId }}" data-elementgroupid="{{ elementGroup.id }}" data-sectionmetadataname="{{ elementGroup.name }}">
 												{{ elementGroup.name }}
 											</a>
 										{% else %}
 
-										<a href = "metadata/{{ metadataInfo.metadataId }}">
+										<a href = "sections/{{ sectionMetadataInfo.metadataId }}">
 											{{ elementGroup.name }}
 										</a>
 
@@ -86,10 +83,10 @@
 									</strong>
 								</td>
 								<td>
-									{% if metadataInfo.element.urlFormat == '__home__' %}
+									{% if sectionMetadataInfo.element.urlFormat == '__home__' %}
 										<span data-icon="home" title="Homepage"></span>
 									{% else %}
-										<code>{{ metadataInfo.element.urlFormat }}</code>
+										<code>{{ sectionMetadataInfo.element.urlFormat }}</code>
 									{% endif %}
 								</td>
 								<td>
@@ -119,9 +116,9 @@
 
 	{% if pluginSettings.enableCustomSections %}
 
-		{% set metadataGroups = craft.sproutSeo.getAllCustomPages() %}
+		{% set sectionMetadataCustomSections = craft.sproutSeo.getAllCustomPages() %}
 
-		{% if metadataGroups is not empty %}
+		{% if sectionMetadataCustomSections is not empty %}
 
 		<div class="pane">
 
@@ -131,7 +128,7 @@
 				</div>
 				<div style="flex-shrink: 0;">
 					<div class="buttons right">
-						<a class="btn submit add icon" href="{{ url('sproutseo/metadata/new') }}">{{ "New section"|t }}</a>
+						<a class="btn submit add icon" href="{{ url('sproutseo/sections/new') }}">{{ "New section"|t }}</a>
 					</div>
 				</div>
 			</div>
@@ -144,24 +141,24 @@
 					<th class="thin"></th>
 				</thead>
 
-				{% for metadataGroup in metadataGroups %}
-					<tr id="results" data-id="{{ metadataGroup.id }}" data-name="{{ metadataGroup.name|t }}">
+				{% for sectionMetadataCustomSection in sectionMetadataCustomSections %}
+					<tr id="results" data-id="{{ sectionMetadataCustomSection.id }}" data-name="{{ sectionMetadataCustomSection.name|t }}">
 						<td>
 							<strong style="display:inline-block;padding:7px 10px;">
 
-								{% if metadataGroup is defined and metadataGroup.enabled %}
+								{% if sectionMetadataCustomSection is defined and sectionMetadataCustomSection.enabled %}
 									<span class="status live"></span>
 								{% else %}
 									<span class="status disabled"></span>
 								{% endif %}
 
-								<a href="{{ url('sproutseo/metadata/' ~ metadataGroup.id) }}">
-									{{ metadataGroup.name }}
+								<a href="{{ url('sproutseo/sections/' ~ sectionMetadataCustomSection.id) }}">
+									{{ sectionMetadataCustomSection.name }}
 								</a>
 							</strong>
 						</td>
 						<td>
-							<code>{{ metadataGroup.sitemapUrl }}</code>
+							<code>{{ sectionMetadataCustomSection.url }}</code>
 						</td>
 						<td>
 							<div class="sprout-metadata-status" style="color:#ccc;">
@@ -196,7 +193,7 @@
 
 	new Craft.AdminTable({
 		tableSelector: '#custom-pages',
-		deleteAction: 'sproutSeo/metadata/deleteMetadataGroupById',
+		deleteAction: 'sproutSeo/metadata/deleteSectionMetadataById',
 		onDeleteObject: function(id)
 		{
 			if($('#custom-pages').find('tbody').find('tr').size() == 0)

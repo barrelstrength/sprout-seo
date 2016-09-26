@@ -1,9 +1,10 @@
 <?php
 namespace Craft;
+
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m160927_000000_sproutSeo_addMetadataGroups extends BaseMigration
+class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 {
 	/**
 	 * @return bool
@@ -11,7 +12,7 @@ class m160927_000000_sproutSeo_addMetadataGroups extends BaseMigration
 	public function safeUp()
 	{
 		$tableName    = 'sproutseo_defaults';
-		$newTableName = 'sproutseo_metadatagroups';
+		$newTableName = 'sproutseo_metadata_sections';
 
 		$varchar = array(
 			'column'   => ColumnType::Varchar,
@@ -21,7 +22,7 @@ class m160927_000000_sproutSeo_addMetadataGroups extends BaseMigration
 
 		$columns = array(
 			'customizationSettings' => $varchar,
-			'sitemapUrl' => $varchar,
+			'url' => $varchar,
 			'isSitemapCustomPage' => array(
 				'column'   => ColumnType::TinyInt,
 				'required' => false,
@@ -33,13 +34,13 @@ class m160927_000000_sproutSeo_addMetadataGroups extends BaseMigration
 				'required' => false,
 				'default'  => 0
 			),
-			'sitemapChangeFrequency' => array(
+			'changeFrequency' => array(
 				'column'    => ColumnType::Varchar,
 				'required'  => false,
 				'default'   => 'weekly',
 				'maxLength' => 7
 			),
-			'sitemapPriority' => array(
+			'priority' => array(
 				'column'   => 'decimal(12,1)',
 				'required' => false,
 				'default'  => '0.0'

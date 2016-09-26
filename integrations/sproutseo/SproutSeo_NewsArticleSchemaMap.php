@@ -27,7 +27,7 @@ class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
 	public function getProperties()
 	{
 		$elementModel = $this->sitemapInfo['elementModel'];
-		$prioritized  = $this->sitemapInfo['prioritizedMetaTagModel'];
+		$prioritized  = $this->sitemapInfo['prioritizedMetadataModel'];
 		$globals      = $this->sitemapInfo['globals'];
 
 		$jsonLd = array(

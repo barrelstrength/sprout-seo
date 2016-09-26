@@ -1,5 +1,5 @@
 <!-- This site is optimized with the Sprout SEO plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/seo -->
-{% for name, value in meta.basic %}
+{% for name, value in meta.search %}
 {% switch name %}
 {% case "title" %}
 	<title>{{ value }}</title>
@@ -11,8 +11,8 @@
 	<meta name='{{ name }}' content='{{ value }}' />
 {% endswitch %}
 {% endfor %}
-{% if googlePlus is defined and googlePlus %}
-	<link rel="publisher" href="{{googlePlus}}" />
+{% if meta.googlePlus is defined and meta.googlePlus %}
+	<link rel="publisher" href="{{ meta.googlePlus }}" />
 {% endif %}
 {% for name, value in meta.robots %}
 {% switch name %}
@@ -28,7 +28,7 @@
 {% for name, value in meta.openGraph %}
 	<meta property='{{ name }}' content='{{ value }}' />
 {% endfor %}
-{% for name, value in meta.twitter %}
+{% for name, value in meta.twitterCard %}
 	<meta name='{{ name }}' content='{{ value }}'>
 {% endfor %}
 {% for property in globals.ownership %}

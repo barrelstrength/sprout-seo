@@ -3,7 +3,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m160928_000025_sproutSeo_updateDeprecatedTwitterCard extends BaseMigration
+class m160901_000006_sproutSeo_updateDeprecatedTwitterPhotoCard extends BaseMigration
 {
 	/**
 	 * @return bool
@@ -11,8 +11,8 @@ class m160928_000025_sproutSeo_updateDeprecatedTwitterCard extends BaseMigration
 	public function safeUp()
 	{
 		$tableNames = array(
-			'sproutseo_metadatagroups',
-			'sproutseo_metadatacontent'
+			'sproutseo_metadata_sections',
+			'sproutseo_metadata_elements'
 		);
 
 		foreach ($tableNames as $tableName)

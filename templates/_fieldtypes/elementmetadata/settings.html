@@ -6,7 +6,7 @@
 
 <div class="field">
 	<div class="heading">
-		<label for="siteOwnerType">{{ "Optimized Meta Tag Title Field"|t}}</label>
+		<label for="siteOwnerType">{{ "Meta Title Field"|t}}</label>
 		<p class="instructions">
 			{{"Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select
 	'Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t}}
@@ -29,7 +29,7 @@
 
 <div class="field">
 	<div class="heading">
-		<label for="siteOwnerType">{{ "Optimized Meta Tag Description Field"|t}}</label>
+		<label for="siteOwnerType">{{ "Meta Description Field"|t}}</label>
 		<p class="instructions">
 			{{"Select the field to use for your basic, Open Graph, and Twitter Card meta tag descriptions. Select
 	'Manually' if you want the Optimize field to display a custom Description Field for your content editors to manage."|t}}
@@ -51,7 +51,7 @@
 {% set optimizedImageOptions = craft.sproutSeo.getOptimizedAssetsOptions() %}
 
 {{ forms.selectField({
-	label: "Optimized Meta Tag Feature Image Field"|t,
+	label: "Meta Image Field"|t,
 	instructions: "Select the Assets field to use for your basic, Open Graph, and Twitter Card meta tag feature image. Select 'Manually' if you want the Optimize field to display a custom Feature Image Field for your content editors to manage."|t,
 	id: 'optimizedImageField',
 	name: 'optimizedImageField',
@@ -69,7 +69,7 @@
 ] %}
 
 {{ forms.selectField({
-	label: "Optimized Meta Keywords Field"|t,
+	label: "Meta Keywords Field"|t,
 	instructions: "Generate keywords and key phrases dynamically based on an algorithm or add them manually."|t,
 	id: 'optimizedKeywordsField',
 	name: 'optimizedKeywordsField',
@@ -103,12 +103,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td><label for="showBasicMeta">{{ "Allow Basic Meta fields to be edited?"|t }}</label></td>
+					<td><label for="showSearchMeta">{{ "Allow Search Meta fields to be edited?"|t }}</label></td>
 					<td class="centeralign">
 						<div>
 							{{ forms.lightswitch({
-								name: 'showBasicMeta',
-								on:   settings.showBasicMeta,
+								name: 'showSearchMeta',
+								on:   settings.showSearchMeta,
 								small: true
 							}) }}
 						</div>

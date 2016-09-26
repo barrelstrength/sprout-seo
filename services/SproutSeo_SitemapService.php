@@ -28,7 +28,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			'elementGroupId' => $attributes->elementGroupId
 		);
 
-		$elementInfo = sproutSeo()->metadata->getMetadataInfo($info);
+		$elementInfo = sproutSeo()->metadata->getSectionMetadataInfo($info);
 		$isNew       = $elementInfo['isNew'];
 
 		if (!$isNew)
@@ -37,31 +37,31 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 			$row = craft()->db->createCommand()
 				->select('*')
-				->from('sproutseo_metadatagroups')
+				->from('sproutseo_metadata_sections')
 				->where('id=:id', array(':id' => $sitemapId))
 				->queryRow();
 
 			$model = SproutSeo_SitemapModel::populateModel($row);
 		}
 
-		$model->id                     = $sitemapId;
-		$model->name                   = $attributes->id;
-		$model->handle                 = str_replace("-", "", $attributes->id);
-		$model->type                   = $type != "customUrl" ? $type : null;
-		$model->elementGroupId         = (isset($attributes->elementGroupId)) ? $attributes->elementGroupId : null;
-		$model->sitemapUrl             = (isset($elementInfo['element']->urlFormat)) ? $elementInfo['element']->urlFormat : null;
-		$model->sitemapPriority        = $attributes->sitemapPriority;
-		$model->sitemapChangeFrequency = $attributes->sitemapChangeFrequency;
-		$model->isSitemapCustomPage    = 0;
-		$model->enabled                = ($attributes->enabled == 1) ? 1 : 0;
-		$model->dateUpdated            = DateTimeHelper::currentTimeForDb();
-		$model->uid                    = StringHelper::UUID();
+		$model->id                  = $sitemapId;
+		$model->name                = $attributes->id;
+		$model->handle              = str_replace("-", "", $attributes->id);
+		$model->type                = $type != "customUrl" ? $type : null;
+		$model->elementGroupId      = (isset($attributes->elementGroupId)) ? $attributes->elementGroupId : null;
+		$model->url                 = (isset($elementInfo['element']->urlFormat)) ? $elementInfo['element']->urlFormat : null;
+		$model->priority            = $attributes->priority;
+		$model->changeFrequency     = $attributes->changeFrequency;
+		$model->isSitemapCustomPage = 0;
+		$model->enabled             = ($attributes->enabled == 1) ? 1 : 0;
+		$model->dateUpdated         = DateTimeHelper::currentTimeForDb();
+		$model->uid                 = StringHelper::UUID();
 
 		if ($isNew)
 		{
 			$model->dateCreated = DateTimeHelper::currentTimeForDb();
 
-			craft()->db->createCommand()->insert('sproutseo_metadatagroups', $model->getAttributes());
+			craft()->db->createCommand()->insert('sproutseo_metadata_sections', $model->getAttributes());
 
 			return craft()->db->lastInsertID;
 		}
@@ -69,7 +69,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		{
 			craft()->db->createCommand()
 				->update(
-					'sproutseo_metadatagroups',
+					'sproutseo_metadata_sections',
 					$model->getAttributes(),
 					'id=:id', array(
 						':id' => $model->id
@@ -93,7 +93,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$urls            = array();
 		$enabledSitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metadatagroups')
+			->from('sproutseo_metadata_sections')
 			->where('enabled = 1 and elementGroupId is not null')
 			->queryAll();
 
@@ -105,7 +105,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			// Fetching all enabled locales
 			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
-				$elementInfo = $this->getElementInfo($sitemaps, $sitemapSettings['type']);
+				$elementInfo = $this->getSectionMetadataElementInfo($sitemaps, $sitemapSettings['type']);
 
 				$elements = array();
 
@@ -140,8 +140,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 						'url'       => $element->getUrl(),
 						'locale'    => $locale->id,
 						'modified'  => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
-						'priority'  => $sitemapSettings['sitemapPriority'],
-						'frequency' => $sitemapSettings['sitemapChangeFrequency'],
+						'priority'  => $sitemapSettings['priority'],
+						'frequency' => $sitemapSettings['changeFrequency'],
 					);
 				}
 			}
@@ -149,16 +149,16 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		// Fetching all Custom Section Metadata defined in Sprout SEO
 		$customSectionMetadata = craft()->db->createCommand()
-			->select('sitemapUrl as url, sitemapPriority as priority, sitemapChangeFrequency as frequency, dateUpdated')
-			->from('sproutseo_metadatagroups')
+			->select('url, priority, changeFrequency, dateUpdated')
+			->from('sproutseo_metadata_sections')
 			->where('enabled = 1')
-			->andWhere('sitemapUrl is not null and isSitemapCustomPage = 1')
+			->andWhere('url is not null and isSitemapCustomPage = 1')
 			->queryAll();
 
 		foreach ($customSectionMetadata as $customSection)
 		{
 			// Adding each custom location indexed by its URL
-			$modified                  = new DateTime($customSection['dateUpdated']);
+			$modified                    = new DateTime($customSection['dateUpdated']);
 			$customSection['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
 			$urls[$customSection['url']] = craft()->config->parseEnvironmentString($customSection);
 		}
@@ -172,7 +172,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		$source = craft()->templates->render('_special/sitemap', array(
 			'elements' => $urls,
-			'options' => is_array($options) ? $options : array(),
+			'options'  => is_array($options) ? $options : array(),
 		));
 
 		craft()->path->setTemplatesPath($path);
@@ -293,7 +293,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	{
 		$sitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metadatagroups')
+			->from('sproutseo_metadata_sections')
 			->where('elementGroupId iS NOT NULL and type = :type', array(':type' => $type))
 			->queryAll();
 
@@ -307,7 +307,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	{
 		$customPages = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metadatagroups')
+			->from('sproutseo_metadata_sections')
 			->where('isSitemapCustomPage = 1')
 			->queryAll();
 
@@ -364,7 +364,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 * @return array
 	 * @internal param $sitemaps array from hook
 	 */
-	public function getElementInfo($sitemaps, $sitemapSettingsType)
+	public function getSectionMetadataElementInfo($sitemaps, $sitemapSettingsType)
 	{
 		$elementInfo = array();
 
@@ -396,5 +396,81 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return $elementInfo;
+	}
+
+	/**
+	 * @param $context
+	 *
+	 * @return array
+	 */
+	public function getSitemapInfo($context)
+	{
+		$sitemapInfo = array();
+
+		if (isset($context))
+		{
+			$sitemaps                 = craft()->plugins->call('registerSproutSeoSitemap');
+			$elementTable             = null;
+			$elementModel             = null;
+			$matchedElementByVariable = array();
+
+			// Loop through all of our sitemap integrations and create an array of our matched element variables
+			foreach ($sitemaps as $plugin)
+			{
+				foreach ($plugin as $definedElementTable => $element)
+				{
+					if (isset($element['matchedElementVariable']))
+					{
+						$matchedElementVariable = $element['matchedElementVariable'];
+
+						if (isset($context[$matchedElementVariable]))
+						{
+							$matchedElementByVariable = $element;
+							$elementTable             = $definedElementTable;
+							$elementModel             = $context[$matchedElementVariable];
+							break 2;
+						}
+					}
+				}
+			}
+
+			if ($matchedElementByVariable && $elementTable && $elementModel)
+			{
+				$elementGroup = isset($matchedElementByVariable['elementGroupId']) ?
+					$matchedElementByVariable['elementGroupId'] :
+					null;
+				$elementType  = isset($matchedElementByVariable['elementType']) ?
+					$matchedElementByVariable['elementType'] :
+					null;
+
+				if (isset($elementModel->{$elementGroup}) && $elementType)
+				{
+					$locale = craft()->i18n->getLocaleById(craft()->language);
+
+					$criteria                  = craft()->elements->getCriteria($elementType);
+					$criteria->{$elementGroup} = $elementModel->{$elementGroup};
+					$criteria->limit           = null;
+					$criteria->enabled         = true;
+					$criteria->locale          = $locale->id;
+					// Support one locale for now
+					$results = $criteria->find();
+
+					if (count($results) > 0)
+					{
+						$result = $results[0];
+
+						$sitemapInfo = array(
+							'hookInfo'       => $matchedElementByVariable,
+							'urlFormat'      => $result->urlFormat,
+							'elementModel'   => $elementModel,
+							'elementTable'   => $elementTable,
+							'elementGroupId' => $elementModel->{$elementGroup}
+						);
+					}
+				}
+			}
+		}
+
+		return $sitemapInfo;
 	}
 }

@@ -70,8 +70,8 @@
       }) }}
 
       {{ forms.lightswitchField({
-        label: "Enable custom meta tag template"|t,
-        instructions: "Enable this setting if you wish to override the default meta tag templates and provide your own custom templates."|t,
+        label: "Enable custom metadata template"|t,
+        instructions: "Enable this setting if you wish to override the default metadata templates and provide your own custom templates."|t,
         name: 'toggleTemplateFolderOverride',
         toggle: 'settings-defaulttemplateoverride',
         on: (settings.templateFolder is empty ? false : true),
@@ -81,8 +81,8 @@
       <div id="settings-defaulttemplateoverride" class="{{ (settings.templateFolder is empty ? "hidden") }}">
 
         {{ forms.textField({
-          label: "Metadata Group Template Folder"|t,
-          instructions: "Use a custom Metadata Group template. Copy _special/meta.html to your folder and do your thing."|t,
+          label: "Custom Template Folder"|t,
+          instructions: "Use a custom template. Copy the template from sproutseo/templates/_special/meta.html to your folder and do your thing."|t,
           name: 'templateFolder',
           value: settings.templateFolder,
           errors: ''
@@ -90,9 +90,7 @@
 
       </div>
 
-
     {% endnamespace %}
-
 
     <div class="buttons">
       <input class="btn submit" type="submit" value="{{ 'Save'|t }}">

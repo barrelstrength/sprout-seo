@@ -20,7 +20,7 @@
 		}
 	] %}
 
-	{% set globals = craft.sproutSeo.getGlobals() %}
+	{% set globals = craft.sproutSeo.getGlobalMetadata() %}
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
@@ -31,7 +31,7 @@
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut>
 		{{ getCsrfInput() }}
-		<input type="hidden" name="action" value="sproutSeo/schema/saveSchema">
+		<input type="hidden" name="action" value="sproutSeo/globals/saveGlobals">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
 		<input type="hidden" name="schemaType" value="{{ schemaTypeFormSubmit }}">
 
@@ -52,7 +52,7 @@
 					<td>
 						<div class="field sprout-selectother">
 							{{ sproutFields.selectOther({
-								name: 'sproutseo[schema][social][' ~ loop.index ~ '][0]',
+								name: 'sproutseo[globals][social][' ~ loop.index ~ '][0]',
 								options: socialProfileOptions,
 								value: socialProfile.profileName,
 								otherPlaceholderText: 'Custom Profile'|t
@@ -61,7 +61,7 @@
 					</td>
 					<td>
 						{{ forms.text({
-							name: 'sproutseo[schema][social][' ~ loop.index ~ '][1]',
+							name: 'sproutseo[globals][social][' ~ loop.index ~ '][1]',
 							value: socialProfile.url,
 							errors: ''
 						}) }}
@@ -107,7 +107,7 @@ $( document ).ready(function() {
 (function() {
 
 	var tableId = 'sproutseo-schema-social';
-	var baseName = 'sproutseo[schema][social]';
+	var baseName = 'sproutseo[globals][social]';
 	var columns = {{ cols|json_encode|raw }};
 	var settings = {};
 

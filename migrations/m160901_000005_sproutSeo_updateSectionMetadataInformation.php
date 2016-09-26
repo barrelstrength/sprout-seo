@@ -3,7 +3,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m160928_000000_sproutSeo_updateInformation extends BaseMigration
+class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigration
 {
 	/**
 	 * Let's dance!
@@ -11,13 +11,11 @@ class m160928_000000_sproutSeo_updateInformation extends BaseMigration
 	 */
 	public function safeUp()
 	{
-		$tableName = "sproutseo_metadatagroups";
+		$tableName = "sproutseo_metadata_sections";
 
 		if (craft()->db->tableExists($tableName))
 		{
-			// Find all metadatagroups
-			// Let's set all the rows as custom pages
-
+			// Find all Section Metadata Sections and set all the rows as custom pages
 			$rows = craft()->db->createCommand()
 				->select('id')
 				->from($tableName)

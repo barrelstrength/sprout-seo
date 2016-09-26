@@ -1,67 +1,41 @@
 <?php
 namespace Craft;
 
-class SproutSeo_MetadataGroupRecord extends BaseRecord
+class SproutSeo_SectionMetadataRecord extends BaseRecord
 {
 	public function getTableName()
 	{
-		return 'sproutseo_metadatagroups';
+		return 'sproutseo_metadata_sections';
 	}
 
 	protected function defineAttributes()
 	{
 		return array(
-			'name'           => array(
-				AttributeType::String,
-				'required' => true
-			),
-			'handle'         => array(
-				AttributeType::String,
-				'required' => true
-			),
-			'enabled'        => array(
-				AttributeType::Bool,
-				'default'  => false,
-				'required' => true
-			),
+			'name'                => array(AttributeType::String, 'required' => true),
+			'handle'              => array(AttributeType::String, 'required' => true),
+			'enabled'             => array(AttributeType::Bool, 'default' => false, 'required' => true),
 
 			// sitemap data
-			'elementGroupId' => array(AttributeType::Number),
-			'type'           => array(AttributeType::String),
-
-			'sitemapPriority'                => array(
-				AttributeType::Number,
-				'maxLength' => 2,
-				'decimals'  => 1,
-				'default'   => '0.5',
-				'required'  => true
-			),
-			'sitemapChangeFrequency'         => array(
-				AttributeType::String,
-				'maxLength' => 7,
-				'default'   => 'weekly',
-				'required'  => true
-			),
-			'sitemapUrl'                     => array(AttributeType::String),
-			'isSitemapCustomPage'       => array(
-				AttributeType::Bool,
-				'default'  => false,
-				'required' => true
-			),
+			'elementGroupId'      => array(AttributeType::Number),
+			'type'                => array(AttributeType::String),
+			'priority'            => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
+			'changeFrequency'     => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
+			'url'                 => array(AttributeType::String),
+			'isSitemapCustomPage' => array(AttributeType::Bool, 'default' => false, 'required' => true),
 			// end sitemap
 
-			'optimizedTitle'       => array(AttributeType::String),
-			'optimizedDescription' => array(AttributeType::String),
-			'optimizedImage'       => array(AttributeType::String),
-			'optimizedKeywords'    => array(AttributeType::String),
-			'customizationSettings'=> array(AttributeType::String),
+			'optimizedTitle'        => array(AttributeType::String),
+			'optimizedDescription'  => array(AttributeType::String),
+			'optimizedImage'        => array(AttributeType::String),
+			'optimizedKeywords'     => array(AttributeType::String),
+			'customizationSettings' => array(AttributeType::String),
 
-			'title'                => array(AttributeType::String),
-			'appendTitleValue'     => array(AttributeType::String),
-			'description'          => array(AttributeType::String),
-			'keywords'             => array(AttributeType::String),
-			'author'               => array(AttributeType::String),
-			'publisher'            => array(AttributeType::String),
+			'title'            => array(AttributeType::String),
+			'appendTitleValue' => array(AttributeType::String),
+			'description'      => array(AttributeType::String),
+			'keywords'         => array(AttributeType::String),
+			'author'           => array(AttributeType::String),
+			'publisher'        => array(AttributeType::String),
 
 			'robots'    => array(AttributeType::String),
 			'canonical' => array(AttributeType::String),

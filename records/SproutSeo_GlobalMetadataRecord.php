@@ -1,11 +1,11 @@
 <?php
 namespace Craft;
 
-class SproutSeo_GlobalsRecord extends BaseRecord
+class SproutSeo_GlobalMetadataRecord extends BaseRecord
 {
 	public function getTableName()
 	{
-		return 'sproutseo_globals';
+		return 'sproutseo_metadata_globals';
 	}
 
 	protected function defineAttributes()

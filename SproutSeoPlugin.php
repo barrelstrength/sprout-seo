@@ -164,20 +164,12 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/metadata/new'                      => array(
-				'action' => 'sproutSeo/metadata/metadataGroupEditTemplate'
+			'sproutseo/sections/new'                      => array(
+				'action' => 'sproutSeo/metadata/sectionMetadataEditTemplate'
 			),
-			'sproutseo/metadata/(?P<metadataGroupId>\d+)' => array(
-				'action' => 'sproutSeo/metadata/metadataGroupEditTemplate'
+			'sproutseo/sections/(?P<sectionMetadataId>\d+)' => array(
+				'action' => 'sproutSeo/metadata/sectionMetadataEditTemplate'
 			),
-
-			'sproutseo/schema/new' =>
-				'sproutseo/schema/_edit',
-
-			'sproutseo/schema/(.*)' => array(
-				'action' => 'sproutSeo/schema/schemaEditTemplate'
-			),
-
 			'sproutseo/sitemap'                               => array(
 				'action' => 'sproutSeo/sitemap/sitemapIndex'
 			),
@@ -187,7 +179,9 @@ class SproutSeoPlugin extends BasePlugin
 			'sproutseo/settings'                              => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
-			'sproutseo/settings/(?P<settingsTemplate>.*)/new' => 'sproutseo/settings/schema/_edit',
+			'sproutseo/settings/(?P<settingsTemplate>.*)/new' =>
+				'sproutseo/settings/schema/_edit',
+
 			'sproutseo/settings/(?P<settingsTemplate>.*)'     => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
@@ -199,7 +193,13 @@ class SproutSeoPlugin extends BasePlugin
 			),
 			'sproutseo/redirects/(?P<redirectId>\d+)'         => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
-			)
+			),
+			'sproutseo/schema/new' =>
+				'sproutseo/schema/_edit',
+
+			'sproutseo/schema/(.*)' => array(
+				'action' => 'sproutSeo/schema/schemaEditTemplate'
+			),
 		);
 	}
 
@@ -296,7 +296,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function onAfterInstall()
 	{
 		sproutSeo()->redirects->installDefaultSettings();
-		sproutSeo()->schema->installDefaultGlobals();
+		sproutSeo()->globals->installDefaultGlobals();
 	}
 
 	/**
