@@ -754,9 +754,7 @@ class SproutSeoVariable
 	 */
 	public function getSchemaMaps()
 	{
-		$schemaMaps = craft()->plugins->call('registerSproutSeoSchemaMaps');
-
-		return $schemaMaps;
+		return sproutSeo()->optimize->getSchemaMaps();
 	}
 
 	/**
@@ -766,23 +764,28 @@ class SproutSeoVariable
 	 */
 	public function getSchemaMapOptions()
 	{
-		$schemaMaps = $this->getSchemaMaps();
-		$schemas    = array('' => 'Select...');
+		$schemaMaps = sproutSeo()->optimize->getSchemaMaps();
 
-		array_push($schemas, array('optgroup' => 'Basic'));
+		$default = array_filter($schemaMaps, function ($map) {
+			/**
+			 * @var BaseSproutSeoSchemaMap $map
+			 */
+			return stripos($map->getUniqueKey(), 'craft-sproutseo') !== false;
+		});
 
-		foreach ($schemaMaps as $schemasByPlugin)
-		{
-			foreach ($schemasByPlugin as $schema)
-			{
-				$type           = $schema->getType();
-				$schemas[$type] = $schema->getName();
-			}
-		}
+		$custom = array_filter($schemaMaps, function ($map) {
+			/**
+			 * @var BaseSproutSeoSchemaMap $map
+			 */
+            return stripos($map->getUniqueKey(), 'craft-sproutseo') === false;
+		});
 
-		array_push($schemas, array('optgroup' => 'Custom'));
-
-		return $schemas;
+		return array_merge(
+			[['optgroup' => 'Default']],
+			array_map(function ($map) { return ['label' => $map->getName(), 'value' => $map->getUniqueKey()];}, $default),
+			[['optgroup' => 'Custom']],
+			array_map(function ($map) { return ['label' => $map->getName(), 'value' => $map->getUniqueKey()];}, $custom)
+		);
 	}
 
 	/**

@@ -4,19 +4,78 @@ namespace Craft;
 class SproutSeo_OptimizeService extends BaseApplicationComponent
 {
 	/**
-	 * @var
+	 * @var array
+	 */
+	protected $schemaMaps;
+
+	/**
+	 * @var mixed
 	 */
 	public $context;
 
 	/**
-	 * @var
+	 * @var string
 	 */
 	public $divider;
 
 	/**
 	 * @var array
 	 */
-	public $codeMetadata = array();
+	public $codeMetadata = [];
+
+	public function init()
+	{
+		$responses = craft()->plugins->call('registerSproutSeoSchemaMaps');
+
+		foreach ($responses as $plugin => $maps)
+		{
+			/**
+			 * @var BaseSproutSeoSchemaMap $map
+			 */
+			foreach ($maps as $map)
+			{
+				$this->schemaMaps[$map->getUniqueKey()] = $map;
+			}
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSchemaMaps()
+	{
+		return $this->schemaMaps;
+	}
+
+	/**
+	 * Returns a list of available schema maps for display in a select field
+	 *
+	 * @return array
+	 */
+	public function getSchemaMapOptions()
+	{
+		$options = [];
+
+		foreach ($this->schemaMaps as $uniqueKey => $instance)
+		{
+			$options[] = ['value' => $uniqueKey, 'label' => $instance->getName()];
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Returns a schema map instance (based on $uniqueKey) or $default
+	 *
+	 * @param string $uniqueKey
+	 * @param null   $default
+	 *
+	 * @return mixed|null
+	 */
+	public function getSchemaMapByUniqueKey($uniqueKey, $default = null)
+	{
+		return array_key_exists($uniqueKey, $this->schemaMaps) ? $this->schemaMaps[$uniqueKey] : $default;
+	}
 
 	/**
 	 * Add values to the master $this->codeMetadata array
@@ -186,23 +245,22 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getMainEntityStructuredDataHtml($sitemapInfo)
 	{
-		$schema = '';
 		$prioritizedMetadataModel = $sitemapInfo['prioritizedMetadataModel'];
 
 		if ($prioritizedMetadataModel)
 		{
-			$enabledMatchingSitemap = $prioritizedMetadataModel->schemaMap;
+			$schemaMapUniqueKey = $prioritizedMetadataModel->schemaMap;
 
-			if ($enabledMatchingSitemap)
+			if ($schemaMapUniqueKey)
 			{
-				$class = 'Craft\SproutSeo_'.$enabledMatchingSitemap.'SchemaMap';
-				$schemaMap = new $class($prioritizedMetadataModel->getAttributes(), true, $sitemapInfo);
+				$schemaMap              = $this->getSchemaMapByUniqueKey($schemaMapUniqueKey);
+				$schemaMap->attributes  = $prioritizedMetadataModel->getAttributes();
+				$schemaMap->isContext   = true;
+				$schemaMap->sitemapInfo = $sitemapInfo;
 
-				$schema = $schemaMap->getSchema();
+				return $schemaMap->getSchema();
 			}
 		}
-
-		return $schema;
 	}
 
 	public function getKnowledgeGraphLinkedData($sitemapInfo)

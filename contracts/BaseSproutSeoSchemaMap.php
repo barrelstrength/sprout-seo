@@ -19,7 +19,7 @@ abstract class BaseSproutSeoSchemaMap
 	/**
 	 * @var bool
 	 */
-	private $isContext;
+	public $isContext;
 
 	/**
 	 * BaseSproutSeoSchemaMap constructor.
@@ -53,6 +53,16 @@ abstract class BaseSproutSeoSchemaMap
 	{
 		return "http://schema.org/";
 	}
+
+    /**
+     * Returns a key that uniquely identifies the schema map integration
+     *
+     * @return string
+     */
+	final public function getUniqueKey()
+    {
+        return str_replace('_', '-', ElementHelper::createSlug(get_class($this)));
+    }
 
 	/**
 	 * Human readable schema name. Admin user will select this schema by this name in the Control Panel.

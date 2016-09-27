@@ -346,7 +346,7 @@ class SproutSeoOptimizeHelper
 	 */
 	public static function getGooglePlusPage()
 	{
-		$googlePlus = null;
+		$googlePlusUrl = null;
 
 		$globals = sproutSeo()->globals->getGlobalMetadata();
 
