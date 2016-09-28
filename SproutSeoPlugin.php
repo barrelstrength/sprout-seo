@@ -99,11 +99,21 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchemaMap');
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityOrganizationSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPersonSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ContactPointSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ImageObjectSchemaMap');
+
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_CreativeWorkSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_EventSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_IntangibleSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_OrganizationSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PersonSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PlaceSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ProductSchemaMap');
+
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_NewsArticleSchemaMap');
+
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 
 		if (!craft()->isConsole())
@@ -285,10 +295,19 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerSproutSeoSchemaMaps()
 	{
 		return array(
+			new SproutSeo_WebsiteIdentityOrganizationSchemaMap(),
+			new SproutSeo_WebsiteIdentityPersonSchemaMap(),
 			new SproutSeo_ContactPointSchemaMap(),
 			new SproutSeo_ImageObjectSchemaMap(),
+
+			new SproutSeo_CreativeWorkSchemaMap(),
+			new SproutSeo_EventSchemaMap(),
+			new SproutSeo_IntangibleSchemaMap(),
 			new SproutSeo_OrganizationSchemaMap(),
 			new SproutSeo_PersonSchemaMap(),
+			new SproutSeo_PlaceSchemaMap(),
+			new SproutSeo_ProductSchemaMap(),
+
 			new SproutSeo_NewsArticleSchemaMap()
 		);
 	}

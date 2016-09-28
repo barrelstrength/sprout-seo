@@ -1,14 +1,14 @@
 <?php
 namespace Craft;
 
-class SproutSeo_OrganizationSchemaMap extends SproutSeoBaseSchemaMap
+class SproutSeo_CreativeWorkSchemaMap extends SproutSeoBaseSchemaMap
 {
 	/**
 	 * @return string
 	 */
 	public function getName()
 	{
-		return 'Organization';
+		return 'Creative Work';
 	}
 
 	/**
@@ -16,7 +16,7 @@ class SproutSeo_OrganizationSchemaMap extends SproutSeoBaseSchemaMap
 	 */
 	public function getType()
 	{
-		return 'Organization';
+		return 'CreativeWork';
 	}
 
 	/**
