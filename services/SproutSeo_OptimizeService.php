@@ -21,7 +21,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	/**
 	 * @var array
 	 */
-	public $codeMetadata = [];
+	public $codeMetadata = array();
 
 	public function init()
 	{
@@ -30,7 +30,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		foreach ($responses as $plugin => $maps)
 		{
 			/**
-			 * @var BaseSproutSeoSchemaMap $map
+			 * @var SproutSeoBaseSchemaMap $map
 			 */
 			foreach ($maps as $map)
 			{
@@ -48,17 +48,20 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Returns a list of available schema maps for display in a select field
+	 * Returns a list of available schema maps for display in a Main Entity select field
 	 *
 	 * @return array
 	 */
 	public function getSchemaMapOptions()
 	{
-		$options = [];
+		$options = array();
 
 		foreach ($this->schemaMaps as $uniqueKey => $instance)
 		{
-			$options[] = ['value' => $uniqueKey, 'label' => $instance->getName()];
+			$options[] = array(
+				'value' => $uniqueKey,
+				'label' => $instance->getName()
+			);
 		}
 
 		return $options;

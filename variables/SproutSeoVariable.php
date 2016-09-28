@@ -766,26 +766,46 @@ class SproutSeoVariable
 	{
 		$schemaMaps = sproutSeo()->optimize->getSchemaMaps();
 
-		$default = array_filter($schemaMaps, function ($map) {
+		// Get a filtered list of our default Sprout SEO schema
+		$defaultSchema = array_filter($schemaMaps, function ($map) {
 			/**
-			 * @var BaseSproutSeoSchemaMap $map
+			 * @var SproutSeoBaseSchemaMap $map
 			 */
 			return stripos($map->getUniqueKey(), 'craft-sproutseo') !== false;
 		});
 
-		$custom = array_filter($schemaMaps, function ($map) {
+		// Get a filtered list of of any custom schema
+		$customSchema = array_filter($schemaMaps, function ($map) {
 			/**
-			 * @var BaseSproutSeoSchemaMap $map
+			 * @var SproutSeoBaseSchemaMap $map
 			 */
-            return stripos($map->getUniqueKey(), 'craft-sproutseo') === false;
+			return stripos($map->getUniqueKey(), 'craft-sproutseo') === false;
 		});
 
-		return array_merge(
-			[['optgroup' => 'Default']],
-			array_map(function ($map) { return ['label' => $map->getName(), 'value' => $map->getUniqueKey()];}, $default),
-			[['optgroup' => 'Custom']],
-			array_map(function ($map) { return ['label' => $map->getName(), 'value' => $map->getUniqueKey()];}, $custom)
-		);
+
+		// Build our options
+		$schemaOptions    = array('' => 'Select...', array('optgroup' => 'Default'));
+
+		$schemaOptions = array_merge($schemaOptions, array_map(function ($schemaMap) {
+			return array(
+				'label' => $schemaMap->getName(),
+				'value' => $schemaMap->getUniqueKey()
+			);
+		}, $defaultSchema));
+
+		if (count($customSchema))
+		{
+			array_push($schemaOptions, array('optgroup' => 'Custom'));
+
+			$schemaOptions = array_merge($schemaOptions, array_map(function ($schemaMap) {
+				return array(
+					'label' => $schemaMap->getName(),
+					'value' => $schemaMap->getUniqueKey()
+				);
+			}, $customSchema));
+		}
+
+		return $schemaOptions;
 	}
 
 	/**
