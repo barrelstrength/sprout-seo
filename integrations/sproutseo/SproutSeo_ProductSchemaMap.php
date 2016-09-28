@@ -1,6 +1,6 @@
 <?php
 
-class SproutSeo_ProductSchemaMap extends BaseSproutSeoSchemaMap
+class SproutSeo_ProductSchemaMap extends SproutSeoBaseSchemaMap
 {
 	// Human readable schema name for UI
 	public function getName()

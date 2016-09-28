@@ -96,7 +96,7 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
-		Craft::import('plugins.sproutseo.contracts.BaseSproutSeoSchemaMap');
+		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchemaMap');
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ContactPointSchemaMap');

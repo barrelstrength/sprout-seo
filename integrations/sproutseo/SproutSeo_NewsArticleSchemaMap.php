@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_NewsArticleSchemaMap extends BaseSproutSeoSchemaMap
+class SproutSeo_NewsArticleSchemaMap extends SproutSeoBaseSchemaMap
 {
 	/**
 	 * @return string

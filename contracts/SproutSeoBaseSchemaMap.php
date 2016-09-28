@@ -2,9 +2,9 @@
 namespace Craft;
 
 /**
- * Class BaseSproutSeoSchemaMap
+ * Class SproutSeoBaseSchemaMap
  */
-abstract class BaseSproutSeoSchemaMap
+abstract class SproutSeoBaseSchemaMap
 {
 	/**
 	 * @var array
@@ -22,7 +22,7 @@ abstract class BaseSproutSeoSchemaMap
 	public $isContext;
 
 	/**
-	 * BaseSproutSeoSchemaMap constructor.
+	 * SproutSeoBaseSchemaMap constructor.
 	 *
 	 * @param array|null $attributes
 	 * @param bool       $isContext
@@ -54,15 +54,19 @@ abstract class BaseSproutSeoSchemaMap
 		return "http://schema.org/";
 	}
 
-    /**
-     * Returns a key that uniquely identifies the schema map integration
-     *
-     * @return string
-     */
+  /**
+   * Returns a key that uniquely identifies the schema map integration
+   *
+   * Example:
+   * class: Craft\\SproutSeo_ContactPointSchemaMap
+   * unique key: craft-sproutseo-contactpointschemamap
+   *
+   * @return string
+   */
 	final public function getUniqueKey()
-    {
-        return str_replace('_', '-', ElementHelper::createSlug(get_class($this)));
-    }
+  {
+	  return str_replace('_', '-', ElementHelper::createSlug(get_class($this)));
+  }
 
 	/**
 	 * Human readable schema name. Admin user will select this schema by this name in the Control Panel.

@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_ContactPointSchemaMap extends BaseSproutSeoSchemaMap
+class SproutSeo_ContactPointSchemaMap extends SproutSeoBaseSchemaMap
 {
 	/**
 	 * @return string

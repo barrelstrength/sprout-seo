@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_ImageObjectSchemaMap extends BaseSproutSeoSchemaMap
+class SproutSeo_ImageObjectSchemaMap extends SproutSeoBaseSchemaMap
 {
 	/**
 	 * @return string

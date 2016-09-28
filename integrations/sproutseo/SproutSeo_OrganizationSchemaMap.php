@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_OrganizationSchemaMap extends BaseSproutSeoSchemaMap
+class SproutSeo_OrganizationSchemaMap extends SproutSeoBaseSchemaMap
 {
 	/**
 	 * @var
