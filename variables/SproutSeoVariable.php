@@ -766,6 +766,8 @@ class SproutSeoVariable
 	{
 		$schemaMaps = sproutSeo()->optimize->getSchemaMaps();
 
+		ksort($schemaMaps);
+
 		// Get a filtered list of our default Sprout SEO schema
 		$defaultSchema = array_filter($schemaMaps, function ($map) {
 			/**
