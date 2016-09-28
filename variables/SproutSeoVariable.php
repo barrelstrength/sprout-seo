@@ -768,6 +768,14 @@ class SproutSeoVariable
 
 		ksort($schemaMaps);
 
+		foreach ($schemaMaps as $schemaMap)
+		{
+			if ($schemaMap->isUnlistedSchemaType())
+			{
+				unset($schemaMaps[$schemaMap->getUniqueKey()]);
+			}
+		}
+
 		// Get a filtered list of our default Sprout SEO schema
 		$defaultSchema = array_filter($schemaMaps, function ($map) {
 			/**

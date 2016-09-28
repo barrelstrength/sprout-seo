@@ -114,8 +114,6 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PlaceSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ProductSchemaMap');
 
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_NewsArticleSchemaMap');
-
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 
 		if (!craft()->isConsole())
@@ -310,9 +308,7 @@ class SproutSeoPlugin extends BasePlugin
 			new SproutSeo_OrganizationSchemaMap(),
 			new SproutSeo_PersonSchemaMap(),
 			new SproutSeo_PlaceSchemaMap(),
-			new SproutSeo_ProductSchemaMap(),
-
-			new SproutSeo_NewsArticleSchemaMap()
+			new SproutSeo_ProductSchemaMap()
 		);
 	}
 

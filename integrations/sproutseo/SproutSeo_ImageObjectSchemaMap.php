@@ -19,6 +19,14 @@ class SproutSeo_ImageObjectSchemaMap extends SproutSeoBaseSchemaMap
 		return 'ImageObject';
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function isUnlistedSchemaType()
+	{
+		return true;
+	}
+
 	public function getProperties()
 	{
 		$image = $this->attributes['image'];

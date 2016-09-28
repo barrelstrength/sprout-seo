@@ -83,6 +83,14 @@ abstract class SproutSeoBaseSchemaMap
 	abstract public function getType();
 
 	/**
+	 * @return bool
+	 */
+	public function isUnlistedSchemaType()
+	{
+		return false;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getProperties()

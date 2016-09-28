@@ -20,6 +20,14 @@ class SproutSeo_WebsiteIdentityPlaceSchemaMap extends SproutSeoBaseSchemaMap
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isUnlistedSchemaType()
+	{
+		return true;
+	}
+
+	/**
 	 * @return array|null
 	 */
 	public function getProperties()

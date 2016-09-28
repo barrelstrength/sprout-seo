@@ -24,6 +24,14 @@ class SproutSeo_WebsiteIdentityOrganizationSchemaMap extends SproutSeoBaseSchema
 		return $this->type;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function isUnlistedSchemaType()
+	{
+		return true;
+	}
+
 	// Does syntax user a generic `object` or do we need to assume
 	// we know specifically what the variable is called?
 	//
