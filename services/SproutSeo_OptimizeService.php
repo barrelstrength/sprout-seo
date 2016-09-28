@@ -272,10 +272,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 		$globals = $sitemapInfo['globals'];
 
+		// Website Identity Schema
 		if ($identityType = $globals->identity['@type'])
 		{
 			// Determine if we have an Organization or Person Schema Type
-			$schemaModel = 'Craft\SproutSeo_' . $identityType . 'SchemaMap';
+			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'SchemaMap';
 
 			$identitySchema = new $schemaModel(array(
 				'globals' => $globals
@@ -283,6 +284,19 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 			$output = $identitySchema->getSchema();
 		}
+
+		// Website Identity Website
+		if ($globals->identity['name'])
+		{
+			$websiteSchema = new SproutSeo_WebsiteIdentityWebsiteSchemaMap();
+			$output .= $websiteSchema->getSchema();
+		}
+
+		//if ($globals->identity['address'])
+		//{
+		//	$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchemaMap();
+		//  $output .= $placeSchema->getSchema();
+		//}
 
 		return TemplateHelper::getRaw($output);
 	}

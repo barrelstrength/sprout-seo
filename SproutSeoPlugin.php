@@ -101,6 +101,8 @@ class SproutSeoPlugin extends BasePlugin
 
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityOrganizationSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPersonSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityWebsiteSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPlaceSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ContactPointSchemaMap');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ImageObjectSchemaMap');
 
@@ -297,6 +299,8 @@ class SproutSeoPlugin extends BasePlugin
 		return array(
 			new SproutSeo_WebsiteIdentityOrganizationSchemaMap(),
 			new SproutSeo_WebsiteIdentityPersonSchemaMap(),
+			new SproutSeo_WebsiteIdentityWebsiteSchemaMap(),
+			new SproutSeo_WebsiteIdentityPlaceSchemaMap(),
 			new SproutSeo_ContactPointSchemaMap(),
 			new SproutSeo_ImageObjectSchemaMap(),
 
