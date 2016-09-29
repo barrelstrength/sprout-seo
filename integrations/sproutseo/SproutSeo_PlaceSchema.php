@@ -1,14 +1,14 @@
 <?php
 namespace Craft;
 
-class SproutSeo_OrganizationSchemaMap extends SproutSeoBaseSchemaMap
+class SproutSeo_PlaceSchema extends SproutSeo_ThingSchema
 {
 	/**
 	 * @return string
 	 */
 	public function getName()
 	{
-		return 'Organization';
+		return 'Place';
 	}
 
 	/**
@@ -16,14 +16,14 @@ class SproutSeo_OrganizationSchemaMap extends SproutSeoBaseSchemaMap
 	 */
 	public function getType()
 	{
-		return 'Organization';
+		return 'Place';
 	}
 
 	/**
 	 * @return array|null
 	 */
-	public function getProperties()
+	public function addProperties()
 	{
-		return array();
+		parent::addProperties();
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_WebsiteIdentityPlaceSchemaMap extends SproutSeoBaseSchemaMap
+class SproutSeo_WebsiteIdentityPlaceSchema extends SproutSeoBaseSchema
 {
 	/**
 	 * @return string
@@ -30,7 +30,7 @@ class SproutSeo_WebsiteIdentityPlaceSchemaMap extends SproutSeoBaseSchemaMap
 	/**
 	 * @return array|null
 	 */
-	public function getProperties()
+	public function addProperties()
 	{
 		$schema['name'] = 'Place Schema Type';
 

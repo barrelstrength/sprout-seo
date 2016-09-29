@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_IntangibleSchemaMap extends SproutSeoBaseSchemaMap
+class SproutSeo_IntangibleSchema extends SproutSeo_ThingSchema
 {
 	/**
 	 * @return string
@@ -22,8 +22,8 @@ class SproutSeo_IntangibleSchemaMap extends SproutSeoBaseSchemaMap
 	/**
 	 * @return array|null
 	 */
-	public function getProperties()
+	public function addProperties()
 	{
-		return array();
+		parent::addProperties();
 	}
 }

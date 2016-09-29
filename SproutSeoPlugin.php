@@ -96,23 +96,25 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
-		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchemaMap');
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityOrganizationSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPersonSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityWebsiteSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPlaceSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ContactPointSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ImageObjectSchemaMap');
+		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityOrganizationSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPersonSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityWebsiteSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPlaceSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ContactPointSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ImageObjectSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_MainEntityOfPageSchema');
 
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_CreativeWorkSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_EventSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_IntangibleSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_OrganizationSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PersonSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PlaceSchemaMap');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ProductSchemaMap');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ThingSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_CreativeWorkSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_EventSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_IntangibleSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_OrganizationSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PersonSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PlaceSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ProductSchema');
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 
@@ -295,20 +297,22 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerSproutSeoSchemaMaps()
 	{
 		return array(
-			new SproutSeo_WebsiteIdentityOrganizationSchemaMap(),
-			new SproutSeo_WebsiteIdentityPersonSchemaMap(),
-			new SproutSeo_WebsiteIdentityWebsiteSchemaMap(),
-			new SproutSeo_WebsiteIdentityPlaceSchemaMap(),
-			new SproutSeo_ContactPointSchemaMap(),
-			new SproutSeo_ImageObjectSchemaMap(),
+			new SproutSeo_WebsiteIdentityOrganizationSchema(),
+			new SproutSeo_WebsiteIdentityPersonSchema(),
+			new SproutSeo_WebsiteIdentityWebsiteSchema(),
+			new SproutSeo_WebsiteIdentityPlaceSchema(),
+			new SproutSeo_ContactPointSchema(),
+			new SproutSeo_ImageObjectSchema(),
+			new SproutSeo_MainEntityOfPageSchema(),
 
-			new SproutSeo_CreativeWorkSchemaMap(),
-			new SproutSeo_EventSchemaMap(),
-			new SproutSeo_IntangibleSchemaMap(),
-			new SproutSeo_OrganizationSchemaMap(),
-			new SproutSeo_PersonSchemaMap(),
-			new SproutSeo_PlaceSchemaMap(),
-			new SproutSeo_ProductSchemaMap()
+			new SproutSeo_ThingSchema(),
+			new SproutSeo_CreativeWorkSchema(),
+			new SproutSeo_EventSchema(),
+			new SproutSeo_IntangibleSchema(),
+			new SproutSeo_OrganizationSchema(),
+			new SproutSeo_PersonSchema(),
+			new SproutSeo_PlaceSchema(),
+			new SproutSeo_ProductSchema()
 		);
 	}
 

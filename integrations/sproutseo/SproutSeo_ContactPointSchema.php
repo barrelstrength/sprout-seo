@@ -1,8 +1,10 @@
 <?php
 namespace Craft;
 
-class SproutSeo_ContactPointSchemaMap extends SproutSeoBaseSchemaMap
+class SproutSeo_ContactPointSchema extends SproutSeoBaseSchema
 {
+	public $contact;
+
 	/**
 	 * @return string
 	 */
@@ -30,18 +32,16 @@ class SproutSeo_ContactPointSchemaMap extends SproutSeoBaseSchemaMap
 	/**
 	 * @return array|null
 	 */
-	public function getProperties()
+	public function addProperties()
 	{
-		$contact = $this->attributes['contact'];
+		$contact = $this->contact;
 
 		if (!$contact)
 		{
 			return null;
 		}
 
-		$schema['contactType'] = isset($contact['contactType']) ? $contact['contactType'] : null;
-		$schema['telephone']   = isset($contact['telephone']) ? $contact['telephone'] : null;
-
-		return array_filter($schema);
+		$this->addText('contactType', $contact['contactType']);
+		$this->addTelephone('telephone', $contact['telephone']);
 	}
 }

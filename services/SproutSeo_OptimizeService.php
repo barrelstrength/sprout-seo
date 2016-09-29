@@ -18,6 +18,33 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public $divider;
 
+	public $globals;
+
+	public $hookInfo;
+
+	public $urlFormat;
+
+	public $elementModel;
+
+	public $elementTable;
+
+	public $elementGroupId;
+
+	public $prioritizedMetadataModel;
+
+	//	Sitemap Info
+	//	'hookInfo'
+	//				'name' => 'Sections'
+	//				'elementType' => 'Entry'
+	//				'elementGroupId' => 'sectionId'
+	//				'service' => 'sections'
+	//				'method' => 'getAllSections'
+	//				'matchedElementVariable' => 'entry'
+	//	'urlFormat' => urlFormat
+	//	'elementModel' = matchedElementModel
+	//	'elementTable' = matchedElementGroupTable
+	//	'elementGroupId' = matchedElementGroupId
+
 	/**
 	 * @var array
 	 */
@@ -30,7 +57,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		foreach ($responses as $plugin => $maps)
 		{
 			/**
-			 * @var SproutSeoBaseSchemaMap $map
+			 * @var SproutSeoBaseSchema $map
 			 */
 			foreach ($maps as $map)
 			{
@@ -108,21 +135,26 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$optimizedMetadata = null;
 		$this->context     = $context;
 
-		$globals = sproutSeo()->globals->getGlobalMetadata();
+		$this->globals = sproutSeo()->globals->getGlobalMetadata();
 
-		// get the sitemap info + urlFormat + $context->entry  $context->product ..
 		$sitemapInfo = sproutSeo()->sitemap->getSitemapInfo($context);
 
-		// Get our meta values
-		$prioritizedMetadataModel = $this->getPrioritizedMetadataModel($sitemapInfo);
+		if (count($sitemapInfo))
+		{
+			$this->hookInfo       = $sitemapInfo['hookInfo'];
+			$this->urlFormat      = $sitemapInfo['urlFormat'];
+			$this->elementModel   = $sitemapInfo['elementModel'];
+			$this->elementTable   = $sitemapInfo['elementTable'];
+			$this->elementGroupId = $sitemapInfo['elementGroupId'];
+		}
 
-		$sitemapInfo['prioritizedMetadataModel'] = $prioritizedMetadataModel;
-		$sitemapInfo['globals']                  = $globals;
+		// Get our meta values
+		$this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel();
 
 		// Prepare our html for the template
-		$optimizedMetadata .= $this->getMetaTagHtml($prioritizedMetadataModel);
-		$optimizedMetadata .= $this->getStructuredDataHtml($sitemapInfo);
-		$optimizedMetadata .= $this->getMainEntityStructuredDataHtml($sitemapInfo);
+		$optimizedMetadata .= $this->getMetaTagHtml();
+		$optimizedMetadata .= $this->getWebsiteIdentityStructuredDataHtml();
+		$optimizedMetadata .= $this->getMainEntityStructuredDataHtml();
 
 		return TemplateHelper::getRaw($optimizedMetadata);
 	}
@@ -143,7 +175,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 *
 	 * @return SproutSeo_MetadataModel
 	 */
-	public function getPrioritizedMetadataModel($sitemapInfo)
+	public function getPrioritizedMetadataModel()
 	{
 		$metaLevels = SproutSeo_MetadataLevels::getConstants();
 
@@ -167,7 +199,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			$metadataModel = new SproutSeo_MetadataModel();
 
-			$codeMetadata = sproutSeo()->metadata->getCodeMetadata($level, $sitemapInfo);
+			$codeMetadata = sproutSeo()->metadata->getCodeMetadata($level);
 
 			$metadataModel = $metadataModel->setMeta($level, $codeMetadata);
 
@@ -205,15 +237,13 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 *
 	 * @return string
 	 */
-	public function getMetaTagHtml(SproutSeo_MetadataModel $prioritizedMetadataModel)
+	public function getMetaTagHtml()
 	{
-		$globals = sproutSeo()->globals->getGlobalMetadata();
-
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
 		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
-			'globals' => $globals,
-			'meta'    => $prioritizedMetadataModel->getMetaTagData()
+			'globals' => $this->globals,
+			'meta'    => $this->prioritizedMetadataModel->getMetaTagData()
 		));
 
 		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
@@ -222,19 +252,17 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param $sitemapInfo
-	 *
 	 * @return string
 	 */
-	public function getStructuredDataHtml($sitemapInfo)
+	public function getWebsiteIdentityStructuredDataHtml()
 	{
 		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
-		$rawHtml = $this->getKnowledgeGraphLinkedData($sitemapInfo);
+		$rawHtml = $this->getKnowledgeGraphLinkedData();
 
-		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema',
-			array('jsonLd'=>$rawHtml)
-		);
+		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema', array(
+			'jsonLd' => $rawHtml
+		));
 
 		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
@@ -242,59 +270,66 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param $sitemapInfo
-	 *
 	 * @return string
 	 */
-	public function getMainEntityStructuredDataHtml($sitemapInfo)
+	public function getMainEntityStructuredDataHtml()
 	{
-		$prioritizedMetadataModel = $sitemapInfo['prioritizedMetadataModel'];
-
-		if ($prioritizedMetadataModel)
+		if ($this->prioritizedMetadataModel)
 		{
-			$schemaMapUniqueKey = $prioritizedMetadataModel->schemaMap;
+			$schemaMapUniqueKey = $this->prioritizedMetadataModel->schemaMap;
 
 			if ($schemaMapUniqueKey)
 			{
-				$schemaMap              = $this->getSchemaMapByUniqueKey($schemaMapUniqueKey);
-				$schemaMap->attributes  = $prioritizedMetadataModel->getAttributes();
-				$schemaMap->isContext   = true;
-				$schemaMap->sitemapInfo = $sitemapInfo;
+				$schemaMap             = $this->getSchemaMapByUniqueKey($schemaMapUniqueKey);
+				$schemaMap->attributes = $this->prioritizedMetadataModel->getAttributes();
+				$schemaMap->isContext  = true;
+
+				$schemaMap->globals = $this->globals;
+				$schemaMap->element = $this->elementModel;
+				$schemaMap->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 				return $schemaMap->getSchema();
 			}
 		}
 	}
 
-	public function getKnowledgeGraphLinkedData($sitemapInfo)
+	public function getKnowledgeGraphLinkedData()
 	{
 		$output = null;
 
-		$globals = $sitemapInfo['globals'];
-
 		// Website Identity Schema
-		if ($identityType = $globals->identity['@type'])
+		if ($identityType = $this->globals->identity['@type'])
 		{
 			// Determine if we have an Organization or Person Schema Type
-			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'SchemaMap';
+			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
 
-			$identitySchema = new $schemaModel(array(
-				'globals' => $globals
-			), true, $sitemapInfo);
+			$identitySchema = new $schemaModel();
+
+			$identitySchema->globals = $this->globals;
+			$identitySchema->element = $this->elementModel;
+			$identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$output = $identitySchema->getSchema();
 		}
 
 		// Website Identity Website
-		if ($globals->identity['name'])
+		if ($this->globals->identity['name'])
 		{
-			$websiteSchema = new SproutSeo_WebsiteIdentityWebsiteSchemaMap();
+			$websiteSchema = new SproutSeo_WebsiteIdentityWebsiteSchema();
+			$websiteSchema->globals = $this->globals;
+			$websiteSchema->element = $this->elementModel;
+			$websiteSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
 			$output .= $websiteSchema->getSchema();
 		}
 
-		//if ($globals->identity['address'])
+		// Website Identity Place
+		//if ($this->globals->identity['address'])
 		//{
 		//	$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchemaMap();
+		//  $placeSchema->globals = $this->globals;
+		//  $placeSchema->element = $this->elementModel;
+		//  $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 		//  $output .= $placeSchema->getSchema();
 		//}
 

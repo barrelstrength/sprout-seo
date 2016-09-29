@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_PersonSchemaMap extends SproutSeoBaseSchemaMap
+class SproutSeo_PersonSchema extends SproutSeoBaseSchema
 {
 	/**
 	 * @return string
@@ -22,8 +22,8 @@ class SproutSeo_PersonSchemaMap extends SproutSeoBaseSchemaMap
 	/**
 	 * @return array|null
 	 */
-	public function getProperties()
+	public function addProperties()
 	{
-		return array();
+		parent::addProperties();
 	}
 }

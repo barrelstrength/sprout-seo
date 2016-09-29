@@ -1,14 +1,24 @@
 <?php
 namespace Craft;
 
-class SproutSeo_WebsiteIdentityWebsiteSchemaMap extends SproutSeoBaseSchemaMap
+class SproutSeo_MainEntityOfPageSchema extends SproutSeoBaseSchema
 {
+	/**
+	 * @var
+	 */
+	public $type = 'Thing';
+
+	/**
+	 * @var
+	 */
+	public $id;
+
 	/**
 	 * @return string
 	 */
 	public function getName()
 	{
-		return 'Website';
+		return 'Main Entity Of Page';
 	}
 
 	/**
@@ -16,7 +26,7 @@ class SproutSeo_WebsiteIdentityWebsiteSchemaMap extends SproutSeoBaseSchemaMap
 	 */
 	public function getType()
 	{
-		return 'Website';
+		return $this->type;
 	}
 
 	/**
@@ -30,10 +40,8 @@ class SproutSeo_WebsiteIdentityWebsiteSchemaMap extends SproutSeoBaseSchemaMap
 	/**
 	 * @return array|null
 	 */
-	public function getProperties()
+	public function addProperties()
 	{
-		$schema['name'] = 'Website Schema Type';
-
-		return array_filter($schema);
+		$this->addProperty('@id', $this->id);
 	}
 }

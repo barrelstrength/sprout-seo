@@ -341,26 +341,33 @@ class SproutSeo_MetadataService extends BaseApplicationComponent
 
 	/**
 	 * Store our codeMetadata in a place so we can access when we need to
+	 * @todo - document better. This also handles overrides for Section and Element data...
 	 *
 	 * @return array
 	 */
-	public function getCodeMetadata($type = null, $sitemapInfo)
+	public function getCodeMetadata($type = null)
 	{
 		$response = array();
+
+		$elementTable   = sproutSeo()->optimize->elementTable;
+		$elementGroupId = sproutSeo()->optimize->elementGroupId;
+		$elementModel   = sproutSeo()->optimize->elementModel;
 
 		switch ($type)
 		{
 			case SproutSeo_MetadataLevels::SectionMetadata:
-				if (isset($sitemapInfo['elementTable']) && isset($sitemapInfo['elementGroupId']))
+				if (isset($elementTable) && isset($elementGroupId))
 				{
-					$response = $sitemapInfo;
+					$response = $sitemapInfo = array(
+						'elementTable'   => $elementTable,
+						'elementGroupId' => $elementGroupId,
+						'elementModel'   => $elementModel
+					);
 				}
 				break;
 			case SproutSeo_MetadataLevels::ElementMetadata:
-				if (isset($sitemapInfo['elementModel']))
+				if (isset($elementModel))
 				{
-					$elementModel = $sitemapInfo['elementModel'];
-
 					if (isset($elementModel->id))
 					{
 						$response = array('elementId' => $elementModel->id);

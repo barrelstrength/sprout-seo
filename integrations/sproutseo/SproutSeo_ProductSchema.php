@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_ProductSchemaMap extends SproutSeoBaseSchemaMap
+class SproutSeo_ProductSchema extends SproutSeo_ThingSchema
 {
 	/**
 	 * @return string
@@ -22,9 +22,9 @@ class SproutSeo_ProductSchemaMap extends SproutSeoBaseSchemaMap
 	/**
 	 * @return array
 	 */
-	public function getProperties()
+	public function addProperties()
 	{
-		return array();
+		parent::addProperties();
 	}
 
 	// <script type="application/ld+json">
