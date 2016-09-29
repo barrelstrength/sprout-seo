@@ -779,7 +779,7 @@ class SproutSeoVariable
 		// Get a filtered list of our default Sprout SEO schema
 		$defaultSchema = array_filter($schemaMaps, function ($map) {
 			/**
-			 * @var SproutSeoBaseSchemaMap $map
+			 * @var SproutSeoBaseSchema $map
 			 */
 			return stripos($map->getUniqueKey(), 'craft-sproutseo') !== false;
 		});
@@ -787,14 +787,14 @@ class SproutSeoVariable
 		// Get a filtered list of of any custom schema
 		$customSchema = array_filter($schemaMaps, function ($map) {
 			/**
-			 * @var SproutSeoBaseSchemaMap $map
+			 * @var SproutSeoBaseSchema $map
 			 */
 			return stripos($map->getUniqueKey(), 'craft-sproutseo') === false;
 		});
 
 
 		// Build our options
-		$schemaOptions    = array('' => 'Select...', array('optgroup' => 'Default'));
+		$schemaOptions    = array('' => 'Select...', array('optgroup' => 'Default Types'));
 
 		$schemaOptions = array_merge($schemaOptions, array_map(function ($schemaMap) {
 			return array(
@@ -805,7 +805,7 @@ class SproutSeoVariable
 
 		if (count($customSchema))
 		{
-			array_push($schemaOptions, array('optgroup' => 'Custom'));
+			array_push($schemaOptions, array('optgroup' => 'Custom Types'));
 
 			$schemaOptions = array_merge($schemaOptions, array_map(function ($schemaMap) {
 				return array(
