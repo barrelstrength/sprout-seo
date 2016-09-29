@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_PersonSchema extends SproutSeoBaseSchema
+class SproutSeo_PersonSchema extends SproutSeo_ThingSchema
 {
 	/**
 	 * @return string
@@ -17,6 +17,14 @@ class SproutSeo_PersonSchema extends SproutSeoBaseSchema
 	public function getType()
 	{
 		return 'Person';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isUnlistedSchemaType()
+	{
+		return false;
 	}
 
 	/**

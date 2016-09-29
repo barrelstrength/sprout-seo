@@ -20,6 +20,14 @@ class SproutSeo_ProductSchema extends SproutSeo_ThingSchema
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isUnlistedSchemaType()
+	{
+		return false;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function addProperties()

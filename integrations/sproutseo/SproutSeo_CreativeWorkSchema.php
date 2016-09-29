@@ -20,6 +20,14 @@ class SproutSeo_CreativeWorkSchema extends SproutSeo_ThingSchema
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isUnlistedSchemaType()
+	{
+		return false;
+	}
+
+	/**
 	 * @return array|null
 	 */
 	public function addProperties()

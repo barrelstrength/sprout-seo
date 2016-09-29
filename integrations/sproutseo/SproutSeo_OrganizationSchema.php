@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_OrganizationSchema extends SproutSeoBaseSchema
+class SproutSeo_OrganizationSchema extends SproutSeo_ThingSchema
 {
 	/**
 	 * @return string
@@ -17,6 +17,14 @@ class SproutSeo_OrganizationSchema extends SproutSeoBaseSchema
 	public function getType()
 	{
 		return 'Organization';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isUnlistedSchemaType()
+	{
+		return false;
 	}
 
 	/**
