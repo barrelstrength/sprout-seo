@@ -37,7 +37,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 				}
 			};
 
-			Craft.postActionRequest('sproutSeo/sections/saveSectionMetadata', data, $.proxy(function(response, textStatus) {
+			Craft.postActionRequest('sproutSeo/sectionMetadata/saveSectionMetadata', data, $.proxy(function(response, textStatus) {
 				if (textStatus == 'success') {
 					if (response.success) {
 						Craft.redirectTo('sproutseo/sections/' + response.sectionMetadata.id);
@@ -102,7 +102,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 
 			console.log(data);
 
-			Craft.postActionRequest('sproutSeo/sections/saveSectionMetadataViaSitemapSection', data, $.proxy(function(response, textStatus) {
+			Craft.postActionRequest('sproutSeo/sectionMetadata/saveSectionMetadataViaSitemapSection', data, $.proxy(function(response, textStatus) {
 				if (textStatus == 'success') {
 					if (response.success) {
 

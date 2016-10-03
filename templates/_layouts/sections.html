@@ -121,7 +121,7 @@
 
 	new Craft.AdminTable({
 		tableSelector: '#custom-pages',
-		deleteAction: 'sproutSeo/sections/deleteSectionMetadataById',
+		deleteAction: 'sproutSeo/sectionMetadata/deleteSectionMetadataById',
 		onDeleteObject: function(id)
 		{
 			if($('#custom-pages').find('tbody').find('tr').size() == 0)

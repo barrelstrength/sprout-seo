@@ -182,10 +182,10 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		return array(
 			'sproutseo/sections/new'                          => array(
-				'action' => 'sproutSeo/sections/sectionMetadataEditTemplate'
+				'action' => 'sproutSeo/sectionMetadata/sectionMetadataEditTemplate'
 			),
 			'sproutseo/sections/(?P<sectionMetadataId>\d+)'   => array(
-				'action' => 'sproutSeo/sections/sectionMetadataEditTemplate'
+				'action' => 'sproutSeo/sectionMetadata/sectionMetadataEditTemplate'
 			),
 			'sproutseo/redirects'                             => array(
 				'action' => 'sproutSeo/redirects/redirectIndex'

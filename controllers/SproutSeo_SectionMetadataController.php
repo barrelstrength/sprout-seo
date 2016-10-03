@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_SectionsController extends BaseController
+class SproutSeo_SectionMetadataController extends BaseController
 {
 	/**
 	 * Edit Section Metadata

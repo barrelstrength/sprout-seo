@@ -1,14 +1,14 @@
 <?php
 namespace Craft;
 
-class SproutSeo_GlobalsController extends BaseController
+class SproutSeo_GlobalMetadataController extends BaseController
 {
 	/**
 	 * Save Globals to the database
 	 *
 	 * @throws HttpException
 	 */
-	public function actionSaveGlobals()
+	public function actionSaveGlobalMetadata()
 	{
 		$this->requirePostRequest();
 
