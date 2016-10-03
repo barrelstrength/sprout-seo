@@ -45,7 +45,10 @@ class SproutSeo_WebsiteIdentityPersonSchema extends SproutSeoBaseSchema
 
 		$this->addText('gender', $person['gender']);
 
-		$urls = array_column($socialProfiles, 'url');
-		$this->addSameAs($urls);
+		if (count($socialProfiles))
+		{
+			$urls = array_column($socialProfiles, 'url');
+			$this->addSameAs($urls);
+		}
 	}
 }

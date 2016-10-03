@@ -3,11 +3,17 @@ namespace Craft;
 
 class SproutSeo_SectionMetadataRecord extends BaseRecord
 {
+	/**
+	 * @return string
+	 */
 	public function getTableName()
 	{
 		return 'sproutseo_metadata_sections';
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function defineAttributes()
 	{
 		return array(
@@ -16,12 +22,12 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 			'enabled'             => array(AttributeType::Bool, 'default' => false, 'required' => true),
 
 			// sitemap data
-			'elementGroupId'      => array(AttributeType::Number),
+			'urlEnabledSectionId' => array(AttributeType::Number),
 			'type'                => array(AttributeType::String),
 			'priority'            => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
 			'changeFrequency'     => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
 			'url'                 => array(AttributeType::String),
-			'isSitemapCustomPage' => array(AttributeType::Bool, 'default' => false, 'required' => true),
+			'isCustom'            => array(AttributeType::Bool, 'default' => false, 'required' => true),
 			// end sitemap
 
 			'optimizedTitle'        => array(AttributeType::String),
@@ -78,6 +84,9 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function defineIndexes()
 	{
 		return array(

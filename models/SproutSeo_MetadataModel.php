@@ -3,7 +3,6 @@ namespace Craft;
 
 class SproutSeo_MetadataModel extends BaseModel
 {
-
 	/**
 	 * @var array
 	 */
@@ -35,16 +34,23 @@ class SproutSeo_MetadataModel extends BaseModel
 	protected function defineAttributes()
 	{
 		$sitemap = array(
-			'elementGroupId'      => array(AttributeType::Number),
-			'type'                => array(AttributeType::String),
-			'enabled'             => array(AttributeType::Bool, 'default' => false, 'required' => true),
-			'isSitemapCustomPage' => array(AttributeType::Bool, 'default' => false, 'required' => true),
-			'url'                 => array(AttributeType::String),
-			'priority'            => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
-			'changeFrequency'     => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
+			'id'              => array(AttributeType::Number),
+			'isNew'           => array(AttributeType::Bool, 'default' => false), // @todo - Can we just test for ID?
+			'elementId'       => array(AttributeType::Number),
+			'default'         => array(AttributeType::String), // @todo - ??
+			'name'            => array(AttributeType::String),
+			'handle'          => array(AttributeType::String),
+			'hasUrls'         => array(AttributeType::Number),
+			'url'             => array(AttributeType::String), // @todo - can we just test for URL format?
+			'priority'        => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
+			'changeFrequency' => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
 
-			'locale'    => array(AttributeType::String),
-			'schemaMap' => array(AttributeType::String),
+			'urlEnabledSectionId' => array(AttributeType::Number),
+			'isCustom'            => array(AttributeType::Bool, 'default' => false, 'required' => true), // @todo - can we just test for urlEnabledSectionId?
+			'type'                => array(AttributeType::String), // @todo - clarify what type is
+			'enabled'             => array(AttributeType::Bool, 'default' => false, 'required' => true),
+			'locale'              => array(AttributeType::String),
+			'schemaMap'           => array(AttributeType::String),
 
 			'dateUpdated' => array(AttributeType::DateTime),
 			'dateCreated' => array(AttributeType::DateTime),
@@ -54,13 +60,6 @@ class SproutSeo_MetadataModel extends BaseModel
 		// @todo - do we need all these values here? Some could just be assigned elsewhere:
 		// name => title, url => canonical, default not in use...
 		$metaTags = array(
-			'id'                    => array(AttributeType::Number),
-			'elementId'             => array(AttributeType::Number),
-			'default'               => array(AttributeType::String),
-			'name'                  => array(AttributeType::String),
-			'handle'                => array(AttributeType::String),
-			'appendTitleValue'      => array(AttributeType::String, 'default' => null),
-			'url'                   => array(AttributeType::String),
 			'optimizedTitle'        => array(AttributeType::String),
 			'optimizedDescription'  => array(AttributeType::String),
 			'optimizedImage'        => array(AttributeType::String),
@@ -69,11 +68,12 @@ class SproutSeo_MetadataModel extends BaseModel
 		);
 
 		$this->searchMeta = array(
-			'title'       => array(AttributeType::String),
-			'description' => array(AttributeType::String),
-			'keywords'    => array(AttributeType::String),
-			'author'      => array(AttributeType::String),
-			'publisher'   => array(AttributeType::String),
+			'title'            => array(AttributeType::String),
+			'appendTitleValue' => array(AttributeType::String, 'default' => null),
+			'description'      => array(AttributeType::String),
+			'keywords'         => array(AttributeType::String),
+			'author'           => array(AttributeType::String),
+			'publisher'        => array(AttributeType::String),
 		);
 
 		$this->robotsMeta = array(
@@ -190,7 +190,7 @@ class SproutSeo_MetadataModel extends BaseModel
 	 */
 	protected function prepareGlobalMetadata()
 	{
-		$globals = sproutSeo()->globals->getGlobalMetadata();
+		$globals = sproutSeo()->globalMetadata->getGlobalMetadata();
 
 		return $globals->meta;
 	}
@@ -198,22 +198,19 @@ class SproutSeo_MetadataModel extends BaseModel
 	/**
 	 * Create our default Section Metadata SproutSeo_MetaTagsModel
 	 *
-	 * @param $overrideInfo
+	 * @param $urlEnabledSection
 	 *
 	 * @return SproutSeo_MetadataModel
 	 */
-	protected function prepareSectionMetadata($overrideInfo)
+	protected function prepareSectionMetadata($urlEnabledSection)
 	{
 		$attributes = array();
 
-		if ($overrideInfo)
+		if ($urlEnabledSection)
 		{
-			$elementGroupId = $overrideInfo['elementGroupId'];
-			$elementTable   = $overrideInfo['elementTable'];
-			$elementModel   = $overrideInfo['elementModel'];
+			$metaTagsModel = sproutSeo()->sectionMetadata->getSectionMetadataByInfo($urlEnabledSection);
 
-			$metaTagsModel = sproutSeo()->metadata->getSectionMetadataByInfo($elementTable, $elementGroupId, $elementModel);
-			$attributes    = $metaTagsModel->getAttributes();
+			$attributes = $metaTagsModel->getAttributes();
 		}
 
 		return $attributes;
@@ -231,7 +228,7 @@ class SproutSeo_MetadataModel extends BaseModel
 		if (isset($overrideInfo['elementId']))
 		{
 			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$elementMetadata = sproutSeo()->metadata->getElementMetadataByElementId($overrideInfo['elementId'], $locale);
+			$elementMetadata = sproutSeo()->elementMetadata->getElementMetadataByElementId($overrideInfo['elementId'], $locale);
 
 			return $elementMetadata->getAttributes();
 		}

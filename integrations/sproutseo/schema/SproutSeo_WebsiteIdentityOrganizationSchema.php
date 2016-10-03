@@ -66,8 +66,11 @@ class SproutSeo_WebsiteIdentityOrganizationSchema extends SproutSeoBaseSchema
 
 		//$jsonLd['foundingLocation'] = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
 
-		$urls = array_column($socialProfiles, 'url');
-		$this->addSameAs($urls);
+		if (count($socialProfiles))
+		{
+			$urls = array_column($socialProfiles, 'url');
+			$this->addSameAs($urls);
+		}
 	}
 
 	/**

@@ -92,31 +92,7 @@ class SproutSeoVariable
 	 */
 	public function getSectionMetadata()
 	{
-		return sproutSeo()->metadata->getSectionMetadata();
-	}
-
-	/**
-	 * Returns all templates
-	 *
-	 * @param array $urls to avoid
-	 *
-	 * @return mixed
-	 */
-	public function getCustomSectionMetadata($urls)
-	{
-		return sproutSeo()->metadata->getCustomSectionMetadata($urls);
-	}
-
-	/**
-	 * Returns all templates
-	 *
-	 * @param array $urls to avoid
-	 *
-	 * @return mixed
-	 */
-	public function getCustomSiteMaps($urls)
-	{
-		return sproutSeo()->metadata->getCustomSiteMaps($urls);
+		return sproutSeo()->sectionMetadata->getSectionMetadata();
 	}
 
 	/**
@@ -128,7 +104,7 @@ class SproutSeoVariable
 	 */
 	public function getSectionMetadataById($id)
 	{
-		return sproutSeo()->metadata->getSectionMetadataById($id);
+		return sproutSeo()->sectionMetadata->getSectionMetadataById($id);
 	}
 
 	/**
@@ -138,7 +114,7 @@ class SproutSeoVariable
 	 */
 	public function getSectionMetadataByHandle($handle)
 	{
-		return sproutSeo()->metadata->getSectionMetadataByHandle($handle);
+		return sproutSeo()->sectionMetadata->getSectionMetadataByHandle($handle);
 	}
 
 	/**
@@ -152,44 +128,23 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * Returns all URL-Enabled Sections Types
+	 *
+	 * @return array of Sections
+	 */
+	public function getUrlEnabledSectionTypes()
+	{
+		return sproutSeo()->sectionMetadata->getUrlEnabledSectionTypes();
+	}
+
+	/**
 	 * Returns all custom pages for sitemap settings
 	 *
 	 * @return array of Sections
 	 */
-	public function getAllCustomPages()
+	public function getCustomSections()
 	{
-		return sproutSeo()->sitemap->getAllCustomPages();
-	}
-
-	/**
-	 * Returns all sitemaps
-	 *
-	 * @return array of Sections
-	 */
-	public function getAllSitemaps()
-	{
-		return sproutSeo()->sitemap->getAllSitemaps();
-	}
-
-	/**
-	 * Returns Section Metadata info
-	 * @todo - clarify what "info" is
-	 *
-	 * @return array
-	 */
-	public function getSectionMetadataInfo($info)
-	{
-		return sproutSeo()->metadata->getSectionMetadataInfo($info);
-	}
-
-	/**
-	 * Returns all custom names
-	 *
-	 * @return array of Sections
-	 */
-	public function getAllCustomNames()
-	{
-		return sproutSeo()->sitemap->getAllCustomNames();
+		return sproutSeo()->sectionMetadata->getCustomSections();
 	}
 
 	/**
@@ -213,7 +168,7 @@ class SproutSeoVariable
 	 */
 	public function getGlobalMetadata()
 	{
-		return sproutSeo()->globals->getGlobalMetadata();
+		return sproutSeo()->globalMetadata->getGlobalMetadata();
 	}
 
 	/**
@@ -472,7 +427,7 @@ class SproutSeoVariable
 	 */
 	public function getFinalOptions($schemaType, $handle)
 	{
-		$schemaGlobals = sproutSeo()->globals->getGlobalMetadata();
+		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$options       = $this->getGlobalOptions($schemaType);
 
 		array_push($options, array('optgroup' => 'Custom'));
@@ -533,7 +488,7 @@ class SproutSeoVariable
 			)
 		);
 
-		$schemaGlobals = sproutSeo()->globals->getGlobalMetadata();
+		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$gender        = $schemaGlobals[$schemaType]['gender'];
 
 		array_push($options, array('optgroup' => 'Custom'));
@@ -564,7 +519,7 @@ class SproutSeoVariable
 			)
 		);
 
-		$schemaGlobals = sproutSeo()->globals->getGlobalMetadata();
+		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
 
 		if (isset($schemaGlobals['settings']['appendTitleValue']))
 		{
@@ -615,7 +570,7 @@ class SproutSeoVariable
 			),
 		);
 
-		$schemaGlobals = sproutSeo()->globals->getGlobalMetadata();
+		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
 
 		if (isset($schemaGlobals['settings']['seoDivider']))
 		{
@@ -718,7 +673,7 @@ class SproutSeoVariable
 	 */
 	public function getGlobalRobots()
 	{
-		$globals = sproutSeo()->globals->getGlobalMetadata();
+		$globals = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$robots  = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($globals->robots);
 
 		return SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($robots);
@@ -748,36 +703,36 @@ class SproutSeoVariable
 	}
 
 	/**
-	 * Returns registerSproutSeoSchemaMaps hook
+	 * Returns registerSproutSeoSchemas hook
 	 *
 	 * @return array
 	 */
-	public function getSchemaMaps()
+	public function getSchemas()
 	{
-		return sproutSeo()->optimize->getSchemaMaps();
+		return sproutSeo()->optimize->getSchemas();
 	}
 
 	/**
-	 * Returns registerSproutSeoSchemaMaps hook
+	 * Returns registerSproutSeoSchemas hook
 	 *
 	 * @return array
 	 */
-	public function getSchemaMapOptions()
+	public function getSchemaOptions()
 	{
-		$schemaMaps = sproutSeo()->optimize->getSchemaMaps();
+		$schemas = sproutSeo()->optimize->getSchemas();
 
-		ksort($schemaMaps);
+		ksort($schemas);
 
-		foreach ($schemaMaps as $schemaMap)
+		foreach ($schemas as $schema)
 		{
-			if ($schemaMap->isUnlistedSchemaType())
+			if ($schema->isUnlistedSchemaType())
 			{
-				unset($schemaMaps[$schemaMap->getUniqueKey()]);
+				unset($schemas[$schema->getUniqueKey()]);
 			}
 		}
 
 		// Get a filtered list of our default Sprout SEO schema
-		$defaultSchema = array_filter($schemaMaps, function ($map) {
+		$defaultSchema = array_filter($schemas, function ($map) {
 			/**
 			 * @var SproutSeoBaseSchema $map
 			 */
@@ -785,7 +740,7 @@ class SproutSeoVariable
 		});
 
 		// Get a filtered list of of any custom schema
-		$customSchema = array_filter($schemaMaps, function ($map) {
+		$customSchema = array_filter($schemas, function ($map) {
 			/**
 			 * @var SproutSeoBaseSchema $map
 			 */
@@ -796,10 +751,10 @@ class SproutSeoVariable
 		// Build our options
 		$schemaOptions    = array('' => 'Select...', array('optgroup' => 'Default Types'));
 
-		$schemaOptions = array_merge($schemaOptions, array_map(function ($schemaMap) {
+		$schemaOptions = array_merge($schemaOptions, array_map(function ($schema) {
 			return array(
-				'label' => $schemaMap->getName(),
-				'value' => $schemaMap->getUniqueKey()
+				'label' => $schema->getName(),
+				'value' => $schema->getUniqueKey()
 			);
 		}, $defaultSchema));
 
@@ -807,10 +762,10 @@ class SproutSeoVariable
 		{
 			array_push($schemaOptions, array('optgroup' => 'Custom Types'));
 
-			$schemaOptions = array_merge($schemaOptions, array_map(function ($schemaMap) {
+			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema) {
 				return array(
-					'label' => $schemaMap->getName(),
-					'value' => $schemaMap->getUniqueKey()
+					'label' => $schema->getName(),
+					'value' => $schema->getUniqueKey()
 				);
 			}, $customSchema));
 		}
@@ -825,7 +780,7 @@ class SproutSeoVariable
 	 */
 	public function getContacts()
 	{
-		$contacts = sproutSeo()->globals->getGlobalMetadata()->contacts;
+		$contacts = sproutSeo()->globalMetadata->getGlobalMetadata()->contacts;
 
 		$contacts = $contacts ? $contacts : array();
 
@@ -845,7 +800,7 @@ class SproutSeoVariable
 	 */
 	public function getSocialProfiles()
 	{
-		$socials = sproutSeo()->globals->getGlobalMetadata()->social;
+		$socials = sproutSeo()->globalMetadata->getGlobalMetadata()->social;
 
 		$socials = $socials ? $socials : array();
 

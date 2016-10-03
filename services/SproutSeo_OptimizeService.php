@@ -6,7 +6,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	/**
 	 * @var array
 	 */
-	protected $schemaMaps;
+	protected $schemas;
 
 	/**
 	 * @var mixed
@@ -18,32 +18,24 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public $divider;
 
+	/**
+	 * Sprout SEO Globals data
+	 *
+	 * @var
+	 */
 	public $globals;
 
-	public $hookInfo;
-
-	public $urlFormat;
-
-	public $elementModel;
-
-	public $elementTable;
-
-	public $elementGroupId;
+	/**
+	 * The active Element Group integration with Section and Element info
+	 *
+	 * $urlEnabledSection->element will have the element that matches
+	 * the matchedElementVariable from the $context
+	 *
+	 * @var SproutSeoBaseSection
+	 */
+	public $urlEnabledSection;
 
 	public $prioritizedMetadataModel;
-
-	//	Sitemap Info
-	//	'hookInfo'
-	//				'name' => 'Sections'
-	//				'elementType' => 'Entry'
-	//				'elementGroupId' => 'sectionId'
-	//				'service' => 'sections'
-	//				'method' => 'getAllSections'
-	//				'matchedElementVariable' => 'entry'
-	//	'urlFormat' => urlFormat
-	//	'elementModel' = matchedElementModel
-	//	'elementTable' = matchedElementGroupTable
-	//	'elementGroupId' = matchedElementGroupId
 
 	/**
 	 * @var array
@@ -52,16 +44,16 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 	public function init()
 	{
-		$responses = craft()->plugins->call('registerSproutSeoSchemaMaps');
+		$schemaIntegrations = craft()->plugins->call('registerSproutSeoSchemas');
 
-		foreach ($responses as $plugin => $maps)
+		foreach ($schemaIntegrations as $plugin => $schemas)
 		{
 			/**
 			 * @var SproutSeoBaseSchema $map
 			 */
-			foreach ($maps as $map)
+			foreach ($schemas as $schema)
 			{
-				$this->schemaMaps[$map->getUniqueKey()] = $map;
+				$this->schemas[$schema->getUniqueKey()] = $schema;
 			}
 		}
 	}
@@ -69,9 +61,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	/**
 	 * @return array
 	 */
-	public function getSchemaMaps()
+	public function getSchemas()
 	{
-		return $this->schemaMaps;
+		return $this->schemas;
 	}
 
 	/**
@@ -79,11 +71,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function getSchemaMapOptions()
+	public function getSchemaOptions()
 	{
 		$options = array();
 
-		foreach ($this->schemaMaps as $uniqueKey => $instance)
+		foreach ($this->schemas as $uniqueKey => $instance)
 		{
 			$options[] = array(
 				'value' => $uniqueKey,
@@ -102,9 +94,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 *
 	 * @return mixed|null
 	 */
-	public function getSchemaMapByUniqueKey($uniqueKey, $default = null)
+	public function getSchemaByUniqueKey($uniqueKey, $default = null)
 	{
-		return array_key_exists($uniqueKey, $this->schemaMaps) ? $this->schemaMaps[$uniqueKey] : $default;
+		return array_key_exists($uniqueKey, $this->schemas) ? $this->schemas[$uniqueKey] : $default;
 	}
 
 	/**
@@ -133,22 +125,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	public function getMetadata(&$context)
 	{
 		$optimizedMetadata = null;
-		$this->context     = $context;
 
-		$this->globals = sproutSeo()->globals->getGlobalMetadata();
+		$this->context           = $context;
+		$this->globals           = sproutSeo()->globalMetadata->getGlobalMetadata();
+		$this->urlEnabledSection = sproutSeo()->sectionMetadata->getUrlEnabledSectionsViaContext($context);
 
-		$sitemapInfo = sproutSeo()->sitemap->getSitemapInfo($context);
-
-		if (count($sitemapInfo))
-		{
-			$this->hookInfo       = $sitemapInfo['hookInfo'];
-			$this->urlFormat      = $sitemapInfo['urlFormat'];
-			$this->elementModel   = $sitemapInfo['elementModel'];
-			$this->elementTable   = $sitemapInfo['elementTable'];
-			$this->elementGroupId = $sitemapInfo['elementGroupId'];
-		}
-
-		// Get our meta values
 		$this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel();
 
 		// Prepare our html for the template
@@ -170,8 +151,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 * 3) Section Metadata
 	 * 4) Global Metadata
 	 * 5) Blank
-	 *
-	 * @param $sitemapInfo
 	 *
 	 * @return SproutSeo_MetadataModel
 	 */
@@ -198,9 +177,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		foreach ($prioritizedMetadataLevels as $level => $model)
 		{
 			$metadataModel = new SproutSeo_MetadataModel();
-
-			$codeMetadata = sproutSeo()->metadata->getCodeMetadata($level);
-
+			$codeMetadata  = $this->getCodeMetadata($level);
 			$metadataModel = $metadataModel->setMeta($level, $codeMetadata);
 
 			$prioritizedMetadataLevels[$level] = $metadataModel;
@@ -276,19 +253,19 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	{
 		if ($this->prioritizedMetadataModel)
 		{
-			$schemaMapUniqueKey = $this->prioritizedMetadataModel->schemaMap;
+			$schemaUniqueKey = $this->prioritizedMetadataModel->schemaMap;
 
-			if ($schemaMapUniqueKey)
+			if ($schemaUniqueKey)
 			{
-				$schemaMap             = $this->getSchemaMapByUniqueKey($schemaMapUniqueKey);
-				$schemaMap->attributes = $this->prioritizedMetadataModel->getAttributes();
-				$schemaMap->isContext  = true;
+				$schema             = $this->getSchemaByUniqueKey($schemaUniqueKey);
+				$schema->attributes = $this->prioritizedMetadataModel->getAttributes();
+				$schema->addContext = true;
 
-				$schemaMap->globals = $this->globals;
-				$schemaMap->element = $this->elementModel;
-				$schemaMap->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+				$schema->globals                  = $this->globals;
+				$schema->element                  = $this->urlEnabledSection->element;
+				$schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-				return $schemaMap->getSchema();
+				return $schema->getSchema();
 			}
 		}
 	}
@@ -303,10 +280,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			// Determine if we have an Organization or Person Schema Type
 			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
 
-			$identitySchema = new $schemaModel();
+			$identitySchema             = new $schemaModel();
+			$identitySchema->addContext = true;
 
-			$identitySchema->globals = $this->globals;
-			$identitySchema->element = $this->elementModel;
+			$identitySchema->globals                  = $this->globals;
+			$identitySchema->element                  = $this->urlEnabledSection->element;
 			$identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$output = $identitySchema->getSchema();
@@ -315,9 +293,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// Website Identity Website
 		if ($this->globals->identity['name'])
 		{
-			$websiteSchema = new SproutSeo_WebsiteIdentityWebsiteSchema();
-			$websiteSchema->globals = $this->globals;
-			$websiteSchema->element = $this->elementModel;
+			$websiteSchema             = new SproutSeo_WebsiteIdentityWebsiteSchema();
+			$websiteSchema->addContext = true;
+
+			$websiteSchema->globals                  = $this->globals;
+			$websiteSchema->element                  = $this->urlEnabledSection->element;
 			$websiteSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$output .= $websiteSchema->getSchema();
@@ -327,6 +307,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		//if ($this->globals->identity['address'])
 		//{
 		//	$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchemaMap();
+		//  $placeSchema->addContext = true;
+
+
 		//  $placeSchema->globals = $this->globals;
 		//  $placeSchema->element = $this->elementModel;
 		//  $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
@@ -334,5 +317,43 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		//}
 
 		return TemplateHelper::getRaw($output);
+	}
+
+	// Code Metadata
+	// =========================================================================
+
+	/**
+	 * Store our codeMetadata in a place so we can access when we need to
+	 *
+	 * @todo - document better. This also handles overrides for Section and Element data...
+	 *
+	 * @return array
+	 */
+	public function getCodeMetadata($type = null)
+	{
+		$response = array();
+
+		switch ($type)
+		{
+			case SproutSeo_MetadataLevels::SectionMetadata:
+				$response = $this->urlEnabledSection;
+				break;
+
+			case SproutSeo_MetadataLevels::ElementMetadata:
+				if (isset($elementModel))
+				{
+					if (isset($elementModel->id))
+					{
+						$response = array('elementId' => $elementModel->id);
+					}
+				}
+				break;
+
+			case SproutSeo_MetadataLevels::CodeMetadata:
+				$response = $this->codeMetadata;
+				break;
+		}
+
+		return $response;
 	}
 }

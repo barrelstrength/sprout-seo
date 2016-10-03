@@ -5,7 +5,7 @@
 
 {% set schemaHandle = craft.request.getSegment(3) ?? 'schema' %}
 {% set selectedSidebarItem = schemaHandle %}
-{% set schemaMaps = craft.sproutSeo.getSchemaMaps() %}
+{% set schemaMaps = craft.sproutSeo.getSchemas() %}
 
 {% set content %}
 

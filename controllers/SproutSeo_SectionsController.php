@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_MetadataController extends BaseController
+class SproutSeo_SectionsController extends BaseController
 {
 	/**
 	 * Edit Section Metadata
@@ -10,54 +10,14 @@ class SproutSeo_MetadataController extends BaseController
 	 */
 	public function actionSectionMetadataEditTemplate(array $variables = array())
 	{
-		$isSitemapCustomPage = true;
-		$segment             = craft()->request->getSegment(3);
-		$sectionMetadataId   = ($segment == 'new') ? null : $segment;
+		$isCustom          = true;
+		$segment           = craft()->request->getSegment(3);
+		$sectionMetadataId = ($segment == 'new') ? null : $segment;
 
 		// Get our Section Metadata Model
-		$sectionMetadata = sproutSeo()->metadata->getSectionMetadataById($sectionMetadataId);
-		$isNew           = $sectionMetadata->id != null ? false : true;
-		$sitemaps        = craft()->plugins->call('registerSproutSeoSitemap');
-		$elementInfo     = null;
-
-		if (craft()->request->getSegment(3) == 'new')
-		{
-			$sectionmetadataname = craft()->request->getPost('sectionmetadataname');
-			$elementGroupId      = craft()->request->getPost('elementgroupid');
-			$groupName           = craft()->request->getPost('elementgrouphandle');
-			$sitemapId           = craft()->request->getPost('sitemapid');
-			$type                = explode('-', $sitemapId);
-			$elementType         = $type[0];
-
-			$sectionMetadata->elementGroupId = $elementGroupId;
-			$sectionMetadata->type           = $elementType;
-
-			// Just trying to get the url
-			$elementInfo = sproutSeo()->sitemap->getSectionMetadataElementInfo($sitemaps, $elementType);
-
-			if ($elementInfo != null)
-			{
-				$elementGroup = $elementInfo['elementGroupId'];
-
-				$groupInfo = array(
-					'groupName'      => $elementGroup,
-					'sitemapId'      => $sitemapId,
-					'elementGroupId' => $elementGroupId
-				);
-
-				$response = sproutSeo()->metadata->getSectionMetadataInfo($groupInfo);
-				$element  = $response['element'];
-
-				if ($element)
-				{
-					$sectionMetadata->url = $element->urlFormat;
-				}
-			}
-
-			$sectionMetadata->name   = $sectionmetadataname;
-			$sectionMetadata->handle = strtolower($groupName) . ucfirst($elementType);
-			$sectionMetadata->handle = str_replace(' ', '', $sectionMetadata->handle);
-		}
+		$sectionMetadata   = sproutSeo()->sectionMetadata->getSectionMetadataById($sectionMetadataId);
+		$isNew             = $sectionMetadata->id != null ? false : true;
+		$urlEnabledSection = null;
 
 		$twitterImageElements = array();
 		$ogImageElements      = array();
@@ -67,9 +27,9 @@ class SproutSeo_MetadataController extends BaseController
 			$sectionMetadata = $variables['sectionMetadata'];
 		}
 
-		if ($sectionMetadata->type && $sectionMetadata->elementGroupId)
+		if ($sectionMetadata->type && $sectionMetadata->urlEnabledSectionId)
 		{
-			$isSitemapCustomPage = false;
+			$isCustom = false;
 		}
 
 		// Set up our asset fields
@@ -105,7 +65,7 @@ class SproutSeo_MetadataController extends BaseController
 
 		if (!$isNew)
 		{
-			$elementInfo = sproutSeo()->sitemap->getSectionMetadataElementInfo($sitemaps, $sectionMetadata->type);
+			$urlEnabledSection = sproutSeo()->sectionMetadata->getUrlEnabledSectionByType($sectionMetadata->type);
 		}
 
 		$this->renderTemplate('sproutseo/sections/_edit', array(
@@ -117,9 +77,9 @@ class SproutSeo_MetadataController extends BaseController
 			'assetsSourceExists'   => $assetsSourceExists,
 			'elementType'          => $elementType,
 			'settings'             => $settings,
-			'isSitemapCustomPage'  => $isSitemapCustomPage,
-			'isNew'                => $isNew or $isSitemapCustomPage,
-			'elementInfo'          => $elementInfo
+			'isCustom'             => $isCustom,
+			'isNew'                => $isNew or $isCustom,
+			'urlEnabledSection'    => $urlEnabledSection
 		));
 	}
 
@@ -150,18 +110,67 @@ class SproutSeo_MetadataController extends BaseController
 
 		$model = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($model);
 
-		if (sproutSeo()->metadata->saveSectionMetadata($model))
+		if (sproutSeo()->sectionMetadata->saveSectionMetadata($model))
 		{
-			craft()->userSession->setNotice(Craft::t('Section Metadata saved.'));
+			if (craft()->request->isAjaxRequest())
+			{
+				$this->returnJson(array(
+					'success'         => true,
+					'sectionMetadata' => $model
+				));
+			}
+			else
+			{
+				craft()->userSession->setNotice(Craft::t('Section Metadata saved.'));
 
-			$this->redirectToPostedUrl();
+				$this->redirectToPostedUrl($model);
+			}
 		}
 		else
 		{
-			craft()->userSession->setError(Craft::t("Couldn't save the Section Metadata."));
+			if (craft()->request->isAjaxRequest())
+			{
+				$this->returnJson(array(
+					'errors' => $model->getErrors(),
+				));
+			}
+			else
+			{
+				craft()->userSession->setError(Craft::t("Couldn't save the Section Metadata."));
 
-			craft()->urlManager->setRouteVariables(array(
+				craft()->urlManager->setRouteVariables(array(
+					'sectionMetadata' => $model
+				));
+			}
+		}
+	}
+
+	/**
+	 * Save Sitemap Info to the Database
+	 *
+	 * @todo - can we update this to use actionSaveSectionMetadata?
+	 *
+	 * @throws HttpException
+	 */
+	public function actionSaveSectionMetadataViaSitemapSection()
+	{
+		$this->requireAjaxRequest();
+
+		$sectionMetadata = craft()->request->getPost('sproutseo.metadata');
+
+		$model = SproutSeo_MetadataSitemapModel::populateModel($sectionMetadata);
+
+		if ($lastInsertId = sproutSeo()->sectionMetadata->saveSectionMetadataViaSitemapSection($model))
+		{
+			$this->returnJson(array(
+				'success' => true,
 				'sectionMetadata' => $model
+			));
+		}
+		else
+		{
+			$this->returnJson(array(
+				'errors' => $model->getErrors()
 			));
 		}
 	}
@@ -178,7 +187,7 @@ class SproutSeo_MetadataController extends BaseController
 
 		$sectionMetadataId = craft()->request->getRequiredPost('id');
 
-		$result = sproutSeo()->metadata->deleteSectionMetadataById($sectionMetadataId);
+		$result = sproutSeo()->sectionMetadata->deleteSectionMetadataById($sectionMetadataId);
 
 		$this->returnJson(array(
 			'success' => $result >= 0 ? true : false

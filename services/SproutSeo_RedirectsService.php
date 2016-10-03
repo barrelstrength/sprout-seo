@@ -270,15 +270,10 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		// Add our default plugin settings
 		$settings = '{"pluginNameOverride":"' . $pluginName . '", "seoDivider":"-", "structureId":"' . $structure->id . '"}';
 
-		craft()->db->createCommand()->update(
-			'plugins',
-			array(
-				'settings' => $settings
-			),
-			'class=:class',
-			array(
-				':class' => 'SproutSeo'
-			)
+		craft()->db->createCommand()->update('plugins', array(
+			'settings' => $settings
+		),
+			'class=:class', array(':class' => 'SproutSeo')
 		);
 
 		return $structure->id;

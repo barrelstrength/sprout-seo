@@ -32,15 +32,13 @@ class SproutSeo_ThingSchema extends SproutSeoBaseSchema
 	 */
 	public function addProperties()
 	{
-		$meta = $this->prioritizedMetadataModel;
+		$metadata = $this->prioritizedMetadataModel;
 
 		$this->addMainEntityOfPage($this->getType());
 
-		$this->addText('title', $meta->optimizedTitle);
-		$this->addText('description', $meta->optimizedDescription);
-		$this->addText('headline', $meta->optimizedTitle);
-		$this->addText('about', $meta->optimizedDescription);
-		$this->addImage('image', $meta->optimizedImage);
-		$this->addUrl('url', $meta->canonical);
+		$this->addText('title', $metadata->optimizedTitle);
+		$this->addText('description', $metadata->optimizedDescription);
+		$this->addImage('image', $metadata->optimizedImage);
+		$this->addUrl('url', $metadata->canonical);
 	}
 }

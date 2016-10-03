@@ -69,7 +69,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$values = sproutSeo()->metadata->getElementMetadataByElementId($elementId, $locale);
+		$values = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
 
 		$ogImageElements      = array();
 		$metaImageElements    = array();
@@ -144,7 +144,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		$locale = $this->element->locale;
 
 		// Get existing or new MetadataModel
-		$model = sproutSeo()->metadata->getElementMetadataByElementId($this->element->id, $locale);
+		$model = sproutSeo()->elementMetadata->getElementMetadataByElementId($this->element->id, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -166,7 +166,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				sproutSeo()->metadata->deleteElementMetadataById($model->id);
+				sproutSeo()->elementMetadata->deleteElementMetadataById($model->id);
 			}
 
 			return;
@@ -197,11 +197,11 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 
 		if ($model->id)
 		{
-			sproutSeo()->metadata->updateElementMetadata($model->id, $columns);
+			sproutSeo()->elementMetadata->updateElementMetadata($model->id, $columns);
 		}
 		else
 		{
-			sproutSeo()->metadata->createElementMetadata($columns);
+			sproutSeo()->elementMetadata->createElementMetadata($columns);
 		}
 	}
 
@@ -236,7 +236,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 			// Custom Field
 			case (is_numeric($optimizedTitleFieldSetting)):
 
-				$title = $this->getElementField($optimizedTitleFieldSetting);
+				$title = $this->getSelectedFieldForOptimizedMetadata($optimizedTitleFieldSetting);
 
 				break;
 
@@ -280,7 +280,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 			// Custom Description
 			case (is_numeric($optimizedDescriptionFieldSetting)):
 
-				$description = $this->getElementField($optimizedDescriptionFieldSetting);
+				$description = $this->getSelectedFieldForOptimizedMetadata($optimizedDescriptionFieldSetting);
 
 				break;
 
@@ -324,7 +324,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 			// Custom Image Field
 			case (is_numeric($optimizedImageFieldSetting)):
 
-				$image = $this->getElementField($optimizedImageFieldSetting);
+				$image = $this->getSelectedFieldForOptimizedMetadata($optimizedImageFieldSetting);
 
 				break;
 		}
@@ -341,7 +341,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 	 *
 	 * @return null
 	 */
-	private function getElementField($fieldId)
+	private function getSelectedFieldForOptimizedMetadata($fieldId)
 	{
 		$value = null;
 

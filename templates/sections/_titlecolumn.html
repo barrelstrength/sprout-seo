@@ -1,0 +1,15 @@
+<strong style="display:inline-block;padding:7px 10px;">
+
+	{% if sectionMetadata.enabled %}
+		<span class="status live"></span>
+	{% else %}
+		<span class="status disabled"></span>
+	{% endif %}
+
+	<a href="sections/{{ sectionMetadata.id }}" class="sproutseo-sectiontitle">
+		{{ sectionMetadata.name }}
+	</a>
+
+	<input type="hidden" name="sproutseo[sections][{{ urlEnabledSectionKey }}][id]" value="{{ urlEnabledSectionKey }}">
+
+</strong>

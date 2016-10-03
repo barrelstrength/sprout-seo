@@ -98,23 +98,28 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
-		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityOrganizationSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPersonSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityWebsiteSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_WebsiteIdentityPlaceSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ContactPointSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ImageObjectSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_MainEntityOfPageSchema');
+		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseUrlEnabledSectionType');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.sectiontypes.SproutSeo_EntryUrlEnabledSectionType');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.sectiontypes.SproutSeo_CategoryUrlEnabledSectionType');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.sectiontypes.SproutSeo_CommerceProductUrlEnabledSectionType');
 
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ThingSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_CreativeWorkSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_EventSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_IntangibleSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_OrganizationSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PersonSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_PlaceSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.SproutSeo_ProductSchema');
+		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_WebsiteIdentityOrganizationSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_WebsiteIdentityPersonSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_WebsiteIdentityWebsiteSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_WebsiteIdentityPlaceSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ContactPointSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ImageObjectSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_MainEntityOfPageSchema');
+
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ThingSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_CreativeWorkSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_EventSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_IntangibleSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_OrganizationSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_PersonSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_PlaceSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ProductSchema');
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 
@@ -176,26 +181,11 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/sections/new'                      => array(
-				'action' => 'sproutSeo/metadata/sectionMetadataEditTemplate'
+			'sproutseo/sections/new'                          => array(
+				'action' => 'sproutSeo/sections/sectionMetadataEditTemplate'
 			),
-			'sproutseo/sections/(?P<sectionMetadataId>\d+)' => array(
-				'action' => 'sproutSeo/metadata/sectionMetadataEditTemplate'
-			),
-			'sproutseo/sitemap'                               => array(
-				'action' => 'sproutSeo/sitemap/sitemapIndex'
-			),
-			'sproutseo/sitemap/newPage'                       => array(
-				'action' => 'sproutSeo/sitemap/editSitemap'
-			),
-			'sproutseo/settings'                              => array(
-				'action' => 'sproutSeo/settings/settingsIndex'
-			),
-			'sproutseo/settings/(?P<settingsTemplate>.*)/new' =>
-				'sproutseo/settings/schema/_edit',
-
-			'sproutseo/settings/(?P<settingsTemplate>.*)'     => array(
-				'action' => 'sproutSeo/settings/settingsIndex'
+			'sproutseo/sections/(?P<sectionMetadataId>\d+)'   => array(
+				'action' => 'sproutSeo/sections/sectionMetadataEditTemplate'
 			),
 			'sproutseo/redirects'                             => array(
 				'action' => 'sproutSeo/redirects/redirectIndex'
@@ -206,11 +196,14 @@ class SproutSeoPlugin extends BasePlugin
 			'sproutseo/redirects/(?P<redirectId>\d+)'         => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			),
-			'sproutseo/schema/new' =>
-				'sproutseo/schema/_edit',
+			'sproutseo/settings'                              => array(
+				'action' => 'sproutSeo/settings/settingsIndex'
+			),
+			'sproutseo/settings/(?P<settingsTemplate>.*)/new' =>
+				'sproutseo/settings/schema/_edit',
 
-			'sproutseo/schema/(.*)' => array(
-				'action' => 'sproutSeo/schema/schemaEditTemplate'
+			'sproutseo/settings/(?P<settingsTemplate>.*)' => array(
+				'action' => 'sproutSeo/settings/settingsIndex'
 			),
 		);
 	}
@@ -252,49 +245,28 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
-	 * Returns supported sitemap urls by default.
-	 *
-	 * 'name_of_the_craft_element_table' => array(
-	 *    'name' => Name that will display in the sitemaps and metada UI
-	 *    'elementType' => Element Type class name
-	 *    'elementGroupId' => column name for the element id
-	 *    'service' => service class name
-	 *    'method'  => method name to get all elements
-	 *    'matchedElementVariable'  => Variable name to be called from the templates
+	 * Register any supported URL-enabled Section Types
 	 *
 	 * @return array
 	 */
-	public function registerSproutSeoSitemap()
+	public function registerSproutSeoUrlEnabledSectionTypes()
 	{
-		return array(
-			'sections'         => array(
-				'name'                   => 'Sections',
-				'elementType'            => ElementType::Entry,
-				'elementGroupId'         => 'sectionId',
-				'service'                => 'sections',
-				'method'                 => 'getAllSections',
-				'matchedElementVariable' => 'entry'
-			),
-			'categories'       => array(
-				'name'                   => 'Categories',
-				'elementType'            => ElementType::Category,
-				'elementGroupId'         => 'groupId',
-				'service'                => 'categories',
-				'method'                 => 'getAllGroups',
-				'matchedElementVariable' => 'category'
-			),
-			'commerce_products' => array(
-				'name'                   => "Commerce Products",
-				'elementType'            => 'Commerce_Product',
-				'elementGroupId'         => 'typeId',
-				'service'                => 'commerce_productTypes',
-				'method'                 => 'getAllProductTypes',
-				'matchedElementVariable' => 'product'
-			)
+		$sections = array(
+			new SproutSeo_EntryUrlEnabledSectionType(),
+			new SproutSeo_CategoryUrlEnabledSectionType()
 		);
+
+		$craftCommercePlugin = craft()->plugins->getPlugin('commerce');
+
+		if (isset($craftCommercePlugin))
+		{
+			array_push($sections, new SproutSeo_CommerceProductUrlEnabledSectionType());
+		}
+
+		return $sections;
 	}
 
-	public function registerSproutSeoSchemaMaps()
+	public function registerSproutSeoSchemas()
 	{
 		return array(
 			new SproutSeo_WebsiteIdentityOrganizationSchema(),
@@ -318,8 +290,8 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function onAfterInstall()
 	{
-		sproutSeo()->redirects->installDefaultSettings();
-		sproutSeo()->globals->installDefaultGlobals();
+		craft()->sproutSeo_redirects->installDefaultSettings();
+		craft()->sproutSeo_globals->installDefaultGlobals();
 	}
 
 	/**

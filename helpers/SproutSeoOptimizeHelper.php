@@ -348,13 +348,16 @@ class SproutSeoOptimizeHelper
 	{
 		$googlePlusUrl = null;
 
-		$globals = sproutSeo()->globals->getGlobalMetadata();
+		$globals = sproutSeo()->globalMetadata->getGlobalMetadata();
 
-		foreach ($globals['social'] as $key => $socialProfile)
+		if (count($globals['social']))
 		{
-			if ($socialProfile['profileName'] == "Google+")
+			foreach ($globals['social'] as $key => $socialProfile)
 			{
-				$googlePlusUrl = $socialProfile['url'];
+				if ($socialProfile['profileName'] == "Google+")
+				{
+					$googlePlusUrl = $socialProfile['url'];
+				}
 			}
 		}
 
@@ -374,7 +377,7 @@ class SproutSeoOptimizeHelper
 		$globalMetadataModel
 	)
 	{
-		$globals  = sproutSeo()->globals->getGlobalMetadata();
+		$globals  = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$settings = $globals->settings;
 
 		// @todo - appendTitleValue should be saved/updated with globals so we don't have to make an extra query here
@@ -428,7 +431,7 @@ class SproutSeoOptimizeHelper
 	 */
 	public static function updateOptimizedAndAdvancedMetaValues($model)
 	{
-		$globals        = sproutSeo()->globals->getGlobalMetadata();
+		$globals        = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$globalSettings = $globals->settings;
 
 		// Prepare our optimized variables

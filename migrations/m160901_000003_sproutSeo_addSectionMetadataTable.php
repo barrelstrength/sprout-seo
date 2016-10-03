@@ -23,7 +23,7 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 		$columns = array(
 			'customizationSettings' => $varchar,
 			'url' => $varchar,
-			'isSitemapCustomPage' => array(
+			'isCustom' => array(
 				'column'   => ColumnType::TinyInt,
 				'required' => false,
 				'default'  => 0
@@ -50,7 +50,7 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 			'optimizedImage' => $varchar,
 			'optimizedTitle' => $varchar,
 			'type' => $varchar,
-			'elementGroupId' => array(
+			'urlEnabledSectionId' => array(
 				'column'   => ColumnType::Int,
 				'required' => false,
 				'default'  => null

@@ -23,7 +23,7 @@ class SproutSeo_GlobalsController extends BaseController
 
 		$globals->meta = JsonHelper::encode($globalMetadata);
 
-		if (sproutSeo()->globals->saveGlobals($globalKeys, $globals))
+		if (sproutSeo()->globalMetadata->saveGlobals($globalKeys, $globals))
 		{
 			craft()->userSession->setNotice(Craft::t('Globals saved.'));
 
@@ -71,7 +71,7 @@ class SproutSeo_GlobalsController extends BaseController
 			$globalKeys => $ownershipMetaWithKeys
 		));
 
-		if (sproutSeo()->globals->saveGlobals(array($globalKeys), $globals))
+		if (sproutSeo()->globalMetadata->saveGlobals(array($globalKeys), $globals))
 		{
 			craft()->userSession->setNotice(Craft::t('Globals saved.'));
 
@@ -98,7 +98,7 @@ class SproutSeo_GlobalsController extends BaseController
 		$locale   = craft()->i18n->getLocaleById(craft()->language);
 		$localeId = $locale->id;
 
-		$oldGlobals        = sproutSeo()->globals->getGlobalMetadata();
+		$oldGlobals        = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$oldIdentity       = isset($oldGlobals) ? $oldGlobals->identity : null;
 		$identity          = isset($postData['identity']) ? $postData['identity'] : $oldIdentity;
 		$oldSocialProfiles = isset($oldGlobals) ? $oldGlobals->social : array();

@@ -1,207 +1,84 @@
-{% extends "sproutseo/_layouts/sitemap" %}
+{% extends "sproutseo/_layouts/sections" %}
 {% import "_includes/forms" as forms %}
 
 {% set title = "Section Metadata"|t %}
 
-{% set pluginSettings = craft.sproutSeo.getSettings() %}
-{% set sitemaps       = craft.sproutSeo.getAllSitemaps() %}
-{% set customNames    = craft.sproutSeo.getAllCustomNames() %}
+{% block sectionMetadataTableRowHead %}
 
-{% set body %}
+	<th style="padding-left:9px;width:35%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here. Enable each "~name~" you want to include in your sitemap. Prepare fallback Metadata if any meta values are not present for content within the matching domain section. Identify the Main Entity schema you wish to match to this URL."|t }}</span></th>
+	<th style="width:50%;">{{ "URL Pattern"|t }}</th>
+	<th style="width:15%;">{{ "Active Metadata?"|t }} {% if loop.index == 1 %} <span class="info">{{ "Each icon represents a type of metadata. A green icon indicates that this type of metadata is in place." }}</span>{% endif %}</th>
+	<th class="thin"></th>
 
-	<div class="pane">
+{% endblock %}
 
-		<div class="header" style="display: flex;align-items: center;">
-			<div style="flex-grow: 1;flex-">
-				<h3 style="text-transform: uppercase;margin-bottom: 3px;">{{ "URL-Enabled Sections"|t }} <span class="info">{{ "Manage all of your Section-level SEO for Search, Social Sharing, Sitemaps, and Structured Data."|t }}</span></h3>
-			</div>
-		</div>
+{% block sectionMetadataTableRow %}
 
-		{% for type, elementGroups in sitemaps %}
-
-			<table class="data fullwidth sitemap-settings">
-				{%set name = attribute(customNames, type) is defined ? attribute(customNames, type) :  type %}
-				<thead>
-					<th style="padding-left:9px;width:35%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here. Enable each "~name~" you want to include in your sitemap. Prepare fallback Metadata if any meta values are not present for content within the matching domain section. Identify the Main Entity schema you wish to match to this URL."|t }}</span></th>
-					<th style="width:50%;">{{ "URL Pattern"|t }}</th>
-					<th style="width:15%;">{{ "Active Metadata?"|t }} {% if loop.index == 1 %} <span class="info">{{ "Each icon represents a type of metadata. A green icon indicates that this type of metadata is in place." }}</span>{% endif %}</th>
-					<th class="thin"></th>
-				</thead>
-				<tbody>
-
-				{% for elementGroup in elementGroups %}
-					{% if elementGroup.name is defined %}
-						{% set sitemap = null %}
-						{% if elementGroup.settings is defined %}
-							{% set sitemap = elementGroup.settings %}
-						{% endif %}
-
-						{% if sitemap.id is defined %}
-							{% set sitemapId = sitemap.id %}
-						{% else %}
-						  {% set sitemapId = 'new-' ~ loop.index %}
-						{% endif %}
-
-						{# elementGroup => type- #}
-						{% set sitemapId = type|lower~'-'~ sitemapId %}
-
-						{% set groupInfo = {
-							'groupName': elementGroup.name,
-							'sitemapId': sitemapId,
-							'elementGroupId': elementGroup.id
-						} %}
-
-						{# @todo - can we update this to use a defined model? #}
-						{% set sectionMetadataInfo = craft.sproutSeo.getSectionMetadataInfo(groupInfo) %}
-
-						{% if sectionMetadataInfo.element %}
-							<tr data-rowid="{{ sitemapId }}" data-type="section">
-								<td>
-									<strong style="display:inline-block;padding:7px 10px;">
-
-										{% if elementGroup.settings is defined and elementGroup.settings.enabled %}
-											<span class="status live"></span>
-										{% else %}
-											<span class="status disabled"></span>
-										{% endif %}
-
-										{% if sectionMetadataInfo.isNew %}
-											<a class="sectionmetadata-isnew" data-isnew="{{ sectionMetadataInfo.isNew }}" data-elementgrouphandle="{{ elementGroup.handle }}" data-sitemapid="{{ sitemapId }}" data-elementgroupid="{{ elementGroup.id }}" data-sectionmetadataname="{{ elementGroup.name }}">
-												{{ elementGroup.name }}
-											</a>
-										{% else %}
-
-										<a href = "sections/{{ sectionMetadataInfo.metadataId }}">
-											{{ elementGroup.name }}
-										</a>
-
-									{% endif %}
-
-										<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][id]" value="{{ sitemapId }}">
-										<input type="hidden" name="sproutseo[sitemap][{{ sitemapId }}][elementGroupId]" value="{{ elementGroup.id }}">
-
-									</strong>
-								</td>
-								<td>
-									{% if sectionMetadataInfo.element.urlFormat == '__home__' %}
-										<span data-icon="home" title="Homepage"></span>
-									{% else %}
-										<code>{{ sectionMetadataInfo.element.urlFormat }}</code>
-									{% endif %}
-								</td>
-								<td>
-									<div class="sprout-metadata-status" style="color:#ccc;">
-										<span class="sproutseo-icon icon-search">&#xe800;</span>
-										<span class="sproutseo-icon icon-facebook">&#xe802;</span>
-										<span class="sproutseo-icon icon-twitter">&#xe801;</span>
-										<span class="sproutseo-icon icon-edit">&#xe805;</span>
-										<span class="sproutseo-icon icon-sitemap {% if elementGroup.settings is defined and elementGroup.settings.enabled %}sproutseo-status-pass{% endif %}">&#xf0e8;</span>
-									</div>
-								</td>
-								<td>
-									{# @todo - find a better way to get the columns to be even. This tag is
-									unnecessary aside from helping to style the table column widths evenly. #}
-									<span style="display: inline-block;width:13px;"></span>
-								</td>
-							</tr>
-						{% endif %}
-					{% endif %}
-				{% endfor %}
-				</tbody>
-			</table>
-			<br>
-		{% endfor %}
-
-	</div>
-
-	{% if pluginSettings.enableCustomSections %}
-
-		{% set sectionMetadataCustomSections = craft.sproutSeo.getAllCustomPages() %}
-
-		{% if sectionMetadataCustomSections is not empty %}
-
-		<div class="pane">
-
-			<div class="header" style="display: flex;align-items: center;">
-				<div style="flex-grow: 1;flex-">
-					<h3 style="text-transform: uppercase;">Custom Sections</h3>
-				</div>
-				<div style="flex-shrink: 0;">
-					<div class="buttons right">
-						<a class="btn submit add icon" href="{{ url('sproutseo/sections/new') }}">{{ "New section"|t }}</a>
-					</div>
-				</div>
-			</div>
-
-			<table class="data" id="custom-pages">
-				<thead>
-					<th style="padding-left:9px;width:35%">{{ "Custom Sections"|t }} <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
-					<th style="width:50%;">{{ "URL Pattern"|t }}</th>
-					<th style="width:15%;">{{ "Active Metadata?"|t }} <span class="info">{{ "Each icon represents a type of metadata. A black icon indicates that this type of metadata is in place." }}</span></th>
-					<th class="thin"></th>
-				</thead>
-
-				{% for sectionMetadataCustomSection in sectionMetadataCustomSections %}
-					<tr id="results" data-id="{{ sectionMetadataCustomSection.id }}" data-name="{{ sectionMetadataCustomSection.name|t }}">
-						<td>
-							<strong style="display:inline-block;padding:7px 10px;">
-
-								{% if sectionMetadataCustomSection is defined and sectionMetadataCustomSection.enabled %}
-									<span class="status live"></span>
-								{% else %}
-									<span class="status disabled"></span>
-								{% endif %}
-
-								<a href="{{ url('sproutseo/sections/' ~ sectionMetadataCustomSection.id) }}">
-									{{ sectionMetadataCustomSection.name }}
-								</a>
-							</strong>
-						</td>
-						<td>
-							<code>{{ sectionMetadataCustomSection.url }}</code>
-						</td>
-						<td>
-							<div class="sprout-metadata-status" style="color:#ccc;">
-								<span class="sproutseo-icon icon-search">&#xe800;</span>
-								<span class="sproutseo-icon icon-facebook">&#xe802;</span>
-								<span class="sproutseo-icon icon-twitter">&#xe801;</span>
-								<span class="sproutseo-icon icon-edit">&#xe805;</span>
-								<span class="sproutseo-icon icon-sitemap {% if elementGroup.settings is defined and elementGroup.settings.enabled %}sproutseo-status-pass{% endif %}">&#xf0e8;</span>
-							</div>
-						</td>
-						<td class="thin">
-							<a class="delete icon" title="{{ 'Delete'|t }}"></a>
-						</td>
-					</tr>
-
-				{% endfor %}
-			</table>
-
-		</div>
-
+	<td>
+		{% include 'sproutseo/sections/_titlecolumn' %}
+	</td>
+	<td>
+		{% if sectionMetadata.url == '__home__' %}
+			<span data-icon="home" title="Homepage"></span>
+		{% else %}
+			<code>{{ sectionMetadata.url }}</code>
 		{% endif %}
+	</td>
+	<td>
+		<div class="sprout-metadata-status" style="color:#ccc;">
+			<span class="sproutseo-icon icon-search">&#xe800;</span>
+			<span class="sproutseo-icon icon-facebook">&#xe802;</span>
+			<span class="sproutseo-icon icon-twitter">&#xe801;</span>
+			<span class="sproutseo-icon icon-edit">&#xe805;</span>
+			<span class="sproutseo-icon icon-sitemap {% if sectionMetadata.enabled %}sproutseo-status-pass{% endif %}">&#xf0e8;</span>
+		</div>
+	</td>
+	<td>
+		{#@todo - find a better way to get the columns to be even. This tag is#}
+		{#unnecessary aside from helping to style the table column widths evenly.#}
+		<span style="display: inline-block;width:13px;"></span>
+	</td>
 
-	{% endif %}
+{% endblock %}
 
-{% endset %}
+{% block customSectionTableRowHead %}
 
-{% includeCssResource "sproutseo/css/sproutseo.css" %}
-{% includeJsResource "sproutseo/js/metadata.js" %}
+	<th style="padding-left:9px;width:35%">{{ "Custom Sections"|t }} <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
+	<th style="width:50%;">{{ "URL Pattern"|t }}</th>
+	<th style="width:15%;">{{ "Active Metadata?"|t }} <span class="info">{{ "Each icon represents a type of metadata. A black icon indicates that this type of metadata is in place." }}</span></th>
+	<th class="thin"></th>
 
-{% set js %}
-	new Craft.SproutSeoSitemap();
+{% endblock %}
 
-	new Craft.AdminTable({
-		tableSelector: '#custom-pages',
-		deleteAction: 'sproutSeo/metadata/deleteSectionMetadataById',
-		onDeleteObject: function(id)
-		{
-			if($('#custom-pages').find('tbody').find('tr').size() == 0)
-			{
-				$('#custom-pages').hide();
-			}
-		}
-	});
-{% endset %}
+{% block customSectionTableRow %}
 
-{% includeJs js %}
+	<td>
+		<strong style="display:inline-block;padding:7px 10px;">
+			{% if customSection is defined and customSection.enabled %}
+				<span class="status live"></span>
+			{% else %}
+				<span class="status disabled"></span>
+			{% endif %}
+
+			<a href="{{ url('sproutseo/sections/' ~ customSection.id) }}">
+				{{ customSection.name }}
+			</a>
+		</strong>
+	</td>
+	<td>
+		<code>{{ customSection.url }}</code>
+	</td>
+	<td>
+		<div class="sprout-metadata-status" style="color:#ccc;">
+			<span class="sproutseo-icon icon-search">&#xe800;</span>
+			<span class="sproutseo-icon icon-facebook">&#xe802;</span>
+			<span class="sproutseo-icon icon-twitter">&#xe801;</span>
+			<span class="sproutseo-icon icon-edit">&#xe805;</span>
+			<span class="sproutseo-icon icon-sitemap {% if customSection.enabled %}sproutseo-status-pass{% endif %}">&#xf0e8;</span>
+		</div>
+	</td>
+	<td class="thin">
+		<a class="delete icon" title="{{ 'Delete'|t }}"></a>
+	</td>
+
+{% endblock %}

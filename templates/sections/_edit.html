@@ -18,7 +18,7 @@
 {% set fullPageForm = true %}
 
 {% if craft.request.getSegment(3) == 'new' %}
-	{% set saveShortcutRedirect = url('sproutseo/sections') %}
+	{% set saveShortcutRedirect = url('sproutseo/sections/{id}') %}
 {% else %}
 	{% set saveShortcutRedirect = url('sproutseo/sections/' ~ sectionMetadataId) %}
 {% endif %}
@@ -42,12 +42,12 @@
 		<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
 			<div id="fields" class="pane">
 
-				<input type="hidden" name="action" value="sproutSeo/metadata/saveSectionMetadata">
+				<input type="hidden" name="action" value="sproutSeo/sections/saveSectionMetadata">
 				<input type="hidden" name="redirect" value="sproutseo/sections">
 				<input type="hidden" name="sproutseo[metadata][id]" value="{{ sectionMetadataId }}">
-				<input type="hidden" name="sproutseo[metadata][isSitemapCustomPage]" value="{{ isSitemapCustomPage }}">
+				<input type="hidden" name="sproutseo[metadata][isCustom]" value="{{ isCustom }}">
 				<input type="hidden" name="sproutseo[metadata][type]" value="{{ sectionMetadata.type }}">
-				<input type="hidden" name="sproutseo[metadata][elementGroupId]" value="{{ sectionMetadata.elementGroupId }}">
+				<input type="hidden" name="sproutseo[metadata][urlEnabledSectionId]" value="{{ sectionMetadata.urlEnabledSectionId }}">
 
 				{% include 'sproutseo/_fieldtypes/elementmetadata/input' %}
 
@@ -63,7 +63,7 @@
 					value: sectionMetadata.name,
 					errors: sectionMetadata.getErrors('name'),
 					readonly: not isNew,
-					class: not isNew ? 'disabled' : ''
+					class: not isNew ? 'disabled sproutseo-uneditable' : ''
 				}) }}
 
 				{{ forms.textField({
@@ -91,16 +91,16 @@
 						<label>{{ "Section"|t }}</label>
 					</div>
 					<div class="input">
-						<h6>{{ elementInfo is not empty ? elementInfo['name'] : "Custom Page"|t }}</h6>
+						<h6>{{ urlEnabledSection is not empty ? urlEnabledSection.getUrlEnabledSectionName() : "Custom Page"|t }}</h6>
 					</div>
 				</div>
 
 				<div class="field">
 					<div class="heading">
-						<label>{{ "Element"|t }} <span class="info">{% if elementInfo is not empty %}{{ "The Matched Element variable <code>{matchedElement}</code> is available to your URL-enabled pages"|t({ 'matchedElement' : elementInfo['matchedElementVariable'] })|raw }}{% else %}{{ "Custom Pages do not have any pre-prepared Elements available to the page"|t }}{% endif %}</span></label>
+						<label>{{ "Element"|t }} <span class="info">{% if urlEnabledSection is not empty %}{{ "The Matched Element variable <code>{matchedElement}</code> is available to your URL-enabled pages"|t({ 'matchedElement' : urlEnabledSection.getMatchedElementVariable() })|raw }}{% else %}{{ "Custom Pages do not have any pre-prepared Elements available to the page"|t }}{% endif %}</span></label>
 					</div>
 					<div class="input">
-						<h6>{{ elementInfo is not empty ? elementInfo['matchedElementVariable'] : "–" }}</h6>
+						<h6>{{ urlEnabledSection is not empty ? urlEnabledSection.getMatchedElementVariable() : "–" }}</h6>
 					</div>
 				</div>
 
@@ -198,7 +198,7 @@
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
 {% endif %}
 
-{% includeJsResource "sproutseo/js/sproutseo.css" %}
+{% includeCssResource "sproutseo/css/sproutseo.css" %}
 {% includeJsResource "sproutseo/js/MetaTags.js" %}
 
 {% set js %}

@@ -14,14 +14,19 @@ class SproutSeoService extends BaseApplicationComponent
 	public $optimize;
 
 	/**
-	 * @var SproutSeo_MetadataService
+	 * @var SproutSeo_GlobalMetadataService
 	 */
-	public $metadata;
+	public $globalMetadata;
 
 	/**
-	 * @var SproutSeo_GlobalsService
+	 * @var SproutSeo_SectionsMetadataService
 	 */
-	public $globals;
+	public $sectionMetadata;
+
+	/**
+	 * @var SproutSeo_ElementMetadataService
+	 */
+	public $elementMetadata;
 
 	/**
 	 * @var SproutSeo_SchemaService
@@ -34,25 +39,26 @@ class SproutSeoService extends BaseApplicationComponent
 	public $sitemap;
 
 	/**
-	 * @var SproutSeo_SettingsService
-	 */
-	public $settings;
-
-	/**
 	 * @var SproutSeo_RedirectsService
 	 */
 	public $redirects;
+
+	/**
+	 * @var SproutSeo_SettingsService
+	 */
+	public $settings;
 
 	public function init()
 	{
 		parent::init();
 
-		$this->optimize  = Craft::app()->getComponent('sproutSeo_optimize');
-		$this->metadata  = Craft::app()->getComponent('sproutSeo_metadata');
-		$this->globals   = Craft::app()->getComponent('sproutSeo_globals');
-		$this->schema    = Craft::app()->getComponent('sproutSeo_schema');
-		$this->sitemap   = Craft::app()->getComponent('sproutSeo_sitemap');
-		$this->settings  = Craft::app()->getComponent('sproutSeo_settings');
-		$this->redirects = Craft::app()->getComponent('sproutSeo_redirects');
+		$this->optimize        = Craft::app()->getComponent('sproutSeo_optimize');
+		$this->globalMetadata  = Craft::app()->getComponent('sproutSeo_globalMetadata');
+		$this->sectionMetadata = Craft::app()->getComponent('sproutSeo_sectionMetadata');
+		$this->elementMetadata = Craft::app()->getComponent('sproutSeo_elementMetadata');
+		$this->schema          = Craft::app()->getComponent('sproutSeo_schema');
+		$this->sitemap         = Craft::app()->getComponent('sproutSeo_sitemap');
+		$this->redirects       = Craft::app()->getComponent('sproutSeo_redirects');
+		$this->settings        = Craft::app()->getComponent('sproutSeo_settings');
 	}
 }

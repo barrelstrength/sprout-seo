@@ -3,11 +3,17 @@ namespace Craft;
 
 class SproutSeo_GlobalMetadataRecord extends BaseRecord
 {
+	/**
+	 * @return string
+	 */
 	public function getTableName()
 	{
 		return 'sproutseo_metadata_globals';
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function defineAttributes()
 	{
 		return array(
@@ -22,6 +28,9 @@ class SproutSeo_GlobalMetadataRecord extends BaseRecord
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function defineIndexes()
 	{
 		return array(

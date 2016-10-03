@@ -4,7 +4,7 @@
     <url>
         <loc>{{ element.url }}</loc>
         <lastmod>{{ element.modified }}</lastmod>
-        <changefreq>{{ element.frequency }}</changefreq>
+        <changefreq>{{ element.changeFrequency }}</changefreq>
         <priority>{{ element.priority }}</priority>
         {% if element.alternates is defined and element.alternates|length %}
         {%- for alternate in element.alternates %}

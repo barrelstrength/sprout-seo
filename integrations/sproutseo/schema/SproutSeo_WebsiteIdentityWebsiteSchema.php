@@ -48,15 +48,18 @@ class SproutSeo_WebsiteIdentityWebsiteSchema extends SproutSeoBaseSchema
 			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
 
 			$identitySchema = new $schemaModel();
-			$identitySchema->isContext = false;
-			$identitySchema->globals = $this->globals;
-			$identitySchema->element = $this->element;
+
+			$identitySchema->globals                  = $this->globals;
+			$identitySchema->element                  = $this->element;
 			$identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$this->addProperty('author', $identitySchema->getSchema());
 		}
 
-		$urls = array_column($socialProfiles, 'url');
-		$this->addSameAs($urls);
+		if (count($socialProfiles))
+		{
+			$urls = array_column($socialProfiles, 'url');
+			$this->addSameAs($urls);
+		}
 	}
 }

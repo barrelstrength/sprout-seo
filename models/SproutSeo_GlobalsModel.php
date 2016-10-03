@@ -19,9 +19,8 @@ class SproutSeo_GlobalsModel extends BaseModel
 	protected function defineAttributes()
 	{
 		return array(
-			//'id'        => array(AttributeType::Number),
-			//'locale'    => array(AttributeType::Locale),
-
+			'id'        => AttributeType::Number,
+			'locale'    => AttributeType::Locale,
 			'meta'      => AttributeType::Mixed,
 			'identity'  => AttributeType::Mixed,
 			'ownership' => AttributeType::Mixed,
@@ -59,6 +58,9 @@ class SproutSeo_GlobalsModel extends BaseModel
 		return $schema;
 	}
 
+	/**
+	 * @return null|string
+	 */
 	public function getWebsiteIdentityType()
 	{
 		$this->getGlobalByKey('identity');
@@ -66,71 +68,25 @@ class SproutSeo_GlobalsModel extends BaseModel
 		return $this->type != '' ? $this->type : 'Organization';
 	}
 
-	protected function getIdentity()
-	{
-		$structuredData = $this->prepareSchemaObject();
-
-		$schema = $this->{$this->globalKey};
-
-		$structuredData['name']          = isset($schema['name']) ? $schema['name'] : null;
-		$structuredData['description']   = isset($schema['description']) ? $schema['description'] : null;
-		$structuredData['url']           = isset($schema['url']) ? $schema['url'] : null;
-		$structuredData['logo']          = isset($schema['logo']) ? $schema['logo'] : null;
-		$structuredData['keywords']      = isset($schema['keywords']) ? $schema['keywords'] : null;
-		$structuredData['alternateName'] = isset($schema['alternateName']) ? $schema['alternateName'] : null;
-
-		$structuredData['telephone'] = isset($schema['telephone']) ? $schema['telephone'] : null;
-		$structuredData['email']     = isset($schema['email']) ? $schema['email'] : null;
-
-		$structuredData['organizationSubTypes']    = array();
-		$structuredData['organizationSubTypes'][0] = isset($schema['organizationSubTypes'][0]) ? $schema['organizationSubTypes'][0] : null;
-		$structuredData['organizationSubTypes'][1] = isset($schema['organizationSubTypes'][1]) ? $schema['organizationSubTypes'][1] : null;
-		$structuredData['organizationSubTypes'][2] = isset($schema['organizationSubTypes'][2]) ? $schema['organizationSubTypes'][2] : null;
-
-		$structuredData['organizationFounder'] = isset($schema['organizationFounder']) ? $schema['organizationFounder'] : null;
-		$structuredData['foundingDate']        = isset($schema['foundingDate']) ? $schema['foundingDate'] : null;
-		$structuredData['foundingLocation']    = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
-
-		$structuredData['openingHours'] = isset($schema['openingHours']) ? $schema['openingHours'] : null;
-
-		//Person
-		$structuredData['gender']     = isset($schema['gender']) ? $schema['gender'] : null;
-		$structuredData['birthplace'] = isset($schema['birthplace']) ? $schema['birthplace'] : null;
-
-		return $structuredData;
-	}
-
-	protected function prepareSchemaObject()
-	{
-		$this->type = $this->{$this->globalKey}['@type'];
-
-		return array(
-			"@context" => "http://schema.org",
-			"@type"    => $this->type
-		);
-	}
-
+	/**
+	 * @return mixed
+	 */
 	protected function getMeta()
 	{
 		return $this->meta;
 	}
 
-	protected function getOrganization()
+	/**
+	 * @return array
+	 */
+	protected function getIdentity()
 	{
+		return $this->{$this->globalKey};
 	}
 
-	protected function getPerson()
-	{
-	}
-
-	protected function getWebsite()
-	{
-	}
-
-	protected function getPlace()
-	{
-	}
-
+	/**
+	 * @return array
+	 */
 	protected function getContacts()
 	{
 		$contacts = $this->{$this->globalKey};
@@ -152,6 +108,9 @@ class SproutSeo_GlobalsModel extends BaseModel
 		return $contactPoints;
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function getSocial()
 	{
 		$profiles = $this->{$this->globalKey};
@@ -172,6 +131,9 @@ class SproutSeo_GlobalsModel extends BaseModel
 		return $profileLinks;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	protected function getOwnership()
 	{
 		$ownership = $this->{$this->globalKey};
@@ -179,6 +141,9 @@ class SproutSeo_GlobalsModel extends BaseModel
 		return $ownership;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	protected function getRobots()
 	{
 		$robots = $this->{$this->globalKey};
@@ -186,6 +151,9 @@ class SproutSeo_GlobalsModel extends BaseModel
 		return $robots;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	protected function getSettings()
 	{
 		$settings = $this->{$this->globalKey};

@@ -24,7 +24,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			foreach ($rows as $row)
 			{
 				craft()->db->createCommand()->update($tableName,
-					array('isSitemapCustomPage' => 1),
+					array('isCustom' => 1),
 					'id = :id',
 					array(':id' => $row['id'])
 				);

@@ -2,11 +2,11 @@
 namespace Craft;
 
 /**
- * Class SproutSeo_GlobalsService
+ * Class SproutSeo_GlobalMetadataService
  *
  * @package Craft
  */
-class SproutSeo_GlobalsService extends BaseApplicationComponent
+class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 {
 	/**
 	 * Get Global Metadata values
@@ -82,7 +82,9 @@ class SproutSeo_GlobalsService extends BaseApplicationComponent
 			'identity'  => null,
 			'ownership' => null,
 			'contacts'  => null,
-			'social'    => null
+			'social'    => null,
+			'robots'    => null,
+			'settings'  => null
 		));
 
 		return $result;

@@ -7,19 +7,9 @@ namespace Craft;
 abstract class SproutSeoBaseSchema
 {
 	/**
-	 * @var array
-	 */
-	public $attributes;
-
-	/**
-	 * @var null
-	 */
-	public $sitemapInfo;
-
-	/**
 	 * @var bool
 	 */
-	public $isContext;
+	public $addContext = false;
 
 	/**
 	 * We build our Structured Data object here using the addProperty methods
@@ -41,33 +31,14 @@ abstract class SproutSeoBaseSchema
 	 */
 	public $element;
 
+	/**
+	 * @var
+	 */
 	public $prioritizedMetadataModel;
 
 	/**
-	 * SproutSeoBaseSchema constructor.
 	 *
-	 * @param array|null $attributes
-	 * @param bool       $isContext
-	 * @param null       $sitemapInfo
 	 */
-	public function __construct(array $attributes = null, $isContext = true, $sitemapInfo = null)
-	{
-		if (!empty($attributes))
-		{
-			$this->attributes = $attributes;
-		}
-
-		if (isset($sitemapInfo))
-		{
-			$this->sitemapInfo = $sitemapInfo;
-		}
-
-		if (isset($isContext))
-		{
-			$this->isContext = $isContext;
-		}
-	}
-
 	public function setElement()
 	{
 		$this->element = sproutSeo()->optimize->matchedElementModel;
@@ -136,7 +107,7 @@ abstract class SproutSeoBaseSchema
 			return null;
 		}
 
-		if ($this->isContext)
+		if ($this->addContext)
 		{
 			// Add the @context tag for the full context
 			$schema['@context'] = $this->getContext();
@@ -153,7 +124,7 @@ abstract class SproutSeoBaseSchema
 			$schema[$key] = $value;
 		}
 
-		if ($this->isContext)
+		if ($this->addContext)
 		{
 			// Return the JSON-LD script tag and full context
 			// @todo Craft 3.0 - clean up logic once we can ditch PHP 5.3
@@ -205,11 +176,19 @@ abstract class SproutSeoBaseSchema
 		return $date;
 	}
 
+	/**
+	 * @param $propertyName
+	 * @param $attributes
+	 */
 	public function addProperty($propertyName, $attributes)
 	{
 		$this->structuredData[$propertyName] = $attributes;
 	}
 
+	/**
+	 * @param $propertyName
+	 * @param $string
+	 */
 	public function addText($propertyName, $string)
 	{
 		if (is_string($string))
@@ -218,6 +197,10 @@ abstract class SproutSeoBaseSchema
 		}
 	}
 
+	/**
+	 * @param $propertyName
+	 * @param $bool
+	 */
 	public function addBoolean($propertyName, $bool)
 	{
 		if (is_bool($bool))
@@ -226,6 +209,10 @@ abstract class SproutSeoBaseSchema
 		}
 	}
 
+	/**
+	 * @param $propertyName
+	 * @param $number
+	 */
 	public function addNumber($propertyName, $number)
 	{
 		if (is_int($number) OR is_float($number))
@@ -249,6 +236,10 @@ abstract class SproutSeoBaseSchema
 		$this->structuredData[$propertyName] = $dateTime->format('c');
 	}
 
+	/**
+	 * @param $propertyName
+	 * @param $url
+	 */
 	public function addUrl($propertyName, $url)
 	{
 		if (!filter_var($url, FILTER_VALIDATE_URL) === false)
@@ -262,6 +253,10 @@ abstract class SproutSeoBaseSchema
 		}
 	}
 
+	/**
+	 * @param $propertyName
+	 * @param $phone
+	 */
 	public function addTelephone($propertyName, $phone)
 	{
 		if (is_string($phone))
@@ -274,6 +269,10 @@ abstract class SproutSeoBaseSchema
 		}
 	}
 
+	/**
+	 * @param $propertyName
+	 * @param $email
+	 */
 	public function addEmail($propertyName, $email)
 	{
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false)
@@ -327,14 +326,16 @@ abstract class SproutSeoBaseSchema
 
 		if (count($image))
 		{
-			$imageObjectSchema = new SproutSeo_ImageObjectSchema();
-			$imageObjectSchema->isContext = false;
+			$imageObjectSchema          = new SproutSeo_ImageObjectSchema();
 			$imageObjectSchema->element = $image;
 
 			$this->structuredData[$propertyName] = $imageObjectSchema->getSchema();
 		}
 	}
 
+	/**
+	 * @param $urls
+	 */
 	public function addSameAs($urls)
 	{
 		if (count($urls))
@@ -350,6 +351,9 @@ abstract class SproutSeoBaseSchema
 		}
 	}
 
+	/**
+	 * @param array $contacts
+	 */
 	public function addContactPoints($contacts = array())
 	{
 		if (count($contacts))
@@ -358,21 +362,23 @@ abstract class SproutSeoBaseSchema
 
 			foreach ($contacts as $contact)
 			{
-				$contactPointSchemaMap = new SproutSeo_ContactPointSchema();
-				$contactPointSchemaMap->isContext = false;
-				$contactPointSchemaMap->contact = $contact;
+				$schema          = new SproutSeo_ContactPointSchema();
+				$schema->contact = $contact;
 
-				$contactPoints[] = $contactPointSchemaMap->getSchema();
+				$contactPoints[] = $schema->getSchema();
 			}
 
 			$this->structuredData['contactPoint'] = $contactPoints;
 		}
 	}
 
+	/**
+	 * @param array $openingHours
+	 */
 	public function addOpeningHours($openingHours = array())
 	{
-		$days         = array(0 => "Su", 1 => "Mo", 2 => "Tu", 3 => "We", 4 => "Th", 5 => "Fr", 6 => "Sa");
-		$index        = 0;
+		$days  = array(0 => "Su", 1 => "Mo", 2 => "Tu", 3 => "We", 4 => "Th", 5 => "Fr", 6 => "Sa");
+		$index = 0;
 
 		foreach ($openingHours as $key => $value)
 		{
@@ -406,14 +412,16 @@ abstract class SproutSeoBaseSchema
 		}
 	}
 
+	/**
+	 * @param string $type
+	 */
 	public function addMainEntityOfPage($type = 'Thing')
 	{
 		$meta = $this->prioritizedMetadataModel;
 
-		$mainEntity = new SproutSeo_MainEntityOfPageSchema();
-		$mainEntity->isContext = false;
+		$mainEntity       = new SproutSeo_MainEntityOfPageSchema();
 		$mainEntity->type = $type;
-		$mainEntity->id = $meta->canonical;
+		$mainEntity->id   = $meta->canonical;
 
 		$this->structuredData['mainEntityOfPage'] = $mainEntity->getSchema();
 	}
