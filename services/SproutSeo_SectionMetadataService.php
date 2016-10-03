@@ -25,7 +25,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function __construct($sectionMetadataRecord = null)
 	{
-		$this->prepareUrlEnabledSections();
+		$this->prepareUrlEnabledSectionTypes();
 
 		$this->sectionMetadataRecord = $sectionMetadataRecord;
 		if (is_null($this->sectionMetadataRecord))
@@ -37,7 +37,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	/**
 	 * Prepare the $this->urlEnabledSectionTypes variable for use in Sections and Sitemap pages
 	 */
-	public function prepareUrlEnabledSections()
+	public function prepareUrlEnabledSectionTypes()
 	{
 		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
 
@@ -54,6 +54,10 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 				// Prepare a list of all URL-Enabled Sections for this URL-Enabled Section Type
 				// if we have an existing Section Metadata, use it, otherwise fallback to a new model
 				$urlEnabledSections = array();
+
+				/**
+				 * @var SproutSeo_UrlEnabledSectionModel $urlEnabledSection
+				 */
 				foreach ($allUrlEnabledSections as $urlEnabledSection)
 				{
 					$uniqueKey = $urlEnabledSectionType->getId() . '-' . $urlEnabledSection->id;
@@ -105,6 +109,55 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	}
 
 	/**
+	 * @param $context
+	 *
+	 * @return mixed
+	 */
+	public function getUrlEnabledSectionsViaContext($context)
+	{
+		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
+		{
+			$matchedElementVariable = $urlEnabledSectionType->getMatchedElementVariable();
+
+			if (isset($context[$matchedElementVariable]))
+			{
+				// Add the current page load matchedElementVariable to our Element Group
+				$element = $context[$matchedElementVariable];
+
+				$type = $urlEnabledSectionType->getId();
+
+				$urlEnabledSectionIdColumn = $urlEnabledSectionType->getUrlEnabledSectionIdColumnName();
+				$urlEnabledSectionId       = $element->{$urlEnabledSectionIdColumn};
+
+				$uniqueKey = $type . '-' . $urlEnabledSectionId;
+
+				$urlEnabledSection          = $urlEnabledSectionType->urlEnabledSections[$uniqueKey];
+				$urlEnabledSection->element = $element;
+
+				return $urlEnabledSection;
+			}
+		}
+	}
+
+	/**
+	 * @param $urlEnabledSectionType
+	 *
+	 * @return array
+	 */
+	public function getUrlEnabledSectionByType($type)
+	{
+		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
+		{
+			if ($urlEnabledSectionType->getId() == $type)
+			{
+				return $urlEnabledSectionType;
+			}
+		}
+
+		return array();
+	}
+
+	/**
 	 * @return array|\CDbDataReader
 	 */
 	public function getCustomSections()
@@ -119,66 +172,11 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param $context
-	 *
-	 * @return mixed
-	 */
-	public function getUrlEnabledSectionsViaContext($context)
-	{
-		$registeredUrlEnabledSectionTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
-
-		foreach ($registeredUrlEnabledSectionTypes as $plugin)
-		{
-			foreach ($plugin as $urlEnabledSectionType)
-			{
-				$matchedElementVariable = $urlEnabledSectionType->getMatchedElementVariable();
-
-				if (isset($context[$matchedElementVariable]))
-				{
-					// Add the current page load matchedElementVariable to our Element Group
-					$element = $context[$matchedElementVariable];
-
-					$urlEnabledSectionIdColumn = $urlEnabledSectionType->getUrlEnabledSectionIdColumnName();
-					$urlEnabledSectionId       = $element->{$urlEnabledSectionIdColumn};
-					$urlEnabledSection         = $urlEnabledSectionType->getUrlEnabledSectionById($urlEnabledSectionId);
-
-					$urlEnabledSectionType->element = $element;
-
-					return $urlEnabledSectionType;
-				}
-			}
-		}
-	}
-
-	/**
-	 * @param $urlEnabledSectionType
-	 *
-	 * @return array
-	 */
-	public function getUrlEnabledSectionByType($type)
-	{
-		$registeredUrlEnabledSectionTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
-
-		foreach ($registeredUrlEnabledSectionTypes as $plugin)
-		{
-			foreach ($plugin as $urlEnabledSectionType)
-			{
-				if ($urlEnabledSectionType->getId() == $type)
-				{
-					return $urlEnabledSectionType;
-				}
-			}
-		}
-
-		return array();
-	}
-
-	/**
 	 * Get all Section Metadata from the database.
 	 *
 	 * @return array
 	 */
-	public function getSectionMetadata()
+	public function getAllSectionMetadata()
 	{
 		$results = craft()->db->createCommand()
 			->select('*')
@@ -241,8 +239,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getSectionMetadataByInfo($urlEnabledSection)
 	{
-		$type                          = $urlEnabledSection->getElementTableName();
-		$urlEnabledSectionIdColumnName = $urlEnabledSection->getUrlEnabledSectionIdColumnName();
+		$type                          = $urlEnabledSection->type->getElementTableName();
+		$urlEnabledSectionIdColumnName = $urlEnabledSection->type->getUrlEnabledSectionIdColumnName();
 		$urlEnabledSectionId           = $urlEnabledSection->element->{$urlEnabledSectionIdColumnName};
 
 		$sectionMetadata = craft()->db->createCommand()

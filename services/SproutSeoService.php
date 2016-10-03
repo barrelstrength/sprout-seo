@@ -19,7 +19,7 @@ class SproutSeoService extends BaseApplicationComponent
 	public $globalMetadata;
 
 	/**
-	 * @var SproutSeo_SectionsMetadataService
+	 * @var SproutSeo_SectionMetadataService
 	 */
 	public $sectionMetadata;
 

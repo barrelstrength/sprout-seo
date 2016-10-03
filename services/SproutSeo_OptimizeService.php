@@ -9,19 +9,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	protected $schemas;
 
 	/**
-	 * @var mixed
-	 */
-	public $context;
-
-	/**
-	 * @var string
-	 */
-	public $divider;
-
-	/**
 	 * Sprout SEO Globals data
 	 *
-	 * @var
+	 * @var SproutSeo_GlobalsModel $globals
 	 */
 	public $globals;
 
@@ -31,14 +21,17 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 * $urlEnabledSection->element will have the element that matches
 	 * the matchedElementVariable from the $context
 	 *
-	 * @var SproutSeoBaseSection
+	 * @var SproutSeo_UrlEnabledSectionModel $urlEnabledSection
 	 */
 	public $urlEnabledSection;
 
+	/**
+	 * @var SproutSeo_MetadataModel $prioritizedMetadataModel
+	 */
 	public $prioritizedMetadataModel;
 
 	/**
-	 * @var array
+	 * @var SproutSeo_MetadataModel $codeMetadata
 	 */
 	public $codeMetadata = array();
 
@@ -124,15 +117,13 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getMetadata(&$context)
 	{
-		$optimizedMetadata = null;
-
-		$this->context           = $context;
 		$this->globals           = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$this->urlEnabledSection = sproutSeo()->sectionMetadata->getUrlEnabledSectionsViaContext($context);
 
 		$this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel();
 
 		// Prepare our html for the template
+		$optimizedMetadata = null;
 		$optimizedMetadata .= $this->getMetaTagHtml();
 		$optimizedMetadata .= $this->getWebsiteIdentityStructuredDataHtml();
 		$optimizedMetadata .= $this->getMainEntityStructuredDataHtml();
@@ -166,8 +157,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		}
 
 		$prioritizedMetadataModel = new SproutSeo_MetadataModel();
-
-		sproutSeo()->optimize->divider = craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
 
 		// Default to the Current URL
 		$prioritizedMetadataModel->canonical  = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
@@ -308,7 +297,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		//{
 		//	$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchemaMap();
 		//  $placeSchema->addContext = true;
-
 
 		//  $placeSchema->globals = $this->globals;
 		//  $placeSchema->element = $this->elementModel;
