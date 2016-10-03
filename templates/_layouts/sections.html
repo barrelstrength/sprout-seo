@@ -39,7 +39,7 @@
 				{% if sectionMetadata.name is defined %}
 					{% if sectionMetadata.hasUrls %}
 
-						<tr class="{{ sectionMetadata.isNew ? 'sectionmetadata-isnew' : null }}" data-rowid="{{ urlEnabledSectionKey }}" data-id="{{ sectionMetadata.isNew ? null : sectionMetadata.id }}" data-name="{{ sectionMetadata.name }}" data-handle="{{ sectionMetadata.handle }}" data-type="{{ urlEnabledSection.type }}" data-url-enabled-section-id="{{ sectionMetadata.urlEnabledSectionId }}" data-url="{{ sectionMetadata.url }}" data-is-new="{{ sectionMetadata.isNew  }}">
+						<tr class="{{ sectionMetadata.isNew ? 'sectionmetadata-isnew' : null }}" data-rowid="{{ urlEnabledSectionKey }}" data-id="{{ sectionMetadata.isNew ? null : sectionMetadata.id }}" data-name="{{ sectionMetadata.name }}" data-handle="{{ sectionMetadata.handle }}" data-type="{{ urlEnabledSection.type.getId() }}" data-url-enabled-section-id="{{ sectionMetadata.urlEnabledSectionId }}" data-url="{{ sectionMetadata.url }}" data-is-new="{{ sectionMetadata.isNew  }}">
 
 							{% block sectionMetadataTableRow %}{% endblock %}
 

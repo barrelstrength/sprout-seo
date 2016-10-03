@@ -7,19 +7,11 @@ namespace Craft;
 abstract class SproutSeoBaseUrlEnabledSectionType
 {
 	/**
-	 * @var
+	 * An array of URL-Enabled Sections for this URL-Enabled Section Type
+	 *
+	 * @var array SproutSeo_UrlEnabledSectionModel $urlEnabledSections
 	 */
 	public $urlEnabledSections;
-
-	///**
-	// * @var
-	// */
-	//public $element;
-
-	///**
-	// * @var
-	// */
-	//public $sectionModel;
 
 	/**
 	 * @return mixed
@@ -117,9 +109,9 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	}
 
 	/**
-	 * @param $handle
+	 * @param $type
 	 *
-	 * @return BaseModel|SproutSeo_MetadataModel
+	 * @return array|\CDbDataReader
 	 */
 	public function getSectionMetadataByType($type)
 	{

@@ -74,17 +74,14 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 						$sectionMetadata->urlEnabledSectionId = $urlEnabledSection->id;
 					}
 
-					$urlFormat                = $this->getUrlFormat($urlEnabledSectionType, $urlEnabledSection->id);
+					$model->type = $urlEnabledSectionType;
+					$model->id   = $urlEnabledSection->id;
+
 					$sectionMetadata->name    = $urlEnabledSection->name;
 					$sectionMetadata->handle  = $urlEnabledSection->handle;
-					$sectionMetadata->url     = $urlFormat;
+					$sectionMetadata->url     = $model->getUrlFormat();
 					$sectionMetadata->hasUrls = $urlEnabledSection->hasUrls;
 
-					//$urlEnabledSectionTypes[$uniqueKey] = $model;
-
-					$model->urlFormat       = $urlFormat; // Can grab from the sectionMetadata model too
-					$model->id              = $urlEnabledSection->id; // Can grab from the sectionMetadata model too
-					$model->type            = $urlEnabledSectionType->getId();
 					$model->sectionMetadata = $sectionMetadata;
 
 					$urlEnabledSections[$uniqueKey] = $model;
@@ -121,45 +118,54 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		return $customSections;
 	}
 
+	/**
+	 * @param $context
+	 *
+	 * @return mixed
+	 */
 	public function getUrlEnabledSectionsViaContext($context)
 	{
-		$registeredUrlEnabledSections = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
+		$registeredUrlEnabledSectionTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
 
-		foreach ($registeredUrlEnabledSections as $plugin)
+		foreach ($registeredUrlEnabledSectionTypes as $plugin)
 		{
-			foreach ($plugin as $urlEnabledSectionIntegration)
+			foreach ($plugin as $urlEnabledSectionType)
 			{
-				$matchedElementVariable = $urlEnabledSectionIntegration->getMatchedElementVariable();
+				$matchedElementVariable = $urlEnabledSectionType->getMatchedElementVariable();
 
 				if (isset($context[$matchedElementVariable]))
 				{
 					// Add the current page load matchedElementVariable to our Element Group
 					$element = $context[$matchedElementVariable];
 
-					$urlEnabledSectionIdColumn = $urlEnabledSectionIntegration->getUrlEnabledSectionIdColumnName();
+					$urlEnabledSectionIdColumn = $urlEnabledSectionType->getUrlEnabledSectionIdColumnName();
 					$urlEnabledSectionId       = $element->{$urlEnabledSectionIdColumn};
-					$urlEnabledSection         = $urlEnabledSectionIntegration->getUrlEnabledSectionById($urlEnabledSectionId);
+					$urlEnabledSection         = $urlEnabledSectionType->getUrlEnabledSectionById($urlEnabledSectionId);
 
-					$urlEnabledSectionIntegration->element   = $element;
-					$urlEnabledSectionIntegration->urlFormat = $urlEnabledSection->getUrlFormat();
+					$urlEnabledSectionType->element = $element;
 
-					return $urlEnabledSectionIntegration;
+					return $urlEnabledSectionType;
 				}
 			}
 		}
 	}
 
-	public function getUrlEnabledSectionByType($urlEnabledSectionType)
+	/**
+	 * @param $urlEnabledSectionType
+	 *
+	 * @return array
+	 */
+	public function getUrlEnabledSectionByType($type)
 	{
-		$registeredUrlEnabledSections = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
+		$registeredUrlEnabledSectionTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
 
-		foreach ($registeredUrlEnabledSections as $plugin)
+		foreach ($registeredUrlEnabledSectionTypes as $plugin)
 		{
-			foreach ($plugin as $urlEnabledSection)
+			foreach ($plugin as $urlEnabledSectionType)
 			{
-				if ($urlEnabledSection->getId() == $urlEnabledSectionType)
+				if ($urlEnabledSectionType->getId() == $type)
 				{
-					return $urlEnabledSection;
+					return $urlEnabledSectionType;
 				}
 			}
 		}
@@ -324,6 +330,12 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		}
 	}
 
+	/**
+	 * @param SproutSeo_MetadataSitemapModel $model
+	 *
+	 * @return bool
+	 * @throws Exception
+	 */
 	public function saveSectionMetadataViaSitemapSection(SproutSeo_MetadataSitemapModel &$model)
 	{
 		if ($model->id)
@@ -388,34 +400,5 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		$record = new SproutSeo_SectionMetadataRecord();
 
 		return $record->deleteByPk($id);
-	}
-
-	/**
-	 * Get the URL format from the element via the Element Group integration
-	 *
-	 * @param $urlEnabledSection
-	 * @param $urlEnabledSectionId
-	 *
-	 * @return \CDbDataReader|mixed|string
-	 */
-	public function getUrlFormat($urlEnabledSection, $urlEnabledSectionId)
-	{
-		$locale = craft()->i18n->getLocaleById(craft()->language);
-
-		$urlEnabledSectionUrlFormatTableName  = $urlEnabledSection->getUrlEnabledSectionTableName();
-		$urlEnabledSectionUrlFormatColumnName = $urlEnabledSection->getUrlEnabledSectionUrlFormatColumnName();
-		$urlEnabledSectionIdColumnName        = $urlEnabledSection->getUrlEnabledSectionIdColumnName();
-
-		$query = craft()->db->createCommand()
-			->select($urlEnabledSectionUrlFormatColumnName)
-			->from($urlEnabledSectionUrlFormatTableName)
-			->where($urlEnabledSectionIdColumnName . '=:id', array(':id' => $urlEnabledSectionId));
-
-		if ($urlEnabledSection->isLocalized())
-		{
-			$query->andWhere('locale=:locale', array(':locale' => $locale));
-		}
-
-		return $query->queryScalar();
 	}
 }
