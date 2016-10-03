@@ -291,7 +291,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function onAfterInstall()
 	{
 		craft()->sproutSeo_redirects->installDefaultSettings();
-		craft()->sproutSeo_globals->installDefaultGlobals();
+		craft()->sproutSeo_globals->installDefaultGlobalMetadata();
 	}
 
 	/**

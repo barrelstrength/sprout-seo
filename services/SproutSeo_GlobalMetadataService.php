@@ -42,7 +42,7 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 	 * @return bool
 	 * @internal param $schemaType
 	 */
-	public function saveGlobals($globalKeys, $globals)
+	public function saveGlobalMetadata($globalKeys, $globals)
 	{
 		// @todo - what do we do if $schemaType doesn't have a value?
 
@@ -71,7 +71,7 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 	/**
 	 * @return int
 	 */
-	public function installDefaultGlobals()
+	public function installDefaultGlobalMetadata()
 	{
 		$tableName = "sproutseo_metadata_globals";
 

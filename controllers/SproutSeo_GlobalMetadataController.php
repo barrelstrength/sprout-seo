@@ -23,7 +23,7 @@ class SproutSeo_GlobalMetadataController extends BaseController
 
 		$globals->meta = JsonHelper::encode($globalMetadata);
 
-		if (sproutSeo()->globalMetadata->saveGlobals($globalKeys, $globals))
+		if (sproutSeo()->globalMetadata->saveGlobalMetadata($globalKeys, $globals))
 		{
 			craft()->userSession->setNotice(Craft::t('Globals saved.'));
 
@@ -71,7 +71,7 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$globalKeys => $ownershipMetaWithKeys
 		));
 
-		if (sproutSeo()->globalMetadata->saveGlobals(array($globalKeys), $globals))
+		if (sproutSeo()->globalMetadata->saveGlobalMetadata(array($globalKeys), $globals))
 		{
 			craft()->userSession->setNotice(Craft::t('Globals saved.'));
 
