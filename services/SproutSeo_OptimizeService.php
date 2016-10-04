@@ -261,10 +261,10 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 	public function getKnowledgeGraphLinkedData()
 	{
-		$output = null;
-
+		$output       = null;
+		$identityType = $this->globals->identity['@type'];
 		// Website Identity Schema
-		if ($identityType = $this->globals->identity['@type'])
+		if ($identityType && isset($this->urlEnabledSection->element))
 		{
 			// Determine if we have an Organization or Person Schema Type
 			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
@@ -280,7 +280,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		}
 
 		// Website Identity Website
-		if ($this->globals->identity['name'])
+		if ($this->globals->identity['name'] && isset($this->urlEnabledSection->element))
 		{
 			$websiteSchema             = new SproutSeo_WebsiteIdentityWebsiteSchema();
 			$websiteSchema->addContext = true;
