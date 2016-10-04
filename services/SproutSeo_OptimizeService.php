@@ -328,11 +328,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 				break;
 
 			case SproutSeo_MetadataLevels::ElementMetadata:
-				if (isset($elementModel))
+				if (isset($this->urlEnabledSection->element))
 				{
-					if (isset($elementModel->id))
+					if (isset($this->urlEnabledSection->element->id))
 					{
-						$response = array('elementId' => $elementModel->id);
+						$response = array('elementId' => $this->urlEnabledSection->element->id);
 					}
 				}
 				break;
