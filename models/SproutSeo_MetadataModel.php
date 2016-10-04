@@ -45,12 +45,13 @@ class SproutSeo_MetadataModel extends BaseModel
 			'priority'        => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
 			'changeFrequency' => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
 
-			'urlEnabledSectionId' => array(AttributeType::Number),
-			'isCustom'            => array(AttributeType::Bool, 'default' => false, 'required' => true), // @todo - can we just test for urlEnabledSectionId?
-			'type'                => array(AttributeType::String), // @todo - clarify what type is
-			'enabled'             => array(AttributeType::Bool, 'default' => false, 'required' => true),
-			'locale'              => array(AttributeType::String),
-			'schemaMap'           => array(AttributeType::String),
+			'urlEnabledSectionId'  => array(AttributeType::Number),
+			'isCustom'             => array(AttributeType::Bool, 'default' => false, 'required' => true), // @todo - can we just test for urlEnabledSectionId?
+			'type'                 => array(AttributeType::String), // @todo - clarify what type is
+			'enabled'              => array(AttributeType::Bool, 'default' => false, 'required' => true),
+			'locale'               => array(AttributeType::String),
+			'schemaTypeId'         => array(AttributeType::String),
+			'schemaOverrideTypeId' => array(AttributeType::String),
 
 			'dateUpdated' => array(AttributeType::DateTime),
 			'dateCreated' => array(AttributeType::DateTime),

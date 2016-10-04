@@ -21,7 +21,7 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 
 		$columns = array(
 			'customizationSettings' => $varchar,
-			'schemaMap'             => $varchar,
+			'schemaTypeId'          => $varchar,
 			'optimizedKeywords'     => $varchar,
 			'optimizedDescription'  => $varchar,
 			'optimizedImage'        => $varchar,

@@ -28,7 +28,8 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 				'required' => false,
 				'default'  => 0
 			),
-			'schemaMap' => $varchar,
+			'schemaTypeId'         => $varchar,
+			'schemaOverrideTypeId' => $varchar,
 			'enabled' => array(
 				'column'   => ColumnType::TinyInt,
 				'required' => false,

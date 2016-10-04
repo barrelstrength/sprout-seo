@@ -242,7 +242,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	{
 		if ($this->prioritizedMetadataModel)
 		{
-			$schemaUniqueKey = $this->prioritizedMetadataModel->schemaMap;
+			$schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
 
 			if ($schemaUniqueKey)
 			{

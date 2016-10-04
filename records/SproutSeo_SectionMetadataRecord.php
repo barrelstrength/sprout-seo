@@ -80,7 +80,8 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 			'twitterPlayerHeight'            => array(AttributeType::String),
 
 			// Structured Data
-			'schemaMap'                      => array(AttributeType::String),
+			'schemaTypeId'                   => array(AttributeType::String),
+			'schemaOverrideTypeId'           => array(AttributeType::String),
 		);
 	}
 
