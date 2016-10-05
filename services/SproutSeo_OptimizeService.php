@@ -272,6 +272,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getMainEntityStructuredData()
 	{
+		$schema = null;
+
 		if ($this->prioritizedMetadataModel)
 		{
 			$schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
@@ -285,10 +287,10 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 				$schema->globals                  = $this->globals;
 				$schema->element                  = $this->urlEnabledSection->element;
 				$schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
-
-				return $schema;
 			}
 		}
+
+		return $schema;
 	}
 
 	/**

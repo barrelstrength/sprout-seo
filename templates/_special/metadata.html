@@ -40,5 +40,7 @@
 {% endfor %}
 
 {%- for item in schema -%}
-	{{ item.getSchema() }}
+	{% if item %}
+		{{ item.getSchema() }}
+	{% endif %}
 {%- endfor %}
