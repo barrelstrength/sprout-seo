@@ -66,6 +66,10 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 			'twitterPlayerStreamContentType' => array(AttributeType::String),
 			'twitterPlayerWidth'             => array(AttributeType::String),
 			'twitterPlayerHeight'            => array(AttributeType::String),
+
+			// Structured Data
+			'schemaTypeId'                   => array(AttributeType::String),
+			'schemaOverrideTypeId'           => array(AttributeType::String),
 		);
 	}
 
