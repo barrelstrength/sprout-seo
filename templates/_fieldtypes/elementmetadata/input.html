@@ -158,7 +158,7 @@
 		}) }}
 	{% endif %}
 
-	{% if fieldContext == 'sectionMetadata' or (fieldContext == 'field' and pluginSettings.advancedCustomization and settings.showMainEntity) %}
+	{% if fieldContext == 'sectionMetadata' or (fieldContext == 'field' and pluginSettings.enableMetaDetailsFields and settings.showMainEntity) %}
 		{% set schemas = craft.sproutSeo.getSchemaOptions() %}
 
 		{{ forms.selectField({
@@ -168,7 +168,7 @@
 				structured: true,
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
 			}),
-			instructions: 'Map the primary element that displays on this page to a Structured Data schema. Select a basic or custom mapping.'|t,
+			instructions: 'Select the Structured Data schema type that best represents your content.'|t,
 			id: 'sproutseo-mainentity',
 			name: 'sproutseo[metadata][schemaTypeId]',
 			options: schemas,
@@ -197,7 +197,7 @@
 	{% endif %}
 {% endif %}
 
-{% if pluginSettings.advancedCustomization %}
+{% if pluginSettings.enableMetaDetailsFields %}
 
 	{% if settings.showSearchMeta or settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
 		{% set advancedSeoButtons %}
@@ -230,8 +230,8 @@
 		{% endset %}
 
 		{{ forms.field({
-			label: 'SEO Optimization'|t,
-			instructions: 'If you have more specific SEO needs, you can further customize your meta data with the following fields.'|t,
+			label: 'Meta Details'|t,
+			instructions: 'Fine-tune your metadata to your specific SEO needs.'|t,
 			id: 'sproutseo-advancedcustomizationfields',
 		}, advancedSeoButtons) }}
 	{%endif%}

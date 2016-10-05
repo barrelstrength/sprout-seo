@@ -9,8 +9,8 @@
 {% set content %}
 
   {{ forms.field({
-    label: "Advanced Settings"|t,
-    instructions: "Sprout SEO provides you with powerful, comprehensive management of all types of metadata from your Control Panel and the ability to setup sensible, reusable defaults with existing fields. This makes preparing metadata for search and social sharing more predictable and leads to good SEO and an easy to manage content experience. Some folks, however, want to have more custom control over each bit of metadata. This requires a more complicated UI, more complicated codebase, and more time necessary to curate, prepare, post, and maintain content. If you'd like to go down that path and have the necessary budget, team, or training processes to do it well, go ahead and enable these settings."|t,
+    label: "Advanced Settings"|t|upper,
+    instructions: "Sprout SEO provides you with powerful, comprehensive management of all types of metadata from your Control Panel and the ability to setup sensible, reusable defaults with existing fields. This makes preparing metadata for search and social sharing more predictable and leads to good SEO and an easy to manage content experience. Some folks, however, want to have the ability to fine-tune each type of metadata. This requires a more complicated UI, more complicated codebase, and more time necessary to curate, prepare, post, and maintain content. If you'd like to go down that path and have the necessary budget, team, or training processes to do it well, go ahead and enable these settings."|t,
   }, null) }}
 
   <hr>
@@ -20,6 +20,47 @@
     <input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
 
     {% namespace 'settings' %}
+
+      {{ forms.lightswitchField({
+        label: "Enable Meta Details fields"|t,
+        instructions: "Meta Details fields add add one more level of fine-tuning over your metadata. With Meta Details fields enabled, content editors will have the option to refine Open Graph, Twitter Card, Geo and Robots metadata at the Section level and the Element Metadata Field will display additional settings to allow customization of Structured Data, Search Meta, Open Graph, Twitter Card, Geo and Robots metadata at the level of individual Pages."|t,
+        name: 'enableMetaDetailsFields',
+        on: settings.enableMetaDetailsFields,
+        onLabel: "Enable"|t
+      }) }}
+
+      {{ forms.lightswitchField({
+        label: "Enable Custom Sections"|t,
+        instructions: "By default, Section and Sitemap metadata is enabled for all URL-enabled Sections. Enable this setting to manage metadata for Sections with Custom URL requirements."|t,
+        name: 'enableCustomSections',
+        on: (settings.enableCustomSections is empty ? false : true),
+        onLabel: "Enable"|t
+      }) }}
+
+    <hr>
+
+      {{ forms.lightswitchField({
+        label: "Enable custom metadata template"|t,
+        instructions: "Enable this setting if you wish to override the default metadata templates and provide your own custom templates."|t,
+        name: 'toggleTemplateFolderOverride',
+        toggle: 'settings-defaulttemplateoverride',
+        on: (settings.templateFolder is empty ? false : true),
+        onLabel: "Enable"|t
+      }) }}
+
+      <div id="settings-defaulttemplateoverride" class="{{ (settings.templateFolder is empty ? "hidden") }}">
+
+        {{ forms.textField({
+          label: "Custom metadata template folder"|t,
+          instructions: "Use a custom template. Copy the template from sproutseo/templates/_special/meta.html to your folder and do your thing."|t,
+          name: 'templateFolder',
+          value: settings.templateFolder,
+          errors: ''
+        }) }}
+
+      </div>
+
+    <hr>
 
       {{ forms.lightswitchField({
         label: "Override default locale behavior"|t,
@@ -45,13 +86,7 @@
 
       </div>
 
-      {{ forms.lightswitchField({
-        label: "Enable field settings for Advanced SEO Optimization"|t,
-        instructions: "Advanced SEO Optimization allows you to optionally give your content editors control to add more specific overrides for each type of metadata."|t,
-        name: 'advancedCustomization',
-        on: settings.advancedCustomization,
-        onLabel: "Enable"|t
-      }) }}
+      <hr>
 
       {{ forms.lightswitchField({
         label: "Enable code overrides in your Twig templates"|t,
@@ -61,36 +96,9 @@
         onLabel: "Enable"|t
       }) }}
 
-      {{ forms.lightswitchField({
-        label: "Enable custom Section Metadata and Sitemap Metadata sections"|t,
-        instructions: "By default, Section and Sitemap metadata is enabled for all URL-enabled Sections. If you need to manage Sections with Custom URL requirements, enable this setting."|t,
-        name: 'enableCustomSections',
-        on: (settings.enableCustomSections is empty ? false : true),
-        onLabel: "Enable"|t
-      }) }}
-
-      {{ forms.lightswitchField({
-        label: "Enable custom metadata template"|t,
-        instructions: "Enable this setting if you wish to override the default metadata templates and provide your own custom templates."|t,
-        name: 'toggleTemplateFolderOverride',
-        toggle: 'settings-defaulttemplateoverride',
-        on: (settings.templateFolder is empty ? false : true),
-        onLabel: "Enable"|t
-      }) }}
-
-      <div id="settings-defaulttemplateoverride" class="{{ (settings.templateFolder is empty ? "hidden") }}">
-
-        {{ forms.textField({
-          label: "Custom Template Folder"|t,
-          instructions: "Use a custom template. Copy the template from sproutseo/templates/_special/meta.html to your folder and do your thing."|t,
-          name: 'templateFolder',
-          value: settings.templateFolder,
-          errors: ''
-        }) }}
-
-      </div>
-
     {% endnamespace %}
+
+    <hr>
 
     <div class="buttons">
       <input class="btn submit" type="submit" value="{{ 'Save'|t }}">

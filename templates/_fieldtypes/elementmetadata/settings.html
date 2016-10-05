@@ -6,7 +6,7 @@
 
 <div class="field">
 	<div class="heading">
-		<label for="siteOwnerType">{{ "Meta Title Field"|t}}</label>
+		<label for="siteOwnerType">{{ "Meta Title"|t}}</label>
 		<p class="instructions">
 			{{"Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select
 	'Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t}}
@@ -29,7 +29,7 @@
 
 <div class="field">
 	<div class="heading">
-		<label for="siteOwnerType">{{ "Meta Description Field"|t}}</label>
+		<label for="siteOwnerType">{{ "Meta Description"|t}}</label>
 		<p class="instructions">
 			{{"Select the field to use for your basic, Open Graph, and Twitter Card meta tag descriptions. Select
 	'Manually' if you want the Optimize field to display a custom Description Field for your content editors to manage."|t}}
@@ -51,7 +51,7 @@
 {% set optimizedImageOptions = craft.sproutSeo.getOptimizedAssetsOptions() %}
 
 {{ forms.selectField({
-	label: "Meta Image Field"|t,
+	label: "Meta Image"|t,
 	instructions: "Select the Assets field to use for your basic, Open Graph, and Twitter Card meta tag feature image. Select 'Manually' if you want the Optimize field to display a custom Feature Image Field for your content editors to manage."|t,
 	id: 'optimizedImageField',
 	name: 'optimizedImageField',
@@ -69,7 +69,7 @@
 ] %}
 
 {{ forms.selectField({
-	label: "Meta Keywords Field"|t,
+	label: "Meta Keywords"|t,
 	instructions: "Generate keywords and key phrases dynamically based on an algorithm or add them manually."|t,
 	id: 'optimizedKeywordsField',
 	name: 'optimizedKeywordsField',
@@ -77,7 +77,7 @@
 	value: settings.optimizedKeywordsField is defined ? settings.optimizedKeywordsField : 'manually',
 }) }}
 
-{% if pluginSettings.advancedCustomization %}
+{% if pluginSettings.enableMetaDetailsFields %}
 
 	<hr>
 
@@ -168,8 +168,8 @@
 	{% endset %}
 
 	{{ forms.field({
-		label: "Enable Advanced SEO Optimization?"|t,
-		instructions: "Allow custom, page-specific overrides for each type of metadata. For most sites, the optimized settings above and a focus on quality content will be enough for a comprehensive SEO strategy."|t,
+		label: "Meta Details"|t,
+		instructions: "Enable one more level of control to fine-tune your metadata to your specific SEO needs. Note: enabling Meta Details fields may require additional time to content planning and monitoring in your SEO strategy."|t,
 		errors: ''
 	}, advancedInput) }}
 

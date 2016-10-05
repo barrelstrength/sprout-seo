@@ -50,11 +50,11 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 				$seoSettings->localeIdOverride;
 		}
 
-		if (isset($settings["advancedCustomization"]))
+		if (isset($settings["enableMetaDetailsFields"]))
 		{
-			$seoSettings->advancedCustomization = isset($settings["advancedCustomization"]) ?
-				$settings["advancedCustomization"] :
-				$seoSettings->advancedCustomization;
+			$seoSettings->enableMetaDetailsFields = isset($settings["enableMetaDetailsFields"]) ?
+				$settings["enableMetaDetailsFields"] :
+				$seoSettings->enableMetaDetailsFields;
 		}
 
 		if (isset($settings["enableCodeOverrides"]))

@@ -162,16 +162,16 @@ class SproutSeoPlugin extends BasePlugin
 		// in the plugin table so in order to use getSettings() we need
 		// these defined here
 		return array(
-			'pluginNameOverride'    => AttributeType::String,
-			'seoDivider'            => array(AttributeType::String, 'default' => '-'),
-			'structureId'           => array(AttributeType::Number, 'default' => null),
-			'twitterCard'           => array(AttributeType::String, 'default' => null),
-			'ogType'                => array(AttributeType::String, 'default' => null),
-			'localeIdOverride'      => array(AttributeType::String, 'default' => null),
-			'enableCustomSections'  => array(AttributeType::Bool, 'default' => false),
-			'enableCodeOverrides'   => array(AttributeType::Bool, 'default' => false),
-			'advancedCustomization' => array(AttributeType::Bool, 'default' => false),
-			'templateFolder'        => array(AttributeType::String, 'default' => null),
+			'pluginNameOverride'      => AttributeType::String,
+			'seoDivider'              => array(AttributeType::String, 'default' => '-'),
+			'structureId'             => array(AttributeType::Number, 'default' => null),
+			'twitterCard'             => array(AttributeType::String, 'default' => null),
+			'ogType'                  => array(AttributeType::String, 'default' => null),
+			'localeIdOverride'        => array(AttributeType::String, 'default' => null),
+			'enableCustomSections'    => array(AttributeType::Bool, 'default' => false),
+			'enableCodeOverrides'     => array(AttributeType::Bool, 'default' => false),
+			'enableMetaDetailsFields' => array(AttributeType::Bool, 'default' => false),
+			'templateFolder'          => array(AttributeType::String, 'default' => null),
 		);
 	}
 
