@@ -171,7 +171,8 @@ class SproutSeoPlugin extends BasePlugin
 			'enableCustomSections'    => array(AttributeType::Bool, 'default' => false),
 			'enableCodeOverrides'     => array(AttributeType::Bool, 'default' => false),
 			'enableMetaDetailsFields' => array(AttributeType::Bool, 'default' => false),
-			'templateFolder'          => array(AttributeType::String, 'default' => null),
+			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => false),
+			'metadataVariable'        => array(AttributeType::String, 'default' => null),
 		);
 	}
 

@@ -37,30 +37,39 @@
         onLabel: "Enable"|t
       }) }}
 
-    <hr>
+      <hr>
 
       {{ forms.lightswitchField({
-        label: "Enable custom metadata template"|t,
-        instructions: "Enable this setting if you wish to override the default metadata templates and provide your own custom templates."|t,
-        name: 'toggleTemplateFolderOverride',
-        toggle: 'settings-defaulttemplateoverride',
-        on: (settings.templateFolder is empty ? false : true),
+        label: "Automatically render metadata"|t,
+        instructions: "By default, Sprout SEO prepares and outputs all of your metadata in your template. If you'd like to manage this output manually, you can disable this setting."|t,
+        name: 'enableMetadataRendering',
+        on: (settings.enableMetadataRendering is empty ? false : true),
         onLabel: "Enable"|t
       }) }}
 
-      <div id="settings-defaulttemplateoverride" class="{{ (settings.templateFolder is empty ? "hidden") }}">
+      {{ forms.lightswitchField({
+        label: "Enable custom metadata variable"|t,
+        instructions: "Make a global `metadata` variable available to all of your templates. The `metadata` variable will contain page-specific Prioritized Metadata and Structured Data, and all of your Globals."|t,
+        name: 'toggleMetadataVariable',
+        toggle: 'settings-enablemetadatavariable',
+        on: (settings.metadataVariable is empty ? false : true),
+        onLabel: "Enable"|t
+      }) }}
+
+      <div id="settings-enablemetadatavariable" class="{{ (settings.metadataVariable is empty ? "hidden") }}">
 
         {{ forms.textField({
-          label: "Custom metadata template folder"|t,
-          instructions: "Use a custom template. Copy the template from sproutseo/templates/_special/meta.html to your folder and do your thing."|t,
-          name: 'templateFolder',
-          value: settings.templateFolder,
+          label: "Custom metadata variable name"|t,
+          instructions: "Give your global `metadata` variable a name."|t,
+          name: 'metadataVariable',
+          value: settings.metadataVariable,
+          placeholder: 'metadata',
           errors: ''
         }) }}
 
       </div>
 
-    <hr>
+      <hr>
 
       {{ forms.lightswitchField({
         label: "Override default locale behavior"|t,

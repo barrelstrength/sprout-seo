@@ -71,16 +71,25 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 				$seoSettings->enableCustomSections;
 		}
 
-		if (isset($settings['toggleTemplateFolderOverride']) and isset($settings["templateFolder"]))
+		if (isset($settings["enableMetadataRendering"]))
 		{
-			if (isset($settings['toggleTemplateFolderOverride']) and $settings['toggleTemplateFolderOverride'] == 0)
+			$seoSettings->enableMetadataRendering = isset($settings["enableMetadataRendering"]) ?
+				$settings["enableMetadataRendering"] :
+				$seoSettings->enableMetadataRendering;
+		}
+
+		if (isset($settings['toggleMetadataVariable']) and isset($settings["metadataVariable"]))
+		{
+			if (isset($settings['toggleMetadataVariable']) and $settings['toggleMetadataVariable'] == 0)
 			{
-				$seoSettings->templateFolder = null;
+				$seoSettings->metadataVariable = null;
 			}
 
-			if (isset($settings['toggleTemplateFolderOverride']) and $settings['toggleTemplateFolderOverride'] == 1)
+			if (isset($settings['toggleMetadataVariable']) and $settings['toggleMetadataVariable'] == 1)
 			{
-				$seoSettings->templateFolder = isset($settings["templateFolder"]) ? $settings["templateFolder"] : $seoSettings->templateFolder;
+				$seoSettings->metadataVariable = isset($settings["metadataVariable"])
+					? $settings["metadataVariable"]
+					: $seoSettings->metadataVariable;
 			}
 		}
 

@@ -1,3 +1,7 @@
+{%- set globals = metadata.globals -%}
+{%- set meta    = metadata.meta -%}
+{%- set schema  = metadata.schema -%}
+
 <!-- This site is optimized with the Sprout SEO plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/seo -->
 {% for name, value in meta.search %}
 {% switch name %}
@@ -34,3 +38,7 @@
 {% for property in globals.ownership %}
 	<meta name='{{ property.metaTag }}' content='{{ property.verificationCode }}'>
 {% endfor %}
+
+{%- for item in schema -%}
+	{{ item.getSchema() }}
+{%- endfor %}

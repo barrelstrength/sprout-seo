@@ -132,10 +132,12 @@ abstract class SproutSeoBaseSchema
 				? json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
 				: str_replace('\\/', '/', json_encode($schema));
 
-			return '
+			$output = '
 <script type="application/ld+json">
 ' . $output . '
 </script>';
+
+			return TemplateHelper::getRaw($output);
 		}
 		else
 		{

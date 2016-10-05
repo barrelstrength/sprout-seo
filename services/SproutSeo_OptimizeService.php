@@ -117,18 +117,32 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public function getMetadata(&$context)
 	{
-		$this->globals           = sproutSeo()->globalMetadata->getGlobalMetadata();
-		$this->urlEnabledSection = sproutSeo()->sectionMetadata->getUrlEnabledSectionsViaContext($context);
+		$output   = null;
+		$settings = craft()->plugins->getPlugin('sproutseo')->getSettings();
 
+		$this->globals                  = sproutSeo()->globalMetadata->getGlobalMetadata();
+		$this->urlEnabledSection        = sproutSeo()->sectionMetadata->getUrlEnabledSectionsViaContext($context);
 		$this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel();
 
-		// Prepare our html for the template
-		$optimizedMetadata = null;
-		$optimizedMetadata .= $this->getMetaTagHtml();
-		$optimizedMetadata .= $this->getWebsiteIdentityStructuredDataHtml();
-		$optimizedMetadata .= $this->getMainEntityStructuredDataHtml();
+		$metadata = array(
+			'globals' => $this->globals,
+			'meta'    => $this->prioritizedMetadataModel->getMetaTagData(),
+			'schema'  => $this->getStructuredData()
+		);
 
-		return TemplateHelper::getRaw($optimizedMetadata);
+		// Output metadata
+		if ($settings->enableMetadataRendering)
+		{
+			$output = $this->renderMetadata($metadata);
+		}
+
+		// Add metadata variable to Twig context
+		if ($settings->metadataVariable)
+		{
+			$context[$settings->metadataVariable] = $metadata;
+		}
+
+		return $output;
 	}
 
 	/**
@@ -198,47 +212,65 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		return $prioritizedMetadataModel;
 	}
 
-	/**
-	 * @param SproutSeo_MetadataModel $prioritizedMetadataModel
-	 *
-	 * @return string
-	 */
-	public function getMetaTagHtml()
+	public function getStructuredData()
 	{
-		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
+		$schema = array();
 
-		$output = craft()->templates->render('sproutseo/templates/_special/meta', array(
-			'globals' => $this->globals,
-			'meta'    => $this->prioritizedMetadataModel->getMetaTagData()
-		));
+		//$output       = null;
+		$identityType = $this->globals->identity['@type'];
 
-		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+		// Website Identity Schema
+		if ($identityType && isset($this->urlEnabledSection->element))
+		{
+			// Determine if we have an Organization or Person Schema Type
+			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
 
-		return $output;
+			$identitySchema             = new $schemaModel();
+			$identitySchema->addContext = true;
+
+			$identitySchema->globals                  = $this->globals;
+			$identitySchema->element                  = $this->urlEnabledSection->element;
+			$identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
+			$schema['websiteIdentity'] = $identitySchema;
+			//$output = $identitySchema->getSchema();
+		}
+
+		// Website Identity Website
+		if ($this->globals->identity['name'] && isset($this->urlEnabledSection->element))
+		{
+			$websiteSchema             = new SproutSeo_WebsiteIdentityWebsiteSchema();
+			$websiteSchema->addContext = true;
+
+			$websiteSchema->globals                  = $this->globals;
+			$websiteSchema->element                  = $this->urlEnabledSection->element;
+			$websiteSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
+			$schema['website'] = $websiteSchema;
+			//$output .= $websiteSchema->getSchema();
+		}
+
+		// Website Identity Place
+		//if ($this->globals->identity['address'])
+		//{
+		//	$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchemaMap();
+		//  $placeSchema->addContext = true;
+
+		//  $placeSchema->globals = $this->globals;
+		//  $placeSchema->element = $this->elementModel;
+		//  $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+		//  $output .= $placeSchema->getSchema();
+		//}
+
+		$schema['mainEntity'] = $this->getMainEntityStructuredData();
+
+		return $schema;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getWebsiteIdentityStructuredDataHtml()
-	{
-		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
-
-		$rawHtml = $this->getKnowledgeGraphLinkedData();
-
-		$schemaHtml = craft()->templates->render('sproutseo/templates/_special/schema', array(
-			'jsonLd' => $rawHtml
-		));
-
-		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
-
-		return $schemaHtml;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getMainEntityStructuredDataHtml()
+	public function getMainEntityStructuredData()
 	{
 		if ($this->prioritizedMetadataModel)
 		{
@@ -254,57 +286,27 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 				$schema->element                  = $this->urlEnabledSection->element;
 				$schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-				return $schema->getSchema();
+				return $schema;
 			}
 		}
 	}
 
-	public function getKnowledgeGraphLinkedData()
+	/**
+	 * @param $metadata
+	 *
+	 * @return string
+	 */
+	public function renderMetadata($metadata)
 	{
-		$output       = null;
-		$identityType = $this->globals->identity['@type'];
-		// Website Identity Schema
-		if ($identityType && isset($this->urlEnabledSection->element))
-		{
-			// Determine if we have an Organization or Person Schema Type
-			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
+		craft()->templates->setTemplatesPath(craft()->path->getPluginsPath());
 
-			$identitySchema             = new $schemaModel();
-			$identitySchema->addContext = true;
+		$output = craft()->templates->render('sproutseo/templates/_special/metadata', array(
+			'metadata' => $metadata
+		));
 
-			$identitySchema->globals                  = $this->globals;
-			$identitySchema->element                  = $this->urlEnabledSection->element;
-			$identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
-			$output = $identitySchema->getSchema();
-		}
-
-		// Website Identity Website
-		if ($this->globals->identity['name'] && isset($this->urlEnabledSection->element))
-		{
-			$websiteSchema             = new SproutSeo_WebsiteIdentityWebsiteSchema();
-			$websiteSchema->addContext = true;
-
-			$websiteSchema->globals                  = $this->globals;
-			$websiteSchema->element                  = $this->urlEnabledSection->element;
-			$websiteSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
-
-			$output .= $websiteSchema->getSchema();
-		}
-
-		// Website Identity Place
-		//if ($this->globals->identity['address'])
-		//{
-		//	$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchemaMap();
-		//  $placeSchema->addContext = true;
-
-		//  $placeSchema->globals = $this->globals;
-		//  $placeSchema->element = $this->elementModel;
-		//  $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
-		//  $output .= $placeSchema->getSchema();
-		//}
-
-		return TemplateHelper::getRaw($output);
+		return $output;
 	}
 
 	// Code Metadata
