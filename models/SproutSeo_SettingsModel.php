@@ -13,7 +13,7 @@ class SproutSeo_SettingsModel extends BaseModel
 			'enableCustomSections'    => AttributeType::Bool,
 			'enableCodeOverrides'     => AttributeType::Bool,
 			'enableMetaDetailsFields' => AttributeType::Bool,
-			'enableMetadataRendering' => AttributeType::Bool,
+			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => true),
 			'metadataVariable'        => AttributeType::String
 		);
 	}
