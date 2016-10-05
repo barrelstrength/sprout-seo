@@ -41,7 +41,11 @@ class SproutSeo_WebsiteIdentityPersonSchema extends SproutSeoBaseSchema
 		$this->addUrl('url', $person['url']);
 		$this->addTelephone('telephone', $person['telephone']);
 		$this->addEmail('email', $person['email']);
-		$this->addImage('image', $person['logo'][0]);
+
+		if (isset($schema['logo'][0]))
+		{
+			$this->addImage('logo', $schema['logo'][0]);
+		}
 
 		$this->addText('gender', $person['gender']);
 
