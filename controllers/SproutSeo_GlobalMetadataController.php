@@ -23,6 +23,16 @@ class SproutSeo_GlobalMetadataController extends BaseController
 
 		$globals->meta = JsonHelper::encode($globalMetadata);
 
+		$identity = $globals->identity;
+
+		if (isset($identity['@type']) && $identity['@type'] == 'Person')
+		{
+			// Clean up our organization subtypes when the Person type is selected
+			unset($identity['organizationSubTypes']);
+
+			$globals->identity = $identity;
+		}
+
 		if (sproutSeo()->globalMetadata->saveGlobalMetadata($globalKeys, $globals))
 		{
 			craft()->userSession->setNotice(Craft::t('Globals saved.'));

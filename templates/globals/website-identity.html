@@ -209,7 +209,7 @@
 			<hr>
 
 			{# These fields should only display when 'Organization => LocalBusiness' is selected #}
-			<div id="localbusiness">
+			<div id="localbusiness" {% if not globals.isLocalBusiness() %}class="hidden"{% endif %}>
 
 				<div class="field">
 					<div class="heading">

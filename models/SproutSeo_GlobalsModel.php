@@ -9,11 +9,6 @@ class SproutSeo_GlobalsModel extends BaseModel
 	public $globalKey = null;
 
 	/**
-	 * @var null
-	 */
-	public $type = null;
-
-	/**
 	 * @return array
 	 */
 	protected function defineAttributes()
@@ -65,7 +60,7 @@ class SproutSeo_GlobalsModel extends BaseModel
 	{
 		$this->getGlobalByKey('identity');
 
-		return $this->type != '' ? $this->type : 'Organization';
+		return $this->identity['@type'] != '' ? $this->identity['@type'] : 'Organization';
 	}
 
 	/**
@@ -159,5 +154,20 @@ class SproutSeo_GlobalsModel extends BaseModel
 		$settings = $this->{$this->globalKey};
 
 		return $settings;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function isLocalBusiness()
+	{
+		$identity = $this->getGlobalByKey('identity');
+
+		if (isset($identity['organizationSubTypes'][0]) and $identity['organizationSubTypes'][0] == 'LocalBusiness')
+		{
+			return true;
+		}
+
+		return false;
 	}
 }
