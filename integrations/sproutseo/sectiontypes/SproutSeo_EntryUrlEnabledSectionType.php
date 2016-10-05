@@ -21,6 +21,13 @@ class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectio
 		return craft()->sections->getSectionById($id);
 	}
 
+	public function getUrlEnabledSectionFieldLayoutSettingsObject($id)
+	{
+		$section = $this->getUrlEnabledSectionById($id);
+
+		return $section->getEntryTypes();
+	}
+
 	public function getElementTableName()
 	{
 		return 'entries';

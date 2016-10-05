@@ -38,7 +38,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 				if ($urlEnabledSection != null)
 				{
-					$urlEnabledSectionId = $urlEnabledSection->getUrlEnabledSectionIdColumn();
+					$urlEnabledSectionId = $urlEnabledSection->getUrlEnabledSectionIdColumnName();
 
 					$criteria                    = craft()->elements->getCriteria($urlEnabledSection->getElementType());
 					$criteria->{$urlEnabledSectionId} = $sitemapSettings['urlEnabledSectionId'];

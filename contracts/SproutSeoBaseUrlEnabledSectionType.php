@@ -14,6 +14,17 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	public $urlEnabledSections;
 
 	/**
+	 * A silly variable because Craft Commerce inconsistently names productTypeId/typeId.
+	 *
+	 * Updating this setting allows us to target different typeId column values in different
+	 * contexts such as when we are trying to match an element on page load and when we are
+	 * trying to determine the URL-format.
+	 *
+	 * @var
+	 */
+	public $typeIdContext;
+
+	/**
 	 * @return mixed
 	 */
 	final public function getId()
@@ -43,6 +54,14 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	 * @return mixed
 	 */
 	abstract public function getUrlEnabledSectionById($id);
+
+	/**
+	 * Get the thing that we can call getFieldLayouts on. We will try to loop
+	 * through whatever we get back and call getFieldLayouts() on each item in the array.
+	 *
+	 * @return mixed
+	 */
+	abstract public function getUrlEnabledSectionFieldLayoutSettingsObject($id);
 
 	/**
 	 * @return mixed

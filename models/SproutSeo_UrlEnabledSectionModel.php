@@ -70,4 +70,48 @@ class SproutSeo_UrlEnabledSectionModel extends BaseModel
 
 		return $this->urlFormat;
 	}
+
+	public function hasElementMetadataField()
+	{
+		$fieldLayoutObjects = $this->type->getUrlEnabledSectionFieldLayoutSettingsObject($this->id);
+
+		if (!$fieldLayoutObjects)
+		{
+			return false;
+		}
+
+		// Make what we get back into an array
+		if (!is_array($fieldLayoutObjects))
+		{
+			$fieldLayoutObjects = array($fieldLayoutObjects);
+		}
+
+		$totalFieldLayouts      = count($fieldLayoutObjects);
+		$totalElementMetaFields = 0;
+
+		// We want to make sure there is an Element Metadata field on every field layout object.
+		// For example, a Category Group or Product Type just needs one Element Metadata for its Field Layout.
+		// A section with multiple Entry Types needs an Element Metadata field on each of it's Field Layouts.
+		foreach ($fieldLayoutObjects as $fieldLayoutObject)
+		{
+			$fields = $fieldLayoutObject->getFieldLayout()->getFields();
+
+			foreach ($fields as $fieldLayoutField)
+			{
+				if ($fieldLayoutField->getField()->type == 'SproutSeo_ElementMetadata')
+				{
+					$totalElementMetaFields++;
+				}
+			}
+		}
+
+		// If we have an equal number of Element Metadata fields,
+		// the setup is optimized to handle metadata at each level
+		if ($totalElementMetaFields >= $totalFieldLayouts)
+		{
+			return true;
+		}
+
+		return false;
+	}
 }

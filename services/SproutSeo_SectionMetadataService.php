@@ -117,6 +117,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	{
 		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
 		{
+			$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
+
 			$matchedElementVariable = $urlEnabledSectionType->getMatchedElementVariable();
 
 			if (isset($context[$matchedElementVariable]))

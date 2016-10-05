@@ -21,6 +21,13 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 		return craft()->categories->getGroupById($id);
 	}
 
+	public function getUrlEnabledSectionFieldLayoutSettingsObject($id)
+	{
+		$group = $this->getUrlEnabledSectionById($id);
+
+		return $group;
+	}
+
 	public function getElementTableName()
 	{
 		return 'categories';
