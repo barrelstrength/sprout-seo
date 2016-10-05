@@ -40,7 +40,11 @@ class SproutSeo_WebsiteIdentityWebsiteSchema extends SproutSeoBaseSchema
 		$this->addText('description', $schema['description']);
 		$this->addText('about', $schema['description']);
 		$this->addUrl('url', $schema['url']);
-		$this->addImage('image', $schema['logo'][0]);
+
+		if (isset($schema['logo'][0]))
+		{
+			$this->addImage('logo', $schema['logo'][0]);
+		}
 
 		if ($identityType = $schema['@type'])
 		{

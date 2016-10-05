@@ -50,7 +50,11 @@ class SproutSeo_WebsiteIdentityOrganizationSchema extends SproutSeoBaseSchema
 		$this->addUrl('url', $schema['url']);
 		$this->addTelephone('telephone', $schema['telephone']);
 		$this->addEmail('email', $schema['email']);
-		$this->addImage('logo', $schema['logo'][0]);
+
+		if (isset($schema['logo'][0]))
+		{
+			$this->addImage('logo', $schema['logo'][0]);
+		}
 
 		// Add Corporate Contacts
 		$contacts = $this->globals['contacts'];
