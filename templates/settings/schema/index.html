@@ -5,7 +5,7 @@
 
 {% set schemaHandle = craft.request.getSegment(3) ?? 'schema' %}
 {% set selectedSidebarItem = schemaHandle %}
-{% set schemaMaps = craft.sproutSeo.getSchemas() %}
+{% set schemas = craft.sproutSeo.getSchemas() %}
 
 {% set content %}
 
@@ -19,13 +19,13 @@
 		</thead>
 		<tbody>
 
-			{% for schemaMap in schemaMaps  %}
+			{% for schema in schemas %}
 				<tr>
 					<td>
-						<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">{{ schemaMap.getName() }}</a>
+						<a href="{{ cpUrl('sproutseo/settings/schema/new') }}">{{ schema.getName() }}</a>
 					</td>
 					<td>
-						<code>{{ schemaMap.getType() }}</code>
+						<code>{{ schema.getType() }}</code>
 					</td>
 					<td>
 						<code>EntryModel</code>, <code>CategoryModel</code>, <code>ProductModel</code>

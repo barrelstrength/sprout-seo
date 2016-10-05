@@ -159,7 +159,7 @@
 	{% endif %}
 
 	{% if fieldContext == 'sectionMetadata' or (fieldContext == 'field' and pluginSettings.advancedCustomization and settings.showMainEntity) %}
-		{% set schemaMaps = craft.sproutSeo.getSchemaOptions() %}
+		{% set schemas = craft.sproutSeo.getSchemaOptions() %}
 
 		{{ forms.selectField({
 			label: 'Main Entity'|t ~ sprout.infoIcon({
@@ -171,7 +171,7 @@
 			instructions: 'Map the primary element that displays on this page to a Structured Data schema. Select a basic or custom mapping.'|t,
 			id: 'sproutseo-mainentity',
 			name: 'sproutseo[metadata][schemaTypeId]',
-			options: schemaMaps,
+			options: schemas,
 			value: values.schemaTypeId,
 			errors: "",
 			required: false
