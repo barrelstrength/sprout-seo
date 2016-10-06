@@ -439,8 +439,13 @@ feel like they are part of the natural flow of fields #}
 			var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
 			var metaTitleLabelId = '#title-label';
 			$(metaTitleLabelId).append(metaTitleSeoButton).removeClass('hidden');
-
 			Craft.initUiElements($(metaTitleLabelId));
+
+			var metaTitleInput = $('#title');
+			metaTitleInput.addClass('nicetext');
+			metaTitleInput.data('show-chars-left', true);
+			metaTitleInput.attr('maxlength', 60);
+			new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
 
 		{% endif %}
 
@@ -450,8 +455,11 @@ feel like they are part of the natural flow of fields #}
 			var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
 			var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';
 			$(metaTitleLabelId).append(metaTitleSeoButton).removeClass('hidden');
-
 			Craft.initUiElements($(metaTitleLabelId));
+
+			var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');
+			metaTitleInput.attr('maxlength', 60);
+			new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
 
 		{% endif %}
 
@@ -461,8 +469,11 @@ feel like they are part of the natural flow of fields #}
 			var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();
 			var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';
 			$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
-
 			Craft.initUiElements($(metaDescriptionLabelId));
+
+			var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
+			metaDescriptionInput.attr('maxlength', 160);
+			new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
 
 		{% endif %}
 
