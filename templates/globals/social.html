@@ -1,6 +1,7 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
+{% import "sproutseo/_includes/sproutseo" as sprout %}
 
 {% set socialProfileOptions = craft.sproutSeo.getFinalOptions('social', 'profileName') %}
 
@@ -22,8 +23,15 @@
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
-			<label>Social Profiles</label>
-			<p class="instructions">Adding <a href="https://developers.google.com/structured-data/customize/social-profiles" target="_blank">Social Profile Links</a> helps establish a relationship between your site or app and your related online profiles. Supported social profiles can be prominently displayed in your Google Knowledge panel, however, it's encouraged to add any other social profiles you have as well.</p>
+			<label>{{ "Social Profiles"|t }} {{ sprout.infoIcon({
+					label: "Social Profiles"|t,
+					search: true,
+					structured: true,
+					openGraph: true,
+					twitterCard: true,
+					priority: 'globals'
+				}) }}</label>
+			<p class="instructions">{{  'Adding <a href="https://developers.google.com/structured-data/customize/social-profiles" target="_blank">Social Profile Links</a> helps establish a relationship between your site or app and your related online profiles. Supported social profiles can be prominently displayed in your Google Knowledge panel, however, it\'s encouraged to add any other social profiles you have as well.'|t|raw }}</p>
 		</div>
 	</div>
 

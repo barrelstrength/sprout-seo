@@ -1,6 +1,7 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
+{% import "sproutseo/_includes/sproutseo" as sprout %}
 
 {% set settings = craft.sproutSeo.getSettings() %}
 
@@ -20,7 +21,12 @@
 
 	<div class="field" style="margin-bottom:0;">
 		<div class="heading">
-			<label>{{ "Contacts"|t }}</label>
+			<label>{{ "Contacts"|t }} {{ sprout.infoIcon({
+					label: "Contacts"|t,
+					search: true,
+					structured: true,
+					priority: 'globals'
+				}) }}</label>
 			<p class="instructions">{{ "Adding <a href='https://developers.google.com/structured-data/customize/contact-points' target='_blank'>Corporate Contacts</a> to your site's structured data can prominently display contact information on the Google Knowledge panel in some searches. Telephone numbers must use an international format starting with the '+' character such as:
 			+1-800-555-1212"|t|raw }}</p>
 		</div>
@@ -86,6 +92,7 @@
 
 {% endset %}
 
+{% includeCssResource  "sproutseo/css/sproutseo.css" %}
 {% includeJsResource 'sproutseo/js/sproutfields.js' %}
 {% includeJsResource 'sproutseo/js/EditableTable.js' %}
 

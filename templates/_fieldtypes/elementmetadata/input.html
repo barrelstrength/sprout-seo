@@ -1,47 +1,37 @@
 {% import "_includes/forms" as forms %}
-
-{% macro infoIcon(params) %}
-	{% set label = params.label ?? null %}
-	{% set search = params.search ?? false %}
-	{% set structured = params.search ?? false %}
-	{% set openGraph = params.openGraph ?? false %}
-	{% set twitterCard = params.twitterCard ?? false %}
-	{% set geo = params.geo ?? false %}
-	{% set robots = params.robots ?? false %}
-	{% set priority = params.priority ?? null %}
-	{% set message = params.message ?? null %}
-
-	<span class="info sproutseo-info">
-		<div class="sprout-info-body sproutseo-metalevel-hud">
-			<h6>{{ label }} Scope</h6>
-			{% if search %}<span class="sproutseo-icon icon-search">&#xe800;</span> Search<br>{% endif %}
-			{% if structured %}<span class="sproutseo-icon icon-puzzle">&#xf12e;</span> Structured Data<br>{% endif %}
-
-			{% if openGraph %}<span class="sproutseo-icon icon-facebook">&#xe802;</span> Open Graph<br>{% endif %}
-			{% if twitterCard %}<span class="sproutseo-icon icon-twitter">&#xe807;</span> Twitter Card<br>{% endif %}
-			{% if geo %}<span class="sproutseo-icon icon-location">&#xe803;</span> Geo<br>{% endif %}
-			{% if robots %}<span class="sproutseo-icon icon-robots">&#xe806;</span> Robots<br>{% endif %}
-
-			{% if message %}<p><i>{{ message }}</i></p>{% endif %}
-			<hr style="margin-left:-24px;margin-right:-24px;">
-			<h6>{{ label }} Priority</h6>
-			<ul class="sproutseo-metalevel-list">
-				<li>
-					<span class="sproutseo-metalevel-number {% if priority == 'globals' %}active{% endif %}">3</span> {% if priority == 'globals' %}<b>Globals</b>{% else %}Globals{% endif %}
-				</li>
-				<li>
-					<span class="sproutseo-metalevel-number {% if priority == 'sections' %}active{% endif %}">2</span> {% if priority == 'sections' %}<b>Sections</b>{% else %}Sections{% endif %}
-				</li>
-				<li>
-					<span class="sproutseo-metalevel-number {% if priority == 'pages' %}active{% endif %}">1</span> {% if priority == 'pages' %}<b>Pages</b>{% else %}Pages{% endif %}
-				</li>
-			</ul>
-		</div>
-	</span>
-{% endmacro %}
-{% import _self as sprout %}
+{% import "sproutseo/_includes/sproutseo" as sprout %}
 
 {% set pluginSettings = craft.sproutSeo.getSettings() %}
+
+<div class="sproutseo-metatitle-info hidden">
+{{- sprout.infoIcon({
+	label: "Meta Title"|t,
+	search: true,
+	openGraph: true,
+	twitterCard: true,
+	priority: 'pages'
+}) -}}
+</div>
+
+<div class="sproutseo-metadescription-info hidden">
+	{{- sprout.infoIcon({
+		label: "Meta Description"|t,
+		search: true,
+		openGraph: true,
+		twitterCard: true,
+		priority: 'pages'
+	}) -}}
+</div>
+
+<div class="sproutseo-metaimage-info hidden">
+	{{- sprout.infoIcon({
+		label: "Meta Image"|t,
+		search: true,
+		openGraph: true,
+		twitterCard: true,
+		priority: 'pages'
+	}) -}}
+</div>
 
 <div class="sproutseo-box-optimized">
 	{% set customizationSettings = values.getCustomizationSettings() %}
@@ -245,7 +235,12 @@
 			>
 
 				<div class="titlebar">
-					<div class="blocktype"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
+					<div class="blocktype"><i class="sproutseo-icon icon-search">&#xe800;</i> {{ "Search Meta"|t }} {{ sprout.infoIcon({
+							label: "Search Meta"|t,
+							search: true,
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages',
+							message: 'All fields in this block take priority for the Search metadata at this priority level.'|t
+						}) }}</div>
 				</div>
 
 				{% include 'sproutseo/_partials/fields/input' %}
@@ -257,11 +252,11 @@
 			>
 
 				<div class="titlebar">
-					<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph {{ sprout.infoIcon({
+					<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> {{ "Open Graph"|t }} {{ sprout.infoIcon({
 							label: "Open Graph"|t,
 							openGraph: true,
 							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages',
-							message: 'All fields in this block take priority for the Open Graph metadata at the Section level.'|t
+							message: 'All fields in this block take priority for the Open Graph metadata at this priority level.'|t
 						}) }}
 					</div>
 				</div>
@@ -276,7 +271,12 @@
 			>
 
 				<div class="titlebar">
-					<div class="blocktype"><i class="sproutseo-icon icon-twitter">&#xe807;</i> Twitter Card</div>
+					<div class="blocktype"><i class="sproutseo-icon icon-twitter">&#xe807;</i> {{ "Twitter Card"|t }} {{ sprout.infoIcon({
+							label: "Twitter Card"|t,
+							twitterCard: true,
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages',
+							message: 'All fields in this block take priority for the Twitter Card metadata at this priority level.'|t
+						}) }}</div>
 				</div>
 
 				{% include 'sproutseo/_partials/fields/twitter-card' %}
@@ -287,7 +287,12 @@
 			>
 
 				<div class="titlebar">
-					<div class="blocktype"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
+					<div class="blocktype"><i class="sproutseo-icon icon-location">&#xe803;</i> {{ "Geo"|t }} {{ sprout.infoIcon({
+							label: "Geo"|t,
+							geo: true,
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages',
+							message: 'All fields in this block take priority for the Geographic metadata at this priority level.'|t
+						}) }}</div>
 					<div class="preview"></div>
 				</div>
 
@@ -300,7 +305,12 @@
 			>
 
 				<div class="titlebar">
-					<div class="blocktype"><i class="sproutseo-icon icon-robots">&#xe806;</i> Robots</div>
+					<div class="blocktype"><i class="sproutseo-icon icon-robots">&#xe806;</i> {{ "Robots"|t }} {{ sprout.infoIcon({
+							label: "Robots"|t,
+							robots: true,
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages',
+							message: 'All fields in this block take priority for the Robots metadata at this priority level.'|t
+						}) }}</div>
 				</div>
 
 				{% set robotsNamespace = 'metadata' %}
@@ -412,177 +422,61 @@ feel like they are part of the natural flow of fields #}
 			}
 		}
 
-		{# @todo - Add an [seo] flag to all SEO-related fields. Possibly add a #}
-		{#HUD with info on what the cascade and priority and actual value that #}
-		{#will be output will be#}
-
-		{#function updateLocaleBadge(value, target)#}
-		{#{#}
-			{#if (value == '')#}
-			{#{#}
-				{# Turn badge red #}
-				{#$(target).css('color', '#ffffff');#}
-				{#$(target).css('background-color', '#da5a47');#}
-
-				{#$(target).css('color', '#8f98a3');#}
-				{#$(target).css('background-color', '#ebedef');#}
-			{#}#}
-			{#else#}
-			{#{#}
-				{# Turn badge grey #}
-				{#$(target).css('color', '#8f98a3');#}
-				{#$(target).css('background-color', '#ebedef');#}
-
-				{# Turn badge green #}
-				{#$(target).css('color', '#ffffff');#}
-				{#$(target).css('background-color', '#27AE60');#}
-			{#}#}
-		{#}#}
-
-		{#function addSeoBadgeListener(fieldId)#}
-		{#{#}
-			{#var spanId = '#fields-' + fieldId + '-label span.sproutseo.locale';#}
-			{#var fieldInput = '#fields-' + fieldId + '-field input';#}
-			{#var fieldTextarea = '#fields-' + fieldId + '-field textarea';#}
-			{#var fieldSelect = '#fields-' + fieldId + '-field select';#}
-
-			{#var fieldElementSelect = '#fields-' + fieldId;#}
-			{#var fieldElementSelectInput = '#fields-' + fieldId + '-field .elementselect';#}
-			{#var fieldElementSelectSpanId = '#fields-' + fieldId + '-label span.sproutseo.locale';#}
-
-			{#$(fieldInput).on('keyup', function() {#}
-				{#updateLocaleBadge($(this).val(), spanId);#}
-			{#});#}
-
-			{#$(fieldTextarea).on('keyup', function() {#}
-				{#updateLocaleBadge($(this).val(), spanId);#}
-			{#});#}
-
-			{#$(fieldSelect).on('change', function() {#}
-				{#updateLocaleBadge($(this).val(), spanId);#}
-			{#});#}
-
-			{#if ($(fieldElementSelectInput).length)#}
-			{#{#}
-				{#$(fieldElementSelect).data('elementSelect').on('selectElements', function(e) {#}
-					{#updateLocaleBadge(true, fieldElementSelectSpanId);#}
-				{#});#}
-
-				{#$(fieldElementSelect).data('elementSelect').on('removeElements', function(e) {#}
-					{#updateLocaleBadge('', fieldElementSelectSpanId);#}
-				{#});#}
-			{#}#}
-		{#}#}
-
-		{#function initSeoBadge(fieldId)#}
-		{#{#}
-			{#var spanId = '#fields-' + fieldId + '-label span.sproutseo.locale';#}
-			{#var fieldInput = '#fields-' + fieldId + '-field input';#}
-			{#var fieldTextarea = '#fields-' + fieldId + '-field textarea';#}
-			{#var fieldSelect = '#fields-' + fieldId + '-field select';#}
-
-			{#var fieldElementSelect = '#fields-' + fieldId + '-field input';#}
-			{#var fieldElementSelectInput = '#fields-' + fieldId + '-field .elementselect';#}
-
-			{#if ($(fieldInput).length && $(fieldInput).val() != '')#}
-			{#{#}
-				{#updateLocaleBadge($(fieldInput).val(), spanId);#}
-			{#}#}
-
-			{#if ($(fieldTextarea).length && $(fieldTextarea).val() != '')#}
-			{#{#}
-				{#updateLocaleBadge($(fieldTextarea).val(), spanId);#}
-			{#}#}
-
-			{#if ($(fieldSelect).length && $(fieldSelect).val() != '')#}
-			{#{#}
-				{#updateLocaleBadge($(fieldSelect).val(), spanId);#}
-			{#}#}
-
-			{#if ($(fieldElementSelectInput).length)#}
-			{#{#}
-				{#if ($(fieldElementSelect).eq(1).length && $(fieldElementSelect).eq(1).val() != '')#}
-				{#{#}
-					{#updateLocaleBadge(true, spanId);#}
-				{#}#}
-				{#else#}
-				{#{#}
-					{#updateLocaleBadge('', spanId);#}
-				{#}#}
-			{#}#}
-		{#}#}
-
 		function appendSeoBadge(fieldId)
 		{
 			var labelId = '#fields-' + fieldId + '-label';
-			$(labelId).append(seoButton);
+			$(labelId).append(metaTitleSeoButton);
 		}
-
-		var seoButton = '<span class="sproutseo locale">seo</span>';
-		var seoFieldIds = [];
-		var seoLabels = [];
-		var seoInputs = [];
-
-		seoFieldIds.push('sproutseo-mainentity');
-		seoFieldIds.push('sproutseo-advancedcustomizationfields');
-
-		{% if settings.optimizedTitleField == 'elementTitle' %}
-			var spanId = '#title-label span.sproutseo.locale';
-			var titleId = '#title-label';
-			var titleInput = '#title-field input';
-
-			$(titleId).append(seoButton);
-
-			{#$('#title-field input').on('keyup', function() {#}
-				{#updateLocaleBadge($(this).val(), '#title-label span.sproutseo.locale');#}
-			{#});#}
-
-			{#if ($(titleInput).val() != '')#}
-			{#{#}
-				{#updateLocaleBadge($(titleInput).val(), spanId);#}
-			{#}#}
-		{% endif %}
-
-		{% if settings.optimizedTitleField == 'manually' %}
-			seoFieldIds.push('sproutseo-optimizedtitle');
-		{% endif %}
-
-		{% if settings.optimizedDescriptionField == 'manually' %}
-			seoFieldIds.push('sproutseo-optimizeddescription');
-		{% endif %}
-
-		{% if settings.optimizedImageField == 'manually' %}
-			seoFieldIds.push('sproutseo-optimizedimage');
-		{% endif %}
 
 		{% if settings.optimizedKeywordsField == 'manually' %}
 			$('#fields-sproutseo-optimizedkeywords-field input').tagEditor({
-				animateDelete: 20
+			animateDelete: 20
 			});
+		{% endif %}
 
-			seoFieldIds.push('sproutseo-optimizedkeywords');
+		{% if settings.optimizedTitleField == 'elementTitle' %}
+
+			var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
+			var metaTitleLabelId = '#title-label';
+			$(metaTitleLabelId).append(metaTitleSeoButton).removeClass('hidden');
+
+			Craft.initUiElements($(metaTitleLabelId));
+
 		{% endif %}
 
 		{% set optimizedTitleFieldModel = craft.fields.getFieldById(settings.optimizedTitleField) %}
 		{% if optimizedTitleFieldModel %}
-			seoFieldIds.push('{{ optimizedTitleFieldModel.handle }}');
+
+			var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
+			var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';
+			$(metaTitleLabelId).append(metaTitleSeoButton).removeClass('hidden');
+
+			Craft.initUiElements($(metaTitleLabelId));
+
 		{% endif %}
 
 		{% set optimizedDescriptionFieldModel = craft.fields.getFieldById(settings.optimizedDescriptionField) %}
 		{% if optimizedDescriptionFieldModel %}
-			seoFieldIds.push('{{ optimizedDescriptionFieldModel.handle }}');
+
+			var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();
+			var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';
+			$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
+
+			Craft.initUiElements($(metaDescriptionLabelId));
+
 		{% endif %}
 
 		{% set optimizedImageFieldModel = craft.fields.getFieldById(settings.optimizedImageField) %}
 		{% if optimizedImageFieldModel %}
-			seoFieldIds.push('{{ optimizedImageFieldModel.handle }}');
+
+			var metaImageSeoButton = $('div.sproutseo-metaimage-info').html();
+			var metaImageLabelId = '#fields-{{ optimizedImageFieldModel.handle }}-label';
+			$(metaImageLabelId).append(metaImageSeoButton).removeClass('hidden');
+
+			Craft.initUiElements($(metaImageLabelId));
+
 		{% endif %}
 
-		$.each(seoFieldIds, function(key, value) {
-			appendSeoBadge(value);
-			{#addSeoBadgeListener(value);#}
-			{#initSeoBadge(value);#}
-		});
 	});
 
 	new Craft.SproutSeoOpenGraph();

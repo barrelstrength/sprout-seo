@@ -1,6 +1,7 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
+{% import "sproutseo/_includes/sproutseo" as sprout %}
 
 {% set globals = craft.sproutSeo.getGlobalMetadata() %}
 {% set settings = globals.settings %}
@@ -16,7 +17,11 @@
 		{% set dividerOptions = craft.sproutSeo.getSeoDividerOptions() %}
 
 		{{ forms.field({
-			label: 'Select the character that will be used between Title segments'|t,
+			label: 'Select the character that will be used between Title segments'|t ~ sprout.infoIcon({
+				label: "Character"|t,
+				search: true,
+				priority: 'globals'
+			}),
 			instructions: "This character will be used in between your title segments, i.e. Blog Post Title – {sitename}"|t({ 'sitename': siteName }),
 			first: true,
 		}, sproutFields.selectOther({
@@ -29,7 +34,11 @@
 		{% set titleOptions = craft.sproutSeo.getAppendMetaTitleOptions() %}
 
 		{{ forms.field({
-			label: 'Append value to all Meta Titles'|t,
+			label: 'Append value to all Meta Titles'|t ~ sprout.infoIcon({
+				label: "Append value"|t,
+				search: true,
+				priority: 'globals'
+			}),
 			instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. Article Title - {sitename}"|t({ 'sitename': siteName }),
 			first: true,
 		}, sproutFields.selectOther({
@@ -46,7 +55,11 @@
 		} %}
 
 		{{ forms.selectField({
-			label: 'Default Open Graph Type'|t,
+			label: 'Default Open Graph Type'|t ~ sprout.infoIcon({
+				label: "Type"|t,
+				openGraph: true,
+				priority: 'globals'
+			}),
 			instructions: 'Select your default Open Graph Type for individual entries using the Sprout SEO Optimize field. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
     target="_blank">How Open Graph Stories work.</a>'|t,
 			name: 'sproutseo[globals][settings][defaultOgType]',
@@ -64,7 +77,11 @@
 		} %}
 
 		{{ forms.selectField({
-			label: 'Default Twitter Card Type'|t,
+			label: 'Default Twitter Card Type'|t ~ sprout.infoIcon({
+				label: "Type"|t,
+				twitterCard: true,
+				priority: 'globals'
+			}),
 			instructions: 'Select your default Twitter Card Type for individual entries using the Sprout SEO Optimize field.. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
 			name: 'sproutseo[globals][settings][defaultTwitterCard]',
 			options: twitterCardOptions,
@@ -81,6 +98,7 @@
 
 	</form>
 
+	{% includeCssResource  "sproutseo/css/sproutseo.css" %}
 	{% includeJsResource 'sproutseo/js/sproutfields.js' %}
 
 	{% includejs %}
