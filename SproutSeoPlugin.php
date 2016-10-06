@@ -23,7 +23,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getDescription()
 	{
-		return 'All-in-One SEO, Social Media Sharing, Redirects, and Sitemap';
+		return 'Content-focused SEO. Curate every detail of your online visibility.';
 	}
 
 	/**
