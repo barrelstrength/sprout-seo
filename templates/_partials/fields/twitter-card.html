@@ -2,12 +2,11 @@
 
 <div class="sproutseo-box-twitter">
 	<div class="sproutseo-fields" id="twitter-card">
-
+		
 		{% set twitterCardOptions = {
-		'' : 'Select Twitter Card Type...'|t,
-		'summary' : 'Summary Card'|t,
-		'summary_large_image' : 'Summary Card with Large Image'|t,
-		'player' : 'Player Card'|t
+			'' : 'Select Twitter Card Type...'|t,
+			'summary' : 'Summary Card'|t,
+			'summary_large_image' : 'Summary Card with Large Image'|t,
 		} %}
 
 		{{ forms.selectField({
@@ -20,69 +19,47 @@
 			required: false
 		}) }}
 
-		{% if fieldContext is defined and fieldContext == 'field' %}
-			{{ forms.textField({
-				label: "Creator"|t,
-				instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
-				name: 'sproutseo[metadata][twitterCreator]',
-				value: values.twitterCreator,
-				errors: "",
-				required: false,
-				placeholder: '@ContentAuthor'
-			}) }}
-		{% endif %}
+		{{ forms.textField({
+			label: "Title"|t,
+			name: "sproutseo[metadata][twitterTitle]",
+			value: values.twitterTitle
+		}) }}
 
-		<div id="twitter-player" class="hidden">
+		{{ forms.textareaField({
+			label: "Description"|t,
+			name: "sproutseo[metadata][twitterDescription]",
+			value: values.twitterDescription
+		}) }}
 
-			<hr>
+		{{ forms.field({
+			label: 'Image'|t ~ sprout.infoIcon({
+				label: 'Image'|t,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
+			}),
+			instructions: 'An image that represents your content that will display in social sharing.'|t,
+		}, forms.elementSelect({
+			elements: twitterImageElements,
+			sourceElementId: [values.twitterImage],
+			elementType: elementType,
+			id: 'metaDetailsTwitterImage',
+			name: 'sproutseo[metadata][twitterImage]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image'|t,
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
 
-			{{ forms.textField({
-				label: "Player"|t,
-				instructions: "HTTPS URL to iframe player. This must be a HTTPS URL which does not generate mixed content warnings in a web browser."|t,
-				name: 'sproutseo[metadata][twitterPlayer]',
-				value: values.twitterPlayer,
-				errors: "",
-				required: false
-			}) }}
-
-			{{ forms.textField({
-				label: "Stream"|t,
-				instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrations directly. If
-						provided, the stream must be delivered in the MPEG-4 container format."|t,
-				name: 'sproutseo[metadata][twitterPlayerStream]',
-				value: values.twitterPlayerStream,
-				errors: "",
-				required: false
-			}) }}
-
-			{{ forms.textField({
-				label: "Stream Content Type"|t,
-				instructions: "The MIME type subtype combination that describes the content contained in twitter player stream."|t,
-				name: 'sproutseo[metadata][twitterPlayerStreamContentType]',
-				value: values.twitterPlayerStreamContentType,
-				errors: "",
-				required: false
-			}) }}
-
-			{{ forms.textField({
-				label: "Height"|t,
-				instructions: "Height of IFRAME specified in twitter player in pixels."|t,
-				name: 'sproutseo[metadata][twitterPlayerHeight]',
-				value: values.twitterPlayerHeight,
-				errors: "",
-				required: false
-			}) }}
-
-			{{ forms.textField({
-				label: "Width"|t,
-				instructions: 'Width of IFRAME specified in twitter player in pixels.'|t,
-				name: 'sproutseo[metadata][twitterPlayerWidth]',
-				value: values.twitterPlayerWidth,
-				errors: "",
-				required: false
-			}) }}
-
-		</div>
+		{{ forms.textField({
+			label: "Creator"|t,
+			instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
+			name: 'sproutseo[metadata][twitterCreator]',
+			value: values.twitterCreator,
+			errors: "",
+			required: false,
+			placeholder: '@ContentAuthor'
+		}) }}
 
 	</div>
 </div>

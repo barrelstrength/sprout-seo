@@ -33,19 +33,25 @@
 			value: values.ogDescription
 		}) }}
 
-		{{ forms.textField({
-			label: "Audio"|t,
-			instructions: "A URL to an audio file to accompany this content."|t,
-			name: "sproutseo[metadata][ogAudio]",
-			value: values.ogAudio
-		}) }}
-
-		{{ forms.textField({
-			label: "Video"|t,
-			instructions: "A URL to a video file that complements this content."|t,
-			name: "sproutseo[metadata][ogVideo]",
-			value: values.ogVideo
-		}) }}
+		{{ forms.field({
+			label: 'Image'|t ~ sprout.infoIcon({
+				label: 'Image'|t,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
+			}),
+			instructions: 'An image that represents your content that will display in social sharing.'|t,
+		}, forms.elementSelect({
+			elements: ogImageElements,
+			sourceElementId: [values.ogImage],
+			elementType: elementType,
+			id: 'metaDetailsOgImage',
+			name: 'sproutseo[metadata][ogImage]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image'|t,
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
 
 	</div>
 
