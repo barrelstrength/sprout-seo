@@ -96,6 +96,9 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
+		// Import third party libraries
+		require_once dirname(__FILE__) . '/vendor/autoload.php';
+
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
 		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseUrlEnabledSectionType');

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "commerceguys/addressing": "^0.7.1",
+        "commerceguys/intl": "^0.6.1"
+    }
+}
