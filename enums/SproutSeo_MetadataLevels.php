@@ -26,11 +26,11 @@ abstract class SproutSeo_MetadataLevels extends BaseEnum
 	const SectionMetadata = 'section';
 
 	/**
-	 * UI Names: Pages, SEO Optimize FieldType, Element Metadata
-	 * Internal Names: ElementMetadata, $elementMetadataModel
+	 * UI Names: Pages, SEO Optimize FieldType, Content Metadata
+	 * Internal Names: ContentMetadata, $contentMetadataModel
 	 * Priority: 1
 	 */
-	const ElementMetadata = 'element';
+	const ContentMetadata = 'content';
 
 	/**
 	 * UI Names: Code Metadata, Code Overrides, Template Overrides

@@ -168,8 +168,8 @@ class SproutSeo_MetadataModel extends BaseModel
 				$this->setAttributes($this->prepareCodeMetadata($overrideInfo));
 				break;
 
-			case SproutSeo_MetadataLevels::ElementMetadata:
-				$this->setAttributes($this->prepareElementMetadata($overrideInfo));
+			case SproutSeo_MetadataLevels::ContentMetadata:
+				$this->setAttributes($this->prepareContentMetadata($overrideInfo));
 				break;
 
 			case SproutSeo_MetadataLevels::SectionMetadata:
@@ -218,20 +218,20 @@ class SproutSeo_MetadataModel extends BaseModel
 	}
 
 	/**
-	 * Get Element Metadata based on an Element ID
+	 * Get Content Metadata based on an Element ID
 	 *
 	 * @param $overrideInfo
 	 *
 	 * @return array
 	 */
-	protected function prepareElementMetadata($overrideInfo)
+	protected function prepareContentMetadata($overrideInfo)
 	{
 		if (isset($overrideInfo['elementId']))
 		{
 			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$elementMetadata = sproutSeo()->elementMetadata->getElementMetadataByElementId($overrideInfo['elementId'], $locale);
+			$contentMetadata = sproutSeo()->contentMetadata->getContentMetadataByElementId($overrideInfo['elementId'], $locale);
 
-			return $elementMetadata->getAttributes();
+			return $contentMetadata->getAttributes();
 		}
 
 		return array();
