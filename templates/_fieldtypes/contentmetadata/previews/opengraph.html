@@ -1,18 +1,4 @@
 <style>
-	/*.unclickable {*/
-		/*overflow: hidden;*/
-		/*position: relative;*/
-		/*-webkit-user-select: none;*/
-	/*}*/
-	/*.unclickable .unclickableMask {*/
-		/*background: url(https://static.xx.fbcdn.net/rsrc.php/v2/y4/r/-PAXP-deijE.gif) repeat;*/
-		/*height: 100%;*/
-		/*left: 0;*/
-		/*position: absolute;*/
-		/*top: 0;*/
-		/*width: 100%;*/
-		/*z-index: 10;*/
-	/*}*/
 
 	.opengraph-preview {
 		clear: both;
@@ -21,7 +7,7 @@
 		overflow: hidden;
 		position: relative;
 		z-index: 0;
-		width: 527px;
+		width: 100%; /* 527px */
 		border: 1px solid;
 		border-color: #e9ebee #e9ebee #d1d1d1;
 		/*box-shadow: 0 0 0 1px rgba(0, 0, 0, .15) inset, 0 1px 4px rgba(0, 0, 0, .1);*/
@@ -71,6 +57,10 @@
 		bottom: 20px;
 	}
 
+	.opengraph-preview-small,
+	.opengraph-preview-large {
+		width: 526px;
+	}
 	.opengraph-preview-large .preview-img img {
 		width: 526px;
 		height: 275px;
@@ -95,21 +85,21 @@
 	</div>
 </div>
 
-<br>
+{#<br>#}
 
-<div class="opengraph-preview opengraph-preview-large">
-	<div class="unclickable">
+{#<div class="opengraph-preview opengraph-preview-large">#}
+	{#<div class="unclickable">#}
 
-		<div class="preview-img">
-			<img src="https://external-lax3-1.xx.fbcdn.net/safe_image.php?d=AQA1nWq4jheAvUd-&amp;w=158&amp;h=158&amp;url=https%3A%2F%2Fstraightupcraft.com%2Fcontent%2Fgallery%2Flogo-olive.png&amp;cfs=1&amp;upscale=1" alt="" width="526" height="275">
-		</div>
+		{#<div class="preview-img">#}
+			{#<img src="https://external-lax3-1.xx.fbcdn.net/safe_image.php?d=AQA1nWq4jheAvUd-&amp;w=158&amp;h=158&amp;url=https%3A%2F%2Fstraightupcraft.com%2Fcontent%2Fgallery%2Flogo-olive.png&amp;cfs=1&amp;upscale=1" alt="" width="526" height="275">#}
+		{#</div>#}
 
-		<div class="preview-body">
-			<div class="og-heading">Tutorials for Craft CMS</div>
-			<div class="og-description">Learn Craft CMS and design easy to use, stunning websites and web applications for your business and your clients.</div>
-			<div class="og-url">straightupcraft.com</div>
-		</div>
+		{#<div class="preview-body">#}
+			{#<div class="og-heading">Tutorials for Craft CMS</div>#}
+			{#<div class="og-description">Learn Craft CMS and design easy to use, stunning websites and web applications for your business and your clients.</div>#}
+			{#<div class="og-url">straightupcraft.com</div>#}
+		{#</div>#}
 
-		<div class="unclickableMask"></div>
-	</div>
-</div>
+		{#<div class="unclickableMask"></div>#}
+	{#</div>#}
+{#</div>#}

@@ -1,5 +1,6 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
+{% import "sproutseo/_includes/sproutseo" as sprout %}
 
 {% set settings = craft.sproutSeo.getSettings() %}
 {% set values = { robots : craft.sproutSeo.getGlobalRobots } %}
@@ -24,3 +25,5 @@
 	</form>
 
 {% endset %}
+
+{% includeCssResource  "sproutseo/css/sproutseo.css" %}

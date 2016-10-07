@@ -3,7 +3,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
+class m160901_000004_sproutSeo_addContentMetadataTable extends BaseMigration
 {
 	/**
 	 * @return bool
@@ -11,7 +11,7 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 	public function safeUp()
 	{
 		$tableName    = 'sproutseo_overrides';
-		$newTableName = 'sproutseo_metadata_elements';
+		$newTableName = 'sproutseo_metadata_content';
 
 		$varchar = array(
 			'column'   => ColumnType::Varchar,

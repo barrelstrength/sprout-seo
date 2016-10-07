@@ -15,9 +15,9 @@ class SproutSeo_SectionMetadataController extends BaseController
 		$sectionMetadataId = ($segment == 'new') ? null : $segment;
 
 		// Get our Section Metadata Model
-		$sectionMetadata   = sproutSeo()->sectionMetadata->getSectionMetadataById($sectionMetadataId);
-		$isNew             = $sectionMetadata->id != null ? false : true;
-		$urlEnabledSection = null;
+		$sectionMetadata       = sproutSeo()->sectionMetadata->getSectionMetadataById($sectionMetadataId);
+		$isNew                 = $sectionMetadata->id != null ? false : true;
+		$urlEnabledSectionType = null;
 
 		$twitterImageElements = array();
 		$ogImageElements      = array();
@@ -65,21 +65,31 @@ class SproutSeo_SectionMetadataController extends BaseController
 
 		if (!$isNew)
 		{
-			$urlEnabledSection = sproutSeo()->sectionMetadata->getUrlEnabledSectionByType($sectionMetadata->type);
+			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionByType($sectionMetadata->type);
+
+			$type                                    = $sectionMetadata->type;
+			$urlEnabledSectionId                     = $sectionMetadata->urlEnabledSectionId;
+			$urlEnabledSection                       = $urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId];
+			sproutSeo()->optimize->urlEnabledSection = $urlEnabledSection;
 		}
 
+		sproutSeo()->optimize->globals = sproutSeo()->globalMetadata->getGlobalMetadata();
+
+		$prioritizedMetadata = sproutSeo()->optimize->getPrioritizedMetadataModel();
+
 		$this->renderTemplate('sproutseo/sections/_edit', array(
-			'sectionMetadataId'    => $sectionMetadataId,
-			'sectionMetadata'      => $sectionMetadata,
-			'metaImageElements'    => $metaImageElements,
-			'ogImageElements'      => $ogImageElements,
-			'twitterImageElements' => $twitterImageElements,
-			'assetsSourceExists'   => $assetsSourceExists,
-			'elementType'          => $elementType,
-			'settings'             => $settings,
-			'isCustom'             => $isCustom,
-			'isNew'                => $isNew or $isCustom,
-			'urlEnabledSection'    => $urlEnabledSection
+			'sectionMetadataId'     => $sectionMetadataId,
+			'sectionMetadata'       => $sectionMetadata,
+			'metaImageElements'     => $metaImageElements,
+			'ogImageElements'       => $ogImageElements,
+			'twitterImageElements'  => $twitterImageElements,
+			'assetsSourceExists'    => $assetsSourceExists,
+			'elementType'           => $elementType,
+			'settings'              => $settings,
+			'isCustom'              => $isCustom,
+			'isNew'                 => $isNew or $isCustom,
+			'urlEnabledSectionType' => $urlEnabledSectionType,
+			'prioritizedMetadata'   => $prioritizedMetadata
 		));
 	}
 
@@ -163,7 +173,7 @@ class SproutSeo_SectionMetadataController extends BaseController
 		if ($lastInsertId = sproutSeo()->sectionMetadata->saveSectionMetadataViaSitemapSection($model))
 		{
 			$this->returnJson(array(
-				'success' => true,
+				'success'         => true,
 				'sectionMetadata' => $model
 			));
 		}

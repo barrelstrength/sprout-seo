@@ -2,25 +2,25 @@
 namespace Craft;
 
 /**
- * Class SproutSeo_ElementMetadataService
+ * Class SproutSeo_ContentMetadataService
  *
  * @package Craft
  */
-class SproutSeo_ElementMetadataService extends BaseApplicationComponent
+class SproutSeo_ContentMetadataService extends BaseApplicationComponent
 {
 	/**
-	 * Get an Element Metadata by Element ID
+	 * Get an Content Metadata by Element ID
 	 *
 	 * @param $elementId
 	 * @param $locale
 	 *
 	 * @return BaseModel
 	 */
-	public function getElementMetadataByElementId($elementId, $locale)
+	public function getContentMetadataByElementId($elementId, $locale)
 	{
 		$query = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metadata_elements')
+			->from('sproutseo_metadata_content')
 			->where('elementId = :elementId', array(':elementId' => $elementId))
 			->andWhere('locale = :locale', array(':locale' => $locale))
 			->queryRow();
@@ -31,41 +31,41 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Create an Element Metadata record
+	 * Create an Content Metadata record
 	 *
 	 * @param $attributes
 	 */
-	public function createElementMetadata($attributes)
+	public function createContentMetadata($attributes)
 	{
 		craft()->db->createCommand()
-			->insert('sproutseo_metadata_elements', $attributes);
+			->insert('sproutseo_metadata_content', $attributes);
 	}
 
 	/**
-	 * Update am Element Metadata record
+	 * Update am Content Metadata record
 	 *
 	 * @param $id
 	 * @param $attributes
 	 */
-	public function updateElementMetadata($id, $attributes)
+	public function updateContentMetadata($id, $attributes)
 	{
 		craft()->db->createCommand()
-			->update('sproutseo_metadata_elements',
+			->update('sproutseo_metadata_content',
 				$attributes,
 				'id = :id', array(':id' => $id)
 			);
 	}
 
 	/**
-	 * Delete an Element Metadata record
+	 * Delete an Content Metadata record
 	 *
 	 * @param null $id
 	 *
 	 * @return int
 	 */
-	public function deleteElementMetadataById($id = null)
+	public function deleteContentMetadataById($id = null)
 	{
-		$record = new SproutSeo_ElementMetadataRecord();
+		$record = new SproutSeo_ContentMetadataRecord();
 
 		return $record->deleteByPk($id);
 	}

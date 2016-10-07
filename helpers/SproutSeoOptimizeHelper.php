@@ -440,8 +440,13 @@ class SproutSeoOptimizeHelper
 		$optimizedDescription = (!empty($model->optimizedDescription) ? $model->optimizedDescription : null);
 
 		// Make our images single IDs instead of an array
-		$optimizedImage          = (!empty($model->optimizedImage) and is_array($model->optimizedImage)) ? $model['optimizedImage'][0] : $model->optimizedImage;
+		$optimizedImage = (!empty($model->optimizedImage) and is_array($model->optimizedImage)) ? $model['optimizedImage'][0] : $model->optimizedImage;
+		$ogImage        = (!empty($model->ogImage) and is_array($model->ogImage)) ? $model['ogImage'][0] : $model->ogImage;
+		$twitterImage   = (!empty($model->twitterImage) and is_array($model->twitterImage)) ? $model['twitterImage'][0] : $model->twitterImage;
+
 		$model['optimizedImage'] = $optimizedImage;
+		$model['ogImage']        = $ogImage;
+		$model['twitterImage']   = $twitterImage;
 
 		// Set null values for any Advanced SEO Optimization
 		// override fields whose blocks have been disabled

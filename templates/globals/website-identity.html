@@ -1,6 +1,7 @@
 {% extends "sproutseo/_layouts/general" %}
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_components/selectOther" as sproutFields %}
+{% import "sproutseo/_includes/sproutseo" as sprout %}
 
 {% set logoElement       = null %}
 {% set elementType       = craft.sproutseo.getAssetElementType %}
@@ -37,7 +38,14 @@
 		<input type="hidden" name="globalKeys" value="meta,identity">
 
 		{{ forms.textField({
-			label: "Name"|t,
+			label: "Name"|t ~ sprout.infoIcon({
+				label: "Name"|t,
+				search: true,
+				structured: true,
+				openGraph: true,
+				twitterCard: true,
+				priority: 'globals'
+			}),
 			instructions: "The preferred name of your website. <a href='#' class='fieldtoggle instructionstoggle'
 			data-target='toggle-alternate'>Add alternate name</a>."|t,
 			name: 'sproutseo[globals][identity][name]',
@@ -54,7 +62,12 @@
 		<div id="toggle-alternate" class="{{ (websiteIdentity['alternateName'] is defined and websiteIdentity.alternateName ?:
 		'hidden' ) }}">
 			{{ forms.textField({
-				label: "Alternate Name"|t,
+				label: "Alternate Name"|t ~ sprout.infoIcon({
+					label: "Alternate Name"|t,
+					search: true,
+					structured: true,
+					priority: 'globals'
+				}),
 				instructions: "An alternate name you want search engines to consider (i.e. such as a legal name or nickname)."|t,
 				name: 'sproutseo[globals][identity][alternateName]',
 				value: websiteIdentity['alternateName'] is defined ? websiteIdentity.alternateName : null,
@@ -66,7 +79,14 @@
 		</div>
 
 		{{ forms.textareaField({
-			label: "Description"|t,
+			label: "Description"|t ~ sprout.infoIcon({
+				label: "Description"|t,
+				search: true,
+				structured: true,
+				openGraph: true,
+				twitterCard: true,
+				priority: 'globals'
+			}),
 			instructions: "A description of your website."|t,
 			name: 'sproutseo[globals][identity][description]',
 			value: websiteIdentity['description'] is defined ? websiteIdentity.description : null,
@@ -78,7 +98,14 @@
 		}) }}
 
 		{{ forms.field({
-			label: 'Image'|t,
+			label: 'Image'|t ~ sprout.infoIcon({
+				label: "Image"|t,
+				search: true,
+				structured: true,
+				openGraph: true,
+				twitterCard: true,
+				priority: 'globals'
+			}),
 			instructions: "The preferred logo or profile picture for your website."|t,
 			required: true
 		}, forms.elementSelect({
@@ -96,7 +123,11 @@
 		{% set keywordsValue = websiteIdentity['keywords'] is defined ? websiteIdentity.keywords : null %}
 
 		{{ forms.textField({
-			label: "Keywords"|t,
+			label: "Keywords"|t ~ sprout.infoIcon({
+				label: "Keywords"|t,
+				search: true,
+				priority: 'globals'
+			}),
 			instructions: "The primary keywords or phrases that describe your website."|t,
 			id: 'keywords',
 			name: 'sproutseo[globals][identity][keywords]',
@@ -105,7 +136,14 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "URL"|t,
+			label: "URL"|t ~ sprout.infoIcon({
+				label: "URL"|t,
+				search: true,
+				structured: true,
+				openGraph: true,
+				twitterCard: true,
+				priority: 'globals'
+			}),
 			instructions: "The URL of your official website. Defaults to the same value as Site URL in Settings->General."|t,
 			name: 'sproutseo[globals][identity][url]',
 			value: websiteIdentity['url'] is defined and websiteIdentity['url'] != "" ? websiteIdentity.url : siteUrl,
@@ -114,7 +152,12 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Email"|t,
+			label: "Email"|t ~ sprout.infoIcon({
+				label: "Email"|t,
+				search: true,
+				structured: true,
+				priority: 'globals'
+			}),
 			instructions: 'The preferred email address for your website.'|t,
 			name: 'sproutseo[globals][identity][email]',
 			value: websiteIdentity['email'] is defined ? websiteIdentity.email : null,
@@ -122,7 +165,12 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Telephone"|t,
+			label: "Telephone"|t ~ sprout.infoIcon({
+				label: "Telephone"|t,
+				search: true,
+				structured: true,
+				priority: 'globals'
+			}),
 			instructions: 'The preferred telephone number for your website.'|t,
 			name: 'sproutseo[globals][identity][telephone]',
 			value: websiteIdentity['telephone'] is defined ? websiteIdentity.telephone : null,
@@ -134,7 +182,13 @@
 		<div class="field identityType-field-wrapper">
 
 			<div class="heading">
-				<label for="siteOwnerType">{{ "Website Identity"|t}}</label>
+				<label for="siteOwnerType">{{ "Website Identity"|t }}  {{ sprout.infoIcon({
+					label: "Website Identity"|t,
+					search: true,
+					structured: true,
+					priority: 'globals'
+					}) }}
+				</label>
 				<div class="instructions"><p>{{ "Select the primary concept that represents your brand identity." |t |raw}}</p></div>
 			</div>
 
@@ -197,7 +251,12 @@
 		{# These fields should only display when 'Organization' is selected #}
 		<div class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
 			{{ forms.dateField({
-				label: "Founding Date"|t,
+				label: "Founding Date"|t ~ sprout.infoIcon({
+					label: "Founding Date"|t,
+					search: true,
+					structured: true,
+					priority: 'globals'
+				}),
 				id : "foundingDate",
 				instructions: 'The date that this organization was founded.'|t,
 				name: 'sproutseo[globals][identity][foundingDate]',
@@ -213,7 +272,12 @@
 
 				<div class="field">
 					<div class="heading">
-						<label for="siteOwnerType">{{ "Opening Hours"|t}}</label>
+						<label for="siteOwnerType">{{ "Opening Hours"|t }} {{ sprout.infoIcon({
+								label: "Opening Hours"|t,
+								search: true,
+								structured: true,
+								priority: 'globals'
+							}) }}</label>
 						<div class="instructions"><p>{{ "The general opening hours for a business. Leave the hours blank to
 						indicate the business is closed on a particular day."	|t |raw}}</p></div>
 					</div>
@@ -264,7 +328,12 @@
 			{% set genderOptions = craft.sproutseo.getGenderOptions() %}
 
 			{{ forms.field({
-				label: "Gender"|t,
+				label: "Gender"|t ~ sprout.infoIcon({
+					label: "Gender"|t,
+					search: true,
+					structured: true,
+					priority: 'globals'
+				}),
 				first: true,
 			}, sproutFields.selectOther({
 				name: 'sproutseo[globals][identity][gender]',
