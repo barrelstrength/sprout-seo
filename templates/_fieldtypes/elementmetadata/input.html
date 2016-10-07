@@ -160,22 +160,38 @@
 
 	{% if fieldContext == 'sectionMetadata' or (fieldContext == 'field' and pluginSettings.enableMetaDetailsFields and settings.showMainEntity) %}
 		{% set schemas = craft.sproutSeo.getSchemaOptions() %}
-
-		{{ forms.selectField({
-			label: 'Main Entity'|t ~ sprout.infoIcon({
-				label: "Meta Image"|t,
-				search: true,
-				structured: true,
-				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
-			}),
-			instructions: 'Select the Structured Data schema type that best represents your content.'|t,
-			id: 'sproutseo-mainentity',
-			name: 'sproutseo[metadata][schemaTypeId]',
-			options: schemas,
-			value: values.schemaTypeId,
-			errors: "",
-			required: false
-		}) }}
+		{% set schemaSubtypes = craft.sproutSeo.getSchemaSubtypes(schemas) %}
+		{% set mainEntityValues = {'schemaTypeId': values.schemaTypeId, 'schemaOverrideTypeId': values.schemaOverrideTypeId} %}
+		<div id ="organization" class="organization-info">
+			<div class="identitytype-dropdown organizationinfo-dropdown">
+				{{ forms.selectField({
+					label: 'Main Entity'|t ~ sprout.infoIcon({
+						label: "Meta Image"|t,
+						search: true,
+						structured: true,
+						priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
+					}),
+					instructions: 'Select the Structured Data schema type that best represents your content.'|t,
+					id: 'first',
+					name: 'sproutseo[metadata][schemaTypeId]',
+					options: schemas,
+					value: '',
+					errors: "",
+					required: false
+				}) }}
+			</div>
+			<div class="identitytype-dropdown organizationinfo-dropdown hidden">
+				{{ forms.selectField({
+					id: 'second',
+					role: 'listbox',
+					name: 'sproutseo[metadata][schemaOverrideTypeId]',
+					options: {'':''},
+					value: '',
+					errors: '',
+					required: false,
+				}) }}
+			</div>
+		</div>
 	{% endif %}
 
 </div>
@@ -332,8 +348,33 @@ feel like they are part of the natural flow of fields #}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
 
 {% includejs %}
-
+	var items = {{ schemaSubtypes|json_encode|raw }};
+	var entryValues = {{ mainEntityValues|json_encode|raw }};
 	$( document ).ready(function() {
+
+		//Main entity dropdowns
+		$( "#first" ).change(function() {
+			if(this.value === 'craft-sproutseo-personschema')
+			{
+				$( "#second" ).addClass('hidden');
+			}
+			else
+			{
+				$( "#second" ).removeClass('hidden');
+			}
+		});
+		// check if we need load depending dropdowns
+		if (entryValues)
+		{
+			if (entryValues.hasOwnProperty('schemaTypeId') && entryValues.schemaTypeId)
+			{
+				$('#first').val(entryValues.schemaTypeId).change();
+			}
+			if (entryValues.hasOwnProperty('schemaOverrideTypeId') && entryValues.schemaOverrideTypeId)
+			{
+				$('#second').val(entryValues.schemaOverrideTypeId).change();
+			}
+		}
 
 		function getScenario()
 		{
@@ -583,13 +624,12 @@ feel like they are part of the natural flow of fields #}
 			{#addSeoBadgeListener(value);#}
 			{#initSeoBadge(value);#}
 		});
+
 	});
+
 
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
 {% endincludejs %}
 
-
-
-
-
+{% includeJsResource  "sproutseo/js/metadataelement.js" %}

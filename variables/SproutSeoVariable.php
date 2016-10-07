@@ -753,7 +753,7 @@ class SproutSeoVariable
 
 		$schemaOptions = array_merge($schemaOptions, array_map(function ($schema) {
 			return array(
-				'label' => $schema->getName(),
+				'label' => $schema->getType(),
 				'value' => $schema->getUniqueKey()
 			);
 		}, $defaultSchema));
@@ -764,7 +764,7 @@ class SproutSeoVariable
 
 			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema) {
 				return array(
-					'label' => $schema->getName(),
+					'label' => $schema->getType(),
 					'value' => $schema->getUniqueKey()
 				);
 			}, $customSchema));
@@ -811,5 +811,59 @@ class SproutSeoVariable
 		}
 
 		return $socials;
+	}
+
+	private function getSchemaChildren($type)
+	{
+		$tree = sproutSeo()->schema->getVocabularies($type);
+		$childrens = array();
+		// let's assume 3 levels
+		if (isset($tree['children']))
+		{
+			foreach ($tree['children'] as $key => $level1)
+			{
+				$childrens[$key] = array();
+
+				if (isset($level1['children']))
+				{
+					foreach ($level1['children'] as $key2 => $level2)
+					{
+						$childrens[$key][$key2] = array();
+
+						if (isset($level2['children']))
+						{
+							foreach ($level2['children'] as $key3 => $level3)
+							{
+								array_push($childrens[$key][$key2], $key3);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return $childrens;
+	}
+
+	/**
+	 * Prepare an array of the optimized Meta
+	 *
+	 * @return multi-dimensional array
+	 */
+	public function getSchemaSubtypes($schemas)
+	{
+		$values = null;
+
+		foreach ($schemas as $schema)
+		{
+			if (isset($schema['label']))
+			{
+				$type = $schema['label'];
+
+				$values[$schema['value']] = $this->getSchemaChildren($type);
+			}
+		}
+
+		return $values;
 	}
 }
