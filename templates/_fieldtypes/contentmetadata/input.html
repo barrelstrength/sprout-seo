@@ -170,23 +170,6 @@
 
 </div>
 
-{% if fieldContext == 'field' %}
-	{% if settings.displayPreview %}
-		<ul class="sproutseo-preview-btns">
-			<li class="selected">Search</li>
-			<li>Facebook</li>
-			<li>Twitter</li>
-		</ul>
-
-		{% include 'sproutseo/_fieldtypes/contentmetadata/previews/search' %}
-
-		{#{% include 'sproutseo/_fieldtypes/contentmetadata/previews/opengraph' %}#}
-
-		{#{% include 'sproutseo/_fieldtypes/contentmetadata/previews/twittercard' %}#}
-
-	{% endif %}
-{% endif %}
-
 {% if pluginSettings.enableMetaDetailsFields %}
 
 	{% if settings.showSearchMeta or settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
@@ -323,6 +306,54 @@
 	</div>
 
 {% endif %}
+
+<style>
+	.btngroup li {
+		display: inline-block;
+	}
+
+	.sproutseo-previewbody {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 60%;
+	}
+	.sproutseo-previewbody div {
+		max-width:600px;
+	}
+</style>
+
+{% if settings.displayPreview %}{% endif %}
+
+<div id="my-modal" class="modal hidden">
+	{#<div>#}
+		<div class="header">
+			<nav class="btngroup right">
+				<ul>
+					<li><a class="btn sel" href="#sproutseo-preview-search"><span class="sproutseo-icon icon-search">&#xe800;</span> Search</a></li>
+					<li><a class="btn" href="#sproutseo-preview-facebook"><span class="sproutseo-icon icon-facebook">&#xe802;</span> Facebook</a></li>
+					<li><a class="btn" href="#sproutseo-preview-twitter"><span class="sproutseo-icon icon-twitter">&#xe807;</span> Twitter</a></li>
+				</ul>
+			</nav>
+			<h2 class="left">{{ "Preview"|t|upper }}</h2><br>
+			<p>An example of how your content might display in search and social sharing.</p>
+		</div>
+
+		<div class="body sproutseo-previewbody">
+			<div id="tab-sproutseo-preview-search">
+				{% include 'sproutseo/_fieldtypes/contentmetadata/previews/search' %}
+			</div>
+			<div id="tab-sproutseo-preview-facebook" class="hidden">
+				{% include 'sproutseo/_fieldtypes/contentmetadata/previews/opengraph' %}
+			</div>
+			<div id="tab-sproutseo-preview-twitter" class="hidden">
+				{% include 'sproutseo/_fieldtypes/contentmetadata/previews/twittercard' %}
+			</div>
+		</div>
+	{#</div>#}
+</div>
+
+
 
 <style>
 	{# Hide the Heading of our Field so all our grouped sub-fields
@@ -488,10 +519,42 @@ feel like they are part of the natural flow of fields #}
 
 		{% endif %}
 
+
+    $('#my-modal nav li a').on('click', function(e) {
+			e.preventDefault();
+
+console.log('waa');
+
+			$currentBase = $('#my-modal nav li a.sel');
+			currentHref = $currentBase.attr('href');
+			currentTab = currentHref.replace('#', '#tab-');
+			$currentBase.removeClass('sel');
+			$(currentTab).addClass('hidden');
+
+			targetHref = $(this).attr('href');
+			targetTab = targetHref.replace('#', '#tab-');
+			$(this).addClass('sel');
+			$(targetTab).removeClass('hidden');
+		});
+
+		$('#sproutseo-seopreview').on('click', function(e) {
+			e.preventDefault();
+
+			$('#my-modal').removeClass('hidden');
+			new Garnish.Modal($('#my-modal'), {
+				resizable: true
+			});
+
+		});
+
 	});
 
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
+
+
+
+
 {% endincludejs %}
 
 

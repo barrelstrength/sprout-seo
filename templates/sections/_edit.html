@@ -91,16 +91,16 @@
 						<label>{{ "Section"|t }}</label>
 					</div>
 					<div class="input">
-						<h6>{{ urlEnabledSection is not empty ? urlEnabledSection.getUrlEnabledSectionName() : "Custom Page"|t }}</h6>
+						<h6>{{ urlEnabledSectionType is not empty ? urlEnabledSectionType.getUrlEnabledSectionName() : "Custom Page"|t }}</h6>
 					</div>
 				</div>
 
 				<div class="field">
 					<div class="heading">
-						<label>{{ "Element"|t }} <span class="info">{% if urlEnabledSection is not empty %}{{ "The Matched Element variable <code>{matchedElement}</code> is available to your URL-enabled pages"|t({ 'matchedElement' : urlEnabledSection.getMatchedElementVariable() })|raw }}{% else %}{{ "Custom Pages do not have any pre-prepared Elements available to the page"|t }}{% endif %}</span></label>
+						<label>{{ "Element"|t }} <span class="info">{% if urlEnabledSectionType is not empty %}{{ "The Matched Element variable <code>{matchedElement}</code> is available to your URL-enabled pages"|t({ 'matchedElement' : urlEnabledSectionType.getMatchedElementVariable() })|raw }}{% else %}{{ "Custom Pages do not have any pre-prepared Elements available to the page"|t }}{% endif %}</span></label>
 					</div>
 					<div class="input">
-						<h6>{{ urlEnabledSection is not empty ? urlEnabledSection.getMatchedElementVariable() : "–" }}</h6>
+						<h6>{{ urlEnabledSectionType is not empty ? urlEnabledSectionType.getMatchedElementVariable() : "–" }}</h6>
 					</div>
 				</div>
 
@@ -170,23 +170,6 @@
 					required: false
 				}) }}
 
-			</div>
-
-			<div class="pane meta">
-				{% if settings.displayPreview %}
-					<ul class="sproutseo-preview-btns">
-					<li class="selected">Search</li>
-					<li>Facebook</li>
-					<li>Twitter</li>
-					</ul>
-
-					{% include 'sproutseo/_fieldtypes/contentmetadata/previews/search' %}
-
-					{#{% include 'sproutseo/_fieldtypes/contentmetadata/previews/opengraph' %}#}
-
-					{#{% include 'sproutseo/_fieldtypes/contentmetadata/previews/twittercard' %}#}
-
-				{% endif %}
 			</div>
 
 		</div>
