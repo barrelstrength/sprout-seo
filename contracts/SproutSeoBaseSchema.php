@@ -193,7 +193,7 @@ abstract class SproutSeoBaseSchema
 	 */
 	public function addText($propertyName, $string)
 	{
-		if (is_string($string))
+		if (is_string($string) && $string != '')
 		{
 			$this->structuredData[$propertyName] = $string;
 		}
@@ -261,7 +261,7 @@ abstract class SproutSeoBaseSchema
 	 */
 	public function addTelephone($propertyName, $phone)
 	{
-		if (is_string($phone))
+		if (is_string($phone) && $phone != '')
 		{
 			$this->structuredData[$propertyName] = $phone;
 		}
