@@ -160,6 +160,26 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get the active URL-Enabled Section Type via the Element Type
+	 *
+	 * @param $urlEnabledSectionType
+	 *
+	 * @return array
+	 */
+	public function getUrlEnabledSectionByElementType($elementType)
+	{
+		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
+		{
+			if ($urlEnabledSectionType->getElementType() == $elementType)
+			{
+				return $urlEnabledSectionType;
+			}
+		}
+
+		return array();
+	}
+
+	/**
 	 * @return array|\CDbDataReader
 	 */
 	public function getCustomSections()
@@ -241,9 +261,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getSectionMetadataByInfo($urlEnabledSection)
 	{
-		$type                          = $urlEnabledSection->type->getElementTableName();
-		$urlEnabledSectionIdColumnName = $urlEnabledSection->type->getUrlEnabledSectionIdColumnName();
-		$urlEnabledSectionId           = $urlEnabledSection->element->{$urlEnabledSectionIdColumnName};
+		$type                = $urlEnabledSection->type->getElementTableName();
+		$urlEnabledSectionId = sproutSeo()->optimize->urlEnabledSection->id;
 
 		$sectionMetadata = craft()->db->createCommand()
 			->select('*')

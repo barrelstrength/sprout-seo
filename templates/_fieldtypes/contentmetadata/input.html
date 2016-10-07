@@ -54,7 +54,7 @@
 				openGraph: true,
 				twitterCard: true,
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'pages'
-			}),
+			}) ~ '<span class="locale" id="sproutseo-seopreview" style="cursor:pointer;">preview</span>',
 			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'sectionMetadata' ? appendTitleValueInstructions : ""),
 			name: 'sproutseo[metadata][optimizedTitle]',
 			id: 'sproutseo-optimizedtitle',
@@ -62,7 +62,7 @@
 			showCharsLeft: true,
 			value: values.title,
 			errors: "",
-			placeholder: siteName,
+			placeholder: prioritizedMetadata.optimizedTitle ?? siteName,
 			class: 'nicetext',
 			first: true
 		}) }}
@@ -104,7 +104,7 @@
 			id: 'sproutseo-optimizeddescription',
 			value: values.description,
 			errors: "",
-			placeholder: "The official website of " ~ siteName
+			placeholder: prioritizedMetadata.optimizedDescription ?? "The official website of {siteName}"|t({ siteName: siteName })
 		}) }}
 	{% endif %}
 

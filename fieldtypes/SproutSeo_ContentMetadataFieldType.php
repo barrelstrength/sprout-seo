@@ -113,6 +113,22 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 
 		$settings = $this->getSettings();
 
+		// Get the prioritized metadata at this level so we can use it as placeholder text
+		/**
+		 * @var SproutSeoBaseUrlEnabledSectionType $urlEnabledSectionType
+		 */
+		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionByElementType($this->element->getElementType());
+
+		$urlEnabledSectionIdColumnName = $urlEnabledSectionType->getUrlEnabledSectionIdColumnName();
+		$type                          = $urlEnabledSectionType->getId();
+		$urlEnabledSectionId           = $this->element->{$urlEnabledSectionIdColumnName};
+		$urlEnabledSection             = $urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId];
+
+		sproutSeo()->optimize->globals           = sproutSeo()->globalMetadata->getGlobalMetadata();
+		sproutSeo()->optimize->urlEnabledSection = $urlEnabledSection;
+
+		$prioritizedMetadata = sproutSeo()->optimize->getPrioritizedMetadataModel();
+
 		// @todo - what are the ogImageElements, twitterImageElements, etc being used for?
 		// they don't appear to be used in the elementdata/input template...
 		return craft()->templates->render('sproutseo/_fieldtypes/contentmetadata/input', array(
@@ -125,7 +141,8 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 			'elementType'          => $elementType,
 			'fieldId'              => $fieldId,
 			'fieldContext'         => 'field',
-			'settings'             => $settings
+			'settings'             => $settings,
+			'prioritizedMetadata'  => $prioritizedMetadata
 		));
 	}
 
