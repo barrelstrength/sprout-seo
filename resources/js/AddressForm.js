@@ -1,6 +1,6 @@
-var SproutCommerce = {};
+var SproutSeo = {};
 
-SproutCommerce.AddressForm = {
+SproutSeo.AddressForm = {
 
 	settings: null,
 	$element: null,
@@ -27,7 +27,7 @@ SproutCommerce.AddressForm = {
 		// public method
 		var self = this;
 		this.initFormInput = $.proxy(function(countryCode) {
-			return SproutCommerce.AddressForm.changeFormInput(countryCode)
+			return SproutSeo.AddressForm.changeFormInput(countryCode)
 		},this)
 	},
 	changeFormInput: function(countryCode, obj) {

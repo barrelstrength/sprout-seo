@@ -1,14 +1,14 @@
-if (typeof Craft.SproutCommerce === typeof undefined)
+if (typeof Craft.SproutSeo === typeof undefined)
 {
-	Craft.SproutCommerce = {};
+	Craft.SproutSeo = {};
 }
 (function($) {
 
 	// Set all the standard Craft.SproutFields.* stuff
-	$.extend(Craft.SproutCommerce,
+	$.extend(Craft.SproutSeo,
 	{
 		initFields: function($container) {
-			$('.sproutaddressinfo-box', $container).SproutCommerceField();
+			$('.sproutaddressinfo-box', $container).SproutSeoField();
 		}
 	});
 
@@ -18,17 +18,17 @@ if (typeof Craft.SproutCommerce === typeof undefined)
 
 	$.extend($.fn,
 	{
-		SproutCommerceField: function() {
+		SproutSeoField: function() {
 			return this.each(function() {
 				if (!$.data(this, 'sproutaddress-edit')) {
-					new Craft.SproutCommerce.AddressBox(this);
+					new Craft.SproutSeo.AddressBox(this);
 				}
 			});
 		},
 	});
 
 
-Craft.SproutCommerce.AddressBox = Garnish.Base.extend({
+Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 
 	$addressBox: null,
 	addressInfoId: null,
@@ -50,28 +50,29 @@ Craft.SproutCommerce.AddressBox = Garnish.Base.extend({
 	},
 	_renderAddress: function()
 	{
-		//this.$addressBox.html("");
-
 		var $buttons = $("<div class='address-buttons'/>").appendTo(this.$addressBox);
 
-		this.$editButton = $("<a class='small btn right edit sproutaddress-edit' href=''>" + Craft.t("Edit") + "</a>").appendTo($buttons);
+		var editLabel = '';
+		if (this.addressInfoId == '')
+		{
+			editLabel = Craft.t("Add Address");
+		}
+		else
+		{
+			editLabel = Craft.t("Update Address");
+		}
+
+
+		this.$editButton = $("<a class='small btn right edit sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
 
 		$("<div class='address-format' />").appendTo(this.$addressBox);
 
 		this.$none = $("<div style='display: none' />").appendTo(this.$addressBox);
 		this.$addressForm = $("<div class='sproutaddress-form' />").appendTo(this.$none);
-		//this.$addressForm = this.$addressBox.find('.sproutaddress-form');
 
 		this._updateAddressFormat();
 
-		this.actionUrl = Craft.getActionUrl('sproutCommerce/address/changeForm');
-
-		//var countryCode = this.$addressForm.find('.sproutaddress-country-select select').val();
-		//console.log('upd');
-		//console.log(this.$addressForm.html())
-		//var addressForm = new SproutCommerce.AddressForm.init(this.$addressForm, { countryCode: countryCode, actionUrl: this.actionUrl } );
-
-		//this._attachListeners();
+		this.actionUrl = Craft.getActionUrl('sproutSeo/address/changeForm');
 	},
 	editAddressBox: function (ev) {
 
@@ -81,7 +82,7 @@ Craft.SproutCommerce.AddressBox = Garnish.Base.extend({
 
 			var countryCode = this.$addressForm.find('.sproutaddress-country-select select').val();
 
-			this.modal = new Craft.SproutCommerce.EditAddressModal(this.$addressForm, {
+			this.modal = new Craft.SproutSeo.EditAddressModal(this.$addressForm, {
 				onSubmit: $.proxy(this, '_saveAddress'),
 				countryCode: countryCode,
 				actionUrl: this.actionUrl,
@@ -93,7 +94,7 @@ Craft.SproutCommerce.AddressBox = Garnish.Base.extend({
 	_updateAddressFormat: function ()
 	{
 		var self = this;
-		Craft.postActionRequest('sproutCommerce/address/updateAddressFormat', { addressInfoId: this.addressInfoId }, $.proxy(function (response) {
+		Craft.postActionRequest('SproutSeo/address/updateAddressFormat', { addressInfoId: this.addressInfoId }, $.proxy(function (response) {
 			self.$addressBox.find('.address-format').append(response.html);
 			self.$addressForm.append(response.countryCodeHtml);
 			self.$addressForm.append(response.formInputHtml);
@@ -103,7 +104,7 @@ Craft.SproutCommerce.AddressBox = Garnish.Base.extend({
 	{
 		var self = this;
 
-		Craft.postActionRequest('sproutCommerce/address/saveAddress', data, $.proxy(function (response) {
+		Craft.postActionRequest('SproutSeo/address/saveAddress', data, $.proxy(function (response) {
 			if (response.result == true)
 			{
 				self.$addressBox.find('.address-format').html(response.html);

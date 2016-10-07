@@ -2,10 +2,10 @@
 namespace Craft;
 
 /**
- * Class SproutCommerce_AddressInfoModel
+ * Class sproutSeo_AddressInfoModel
  *
  */
-class SproutSeo_AddressInfoModel extends SproutCommerce_BaseModel
+class SproutSeo_AddressInfoModel extends BaseModel
 {
 	protected function defineAttributes()
 	{
@@ -39,9 +39,9 @@ class SproutSeo_AddressInfoModel extends SproutCommerce_BaseModel
 
 		$countryCode = $this->countryCode;
 
-		if (!sproutCommerce()->addressForm->validatePostalCode($countryCode, $postalCode))
+		if (!sproutSeo()->addressForm->validatePostalCode($countryCode, $postalCode))
     {
-	    $postalName = sproutCommerce()->addressForm->getPostalName($countryCode);
+	    $postalName = sproutSeo()->addressForm->getPostalName($countryCode);
 
 	    $params = array(
 		    'postalName' => $postalName,
@@ -63,7 +63,7 @@ class SproutSeo_AddressInfoModel extends SproutCommerce_BaseModel
 			return "";
 		}
 
-		$address = sproutCommerce()->addressForm->getAddressWithFormat($this);
+		$address = sproutSeo()->addressForm->getAddressWithFormat($this);
 
 		return $address;
 	}

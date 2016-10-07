@@ -6,15 +6,15 @@ namespace Craft;
 class SproutSeo_AddressInfoService extends BaseApplicationComponent
 {
 
-	public function saveAddressInfo(SproutCommerce_AddressInfoModel $model)
+	public function saveAddressInfo(SproutSeo_AddressInfoModel $model)
 	{
 		$result = false;
 
-		$record = new SproutCommerce_AddressInfoRecord;
+		$record = new SproutSeo_AddressInfoRecord;
 
 		if (!empty($model->id))
 		{
-			$record = SproutCommerce_AddressInfoRecord::model()->findById($model->id);
+			$record = SproutSeo_AddressInfoRecord::model()->findById($model->id);
 
 			if (!$record)
 			{
@@ -77,13 +77,13 @@ class SproutSeo_AddressInfoService extends BaseApplicationComponent
 
 	public function getAddressById($id)
 	{
-		if ($record = SproutCommerce_AddressInfoRecord::model()->findByPk($id))
+		if ($record = SproutSeo_AddressInfoRecord::model()->findByPk($id))
 		{
-			return SproutCommerce_AddressInfoModel::populateModel($record);
+			return SproutSeo_AddressInfoModel::populateModel($record);
 		}
 		else
 		{
-			return new SproutCommerce_AddressInfoModel();
+			return new SproutSeo_AddressInfoModel();
 		}
 	}
 }

@@ -363,3 +363,15 @@ a.fieldtoggle.instructionstoggle {
 	height: 32px; /* necessary to stop on select event adjusting height */
 	margin-top: 5px;
 }
+
+.sproutaddressinfo-box {
+	width: 25%
+}
+
+.sproutaddress-body .text, .sproutaddress-body .select {
+	padding: 0;
+}
+
+.sproutaddress-modal {
+	overflow: visible
+}

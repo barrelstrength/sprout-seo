@@ -10,7 +10,7 @@ class SproutSeo_AddressInfoRecord extends BaseRecord
 	 */
 	public function getTableName()
 	{
-		return 'sproutcommerce_addressinfo';
+		return 'sproutseo_addressinfo';
 	}
 
 	/**

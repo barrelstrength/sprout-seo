@@ -248,6 +248,15 @@
 
 		<hr>
 
+		<div class="field website-identity-address-wrapper">
+			<div class="heading">
+				<label>{{ "Address"|t }}</label>
+				<div class="sproutaddressinfo-box" data-addressinfoid=''></div>
+			</div>
+		</div>
+
+		<hr>
+
 		{# These fields should only display when 'Organization' is selected #}
 		<div class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
 			{{ forms.dateField({
@@ -422,6 +431,9 @@
 				$( "#localbusiness" ).addClass('hidden');
 			}
 		});
+
+
+		new Craft.SproutSeo.AddressBox($('.sproutaddressinfo-box'), {})
 	});
 
 {% endincludejs %}
@@ -434,4 +446,6 @@
 {% includeJsResource  "sproutseo/js/lib/jquery.caret.min.js" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
 {% includeJsResource  "sproutseo/js/websiteidentity.js" %}
+{% includeJsResource  "sproutseo/js/EditAddressModal.js" %}
+{% includeJsResource  "sproutseo/js/AddressBox.js" %}
 

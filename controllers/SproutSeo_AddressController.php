@@ -11,13 +11,13 @@ class SproutSeo_AddressController extends BaseController
 	{
 		$addressInfoId = craft()->request->getPost('addressInfoId');
 
-		$addressInfoModel = sproutCommerce()->addressInfo->getAddressById($addressInfoId);
+		$addressInfoModel = sproutSeo()->addressInfo->getAddressById($addressInfoId);
 
 		$countryCode = $addressInfoModel->countryCode;
 
-		sproutCommerce()->addressForm->setParams($countryCode, 'address');
+		sproutSeo()->addressForm->setParams($countryCode, 'address');
 
-		echo sproutCommerce()->addressForm->countryInput();
+		echo sproutSeo()->addressForm->countryInput();
 
 		exit;
 	}
@@ -29,9 +29,9 @@ class SproutSeo_AddressController extends BaseController
 
 		$countryCode = craft()->request->getPost('countryCode');
 
-		sproutCommerce()->addressForm->setParams($countryCode, 'address');
+		sproutSeo()->addressForm->setParams($countryCode, 'address');
 
-		echo sproutCommerce()->addressForm->getAddressFormHtml();
+		echo sproutSeo()->addressForm->getAddressFormHtml();
 		exit;
 	}
 
@@ -40,18 +40,34 @@ class SproutSeo_AddressController extends BaseController
 		$this->requireAjaxRequest();
 		$this->requirePostRequest();
 
-		$addressInfoId = craft()->request->getPost('addressInfoId');
+		$addressInfoId = null;
 
-		$addressInfoModel = sproutCommerce()->addressInfo->getAddressById($addressInfoId);
+		if (craft()->request->getPost('addressInfoId') != null)
+		{
+			$addressInfoId = craft()->request->getPost('addressInfoId');
 
-		$html = sproutCommerce()->addressForm->getAddressWithFormat($addressInfoModel);
+			$addressInfoModel = sproutSeo()->addressInfo->getAddressById($addressInfoId);
+		}
+		else
+		{
+			$addressInfoModel = new SproutSeo_AddressInfoModel();
+
+			$addressInfoModel->countryCode = sproutSeo()->addressForm->defaultCountryCode();
+		}
+
+		$html = sproutSeo()->addressForm->getAddressWithFormat($addressInfoModel);
+
+		if ($addressInfoId == null)
+		{
+			$html = "<p>" . Craft::t("No Address") . ".</p>";
+		}
 
 		$countryCode = $addressInfoModel->countryCode;
 
-		sproutCommerce()->addressForm->setParams($countryCode, 'address', '', $addressInfoModel);
+		sproutSeo()->addressForm->setParams($countryCode, 'address', '', $addressInfoModel);
 
-		$countryCodeHtml = sproutCommerce()->addressForm->countryInput();
-		$formInputHtml   = sproutCommerce()->addressForm->getAddressFormHtml();
+		$countryCodeHtml = sproutSeo()->addressForm->countryInput();
+		$formInputHtml   = sproutSeo()->addressForm->getAddressFormHtml();
 
 		$this->returnJson(array(
 			'html'            => $html,
@@ -74,18 +90,18 @@ class SproutSeo_AddressController extends BaseController
 		$addressInfo = craft()->request->getPost('addressInfo');
 		$formValues  = craft()->request->getPost('formValues');
 
-		$addressInfoModel = SproutCommerce_AddressInfoModel::populateModel($formValues);
+		$addressInfoModel = SproutSeo_AddressInfoModel::populateModel($formValues);
 
 		if ($addressInfoModel->validate() == true)
 		{
-			if (sproutCommerce()->addressInfo->saveAddressInfo($addressInfoModel))
+			if (sproutSeo()->addressInfo->saveAddressInfo($addressInfoModel))
 			{
-				$html = sproutCommerce()->addressForm->getAddressWithFormat($addressInfoModel);
+				$html = sproutSeo()->addressForm->getAddressWithFormat($addressInfoModel);
 				$countryCode = $addressInfoModel->countryCode;
 
-				sproutCommerce()->addressForm->setParams($countryCode, 'address', '', $addressInfoModel);
-				$countryCodeHtml = sproutCommerce()->addressForm->countryInput();
-				$formInputHtml   = sproutCommerce()->addressForm->getAddressFormHtml();
+				sproutSeo()->addressForm->setParams($countryCode, 'address', '', $addressInfoModel);
+				$countryCodeHtml = sproutSeo()->addressForm->countryInput();
+				$formInputHtml   = sproutSeo()->addressForm->getAddressFormHtml();
 
 				$result['result'] = true;
 
