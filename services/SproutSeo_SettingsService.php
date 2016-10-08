@@ -57,13 +57,6 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 				$seoSettings->enableMetaDetailsFields;
 		}
 
-		if (isset($settings["enableCodeOverrides"]))
-		{
-			$seoSettings->enableCodeOverrides = isset($settings["enableCodeOverrides"]) ?
-				$settings["enableCodeOverrides"] :
-				$seoSettings->enableCodeOverrides;
-		}
-
 		if (isset($settings["enableCustomSections"]))
 		{
 			$seoSettings->enableCustomSections = isset($settings["enableCustomSections"]) ?

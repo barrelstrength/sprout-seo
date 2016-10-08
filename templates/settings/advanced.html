@@ -95,16 +95,6 @@
 
       </div>
 
-      <hr>
-
-      {{ forms.lightswitchField({
-        label: "Enable code overrides in your Twig templates"|t,
-        instructions: "Code overrides are off by default because they should only be necessary when advanced customization of your metadata is needed. Setting this to off by default is meant to encourage you to consider how to solve your problem in a more user-friendly, budget-friendly way, before going down this path."|t,
-        name: 'enableCodeOverrides',
-        on: settings.enableCodeOverrides,
-        onLabel: "Enable"|t
-      }) }}
-
     {% endnamespace %}
 
     <hr>
