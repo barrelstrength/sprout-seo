@@ -128,10 +128,10 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 
 				$type = $urlEnabledSectionType->getId();
 
-				$urlEnabledSectionIdColumn = $urlEnabledSectionType->getUrlEnabledSectionIdColumnName();
-				$urlEnabledSectionId       = $element->{$urlEnabledSectionIdColumn};
+				$urlEnabledSectionTypeIdColumn = $urlEnabledSectionType->getIdColumnName();
+				$urlEnabledSectionTypeId       = $element->{$urlEnabledSectionTypeIdColumn};
 
-				$uniqueKey = $type . '-' . $urlEnabledSectionId;
+				$uniqueKey = $type . '-' . $urlEnabledSectionTypeId;
 
 				$urlEnabledSection          = $urlEnabledSectionType->urlEnabledSections[$uniqueKey];
 				$urlEnabledSection->element = $element;
@@ -146,7 +146,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function getUrlEnabledSectionByType($type)
+	public function getUrlEnabledSectionTypeByType($type)
 	{
 		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
 		{
@@ -166,7 +166,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function getUrlEnabledSectionByElementType($elementType)
+	public function getUrlEnabledSectionTypeByElementType($elementType)
 	{
 		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
 		{

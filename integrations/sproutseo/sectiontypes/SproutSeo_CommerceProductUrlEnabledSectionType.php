@@ -9,7 +9,7 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	/**
 	 * @return string
 	 */
-	public function getUrlEnabledSectionName()
+	public function getName()
 	{
 		return 'Commerce Products';
 	}
@@ -17,7 +17,7 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	/**
 	 * @return string
 	 */
-	public function getUrlEnabledSectionIdColumnName()
+	public function getIdColumnName()
 	{
 		if ($this->typeIdContext == 'matchedElementCheck')
 		{
@@ -32,7 +32,7 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	 *
 	 * @return mixed
 	 */
-	public function getUrlEnabledSectionById($id)
+	public function getById($id)
 	{
 		return craft()->commerce_productTypes->getProductTypeById($id);
 	}
@@ -42,9 +42,9 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	 *
 	 * @return mixed
 	 */
-	public function getUrlEnabledSectionFieldLayoutSettingsObject($id)
+	public function getFieldLayoutSettingsObject($id)
 	{
-		$productType = $this->getUrlEnabledSectionById($id);
+		$productType = $this->getById($id);
 
 		return $productType;
 	}
@@ -84,7 +84,7 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	/**
 	 * @return string
 	 */
-	public function getUrlEnabledSectionTableName()
+	public function getTableName()
 	{
 		return 'commerce_producttypes_i18n';
 	}

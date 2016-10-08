@@ -117,9 +117,9 @@ class SproutSeo_EntryMetadataFieldType extends BaseFieldType
 		/**
 		 * @var SproutSeoBaseUrlEnabledSectionType $urlEnabledSectionType
 		 */
-		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionByElementType($this->element->getElementType());
+		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($this->element->getElementType());
 
-		$urlEnabledSectionIdColumnName = $urlEnabledSectionType->getUrlEnabledSectionIdColumnName();
+		$urlEnabledSectionIdColumnName = $urlEnabledSectionType->getIdColumnName();
 		$type                          = $urlEnabledSectionType->getId();
 		$urlEnabledSectionId           = $this->element->{$urlEnabledSectionIdColumnName};
 		$urlEnabledSection             = $urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId];

@@ -46,14 +46,14 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	/**
 	 * @return mixed
 	 */
-	abstract public function getUrlEnabledSectionName();
+	abstract public function getName();
 
 	/**
 	 * @param $id
 	 *
 	 * @return mixed
 	 */
-	abstract public function getUrlEnabledSectionById($id);
+	abstract public function getById($id);
 
 	/**
 	 * Get the thing that we can call getFieldLayouts on. We will try to loop
@@ -61,29 +61,24 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	 *
 	 * @return mixed
 	 */
-	abstract public function getUrlEnabledSectionFieldLayoutSettingsObject($id);
+	abstract public function getFieldLayoutSettingsObject($id);
 
 	/**
 	 * @return mixed
 	 */
-	abstract public function getAllUrlEnabledSections();
+	abstract public function getTableName();
 
 	/**
 	 * @return mixed
 	 */
-	abstract public function getUrlEnabledSectionTableName();
-
-	/**
-	 * @return mixed
-	 */
-	abstract public function getUrlEnabledSectionIdColumnName();
+	abstract public function getIdColumnName();
 
 	/**
 	 * By default, we assume the urlFormat setting is in a column of the same name
 	 *
 	 * @return string
 	 */
-	public function getUrlEnabledSectionUrlFormatColumnName()
+	public function getUrlFormatColumnName()
 	{
 		return 'urlFormat';
 	}
@@ -102,6 +97,11 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	 * @return mixed
 	 */
 	abstract public function getMatchedElementVariable();
+
+	/**
+	 * @return mixed
+	 */
+	abstract public function getAllUrlEnabledSections();
 
 	/**
 	 * Get all Section Metadata Sections related to this URL-Enabled Section Type

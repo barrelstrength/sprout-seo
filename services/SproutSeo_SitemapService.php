@@ -32,16 +32,17 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			// Fetching all enabled locales
 			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
-				$urlEnabledSection = sproutSeo()->sectionMetadata->getUrlEnabledSectionByType($sitemapSettings['type']);
+				$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
 
 				$elements = array();
 
-				if ($urlEnabledSection != null)
+				if ($urlEnabledSectionType != null)
 				{
-					$urlEnabledSectionId = $urlEnabledSection->getUrlEnabledSectionIdColumnName();
+					$urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
 
-					$criteria                    = craft()->elements->getCriteria($urlEnabledSection->getElementType());
-					$criteria->{$urlEnabledSectionId} = $sitemapSettings['urlEnabledSectionId'];
+					$criteria = craft()->elements->getCriteria($urlEnabledSectionType->getElementType());
+
+					$criteria->{$urlEnabledSectionTypeId} = $sitemapSettings['urlEnabledSectionId'];
 
 					$criteria->limit   = null;
 					$criteria->enabled = true;

@@ -65,7 +65,7 @@ class SproutSeo_SectionMetadataController extends BaseController
 
 		if (!$isNew)
 		{
-			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionByType($sectionMetadata->type);
+			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sectionMetadata->type);
 
 			$type                                    = $sectionMetadata->type;
 			$urlEnabledSectionId                     = $sectionMetadata->urlEnabledSectionId;
