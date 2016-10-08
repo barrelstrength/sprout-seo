@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_ContentMetadataFieldType extends BaseFieldType
+class SproutSeo_EntryMetadataFieldType extends BaseFieldType
 {
 	/**
 	 * FieldType name
@@ -10,7 +10,7 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 	 */
 	public function getName()
 	{
-		return Craft::t('Content Metadata');
+		return Craft::t('Entry Metadata');
 	}
 
 	/**
@@ -49,7 +49,7 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 	 */
 	public function getSettingsHtml()
 	{
-		return craft()->templates->render('sproutseo/_fieldtypes/contentmetadata/settings', array(
+		return craft()->templates->render('sproutseo/_fieldtypes/entrymetadata/settings', array(
 			'settings' => $this->getSettings()
 		));
 	}
@@ -69,7 +69,7 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 
 		$locale = $this->element->locale;
 
-		$values = sproutSeo()->contentMetadata->getContentMetadataByElementId($elementId, $locale);
+		$values = sproutSeo()->entryMetadata->getEntryMetadataByElementId($elementId, $locale);
 
 		$ogImageElements      = array();
 		$metaImageElements    = array();
@@ -131,7 +131,7 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 
 		// @todo - what are the ogImageElements, twitterImageElements, etc being used for?
 		// they don't appear to be used in the elementdata/input template...
-		return craft()->templates->render('sproutseo/_fieldtypes/contentmetadata/input', array(
+		return craft()->templates->render('sproutseo/_fieldtypes/entrymetadata/input', array(
 			'name'                 => $name,
 			'values'               => $values,
 			'ogImageElements'      => $ogImageElements,
@@ -161,7 +161,7 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 		$locale = $this->element->locale;
 
 		// Get existing or new MetadataModel
-		$model = sproutSeo()->contentMetadata->getContentMetadataByElementId($this->element->id, $locale);
+		$model = sproutSeo()->entryMetadata->getEntryMetadataByElementId($this->element->id, $locale);
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
@@ -183,7 +183,7 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 			// Remove record since it is now blank
 			if ($model->id)
 			{
-				sproutSeo()->contentMetadata->deleteContentMetadataById($model->id);
+				sproutSeo()->entryMetadata->deleteEntryMetadataById($model->id);
 			}
 
 			return;
@@ -214,11 +214,11 @@ class SproutSeo_ContentMetadataFieldType extends BaseFieldType
 
 		if ($model->id)
 		{
-			sproutSeo()->contentMetadata->updateContentMetadata($model->id, $columns);
+			sproutSeo()->entryMetadata->updateEntryMetadata($model->id, $columns);
 		}
 		else
 		{
-			sproutSeo()->contentMetadata->createContentMetadata($columns);
+			sproutSeo()->entryMetadata->createEntryMetadata($columns);
 		}
 	}
 

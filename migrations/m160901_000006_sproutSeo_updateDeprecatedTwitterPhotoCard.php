@@ -12,7 +12,7 @@ class m160901_000006_sproutSeo_updateDeprecatedTwitterPhotoCard extends BaseMigr
 	{
 		$tableNames = array(
 			'sproutseo_metadata_sections',
-			'sproutseo_metadata_content'
+			'sproutseo_metadata_entries'
 		);
 
 		foreach ($tableNames as $tableName)
