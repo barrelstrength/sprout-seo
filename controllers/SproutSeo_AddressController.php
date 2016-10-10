@@ -90,11 +90,18 @@ class SproutSeo_AddressController extends BaseController
 		$addressInfo = craft()->request->getPost('addressInfo');
 		$formValues  = craft()->request->getPost('formValues');
 
+		$source = '';
+
+		if (craft()->request->getPost('source') != null)
+		{
+			$source = craft()->request->getPost('source');
+		}
+
 		$addressInfoModel = SproutSeo_AddressInfoModel::populateModel($formValues);
 
 		if ($addressInfoModel->validate() == true)
 		{
-			if (sproutSeo()->addressInfo->saveAddressInfo($addressInfoModel))
+			if (sproutSeo()->addressInfo->saveAddressInfo($addressInfoModel, $source))
 			{
 				$html = sproutSeo()->addressForm->getAddressWithFormat($addressInfoModel);
 				$countryCode = $addressInfoModel->countryCode;

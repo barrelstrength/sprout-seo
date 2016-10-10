@@ -102,6 +102,11 @@ Craft.SproutSeo.EditAddressModal = Garnish.Modal.extend(
 				formValues: formValues
 			}
 
+			if (this.settings.source != null)
+			{
+				data.source = this.settings.source;
+			}
+
 			this.settings.onSubmit(data, $.proxy(function(errors) {
 
 				$.each(errors, function(index, val) {

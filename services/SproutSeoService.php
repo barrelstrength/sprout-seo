@@ -66,4 +66,9 @@ class SproutSeoService extends BaseApplicationComponent
 		$this->addressInfo     = Craft::app()->getComponent('sproutSeo_addressInfo');
 		$this->addressForm     = Craft::app()->getComponent('sproutSeo_addressForm');
 	}
+
+	public function onSaveAdderssInfo(Event $event)
+	{
+		$this->raiseEvent('onSaveAdderssInfo', $event);
+	}
 }

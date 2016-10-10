@@ -42,6 +42,8 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 	{
 		this.$addressBox = $addressBox;
 
+		this.settings = settings;
+
 		this.addressInfoId = this.$addressBox.data('addressinfoid');
 
 		this._renderAddress();
@@ -78,6 +80,11 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 
 			ev.preventDefault();
 
+		  var source = null;
+			if (this.settings.source != null)
+			{
+				source = this.settings.source;
+			}
 			this.$target = $(ev.currentTarget);
 
 			var countryCode = this.$addressForm.find('.sproutaddress-country-select select').val();
@@ -87,7 +94,8 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 				countryCode: countryCode,
 				actionUrl: this.actionUrl,
 				addressInfoId: this.addressInfoId,
-				namespace: 'address'
+				namespace: 'address',
+				source: source
 			}, this.$target);
 
 	},

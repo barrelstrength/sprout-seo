@@ -6,7 +6,7 @@ namespace Craft;
 class SproutSeo_AddressInfoService extends BaseApplicationComponent
 {
 
-	public function saveAddressInfo(SproutSeo_AddressInfoModel $model)
+	public function saveAddressInfo(SproutSeo_AddressInfoModel $model, $source = '')
 	{
 		$result = false;
 
@@ -46,6 +46,15 @@ class SproutSeo_AddressInfoService extends BaseApplicationComponent
 					$model->setAttributes($record->getAttributes());
 
 					$result = true;
+
+					$eventParams = array(
+						'model'  => $model,
+						'source' => $source
+					);
+
+					$event = new Event($this, $eventParams);
+
+					sproutSeo()->onSaveAdderssInfo($event);
 				}
 			}
 			catch (\Exception $e)
