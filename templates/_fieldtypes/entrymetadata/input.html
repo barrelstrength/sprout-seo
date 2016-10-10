@@ -103,8 +103,8 @@
 			showCharsLeft: true,
 			id: 'sproutseo-optimizeddescription',
 			value: values.description,
+			placeholder: prioritizedMetadata.optimizedDescription ?? "The official website of {siteName}"|t({ siteName: siteName }),
 			errors: "",
-			placeholder: prioritizedMetadata.optimizedDescription ?? "The official website of {siteName}"|t({ siteName: siteName })
 		}) }}
 	{% endif %}
 
@@ -143,7 +143,8 @@
 			instructions: "The primary keywords or phrases that describe your website."|t,
 			id: 'sproutseo-optimizedkeywords',
 			name: 'sproutseo[metadata][optimizedKeywords]',
-			value: keywordsValue,
+			value: values.optimizedKeywords,
+			placeholder: prioritizedMetadata.optimizedKeywords ?? values.optimizedKeywords,
 			errors: ''
 		}) }}
 	{% endif %}

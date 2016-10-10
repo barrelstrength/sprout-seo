@@ -16,7 +16,7 @@
 				target="_blank">How Open Graph Stories work.</a>'|t,
 			name: 'sproutseo[metadata][ogType]',
 			options: ogTypesOptions,
-			value: values.ogType,
+			value: values.ogType ?? prioritizedMetadata.ogType,
 			errors: "",
 			required: false
 		}) }}
@@ -24,13 +24,15 @@
 		{{ forms.textField({
 			label: "Title"|t,
 			name: "sproutseo[metadata][ogTitle]",
-			value: values.ogTitle
+			value: values.ogTitle,
+			placeholder: prioritizedMetadata.optimizedTitle ?? values.optimizedTitle ?? null,
 		}) }}
 
 		{{ forms.textareaField({
 			label: "Description"|t,
 			name: "sproutseo[metadata][ogDescription]",
-			value: values.ogDescription
+			value: values.ogDescription,
+			placeholder: prioritizedMetadata.optimizedDescription ?? values.optimizedDescription ?? null,
 		}) }}
 
 		{{ forms.field({

@@ -9,9 +9,9 @@
 		maxlength: 60,
 		showCharsLeft: true,
 		value: values.title,
+		placeholder: prioritizedMetadata.optimizedTitle ?? values.optimizedTitle ?? null,
 		errors: "",
 		required: false,
-		placeholder: " "
 	}) }}
 
 	{{ forms.textField({
@@ -21,9 +21,9 @@
 		maxlength: 160,
 		showCharsLeft: true,
 		value: values.description,
+		placeholder: prioritizedMetadata.optimizedDescription ?? values.optimizedDescription ?? null,
 		errors: "",
 		required: false,
-		placeholder: " "
 	}) }}
 
 	{{ forms.textField({
@@ -31,6 +31,7 @@
 		instructions: "A list of keywords that describe your content"|t,
 		name: 'sproutseo[metadata][keywords]',
 		value: values.keywords,
+		placeholder: prioritizedMetadata.optimizedKeywords ?? values.optimizedKeywords ?? null,
 		errors: "",
 		required: false
 	}) }}

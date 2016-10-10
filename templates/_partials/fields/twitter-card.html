@@ -14,7 +14,7 @@
 			instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
 			name: 'sproutseo[metadata][twitterCard]',
 			options: twitterCardOptions,
-			value: (values.twitterCard is defined ? values.twitterCard : 'summary'),
+			value: values.twitterCard ?? prioritizedMetadata.twitterCard ?? 'summary',
 			errors: "",
 			required: false
 		}) }}
@@ -22,13 +22,15 @@
 		{{ forms.textField({
 			label: "Title"|t,
 			name: "sproutseo[metadata][twitterTitle]",
-			value: values.twitterTitle
+			value: values.twitterTitle,
+			placeholder: prioritizedMetadata.optimizedTitle ?? values.optimizedTitle ?? null,
 		}) }}
 
 		{{ forms.textareaField({
 			label: "Description"|t,
 			name: "sproutseo[metadata][twitterDescription]",
-			value: values.twitterDescription
+			value: values.twitterDescription,
+			placeholder: prioritizedMetadata.optimizedDescription ?? values.optimizedDescription ?? null,
 		}) }}
 
 		{{ forms.field({
@@ -58,7 +60,7 @@
 			value: values.twitterCreator,
 			errors: "",
 			required: false,
-			placeholder: '@ContentAuthor'
+			placeholder: prioritizedMetadata.twitterCreator ?? '@ContentAuthor'
 		}) }}
 
 	</div>
