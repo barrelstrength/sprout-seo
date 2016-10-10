@@ -72,6 +72,8 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 		this.$none = $("<div style='display: none' />").appendTo(this.$addressBox);
 		this.$addressForm = $("<div class='sproutaddress-form' />").appendTo(this.$none);
 
+		this.$addressBox.find('.address-format').append("<div class='spinner' />");
+
 		this._updateAddressFormat();
 
 		this.actionUrl = Craft.getActionUrl('sproutSeo/address/changeForm');
@@ -102,7 +104,8 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 	_updateAddressFormat: function ()
 	{
 		var self = this;
-		Craft.postActionRequest('SproutSeo/address/updateAddressFormat', { addressInfoId: this.addressInfoId }, $.proxy(function (response) {
+		Craft.postActionRequest('sproutSeo/address/updateAddressFormat', { addressInfoId: this.addressInfoId }, $.proxy(function (response) {
+			this.$addressBox.find('.address-format .spinner').remove();
 			self.$addressBox.find('.address-format').append(response.html);
 			self.$addressForm.append(response.countryCodeHtml);
 			self.$addressForm.append(response.formInputHtml);
@@ -112,7 +115,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 	{
 		var self = this;
 
-		Craft.postActionRequest('SproutSeo/address/saveAddress', data, $.proxy(function (response) {
+		Craft.postActionRequest('sproutSeo/address/saveAddress', data, $.proxy(function (response) {
 			if (response.result == true)
 			{
 				self.$addressBox.find('.address-format').html(response.html);

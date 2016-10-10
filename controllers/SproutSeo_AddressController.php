@@ -101,29 +101,26 @@ class SproutSeo_AddressController extends BaseController
 
 		if ($addressInfoModel->validate() == true)
 		{
-			if (sproutSeo()->addressInfo->saveAddressInfo($addressInfoModel, $source))
-			{
-				$html = sproutSeo()->addressForm->getAddressWithFormat($addressInfoModel);
-				$countryCode = $addressInfoModel->countryCode;
 
-				sproutSeo()->addressForm->setParams($countryCode, 'address', '', $addressInfoModel);
-				$countryCodeHtml = sproutSeo()->addressForm->countryInput();
-				$formInputHtml   = sproutSeo()->addressForm->getAddressFormHtml();
+			$html = sproutSeo()->addressForm->getAddressWithFormat($addressInfoModel);
+			$countryCode = $addressInfoModel->countryCode;
 
-				$result['result'] = true;
+			sproutSeo()->addressForm->setParams($countryCode, 'address', '', $addressInfoModel);
+			$countryCodeHtml = sproutSeo()->addressForm->countryInput();
+			$formInputHtml   = sproutSeo()->addressForm->getAddressFormHtml();
 
-				$result['html']            = $html;
-				$result['countryCodeHtml'] = $countryCodeHtml;
-				$result['formInputHtml']   = $formInputHtml;
-				$result['countryCode']     = $countryCode;
-			}
+			$result['result'] = true;
+
+			$result['html']            = $html;
+			$result['countryCodeHtml'] = $countryCodeHtml;
+			$result['formInputHtml']   = $formInputHtml;
+			$result['countryCode']     = $countryCode;
 		}
 		else
 		{
 			$result['result'] = false;
 			$result['errors'] = $addressInfoModel->getErrors();
 		}
-
 
 		$this->returnJson($result);
 	}

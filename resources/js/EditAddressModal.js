@@ -18,8 +18,6 @@ Craft.SproutSeo.EditAddressModal = Garnish.Modal.extend(
 
 	    $(this.$addressFormHtml).appendTo(this.$bodyMeta);
 
-	   // var addressForm = new SproutSeo.AddressForm.init(this.$addressForm, { countryCode: settings.countryCode, actionUrl: settings.actionUrl } );
-
       this.modalTitle = Craft.t('Update Address');
       this.submitLabel = Craft.t('Update');
 
@@ -98,6 +96,7 @@ Craft.SproutSeo.EditAddressModal = Garnish.Modal.extend(
 			})
 
 			formValues.id = this.settings.addressInfoId;
+
 			var data = {
 				formValues: formValues
 			}

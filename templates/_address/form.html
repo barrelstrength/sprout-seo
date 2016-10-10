@@ -1,0 +1,14 @@
+<div class="sproutaddress-form">
+	{{ countryInput  }}
+
+	{{ form }}
+</div>
+
+{% includeJsResource 'sproutseo/js/AddressForm.js' %}
+{% includejs %}
+
+	$(document).ready(function () {
+		SproutSeo.AddressForm.init($('.sproutaddress-form'), { actionUrl: '{{ actionUrl }}' })
+	})
+
+{% endincludejs %}

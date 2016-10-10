@@ -112,7 +112,17 @@ class SproutSeo_AddressFormService extends BaseApplicationComponent
 		$format = preg_replace('/%administrativeArea/', $this->administrativeArea(), $format);
 		$format = preg_replace('/%postalCode/', $this->postalCode(), $format);
 
+		if ($this->addressInfoModel != null)
+		{
+			$format .= $this->getAddressInfoInput();
+		}
+
 		return $format;
+	}
+
+	private function getAddressInfoInput()
+	{
+		return "<input type='hidden' name='" . $this->name . "[id]' value='" . $this->addressInfoModel->id . "' />";
 	}
 
 	public function displayAddressForm(SproutSeo_AddressInfoModel $addressInfoModel = null)
@@ -133,7 +143,7 @@ class SproutSeo_AddressFormService extends BaseApplicationComponent
 		$html = $this->renderTemplates('form', array(
 			'countryInput' => TemplateHelper::getRaw($countryInput),
 			'form'         => TemplateHelper::getRaw($form),
-			'actionUrl'    => UrlHelper::getActionUrl('sproutCommerce/address/changeForm')
+			'actionUrl'    => UrlHelper::getActionUrl('sproutSeo/address/changeForm')
 		));
 
 		return TemplateHelper::getRaw($html);
@@ -166,14 +176,6 @@ class SproutSeo_AddressFormService extends BaseApplicationComponent
 				'addressInfo'        => $this->addressInfoModel
 			)
 		);
-	}
-
-	/**
-	 * @return string
-	 */
-	private function comma()
-	{
-		return $this->renderTemplates('sproutcommerce/_address/comma');
 	}
 
 	/**
@@ -729,7 +731,7 @@ class SproutSeo_AddressFormService extends BaseApplicationComponent
 	public function renderTemplates($path, $params)
 	{
 		$oldPath = craft()->path->getTemplatesPath();
-		$newPath = craft()->path->getPluginsPath().'sproutcommerce/templates/_address/';
+		$newPath = craft()->path->getPluginsPath().'sproutseo/templates/_address/';
 
 		craft()->path->setTemplatesPath($newPath);
 
