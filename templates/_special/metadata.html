@@ -36,7 +36,7 @@
 	<meta name='{{ name }}' content='{{ value }}'>
 {% endfor %}
 {% for property in globals.ownership %}
-	<meta name='{{ property.metaTag }}' content='{{ property.verificationCode }}'>
+	<meta name='{{ property.metaTag }}' property='{{ property.metaTag }}' content='{{ property.verificationCode }}'>
 {% endfor %}
 
 {%- for item in schema -%}

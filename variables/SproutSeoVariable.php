@@ -393,8 +393,13 @@ class SproutSeoVariable
 					),
 					array(
 						'label'       => "Facebook Page",
-						'value'       => 'FacebookPage',
-						'metaTagName' => 'fb:app_id'
+						'value'       => 'facebookPage',
+						'metaTagName' => 'fb:page_id'
+					),
+					array(
+						'label'       => "Facebook Admins",
+						'value'       => 'facebookAdmins',
+						'metaTagName' => 'fb:admins'
 					),
 					array(
 						'label'       => "Google Search Console",
@@ -402,9 +407,9 @@ class SproutSeoVariable
 						'metaTagName' => 'google-site-verification'
 					),
 					array(
-						'label' => "Pinterest",
-						'value' => 'pinterest', '
-							metaTagName' => 'p:domain_verify'
+						'label'       => "Pinterest",
+						'value'       => 'pinterest',
+						'metaTagName' => 'p:domain_verify'
 					),
 					array(
 						'label'       => "Yandex Webmaster Tools",
@@ -732,7 +737,8 @@ class SproutSeoVariable
 		}
 
 		// Get a filtered list of our default Sprout SEO schema
-		$defaultSchema = array_filter($schemas, function ($map) {
+		$defaultSchema = array_filter($schemas, function ($map)
+		{
 			/**
 			 * @var SproutSeoBaseSchema $map
 			 */
@@ -740,18 +746,19 @@ class SproutSeoVariable
 		});
 
 		// Get a filtered list of of any custom schema
-		$customSchema = array_filter($schemas, function ($map) {
+		$customSchema = array_filter($schemas, function ($map)
+		{
 			/**
 			 * @var SproutSeoBaseSchema $map
 			 */
 			return stripos($map->getUniqueKey(), 'craft-sproutseo') === false;
 		});
 
-
 		// Build our options
-		$schemaOptions    = array('' => 'Select...', array('optgroup' => 'Default Types'));
+		$schemaOptions = array('' => 'Select...', array('optgroup' => 'Default Types'));
 
-		$schemaOptions = array_merge($schemaOptions, array_map(function ($schema) {
+		$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
+		{
 			return array(
 				'label' => $schema->getType(),
 				'value' => $schema->getUniqueKey()
@@ -762,7 +769,8 @@ class SproutSeoVariable
 		{
 			array_push($schemaOptions, array('optgroup' => 'Custom Types'));
 
-			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema) {
+			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
+			{
 				return array(
 					'label' => $schema->getType(),
 					'value' => $schema->getUniqueKey()
@@ -815,7 +823,7 @@ class SproutSeoVariable
 
 	private function getSchemaChildren($type)
 	{
-		$tree = sproutSeo()->schema->getVocabularies($type);
+		$tree      = sproutSeo()->schema->getVocabularies($type);
 		$childrens = array();
 		// let's assume 3 levels
 		if (isset($tree['children']))
