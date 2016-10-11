@@ -226,10 +226,17 @@ class SproutSeo_MetadataModel extends BaseModel
 	 */
 	protected function prepareEntryMetadata($overrideInfo)
 	{
+
+
 		if (isset($overrideInfo['elementId']))
 		{
 			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
 			$entryMetadata = sproutSeo()->entryMetadata->getEntryMetadataByElementId($overrideInfo['elementId'], $locale);
+
+			// Default to the current URL, if no overrides exist
+			$entryMetadata->canonical  = SproutSeoOptimizeHelper::prepareCanonical($entryMetadata);
+			$entryMetadata->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($entryMetadata);
+			$entryMetadata->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($entryMetadata);
 
 			return $entryMetadata->getAttributes();
 		}
