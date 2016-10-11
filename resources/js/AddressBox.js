@@ -55,7 +55,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 		var $buttons = $("<div class='address-buttons'/>").appendTo(this.$addressBox);
 
 		var editLabel = '';
-		if (this.addressInfoId == '')
+		if (this.addressInfoId == null)
 		{
 			editLabel = Craft.t("Add Address");
 		}

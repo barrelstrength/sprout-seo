@@ -6,6 +6,23 @@ namespace Craft;
 class SproutSeo_AddressInfoService extends BaseApplicationComponent
 {
 
+	public function saveAddressInfoByPost()
+	{
+		if (craft()->request->getPost('address') != null)
+		{
+			$addressInfo = craft()->request->getPost('address');
+
+			$addressInfoModel = SproutSeo_AddressInfoModel::populateModel($addressInfo);
+
+			if ($addressInfoModel->validate() == true && $this->saveAddressInfo($addressInfoModel))
+			{
+				return $addressInfoModel->id;
+			}
+		}
+
+		return false;
+	}
+
 	public function saveAddressInfo(SproutSeo_AddressInfoModel $model, $source = '')
 	{
 		$result = false;

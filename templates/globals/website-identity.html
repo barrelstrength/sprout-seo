@@ -251,9 +251,10 @@
 			{% set addressInput %}
 			<div class="sproutaddressinfo-box"
 				{% if websiteIdentity.addressInfoId is defined %}
-					data-addressinfoid='{{ websiteIdentity.addressInfoId }}'
+				data-addressinfoid='{{ websiteIdentity.addressInfoId }}'
 				{% endif %}
-				></div>
+				>
+			</div>
 			{% endset %}
 
 			{{ forms.field({
@@ -457,6 +458,6 @@
 {% includeJsResource  "sproutseo/js/lib/jquery.caret.min.js" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
 {% includeJsResource  "sproutseo/js/websiteidentity.js" %}
-{% includeJsResource  "sproutseo/js/EditAddressModal.js" %}
-{% includeJsResource  "sproutseo/js/AddressBox.js" %}
+{% includeJsResource  "sproutseo/js/editaddressmodal.js" %}
+{% includeJsResource  "sproutseo/js/addressbox.js" %}
 

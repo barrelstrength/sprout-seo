@@ -15,16 +15,11 @@ class SproutSeo_GlobalMetadataController extends BaseController
 		$postData = craft()->request->getPost('sproutseo.globals');
 		$globalKeys = craft()->request->getPost('globalKeys');
 
-		if (craft()->request->getPost('address') != null)
+		$addressInfoId = sproutSeo()->addressInfo->saveAddressInfoByPost();
+
+		if ($addressInfoId)
 		{
-			$addressInfo = craft()->request->getPost('address');
-
-			$addressInfoModel = SproutSeo_AddressInfoModel::populateModel($addressInfo);
-
-			if ($addressInfoModel->validate() == true && sproutSeo()->addressInfo->saveAddressInfo($addressInfoModel))
-			{
-				$postData['identity']['addressInfoId'] = $addressInfoModel->id;
-			}
+			$postData['identity']['addressInfoId'] = $addressInfoId;
 		}
 
 		$globalKeys = explode(',', $globalKeys);

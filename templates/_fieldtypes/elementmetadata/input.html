@@ -168,6 +168,24 @@
 		}) }}
 	{% endif %}
 
+	{% set addressInput %}
+	<div class="sproutaddressinfo-box"
+		{% if websiteIdentity.addressInfoId is defined %}
+		data-addressinfoid='{{ websiteIdentity.addressInfoId }}'
+		{% endif %}
+		>
+	</div>
+	{% endset %}
+
+	{{ forms.field({
+		label: 'Address Field'|t ~ sprout.infoIcon({
+			label: "Address Field"|t,
+			structured: true,
+			priority: 'globals'
+		}),
+		required: false
+	}, addressInput) }}
+
 </div>
 
 {% if fieldContext == 'field' %}
@@ -340,6 +358,8 @@ feel like they are part of the natural flow of fields #}
 {% includeCssResource "sproutseo/css/lib/jquery.tag-editor.css" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.caret.min.js" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
+{% includeJsResource  "sproutseo/js/editaddressmodal.js" %}
+{% includeJsResource  "sproutseo/js/addressbox.js" %}
 
 {% includejs %}
 
@@ -477,10 +497,12 @@ feel like they are part of the natural flow of fields #}
 
 		{% endif %}
 
+		new Craft.SproutSeo.AddressBox($('.sproutaddressinfo-box'), {})
 	});
 
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
+
 {% endincludejs %}
 
 
