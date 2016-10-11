@@ -61,8 +61,8 @@ $(document).ready(function() {
 	};
 
 	// Select each of the dropdowns
-	var firstDropDown  =  $('#first');
-	var secondDropDown = $('#second');
+	var firstDropDown  =  $('.mainentity-firstdropdown select');
+	var secondDropDown = $('.mainentity-seconddropdown select');
 
 	// Hold selected option
 	var firstSelection = '';
@@ -84,7 +84,7 @@ $(document).ready(function() {
 		disableDropDown($("#organization :input"), 1);
 
 		// Check current selection
-		if (firstSelection === '')
+		if (firstSelection === '' || items[firstSelection].length <= 0)
 		{
 			return;
 		}

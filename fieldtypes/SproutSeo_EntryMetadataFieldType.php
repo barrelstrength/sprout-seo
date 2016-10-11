@@ -205,6 +205,7 @@ class SproutSeo_EntryMetadataFieldType extends BaseFieldType
 		$attributes = $this->processOptimizedTitle($attributes, $settings);
 		$attributes = $this->processOptimizedDescription($attributes, $settings);
 		$attributes = $this->processOptimizedFeatureImage($attributes, $settings);
+		$attributes = $this->processMainEntity($attributes, $settings);
 
 		$model->setAttributes($attributes);
 
@@ -349,6 +350,16 @@ class SproutSeo_EntryMetadataFieldType extends BaseFieldType
 		$attributes['optimizedImage'] = $image;
 		$attributes['ogImage']        = $image;
 		$attributes['twitterImage']   = $image;
+
+		return $attributes;
+	}
+
+	protected function processMainEntity($attributes, $settings)
+	{
+		if (!isset($attributes['schemaOverrideTypeId']))
+		{
+			$attributes['schemaOverrideTypeId'] = null;
+		}
 
 		return $attributes;
 	}

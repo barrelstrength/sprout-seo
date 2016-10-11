@@ -163,7 +163,7 @@
 						priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries'
 					}),
 					instructions: 'Select the Structured Data schema type that best represents your content.'|t,
-					id: 'first',
+					class: 'mainentity-firstdropdown',
 					name: 'sproutseo[metadata][schemaTypeId]',
 					options: schemas,
 					value: '',
@@ -173,7 +173,7 @@
 			</div>
 			<div class="identitytype-dropdown organizationinfo-dropdown hidden">
 				{{ forms.selectField({
-					id: 'second',
+					class: 'mainentity-seconddropdown',
 					role: 'listbox',
 					name: 'sproutseo[metadata][schemaOverrideTypeId]',
 					options: {'':''},
@@ -382,6 +382,7 @@ feel like they are part of the natural flow of fields #}
 
 {% includeCssResource "sproutseo/css/sproutseo.css" %}
 {% includeJsResource "sproutseo/js/sproutbase.js" %}
+{% includeJsResource "sproutseo/js/metadataelement.js" %}
 {% includeJsResource "sproutseo/js/open-graph.js" %}
 {% includeJsResource "sproutseo/js/twitter-card.js" %}
 
@@ -390,19 +391,21 @@ feel like they are part of the natural flow of fields #}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
 
 {% includejs %}
+
 	var items = {{ schemaSubtypes|json_encode|raw }};
 	var entryValues = {{ mainEntityValues|json_encode|raw }};
+
 	$( document ).ready(function() {
 
 		//Main entity dropdowns
-		$( "#first" ).change(function() {
+		$('.mainentity-firstdropdown select').change(function() {
 			if(this.value === 'craft-sproutseo-personschema')
 			{
-				$( "#second" ).addClass('hidden');
+				$('.mainentity-seconddropdown select').addClass('hidden');
 			}
 			else
 			{
-				$( "#second" ).removeClass('hidden');
+				$('.mainentity-seconddropdown select').removeClass('hidden');
 			}
 		});
 		// check if we need load depending dropdowns
@@ -410,11 +413,11 @@ feel like they are part of the natural flow of fields #}
 		{
 			if (entryValues.hasOwnProperty('schemaTypeId') && entryValues.schemaTypeId)
 			{
-				$('#first').val(entryValues.schemaTypeId).change();
+				$('.mainentity-firstdropdown select').val(entryValues.schemaTypeId).change();
 			}
 			if (entryValues.hasOwnProperty('schemaOverrideTypeId') && entryValues.schemaOverrideTypeId)
 			{
-				$('#second').val(entryValues.schemaOverrideTypeId).change();
+				$('.mainentity-seconddropdown select').val(entryValues.schemaOverrideTypeId).change();
 			}
 		}
 
@@ -565,8 +568,6 @@ feel like they are part of the natural flow of fields #}
     $('#my-modal nav li a').on('click', function(e) {
 			e.preventDefault();
 
-console.log('waa');
-
 			$currentBase = $('#my-modal nav li a.sel');
 			currentHref = $currentBase.attr('href');
 			currentTab = currentHref.replace('#', '#tab-');
@@ -591,13 +592,7 @@ console.log('waa');
 
 	});
 
-
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
 
-
-
-
 {% endincludejs %}
-
-{% includeJsResource  "sproutseo/js/metadataelement.js" %}

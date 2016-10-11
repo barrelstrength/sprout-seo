@@ -226,8 +226,6 @@ class SproutSeo_MetadataModel extends BaseModel
 	 */
 	protected function prepareEntryMetadata($overrideInfo)
 	{
-
-
 		if (isset($overrideInfo['elementId']))
 		{
 			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());

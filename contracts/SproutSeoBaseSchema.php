@@ -22,6 +22,11 @@ abstract class SproutSeoBaseSchema
 	/**
 	 * @var
 	 */
+	protected $type;
+
+	/**
+	 * @var
+	 */
 	public $globals;
 
 	/**
@@ -113,8 +118,16 @@ abstract class SproutSeoBaseSchema
 			$schema['@context'] = $this->getContext();
 		}
 
-		// Grab the type after we process the attributes in case we need to set it dynamically
-		$schema['@type'] = $this->getType();
+		if ($this->type != '')
+		{
+			// If we have a schema override type, use it
+			$schema['@type'] = $this->type;
+		}
+		else
+		{
+			// Grab the type after we process the attributes in case we need to set it dynamically
+			$schema['@type'] = $this->getType();
+		}
 
 		foreach ($this->structuredData as $key => $value)
 		{
@@ -144,6 +157,24 @@ abstract class SproutSeoBaseSchema
 			// If context has already been established, just return the data
 			return $schema;
 		}
+	}
+
+	/**
+	 * Get the dynamic Schema Type Override or fallback to the defined type
+	 *
+	 * @return string
+	 */
+	public function getSchemaOverrideType()
+	{
+		if ((isset($this->prioritizedMetadataModel->schemaOverrideTypeId) && $this->prioritizedMetadataModel->schemaOverrideTypeId != null) &&
+			($this->prioritizedMetadataModel->schemaTypeId == $this->getUniqueKey()))
+		{
+			$this->type = $this->prioritizedMetadataModel->schemaOverrideTypeId;
+
+			return $this->type;
+		}
+
+		return $this->getType();
 	}
 
 	/**
@@ -424,6 +455,8 @@ abstract class SproutSeoBaseSchema
 		$mainEntity       = new SproutSeo_MainEntityOfPageSchema();
 		$mainEntity->type = $type;
 		$mainEntity->id   = $meta->canonical;
+
+		$mainEntity->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 		$this->structuredData['mainEntityOfPage'] = $mainEntity->getSchema();
 	}

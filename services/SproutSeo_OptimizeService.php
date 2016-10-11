@@ -177,6 +177,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$prioritizedMetadataModel->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
 		$prioritizedMetadataModel->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
 
+		$schemaTypeId = null;
+		$schemaOverrideTypeId = null;
+
 		foreach ($prioritizedMetadataLevels as $level => $model)
 		{
 			$metadataModel = new SproutSeo_MetadataModel();
@@ -191,6 +194,17 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 				if ($metadataModel->getAttribute($key))
 				{
 					$prioritizedMetadataModel[$key] = $metadataModel[$key];
+				}
+
+				// Make sure our schema type and override are all or nothing
+				// if we find the $metadataModel doesn't have a value for schemaOverrideTypeId
+				// then we should make sure the $prioritizedMetadataModel also has a null value
+				// otherwise we still keep our lower level value
+				if ($key == 'schemaOverrideTypeId' &&
+					  $metadataModel['schemaTypeId'] != null &&
+					  $metadataModel->getAttribute($key) == null)
+				{
+					$prioritizedMetadataModel[$key] = null;
 				}
 
 				// Make sure all our strings are trimmed

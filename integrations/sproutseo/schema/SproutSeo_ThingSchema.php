@@ -34,7 +34,7 @@ class SproutSeo_ThingSchema extends SproutSeoBaseSchema
 	{
 		$metadata = $this->prioritizedMetadataModel;
 
-		$this->addMainEntityOfPage($this->getType());
+		$this->addMainEntityOfPage($this->getSchemaOverrideType());
 
 		$this->addText('title', $metadata->optimizedTitle);
 		$this->addText('description', $metadata->optimizedDescription);
