@@ -54,6 +54,26 @@ class SproutSeo_EntryMetadataFieldType extends BaseFieldType
 		));
 	}
 
+	public function prepValue($value)
+	{
+		$globals  = sproutSeo()->optimize->globals;
+		$identity = $globals['identity'];
+		$schema = new SproutSeo_WebsiteIdentityWebsiteSchema();
+
+		if ($identityType = $identity['@type'])
+		{
+			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
+			$schema      = new $schemaModel();
+		}
+
+		$schema->addContext               = true;
+		$schema->globals                  = sproutSeo()->optimize->globals;
+		$schema->element                  = $this->element;
+		$schema->prioritizedMetadataModel = sproutSeo()->optimize->prioritizedMetadataModel;
+
+		return $schema;
+	}
+
 	/**
 	 * Display our FieldType
 	 *

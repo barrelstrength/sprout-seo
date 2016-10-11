@@ -2,6 +2,9 @@
 {% import "sproutseo/_includes/sproutseo" as sprout %}
 
 {% set pluginSettings = craft.sproutSeo.getSettings() %}
+{% set schemas = craft.sproutSeo.getSchemaOptions() %}
+{% set schemaSubtypes = craft.sproutSeo.getSchemaSubtypes(schemas) %}
+{% set mainEntityValues = {'schemaTypeId': values.schemaTypeId, 'schemaOverrideTypeId': values.schemaOverrideTypeId} %}
 
 <div class="sproutseo-metatitle-info hidden">
 {{- sprout.infoIcon({
@@ -150,9 +153,6 @@
 	{% endif %}
 
 	{% if fieldContext == 'sectionMetadata' or (fieldContext == 'field' and pluginSettings.enableMetaDetailsFields and settings.showMainEntity) %}
-		{% set schemas = craft.sproutSeo.getSchemaOptions() %}
-		{% set schemaSubtypes = craft.sproutSeo.getSchemaSubtypes(schemas) %}
-		{% set mainEntityValues = {'schemaTypeId': values.schemaTypeId, 'schemaOverrideTypeId': values.schemaOverrideTypeId} %}
 		<div id ="organization" class="organization-info">
 			<div class="identitytype-dropdown organizationinfo-dropdown">
 				{{ forms.selectField({
