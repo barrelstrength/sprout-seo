@@ -5,7 +5,19 @@ namespace Craft;
 
 class SproutSeo_AddressController extends BaseController
 {
-	protected $allowAnonymous = true;
+	/**
+	 * @var SproutFieldsAddressHelper $addressHelper
+	 */
+	protected $addressHelper;
+
+	protected $allowAnonymous = array('actionGetAddressFormFields');
+
+	public function init()
+	{
+		$this->addressHelper = new SproutFieldsAddressHelper();
+
+		parent::init();
+	}
 
 	public function actionCountryInput()
 	{
@@ -15,9 +27,9 @@ class SproutSeo_AddressController extends BaseController
 
 		$countryCode = $addressInfoModel->countryCode;
 
-		sproutSeo()->addressForm->setParams($countryCode, 'address');
+		$this->addressHelper->setParams($countryCode, 'address');
 
-		echo sproutSeo()->addressForm->countryInput();
+		echo $this->addressHelper->countryInput();
 
 		exit;
 	}
@@ -29,13 +41,13 @@ class SproutSeo_AddressController extends BaseController
 
 		$countryCode = craft()->request->getPost('countryCode');
 
-		sproutSeo()->addressForm->setParams($countryCode, 'address');
+		$this->addressHelper->setParams($countryCode, 'address');
 
-		echo sproutSeo()->addressForm->getAddressFormHtml();
+		echo $this->addressHelper->getAddressFormHtml();
 		exit;
 	}
 
-	public function actionUpdateAddressFormat()
+	public function actionGetAddressFormFields()
 	{
 		$this->requireAjaxRequest();
 		$this->requirePostRequest();
@@ -52,10 +64,10 @@ class SproutSeo_AddressController extends BaseController
 		{
 			$addressInfoModel = new SproutSeo_AddressInfoModel();
 
-			$addressInfoModel->countryCode = sproutSeo()->addressForm->defaultCountryCode();
+			$addressInfoModel->countryCode = $this->addressHelper->defaultCountryCode();
 		}
 
-		$html = sproutSeo()->addressForm->getAddressWithFormat($addressInfoModel);
+		$html = $this->addressHelper->getAddressWithFormat($addressInfoModel);
 
 		if ($addressInfoId == null)
 		{
@@ -64,10 +76,10 @@ class SproutSeo_AddressController extends BaseController
 
 		$countryCode = $addressInfoModel->countryCode;
 
-		sproutSeo()->addressForm->setParams($countryCode, 'address', '', $addressInfoModel);
+		$this->addressHelper->setParams($countryCode, 'address', '', $addressInfoModel);
 
-		$countryCodeHtml = sproutSeo()->addressForm->countryInput();
-		$formInputHtml   = sproutSeo()->addressForm->getAddressFormHtml();
+		$countryCodeHtml = $this->addressHelper->countryInput();
+		$formInputHtml   = $this->addressHelper->getAddressFormHtml();
 
 		$this->returnJson(array(
 			'html'            => $html,
@@ -77,7 +89,7 @@ class SproutSeo_AddressController extends BaseController
 		));
 	}
 
-	public function actionSaveAddress()
+	public function actionGetAddress()
 	{
 		$this->requireAjaxRequest();
 		$this->requirePostRequest();
@@ -102,12 +114,12 @@ class SproutSeo_AddressController extends BaseController
 		if ($addressInfoModel->validate() == true)
 		{
 
-			$html = sproutSeo()->addressForm->getAddressWithFormat($addressInfoModel);
+			$html = $this->addressHelper->getAddressWithFormat($addressInfoModel);
 			$countryCode = $addressInfoModel->countryCode;
 
-			sproutSeo()->addressForm->setParams($countryCode, 'address', '', $addressInfoModel);
-			$countryCodeHtml = sproutSeo()->addressForm->countryInput();
-			$formInputHtml   = sproutSeo()->addressForm->getAddressFormHtml();
+			$this->addressHelper->setParams($countryCode, 'address', '', $addressInfoModel);
+			$countryCodeHtml = $this->addressHelper->countryInput();
+			$formInputHtml   = $this->addressHelper->getAddressFormHtml();
 
 			$result['result'] = true;
 

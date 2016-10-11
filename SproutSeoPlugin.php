@@ -126,6 +126,8 @@ class SproutSeoPlugin extends BasePlugin
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 
+		Craft::import('plugins.sproutseo.helpers.SproutFieldsAddressHelper');
+
 		if (!craft()->isConsole())
 		{
 			if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())

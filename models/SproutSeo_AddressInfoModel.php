@@ -7,6 +7,15 @@ namespace Craft;
  */
 class SproutSeo_AddressInfoModel extends BaseModel
 {
+	protected $addressHelper;
+
+	public function init()
+	{
+		$this->addressHelper = new SproutFieldsAddressHelper();
+
+		parent::init();
+	}
+
 	protected function defineAttributes()
 	{
 		return array(
@@ -33,15 +42,17 @@ class SproutSeo_AddressInfoModel extends BaseModel
 
 	public function validatePostalCode($attribute)
 	{
+		$this->addressHelper = new SproutFieldsAddressHelper();
+
 		$postalCode = $this->{$attribute};
 		
 		if ($postalCode == null) return;
 
 		$countryCode = $this->countryCode;
 
-		if (!sproutSeo()->addressForm->validatePostalCode($countryCode, $postalCode))
+		if (!$this->addressHelper->validatePostalCode($countryCode, $postalCode))
     {
-	    $postalName = sproutSeo()->addressForm->getPostalName($countryCode);
+	    $postalName = $this->addressHelper->getPostalName($countryCode);
 
 	    $params = array(
 		    'postalName' => $postalName,
@@ -63,7 +74,7 @@ class SproutSeo_AddressInfoModel extends BaseModel
 			return "";
 		}
 
-		$address = sproutSeo()->addressForm->getAddressWithFormat($this);
+		$address = $this->addressHelper->getAddressWithFormat($this);
 
 		return $address;
 	}

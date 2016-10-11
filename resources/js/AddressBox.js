@@ -74,7 +74,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 
 		this.$addressBox.find('.address-format').append("<div class='spinner' />");
 
-		this._updateAddressFormat();
+		this._getAddressFormFields();
 
 		this.actionUrl = Craft.getActionUrl('sproutSeo/address/changeForm');
 	},
@@ -92,7 +92,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 			var countryCode = this.$addressForm.find('.sproutaddress-country-select select').val();
 
 			this.modal = new Craft.SproutSeo.EditAddressModal(this.$addressForm, {
-				onSubmit: $.proxy(this, '_saveAddress'),
+				onSubmit: $.proxy(this, '_getAddress'),
 				countryCode: countryCode,
 				actionUrl: this.actionUrl,
 				addressInfoId: this.addressInfoId,
@@ -101,21 +101,21 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 			}, this.$target);
 
 	},
-	_updateAddressFormat: function ()
+	_getAddressFormFields: function ()
 	{
 		var self = this;
-		Craft.postActionRequest('sproutSeo/address/updateAddressFormat', { addressInfoId: this.addressInfoId }, $.proxy(function (response) {
+		Craft.postActionRequest('sproutSeo/address/getAddressFormFields', { addressInfoId: this.addressInfoId }, $.proxy(function (response) {
 			this.$addressBox.find('.address-format .spinner').remove();
 			self.$addressBox.find('.address-format').append(response.html);
 			self.$addressForm.append(response.countryCodeHtml);
 			self.$addressForm.append(response.formInputHtml);
 		}, this))
 	},
-	_saveAddress: function(data, onError)
+	_getAddress: function(data, onError)
 	{
 		var self = this;
 
-		Craft.postActionRequest('sproutSeo/address/saveAddress', data, $.proxy(function (response) {
+		Craft.postActionRequest('sproutSeo/address/getAddress', data, $.proxy(function (response) {
 			if (response.result == true)
 			{
 				self.$addressBox.find('.address-format').html(response.html);

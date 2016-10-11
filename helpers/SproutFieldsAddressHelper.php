@@ -20,7 +20,7 @@ use CommerceGuys\Addressing\Model\Address;
  * @package   craft.plugins.sproutfields
  * @since     2.0
  */
-class SproutSeo_AddressFormService extends BaseApplicationComponent
+class SproutFieldsAddressHelper
 {
 	/**
 	 * @var
@@ -122,7 +122,10 @@ class SproutSeo_AddressFormService extends BaseApplicationComponent
 
 	private function getAddressInfoInput()
 	{
-		return "<input type='hidden' name='" . $this->name . "[id]' value='" . $this->addressInfoModel->id . "' />";
+		return $this->renderTemplates('hidden', array(
+			'name' => $this->name . '[id]',
+			'value' => $this->addressInfoModel->id
+		));
 	}
 
 	public function displayAddressForm(SproutSeo_AddressInfoModel $addressInfoModel = null)
