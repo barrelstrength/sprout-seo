@@ -392,34 +392,38 @@ feel like they are part of the natural flow of fields #}
 
 {% includejs %}
 
-	var items = {{ schemaSubtypes|json_encode|raw }};
-	var entryValues = {{ mainEntityValues|json_encode|raw }};
-
 	$( document ).ready(function() {
 
-		//Main entity dropdowns
-		$('.mainentity-firstdropdown select').change(function() {
-			if(this.value === 'craft-sproutseo-personschema')
+		{% if mainEntityValues is defined and schemaSubtypes is defined %}
+
+			var items = {{ schemaSubtypes|json_encode|raw }};
+			var entryValues = {{ mainEntityValues|json_encode|raw }};
+
+			//Main entity dropdowns
+			$('.mainentity-firstdropdown select').change(function() {
+				if(this.value === 'craft-sproutseo-personschema')
+				{
+					$('.mainentity-seconddropdown select').addClass('hidden');
+				}
+				else
+				{
+					$('.mainentity-seconddropdown select').removeClass('hidden');
+				}
+			});
+			// check if we need load depending dropdowns
+			if (entryValues)
 			{
-				$('.mainentity-seconddropdown select').addClass('hidden');
+				if (entryValues.hasOwnProperty('schemaTypeId') && entryValues.schemaTypeId)
+				{
+					$('.mainentity-firstdropdown select').val(entryValues.schemaTypeId).change();
+				}
+				if (entryValues.hasOwnProperty('schemaOverrideTypeId') && entryValues.schemaOverrideTypeId)
+				{
+					$('.mainentity-seconddropdown select').val(entryValues.schemaOverrideTypeId).change();
+				}
 			}
-			else
-			{
-				$('.mainentity-seconddropdown select').removeClass('hidden');
-			}
-		});
-		// check if we need load depending dropdowns
-		if (entryValues)
-		{
-			if (entryValues.hasOwnProperty('schemaTypeId') && entryValues.schemaTypeId)
-			{
-				$('.mainentity-firstdropdown select').val(entryValues.schemaTypeId).change();
-			}
-			if (entryValues.hasOwnProperty('schemaOverrideTypeId') && entryValues.schemaOverrideTypeId)
-			{
-				$('.mainentity-seconddropdown select').val(entryValues.schemaOverrideTypeId).change();
-			}
-		}
+
+		{% endif %}
 
 		function getScenario()
 		{
@@ -549,6 +553,8 @@ feel like they are part of the natural flow of fields #}
 
 			var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
 			metaDescriptionInput.attr('maxlength', 160);
+
+			{# @todo - this triggers the Double-instantiating console error #}
 			new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
 
 		{% endif %}
