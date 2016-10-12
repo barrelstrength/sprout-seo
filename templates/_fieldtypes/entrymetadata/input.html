@@ -1,9 +1,10 @@
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_includes/sproutseo" as sprout %}
 
-{% set pluginSettings = craft.sproutSeo.getSettings() %}
-{% set schemas = craft.sproutSeo.getSchemaOptions() %}
-{% set schemaSubtypes = craft.sproutSeo.getSchemaSubtypes(schemas) %}
+{% set nameContext      = elementHandle is defined ? elementHandle : 'sproutSeo'  %}
+{% set pluginSettings   = craft.sproutSeo.getSettings() %}
+{% set schemas          = craft.sproutSeo.getSchemaOptions() %}
+{% set schemaSubtypes   = craft.sproutSeo.getSchemaSubtypes(schemas) %}
 {% set mainEntityValues = {'schemaTypeId': values.schemaTypeId, 'schemaOverrideTypeId': values.schemaOverrideTypeId} %}
 
 <div class="sproutseo-metatitle-info hidden">
@@ -40,7 +41,7 @@
 	{% set customizationSettings = values.getCustomizationSettings() %}
 
 	{{ forms.hidden({
-		name: 'sproutseo[metadata][customizationSettings]',
+		name: nameContext~'[metadata][customizationSettings]',
 		id: 'customizationSettings',
 		value: customizationSettings|json_encode,
 		errors: "",
@@ -59,7 +60,7 @@
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries'
 			}) ~ '<span class="locale" id="sproutseo-seopreview" style="cursor:pointer;">preview</span>',
 			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'sectionMetadata' ? appendTitleValueInstructions : ""),
-			name: 'sproutseo[metadata][optimizedTitle]',
+			name: nameContext~'[metadata][optimizedTitle]',
 			id: 'sproutseo-optimizedtitle',
 			maxlength: 60,
 			showCharsLeft: true,
@@ -82,7 +83,7 @@
 					priority: 'sections'
 				}),
 				instructions: "Append a custom value at the end of all Meta Titles in this Section Metadata, i.e. <i>Article Title - " ~ siteName ~ "</i>. This setting overrides the <a href='" ~ cpUrl('sproutseo/globals/customization') ~ "'>default setting</a> and will apply to all titles within this Section Metadata."|t,
-				name: 'sproutseo[metadata][appendTitleValue]',
+				name: nameContext~'[metadata][appendTitleValue]',
 				value: values.appendTitleValue ?? null,
 				placeholder: 'Keywords {divider} {siteName}',
 				errors: '',
@@ -101,7 +102,7 @@
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries'
 			}),
 			instructions: "A description of your content which will appear in search results and social sharing."|t,
-			name: 'sproutseo[metadata][optimizedDescription]',
+			name: nameContext~'[metadata][optimizedDescription]',
 			maxlength: 160,
 			showCharsLeft: true,
 			id: 'sproutseo-optimizeddescription',
@@ -126,7 +127,7 @@
 			sourceElementId: [values.optimizedImage],
 			elementType: elementType,
 			id: 'optimizedImage',
-			name: 'sproutseo[metadata][optimizedImage]',
+			name: nameContext~'[metadata][optimizedImage]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image'|t,
 			limit: 1,
@@ -145,7 +146,7 @@
 			}),
 			instructions: "The primary keywords or phrases that describe your website."|t,
 			id: 'sproutseo-optimizedkeywords',
-			name: 'sproutseo[metadata][optimizedKeywords]',
+			name: nameContext~'[metadata][optimizedKeywords]',
 			value: values.optimizedKeywords,
 			placeholder: prioritizedMetadata.optimizedKeywords ?? values.optimizedKeywords,
 			errors: ''
@@ -164,7 +165,7 @@
 					}),
 					instructions: 'Select the Structured Data schema type that best represents your content.'|t,
 					class: 'mainentity-firstdropdown',
-					name: 'sproutseo[metadata][schemaTypeId]',
+					name: nameContext~'[metadata][schemaTypeId]',
 					options: schemas,
 					value: '',
 					errors: "",
@@ -175,7 +176,7 @@
 				{{ forms.selectField({
 					class: 'mainentity-seconddropdown',
 					role: 'listbox',
-					name: 'sproutseo[metadata][schemaOverrideTypeId]',
+					name: nameContext~'[metadata][schemaOverrideTypeId]',
 					options: {'':''},
 					value: '',
 					errors: '',
@@ -393,9 +394,9 @@ feel like they are part of the natural flow of fields #}
 {% includejs %}
 
 	$( document ).ready(function() {
+		var nameContext = '{{nameContext|raw}}';
 
 		{% if mainEntityValues is defined and schemaSubtypes is defined %}
-
 			var items = {{ schemaSubtypes|json_encode|raw }};
 			var entryValues = {{ mainEntityValues|json_encode|raw }};
 
@@ -427,13 +428,13 @@ feel like they are part of the natural flow of fields #}
 
 		function getScenario()
 		{
-			if ($("input[name='fields[sproutseo][metadata][customizationSettings]']").length)
+			if ($("input[name='fields["+nameContext+"][metadata][customizationSettings]']").length)
 			{
-				return $("input[name='fields[sproutseo][metadata][customizationSettings]']");
+				return $("input[name='fields["+nameContext+"][metadata][customizationSettings]']");
 			}
 			else
 			{
-				return $("input[name='sproutseo[metadata][customizationSettings]']");
+				return $("input[name='sproutSeo[metadata][customizationSettings]']");
 			}
 		}
 

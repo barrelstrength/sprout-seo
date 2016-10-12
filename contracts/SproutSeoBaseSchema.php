@@ -41,6 +41,11 @@ abstract class SproutSeoBaseSchema
 	 */
 	public $prioritizedMetadataModel;
 
+	public function __toString()
+	{
+		return $this->getType();
+	}
+
 	/**
 	 *
 	 */

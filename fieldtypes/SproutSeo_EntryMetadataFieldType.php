@@ -162,7 +162,8 @@ class SproutSeo_EntryMetadataFieldType extends BaseFieldType
 			'fieldId'              => $fieldId,
 			'fieldContext'         => 'field',
 			'settings'             => $settings,
-			'prioritizedMetadata'  => $prioritizedMetadata
+			'prioritizedMetadata'  => $prioritizedMetadata,
+			'elementHandle'        => $this->model->handle
 		));
 	}
 
@@ -171,7 +172,8 @@ class SproutSeo_EntryMetadataFieldType extends BaseFieldType
 	 */
 	public function onAfterElementSave()
 	{
-		$fields = craft()->request->getPost('fields.sproutseo.metadata');
+		$fieldHandle = $this->model->handle;
+		$fields = $this->element->getContent()->{$fieldHandle}['metadata'];
 
 		if (!isset($fields))
 		{
