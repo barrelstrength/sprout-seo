@@ -392,39 +392,33 @@ feel like they are part of the natural flow of fields #}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
 
 {% includejs %}
-
+	var items = {{ schemaSubtypes|json_encode|raw }};
+	var entryValues = {{ mainEntityValues|json_encode|raw }};
 	$( document ).ready(function() {
 		var nameContext = '{{nameContext|raw}}';
-
-		{% if mainEntityValues is defined and schemaSubtypes is defined %}
-			var items = {{ schemaSubtypes|json_encode|raw }};
-			var entryValues = {{ mainEntityValues|json_encode|raw }};
-
-			//Main entity dropdowns
-			$('.mainentity-firstdropdown select').change(function() {
-				if(this.value === 'craft-sproutseo-personschema')
-				{
-					$('.mainentity-seconddropdown select').addClass('hidden');
-				}
-				else
-				{
-					$('.mainentity-seconddropdown select').removeClass('hidden');
-				}
-			});
-			// check if we need load depending dropdowns
-			if (entryValues)
+		//Main entity dropdowns
+		$('.mainentity-firstdropdown select').change(function() {
+			if(this.value === 'craft-sproutseo-personschema')
 			{
-				if (entryValues.hasOwnProperty('schemaTypeId') && entryValues.schemaTypeId)
-				{
-					$('.mainentity-firstdropdown select').val(entryValues.schemaTypeId).change();
-				}
-				if (entryValues.hasOwnProperty('schemaOverrideTypeId') && entryValues.schemaOverrideTypeId)
-				{
-					$('.mainentity-seconddropdown select').val(entryValues.schemaOverrideTypeId).change();
-				}
+				$('.mainentity-seconddropdown select').addClass('hidden');
 			}
-
-		{% endif %}
+			else
+			{
+				$('.mainentity-seconddropdown select').removeClass('hidden');
+			}
+		});
+		// check if we need load depending dropdowns
+		if (entryValues)
+		{
+			if (entryValues.hasOwnProperty('schemaTypeId') && entryValues.schemaTypeId)
+			{
+				$('.mainentity-firstdropdown select').val(entryValues.schemaTypeId).change();
+			}
+			if (entryValues.hasOwnProperty('schemaOverrideTypeId') && entryValues.schemaOverrideTypeId)
+			{
+				$('.mainentity-seconddropdown select').val(entryValues.schemaOverrideTypeId).change();
+			}
+		}
 
 		function getScenario()
 		{
