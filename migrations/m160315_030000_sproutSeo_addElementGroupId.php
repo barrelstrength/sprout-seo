@@ -23,10 +23,11 @@ class m160315_030000_sproutSeo_addElementGroupId extends BaseMigration
 		// Set type to currents sitemaps
 		foreach ($sitemaps as $key => $sitemap)
 		{
-			$sitemapRecord       = SproutSeo_SitemapRecord::model()->findByPk($sitemap["id"]);
-			$sitemapRecord->type = "sections";
-
-			$sitemapRecord->save(false);
+			craft()->db->createCommand()->update($tableName,
+				array('type' => 'sections'),
+				'id = :id',
+				array(':id' => $sitemap['id'])
+			);
 		}
 
 		if (craft()->db->columnExists($tableName, 'sectionId') && !craft()->db->columnExists($tableName, $renameColumn))
