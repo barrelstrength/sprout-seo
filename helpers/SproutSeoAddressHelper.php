@@ -20,7 +20,7 @@ use CommerceGuys\Addressing\Model\Address;
  * @package   craft.plugins.sproutfields
  * @since     2.0
  */
-class SproutFieldsAddressHelper
+class SproutSeoAddressHelper
 {
 	/**
 	 * @var
@@ -65,7 +65,7 @@ class SproutFieldsAddressHelper
 	 * @param string $namespaceInputName
 	 */
 	public function setParams($countryCode,
-	                          $name,
+	                          $name = 'address',
 	                          $sproutAddress = '',
 	                          SproutSeo_AddressInfoModel $addressInfoModel = null,
 														$namespaceInputName = '')
@@ -112,7 +112,7 @@ class SproutFieldsAddressHelper
 		$format = preg_replace('/%administrativeArea/', $this->administrativeArea(), $format);
 		$format = preg_replace('/%postalCode/', $this->postalCode(), $format);
 
-		if ($this->addressInfoModel != null)
+		if ($this->addressInfoModel->id != null)
 		{
 			$format .= $this->getAddressInfoInput();
 		}
@@ -128,7 +128,7 @@ class SproutFieldsAddressHelper
 		));
 	}
 
-	public function displayAddressForm(SproutSeo_AddressInfoModel $addressInfoModel = null)
+	public function displayAddressForm(SproutSeo_AddressInfoModel $addressInfoModel = null, $namespace = 'address')
 	{
 		$countryCode = $this->defaultCountryCode();
 
@@ -137,7 +137,7 @@ class SproutFieldsAddressHelper
 			$countryCode = $addressInfoModel->countryCode;
 		}
 
-		$this->setParams($countryCode, 'address', '', $addressInfoModel);
+		$this->setParams($countryCode, $namespace, '', $addressInfoModel);
 
 		$countryInput = $this->countryInput();
 

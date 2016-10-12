@@ -65,6 +65,10 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 	 */
 	public function getInputHtml($name, $value)
 	{
+		$inputId            = craft()->templates->formatInputId($name);
+		$namespaceInputName = craft()->templates->namespaceInputName($inputId);
+		$namespaceInputId   = craft()->templates->namespaceInputId($inputId);
+
 		$elementId = $this->element->id;
 
 		$locale = $this->element->locale;
@@ -117,6 +121,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		// they don't appear to be used in the elementdata/input template...
 		return craft()->templates->render('sproutseo/_fieldtypes/elementmetadata/input', array(
 			'name'                 => $name,
+			'namespaceInputName'   => $namespaceInputName,
+			'namespaceInputId'     => $namespaceInputId,
 			'values'               => $values,
 			'ogImageElements'      => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
@@ -139,6 +145,16 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		if (!isset($fields))
 		{
 			return;
+		}
+
+		$fieldHandle = $this->model->handle;
+		$addressInfo  = $this->element->getContent()->{$fieldHandle};
+
+		$addressInfoModel = SproutSeo_AddressInfoModel::populateModel($addressInfo);
+
+		if ($addressInfoModel->validate() == true && sproutSeo()->addressInfo->saveAddressInfo($addressInfoModel))
+		{
+			$fields['addressInfoId'] = $addressInfoModel->id;
 		}
 
 		$locale = $this->element->locale;

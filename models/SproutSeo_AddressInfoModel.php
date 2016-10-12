@@ -11,7 +11,7 @@ class SproutSeo_AddressInfoModel extends BaseModel
 
 	public function init()
 	{
-		$this->addressHelper = new SproutFieldsAddressHelper();
+		$this->addressHelper = new SproutSeoAddressHelper();
 
 		parent::init();
 	}
@@ -42,7 +42,7 @@ class SproutSeo_AddressInfoModel extends BaseModel
 
 	public function validatePostalCode($attribute)
 	{
-		$this->addressHelper = new SproutFieldsAddressHelper();
+		$this->addressHelper = new SproutSeoAddressHelper();
 
 		$postalCode = $this->{$attribute};
 		

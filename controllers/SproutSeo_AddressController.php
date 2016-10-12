@@ -6,7 +6,7 @@ namespace Craft;
 class SproutSeo_AddressController extends BaseController
 {
 	/**
-	 * @var SproutFieldsAddressHelper $addressHelper
+	 * @var SproutSeoAddressHelper $addressHelper
 	 */
 	protected $addressHelper;
 
@@ -14,7 +14,7 @@ class SproutSeo_AddressController extends BaseController
 
 	public function init()
 	{
-		$this->addressHelper = new SproutFieldsAddressHelper();
+		$this->addressHelper = new SproutSeoAddressHelper();
 
 		parent::init();
 	}
@@ -27,7 +27,9 @@ class SproutSeo_AddressController extends BaseController
 
 		$countryCode = $addressInfoModel->countryCode;
 
-		$this->addressHelper->setParams($countryCode, 'address');
+		$namespace = (craft()->request->getPost('namespace') != null)? craft()->request->getPost('namespace') : 'address';
+
+		$this->addressHelper->setParams($countryCode, $namespace);
 
 		echo $this->addressHelper->countryInput();
 
@@ -40,8 +42,9 @@ class SproutSeo_AddressController extends BaseController
 		$this->requirePostRequest();
 
 		$countryCode = craft()->request->getPost('countryCode');
+		$namespace   = (craft()->request->getPost('namespace') != null)? craft()->request->getPost('namespace') : 'address';
 
-		$this->addressHelper->setParams($countryCode, 'address');
+		$this->addressHelper->setParams($countryCode, $namespace);
 
 		echo $this->addressHelper->getAddressFormHtml();
 		exit;
@@ -76,7 +79,9 @@ class SproutSeo_AddressController extends BaseController
 
 		$countryCode = $addressInfoModel->countryCode;
 
-		$this->addressHelper->setParams($countryCode, 'address', '', $addressInfoModel);
+		$namespace = (craft()->request->getPost('namespace') != null)? craft()->request->getPost('namespace') : 'address';
+
+		$this->addressHelper->setParams($countryCode, $namespace, '', $addressInfoModel);
 
 		$countryCodeHtml = $this->addressHelper->countryInput();
 		$formInputHtml   = $this->addressHelper->getAddressFormHtml();
@@ -101,6 +106,7 @@ class SproutSeo_AddressController extends BaseController
 
 		$addressInfo = craft()->request->getPost('addressInfo');
 		$formValues  = craft()->request->getPost('formValues');
+		$namespace   = (craft()->request->getPost('namespace') != null)? craft()->request->getPost('namespace') : 'address';
 
 		$source = '';
 
@@ -113,11 +119,10 @@ class SproutSeo_AddressController extends BaseController
 
 		if ($addressInfoModel->validate() == true)
 		{
-
 			$html = $this->addressHelper->getAddressWithFormat($addressInfoModel);
 			$countryCode = $addressInfoModel->countryCode;
 
-			$this->addressHelper->setParams($countryCode, 'address', '', $addressInfoModel);
+			$this->addressHelper->setParams($countryCode, $namespace, '', $addressInfoModel);
 			$countryCodeHtml = $this->addressHelper->countryInput();
 			$formInputHtml   = $this->addressHelper->getAddressFormHtml();
 

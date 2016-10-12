@@ -44,6 +44,11 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 
 		this.settings = settings;
 
+		if (this.settings.namespace == null)
+		{
+			this.settings.namespace = 'address';
+		}
+
 		this.addressInfoId = this.$addressBox.data('addressinfoid');
 
 		this._renderAddress();
@@ -55,7 +60,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 		var $buttons = $("<div class='address-buttons'/>").appendTo(this.$addressBox);
 
 		var editLabel = '';
-		if (this.addressInfoId == null)
+		if (this.addressInfoId == '' || this.addressInfoId == null)
 		{
 			editLabel = Craft.t("Add Address");
 		}
@@ -63,7 +68,6 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 		{
 			editLabel = Craft.t("Update Address");
 		}
-
 
 		this.$editButton = $("<a class='small btn right edit sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
 
@@ -96,7 +100,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 				countryCode: countryCode,
 				actionUrl: this.actionUrl,
 				addressInfoId: this.addressInfoId,
-				namespace: 'address',
+				namespace: this.settings.namespace,
 				source: source
 			}, this.$target);
 
@@ -104,11 +108,13 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 	_getAddressFormFields: function ()
 	{
 		var self = this;
-		Craft.postActionRequest('sproutSeo/address/getAddressFormFields', { addressInfoId: this.addressInfoId }, $.proxy(function (response) {
+		Craft.postActionRequest('sproutSeo/address/getAddressFormFields', { addressInfoId: this.addressInfoId, namespace: this.settings.namespace }, $.proxy(function (response) {
 			this.$addressBox.find('.address-format .spinner').remove();
 			self.$addressBox.find('.address-format').append(response.html);
 			self.$addressForm.append(response.countryCodeHtml);
 			self.$addressForm.append(response.formInputHtml);
+
+			Craft.SproutSeo.initFields(self.$addressBox);
 		}, this))
 	},
 	_getAddress: function(data, onError)
@@ -122,6 +128,8 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 				self.$addressForm.empty();
 				self.$addressForm.append(response.countryCodeHtml);
 				self.$addressForm.append(response.formInputHtml);
+
+				self.$editButton.text(Craft.t("Update Address"));
 
 				Craft.cp.displayNotice(Craft.t('Address Updated.'));
 

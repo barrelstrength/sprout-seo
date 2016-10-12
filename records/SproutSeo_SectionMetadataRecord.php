@@ -44,6 +44,7 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 			'publisher'        => array(AttributeType::String),
 
 			'robots'    => array(AttributeType::String),
+			'addressInfoId'    => array(AttributeType::Number),
 			'canonical' => array(AttributeType::String),
 
 			'region'    => array(AttributeType::String),

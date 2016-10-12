@@ -55,7 +55,7 @@ Craft.SproutSeo.EditAddressModal = Garnish.Modal.extend(
 			var $parents    = $target.parents('.sproutaddress-body');
 
 			var self = this;
-			Craft.postActionRequest('sproutSeo/address/changeForm', { countryCode: countryCode }, $.proxy(function (response) {
+			Craft.postActionRequest('sproutSeo/address/changeForm', { countryCode: countryCode, namespace: this.settings.namespace }, $.proxy(function (response) {
 				$parents.find('.field-address-input').remove();
 				$parents.find('.meta').append(response)
 			}, this))
@@ -105,6 +105,8 @@ Craft.SproutSeo.EditAddressModal = Garnish.Modal.extend(
 			{
 				data.source = this.settings.source;
 			}
+
+			data.namespace = this.settings.namespace;
 
 			this.settings.onSubmit(data, $.proxy(function(errors) {
 
