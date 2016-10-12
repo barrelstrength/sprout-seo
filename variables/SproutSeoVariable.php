@@ -823,26 +823,27 @@ class SproutSeoVariable
 
 	private function getSchemaChildren($type)
 	{
-		$tree      = sproutSeo()->schema->getVocabularies($type);
-		$childrens = array();
+		$tree     = sproutSeo()->schema->getVocabularies($type);
+		$children = array();
+
 		// let's assume 3 levels
 		if (isset($tree['children']))
 		{
 			foreach ($tree['children'] as $key => $level1)
 			{
-				$childrens[$key] = array();
+				$children[$key] = array();
 
 				if (isset($level1['children']))
 				{
 					foreach ($level1['children'] as $key2 => $level2)
 					{
-						$childrens[$key][$key2] = array();
+						$children[$key][$key2] = array();
 
 						if (isset($level2['children']))
 						{
 							foreach ($level2['children'] as $key3 => $level3)
 							{
-								array_push($childrens[$key][$key2], $key3);
+								array_push($children[$key][$key2], $key3);
 							}
 						}
 					}
@@ -850,7 +851,7 @@ class SproutSeoVariable
 			}
 		}
 
-		return $childrens;
+		return $children;
 	}
 
 	/**
