@@ -223,6 +223,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 		$prioritizedMetadataModel->robots = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($prioritizedMetadataModel->robots);
 
+		// let's just prepare assets for final metadatamodel
+		SproutSeoOptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
+
 		return $prioritizedMetadataModel;
 	}
 

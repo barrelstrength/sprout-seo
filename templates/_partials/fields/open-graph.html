@@ -1,5 +1,5 @@
 {% import "_includes/forms" as forms %}
-
+{% set transformOptions = craft.sproutseo.getTransforms() %}
 <div class="sproutseo-box-opengraph">
 
 	<div class="sproutseo-fields" id="open-graph">
@@ -14,7 +14,7 @@
 			label: 'Open Graph Type'|t,
 			instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
 				target="_blank">How Open Graph Stories work.</a>'|t,
-			name: 'sproutseo[metadata][ogType]',
+			name: nameContext~'[metadata][ogType]',
 			options: ogTypesOptions,
 			value: values.ogType ?? prioritizedMetadata.ogType,
 			errors: "",
@@ -23,14 +23,14 @@
 
 		{{ forms.textField({
 			label: "Title"|t,
-			name: "sproutseo[metadata][ogTitle]",
+			name: nameContext~"[metadata][ogTitle]",
 			value: values.ogTitle,
 			placeholder: prioritizedMetadata.optimizedTitle ?? values.optimizedTitle ?? null,
 		}) }}
 
 		{{ forms.textareaField({
 			label: "Description"|t,
-			name: "sproutseo[metadata][ogDescription]",
+			name: nameContext~"[metadata][ogDescription]",
 			value: values.ogDescription,
 			placeholder: prioritizedMetadata.optimizedDescription ?? values.optimizedDescription ?? null,
 		}) }}
@@ -48,12 +48,22 @@
 			sourceElementId: [values.ogImage],
 			elementType: elementType,
 			id: 'metaDetailsOgImage',
-			name: 'sproutseo[metadata][ogImage]',
+			name: nameContext~'[metadata][ogImage]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image'|t,
 			limit: 1,
 			criteria: {"localeEnabled":null}
 		})) }}
+
+		{{ forms.selectField({
+			label: 'Facebook Image transform'|t,
+			instructions: 'Select Image Transforms for the facebook image'|t,
+			name: nameContext~'[metadata][ogTransform]',
+			options: transformOptions,
+			value: values.ogTransform ?? prioritizedMetadata.ogTransform,
+			errors: "",
+			required: false
+		}) }}
 
 	</div>
 

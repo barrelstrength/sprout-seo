@@ -1,8 +1,8 @@
 {% import "_includes/forms" as forms %}
-
+{% set transformOptions = craft.sproutseo.getTransforms() %}
 <div class="sproutseo-box-twitter">
 	<div class="sproutseo-fields" id="twitter-card">
-		
+
 		{% set twitterCardOptions = {
 			'' : 'Select Twitter Card Type...'|t,
 			'summary' : 'Summary Card'|t,
@@ -12,7 +12,7 @@
 		{{ forms.selectField({
 			label: 'Twitter Card Type'|t,
 			instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
-			name: 'sproutseo[metadata][twitterCard]',
+			name: nameContext~'[metadata][twitterCard]',
 			options: twitterCardOptions,
 			value: values.twitterCard ?? prioritizedMetadata.twitterCard ?? 'summary',
 			errors: "",
@@ -21,14 +21,14 @@
 
 		{{ forms.textField({
 			label: "Title"|t,
-			name: "sproutseo[metadata][twitterTitle]",
+			name: nameContext~"[metadata][twitterTitle]",
 			value: values.twitterTitle,
 			placeholder: prioritizedMetadata.optimizedTitle ?? values.optimizedTitle ?? null,
 		}) }}
 
 		{{ forms.textareaField({
 			label: "Description"|t,
-			name: "sproutseo[metadata][twitterDescription]",
+			name: nameContext~"[metadata][twitterDescription]",
 			value: values.twitterDescription,
 			placeholder: prioritizedMetadata.optimizedDescription ?? values.optimizedDescription ?? null,
 		}) }}
@@ -46,17 +46,27 @@
 			sourceElementId: [values.twitterImage],
 			elementType: elementType,
 			id: 'metaDetailsTwitterImage',
-			name: 'sproutseo[metadata][twitterImage]',
+			name: nameContext~'[metadata][twitterImage]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image'|t,
 			limit: 1,
 			criteria: {"localeEnabled":null}
 		})) }}
 
+		{{ forms.selectField({
+			label: 'Twitter Image transform'|t,
+			instructions: 'Select Image Transforms for the twitter image'|t,
+			name: nameContext~'[metadata][twitterTransform]',
+			options: transformOptions,
+			value: values.twitterTransform ?? prioritizedMetadata.twitterTransform,
+			errors: "",
+			required: false
+		}) }}
+
 		{{ forms.textField({
 			label: "Creator"|t,
 			instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
-			name: 'sproutseo[metadata][twitterCreator]',
+			name: nameContext~'[metadata][twitterCreator]',
 			value: values.twitterCreator,
 			errors: "",
 			required: false,

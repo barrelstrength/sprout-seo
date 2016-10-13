@@ -407,6 +407,22 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		return false;
 	}
 
+	public function getTransforms()
+	{
+		$options = array(
+			'' => 'Select...'
+		);
+
+		$transforms = craft()->assetTransforms->getAllTransforms();
+
+		foreach ($transforms as $transform)
+		{
+			$options[$transform->handle] = $transform->name;
+		}
+
+		return $options;
+	}
+
 	/**
 	 * Delete a Section Metadata by ID
 	 *

@@ -1,7 +1,7 @@
 {% import "_includes/forms" as forms %}
 {% import "sproutseo/_includes/sproutseo" as sprout %}
 
-{% set nameContext      = elementHandle is defined ? elementHandle : 'sproutSeo'  %}
+{% set nameContext      = elementHandle is defined ? elementHandle : 'sproutseo'  %}
 {% set pluginSettings   = craft.sproutSeo.getSettings() %}
 {% set schemas          = craft.sproutSeo.getSchemaOptions() %}
 {% set schemaSubtypes   = craft.sproutSeo.getSchemaSubtypes(schemas) %}
@@ -428,7 +428,7 @@ feel like they are part of the natural flow of fields #}
 			}
 			else
 			{
-				return $("input[name='sproutSeo[metadata][customizationSettings]']");
+				return $("input[name='sproutseo[metadata][customizationSettings]']");
 			}
 		}
 

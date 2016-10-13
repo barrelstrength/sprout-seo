@@ -55,6 +55,7 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 			'ogType'        => array(AttributeType::String),
 			'ogUrl'         => array(AttributeType::String),
 			'ogImage'       => array(AttributeType::String),
+			'ogTransform'   => array(AttributeType::String),
 			'ogAuthor'      => array(AttributeType::String),
 			'ogPublisher'   => array(AttributeType::String),
 			'ogSiteName'    => array(AttributeType::String),
@@ -71,6 +72,7 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 
 			'twitterUrl'                     => array(AttributeType::String),
 			'twitterImage'                   => array(AttributeType::String),
+			'twitterTransfrom'               => array(AttributeType::String),
 
 			// Fields for Twitter Player Card
 			'twitterPlayer'                  => array(AttributeType::String),

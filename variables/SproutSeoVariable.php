@@ -875,4 +875,14 @@ class SproutSeoVariable
 
 		return $values;
 	}
+
+	/**
+	 * Prepare an array of the image transforms available
+	 *
+	 * @return multi-dimensional array
+	 */
+	public function getTransforms()
+	{
+		return sproutSeo()->sectionMetadata->getTransforms();
+	}
 }
