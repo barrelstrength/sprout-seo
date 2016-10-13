@@ -58,7 +58,7 @@
 				openGraph: true,
 				twitterCard: true,
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
-			}) ~ '<span class="locale" id="sproutseo-seopreview" style="cursor:pointer;">preview</span>',
+			}),
 			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'sectionMetadata' ? appendTitleValueInstructions : ""),
 			name: nameContext~'[metadata][optimizedTitle]',
 			id: 'sproutseo-optimizedtitle',
