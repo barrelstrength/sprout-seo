@@ -152,7 +152,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 * Loop through and select the highest ranking value for each attribute in our SproutSeo_MetadataModel
 	 *
 	 * 1) Code Metadata
-	 * 2) Entry Metadata
+	 * 2) Element Metadata
 	 * 3) Section Metadata
 	 * 4) Global Metadata
 	 * 5) Blank
@@ -345,7 +345,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 				$response = $this->urlEnabledSection;
 				break;
 
-			case SproutSeo_MetadataLevels::EntryMetadata:
+			case SproutSeo_MetadataLevels::ElementMetadata:
 				if (isset($this->urlEnabledSection->element))
 				{
 					if (isset($this->urlEnabledSection->element->id))

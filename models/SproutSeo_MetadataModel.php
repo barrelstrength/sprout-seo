@@ -168,8 +168,8 @@ class SproutSeo_MetadataModel extends BaseModel
 				$this->setAttributes($this->prepareCodeMetadata($overrideInfo));
 				break;
 
-			case SproutSeo_MetadataLevels::EntryMetadata:
-				$this->setAttributes($this->prepareEntryMetadata($overrideInfo));
+			case SproutSeo_MetadataLevels::ElementMetadata:
+				$this->setAttributes($this->prepareElementMetadata($overrideInfo));
 				break;
 
 			case SproutSeo_MetadataLevels::SectionMetadata:
@@ -218,25 +218,25 @@ class SproutSeo_MetadataModel extends BaseModel
 	}
 
 	/**
-	 * Get Entry Metadata based on an Element ID
+	 * Get Element Metadata based on an Element ID
 	 *
 	 * @param $overrideInfo
 	 *
 	 * @return array
 	 */
-	protected function prepareEntryMetadata($overrideInfo)
+	protected function prepareElementMetadata($overrideInfo)
 	{
 		if (isset($overrideInfo['elementId']))
 		{
 			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$entryMetadata = sproutSeo()->entryMetadata->getEntryMetadataByElementId($overrideInfo['elementId'], $locale);
+			$elementMetadata = sproutSeo()->elementMetadata->getElementMetadataByElementId($overrideInfo['elementId'], $locale);
 
 			// Default to the current URL, if no overrides exist
-			$entryMetadata->canonical  = SproutSeoOptimizeHelper::prepareCanonical($entryMetadata);
-			$entryMetadata->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($entryMetadata);
-			$entryMetadata->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($entryMetadata);
+			$elementMetadata->canonical  = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
+			$elementMetadata->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
+			$elementMetadata->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
 
-			return $entryMetadata->getAttributes();
+			return $elementMetadata->getAttributes();
 		}
 
 		return array();

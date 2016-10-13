@@ -11,7 +11,7 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 	public function safeUp()
 	{
 		$tableName    = 'sproutseo_overrides';
-		$newTableName = 'sproutseo_metadata_entries';
+		$newTableName = 'sproutseo_metadata_elements';
 
 		$varchar = array(
 			'column'   => ColumnType::Varchar,

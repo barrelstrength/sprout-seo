@@ -13,7 +13,7 @@
 	search: true,
 	openGraph: true,
 	twitterCard: true,
-	priority: 'entries'
+	priority: 'elements'
 }) -}}
 </div>
 
@@ -23,7 +23,7 @@
 		search: true,
 		openGraph: true,
 		twitterCard: true,
-		priority: 'entries'
+		priority: 'elements'
 	}) -}}
 </div>
 
@@ -33,7 +33,7 @@
 		search: true,
 		openGraph: true,
 		twitterCard: true,
-		priority: 'entries'
+		priority: 'elements'
 	}) -}}
 </div>
 
@@ -57,7 +57,7 @@
 				search: true,
 				openGraph: true,
 				twitterCard: true,
-				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}) ~ '<span class="locale" id="sproutseo-seopreview" style="cursor:pointer;">preview</span>',
 			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'sectionMetadata' ? appendTitleValueInstructions : ""),
 			name: nameContext~'[metadata][optimizedTitle]',
@@ -99,7 +99,7 @@
 				search: true,
 				openGraph: true,
 				twitterCard: true,
-				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}),
 			instructions: "A description of your content which will appear in search results and social sharing."|t,
 			name: nameContext~'[metadata][optimizedDescription]',
@@ -118,7 +118,7 @@
 				label: "Meta Image"|t,
 				openGraph: true,
 				twitterCard: true,
-				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}),
 			instructions: 'A featured image that represents your content that will display in social sharing.'|t,
 			id: 'sproutseo-optimizedimage',
@@ -142,7 +142,7 @@
 			label: "Meta Keywords"|t ~ sprout.infoIcon({
 				label: "Meta Keywords"|t,
 				search: true,
-				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries'
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}),
 			instructions: "The primary keywords or phrases that describe your website."|t,
 			id: 'sproutseo-optimizedkeywords',
@@ -161,7 +161,7 @@
 						label: "Meta Image"|t,
 						search: true,
 						structured: true,
-						priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries'
+						priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 					}),
 					instructions: 'Select the Structured Data schema type that best represents your content.'|t,
 					class: 'mainentity-firstdropdown',
@@ -239,7 +239,7 @@
 					<div class="blocktype"><i class="sproutseo-icon icon-search">&#xe800;</i> {{ "Search Meta"|t }} {{ sprout.infoIcon({
 							label: "Search Meta"|t,
 							search: true,
-							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries',
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements',
 							message: 'All fields in this block take priority for the Search metadata at this priority level.'|t
 						}) }}</div>
 				</div>
@@ -256,7 +256,7 @@
 					<div class="blocktype"><i class="sproutseo-icon icon-facebook">&#xe802;</i> {{ "Open Graph"|t }} {{ sprout.infoIcon({
 							label: "Open Graph"|t,
 							openGraph: true,
-							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries',
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements',
 							message: 'All fields in this block take priority for the Open Graph metadata at this priority level.'|t
 						}) }}
 					</div>
@@ -275,7 +275,7 @@
 					<div class="blocktype"><i class="sproutseo-icon icon-twitter">&#xe807;</i> {{ "Twitter Card"|t }} {{ sprout.infoIcon({
 							label: "Twitter Card"|t,
 							twitterCard: true,
-							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries',
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements',
 							message: 'All fields in this block take priority for the Twitter Card metadata at this priority level.'|t
 						}) }}</div>
 				</div>
@@ -291,7 +291,7 @@
 					<div class="blocktype"><i class="sproutseo-icon icon-location">&#xe803;</i> {{ "Geo"|t }} {{ sprout.infoIcon({
 							label: "Geo"|t,
 							geo: true,
-							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries',
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements',
 							message: 'All fields in this block take priority for the Geographic metadata at this priority level.'|t
 						}) }}</div>
 					<div class="preview"></div>
@@ -309,7 +309,7 @@
 					<div class="blocktype"><i class="sproutseo-icon icon-robots">&#xe806;</i> {{ "Robots"|t }} {{ sprout.infoIcon({
 							label: "Robots"|t,
 							robots: true,
-							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'entries',
+							priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements',
 							message: 'All fields in this block take priority for the Robots metadata at this priority level.'|t
 						}) }}</div>
 				</div>
@@ -359,13 +359,13 @@
 
 		<div class="body sproutseo-previewbody">
 			<div id="tab-sproutseo-preview-search">
-				{% include 'sproutseo/_fieldtypes/entrymetadata/previews/search' %}
+				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/search' %}
 			</div>
 			<div id="tab-sproutseo-preview-facebook" class="hidden">
-				{% include 'sproutseo/_fieldtypes/entrymetadata/previews/opengraph' %}
+				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/opengraph' %}
 			</div>
 			<div id="tab-sproutseo-preview-twitter" class="hidden">
-				{% include 'sproutseo/_fieldtypes/entrymetadata/previews/twittercard' %}
+				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/twittercard' %}
 			</div>
 		</div>
 	{#</div>#}
