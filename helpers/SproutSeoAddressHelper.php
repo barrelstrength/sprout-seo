@@ -146,7 +146,7 @@ class SproutSeoAddressHelper
 		$html = $this->renderTemplates('form', array(
 			'countryInput' => TemplateHelper::getRaw($countryInput),
 			'form'         => TemplateHelper::getRaw($form),
-			'actionUrl'    => UrlHelper::getActionUrl('sproutSeo/address/changeForm')
+			'actionUrl'    => UrlHelper::getActionUrl('sproutSeo/changeForm')
 		));
 
 		return TemplateHelper::getRaw($html);
@@ -155,7 +155,7 @@ class SproutSeoAddressHelper
 	/**
 	 * @todo - if we want to use this for both Craft CP and Sprout Forms output, we'll need to update
 	 * the render path as the templates for the front-end have to be in a different location:
-	 * templates/_integrations/sproutforms/fields/address/...
+	 * templates/_integrations/sproutforms/fields/...
 	 *
 	 * @return string
 	 */
@@ -184,7 +184,7 @@ class SproutSeoAddressHelper
 	/**
 	 * @todo - if we want to use this for both Craft CP and Sprout Forms output, we'll need to update
 	 * the render path as the templates for the front-end have to be in a different location:
-	 * templates/_integrations/sproutforms/fields/address/...
+	 * templates/_integrations/sproutforms/fields/...
 	 *
 	 * @param $addressName
 	 *
@@ -731,16 +731,17 @@ class SproutSeoAddressHelper
 		return 'US';
 	}
 
-	public function renderTemplates($path, $params)
+	public function renderTemplates($template, $params, $folder = '')
 	{
-		$oldPath = craft()->path->getTemplatesPath();
-		$newPath = craft()->path->getPluginsPath().'sproutseo/templates/_address/';
+		if (empty($folder))
+		{
+			$class = (new \ReflectionClass($this))->getShortName();;
+			$folder = str_replace('addresshelper', '', strtolower($class));
+		}
 
-		craft()->path->setTemplatesPath($newPath);
+		$path = "$folder/_fieldtypes/address/" . $template;
 
 		$html = craft()->templates->render($path, $params);
-
-		craft()->path->setTemplatesPath($oldPath);
 
 		return $html;
 	}
