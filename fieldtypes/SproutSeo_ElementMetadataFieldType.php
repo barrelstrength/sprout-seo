@@ -174,46 +174,50 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 	{
 		$fieldHandle = $this->model->handle;
 		$fields = $this->element->getContent()->{$fieldHandle}['metadata'];
-
-		if (!isset($fields))
-		{
-			return;
-		}
-
 		$locale = $this->element->locale;
-
+		// Instance model if call comes from ResaveElements task
 		// Get existing or new MetadataModel
 		$model = sproutSeo()->elementMetadata->getElementMetadataByElementId($this->element->id, $locale);
 
-		// Test to see if we have any values in our Sprout SEO fields
-		$saveSproutSeoFields = false;
-
-		foreach ($fields as $key => $value)
+		if ($fields)
 		{
-			if ($value)
-			{
-				$saveSproutSeoFields = true;
-				continue;
-			}
-		}
+			// Test to see if we have any values in our Sprout SEO fields
+			$saveSproutSeoFields = false;
 
-		// If we don't have any values in our Sprout SEO fields
-		// don't add a record to the database
-		// If a record already exists, we should delete it.
-		if (!$saveSproutSeoFields)
-		{
-			// Remove record since it is now blank
-			if ($model->id)
+			foreach ($fields as $key => $value)
 			{
-				sproutSeo()->elementMetadata->deleteElementMetadataById($model->id);
+				if ($value)
+				{
+					$saveSproutSeoFields = true;
+					continue;
+				}
 			}
 
-			return;
-		}
+			// If we don't have any values in our Sprout SEO fields
+			// don't add a record to the database
+			// If a record already exists, we should delete it.
+			if (!$saveSproutSeoFields)
+			{
+				// Remove record since it is now blank
+				if ($model->id)
+				{
+					sproutSeo()->elementMetadata->deleteElementMetadataById($model->id);
+				}
 
-		if (isset($fields['robots']))
+				return;
+			}
+
+			if (isset($fields['robots']))
+			{
+				$fields['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
+			}
+		}
+		else
 		{
-			$fields['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
+			$attributes['optimizedTitle']       = null;
+			$attributes['optimizedDescription'] = null;
+			$attributes['optimizedImage']       = null;
+			$attributes['elementId']            = null;
 		}
 
 		// Add the element ID to the field data we will submit for Sprout SEO
@@ -221,7 +225,10 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		$attributes['locale']    = $locale;
 
 		// Grab all the other Sprout SEO fields.
-		$attributes = array_merge($attributes, $fields);
+		if ($fields)
+		{
+			$attributes = array_merge($attributes, $fields);
+		}
 
 		$settings   = $this->getSettings();
 		$attributes = $this->processOptimizedTitle($attributes, $settings);
