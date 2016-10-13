@@ -49,11 +49,17 @@
 				<input type="hidden" name="sproutseo[metadata][type]" value="{{ sectionMetadata.type }}">
 				<input type="hidden" name="sproutseo[metadata][urlEnabledSectionId]" value="{{ sectionMetadata.urlEnabledSectionId }}">
 
-				{% include 'sproutseo/_fieldtypes/entrymetadata/input' %}
+				{% include 'sproutseo/_fieldtypes/elementmetadata/input' %}
 
 			</div>
 		</div>
 		<div class="item" data-position="right" data-colspan="1">
+
+			<div id="sproutseo-seopreview" class="btn big livepreviewbtn" tabindex="0">
+				{{ "SEO Preview"|t }}
+				<div class="spinner hidden"></div>
+			</div>
+
 			<div class="pane meta">
 
 				{{ forms.textField({

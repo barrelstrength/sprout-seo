@@ -25,8 +25,6 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function __construct($sectionMetadataRecord = null)
 	{
-		$this->prepareUrlEnabledSectionTypes();
-
 		$this->sectionMetadataRecord = $sectionMetadataRecord;
 		if (is_null($this->sectionMetadataRecord))
 		{
@@ -39,6 +37,12 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function prepareUrlEnabledSectionTypes()
 	{
+		// Have we already prepared our URL-Enabled Sections?
+		if (count($this->urlEnabledSectionTypes))
+		{
+			return null;
+		}
+
 		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
 
 		foreach ($registeredUrlEnabledSectionsTypes as $plugin => $urlEnabledSectionTypes)
@@ -105,6 +109,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getUrlEnabledSectionTypes()
 	{
+		$this->prepareUrlEnabledSectionTypes();
+
 		return $this->urlEnabledSectionTypes;
 	}
 
@@ -115,6 +121,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getUrlEnabledSectionsViaContext($context)
 	{
+		$this->prepareUrlEnabledSectionTypes();
+
 		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
 		{
 			$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
@@ -148,6 +156,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getUrlEnabledSectionTypeByType($type)
 	{
+		$this->prepareUrlEnabledSectionTypes();
+
 		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
 		{
 			if ($urlEnabledSectionType->getId() == $type)
@@ -168,6 +178,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getUrlEnabledSectionTypeByElementType($elementType)
 	{
+		$this->prepareUrlEnabledSectionTypes();
+
 		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
 		{
 			if ($urlEnabledSectionType->getElementType() == $elementType)
