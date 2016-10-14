@@ -10,6 +10,12 @@ class SproutSeo_AddressController extends BaseController
 	 */
 	protected $addressHelper;
 
+	/**
+	 * Allow anonymous actions as defined within this array
+	 *
+	 * @var array
+	 */
+
 	protected $allowAnonymous = array('actionGetAddressFormFields');
 
 	public function init()
@@ -50,6 +56,10 @@ class SproutSeo_AddressController extends BaseController
 		exit;
 	}
 
+	/**
+	 * Return all Address Form Fields for the selected Country
+	 */
+
 	public function actionGetAddressFormFields()
 	{
 		$this->requireAjaxRequest();
@@ -65,7 +75,7 @@ class SproutSeo_AddressController extends BaseController
 		}
 		else
 		{
-			$addressInfoModel = new SproutSeo_AddressInfoModel();
+			$addressInfoModel = new SproutSeo_AddressModel();
 
 			$addressInfoModel->countryCode = $this->addressHelper->defaultCountryCode();
 		}
@@ -115,7 +125,7 @@ class SproutSeo_AddressController extends BaseController
 			$source = craft()->request->getPost('source');
 		}
 
-		$addressInfoModel = SproutSeo_AddressInfoModel::populateModel($formValues);
+		$addressInfoModel = SproutSeo_AddressModel::populateModel($formValues);
 
 		if ($addressInfoModel->validate() == true)
 		{

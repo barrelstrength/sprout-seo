@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_AddressInfoRecord extends BaseRecord
+class SproutSeo_AddressRecord extends BaseRecord
 {
 	/**
 	 * Database table name
@@ -10,7 +10,7 @@ class SproutSeo_AddressInfoRecord extends BaseRecord
 	 */
 	public function getTableName()
 	{
-		return 'sproutseo_addressinfo';
+		return 'sproutseo_address';
 	}
 
 	/**

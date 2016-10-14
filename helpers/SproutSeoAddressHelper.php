@@ -67,12 +67,12 @@ class SproutSeoAddressHelper
 	public function setParams($countryCode,
 	                          $name = 'address',
 	                          $sproutAddress = '',
-	                          SproutSeo_AddressInfoModel $addressInfoModel = null,
+	                          SproutSeo_AddressModel $addressInfoModel = null,
 														$namespaceInputName = '')
 	{
 		$this->name               = $name;
 		$this->namespaceInputName = $namespaceInputName;
-		$this->addressInfoModel   = ($addressInfoModel == null) ? new SproutSeo_AddressInfoModel : $addressInfoModel;
+		$this->addressInfoModel   = ($addressInfoModel == null) ? new SproutSeo_AddressModel : $addressInfoModel;
 		$this->countryCode        = $countryCode;
 		$this->sproutAddress      = $sproutAddress;
 	}
@@ -128,7 +128,7 @@ class SproutSeoAddressHelper
 		));
 	}
 
-	public function displayAddressForm(SproutSeo_AddressInfoModel $addressInfoModel = null, $namespace = 'address')
+	public function displayAddressForm(SproutSeo_AddressModel $addressInfoModel = null, $namespace = 'address')
 	{
 		$countryCode = $this->defaultCountryCode();
 
@@ -349,7 +349,7 @@ class SproutSeoAddressHelper
 	 *
 	 * @return mixed
 	 */
-	public function getAddressWithFormat(SproutSeo_AddressInfoModel $model)
+	public function getAddressWithFormat(SproutSeo_AddressModel $model)
 	{
 		$address                 = new Address();
 		$addressFormatRepository = new AddressFormatRepository();

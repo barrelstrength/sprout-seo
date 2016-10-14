@@ -5,7 +5,7 @@ namespace Craft;
  * Class sproutSeo_AddressInfoModel
  *
  */
-class SproutSeo_AddressInfoModel extends BaseModel
+class SproutSeo_AddressModel extends BaseModel
 {
 	protected $addressHelper;
 

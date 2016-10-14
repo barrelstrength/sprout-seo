@@ -123,6 +123,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 			'name'                 => $name,
 			'namespaceInputName'   => $namespaceInputName,
 			'namespaceInputId'     => $namespaceInputId,
+			'pluginTemplate'       => 'sproutseo',
 			'values'               => $values,
 			'ogImageElements'      => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
@@ -150,7 +151,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		$fieldHandle = $this->model->handle;
 		$addressInfo  = $this->element->getContent()->{$fieldHandle};
 
-		$addressInfoModel = SproutSeo_AddressInfoModel::populateModel($addressInfo);
+		$addressInfoModel = SproutSeo_AddressModel::populateModel($addressInfo);
 
 		if ($addressInfoModel->validate() == true && sproutSeo()->addressInfo->saveAddressInfo($addressInfoModel))
 		{

@@ -12,7 +12,7 @@ class SproutSeo_AddressInfoService extends BaseApplicationComponent
 		{
 			$addressInfo = craft()->request->getPost($namespace);
 
-			$addressInfoModel = SproutSeo_AddressInfoModel::populateModel($addressInfo);
+			$addressInfoModel = SproutSeo_AddressModel::populateModel($addressInfo);
 
 			if ($addressInfoModel->validate() == true && $this->saveAddressInfo($addressInfoModel))
 			{
@@ -23,15 +23,15 @@ class SproutSeo_AddressInfoService extends BaseApplicationComponent
 		return false;
 	}
 
-	public function saveAddressInfo(SproutSeo_AddressInfoModel $model, $source = '')
+	public function saveAddressInfo(SproutSeo_AddressModel $model, $source = '')
 	{
 		$result = false;
 
-		$record = new SproutSeo_AddressInfoRecord;
+		$record = new SproutSeo_AddressRecord;
 
 		if (!empty($model->id))
 		{
-			$record = SproutSeo_AddressInfoRecord::model()->findById($model->id);
+			$record = SproutSeo_AddressRecord::model()->findById($model->id);
 
 			if (!$record)
 			{
@@ -103,13 +103,13 @@ class SproutSeo_AddressInfoService extends BaseApplicationComponent
 
 	public function getAddressById($id)
 	{
-		if ($record = SproutSeo_AddressInfoRecord::model()->findByPk($id))
+		if ($record = SproutSeo_AddressRecord::model()->findByPk($id))
 		{
-			return SproutSeo_AddressInfoModel::populateModel($record);
+			return SproutSeo_AddressModel::populateModel($record);
 		}
 		else
 		{
-			return new SproutSeo_AddressInfoModel();
+			return new SproutSeo_AddressModel();
 		}
 	}
 }
