@@ -420,6 +420,23 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 						$value = $_POST['fields'][$field->handle];
 					}
 				}
+				//Resave elements
+				else
+				{
+					if (isset($this->element->{$field->handle}))
+					{
+						$elementValue = $this->element->{$field->handle};
+
+						if ($field->type == 'Assets')
+						{
+							$value = (isset($elementValue[0]->id) ? $elementValue[0]->id : null);
+						}
+						else
+						{
+							$value = $elementValue;
+						}
+					}
+				}
 			}
 		}
 
