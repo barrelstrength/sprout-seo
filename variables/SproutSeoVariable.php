@@ -595,6 +595,35 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * Returns keywords options
+	 *
+	 * @return array
+	 */
+	public function getKeywordsOptions($type = "PlainText")
+	{
+		$options = array();
+		$fields  = craft()->fields->getAllFields();
+
+		$options[''] = "Select...";
+		$options[] = array('optgroup' => "Add Custom Field");
+
+		$options['manually'] = 'Display Editable Field';
+		$options[] = array('optgroup' => "Generate based on Existing Fields");
+
+		foreach ($fields as $key => $field)
+		{
+			if ($field->type == $type)
+			{
+				$context             = explode(":", $field->context);
+				$context             = isset($context[0]) ? $context[0] : 'global';
+				$options[$field->id] = $field->name;
+			}
+		}
+
+		return $options;
+	}
+
+	/**
 	 * Returns all plain fields available given a type
 	 *
 	 * @return array

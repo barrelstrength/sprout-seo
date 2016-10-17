@@ -233,6 +233,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		$settings   = $this->getSettings();
 		$attributes = $this->processOptimizedTitle($attributes, $settings);
 		$attributes = $this->processOptimizedDescription($attributes, $settings);
+		$attributes = $this->processOptimizedKeywords($attributes, $settings);
 		$attributes = $this->processOptimizedFeatureImage($attributes, $settings);
 		$attributes = $this->processMainEntity($attributes, $settings);
 
@@ -299,6 +300,43 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		$attributes['title']          = $title;
 		$attributes['ogTitle']        = $title;
 		$attributes['twitterTitle']   = $title;
+
+		return $attributes;
+	}
+
+	/**
+	 * @param $attributes
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	protected function processOptimizedKeywords($attributes, $settings)
+	{
+		$keywords = null;
+
+		$optimizedKeywordsFieldSetting = $settings['optimizedKeywordsField'];
+
+		switch (true)
+		{
+			// Manual Keywords
+			case ($optimizedKeywordsFieldSetting == 'manually'):
+
+				$keywords = ($attributes['optimizedKeywords']) ? $attributes['optimizedKeywords'] : null;
+
+				break;
+
+			// Auto-generate keywords from target field
+			case (is_numeric($optimizedKeywordsFieldSetting)):
+
+				$keywords     = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
+				$rake         = new Rake();
+				$rakeKeywords = array_keys($rake->extract($keywords));
+				$keywords     = implode(',',$rakeKeywords);
+
+				break;
+		}
+
+		$attributes['optimizedKeywords'] = $keywords;
 
 		return $attributes;
 	}

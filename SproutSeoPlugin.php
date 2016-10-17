@@ -122,6 +122,7 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ProductSchema');
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
+		Craft::import('plugins.sproutseo.vendor.rake.Rake');
 
 		if (!craft()->isConsole())
 		{
