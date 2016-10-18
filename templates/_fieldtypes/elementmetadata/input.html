@@ -509,6 +509,10 @@ feel like they are part of the natural flow of fields #}
 			});
 		{% endif %}
 
+		$('#fields-sproutseo-searchKeywords-field input').tagEditor({
+		animateDelete: 20
+		});
+
 		{% if settings.optimizedTitleField == 'elementTitle' %}
 
 			var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();

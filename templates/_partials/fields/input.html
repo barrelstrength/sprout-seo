@@ -28,10 +28,10 @@
 
 	{{ forms.textField({
 		label: "Keywords"|t,
+		id: 'sproutseo-searchKeywords',
 		instructions: "A list of keywords that describe your content"|t,
 		name: nameContext~'[metadata][keywords]',
 		value: values.keywords,
-		placeholder: prioritizedMetadata.optimizedKeywords ?? values.optimizedKeywords ?? null,
 		errors: "",
 		required: false
 	}) }}
