@@ -231,6 +231,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		}
 
 		$settings   = $this->getSettings();
+		// meta details needs go first
+		$attributes = $this->processMetaDetails($attributes, $settings);
 		$attributes = $this->processOptimizedTitle($attributes, $settings);
 		$attributes = $this->processOptimizedDescription($attributes, $settings);
 		$attributes = $this->processOptimizedKeywords($attributes, $settings);
@@ -297,9 +299,39 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		}
 
 		$attributes['optimizedTitle'] = $title;
-		$attributes['title']          = $title;
-		$attributes['ogTitle']        = $title;
-		$attributes['twitterTitle']   = $title;
+
+		$attributes = $this->setMetaDetailsValues('title', $title, $attributes);
+
+		return $attributes;
+	}
+
+	private function setMetaDetailsValues($type, $value, $attributes)
+	{
+		$metaDetails  = JsonHelper::decode($attributes['customizationSettings']);
+		$ogKey        = 'og'.ucfirst($type);
+		$twitterKey   = 'twitter'.ucfirst($type);
+		$ogValue      = $attributes[$ogKey];
+		$twitterValue = $attributes[$twitterKey];
+		$searchValue  =  $attributes[$type];
+		// Default values
+		$attributes[$type]       = $value;
+		$attributes[$ogKey]      = $value;
+		$attributes[$twitterKey] = $value;
+
+		if (isset($metaDetails['searchMetaSectionMetadataEnabled']) && $metaDetails['searchMetaSectionMetadataEnabled'] && $searchValue)
+		{
+			$attributes[$type] = $searchValue;
+		}
+
+		if (isset($metaDetails['openGraphSectionMetadataEnabled']) && $metaDetails['openGraphSectionMetadataEnabled'] && $ogValue)
+		{
+			$attributes[$ogKey] = $ogValue;
+		}
+
+		if (isset($metaDetails['twitterCardSectionMetadataEnabled']) && $metaDetails['twitterCardSectionMetadataEnabled'] && $twitterValue)
+		{
+			$attributes[$twitterKey] = $twitterValue;
+		}
 
 		return $attributes;
 	}
@@ -378,9 +410,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		}
 
 		$attributes['optimizedDescription'] = $description;
-		$attributes['description']          = $description;
-		$attributes['ogDescription']        = $description;
-		$attributes['twitterDescription']   = $description;
+		$attributes = $this->setMetaDetailsValues('description', $description, $attributes);
 
 		return $attributes;
 	}
@@ -426,6 +456,43 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		if (!isset($attributes['schemaOverrideTypeId']))
 		{
 			$attributes['schemaOverrideTypeId'] = null;
+		}
+
+		return $attributes;
+	}
+
+	protected function processMetaDetails($attributes, $settings)
+	{
+		$details = array();
+
+		if (!isset($attributes['customizationSettings']))
+		{
+			if ($settings['showSearchMeta'])
+			{
+				$details['searchMetaSectionMetadataEnabled'] = 0;
+			}
+
+			if ($settings['showOpenGraph'])
+			{
+				$details['openGraphSectionMetadataEnabled'] = 0;
+			}
+
+			if ($settings['showTwitter'])
+			{
+				$details['twitterCardSectionMetadataEnabled'] = 0;
+			}
+
+			if ($settings['showGeo'])
+			{
+				$details['geoSectionMetadataEnabled'] = 0;
+			}
+
+			if ($settings['showRobots'])
+			{
+				$details['robotsSectionMetadataEnabled'] = 0;
+			}
+
+			$attributes['customizationSettings'] = json_encode($details);
 		}
 
 		return $attributes;
