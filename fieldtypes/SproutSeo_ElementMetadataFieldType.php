@@ -58,7 +58,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 	{
 		$globals  = sproutSeo()->optimize->globals;
 		$identity = $globals['identity'];
-		$schema = new SproutSeo_WebsiteIdentityWebsiteSchema();
+		$schema   = new SproutSeo_WebsiteIdentityWebsiteSchema();
 
 		if ($identityType = $identity['@type'])
 		{
@@ -139,6 +139,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		 */
 		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($this->element->getElementType());
 
+		$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
+
 		$urlEnabledSectionIdColumnName = $urlEnabledSectionType->getIdColumnName();
 		$type                          = $urlEnabledSectionType->getId();
 		$urlEnabledSectionId           = $this->element->{$urlEnabledSectionIdColumnName};
@@ -173,8 +175,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 	public function onAfterElementSave()
 	{
 		$fieldHandle = $this->model->handle;
-		$fields = $this->element->getContent()->{$fieldHandle}['metadata'];
-		$locale = $this->element->locale;
+		$fields      = $this->element->getContent()->{$fieldHandle}['metadata'];
+		$locale      = $this->element->locale;
 		// Instance model if call comes from ResaveElements task
 		// Get existing or new MetadataModel
 		$model = sproutSeo()->elementMetadata->getElementMetadataByElementId($this->element->id, $locale);
@@ -230,7 +232,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 			$attributes = array_merge($attributes, $fields);
 		}
 
-		$settings   = $this->getSettings();
+		$settings = $this->getSettings();
 		// meta details needs go first
 		$attributes = $this->processMetaDetails($attributes, $settings);
 		$attributes = $this->processOptimizedTitle($attributes, $settings);
@@ -307,12 +309,14 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 
 	private function setMetaDetailsValues($type, $value, $attributes)
 	{
-		$metaDetails  = JsonHelper::decode($attributes['customizationSettings']);
-		$ogKey        = 'og'.ucfirst($type);
-		$twitterKey   = 'twitter'.ucfirst($type);
-		$ogValue      = $attributes[$ogKey];
-		$twitterValue = $attributes[$twitterKey];
-		$searchValue  =  $attributes[$type];
+		$metaDetails = JsonHelper::decode($attributes['customizationSettings']);
+
+		$ogKey        = 'og' . ucfirst($type);
+		$twitterKey   = 'twitter' . ucfirst($type);
+		$ogValue      = isset($attributes[$ogKey]) ? $attributes[$ogKey] : null;
+		$twitterValue = isset($attributes[$twitterKey]) ? $attributes[$twitterKey] : null;
+		$searchValue  = isset($attributes[$type]) ? $attributes[$type] : null;
+
 		// Default values
 		$attributes[$type]       = $value;
 		$attributes[$ogKey]      = $value;
@@ -363,7 +367,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 				$keywords     = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
 				$rake         = new Rake();
 				$rakeKeywords = array_keys($rake->extract($keywords));
-				$keywords     = implode(',',$rakeKeywords);
+				$keywords     = implode(',', $rakeKeywords);
 
 				break;
 		}
@@ -410,7 +414,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		}
 
 		$attributes['optimizedDescription'] = $description;
-		$attributes = $this->setMetaDetailsValues('description', $description, $attributes);
+		$attributes                         = $this->setMetaDetailsValues('description', $description, $attributes);
 
 		return $attributes;
 	}
