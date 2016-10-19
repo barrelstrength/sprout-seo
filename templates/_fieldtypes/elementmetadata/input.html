@@ -39,13 +39,16 @@
 
 <div class="sproutseo-box-optimized">
 	{% set customizationSettings = values.getCustomizationSettings() %}
-
-	{{ forms.hidden({
-		name: nameContext~'[metadata][customizationSettings]',
-		id: 'customizationSettings',
-		value: customizationSettings|json_encode,
-		errors: "",
-	}) }}
+	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][searchMetaSectionMetadataEnabled]'}}"
+	value = "{{customizationSettings['searchMetaSectionMetadataEnabled']}}">
+	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][openGraphSectionMetadataEnabled]'}}"
+	value = "{{customizationSettings['openGraphSectionMetadataEnabled']}}">
+	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][twitterCardSectionMetadataEnabled]'}}"
+	value = "{{customizationSettings['twitterCardSectionMetadataEnabled']}}">
+	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][geoSectionMetadataEnabled]'}}"
+	value = "{{customizationSettings['geoSectionMetadataEnabled']}}">
+	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][robotsSectionMetadataEnabled]'}}"
+	value = "{{customizationSettings['robotsSectionMetadataEnabled']}}">
 
 	{% if settings.optimizedTitleField == 'manually' %}
 
@@ -420,44 +423,38 @@ feel like they are part of the natural flow of fields #}
 			}
 		}
 
-		function getScenario()
+		function getScenario(customKey)
 		{
-			if ($("input[name='fields["+nameContext+"][metadata][customizationSettings]']").length)
+			if ($("input[name='fields["+nameContext+"][metadata][customizationSettings]["+customKey+"]']").length)
 			{
-				return $("input[name='fields["+nameContext+"][metadata][customizationSettings]']");
+				return $("input[name='fields["+nameContext+"][metadata][customizationSettings]["+customKey+"]']");
 			}
 			else
 			{
-				return $("input[name='sproutseo[metadata][customizationSettings]']");
+				return $("input[name='sproutseo[metadata][customizationSettings]["+customKey+"]']");
 			}
 		}
 
-		function getCustomizationSettings()
+		function getCustomizationSettings(customKey)
 		{
-			return $.parseJSON(getScenario().val());
-		}
-
-		function setCustomizationSettings(values)
-		{
-			var value = JSON.stringify(values);
-			getScenario().val(value);
+			return getScenario(customKey);
 		}
 
 		function toggleActive(div, divId)
 		{
-			var customizationSettings = getCustomizationSettings();
+			//searchMetaSectionMetadataEnabled
+			var customKey = divId+"SectionMetadataEnabled";
+			var customizationSettings = getCustomizationSettings(customKey);
 
 			if (div.hasClass("active"))
 			{
-				customizationSettings[divId+"SectionMetadataEnabled"] = 0;
 				div.removeClass("active");
-				setCustomizationSettings(customizationSettings);
+				customizationSettings.val(0);
 			}
 			else
 			{
-				customizationSettings[divId+"SectionMetadataEnabled"] = 1;
 				div.addClass("active");
-				setCustomizationSettings(customizationSettings);
+				customizationSettings.val(1);
 			}
 		}
 
@@ -485,11 +482,12 @@ feel like they are part of the natural flow of fields #}
 
 		// Checking active class
 		var fields = ["searchMeta","openGraph","geo","robots","twitterCard"];
-		var customizationSettings = getCustomizationSettings();
 
 		for (var i = 0; i < fields.length; i++)
 		{
-			if(customizationSettings[fields[i]+"SectionMetadataEnabled"]==1)
+			var customKey = fields[i]+"SectionMetadataEnabled";
+			var customizationSettings = getCustomizationSettings(customKey);
+			if(customizationSettings.val()==1)
 			{
 				$("#btn-"+fields[i]).addClass("active");
 				// Optimize Field Settings
@@ -570,7 +568,7 @@ feel like they are part of the natural flow of fields #}
 		{% endif %}
 
 
-    $('#my-modal nav li a').on('click', function(e) {
+		$('#my-modal nav li a').on('click', function(e) {
 			e.preventDefault();
 
 			$currentBase = $('#my-modal nav li a.sel');

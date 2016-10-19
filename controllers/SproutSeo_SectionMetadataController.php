@@ -116,6 +116,12 @@ class SproutSeo_SectionMetadataController extends BaseController
 			$sectionMetadata['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($sectionMetadata['robots']);
 		}
 
+		// Convert customizationSettings Array into json String
+		if (isset($sectionMetadata['customizationSettings']))
+		{
+			$sectionMetadata['customizationSettings'] = json_encode($sectionMetadata['customizationSettings']);
+		}
+
 		$model->setAttributes($sectionMetadata);
 
 		$model = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($model);

@@ -498,6 +498,10 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 
 			$attributes['customizationSettings'] = json_encode($details);
 		}
+		else
+		{
+			$attributes['customizationSettings'] = json_encode($attributes['customizationSettings']);
+		}
 
 		return $attributes;
 	}
