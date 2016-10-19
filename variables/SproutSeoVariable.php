@@ -604,11 +604,9 @@ class SproutSeoVariable
 		$options = array();
 		$fields  = craft()->fields->getAllFields();
 
-		$options[''] = "Select...";
-		$options[] = array('optgroup' => "Add Custom Field");
+		$options[''] = Craft::t('Select...');
 
-		$options['manually'] = 'Display Editable Field';
-		$options[] = array('optgroup' => "Generate based on Existing Fields");
+		$options[] = array('optgroup' => Craft::t('Generate from Existing Field'));
 
 		foreach ($fields as $key => $field)
 		{
@@ -619,6 +617,9 @@ class SproutSeoVariable
 				$options[$field->id] = $field->name;
 			}
 		}
+
+		$options[] = array('optgroup' => Craft::t('Add Custom Field'));
+		$options['manually'] = Craft::t('Display Editable Field');
 
 		return $options;
 	}
@@ -633,12 +634,12 @@ class SproutSeoVariable
 		$options = array();
 		$fields  = craft()->fields->getAllFields();
 
-		$options[''] = "Select...";
-		$options[]   = array('optgroup' => "Use Existing Field");
+		$options[''] = Craft::t('None');
+		$options[]   = array('optgroup' => Craft::t('Use Existing Field'));
 
 		if ($handle == 'optimizedTitleField')
 		{
-			$options['elementTitle'] = "Title";
+			$options['elementTitle'] = Craft::t('Title');
 		}
 
 		foreach ($fields as $key => $field)
@@ -651,11 +652,11 @@ class SproutSeoVariable
 			}
 		}
 
-		$options[] = array('optgroup' => "Add Custom Field");
+		$options[] = array('optgroup' => Craft::t('Add Custom Field'));
 
-		$options['manually'] = 'Display Editable Field';
+		$options['manually'] = Craft::t('Display Editable Field');
 
-		$options[] = array('optgroup' => "Define Custom Pattern");
+		$options[] = array('optgroup' => Craft::t('Define Custom Pattern'));
 
 		if (!isset($options[$settings[$handle]]) && $settings[$handle] != 'manually')
 		{
@@ -664,7 +665,7 @@ class SproutSeoVariable
 
 		if ($type != 'Assets')
 		{
-			$options['custom'] = 'Add Custom Format';
+			$options['custom'] = Craft::t('Add Custom Format');
 		}
 
 		return $options;
