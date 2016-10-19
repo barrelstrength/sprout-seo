@@ -29,10 +29,8 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 	 */
 	public function onAfterElementSave()
 	{
-		$fieldHandle = $this->model->handle;
-
 		// grab only the basic fields
-		$fields = (isset($this->element->getContent()->{$fieldHandle})) ? $this->element->getContent()->{$fieldHandle} : null;
+		$fields = (isset($_POST['fields']['sproutseo_fields'])) ? $_POST['fields']['sproutseo_fields'] : null;
 
 		if (!isset($fields))
 		{
@@ -49,7 +47,7 @@ class SproutSeo_BasicMetaFieldType extends BaseFieldType
 
 		// Test to see if we have any values in our Sprout SEO fields
 		$saveSproutSeoFields = false;
-		foreach ($fields as $key => $value)
+		foreach ($_POST['fields']['sproutseo_fields'] as $key => $value)
 		{
 			if ($value)
 			{
