@@ -31,7 +31,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '2.2.1';
+		return '2.2.2';
 	}
 
 	/**
@@ -97,6 +97,13 @@ class SproutSeoPlugin extends BasePlugin
 	public function init()
 	{
 		Craft::import('plugins.sproutseo.helpers.SproutSeoMetaHelper');
+
+		// Prevent yiic from failing
+		// @deprecate - Craft 3.0 should no longer require this
+		if (craft()->isConsole())
+		{
+		  return false;
+		}
 
 		if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
 		{
