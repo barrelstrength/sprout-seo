@@ -20,42 +20,50 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 			'default'  => null,
 		);
 
-		$columns = array(
+		$columnsAfterId = array(
+			'type'                  => $varchar,
+			'enabled'               => array(
+				'column'   => ColumnType::TinyInt,
+				'required' => true,
+				'default'  => 0,
+				'length'   => 1,
+				'unsigned' => true
+			),
+			'isCustom'              => array(
+				'column'   => ColumnType::TinyInt,
+				'required' => true,
+				'default'  => 0,
+				'length'   => 1,
+				'unsigned' => true
+			),
+			'urlEnabledSectionId'   => array(
+				'column'   => ColumnType::Int,
+				'required' => false,
+				'default'  => null,
+				'length'   => 10
+			)
+		);
+
+		$columnsAfterHandle = array(
 			'customizationSettings' => $varchar,
-			'url' => $varchar,
-			'isCustom' => array(
-				'column'   => ColumnType::TinyInt,
-				'required' => false,
-				'default'  => 0
-			),
-			'schemaTypeId'         => $varchar,
-			'schemaOverrideTypeId' => $varchar,
-			'enabled' => array(
-				'column'   => ColumnType::TinyInt,
-				'required' => false,
-				'default'  => 0
-			),
-			'changeFrequency' => array(
+			'schemaOverrideTypeId'  => $varchar,
+			'schemaTypeId'          => $varchar,
+			'optimizedKeywords'     => $varchar,
+			'optimizedImage'        => $varchar,
+			'optimizedDescription'  => $varchar,
+			'optimizedTitle'        => $varchar,
+			'changeFrequency'       => array(
 				'column'    => ColumnType::Varchar,
-				'required'  => false,
+				'required'  => true,
 				'default'   => 'weekly',
 				'maxLength' => 7
 			),
-			'priority' => array(
-				'column'   => 'decimal(12,1)',
-				'required' => false,
+			'priority'              => array(
+				'column'   => 'decimal(11,1)',
+				'required' => true,
 				'default'  => '0.0'
 			),
-			'optimizedKeywords' => $varchar,
-			'optimizedDescription' => $varchar,
-			'optimizedImage' => $varchar,
-			'optimizedTitle' => $varchar,
-			'type' => $varchar,
-			'urlEnabledSectionId' => array(
-				'column'   => ColumnType::Int,
-				'required' => false,
-				'default'  => null
-			),
+			'url'                   => $varchar
 		);
 
 		$columnsToRename = array(
@@ -64,7 +72,17 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 
 		if (craft()->db->tableExists($tableName))
 		{
-			foreach ($columns as $columnName => $type)
+			foreach ($columnsAfterId as $columnName => $type)
+			{
+				if (!craft()->db->columnExists($tableName, $columnName))
+				{
+					$this->addColumnAfter($tableName, $columnName, $type, 'id');
+
+					SproutSeoPlugin::log("Created column `$columnName` in `$newTableName` .", LogLevel::Info, true);
+				}
+			}
+
+			foreach ($columnsAfterHandle as $columnName => $type)
 			{
 				if (!craft()->db->columnExists($tableName, $columnName))
 				{

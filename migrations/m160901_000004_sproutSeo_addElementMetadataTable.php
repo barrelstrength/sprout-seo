@@ -21,11 +21,11 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 
 		$columns = array(
 			'customizationSettings' => $varchar,
-			'schemaTypeId'          => $varchar,
 			'schemaOverrideTypeId'  => $varchar,
+			'schemaTypeId'          => $varchar,
 			'optimizedKeywords'     => $varchar,
-			'optimizedDescription'  => $varchar,
 			'optimizedImage'        => $varchar,
+			'optimizedDescription'  => $varchar,
 			'optimizedTitle'        => $varchar
 		);
 
@@ -39,7 +39,7 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 			{
 				if (!craft()->db->columnExists($tableName, $columnName))
 				{
-					$this->addColumnAfter($tableName, $columnName, $type, 'title');
+					$this->addColumnAfter($tableName, $columnName, $type, 'locale');
 
 					SproutSeoPlugin::log("Created column `$columnName` in `$newTableName` .", LogLevel::Info, true);
 				}
