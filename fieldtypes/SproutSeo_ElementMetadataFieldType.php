@@ -28,7 +28,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	{
 		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
 		$element = isset($value->element) ? $value->element : null;
-		$message = '<span class="status disabled"></span>';
+		$message = '<a><span class="status disabled"></span>';
 
 		if ($element)
 		{
@@ -51,8 +51,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 							{
 								$message = '<span class="status orange"></span>';
 
-								$elementId = $this->element->id;
-								$locale    = $this->element->locale;
+								$elementId = $element->id;
+								$locale    = $element->locale;
 								$elementData = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
 
 								if (isset($elementData->id) && $elementData->id)
