@@ -147,4 +147,29 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 
 		return $results;
 	}
+
+	/**
+	 * @param $type
+	 *
+	 * @return SproutSeo_MetadataModel|null
+	 */
+	public function getSectionMetadataByTypeAndUrlEnabled($type, $urlEnabledSectionId)
+	{
+		$result = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_metadata_sections')
+			->where('type=:type and urlEnabledSectionId=:urlEnabledSectionId', array(
+				':type' => $type,
+				':urlEnabledSectionId' => $urlEnabledSectionId
+				)
+			)
+			->queryRow();
+
+		if ($result)
+		{
+			return SproutSeo_MetadataModel::populateModel($result);
+		}
+
+		return $result;
+	}
 }

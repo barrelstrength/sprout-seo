@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_ElementMetadataFieldType extends BaseFieldType
+class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPreviewableFieldType
 {
 	/**
 	 * FieldType name
@@ -22,6 +22,53 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 	{
 		// We don't need a column in the content table
 		return false;
+	}
+
+	public function getTableAttributeHtml($value)
+	{
+		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
+		$element = isset($value->element) ? $value->element : null;
+		$message = '<span class="status disabled"></span>';
+
+		if ($element)
+		{
+			foreach ($registeredUrlEnabledSectionsTypes as $plugin => $urlEnabledSectionTypes)
+			{
+				foreach ($urlEnabledSectionTypes as $urlEnabledSectionType)
+				{
+					if ($urlEnabledSectionType->getElementType() == $element->elementType)
+					{
+						if ($urlEnabledSectionType->getIdColumnName() != null && $urlEnabledSectionType->getElementTableName() != null)
+						{
+							$columnId = $urlEnabledSectionType->getIdColumnName();
+
+							$sectionMetadata = $urlEnabledSectionType->getSectionMetadataByTypeAndUrlEnabled(
+								$urlEnabledSectionType->getElementTableName(),
+								$element->{$columnId}
+							);
+
+							if ($sectionMetadata)
+							{
+								$message = '<span class="status orange"></span>';
+
+								$elementId = $this->element->id;
+								$locale    = $this->element->locale;
+								$elementData = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
+
+								if (isset($elementData->id) && $elementData->id)
+								{
+									$message = '<span class="status active"></span>';
+								}
+							}
+
+							break 2;
+						}
+					}
+				}
+			}
+		}
+
+		return $message;
 	}
 
 	/**
