@@ -63,20 +63,20 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 		if (this.addressInfoId == '' || this.addressInfoId == null)
 		{
 			editLabel = Craft.t("Add Address");
+			this.$editButton = $("<a class='btn add icon dashed sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
 		}
 		else
 		{
 			editLabel = Craft.t("Update Address");
+			this.$editButton = $("<a class='small btn right edit icon sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
+			this.$addressBox.find('.address-format').append("<div class='spinner' />");
 		}
 
-		this.$editButton = $("<a class='small btn right edit sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
 
 		$("<div class='address-format' />").appendTo(this.$addressBox);
 
 		this.$none = $("<div style='display: none' />").appendTo(this.$addressBox);
 		this.$addressForm = $("<div class='sproutaddress-form' />").appendTo(this.$none);
-
-		this.$addressBox.find('.address-format').append("<div class='spinner' />");
 
 		this._getAddressFormFields();
 
@@ -129,6 +129,8 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 				self.$addressForm.append(response.countryCodeHtml);
 				self.$addressForm.append(response.formInputHtml);
 
+				self.$editButton.removeClass('add dashed');
+				self.$editButton.addClass('edit small right');
 				self.$editButton.text(Craft.t("Update Address"));
 
 				Craft.cp.displayNotice(Craft.t('Address Updated.'));

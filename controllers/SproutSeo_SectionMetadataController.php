@@ -106,11 +106,18 @@ class SproutSeo_SectionMetadataController extends BaseController
 			$sectionMetadata['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($sectionMetadata['robots']);
 		}
 
-		$addressInfoId = sproutSeo()->addressInfo->saveAddressInfoByPost();
+		$addressModelId = null;
+
+		if (isset($sectionMetadata['id']))
+		{
+			$addressModelId = $sectionMetadata['id'];
+		}
+
+		$addressInfoId = sproutSeo()->address->saveAddressByPost('address', $addressModelId);
 
 		if ($addressInfoId)
 		{
-			$sectionMetadata['addressInfoId'] = $addressInfoId;
+			$sectionMetadata['addressId'] = $addressInfoId;
 		}
 
 		$model->setAttributes($sectionMetadata);

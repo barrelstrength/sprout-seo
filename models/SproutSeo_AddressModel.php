@@ -20,6 +20,7 @@ class SproutSeo_AddressModel extends BaseModel
 	{
 		return array(
 			'id'                 => array(AttributeType::Number),
+			'modelId'            => array(AttributeType::Number),
 			'countryCode'        => array(AttributeType::String),
 			'administrativeArea' => array(AttributeType::String),
 			'locality'           => array(AttributeType::String),

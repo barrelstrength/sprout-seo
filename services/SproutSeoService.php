@@ -48,7 +48,7 @@ class SproutSeoService extends BaseApplicationComponent
 	 */
 	public $settings;
 
-	public $addressInfo;
+	public $address;
 
 	public function init()
 	{
@@ -62,7 +62,7 @@ class SproutSeoService extends BaseApplicationComponent
 		$this->sitemap         = Craft::app()->getComponent('sproutSeo_sitemap');
 		$this->redirects       = Craft::app()->getComponent('sproutSeo_redirects');
 		$this->settings        = Craft::app()->getComponent('sproutSeo_settings');
-		$this->addressInfo     = Craft::app()->getComponent('sproutSeo_addressInfo');
+		$this->address         = Craft::app()->getComponent('sproutSeo_address');
 	}
 
 	public function onSaveAdderssInfo(Event $event)

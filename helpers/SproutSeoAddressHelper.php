@@ -40,12 +40,7 @@ class SproutSeoAddressHelper
 	/**
 	 * @var
 	 */
-	private $addressInfoModel;
-
-	/**
-	 * @var
-	 */
-	private $namespaceInputName;
+	private $addressModel;
 
 	/**
 	 * @var
@@ -53,28 +48,19 @@ class SproutSeoAddressHelper
 	protected $countryCode;
 
 	/**
-	 * @var
-	 */
-	private $sproutAddress;
-
-	/**
 	 * @param        $countryCode
 	 * @param        $name
 	 * @param        $sproutAddress
-	 * @param        $addressInfoModel
+	 * @param        $addressModel
 	 * @param string $namespaceInputName
 	 */
 	public function setParams($countryCode,
 	                          $name = 'address',
-	                          $sproutAddress = '',
-	                          SproutSeo_AddressModel $addressInfoModel = null,
-														$namespaceInputName = '')
+	                          SproutSeo_AddressModel $addressModel = null)
 	{
 		$this->name               = $name;
-		$this->namespaceInputName = $namespaceInputName;
-		$this->addressInfoModel   = ($addressInfoModel == null) ? new SproutSeo_AddressModel : $addressInfoModel;
+		$this->addressModel   = ($addressModel == null) ? new SproutSeo_AddressModel : $addressModel;
 		$this->countryCode        = $countryCode;
-		$this->sproutAddress      = $sproutAddress;
 	}
 
 	/**
@@ -112,7 +98,7 @@ class SproutSeoAddressHelper
 		$format = preg_replace('/%administrativeArea/', $this->administrativeArea(), $format);
 		$format = preg_replace('/%postalCode/', $this->postalCode(), $format);
 
-		if ($this->addressInfoModel->id != null)
+		if ($this->addressModel->id != null)
 		{
 			$format .= $this->getAddressInfoInput();
 		}
@@ -124,20 +110,20 @@ class SproutSeoAddressHelper
 	{
 		return $this->renderTemplates('hidden', array(
 			'name' => $this->name . '[id]',
-			'value' => $this->addressInfoModel->id
+			'value' => $this->addressModel->id
 		));
 	}
 
-	public function displayAddressForm(SproutSeo_AddressModel $addressInfoModel = null, $namespace = 'address')
+	public function displayAddressForm(SproutSeo_AddressModel $addressModel = null, $namespace = 'address')
 	{
 		$countryCode = $this->defaultCountryCode();
 
-		if (isset($addressInfoModel->countryCode))
+		if (isset($addressModel->countryCode))
 		{
-			$countryCode = $addressInfoModel->countryCode;
+			$countryCode = $addressModel->countryCode;
 		}
 
-		$this->setParams($countryCode, $namespace, '', $addressInfoModel);
+		$this->setParams($countryCode, $namespace, $addressModel);
 
 		$countryInput = $this->countryInput();
 
@@ -167,16 +153,14 @@ class SproutSeoAddressHelper
 			'select',
 			array(
 				'class'              => 'sproutaddress-country-select',
-				'namespaceInputName' => $this->namespaceInputName,
 				'label'              => $this->renderHeading('Country'),
 				'name'               => $this->name . "[countryCode]",
 				'inputName'          => 'countryCode',
 				'options'            => $countries,
 				'value'              => $this->countryCode,
-				'addressInfoObject'  => JsonHelper::decode($this->sproutAddress),
 				'nameValue'          => $this->name,
 				'hidden'             => $hidden,
-				'addressInfo'        => $this->addressInfoModel
+				'addressInfo'        => $this->addressModel
 			)
 		);
 	}
@@ -192,7 +176,7 @@ class SproutSeoAddressHelper
 	 */
 	private function addressLine($addressName)
 	{
-		$value = $this->addressInfoModel->$addressName;
+		$value = $this->addressModel->$addressName;
 
 		$addressLabel = $this->renderHeading('Address 1');
 
@@ -209,7 +193,7 @@ class SproutSeoAddressHelper
 				'name'  => $this->name . "[$addressName]",
 				'value' => $value,
 				'inputName'   => $addressName,
-				'addressInfo' => $this->addressInfoModel
+				'addressInfo' => $this->addressModel
 			)
 		);
 	}
@@ -219,7 +203,7 @@ class SproutSeoAddressHelper
 	 */
 	private function sortingCode()
 	{
-		$value = $this->addressInfoModel->sortingCode;
+		$value = $this->addressModel->sortingCode;
 
 		return $this->renderTemplates(
 			'text',
@@ -229,7 +213,7 @@ class SproutSeoAddressHelper
 				'name'  => $this->name . "[sortingCode]",
 				'value' => $value,
 				'inputName' => 'sortingCode',
-				'addressInfo' => $this->addressInfoModel
+				'addressInfo' => $this->addressModel
 			)
 		);
 	}
@@ -239,7 +223,7 @@ class SproutSeoAddressHelper
 	 */
 	private function locality()
 	{
-		$value = $this->addressInfoModel->locality;
+		$value = $this->addressModel->locality;
 
 		return $this->renderTemplates(
 			'text',
@@ -249,7 +233,7 @@ class SproutSeoAddressHelper
 				'name'  => $this->name . "[locality]",
 				'value' => $value,
 				'inputName' => 'locality',
-				'addressInfo' => $this->addressInfoModel
+				'addressInfo' => $this->addressModel
 			)
 		);
 	}
@@ -259,7 +243,7 @@ class SproutSeoAddressHelper
 	 */
 	private function dependentLocality()
 	{
-		$value = $this->addressInfoModel->dependentLocality;
+		$value = $this->addressModel->dependentLocality;
 
 		return $this->renderTemplates(
 			'text',
@@ -269,7 +253,7 @@ class SproutSeoAddressHelper
 				'name'  => $this->name . "[dependentLocality]",
 				'value' => $value,
 				'inputName' => 'dependentLocality',
-				'addressInfo' => $this->addressInfoModel
+				'addressInfo' => $this->addressModel
 			)
 		);
 	}
@@ -279,7 +263,7 @@ class SproutSeoAddressHelper
 	 */
 	private function administrativeArea()
 	{
-		$value = $this->addressInfoModel->administrativeArea;
+		$value = $this->addressModel->administrativeArea;
 
 		$options = array();
 
@@ -303,7 +287,7 @@ class SproutSeoAddressHelper
 						'options' => $options,
 						'value'   => $value,
 						'inputName' => 'administrativeArea',
-						'addressInfo' => $this->addressInfoModel
+						'addressInfo' => $this->addressModel
 					)
 				);
 			}
@@ -318,7 +302,7 @@ class SproutSeoAddressHelper
 					'name'  => $this->name . "[administrativeArea]",
 					'value' => $value,
 					'inputName' => 'administrativeArea',
-					'addressInfo' => $this->addressInfoModel
+					'addressInfo' => $this->addressModel
 				)
 			);
 		}
@@ -329,7 +313,7 @@ class SproutSeoAddressHelper
 	 */
 	public function postalCode()
 	{
-		$value = $this->addressInfoModel->postalCode;
+		$value = $this->addressModel->postalCode;
 
 		return $this->renderTemplates(
 			'text',
@@ -339,7 +323,7 @@ class SproutSeoAddressHelper
 				'name'  => $this->name . "[postalCode]",
 				'value' => $value,
 				'inputName' => 'postalCode',
-				'addressInfo' => $this->addressInfoModel
+				'addressInfo' => $this->addressModel
 			)
 		);
 	}

@@ -21,6 +21,7 @@ class SproutSeo_AddressRecord extends BaseRecord
 	protected function defineAttributes()
 	{
 		return array(
+			'modelId'            => array(AttributeType::Number),
 			'countryCode'        => array(AttributeType::String),
 			'administrativeArea' => array(AttributeType::String),
 			'locality'           => array(AttributeType::String),

@@ -151,11 +151,12 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		$fieldHandle = $this->model->handle;
 		$addressInfo  = $this->element->getContent()->{$fieldHandle};
 
+		$addressInfo['modelId'] = $this->model->id;
 		$addressInfoModel = SproutSeo_AddressModel::populateModel($addressInfo);
 
-		if ($addressInfoModel->validate() == true && sproutSeo()->addressInfo->saveAddressInfo($addressInfoModel))
+		if ($addressInfoModel->validate() == true && sproutSeo()->address->saveAddress($addressInfoModel))
 		{
-			$fields['addressInfoId'] = $addressInfoModel->id;
+			$fields['addressId'] = $addressInfoModel->id;
 		}
 
 		$locale = $this->element->locale;

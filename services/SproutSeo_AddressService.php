@@ -3,18 +3,23 @@
 namespace Craft;
 
 
-class SproutSeo_AddressInfoService extends BaseApplicationComponent
+class SproutSeo_AddressService extends BaseApplicationComponent
 {
 
-	public function saveAddressInfoByPost($namespace = 'address')
+	public function saveAddressByPost($namespace = 'address', int $modelId = null)
 	{
 		if (craft()->request->getPost($namespace) != null)
 		{
 			$addressInfo = craft()->request->getPost($namespace);
 
+			if ($modelId != null)
+			{
+				$addressInfo['modelId'] = $modelId;
+			}
+
 			$addressInfoModel = SproutSeo_AddressModel::populateModel($addressInfo);
 
-			if ($addressInfoModel->validate() == true && $this->saveAddressInfo($addressInfoModel))
+			if ($addressInfoModel->validate() == true && $this->saveAddress($addressInfoModel))
 			{
 				return $addressInfoModel->id;
 			}
@@ -23,7 +28,7 @@ class SproutSeo_AddressInfoService extends BaseApplicationComponent
 		return false;
 	}
 
-	public function saveAddressInfo(SproutSeo_AddressModel $model, $source = '')
+	public function saveAddress(SproutSeo_AddressModel $model, $source = '')
 	{
 		$result = false;
 
@@ -111,5 +116,34 @@ class SproutSeo_AddressInfoService extends BaseApplicationComponent
 		{
 			return new SproutSeo_AddressModel();
 		}
+	}
+
+	/**
+	 * @param null $id
+	 *
+	 * @return int
+	 */
+	public function deleteAddressById($id = null)
+	{
+		$record = new SproutFields_AddressRecord();
+
+		return $record->deleteByPk($id);
+	}
+
+
+	/**
+	 * @param null $id
+	 *
+	 * @return int
+	 */
+	public function deleteAddressByModelId($id = null)
+	{
+		$record = new SproutFields_AddressRecord();
+
+		$attributes = array(
+			'modelId' => $id
+		);
+
+		return $record->deleteAllByAttributes($attributes);
 	}
 }

@@ -22,6 +22,7 @@ class SproutSeo_GlobalsModel extends BaseModel
 			'contacts'  => AttributeType::Mixed,
 			'social'    => AttributeType::Mixed,
 			'robots'    => AttributeType::Mixed,
+			'addressId' => array(AttributeType::Number),
 			'settings'  => AttributeType::Mixed,
 		);
 	}

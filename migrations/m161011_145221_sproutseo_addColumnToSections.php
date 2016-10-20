@@ -15,7 +15,7 @@ class m161011_145221_sproutseo_addColumnToSections extends BaseMigration
 	{
 		if (($table = $this->dbConnection->schema->getTable('{{sproutseo_metadata_sections}}')))
 		{
-			if (($column = $table->getColumn('addressInfoId')) == null)
+			if (($column = $table->getColumn('addressId')) == null)
 			{
 					$definition = array(
 						AttributeType::Number,
@@ -23,11 +23,11 @@ class m161011_145221_sproutseo_addColumnToSections extends BaseMigration
 						'required' => false
 					);
 
-					$this->addColumnAfter('sproutseo_metadata_sections', 'addressInfoId', $definition, 'robots');
+					$this->addColumnAfter('sproutseo_metadata_sections', 'addressId', $definition, 'robots');
 			}
 			else
 			{
-				Craft::log('Tried to add a `addressInfoId` column to the `sproutseo_metadata_sections` table, but there is already
+				Craft::log('Tried to add a `addressId` column to the `sproutseo_metadata_sections` table, but there is already
 				one there.', LogLevel::Warning);
 			}
 		}
