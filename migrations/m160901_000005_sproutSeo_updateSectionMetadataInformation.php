@@ -66,6 +66,32 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				$settings['enableCustomSections'] = 1;
 				craft()->plugins->savePluginSettings( $sproutSeo, $settings );
 			}
+
+			// Move globalFallback to globals
+
+			$globalFallback = craft()->db->createCommand()
+				->select('id, handle, name')
+				->from($tableName)
+				->where('globalFallback = 1')
+				->queryRow();
+
+			if ($globalFallback)
+			{
+				$values['meta'] = json_encode($globalFallback);
+
+				$globalMetadata = SproutSeo_MetadataModel::populateModel($globalFallback);
+
+				$values['identity'] = $globalMetadata->getGlobalByKey('identity', 'json');
+
+				$result = craft()->db->createCommand()->update('sproutseo_metadata_globals',
+					$values,
+					'id=:id',
+					array(':id' => 1)
+				);
+ 			}
+
+
+
 		}
 		else
 		{

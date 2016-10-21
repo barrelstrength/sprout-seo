@@ -66,9 +66,7 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 			'url'                   => $varchar
 		);
 
-		$columnsToRename = array(
-			'appendSiteName' => 'appendTitleValue'
-		);
+		$columnToRename = 'appendSiteName';
 
 		if (craft()->db->tableExists($tableName))
 		{
@@ -92,12 +90,9 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 				}
 			}
 
-			foreach ($columnsToRename as $columnName => $newColumn)
+			if (craft()->db->columnExists($tableName, $columnToRename))
 			{
-				if (craft()->db->columnExists($tableName, $columnName))
-				{
-					$this->renameColumn($tableName, $columnName, $newColumn);
-				}
+				$this->alterColumn($tableName, $columnToRename, $varchar, 'appendTitleValue', 'title');
 			}
 
 			// finally rename table
