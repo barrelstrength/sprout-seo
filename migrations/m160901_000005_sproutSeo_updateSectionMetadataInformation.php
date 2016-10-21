@@ -12,6 +12,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 	public function safeUp()
 	{
 		$tableName = "sproutseo_metadata_sections";
+		$enableCustom = false;
 
 		if (craft()->db->tableExists($tableName))
 		{
@@ -53,6 +54,17 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					'id = :id',
 					array(':id' => $row['id'])
 				);
+
+				$enableCustom = true;
+			}
+
+			if ($enableCustom)
+			{
+				$sproutSeo = craft()->plugins->getPlugin( 'sproutseo' );
+				$settings  = $sproutSeo->getSettings();
+
+				$settings['enableCustomSections'] = 1;
+				craft()->plugins->savePluginSettings( $sproutSeo, $settings );
 			}
 		}
 		else
