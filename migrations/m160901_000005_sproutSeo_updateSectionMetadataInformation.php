@@ -23,10 +23,35 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 			foreach ($rows as $row)
 			{
+				// let's validate any possible duplicate handle
+				$urlEnabledSectionTypes = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypes();
+
+				foreach ($urlEnabledSectionTypes as $urlEnabledSectionTypeKey => $urlEnabledSectionType)
+				{
+					foreach ($urlEnabledSection as $urlEnabledSectionKey => $value)
+					{
+						$sectionMetadata = $urlEnabledSection['sectionMetadata'];
+
+						if (isset($sectionMetadata->name))
+						{
+							if (isset($sectionMetadata->handle))
+							{
+								$handle = $sectionMetadata->handle;
+
+								if ($row['handle'] == $handle)
+								{
+									$row['handle'] = "sproutSeo".ucfirst($row['handle']);
+									break 2;
+								}
+							}
+						}
+					}
+				}
+
 				craft()->db->createCommand()->update($tableName,
-					array('isCustom' => 1),
+					array('isCustom' => 1, 'handle' => ':handle'),
 					'id = :id',
-					array(':id' => $row['id'])
+					array(':id' => $row['id'], ':handle' => $row['handle'])
 				);
 			}
 		}
