@@ -17,7 +17,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		{
 			// Find all Section Metadata Sections and set all the rows as custom pages
 			$rows = craft()->db->createCommand()
-				->select('id')
+				->select('id, handle, name')
 				->from($tableName)
 				->queryAll();
 
@@ -28,9 +28,9 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				foreach ($urlEnabledSectionTypes as $urlEnabledSectionTypeKey => $urlEnabledSectionType)
 				{
-					foreach ($urlEnabledSection as $urlEnabledSectionKey => $value)
+					foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSectionKey => $urlEnabledSection)
 					{
-						$sectionMetadata = $urlEnabledSection['sectionMetadata'];
+						$sectionMetadata = $urlEnabledSection->sectionMetadata;
 
 						if (isset($sectionMetadata->name))
 						{
@@ -49,9 +49,9 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				}
 
 				craft()->db->createCommand()->update($tableName,
-					array('isCustom' => 1, 'handle' => ':handle'),
+					array('isCustom' => 1, 'handle' => $row['handle']),
 					'id = :id',
-					array(':id' => $row['id'], ':handle' => $row['handle'])
+					array(':id' => $row['id'])
 				);
 			}
 		}
