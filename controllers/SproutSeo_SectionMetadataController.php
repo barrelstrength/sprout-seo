@@ -63,7 +63,7 @@ class SproutSeo_SectionMetadataController extends BaseController
 		// Set elementType
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
-		if (!$isNew)
+		if (!$isNew && !$isCustom)
 		{
 			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sectionMetadata->type);
 
