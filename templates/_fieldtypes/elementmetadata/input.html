@@ -346,32 +346,28 @@
 
 {% if settings.displayPreview %}{% endif %}
 
-<div id="my-modal" class="modal hidden">
-	{#<div>#}
-		<div class="header">
-			<nav class="btngroup right">
-				<ul>
-					<li><a class="btn sel" href="#sproutseo-preview-search"><span class="sproutseo-icon icon-search">&#xe800;</span> Search</a></li>
-					<li><a class="btn" href="#sproutseo-preview-facebook"><span class="sproutseo-icon icon-facebook">&#xe802;</span> Facebook</a></li>
-					<li><a class="btn" href="#sproutseo-preview-twitter"><span class="sproutseo-icon icon-twitter">&#xe807;</span> Twitter</a></li>
-				</ul>
-			</nav>
-			<h2 class="left">{{ "Preview"|t|upper }}</h2><br>
-			<p>An example of how your content might display in search and social sharing.</p>
+<div id="sproutseo-preview" class="modal hidden">
+	<div class="header">
+		<div class="btngroup right">
+			<div class="btn active" id="sproutseo-preview-search"><span class="sproutseo-icon icon-search">&#xe800;</span> Search</div>
+			<div class="btn" id="sproutseo-preview-facebook"><span class="sproutseo-icon icon-facebook">&#xe802;</span> Facebook</div>
+			<div class="btn" id="sproutseo-preview-twitter"><span class="sproutseo-icon icon-twitter">&#xe807;</span> Twitter</div>
 		</div>
+		<h2 class="left">{{ "Preview"|t|upper }}</h2><br>
+		<p>An example of how your content might display in search and social sharing.</p>
+	</div>
 
-		<div class="body sproutseo-previewbody">
-			<div id="tab-sproutseo-preview-search">
-				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/search' %}
-			</div>
-			<div id="tab-sproutseo-preview-facebook" class="hidden">
-				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/opengraph' %}
-			</div>
-			<div id="tab-sproutseo-preview-twitter" class="hidden">
-				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/twittercard' %}
-			</div>
+	<div class="body sproutseo-previewbody">
+		<div id="tab-sproutseo-preview-search">
+			{% include 'sproutseo/_fieldtypes/elementmetadata/previews/search' %}
 		</div>
-	{#</div>#}
+		<div id="tab-sproutseo-preview-facebook" class="hidden">
+			{% include 'sproutseo/_fieldtypes/elementmetadata/previews/opengraph' %}
+		</div>
+		<div id="tab-sproutseo-preview-twitter" class="hidden">
+			{% include 'sproutseo/_fieldtypes/elementmetadata/previews/twittercard' %}
+		</div>
+	</div>
 </div>
 
 
@@ -568,29 +564,39 @@ feel like they are part of the natural flow of fields #}
 
 		{% endif %}
 
-		// Structured js code
-		$('#my-modal nav li a').on('click', function(e) {
+		$('#sproutseo-preview .header .btngroup .btn').on('click', function(e) {
 			e.preventDefault();
 
-			$currentBase = $('#my-modal nav li a.sel');
-			currentHref = $currentBase.attr('href');
-			currentTab = currentHref.replace('#', '#tab-');
-			$currentBase.removeClass('sel');
+			$currentBase = $('#sproutseo-preview .header .btngroup div.active');
+			currentHref = $currentBase.attr('id');
+			currentTab = '#tab-' + currentHref;
+
+			$currentBase.removeClass('active');
 			$(currentTab).addClass('hidden');
 
-			targetHref = $(this).attr('href');
-			targetTab = targetHref.replace('#', '#tab-');
-			$(this).addClass('sel');
+			targetHref = $(this).attr('id');
+			targetTab = '#tab-' + targetHref;
+
+			$(this).addClass('active');
 			$(targetTab).removeClass('hidden');
 		});
+
+		var previewModal;
 
 		$('#sproutseo-seopreview').on('click', function(e) {
 			e.preventDefault();
 
-			$('#my-modal').removeClass('hidden');
-			new Garnish.Modal($('#my-modal'), {
-				resizable: true
-			});
+			if (!previewModal)
+			{
+				$('#sproutseo-preview').removeClass('hidden');
+				previewModal = new Garnish.Modal($('#sproutseo-preview'), {
+					resizable: true
+				});
+			}
+			else
+			{
+				previewModal.show();
+			}
 
 		});
 
