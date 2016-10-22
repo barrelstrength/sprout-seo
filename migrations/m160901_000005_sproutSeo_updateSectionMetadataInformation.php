@@ -70,18 +70,62 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			// Move globalFallback to globals
 
 			$globalFallback = craft()->db->createCommand()
-				->select('id, handle, name')
+				->select('*')
 				->from($tableName)
 				->where('globalFallback = 1')
 				->queryRow();
 
 			if ($globalFallback)
 			{
+				$identity = array();
 				$values['meta'] = json_encode($globalFallback);
 
-				$globalMetadata = SproutSeo_MetadataModel::populateModel($globalFallback);
+				$identity['name']          = $globalFallback['title'];
+				$identity['alternateName'] = "";
+				$identity['logo']          = "";
+				$identity['email']         = "";
+				$identity['telephone']     = "";
+				$identity['logo']          = "";
+				$identity['@type']         = "Organization";
+				$identity['foundingDate']  = "";
+				$identity['openingHours']  = "";
+				$identity['gender']        = "";
+				$identity['description']   = $globalFallback['description'];
+				$identity['keywords']      = $globalFallback['keywords'];
+				$identity['url']           = $globalFallback['url'];
+				$identity['organizationSubTypes'] = "";
 
-				$values['identity'] = $globalMetadata->getGlobalByKey('identity', 'json');
+				$values['identity'] = json_encode($identity);
+
+				if ($globalFallback['robots'])
+				{
+					$robotsArray = explode(",", $globalFallback['robots']);
+					$robotsSettings = array();
+
+					foreach ($robotsArray as $key => $value)
+					{
+						$robotsSettings[$value] = 1;
+					}
+
+					$robots = array(
+						'noindex'      => 0,
+						'nofollow'     => 0,
+						'noarchive'    => 0,
+						'noimageindex' => 0,
+						'noodp'        => 0,
+						'noydir'       => 0,
+					);
+
+					foreach ($robots as $key => $value)
+					{
+						if (isset($robotsSettings[$key]))
+						{
+							$robots[$key] = 1;
+						}
+					}
+
+					$values['robots'] = json_encode($robots);
+				}
 
 				$result = craft()->db->createCommand()->update('sproutseo_metadata_globals',
 					$values,

@@ -59,8 +59,14 @@ class SproutSeo_GlobalsModel extends BaseModel
 	public function getWebsiteIdentityType()
 	{
 		$this->getGlobalByKey('identity');
+		$identityType = 'Organization';
 
-		return $this->identity['@type'] != '' ? $this->identity['@type'] : 'Organization';
+		if (isset($this->identity['@type']) &&  $this->identity['@type'] != '')
+		{
+			$identityType = $this->identity['@type'];
+		}
+
+		return $identityType;
 	}
 
 	/**

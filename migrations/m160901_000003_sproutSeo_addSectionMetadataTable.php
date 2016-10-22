@@ -66,8 +66,6 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 			'url'                   => $varchar
 		);
 
-		$columnToRename = 'appendSiteName';
-
 		if (craft()->db->tableExists($tableName))
 		{
 			foreach ($columnsAfterId as $columnName => $type)
@@ -90,6 +88,51 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 				}
 			}
 
+			if (!craft()->db->columnExists($tableName, 'ogTransform'))
+			{
+				$this->addColumnAfter($tableName, 'ogTransform', $varchar, 'ogImage');
+
+				SproutSeoPlugin::log("Created column ogTransform in `$newTableName` .", LogLevel::Info, true);
+			}
+
+			if (!craft()->db->columnExists($tableName, 'twitterTransform'))
+			{
+				$this->addColumnAfter($tableName, 'twitterTransform', $varchar, 'twitterImage');
+
+				SproutSeoPlugin::log("Created column twitterTransform in `$newTableName` .", LogLevel::Info, true);
+			}
+
+			$columnToRename = 'ogTitle';
+			if (craft()->db->columnExists($tableName, $columnToRename))
+			{
+				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'ogUrl');
+			}
+
+			$columnToRename = 'ogDescription';
+			if (craft()->db->columnExists($tableName, $columnToRename))
+			{
+				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'ogTitle');
+			}
+
+			$columnToRename = 'ogSiteName';
+			if (craft()->db->columnExists($tableName, $columnToRename))
+			{
+				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'ogUrl');
+			}
+
+			$columnToRename = 'twitterUrl';
+			if (craft()->db->columnExists($tableName, $columnToRename))
+			{
+				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'twitterCard');
+			}
+
+			$columnToRename = 'twitterCreator';
+			if (craft()->db->columnExists($tableName, $columnToRename))
+			{
+				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'twitterImage');
+			}
+
+			$columnToRename = 'appendSiteName';
 			if (craft()->db->columnExists($tableName, $columnToRename))
 			{
 				$this->alterColumn($tableName, $columnToRename, $varchar, 'appendTitleValue', 'title');
