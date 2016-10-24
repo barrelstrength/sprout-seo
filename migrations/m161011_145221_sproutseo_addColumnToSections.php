@@ -13,9 +13,12 @@ class m161011_145221_sproutseo_addColumnToSections extends BaseMigration
 	 */
 	public function safeUp()
 	{
-		if (($table = $this->dbConnection->schema->getTable('{{sproutseo_metadata_sections}}')))
+		$tableName  = 'sproutseo_metadata_sections';
+		$columnName = 'addressId';
+
+		if (craft()->db->tableExists($tableName))
 		{
-			if (($column = $table->getColumn('addressId')) == null)
+			if (!craft()->db->columnExists($tableName, $columnName))
 			{
 					$definition = array(
 						AttributeType::Number,
@@ -23,17 +26,17 @@ class m161011_145221_sproutseo_addColumnToSections extends BaseMigration
 						'required' => false
 					);
 
-					$this->addColumnAfter('sproutseo_metadata_sections', 'addressId', $definition, 'robots');
+					$this->addColumnAfter($tableName, $columnName, $definition, 'robots');
 			}
 			else
 			{
-				Craft::log('Tried to add a `addressId` column to the `sproutseo_metadata_sections` table, but there is already
-				one there.', LogLevel::Warning);
+				SproutSeoPlugin::log("Tried to add a {$columnName} column to the {$tableName} table, but there is already
+				one there.", LogLevel::Error, true);
 			}
 		}
 		else
 		{
-			Craft::log('Could not find the `sproutseo_metadata_sections` table.', LogLevel::Error);
+			SproutSeoPlugin::log("Could not find the {$tableName} table", LogLevel::Error, true);
 		}
 
 		return true;
