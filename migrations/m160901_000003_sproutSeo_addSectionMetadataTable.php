@@ -140,6 +140,17 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 				SproutSeoPlugin::log("Created column twitterTransform in `$newTableName` .", LogLevel::Info, true);
 			}
 
+			// Removes publisher and author columns
+			if (craft()->db->columnExists($tableName, 'publisher'))
+			{
+				$this->dropColumn($tableName, 'publisher');
+			}
+
+			if (craft()->db->columnExists($tableName, 'author'))
+			{
+				$this->dropColumn($tableName, 'author');
+			}
+
 			// finally rename table
 			MigrationHelper::dropIndexIfExists($tableName, array('name', 'handle'), true);
 			$this->renameTable($tableName, $newTableName);
