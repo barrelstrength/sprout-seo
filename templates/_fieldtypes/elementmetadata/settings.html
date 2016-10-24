@@ -59,14 +59,7 @@
 	value: settings.optimizedImageField is defined ? settings.optimizedImageField : 'manually',
 }) }}
 
-{% set optimizedKeywordOptions = [
-	{ value: '', label: "Select..." },
-	{ optgroup: 'Add Custom Field' },
-	{ value: 'manually', label: "Display Editable Field" },
-	{ optgroup: 'Define Custom Pattern' },
-	{ value: 'top5', label: "Generate Top 5 Keywords" },
-	{ value: 'top3', label: "Generate Top 3 Keywords" }
-] %}
+{% set optimizedKeywordOptions = craft.sproutSeo.getKeywordsOptions() %}
 
 {{ forms.selectField({
 	label: "Meta Keywords"|t,

@@ -25,7 +25,7 @@ class SproutSeoOptimizeHelper
 	 *
 	 * @return string
 	 */
-	public static function prepareCanonical()
+	public static function prepareCanonical($metadataModel)
 	{
 		return UrlHelper::getSiteUrl(craft()->request->path);
 	}
@@ -156,28 +156,39 @@ class SproutSeoOptimizeHelper
 					throw new \Exception('Open Graph Image override value "' . $model->ogImage . '" must be an absolute url.');
 				}
 
-				$ogImage = craft()->elements->getElementById($model->ogImage);
+				$ogImage = craft()->assets->getFileById($model->ogImage);
 
 				if (!empty($ogImage))
 				{
-					$imageUrl = (string) ($ogImage->url);
+					$imageUrl = (string) ($ogImage->getUrl());
+
+					if ($model->ogTransform)
+					{
+						$imageUrl = (string) ($ogImage->getUrl($model->ogTransform));
+					}
 					// check to see if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
 					{
-						$model->ogImage = $ogImage->url;
+						$model->ogImage = $imageUrl;
 					}
 					else
 					{
-						$model->ogImage = UrlHelper::getSiteUrl($ogImage->url);
+						$model->ogImage = UrlHelper::getSiteUrl($imageUrl);
 					}
 
 					$model->ogImageWidth  = $ogImage->width;
 					$model->ogImageHeight = $ogImage->height;
 					$model->ogImageType   = $ogImage->mimeType;
 
+					if ($model->ogTransform)
+					{
+						$model->ogImageWidth  = $ogImage->getWidth($model->ogTransform);
+						$model->ogImageHeight = $ogImage->getHeight($model->ogTransform);
+					}
+
 					if (craft()->request->isSecureConnection())
 					{
-						$secureUrl            = preg_replace("/^http:/i", "https:", $ogImage->url);
+						$secureUrl            = preg_replace("/^http:/i", "https:", $model->ogImage);
 						$model->ogImageSecure = $secureUrl;
 					}
 				}
@@ -200,19 +211,24 @@ class SproutSeoOptimizeHelper
 					throw new \Exception('Twitter Image override value "' . $model->twitterImage . '" must be an	absolute url.');
 				}
 
-				$twitterImage = craft()->elements->getElementById($model->twitterImage);
+				$twitterImage = craft()->assets->getFileById($model->twitterImage);
 
 				if (!empty($twitterImage))
 				{
-					$imageUrl = (string) ($twitterImage->url);
+					$imageUrl = (string) ($twitterImage->getUrl());
+
+					if ($model->twitterTransform)
+					{
+						$imageUrl = (string) ($twitterImage->getUrl($model->twitterTransform));
+					}
 					// check to se	e if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
 					{
-						$model->twitterImage = $twitterImage->url;
+						$model->twitterImage = $imageUrl;
 					}
 					else
 					{
-						$model->twitterImage = UrlHelper::getSiteUrl($twitterImage->url);
+						$model->twitterImage = UrlHelper::getSiteUrl($imageUrl);
 					}
 				}
 				else

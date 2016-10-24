@@ -393,8 +393,13 @@ class SproutSeoVariable
 					),
 					array(
 						'label'       => "Facebook Page",
-						'value'       => 'FacebookPage',
-						'metaTagName' => 'fb:app_id'
+						'value'       => 'facebookPage',
+						'metaTagName' => 'fb:page_id'
+					),
+					array(
+						'label'       => "Facebook Admins",
+						'value'       => 'facebookAdmins',
+						'metaTagName' => 'fb:admins'
 					),
 					array(
 						'label'       => "Google Search Console",
@@ -402,9 +407,9 @@ class SproutSeoVariable
 						'metaTagName' => 'google-site-verification'
 					),
 					array(
-						'label' => "Pinterest",
-						'value' => 'pinterest', '
-							metaTagName' => 'p:domain_verify'
+						'label'       => "Pinterest",
+						'value'       => 'pinterest',
+						'metaTagName' => 'p:domain_verify'
 					),
 					array(
 						'label'       => "Yandex Webmaster Tools",
@@ -590,6 +595,36 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * Returns keywords options
+	 *
+	 * @return array
+	 */
+	public function getKeywordsOptions($type = "PlainText")
+	{
+		$options = array();
+		$fields  = craft()->fields->getAllFields();
+
+		$options[''] = Craft::t('Select...');
+
+		$options[] = array('optgroup' => Craft::t('Generate from Existing Field'));
+
+		foreach ($fields as $key => $field)
+		{
+			if ($field->type == $type)
+			{
+				$context             = explode(":", $field->context);
+				$context             = isset($context[0]) ? $context[0] : 'global';
+				$options[$field->id] = $field->name;
+			}
+		}
+
+		$options[] = array('optgroup' => Craft::t('Add Custom Field'));
+		$options['manually'] = Craft::t('Display Editable Field');
+
+		return $options;
+	}
+
+	/**
 	 * Returns all plain fields available given a type
 	 *
 	 * @return array
@@ -599,12 +634,12 @@ class SproutSeoVariable
 		$options = array();
 		$fields  = craft()->fields->getAllFields();
 
-		$options[''] = "Select...";
-		$options[]   = array('optgroup' => "Use Existing Field");
+		$options[''] = Craft::t('None');
+		$options[]   = array('optgroup' => Craft::t('Use Existing Field'));
 
 		if ($handle == 'optimizedTitleField')
 		{
-			$options['elementTitle'] = "Title";
+			$options['elementTitle'] = Craft::t('Title');
 		}
 
 		foreach ($fields as $key => $field)
@@ -617,11 +652,11 @@ class SproutSeoVariable
 			}
 		}
 
-		$options[] = array('optgroup' => "Add Custom Field");
+		$options[] = array('optgroup' => Craft::t('Add Custom Field'));
 
-		$options['manually'] = 'Display Editable Field';
+		$options['manually'] = Craft::t('Display Editable Field');
 
-		$options[] = array('optgroup' => "Define Custom Pattern");
+		$options[] = array('optgroup' => Craft::t('Define Custom Pattern'));
 
 		if (!isset($options[$settings[$handle]]) && $settings[$handle] != 'manually')
 		{
@@ -630,7 +665,7 @@ class SproutSeoVariable
 
 		if ($type != 'Assets')
 		{
-			$options['custom'] = 'Add Custom Format';
+			$options['custom'] = Craft::t('Add Custom Format');
 		}
 
 		return $options;
@@ -732,7 +767,8 @@ class SproutSeoVariable
 		}
 
 		// Get a filtered list of our default Sprout SEO schema
-		$defaultSchema = array_filter($schemas, function ($map) {
+		$defaultSchema = array_filter($schemas, function ($map)
+		{
 			/**
 			 * @var SproutSeoBaseSchema $map
 			 */
@@ -740,20 +776,21 @@ class SproutSeoVariable
 		});
 
 		// Get a filtered list of of any custom schema
-		$customSchema = array_filter($schemas, function ($map) {
+		$customSchema = array_filter($schemas, function ($map)
+		{
 			/**
 			 * @var SproutSeoBaseSchema $map
 			 */
 			return stripos($map->getUniqueKey(), 'craft-sproutseo') === false;
 		});
 
-
 		// Build our options
-		$schemaOptions    = array('' => 'Select...', array('optgroup' => 'Default Types'));
+		$schemaOptions = array('' => 'Select...', array('optgroup' => 'Default Types'));
 
-		$schemaOptions = array_merge($schemaOptions, array_map(function ($schema) {
+		$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
+		{
 			return array(
-				'label' => $schema->getName(),
+				'label' => $schema->getType(),
 				'value' => $schema->getUniqueKey()
 			);
 		}, $defaultSchema));
@@ -762,9 +799,10 @@ class SproutSeoVariable
 		{
 			array_push($schemaOptions, array('optgroup' => 'Custom Types'));
 
-			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema) {
+			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
+			{
 				return array(
-					'label' => $schema->getName(),
+					'label' => $schema->getType(),
 					'value' => $schema->getUniqueKey()
 				);
 			}, $customSchema));
@@ -811,5 +849,70 @@ class SproutSeoVariable
 		}
 
 		return $socials;
+	}
+
+	private function getSchemaChildren($type)
+	{
+		$tree     = sproutSeo()->schema->getVocabularies($type);
+		$children = array();
+
+		// let's assume 3 levels
+		if (isset($tree['children']))
+		{
+			foreach ($tree['children'] as $key => $level1)
+			{
+				$children[$key] = array();
+
+				if (isset($level1['children']))
+				{
+					foreach ($level1['children'] as $key2 => $level2)
+					{
+						$children[$key][$key2] = array();
+
+						if (isset($level2['children']))
+						{
+							foreach ($level2['children'] as $key3 => $level3)
+							{
+								array_push($children[$key][$key2], $key3);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return $children;
+	}
+
+	/**
+	 * Prepare an array of the optimized Meta
+	 *
+	 * @return multi-dimensional array
+	 */
+	public function getSchemaSubtypes($schemas)
+	{
+		$values = null;
+
+		foreach ($schemas as $schema)
+		{
+			if (isset($schema['label']))
+			{
+				$type = $schema['label'];
+
+				$values[$schema['value']] = $this->getSchemaChildren($type);
+			}
+		}
+
+		return $values;
+	}
+
+	/**
+	 * Prepare an array of the image transforms available
+	 *
+	 * @return multi-dimensional array
+	 */
+	public function getTransforms()
+	{
+		return sproutSeo()->sectionMetadata->getTransforms();
 	}
 }

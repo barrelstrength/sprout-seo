@@ -27,9 +27,20 @@
 	<td>
 
 		<div class="sprout-metadata-status" style="color:#ccc;">
-			<span class="sproutseo-icon icon-search">&#xe800;</span>
-			<span class="sproutseo-icon icon-facebook">&#xe802;</span>
-			<span class="sproutseo-icon icon-twitter">&#xe807;</span>
+			<span class="sproutseo-icon icon-search
+			{% if ((sectionMetadata.optimizedTitle or sectionMetadata.title) or
+			(sectionMetadata.optimizedDescription or sectionMetadata.description))
+			%}sproutseo-status-pass{% endif %}">&#xe800;</span>
+			<span class="sproutseo-icon icon-facebook
+			{% if ((sectionMetadata.optimizedTitle or sectionMetadata.ogTitle) or
+			(sectionMetadata.optimizedDescription or sectionMetadata.ogDescription) or
+			(sectionMetadata.optimizedImage or sectionMetadata.ogImage))
+			%}sproutseo-status-pass{% endif %}">&#xe802;</span>
+			<span class="sproutseo-icon icon-twitter
+			{% if ((sectionMetadata.optimizedTitle or sectionMetadata.twitterTitle) or
+			(sectionMetadata.optimizedTitle or sectionMetadata.twitterDescription) or
+			(sectionMetadata.optimizedImage or sectionMetadata.twitterImage))
+			%}sproutseo-status-pass{% endif %}">&#xe807;</span>
 			<span class="sproutseo-icon icon-edit {% if urlEnabledSection.hasElementMetadataField() %}sproutseo-status-pass{% endif %}">&#xe805;</span>
 			<span class="sproutseo-icon icon-sitemap {% if sectionMetadata.enabled %}sproutseo-status-pass{% endif %}">&#xf0e8;</span>
 		</div>

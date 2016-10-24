@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutSeo_ElementMetadataFieldType extends BaseFieldType
+class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPreviewableFieldType
 {
 	/**
 	 * FieldType name
@@ -22,6 +22,53 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 	{
 		// We don't need a column in the content table
 		return false;
+	}
+
+	public function getTableAttributeHtml($value)
+	{
+		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
+		$element = isset($value->element) ? $value->element : null;
+		$message = '<a><span class="status disabled"></span>';
+
+		if ($element)
+		{
+			foreach ($registeredUrlEnabledSectionsTypes as $plugin => $urlEnabledSectionTypes)
+			{
+				foreach ($urlEnabledSectionTypes as $urlEnabledSectionType)
+				{
+					if ($urlEnabledSectionType->getElementType() == $element->elementType)
+					{
+						if ($urlEnabledSectionType->getIdColumnName() != null && $urlEnabledSectionType->getElementTableName() != null)
+						{
+							$columnId = $urlEnabledSectionType->getIdColumnName();
+
+							$sectionMetadata = $urlEnabledSectionType->getSectionMetadataByTypeAndUrlEnabled(
+								$urlEnabledSectionType->getElementTableName(),
+								$element->{$columnId}
+							);
+
+							if ($sectionMetadata)
+							{
+								$message = '<span class="status orange"></span>';
+
+								$elementId = $element->id;
+								$locale    = $element->locale;
+								$elementData = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
+
+								if (isset($elementData->id) && $elementData->id)
+								{
+									$message = '<span class="status active"></span>';
+								}
+							}
+
+							break 2;
+						}
+					}
+				}
+			}
+		}
+
+		return $message;
 	}
 
 	/**
@@ -52,6 +99,26 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		return craft()->templates->render('sproutseo/_fieldtypes/elementmetadata/settings', array(
 			'settings' => $this->getSettings()
 		));
+	}
+
+	public function prepValue($value)
+	{
+		$globals  = sproutSeo()->optimize->globals;
+		$identity = $globals['identity'];
+		$schema   = new SproutSeo_WebsiteIdentityWebsiteSchema();
+
+		if ($identityType = $identity['@type'])
+		{
+			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
+			$schema      = new $schemaModel();
+		}
+
+		$schema->addContext               = true;
+		$schema->globals                  = sproutSeo()->optimize->globals;
+		$schema->element                  = $this->element;
+		$schema->prioritizedMetadataModel = sproutSeo()->optimize->prioritizedMetadataModel;
+
+		return $schema;
 	}
 
 	/**
@@ -117,6 +184,24 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 
 		$settings = $this->getSettings();
 
+		// Get the prioritized metadata at this level so we can use it as placeholder text
+		/**
+		 * @var SproutSeoBaseUrlEnabledSectionType $urlEnabledSectionType
+		 */
+		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($this->element->getElementType());
+
+		$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
+
+		$urlEnabledSectionIdColumnName = $urlEnabledSectionType->getIdColumnName();
+		$type                          = $urlEnabledSectionType->getId();
+		$urlEnabledSectionId           = $this->element->{$urlEnabledSectionIdColumnName};
+		$urlEnabledSection             = $urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId];
+
+		sproutSeo()->optimize->globals           = sproutSeo()->globalMetadata->getGlobalMetadata();
+		sproutSeo()->optimize->urlEnabledSection = $urlEnabledSection;
+
+		$prioritizedMetadata = sproutSeo()->optimize->getPrioritizedMetadataModel();
+
 		// @todo - what are the ogImageElements, twitterImageElements, etc being used for?
 		// they don't appear to be used in the elementdata/input template...
 		return craft()->templates->render('sproutseo/_fieldtypes/elementmetadata/input', array(
@@ -132,7 +217,9 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 			'elementType'          => $elementType,
 			'fieldId'              => $fieldId,
 			'fieldContext'         => 'field',
-			'settings'             => $settings
+			'settings'             => $settings,
+			'prioritizedMetadata'  => $prioritizedMetadata,
+			'elementHandle'        => $this->model->handle
 		));
 	}
 
@@ -141,15 +228,10 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 	 */
 	public function onAfterElementSave()
 	{
-		$fields = craft()->request->getPost('fields.sproutseo.metadata');
-
-		if (!isset($fields))
-		{
-			return;
-		}
-
 		$fieldHandle = $this->model->handle;
-		$addressInfo  = $this->element->getContent()->{$fieldHandle};
+		$fields      = $this->element->getContent()->{$fieldHandle}['metadata'];
+		$locale      = $this->element->locale;
+		$addressInfo = $this->element->getContent()->{$fieldHandle};
 
 		$addressInfo['modelId'] = $this->model->id;
 		$addressInfoModel = SproutSeo_AddressModel::populateModel($addressInfo);
@@ -159,40 +241,49 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 			$fields['addressId'] = $addressInfoModel->id;
 		}
 
-		$locale = $this->element->locale;
-
+		// Instance model if call comes from ResaveElements task
 		// Get existing or new MetadataModel
 		$model = sproutSeo()->elementMetadata->getElementMetadataByElementId($this->element->id, $locale);
 
-		// Test to see if we have any values in our Sprout SEO fields
-		$saveSproutSeoFields = false;
-
-		foreach ($fields as $key => $value)
+		if ($fields)
 		{
-			if ($value)
-			{
-				$saveSproutSeoFields = true;
-				continue;
-			}
-		}
+			// Test to see if we have any values in our Sprout SEO fields
+			$saveSproutSeoFields = false;
 
-		// If we don't have any values in our Sprout SEO fields
-		// don't add a record to the database
-		// If a record already exists, we should delete it.
-		if (!$saveSproutSeoFields)
-		{
-			// Remove record since it is now blank
-			if ($model->id)
+			foreach ($fields as $key => $value)
 			{
-				sproutSeo()->elementMetadata->deleteElementMetadataById($model->id);
+				if ($value)
+				{
+					$saveSproutSeoFields = true;
+					continue;
+				}
 			}
 
-			return;
-		}
+			// If we don't have any values in our Sprout SEO fields
+			// don't add a record to the database
+			// If a record already exists, we should delete it.
+			if (!$saveSproutSeoFields)
+			{
+				// Remove record since it is now blank
+				if ($model->id)
+				{
+					sproutSeo()->elementMetadata->deleteElementMetadataById($model->id);
+				}
 
-		if (isset($fields['robots']))
+				return;
+			}
+
+			if (isset($fields['robots']))
+			{
+				$fields['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
+			}
+		}
+		else
 		{
-			$fields['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
+			$attributes['optimizedTitle']       = null;
+			$attributes['optimizedDescription'] = null;
+			$attributes['optimizedImage']       = null;
+			$attributes['elementId']            = null;
 		}
 
 		// Add the element ID to the field data we will submit for Sprout SEO
@@ -200,12 +291,19 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		$attributes['locale']    = $locale;
 
 		// Grab all the other Sprout SEO fields.
-		$attributes = array_merge($attributes, $fields);
+		if ($fields)
+		{
+			$attributes = array_merge($attributes, $fields);
+		}
 
-		$settings   = $this->getSettings();
+		$settings = $this->getSettings();
+		// meta details needs go first
+		$attributes = $this->processMetaDetails($attributes, $settings);
 		$attributes = $this->processOptimizedTitle($attributes, $settings);
 		$attributes = $this->processOptimizedDescription($attributes, $settings);
+		$attributes = $this->processOptimizedKeywords($attributes, $settings);
 		$attributes = $this->processOptimizedFeatureImage($attributes, $settings);
+		$attributes = $this->processMainEntity($attributes, $settings);
 
 		$model->setAttributes($attributes);
 
@@ -267,9 +365,78 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		}
 
 		$attributes['optimizedTitle'] = $title;
-		$attributes['title']          = $title;
-		$attributes['ogTitle']        = $title;
-		$attributes['twitterTitle']   = $title;
+
+		$attributes = $this->setMetaDetailsValues('title', $title, $attributes);
+
+		return $attributes;
+	}
+
+	private function setMetaDetailsValues($type, $value, $attributes)
+	{
+		$metaDetails = JsonHelper::decode($attributes['customizationSettings']);
+
+		$ogKey        = 'og' . ucfirst($type);
+		$twitterKey   = 'twitter' . ucfirst($type);
+		$ogValue      = isset($attributes[$ogKey]) ? $attributes[$ogKey] : null;
+		$twitterValue = isset($attributes[$twitterKey]) ? $attributes[$twitterKey] : null;
+		$searchValue  = isset($attributes[$type]) ? $attributes[$type] : null;
+
+		// Default values
+		$attributes[$type]       = $value;
+		$attributes[$ogKey]      = $value;
+		$attributes[$twitterKey] = $value;
+
+		if (isset($metaDetails['searchMetaSectionMetadataEnabled']) && $metaDetails['searchMetaSectionMetadataEnabled'] && $searchValue)
+		{
+			$attributes[$type] = $searchValue;
+		}
+
+		if (isset($metaDetails['openGraphSectionMetadataEnabled']) && $metaDetails['openGraphSectionMetadataEnabled'] && $ogValue)
+		{
+			$attributes[$ogKey] = $ogValue;
+		}
+
+		if (isset($metaDetails['twitterCardSectionMetadataEnabled']) && $metaDetails['twitterCardSectionMetadataEnabled'] && $twitterValue)
+		{
+			$attributes[$twitterKey] = $twitterValue;
+		}
+
+		return $attributes;
+	}
+
+	/**
+	 * @param $attributes
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	protected function processOptimizedKeywords($attributes, $settings)
+	{
+		$keywords = null;
+
+		$optimizedKeywordsFieldSetting = $settings['optimizedKeywordsField'];
+
+		switch (true)
+		{
+			// Manual Keywords
+			case ($optimizedKeywordsFieldSetting == 'manually'):
+
+				$keywords = ($attributes['optimizedKeywords']) ? $attributes['optimizedKeywords'] : null;
+
+				break;
+
+			// Auto-generate keywords from target field
+			case (is_numeric($optimizedKeywordsFieldSetting)):
+
+				$keywords     = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
+				$rake         = new Rake();
+				$rakeKeywords = array_keys($rake->extract($keywords));
+				$keywords     = implode(',', $rakeKeywords);
+
+				break;
+		}
+
+		$attributes['optimizedKeywords'] = $keywords;
 
 		return $attributes;
 	}
@@ -311,9 +478,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		}
 
 		$attributes['optimizedDescription'] = $description;
-		$attributes['description']          = $description;
-		$attributes['ogDescription']        = $description;
-		$attributes['twitterDescription']   = $description;
+		$attributes                         = $this->setMetaDetailsValues('description', $description, $attributes);
 
 		return $attributes;
 	}
@@ -354,6 +519,57 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 		return $attributes;
 	}
 
+	protected function processMainEntity($attributes, $settings)
+	{
+		if (!isset($attributes['schemaOverrideTypeId']))
+		{
+			$attributes['schemaOverrideTypeId'] = null;
+		}
+
+		return $attributes;
+	}
+
+	protected function processMetaDetails($attributes, $settings)
+	{
+		$details = array();
+
+		if (!isset($attributes['customizationSettings']))
+		{
+			if ($settings['showSearchMeta'])
+			{
+				$details['searchMetaSectionMetadataEnabled'] = 0;
+			}
+
+			if ($settings['showOpenGraph'])
+			{
+				$details['openGraphSectionMetadataEnabled'] = 0;
+			}
+
+			if ($settings['showTwitter'])
+			{
+				$details['twitterCardSectionMetadataEnabled'] = 0;
+			}
+
+			if ($settings['showGeo'])
+			{
+				$details['geoSectionMetadataEnabled'] = 0;
+			}
+
+			if ($settings['showRobots'])
+			{
+				$details['robotsSectionMetadataEnabled'] = 0;
+			}
+
+			$attributes['customizationSettings'] = json_encode($details);
+		}
+		else
+		{
+			$attributes['customizationSettings'] = json_encode($attributes['customizationSettings']);
+		}
+
+		return $attributes;
+	}
+
 	/**
 	 * @param $fieldId
 	 *
@@ -379,6 +595,23 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType
 					else
 					{
 						$value = $_POST['fields'][$field->handle];
+					}
+				}
+				//Resave elements
+				else
+				{
+					if (isset($this->element->{$field->handle}))
+					{
+						$elementValue = $this->element->{$field->handle};
+
+						if ($field->type == 'Assets')
+						{
+							$value = (isset($elementValue[0]->id) ? $elementValue[0]->id : null);
+						}
+						else
+						{
+							$value = $elementValue;
+						}
 					}
 				}
 			}

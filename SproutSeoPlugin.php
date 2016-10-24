@@ -23,7 +23,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getDescription()
 	{
-		return 'All-in-One SEO, Social Media Sharing, Redirects, and Sitemap';
+		return 'Content-focused SEO. Curate every detail of your online visibility.';
 	}
 
 	/**
@@ -31,7 +31,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '2.3.0';
+		return '2.4.2';
 	}
 
 	/**
@@ -39,7 +39,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '2.3.1';
+		return '2.4.0';
 	}
 
 	/**
@@ -125,6 +125,7 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ProductSchema');
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
+		Craft::import('plugins.sproutseo.vendor.rake.Rake');
 
 		Craft::import('plugins.sproutseo.helpers.SproutSeoAddressHelper');
 
@@ -174,7 +175,6 @@ class SproutSeoPlugin extends BasePlugin
 			'ogType'                  => array(AttributeType::String, 'default' => null),
 			'localeIdOverride'        => array(AttributeType::String, 'default' => null),
 			'enableCustomSections'    => array(AttributeType::Bool, 'default' => false),
-			'enableCodeOverrides'     => array(AttributeType::Bool, 'default' => false),
 			'enableMetaDetailsFields' => array(AttributeType::Bool, 'default' => false),
 			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => true),
 			'metadataVariable'        => array(AttributeType::String, 'default' => null),

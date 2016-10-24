@@ -6,24 +6,24 @@ namespace Craft;
  */
 class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectionType
 {
-	public function getUrlEnabledSectionName()
+	public function getName()
 	{
 		return ElementType::Category;
 	}
 
-	public function getUrlEnabledSectionIdColumnName()
+	public function getIdColumnName()
 	{
 		return 'groupId';
 	}
 
-	public function getUrlEnabledSectionById($id)
+	public function getById($id)
 	{
 		return craft()->categories->getGroupById($id);
 	}
 
-	public function getUrlEnabledSectionFieldLayoutSettingsObject($id)
+	public function getFieldLayoutSettingsObject($id)
 	{
-		$group = $this->getUrlEnabledSectionById($id);
+		$group = $this->getById($id);
 
 		return $group;
 	}
@@ -48,7 +48,7 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 		return craft()->categories->getAllGroups();
 	}
 
-	public function getUrlEnabledSectionTableName()
+	public function getTableName()
 	{
 		return 'categorygroups_i18n';
 	}

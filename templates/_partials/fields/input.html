@@ -5,31 +5,32 @@
 	{{ forms.textField({
 		label: "Title"|t,
 		instructions: "The Title of your content which will appear in search results"|t,
-		name: 'sproutseo[metadata][title]',
+		name: nameContext~'[metadata][title]',
 		maxlength: 60,
 		showCharsLeft: true,
 		value: values.title,
+		placeholder: prioritizedMetadata.optimizedTitle ?? values.optimizedTitle ?? null,
 		errors: "",
 		required: false,
-		placeholder: " "
 	}) }}
 
 	{{ forms.textField({
 		label: "Description"|t,
 		instructions: "A description of your content which will appear in search results."|t,
-		name: 'sproutseo[metadata][description]',
+		name: nameContext~'[metadata][description]',
 		maxlength: 160,
 		showCharsLeft: true,
 		value: values.description,
+		placeholder: prioritizedMetadata.optimizedDescription ?? values.optimizedDescription ?? null,
 		errors: "",
 		required: false,
-		placeholder: " "
 	}) }}
 
 	{{ forms.textField({
 		label: "Keywords"|t,
+		id: 'sproutseo-searchKeywords',
 		instructions: "A list of keywords that describe your content"|t,
-		name: 'sproutseo[metadata][keywords]',
+		name: nameContext~'[metadata][keywords]',
 		value: values.keywords,
 		errors: "",
 		required: false

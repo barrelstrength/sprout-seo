@@ -49,9 +49,9 @@ class SproutSeo_UrlEnabledSectionModel extends BaseModel
 	{
 		$locale = craft()->i18n->getLocaleById(craft()->language);
 
-		$urlEnabledSectionUrlFormatTableName  = $this->type->getUrlEnabledSectionTableName();
-		$urlEnabledSectionUrlFormatColumnName = $this->type->getUrlEnabledSectionUrlFormatColumnName();
-		$urlEnabledSectionIdColumnName        = $this->type->getUrlEnabledSectionIdColumnName();
+		$urlEnabledSectionUrlFormatTableName  = $this->type->getTableName();
+		$urlEnabledSectionUrlFormatColumnName = $this->type->getUrlFormatColumnName();
+		$urlEnabledSectionIdColumnName        = $this->type->getIdColumnName();
 
 		$query = craft()->db->createCommand()
 			->select($urlEnabledSectionUrlFormatColumnName)
@@ -73,7 +73,7 @@ class SproutSeo_UrlEnabledSectionModel extends BaseModel
 
 	public function hasElementMetadataField()
 	{
-		$fieldLayoutObjects = $this->type->getUrlEnabledSectionFieldLayoutSettingsObject($this->id);
+		$fieldLayoutObjects = $this->type->getFieldLayoutSettingsObject($this->id);
 
 		if (!$fieldLayoutObjects)
 		{

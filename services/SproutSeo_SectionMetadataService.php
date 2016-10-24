@@ -25,8 +25,6 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function __construct($sectionMetadataRecord = null)
 	{
-		$this->prepareUrlEnabledSectionTypes();
-
 		$this->sectionMetadataRecord = $sectionMetadataRecord;
 		if (is_null($this->sectionMetadataRecord))
 		{
@@ -39,6 +37,12 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function prepareUrlEnabledSectionTypes()
 	{
+		// Have we already prepared our URL-Enabled Sections?
+		if (count($this->urlEnabledSectionTypes))
+		{
+			return null;
+		}
+
 		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
 
 		foreach ($registeredUrlEnabledSectionsTypes as $plugin => $urlEnabledSectionTypes)
@@ -105,6 +109,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getUrlEnabledSectionTypes()
 	{
+		$this->prepareUrlEnabledSectionTypes();
+
 		return $this->urlEnabledSectionTypes;
 	}
 
@@ -115,6 +121,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getUrlEnabledSectionsViaContext($context)
 	{
+		$this->prepareUrlEnabledSectionTypes();
+
 		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
 		{
 			$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
@@ -128,10 +136,10 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 
 				$type = $urlEnabledSectionType->getId();
 
-				$urlEnabledSectionIdColumn = $urlEnabledSectionType->getUrlEnabledSectionIdColumnName();
-				$urlEnabledSectionId       = $element->{$urlEnabledSectionIdColumn};
+				$urlEnabledSectionTypeIdColumn = $urlEnabledSectionType->getIdColumnName();
+				$urlEnabledSectionTypeId       = $element->{$urlEnabledSectionTypeIdColumn};
 
-				$uniqueKey = $type . '-' . $urlEnabledSectionId;
+				$uniqueKey = $type . '-' . $urlEnabledSectionTypeId;
 
 				$urlEnabledSection          = $urlEnabledSectionType->urlEnabledSections[$uniqueKey];
 				$urlEnabledSection->element = $element;
@@ -146,11 +154,35 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 *
 	 * @return array
 	 */
-	public function getUrlEnabledSectionByType($type)
+	public function getUrlEnabledSectionTypeByType($type)
 	{
+		$this->prepareUrlEnabledSectionTypes();
+
 		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
 		{
 			if ($urlEnabledSectionType->getId() == $type)
+			{
+				return $urlEnabledSectionType;
+			}
+		}
+
+		return array();
+	}
+
+	/**
+	 * Get the active URL-Enabled Section Type via the Element Type
+	 *
+	 * @param $urlEnabledSectionType
+	 *
+	 * @return array
+	 */
+	public function getUrlEnabledSectionTypeByElementType($elementType)
+	{
+		$this->prepareUrlEnabledSectionTypes();
+
+		foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType)
+		{
+			if ($urlEnabledSectionType->getElementType() == $elementType)
 			{
 				return $urlEnabledSectionType;
 			}
@@ -241,9 +273,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getSectionMetadataByInfo($urlEnabledSection)
 	{
-		$type                          = $urlEnabledSection->type->getElementTableName();
-		$urlEnabledSectionIdColumnName = $urlEnabledSection->type->getUrlEnabledSectionIdColumnName();
-		$urlEnabledSectionId           = $urlEnabledSection->element->{$urlEnabledSectionIdColumnName};
+		$type                = $urlEnabledSection->type->getElementTableName();
+		$urlEnabledSectionId = sproutSeo()->optimize->urlEnabledSection->id;
 
 		$sectionMetadata = craft()->db->createCommand()
 			->select('*')
@@ -386,6 +417,22 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		}
 
 		return false;
+	}
+
+	public function getTransforms()
+	{
+		$options = array(
+			'' => 'Select...'
+		);
+
+		$transforms = craft()->assetTransforms->getAllTransforms();
+
+		foreach ($transforms as $transform)
+		{
+			$options[$transform->handle] = $transform->name;
+		}
+
+		return $options;
 	}
 
 	/**

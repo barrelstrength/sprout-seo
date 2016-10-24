@@ -11,7 +11,6 @@ class SproutSeo_SettingsModel extends BaseModel
 			'seoDivider'              => AttributeType::String,
 			'localeIdOverride'        => AttributeType::String,
 			'enableCustomSections'    => AttributeType::Bool,
-			'enableCodeOverrides'     => AttributeType::Bool,
 			'enableMetaDetailsFields' => AttributeType::Bool,
 			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => true),
 			'metadataVariable'        => AttributeType::String

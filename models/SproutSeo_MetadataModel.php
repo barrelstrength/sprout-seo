@@ -52,6 +52,8 @@ class SproutSeo_MetadataModel extends BaseModel
 			'locale'               => array(AttributeType::String),
 			'schemaTypeId'         => array(AttributeType::String),
 			'schemaOverrideTypeId' => array(AttributeType::String),
+			'ogTransform'          => array(AttributeType::String),
+			'twitterTransform'     => array(AttributeType::String),
 
 			'dateUpdated' => array(AttributeType::DateTime),
 			'dateCreated' => array(AttributeType::DateTime),
@@ -182,7 +184,8 @@ class SproutSeo_MetadataModel extends BaseModel
 				break;
 		}
 
-		SproutSeoOptimizeHelper::prepareAssetUrls($this);
+		// moved to getPrioritizedMetadataModel just one time called.
+		//SproutSeoOptimizeHelper::prepareAssetUrls($this);
 
 		return $this;
 	}
@@ -231,6 +234,11 @@ class SproutSeo_MetadataModel extends BaseModel
 		{
 			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
 			$elementMetadata = sproutSeo()->elementMetadata->getElementMetadataByElementId($overrideInfo['elementId'], $locale);
+
+			// Default to the current URL, if no overrides exist
+			$elementMetadata->canonical  = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
+			$elementMetadata->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
+			$elementMetadata->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
 
 			return $elementMetadata->getAttributes();
 		}
