@@ -55,6 +55,55 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 				}
 			}
 
+			$columnsToMove = array(
+				'ogTitle' => array(
+					'type' => $varchar,
+					'after' => 'ogUrl'
+				),
+				'ogSiteName' => array(
+					'type' => $varchar,
+					'after' => 'ogUrl'
+				),
+				'ogDescription' => array(
+					'type' => $varchar,
+					'after' => 'ogTitle'
+				),
+				'twitterUrl' => array(
+					'type' => $varchar,
+					'after' => 'twitterCard'
+				),
+				'twitterDescription' => array(
+					'type' => $varchar,
+					'after' => 'twitterTitle'
+				),
+				'twitterImage' => array(
+					'type' => $varchar,
+					'after' => 'twitterDescription'
+				),
+			);
+
+			foreach ($columnsToMove as $columnToRename => $info)
+			{
+				if (craft()->db->columnExists($tableName, $columnToRename))
+				{
+					$this->alterColumn($tableName, $columnToRename, $info['type'], $columnToRename, $info['after']);
+				}
+			}
+
+			if (!craft()->db->columnExists($tableName, 'ogTransform'))
+			{
+				$this->addColumnAfter($tableName, 'ogTransform', $varchar, 'ogImage');
+
+				SproutSeoPlugin::log("Created column ogTransform in `$tableName` .", LogLevel::Info, true);
+			}
+
+			if (!craft()->db->columnExists($tableName, 'twitterTransform'))
+			{
+				$this->addColumnAfter($tableName, 'twitterTransform', $varchar, 'twitterImage');
+
+				SproutSeoPlugin::log("Created column twitterTransform in `$tableName` .", LogLevel::Info, true);
+			}
+
 			// finally rename table
 			$this->renameTable($tableName, $newTableName);
 			$this->createIndex($newTableName, 'elementId,locale', true);

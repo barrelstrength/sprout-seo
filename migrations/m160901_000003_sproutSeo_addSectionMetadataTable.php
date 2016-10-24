@@ -88,6 +88,44 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 				}
 			}
 
+			$columnsToMove = array(
+				'ogTitle' => array(
+					'type' => $varchar,
+					'after' => 'ogUrl'
+				),
+				'ogDescription' => array(
+					'type' => $varchar,
+					'after' => 'ogTitle'
+				),
+				'ogSiteName' => array(
+					'type' => $varchar,
+					'after' => 'ogUrl'
+				),
+				'twitterUrl' => array(
+					'type' => $varchar,
+					'after' => 'twitterCard'
+				),
+				'twitterCreator' => array(
+					'type' => $varchar,
+					'after' => 'twitterImage'
+				),
+
+			);
+
+			foreach ($columnsToMove as $columnToRename => $info)
+			{
+				if (craft()->db->columnExists($tableName, $columnToRename))
+				{
+					$this->alterColumn($tableName, $columnToRename, $info['type'], $columnToRename, $info['after']);
+				}
+			}
+
+			$columnToRename = 'appendSiteName';
+			if (craft()->db->columnExists($tableName, $columnToRename))
+			{
+				$this->alterColumn($tableName, $columnToRename, $varchar, 'appendTitleValue', 'title');
+			}
+
 			if (!craft()->db->columnExists($tableName, 'ogTransform'))
 			{
 				$this->addColumnAfter($tableName, 'ogTransform', $varchar, 'ogImage');
@@ -100,42 +138,6 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 				$this->addColumnAfter($tableName, 'twitterTransform', $varchar, 'twitterImage');
 
 				SproutSeoPlugin::log("Created column twitterTransform in `$newTableName` .", LogLevel::Info, true);
-			}
-
-			$columnToRename = 'ogTitle';
-			if (craft()->db->columnExists($tableName, $columnToRename))
-			{
-				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'ogUrl');
-			}
-
-			$columnToRename = 'ogDescription';
-			if (craft()->db->columnExists($tableName, $columnToRename))
-			{
-				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'ogTitle');
-			}
-
-			$columnToRename = 'ogSiteName';
-			if (craft()->db->columnExists($tableName, $columnToRename))
-			{
-				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'ogUrl');
-			}
-
-			$columnToRename = 'twitterUrl';
-			if (craft()->db->columnExists($tableName, $columnToRename))
-			{
-				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'twitterCard');
-			}
-
-			$columnToRename = 'twitterCreator';
-			if (craft()->db->columnExists($tableName, $columnToRename))
-			{
-				$this->alterColumn($tableName, $columnToRename, $varchar, $columnToRename, 'twitterImage');
-			}
-
-			$columnToRename = 'appendSiteName';
-			if (craft()->db->columnExists($tableName, $columnToRename))
-			{
-				$this->alterColumn($tableName, $columnToRename, $varchar, 'appendTitleValue', 'title');
 			}
 
 			// finally rename table
