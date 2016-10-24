@@ -411,6 +411,31 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * @param array $contacts
+	 * @info https://schema.org/address
+	 */
+	public function addAddress($addressId)
+	{
+		$address = array();
+
+		if ($addressId)
+		{
+			$addressModel = sproutSeo()->address->getAddressById($addressId);
+
+			if ($addressModel->id)
+			{
+				$address['@type']           = 'PostalAddress';
+				$address['addressLocality'] = $addressModel->locality;
+				$address['addressRegion']   = $addressModel->administrativeArea;
+				$address['postalCode']      = $addressModel->postalCode;
+				$address['streetAddress']   = $addressModel->address1.'. '.$addressModel->address2;
+
+				$this->structuredData['address'] = $address;
+			}
+		}
+	}
+
+	/**
 	 * @param array $openingHours
 	 */
 	public function addOpeningHours($openingHours = array())

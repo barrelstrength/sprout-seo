@@ -66,9 +66,12 @@ class SproutSeo_WebsiteIdentityOrganizationSchema extends SproutSeoBaseSchema
 			$this->addOpeningHours($openingHours);
 		}
 
-		$this->addDate('foundingDate', $schema['foundingDate']['date']);
+		if (isset($schema['addressId']) && $schema['addressId'])
+		{
+			$this->addAddress($schema['addressId']);
+		}
 
-		//$jsonLd['foundingLocation'] = isset($schema['foundingLocation']) ? $schema['foundingLocation'] : null;
+		$this->addDate('foundingDate', $schema['foundingDate']['date']);
 
 		if (count($socialProfiles))
 		{
