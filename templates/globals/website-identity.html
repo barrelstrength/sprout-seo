@@ -177,6 +177,24 @@
 			errors: ''
 		}) }}
 
+		{% set addressInput %}
+		<div class="sproutaddressinfo-box"
+			{% if websiteIdentity.addressId is defined %}
+			data-addressinfoid='{{ websiteIdentity.addressId }}'
+			{% endif %}
+			>
+		</div>
+		{% endset %}
+
+		{{ forms.field({
+			label: 'Address'|t ~ sprout.infoIcon({
+				label: "Address Field"|t,
+				structured: true,
+				priority: 'globals'
+			}),
+			required: false
+		}, addressInput) }}
+
 		<hr>
 
 		<div class="field identityType-field-wrapper">
@@ -244,28 +262,6 @@
 				</div>
 			</div>
 		</div>
-
-		<hr>
-
-
-		{% set addressInput %}
-		<div class="sproutaddressinfo-box"
-			{% if websiteIdentity.addressId is defined %}
-			data-addressinfoid='{{ websiteIdentity.addressId }}'
-			{% endif %}
-			>
-		</div>
-		{% endset %}
-
-		{{ forms.field({
-			label: 'Address Field'|t ~ sprout.infoIcon({
-				label: "Address Field"|t,
-				structured: true,
-				priority: 'globals'
-			}),
-			required: false
-		}, addressInput) }}
-
 
 		<hr>
 
