@@ -5,20 +5,6 @@
 	{% set addressBox = (namespaceInputId is not defined) ? 'sproutaddressinfo-box' : 'sproutaddressinfo-box-' ~ namespaceInputId
 	%}
 
-	{% set addressInput %}
-	<div class="{{ addressBox }}"
-		{% if values.addressId is defined %}
-			data-addressinfoid='{{ values.addressId }}'
-		{% endif %}
-		>
-	</div>
-	{% endset %}
-
-	{{ forms.field({
-		label: 'Address Field'|t,
-		required: false
-	}, addressInput) }}
-
 	{{ forms.textField({
 		label: "Region"|t,
 		instructions: 'The geo.region expects codes for <a
