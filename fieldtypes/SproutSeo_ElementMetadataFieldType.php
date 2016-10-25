@@ -477,6 +477,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				break;
 		}
 
+		// Lets store just 255 characters
+		$description = substr(trim($description), 0, 255);
 		$attributes['optimizedDescription'] = $description;
 		$attributes                         = $this->setMetaDetailsValues('description', $description, $attributes);
 
