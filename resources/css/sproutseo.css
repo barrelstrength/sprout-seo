@@ -46,6 +46,22 @@
 	margin: 0;
 }
 
+/* Section Status and Element Metadata Status Icons
+------------------------------------------------------------ */
+.elementindex .sproutseo-icon {
+	margin-left: 7px;
+}
+.sproutseo-status-pass {
+	color: #27AE60; // enabled green
+	/*color: #29323d; // home icon dark grey*/
+}
+.sproutseo-status-partial {
+	color: #F2842D; // orange
+}
+.sproutseo-status-missing {
+	color: #CCCCCC; // grey
+}
+
 /* Craft.InfoIcon styles - copied from Craft .info
 ------------------------------------------------------------ */
 
@@ -187,10 +203,7 @@ ul.sproutseo-metalevel-list li {
 }
 
 
-.sproutseo-status-pass {
-	/*color: #27AE60; // enabled green*/
-	color: #29323d; // home icon dark grey
-}
+
 
 
 /*.sitemap-custom-url:focus {*/

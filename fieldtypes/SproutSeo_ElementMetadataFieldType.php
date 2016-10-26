@@ -26,9 +26,12 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 	public function getTableAttributeHtml($value)
 	{
+		craft()->templates->includeCssResource('sproutseo/css/sproutseo.css');
+
 		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
 		$element                           = isset($value->element) ? $value->element : null;
-		$message                           = '<a><span class="status disabled"></span>';
+		$message                           = '<span class="sproutseo-icon icon-ok-circled sproutseo-status-missing">&#xe801;
+</span>';
 
 		if ($element)
 		{
@@ -49,7 +52,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 							if ($sectionMetadata)
 							{
-								$message = '<span class="status orange"></span>';
+								$message = '<span class="sproutseo-icon icon-ok-circled sproutseo-status-partial">&#xe801;
+</span>';
 
 								$elementId   = $element->id;
 								$locale      = $element->locale;
@@ -57,7 +61,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 								if (isset($elementData->id) && $elementData->id)
 								{
-									$message = '<span class="status active"></span>';
+									$message = '<span class="sproutseo-icon icon-ok-circled sproutseo-status-pass">&#xe801;
+</span>';
 								}
 							}
 
