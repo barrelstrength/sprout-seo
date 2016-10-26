@@ -134,8 +134,11 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				);
  			}
 
-
-
+ 			// We no longer need the Global Fallback column
+			if (craft()->db->columnExists($tableName, 'globalFallback'))
+			{
+				$this->dropColumn($tableName, 'globalFallback');
+			}
 		}
 		else
 		{
