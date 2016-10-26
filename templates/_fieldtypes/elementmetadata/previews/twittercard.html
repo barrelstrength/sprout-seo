@@ -174,19 +174,22 @@
 
 <div class="Tweet-card">
 	<div class="TwitterCardsGrid TwitterCard">
+		 {% set twitterImage = prioritizedMetadata.twitterImage != null ?
+		 				prioritizedMetadata.twitterImage :
+		 				craft.sproutSeo.getDefaultTwitterImage()  %}
 
 			<div class="TwitterCardsGrid-col--12 TwitterCardsGrid-col--spacerBottom CardContent">
-				<a class="js-openLink u-block TwitterCardsGrid-col--12 TwitterCard-container TwitterCard-container--clickable SummaryCard--large" href="http://t.co/uULA47di9M" data-theme="light" data-card-breakpoints="w450 w400 w350 w300 w250 w200 w150 w100 w50 ">
+				<a class="js-openLink u-block TwitterCardsGrid-col--12 TwitterCard-container TwitterCard-container--clickable SummaryCard--large" href="{{ prioritizedMetadata.getPreviewUrl() }}" data-theme="light" data-card-breakpoints="w450 w400 w350 w300 w250 w200 w150 w100 w50 ">
 					<div class="SummaryCard-image TwitterCardsGrid-col--12">
 						<div class="tcu-imageContainer tcu-imageAspect--2to1">
 							<style>
 								.tcu-image-491955931719434241 {
-									background-image: url(https://o.twimg.com/2/proxy.jpg?t=HBg-aHR0cHM6Ly9zcHRodW1ibmFpbHMuNW1pbi5jb20vMTAzNjY2NTkvNTE4MzMyOTQ5X2NfNzY0XzQwMC5qcGcU-AsUngYcFIQGFJQDAAAWABIA&s=KAgoilX2mNVQHiQScu_BAY17SUD7mzXco1rhe6AqjN4) !important;
+									background-image: url("{{ twitterImage }}") !important;
 									background-size: cover !important;
 								}
 							</style>
-							<div class="tcu-imageWrapper tcu-image-491955931719434241 js-cspForcedStyle" data-style="background-image: url(https://o.twimg.com/2/proxy.jpg?t=HBg-aHR0cHM6Ly9zcHRodW1ibmFpbHMuNW1pbi5jb20vMTAzNjY2NTkvNTE4MzMyOTQ5X2NfNzY0XzQwMC5qcGcU-AsUngYcFIQGFJQDAAAWABIA&amp;s=KAgoilX2mNVQHiQScu_BAY17SUD7mzXco1rhe6AqjN4); background-size: cover;" data-csp-fix="true" style="background-image: url(&quot;https://o.twimg.com/2/proxy.jpg?t=HBg-aHR0cHM6Ly9zcHRodW1ibmFpbHMuNW1pbi5jb20vMTAzNjY2NTkvNTE4MzMyOTQ5X2NfNzY0XzQwMC5qcGcU-AsUngYcFIQGFJQDAAAWABIA&amp;s=KAgoilX2mNVQHiQScu_BAY17SUD7mzXco1rhe6AqjN4&quot;); background-size: cover;">
-								<img class="u-block" src="https://o.twimg.com/2/proxy.jpg?t=HBg-aHR0cHM6Ly9zcHRodW1ibmFpbHMuNW1pbi5jb20vMTAzNjY2NTkvNTE4MzMyOTQ5X2NfNzY0XzQwMC5qcGcU-AsUngYcFIQGFJQDAAAWABIA&amp;s=KAgoilX2mNVQHiQScu_BAY17SUD7mzXco1rhe6AqjN4" alt="Photo published for Hands On With The Amazon Fire Phone | TechCrunch">
+							<div class="tcu-imageWrapper tcu-image-491955931719434241 js-cspForcedStyle" data-csp-fix="true">
+								<img class="u-block" src="{{ twitterImage }}" alt="{{ prioritizedMetadata.twitterTitle }}">
 							</div>
 						</div>
 
@@ -194,11 +197,11 @@
 					<div class="SummaryCard-contentContainer TwitterCardsGrid-col--12">
 						<div class="SummaryCard-content">
 
-							<h2 class="TwitterCard-title js-cardClick tcu-textEllipse--multiline">Hands On With The Amazon Fire Phone | TechCrunch</h2>
+							<h2 class="TwitterCard-title js-cardClick tcu-textEllipse--multiline">{{ prioritizedMetadata.twitterTitle }}</h2>
 
-							<p class="tcu-resetMargin u-block TwitterCardsGrid-col--spacerTop tcu-textEllipse--multiline">Announced last month, the Amazon Fire Phone is the company’s first attempt at mobile hardware. Like its cousins in the Kindle Fire line of tablets, it runs a fork of Android and gives you…</p>
+							<p class="tcu-resetMargin u-block TwitterCardsGrid-col--spacerTop tcu-textEllipse--multiline">{{ prioritizedMetadata.twitterDescription }}</p>
 
-							<span class="u-block TwitterCardsGrid-col--spacerTop SummaryCard-destination">techcrunch.com</span>
+							<span class="u-block TwitterCardsGrid-col--spacerTop SummaryCard-destination">{{siteUrl}}</span>
 
 						</div>
 					</div>
