@@ -236,15 +236,6 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$fieldHandle = $this->model->handle;
 		$fields      = $this->element->getContent()->{$fieldHandle}['metadata'];
 		$locale      = $this->element->locale;
-		$addressInfo = $this->element->getContent()->{$fieldHandle};
-
-		$addressInfo['modelId'] = $this->model->id;
-		$addressInfoModel       = SproutSeo_AddressModel::populateModel($addressInfo);
-
-		if ($addressInfoModel->validate() == true && sproutSeo()->address->saveAddress($addressInfoModel))
-		{
-			$fields['addressId'] = $addressInfoModel->id;
-		}
 
 		// Instance model if call comes from ResaveElements task
 		// Get existing or new MetadataModel

@@ -83,7 +83,6 @@ class SproutSeo_MetadataModel extends BaseModel
 		);
 
 		$this->geographicMeta = array(
-			'addressId' => array(AttributeType::Number),
 			'region'    => array(AttributeType::String),
 			'placename' => array(AttributeType::String),
 			'position'  => array(AttributeType::String),

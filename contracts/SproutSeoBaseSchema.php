@@ -411,7 +411,8 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
-	 * @param array $contacts
+	 * @param $addressId
+	 *
 	 * @info https://schema.org/address
 	 */
 	public function addAddress($addressId)

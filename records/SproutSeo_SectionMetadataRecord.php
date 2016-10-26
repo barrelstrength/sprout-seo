@@ -43,8 +43,8 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 			'appendTitleValue'               => array(AttributeType::String),
 			'description'                    => array(AttributeType::String),
 			'keywords'                       => array(AttributeType::String),
+
 			'robots'                         => array(AttributeType::String),
-			'addressId'    				           => array(AttributeType::Number),
 			'canonical'                      => array(AttributeType::String),
 
 			'region'                         => array(AttributeType::String),

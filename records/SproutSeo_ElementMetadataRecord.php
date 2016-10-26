@@ -38,7 +38,6 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 			'robots'    => array(AttributeType::String),
 			'canonical' => array(AttributeType::String),
 
-			'addressId' => array(AttributeType::Number),
 			'region'    => array(AttributeType::String),
 			'placename' => array(AttributeType::String),
 			'latitude'  => array(AttributeType::String),
