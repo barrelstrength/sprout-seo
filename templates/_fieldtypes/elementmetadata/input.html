@@ -37,6 +37,15 @@
 	}) -}}
 </div>
 
+{% if fieldContext != 'sectionMetadata' %}
+	<div class="field">
+		<div id="sproutseo-seopreview" class="btn big sprout-livepreviewbtn" tabindex="0">
+			{{ "SEO Preview"|t }}
+			<div class="spinner hidden"></div>
+		</div>
+	</div>
+{% endif %}
+
 <div class="sproutseo-box-optimized">
 	{% set customizationSettings = values.getCustomizationSettings() %}
 	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][searchMetaSectionMetadataEnabled]'}}"
@@ -343,7 +352,6 @@
 		max-width:600px;
 	}
 </style>
-
 {% if settings.displayPreview %}{% endif %}
 
 <div id="sproutseo-preview" class="modal hidden">
@@ -564,18 +572,30 @@ feel like they are part of the natural flow of fields #}
 
 		{% endif %}
 
-		$('#sproutseo-preview .header .btngroup .btn').on('click', function(e) {
-			e.preventDefault();
+		var divScenario = $('#sproutseo-preview').length ? '' : 'fields-' ;
 
-			$currentBase = $('#sproutseo-preview .header .btngroup div.active');
+
+		$('#'+divScenario+'sproutseo-preview .header .btngroup .btn').on('click', function(e) {
+			e.preventDefault();
+			$currentBase = $('#'+divScenario+'sproutseo-preview .header .btngroup div.active');
 			currentHref = $currentBase.attr('id');
-			currentTab = '#tab-' + currentHref;
+			// Lets delete scenario prefix
+			if (divScenario == 'fields-')
+			{
+				currentHref = currentHref.replace(divScenario,'');
+			}
+			currentTab = '#'+divScenario+'tab-' + currentHref;
 
 			$currentBase.removeClass('active');
 			$(currentTab).addClass('hidden');
 
 			targetHref = $(this).attr('id');
-			targetTab = '#tab-' + targetHref;
+			if (divScenario == 'fields-')
+			{
+				targetHref = targetHref.replace(divScenario,'');
+			}
+			targetTab = '#'+divScenario+'tab-' + targetHref;
+
 
 			$(this).addClass('active');
 			$(targetTab).removeClass('hidden');
@@ -583,13 +603,13 @@ feel like they are part of the natural flow of fields #}
 
 		var previewModal;
 
-		$('#sproutseo-seopreview').on('click', function(e) {
+		$('#'+divScenario+'sproutseo-seopreview').on('click', function(e) {
 			e.preventDefault();
 
 			if (!previewModal)
 			{
-				$('#sproutseo-preview').removeClass('hidden');
-				previewModal = new Garnish.Modal($('#sproutseo-preview'), {
+				$('#'+divScenario+'sproutseo-preview').removeClass('hidden');
+				previewModal = new Garnish.Modal($('#'+divScenario+'sproutseo-preview'), {
 					resizable: true
 				});
 			}

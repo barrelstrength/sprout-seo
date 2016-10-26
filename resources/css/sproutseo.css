@@ -402,3 +402,14 @@ Address Field
 .modal .sproutaddress-body {
 	padding: 0;
 }
+
+.sprout-livepreviewbtn {
+	display: block; position: relative;
+}
+
+.sprout-livepreviewbtn:before {
+	content: 'view';
+	margin-left: -2px;
+	margin-right: -2px;
+	font-family: 'Craft';
+}
