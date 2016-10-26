@@ -75,8 +75,6 @@ class SproutSeo_MetadataModel extends BaseModel
 			'appendTitleValue' => array(AttributeType::String, 'default' => null),
 			'description'      => array(AttributeType::String),
 			'keywords'         => array(AttributeType::String),
-			'author'           => array(AttributeType::String),
-			'publisher'        => array(AttributeType::String),
 		);
 
 		$this->robotsMeta = array(

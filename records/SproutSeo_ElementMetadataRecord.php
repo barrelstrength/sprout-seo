@@ -34,8 +34,6 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 			'title'                 => array(AttributeType::String),
 			'description'           => array(AttributeType::String),
 			'keywords'              => array(AttributeType::String),
-			'author'                => array(AttributeType::String),
-			'publisher'             => array(AttributeType::String),
 
 			'robots'    => array(AttributeType::String),
 			'canonical' => array(AttributeType::String),

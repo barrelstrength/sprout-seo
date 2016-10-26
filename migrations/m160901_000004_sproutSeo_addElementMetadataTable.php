@@ -104,6 +104,17 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 				SproutSeoPlugin::log("Created column twitterTransform in `$tableName` .", LogLevel::Info, true);
 			}
 
+			// Removes publisher and author columns
+			if (craft()->db->columnExists($tableName, 'publisher'))
+			{
+				$this->dropColumn($tableName, 'publisher');
+			}
+
+			if (craft()->db->columnExists($tableName, 'author'))
+			{
+				$this->dropColumn($tableName, 'author');
+			}
+
 			// finally rename table
 			$this->renameTable($tableName, $newTableName);
 			$this->createIndex($newTableName, 'elementId,locale', true);
