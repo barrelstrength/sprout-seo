@@ -452,4 +452,24 @@ class SproutSeo_MetadataModel extends BaseModel
 
 		return $response;
 	}
+
+	/**
+	 * @return array
+	 **/
+	public function getPreviewUrl()
+	{
+		$url = $this->url;
+
+		if ($this->elementId && $this->locale)
+		{
+			$uri = craft()->elements->getElementUriForLocale($this->elementId, $this->locale);
+
+			if ($uri)
+			{
+				$url = $uri;
+			}
+		}
+
+		return UrlHelper::getSiteUrl($url);
+	}
 }

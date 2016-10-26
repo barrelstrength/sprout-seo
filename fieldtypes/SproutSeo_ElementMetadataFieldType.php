@@ -204,6 +204,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		sproutSeo()->optimize->globals           = sproutSeo()->globalMetadata->getGlobalMetadata();
 		sproutSeo()->optimize->urlEnabledSection = $urlEnabledSection;
+		sproutSeo()->optimize->urlEnabledSection->element = $this->element;
 
 		$prioritizedMetadata = sproutSeo()->optimize->getPrioritizedMetadataModel();
 
