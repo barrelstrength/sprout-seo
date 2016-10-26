@@ -7,11 +7,12 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 {
 	/**
 	 * Let's dance!
+	 *
 	 * @return bool
 	 */
 	public function safeUp()
 	{
-		$tableName = "sproutseo_metadata_sections";
+		$tableName    = "sproutseo_metadata_sections";
 		$enableCustom = false;
 
 		if (craft()->db->tableExists($tableName))
@@ -41,7 +42,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 								if ($row['handle'] == $handle)
 								{
-									$row['handle'] = "sproutSeo".ucfirst($row['handle']);
+									$row['handle'] = 'customSection' . ucfirst($row['handle']);
 									break 2;
 								}
 							}
@@ -60,11 +61,11 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 			if ($enableCustom)
 			{
-				$sproutSeo = craft()->plugins->getPlugin( 'sproutseo' );
+				$sproutSeo = craft()->plugins->getPlugin('sproutseo');
 				$settings  = $sproutSeo->getSettings();
 
 				$settings['enableCustomSections'] = 1;
-				craft()->plugins->savePluginSettings( $sproutSeo, $settings );
+				craft()->plugins->savePluginSettings($sproutSeo, $settings);
 			}
 
 			// Move globalFallback to globals
@@ -77,29 +78,29 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 			if ($globalFallback)
 			{
-				$identity = array();
+				$identity       = array();
 				$values['meta'] = json_encode($globalFallback);
 
-				$identity['name']          = $globalFallback['title'];
-				$identity['alternateName'] = "";
-				$identity['logo']          = "";
-				$identity['email']         = "";
-				$identity['telephone']     = "";
-				$identity['logo']          = "";
-				$identity['@type']         = "Organization";
-				$identity['foundingDate']  = "";
-				$identity['openingHours']  = "";
-				$identity['gender']        = "";
-				$identity['description']   = $globalFallback['description'];
-				$identity['keywords']      = $globalFallback['keywords'];
-				$identity['url']           = $globalFallback['url'];
+				$identity['name']                 = $globalFallback['title'];
+				$identity['alternateName']        = "";
+				$identity['logo']                 = "";
+				$identity['email']                = "";
+				$identity['telephone']            = "";
+				$identity['logo']                 = "";
+				$identity['@type']                = "Organization";
+				$identity['foundingDate']         = "";
+				$identity['openingHours']         = "";
+				$identity['gender']               = "";
+				$identity['description']          = $globalFallback['description'];
+				$identity['keywords']             = $globalFallback['keywords'];
+				$identity['url']                  = $globalFallback['url'];
 				$identity['organizationSubTypes'] = "";
 
 				$values['identity'] = json_encode($identity);
 
 				if ($globalFallback['robots'])
 				{
-					$robotsArray = explode(",", $globalFallback['robots']);
+					$robotsArray    = explode(",", $globalFallback['robots']);
 					$robotsSettings = array();
 
 					foreach ($robotsArray as $key => $value)
@@ -132,9 +133,9 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					'id=:id',
 					array(':id' => 1)
 				);
- 			}
+			}
 
- 			// We no longer need the Global Fallback column
+			// We no longer need the Global Fallback column
 			if (craft()->db->columnExists($tableName, 'globalFallback'))
 			{
 				$this->dropColumn($tableName, 'globalFallback');
