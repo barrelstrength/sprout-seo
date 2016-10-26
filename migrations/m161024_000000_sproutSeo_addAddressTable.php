@@ -19,7 +19,7 @@ class m161024_000000_sproutSeo_addAddressTable extends BaseMigration
 
 			craft()->db->createCommand()->createTable($tableName, array(
 					'id'                 => array('column' => ColumnType::PK, 'null' => false),
-					'modelId'            => array('column' => ColumnType::Int, 'null' => true),
+					'modelId'            => array('column' => ColumnType::Int, 'length' => 10, 'null' => true),
 					'countryCode'        => array('column' => ColumnType::Varchar, 'length' => 255, 'null' => true),
 					'administrativeArea' => array('column' => ColumnType::Varchar, 'length' => 255, 'null' => true),
 					'locality'           => array('column' => ColumnType::Varchar, 'length' => 255, 'null' => true),
