@@ -378,13 +378,27 @@ a.fieldtoggle.instructionstoggle {
 Address Field
 */
 .sproutaddressinfo-box {
-	width: 25%
+	display: inline-flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+.sproutaddressinfo-box .address-buttons {
+	order: 2;
+}
+.sproutaddressinfo-box .address-format {
+	order: 1;
+	padding-right: 20px;
 }
 
-.sproutaddress-body .text, .sproutaddress-body .select {
+.sproutaddress-body .text,
+.sproutaddress-body .select {
 	padding: 0;
 }
 
 .sproutaddress-modal {
 	overflow: visible
+}
+
+.modal .sproutaddress-body {
+	padding: 0;
 }

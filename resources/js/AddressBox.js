@@ -68,7 +68,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 		else
 		{
 			editLabel = Craft.t("Update Address");
-			this.$editButton = $("<a class='small btn right edit icon sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
+			this.$editButton = $("<a class='small btn right icon sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
 			this.$addressBox.find('.address-format').append("<div class='spinner' />");
 		}
 
@@ -130,7 +130,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 				self.$addressForm.append(response.formInputHtml);
 
 				self.$editButton.removeClass('add dashed');
-				self.$editButton.addClass('edit small right');
+				self.$editButton.addClass('small right');
 				self.$editButton.text(Craft.t("Update Address"));
 
 				Craft.cp.displayNotice(Craft.t('Address Updated.'));
