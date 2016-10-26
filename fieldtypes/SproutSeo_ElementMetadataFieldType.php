@@ -27,8 +27,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	public function getTableAttributeHtml($value)
 	{
 		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
-		$element = isset($value->element) ? $value->element : null;
-		$message = '<a><span class="status disabled"></span>';
+		$element                           = isset($value->element) ? $value->element : null;
+		$message                           = '<a><span class="status disabled"></span>';
 
 		if ($element)
 		{
@@ -51,8 +51,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 							{
 								$message = '<span class="status orange"></span>';
 
-								$elementId = $element->id;
-								$locale    = $element->locale;
+								$elementId   = $element->id;
+								$locale      = $element->locale;
 								$elementData = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
 
 								if (isset($elementData->id) && $elementData->id)
@@ -234,7 +234,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$addressInfo = $this->element->getContent()->{$fieldHandle};
 
 		$addressInfo['modelId'] = $this->model->id;
-		$addressInfoModel = SproutSeo_AddressModel::populateModel($addressInfo);
+		$addressInfoModel       = SproutSeo_AddressModel::populateModel($addressInfo);
 
 		if ($addressInfoModel->validate() == true && sproutSeo()->address->saveAddress($addressInfoModel))
 		{
@@ -477,8 +477,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				break;
 		}
 
-		// Lets store just 255 characters
-		$description = substr(trim($description), 0, 255);
+		// Just save the first 255 characters (we only output 160...)
+		$description                        = substr(trim($description), 0, 255);
 		$attributes['optimizedDescription'] = $description;
 		$attributes                         = $this->setMetaDetailsValues('description', $description, $attributes);
 
