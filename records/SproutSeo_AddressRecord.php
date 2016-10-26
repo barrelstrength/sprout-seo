@@ -10,7 +10,7 @@ class SproutSeo_AddressRecord extends BaseRecord
 	 */
 	public function getTableName()
 	{
-		return 'sproutseo_address';
+		return 'sproutseo_addresses';
 	}
 
 	/**

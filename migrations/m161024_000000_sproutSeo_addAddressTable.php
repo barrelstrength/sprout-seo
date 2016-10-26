@@ -11,7 +11,7 @@ class m161024_000000_sproutSeo_addAddressTable extends BaseMigration
 	 */
 	public function safeUp()
 	{
-		$tableName = 'sproutseo_address';
+		$tableName = 'sproutseo_addresses';
 
 		if (!craft()->db->tableExists($tableName))
 		{
