@@ -148,27 +148,17 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					);
 				}
 
-				if ($globalFallback['appendSiteName'] != null)
-				{
-					$settings['appendTitleValue'] = $globalFallback['appendSiteName'];
-				}
-
 				$values['identity'] = json_encode($identity);
 				$values['settings'] = json_encode($settings);
 
 				if ($globalFallback['twitterSite'])
 				{
-					$matches = array();
+					$username = $globalFallback['twitterSite'];
+					$username = str_replace("@", "", $username);
+					$twitterUrl  = "http://twitter.com/".$username;
 
-					preg_match("|https?://(www\.)?twitter\.com/(#!/)?@?([^/]*)|", $globalFallback['twitterSite'], $matches);
-
-					if(isset($matches[3]))
+					if($twitterUrl)
 					{
-						$username = $matches[3];
-						$twitterUrl = preg_replace('/(^|\s)@([a-z0-9_]+)/i',
-										'$1<a href="http://www.twitter.com/$2">@$2</a>',
-										 $username);
-
 						$social = array(array('profileName'=>'Twitter', 'url'=>$twitterUrl));
 
 						$values['social'] = json_encode($social);
