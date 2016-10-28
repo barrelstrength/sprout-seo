@@ -19,9 +19,42 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		{
 			// Find all Section Metadata Sections and set all the rows as custom pages
 			$rows = craft()->db->createCommand()
-				->select('id, handle, name')
+				->select('*')
 				->from($tableName)
 				->queryAll();
+
+			$enableMetaDetails = false;
+
+
+			$metaInfo = array(
+				'ogType'       ,
+				'ogSiteName'   ,
+				'ogAuthor'     ,
+				'ogPublisher'  ,
+				'ogUrl'        ,
+				'ogTitle'      ,
+				'ogDescription',
+				'ogImage'      ,
+				'ogImageSecure',
+				'ogImageWidth' ,
+				'ogImageHeight',
+				'ogImageType'  ,
+				'ogAudio'      ,
+				'ogVideo'      ,
+				'ogLocale'     ,
+				'twitterCard'                   ,
+				'twitterSite'                   ,
+				'twitterCreator'                ,
+				'twitterUrl'                    ,
+				'twitterTitle'                  ,
+				'twitterDescription'            ,
+				'twitterImage'                  ,
+				'twitterPlayer'                 ,
+				'twitterPlayerStream'           ,
+				'twitterPlayerStreamContentType',
+				'twitterPlayerWidth'            ,
+				'twitterPlayerHeight'           ,
+			);
 
 			foreach ($rows as $row)
 			{
@@ -48,6 +81,29 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 							}
 						}
 					}
+				}
+
+				if (!$enableMetaDetails)
+				{
+					foreach ($metaInfo as $meta)
+					{
+						if (isset($row[$meta]) && $row[$meta])
+						{
+							$enableMetaDetails = true;
+						}
+					}
+				}
+
+				if ($enableMetaDetails)
+				{
+					$settings = craft()->plugins->getPlugin('sproutseo')->getSettings();
+					$settings->enableMetaDetailsFields = 1;
+
+					craft()->db->createCommand()->update('plugins', array(
+						'settings' => json_encode($settings)
+					),
+						'class=:class', array(':class' => 'SproutSeo')
+					);
 				}
 
 				craft()->db->createCommand()->update($tableName,
