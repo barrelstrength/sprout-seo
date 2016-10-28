@@ -172,6 +172,57 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				);
 			}
 
+			// Migrate Sitemap info
+			$sitemapTable = "sproutseo_sitemap";
+
+			$sitempas = craft()->db->createCommand()
+				->select('*')
+				->from($sitemapTable)
+				->queryAll();
+
+			foreach ($sitempas as $sitemap)
+			{
+				$locale = craft()->i18n->getLocaleById(craft()->language);
+
+				// support just for sections (entries) and categories
+				if ($sitemap['elementGroupId'] && $sitemap['type'] == 'sections')
+				{
+					$section = craft()->db->createCommand()
+					->select('*')
+					->from('sections')
+					->where('id = :id', array(':id' => $sitemap['elementGroupId']))
+					->queryRow();
+
+					$section18n = craft()->db->createCommand()
+					->select('urlFormat')
+					->from('sections_i18n')
+					->where('sectionId = :id and locale = :locale', array(
+						':id' => $sitemap['elementGroupId'],
+						':locale' => $locale
+						)
+					)
+					->queryRow();
+
+					if ($section && $section18n)
+					{
+						// Create a new row in sections
+						craft()->db->createCommand()->insert('elements', array(
+							'urlEnabledSectionId' => $sitemap['elementGroupId'],
+							'isCustom'            => 0,
+							'enabled'             => $sitemap['enabled'],
+							'type'                => 'entries',
+							'name'                => $section['name'],
+							'handle'              => $section['handle'],
+							'url'                 => $section18n['urlFormat'],
+							'priority'            => $sitemap['priority'],
+							'changeFrequency'     => $sitemap['changeFrequency']
+						));
+					}
+				}
+			}
+
+			$this->dropTableIfExists($sitemapTable);
+
 			// We no longer need the Global Fallback column
 			if (craft()->db->columnExists($tableName, 'globalFallback'))
 			{
