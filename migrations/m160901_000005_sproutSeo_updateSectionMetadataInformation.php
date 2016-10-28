@@ -175,16 +175,16 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			// Migrate Sitemap info
 			$sitemapTable = "sproutseo_sitemap";
 
-			$sitempas = craft()->db->createCommand()
+			$sitemaps = craft()->db->createCommand()
 				->select('*')
 				->from($sitemapTable)
 				->queryAll();
 
-			foreach ($sitempas as $sitemap)
+			foreach ($sitemaps as $sitemap)
 			{
 				$locale = craft()->i18n->getLocaleById(craft()->language);
 
-				// support just for sections (entries) and categories
+				// support for sections (entries) and categories
 				if ($sitemap['elementGroupId'] && $sitemap['type'] == 'sections')
 				{
 					$section = craft()->db->createCommand()
@@ -206,7 +206,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					if ($section && $section18n)
 					{
 						// Create a new row in sections
-						craft()->db->createCommand()->insert('elements', array(
+						craft()->db->createCommand()->insert($tableName, array(
 							'urlEnabledSectionId' => $sitemap['elementGroupId'],
 							'isCustom'            => 0,
 							'enabled'             => $sitemap['enabled'],
@@ -214,6 +214,41 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 							'name'                => $section['name'],
 							'handle'              => $section['handle'],
 							'url'                 => $section18n['urlFormat'],
+							'priority'            => $sitemap['priority'],
+							'changeFrequency'     => $sitemap['changeFrequency']
+						));
+					}
+				}
+
+				if ($sitemap['elementGroupId'] && $sitemap['type'] == 'categories')
+				{
+					$category = craft()->db->createCommand()
+					->select('*')
+					->from('categorygroups')
+					->where('id = :id', array(':id' => $sitemap['elementGroupId']))
+					->queryRow();
+
+					$category18n = craft()->db->createCommand()
+					->select('urlFormat')
+					->from('categorygroups_i18n')
+					->where('groupId = :id and locale = :locale', array(
+						':id' => $sitemap['elementGroupId'],
+						':locale' => $locale
+						)
+					)
+					->queryRow();
+
+					if ($category && $category18n)
+					{
+						// Create a new row in sections
+						craft()->db->createCommand()->insert($tableName, array(
+							'urlEnabledSectionId' => $sitemap['elementGroupId'],
+							'isCustom'            => 0,
+							'enabled'             => $sitemap['enabled'],
+							'type'                => 'categories',
+							'name'                => $category['name'],
+							'handle'              => $category['handle'],
+							'url'                 => $category18n['urlFormat'],
 							'priority'            => $sitemap['priority'],
 							'changeFrequency'     => $sitemap['changeFrequency']
 						));
