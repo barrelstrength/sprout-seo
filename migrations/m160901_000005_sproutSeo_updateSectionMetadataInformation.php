@@ -107,7 +107,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				}
 
 				craft()->db->createCommand()->update($tableName,
-					array('isCustom' => 1, 'handle' => $row['handle']),
+					array('isCustom' => 1, 'handle' => $row['handle'], 'priority' => '0.5'),
 					'id = :id',
 					array(':id' => $row['id'])
 				);
