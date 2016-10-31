@@ -3,8 +3,9 @@
 {% import "sproutseo/_components/selectOther" as sproutFields %}
 {% import "sproutseo/_includes/sproutseo" as sprout %}
 
-{% set globals = craft.sproutSeo.getGlobalMetadata() %}
-{% set settings = globals.settings %}
+{% set globals          = craft.sproutSeo.getGlobalMetadata() %}
+{% set settings         = globals.settings %}
+{% set transformOptions = craft.sproutseo.getTransforms() %}
 
 {% set content %}
 
@@ -85,6 +86,16 @@
 			name: 'sproutseo[globals][settings][defaultTwitterCard]',
 			options: twitterCardOptions,
 			value: settings.defaultTwitterCard ?? 'summary',
+			errors: "",
+			required: false
+		}) }}
+
+		{{ forms.selectField({
+			label: 'Global Image transform'|t,
+			instructions: 'Select Image Transforms for the global image'|t,
+			name: 'sproutseo[globals][settings][imageTransform]',
+			options: transformOptions,
+			value: settings.imageTransform ?  settings.imageTransform : '',
 			errors: "",
 			required: false
 		}) }}

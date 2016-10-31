@@ -94,17 +94,25 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					}
 				}
 
+				$pluginSettings = craft()->db->createCommand()
+				->select('*')
+				->from('plugins')
+				->where('class=:class', array(':class' => 'SproutSeo'))
+				->queryRow();
+
+				$pluginSettings = json_decode($pluginSettings['settings'], true);
+				$pluginSettings['imageTransform'] = '';
+
 				if ($enableMetaDetails)
 				{
-					$settings = craft()->plugins->getPlugin('sproutseo')->getSettings();
-					$settings->enableMetaDetailsFields = 1;
-
-					craft()->db->createCommand()->update('plugins', array(
-						'settings' => json_encode($settings)
-					),
-						'class=:class', array(':class' => 'SproutSeo')
-					);
+					$pluginSettings['enableMetaDetailsFields'] = 1;
 				}
+
+				craft()->db->createCommand()->update('plugins', array(
+					'settings' => json_encode($pluginSettings)
+				),
+					'class=:class', array(':class' => 'SproutSeo')
+				);
 
 				craft()->db->createCommand()->update($tableName,
 					array('isCustom' => 1, 'handle' => $row['handle'], 'priority' => '0.5'),
@@ -115,13 +123,24 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				$enableCustom = true;
 			}
 
+			$pluginSettings = craft()->db->createCommand()
+			->select('*')
+			->from('plugins')
+			->where('class=:class', array(':class' => 'SproutSeo'))
+			->queryRow();
+
+			$pluginSettings = json_decode($pluginSettings['settings'], true);
+
 			if ($enableCustom)
 			{
-				$sproutSeo = craft()->plugins->getPlugin('sproutseo');
-				$settings  = $sproutSeo->getSettings();
+				// Plugin settings
+				$pluginSettings['enableCustomSections'] = 1;
 
-				$settings['enableCustomSections'] = 1;
-				craft()->plugins->savePluginSettings($sproutSeo, $settings);
+				craft()->db->createCommand()->update('plugins', array(
+					'settings' => json_encode($pluginSettings)
+				),
+					'class=:class', array(':class' => 'SproutSeo')
+				);
 			}
 
 			// Move globalFallback to globals
@@ -192,16 +211,16 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					$values['robots'] = json_encode($robots);
 				}
 
-				$settings = array();
+				$settings = array(
+					'seoDivider'         => $pluginSettings['seoDivider'],
+					'appendTitleValue'   => $enableCustom ? 1 : "",
+					'imageTransform'     => ""
+				);
 
 				if ($globalFallback['ogType'] || $globalFallback['twitterCard'])
 				{
-					$settings = array(
-						'seoDivider'         => "",
-						'appendTitleValue'   => "",
-						'defaultOgType'      => $globalFallback['ogType'],
-						'defaultTwitterCard' => $globalFallback['twitterCard'],
-					);
+					$settings['defaultOgType']      = $globalFallback['ogType'];
+					$settings['defaultTwitterCard'] = $globalFallback['twitterCard'];
 				}
 
 				$values['identity'] = json_encode($identity);
