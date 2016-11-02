@@ -216,7 +216,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				$settings = array(
 					'seoDivider'         => $pluginSettings['seoDivider'],
-					'appendTitleValue'   => $globalFallback['appendTitleValue'] == 1 ? 'sitename' : "",
+					'appendTitleValue'   => $globalFallback['appendTitleValue'] ? 'sitename' : "",
 					'twitterTransform'   => "",
 					'ogTransform'        => ""
 				);
