@@ -24,7 +24,6 @@ class SproutSeo_GlobalMetadataRecord extends BaseRecord
 			'contacts'  => array(AttributeType::Mixed),
 			'social'    => array(AttributeType::Mixed),
 			'robots'    => array(AttributeType::Mixed),
-			'addressId' => array(AttributeType::Number),
 			'settings'  => array(AttributeType::Mixed),
 		);
 	}
