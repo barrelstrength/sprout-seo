@@ -133,44 +133,8 @@
 	}
 
 </style>
-{#<div class="Tweet-card">#}
-	{#<div class="TwitterCardsGrid TwitterCard">#}
 
-			{#<div class="TwitterCardsGrid-col--12 TwitterCardsGrid-col--spacerBottom CardContent">#}
-				{#<a class="js-openLink u-block TwitterCardsGrid-col--12 TwitterCard-container TwitterCard-container--clickable SummaryCard--small" href="https://t.co/IhGdmShWH6" data-theme="light" data-card-breakpoints="w450 w400 w350 w300 w250 w200 w150 w100 w50 ">#}
-					{#<div class="SummaryCard-image TwitterCardsGrid-float--prev">#}
-						{#<div class="tcu-imageContainer tcu-imageAspect--1to1">#}
-							{#<style>#}
-								{#.tcu-image-593828669740584960 {#}
-									{#background-image: url(https://o.twimg.com/2/proxy.jpg?t=HBhTaHR0cHM6Ly9ibG9nLnR3aXR0ZXIuY29tL3NpdGVzL2FsbC90aGVtZXMvZ2F6ZWJvL2ltZy90d2l0dGVyLWJpcmQtd2hpdGUtb24tYmx1ZS5wbmcU2AQU2AQcFPABFPABAAAWABIA&s=W3GDyvpCjfGHn5PDkf77S0yZU_EvP8Ef8MQFhIJAXks) !important;#}
-									{#background-size: cover !important;#}
-								{#}#}
-							{#</style>#}
-							{#<div class="tcu-imageWrapper tcu-image-593828669740584960 js-cspForcedStyle" data-style="background-image: url(https://o.twimg.com/2/proxy.jpg?t=HBhTaHR0cHM6Ly9ibG9nLnR3aXR0ZXIuY29tL3NpdGVzL2FsbC90aGVtZXMvZ2F6ZWJvL2ltZy90d2l0dGVyLWJpcmQtd2hpdGUtb24tYmx1ZS5wbmcU2AQU2AQcFPABFPABAAAWABIA&amp;s=W3GDyvpCjfGHn5PDkf77S0yZU_EvP8Ef8MQFhIJAXks); background-size: cover;" data-csp-fix="true" style="background-image: url(&quot;https://o.twimg.com/2/proxy.jpg?t=HBhTaHR0cHM6Ly9ibG9nLnR3aXR0ZXIuY29tL3NpdGVzL2FsbC90aGVtZXMvZ2F6ZWJvL2ltZy90d2l0dGVyLWJpcmQtd2hpdGUtb24tYmx1ZS5wbmcU2AQU2AQcFPABFPABAAAWABIA&amp;s=W3GDyvpCjfGHn5PDkf77S0yZU_EvP8Ef8MQFhIJAXks&quot;); background-size: cover;">#}
-								{#<img class="u-block" src="https://o.twimg.com/2/proxy.jpg?t=HBhTaHR0cHM6Ly9ibG9nLnR3aXR0ZXIuY29tL3NpdGVzL2FsbC90aGVtZXMvZ2F6ZWJvL2ltZy90d2l0dGVyLWJpcmQtd2hpdGUtb24tYmx1ZS5wbmcU2AQU2AQcFPABFPABAAAWABIA&amp;s=W3GDyvpCjfGHn5PDkf77S0yZU_EvP8Ef8MQFhIJAXks" alt="Photo published for History of #TBT on Twitter | Twitter Blogs">#}
-							{#</div>#}
-						{#</div>#}
-
-					{#</div>#}
-					{#<div class="SummaryCard-contentContainer TwitterCardsGrid-float--prev">#}
-						{#<div class="SummaryCard-content">#}
-							{#<h2 class="TwitterCard-title js-cardClick tcu-textEllipse--multiline">History of #TBT on Twitter | Twitter Blogs</h2>#}
-
-							{#<p class="tcu-resetMargin u-block TwitterCardsGrid-col--spacerTop tcu-textEllipse--multiline">We’re celebrating the three year anniversary of #TBT by looking at some memorable Tweets.</p>#}
-
-							{#<span class="u-block TwitterCardsGrid-col--spacerTop SummaryCard-destination">blog.twitter.com</span>#}
-
-
-						{#</div>#}
-					{#</div>#}
-				{#</a>#}
-
-			{#</div>#}
-
-	{#</div>#}
-{#</div>#}
-
-{#<br>#}
+{% if prioritizedMetadata.twitterCard == 'summary_large_image' %}
 
 <div class="Tweet-card">
 	<div class="TwitterCardsGrid TwitterCard">
@@ -201,7 +165,7 @@
 
 							<p class="tcu-resetMargin u-block TwitterCardsGrid-col--spacerTop tcu-textEllipse--multiline">{{ prioritizedMetadata.twitterDescription }}</p>
 
-							<span class="u-block TwitterCardsGrid-col--spacerTop SummaryCard-destination">{{siteUrl}}</span>
+							<span class="u-block TwitterCardsGrid-col--spacerTop SummaryCard-destination">{{ siteUrl|replace("http://", '')|replace("https:://", '')|trim('/') }}</span>
 
 						</div>
 					</div>
@@ -211,3 +175,44 @@
 
 	</div>
 </div>
+
+{% else %}
+
+<div class="Tweet-card">
+	<div class="TwitterCardsGrid TwitterCard">
+
+			<div class="TwitterCardsGrid-col--12 TwitterCardsGrid-col--spacerBottom CardContent">
+				<a class="js-openLink u-block TwitterCardsGrid-col--12 TwitterCard-container TwitterCard-container--clickable SummaryCard--small" href="https://t.co/IhGdmShWH6" data-theme="light" data-card-breakpoints="w450 w400 w350 w300 w250 w200 w150 w100 w50 ">
+					<div class="SummaryCard-image TwitterCardsGrid-float--prev">
+						<div class="tcu-imageContainer tcu-imageAspect--1to1">
+							<style>
+								.tcu-image-593828669740584960 {
+									background-image: url(https://o.twimg.com/2/proxy.jpg?t=HBhTaHR0cHM6Ly9ibG9nLnR3aXR0ZXIuY29tL3NpdGVzL2FsbC90aGVtZXMvZ2F6ZWJvL2ltZy90d2l0dGVyLWJpcmQtd2hpdGUtb24tYmx1ZS5wbmcU2AQU2AQcFPABFPABAAAWABIA&s=W3GDyvpCjfGHn5PDkf77S0yZU_EvP8Ef8MQFhIJAXks) !important;
+									background-size: cover !important;
+								}
+							</style>
+							<div class="tcu-imageWrapper tcu-image-593828669740584960 js-cspForcedStyle" data-style="background-image: url(https://o.twimg.com/2/proxy.jpg?t=HBhTaHR0cHM6Ly9ibG9nLnR3aXR0ZXIuY29tL3NpdGVzL2FsbC90aGVtZXMvZ2F6ZWJvL2ltZy90d2l0dGVyLWJpcmQtd2hpdGUtb24tYmx1ZS5wbmcU2AQU2AQcFPABFPABAAAWABIA&amp;s=W3GDyvpCjfGHn5PDkf77S0yZU_EvP8Ef8MQFhIJAXks); background-size: cover;" data-csp-fix="true" style="background-image: url(&quot;https://o.twimg.com/2/proxy.jpg?t=HBhTaHR0cHM6Ly9ibG9nLnR3aXR0ZXIuY29tL3NpdGVzL2FsbC90aGVtZXMvZ2F6ZWJvL2ltZy90d2l0dGVyLWJpcmQtd2hpdGUtb24tYmx1ZS5wbmcU2AQU2AQcFPABFPABAAAWABIA&amp;s=W3GDyvpCjfGHn5PDkf77S0yZU_EvP8Ef8MQFhIJAXks&quot;); background-size: cover;">
+								<img class="u-block" src="https://o.twimg.com/2/proxy.jpg?t=HBhTaHR0cHM6Ly9ibG9nLnR3aXR0ZXIuY29tL3NpdGVzL2FsbC90aGVtZXMvZ2F6ZWJvL2ltZy90d2l0dGVyLWJpcmQtd2hpdGUtb24tYmx1ZS5wbmcU2AQU2AQcFPABFPABAAAWABIA&amp;s=W3GDyvpCjfGHn5PDkf77S0yZU_EvP8Ef8MQFhIJAXks" alt="Photo published for History of #TBT on Twitter | Twitter Blogs">
+							</div>
+						</div>
+
+					</div>
+					<div class="SummaryCard-contentContainer TwitterCardsGrid-float--prev">
+						<div class="SummaryCard-content">
+							<h2 class="TwitterCard-title js-cardClick tcu-textEllipse--multiline">{{ prioritizedMetadata.twitterCard }}History of #TBT on Twitter | Twitter Blogs</h2>
+
+							<p class="tcu-resetMargin u-block TwitterCardsGrid-col--spacerTop tcu-textEllipse--multiline">We’re celebrating the three year anniversary of #TBT by looking at some memorable Tweets.</p>
+
+							<span class="u-block TwitterCardsGrid-col--spacerTop SummaryCard-destination">blog.twitter.com</span>
+
+
+						</div>
+					</div>
+				</a>
+
+			</div>
+
+	</div>
+</div>
+
+{% endif %}
