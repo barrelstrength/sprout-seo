@@ -90,6 +90,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 						if (isset($row[$meta]) && $row[$meta])
 						{
 							$enableMetaDetails = true;
+							break;
 						}
 					}
 				}
@@ -104,9 +105,20 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				$pluginSettings['twitterTransform'] = '';
 				$pluginSettings['ogTransform']      = '';
 
+				$customizationSettings = array(
+					'searchMetaSectionMetadataEnabled'  => 0,
+					'openGraphSectionMetadataEnabled'   => 0,
+					'twitterCardSectionMetadataEnabled' => 0,
+					'geoSectionMetadataEnabled'         => 0,
+					'robotsSectionMetadataEnabled'      => 0,
+				);
+
 				if ($enableMetaDetails)
 				{
-					$pluginSettings['enableMetaDetailsFields'] = 1;
+					$pluginSettings['enableMetaDetailsFields']                  = 1;
+					$customizationSettings['openGraphSectionMetadataEnabled']   = 1;
+					$customizationSettings['twitterCardSectionMetadataEnabled'] = 1;
+					$customizationSettings['geoSectionMetadataEnabled']         = 1;
 				}
 
 				craft()->db->createCommand()->update('plugins', array(
@@ -117,8 +129,13 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				$siteName = $row['appendTitleValue'] == 1 ? craft()->getSiteName() : "";
 
-				craft()->db->createCommand()->update($tableName,
-					array('isCustom' => 1, 'handle' => $row['handle'], 'priority' => '0.5', 'appendTitleValue' => $siteName),
+				craft()->db->createCommand()->update($tableName, array(
+						'isCustom' => 1,
+						'handle'   => $row['handle'],
+						'priority' => '0.5',
+						'appendTitleValue' => $siteName,
+						'customizationSettings' => json_encode($customizationSettings)
+					),
 					'id = :id',
 					array(':id' => $row['id'])
 				);
