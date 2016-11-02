@@ -13,7 +13,7 @@
 		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutSeo/globalMetadata/saveGlobalMetadata">
 		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
-		<input type="hidden" name="globalKeys" value="settings">
+		<input type="hidden" name="globalKeys" value="settings,meta">
 
 		{% set dividerOptions = craft.sproutSeo.getSeoDividerOptions() %}
 
@@ -91,11 +91,21 @@
 		}) }}
 
 		{{ forms.selectField({
-			label: 'Global Image transform'|t,
-			instructions: 'Select Image Transforms for the global image'|t,
-			name: 'sproutseo[globals][settings][imageTransform]',
+			label: 'Twitter Image transform'|t,
+			instructions: 'Select Image Transforms for the twitter image'|t,
+			name: 'sproutseo[globals][settings][twitterTransform]',
 			options: transformOptions,
-			value: settings.imageTransform ?  settings.imageTransform : '',
+			value: settings.twitterTransform ?  settings.twitterTransform : '',
+			errors: "",
+			required: false
+		}) }}
+
+		{{ forms.selectField({
+			label: 'Og Image transform'|t,
+			instructions: 'Select Image Transforms for the facebook image'|t,
+			name: 'sproutseo[globals][settings][ogTransform]',
+			options: transformOptions,
+			value: settings.ogTransform ?  settings.ogTransform : '',
 			errors: "",
 			required: false
 		}) }}

@@ -120,6 +120,16 @@ class SproutSeo_GlobalMetadataController extends BaseController
 		$identity          = isset($postData['identity']) ? $postData['identity'] : $oldIdentity;
 		$oldSocialProfiles = isset($oldGlobals) ? $oldGlobals->social : array();
 
+		if (isset($postData['settings']['ogTransform']))
+		{
+			$identity['ogTransform'] = $postData['settings']['ogTransform'];
+		}
+
+		if (isset($postData['settings']['twitterTransform']))
+		{
+			$identity['twitterTransform'] = $postData['settings']['twitterTransform'];
+		}
+
 		$globalMetadata = new SproutSeo_MetadataModel();
 		$siteName       = craft()->getSiteName();
 
@@ -169,6 +179,8 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$globalMetadata->ogTitle       = $optimizedTitle;
 			$globalMetadata->ogDescription = $optimizedDescription;
 			$globalMetadata->ogImage       = $optimizedImage;
+			$globalMetadata->ogImage       = $optimizedImage;
+			$globalMetadata->ogTransform   = isset($identity['ogTransform']) ? $identity['ogTransform'] : null;
 			$globalMetadata->ogLocale      = $localeId;
 
 			$globalMetadata->twitterCard        = 'summary';
@@ -178,6 +190,7 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$globalMetadata->twitterTitle       = $optimizedTitle;
 			$globalMetadata->twitterDescription = $optimizedDescription;
 			$globalMetadata->twitterImage       = $optimizedImage;
+			$globalMetadata->twitterTransform   = isset($identity['twitterTransform']) ? $identity['twitterTransform'] : null;
 		}
 
 		return $globalMetadata;

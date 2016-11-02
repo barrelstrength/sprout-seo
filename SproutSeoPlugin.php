@@ -178,7 +178,8 @@ class SproutSeoPlugin extends BasePlugin
 			'enableMetaDetailsFields' => array(AttributeType::Bool, 'default' => false),
 			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => true),
 			'metadataVariable'        => array(AttributeType::String, 'default' => null),
-			'imageTransform'          => array(AttributeType::String, 'default' => null),
+			'twitterTransform'        => array(AttributeType::String, 'default' => null),
+			'ogTransform'             => array(AttributeType::String, 'default' => null),
 		);
 	}
 

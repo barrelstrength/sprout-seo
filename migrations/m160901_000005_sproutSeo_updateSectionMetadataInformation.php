@@ -101,7 +101,8 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				->queryRow();
 
 				$pluginSettings = json_decode($pluginSettings['settings'], true);
-				$pluginSettings['imageTransform'] = '';
+				$pluginSettings['twitterTransform'] = '';
+				$pluginSettings['ogTransform']      = '';
 
 				if ($enableMetaDetails)
 				{
