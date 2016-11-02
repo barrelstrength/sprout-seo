@@ -187,6 +187,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			$metadataModel = $metadataModel->setMeta($level, $codeMetadata);
 
 			$prioritizedMetadataLevels[$level] = $metadataModel;
+			$metadataModel->keywords = !is_null($metadataModel->optimizedKeywords) ? $metadataModel->optimizedKeywords : $metadataModel->keywords;
 
 			foreach ($prioritizedMetadataModel->getAttributes() as $key => $value)
 			{
