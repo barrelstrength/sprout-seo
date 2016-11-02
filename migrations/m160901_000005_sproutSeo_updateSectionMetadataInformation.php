@@ -115,8 +115,10 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					'class=:class', array(':class' => 'SproutSeo')
 				);
 
+				$siteName = $row['appendTitleValue'] == 1 ? craft()->getSiteName() : "";
+
 				craft()->db->createCommand()->update($tableName,
-					array('isCustom' => 1, 'handle' => $row['handle'], 'priority' => '0.5'),
+					array('isCustom' => 1, 'handle' => $row['handle'], 'priority' => '0.5', 'appendTitleValue' => $siteName),
 					'id = :id',
 					array(':id' => $row['id'])
 				);
@@ -214,8 +216,9 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				$settings = array(
 					'seoDivider'         => $pluginSettings['seoDivider'],
-					'appendTitleValue'   => $enableCustom ? 1 : "",
-					'imageTransform'     => ""
+					'appendTitleValue'   => $globalFallback['appendTitleValue'] == 1 ? 'sitename' : "",
+					'twitterTransform'   => "",
+					'ogTransform'        => ""
 				);
 
 				if ($globalFallback['ogType'] || $globalFallback['twitterCard'])
