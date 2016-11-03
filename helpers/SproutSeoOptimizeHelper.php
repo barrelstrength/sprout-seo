@@ -457,8 +457,8 @@ class SproutSeoOptimizeHelper
 
 		// Make our images single IDs instead of an array
 		$optimizedImage = (!empty($model->optimizedImage) and is_array($model->optimizedImage)) ? $model['optimizedImage'][0] : $model->optimizedImage;
-		$ogImage        = (!empty($model->ogImage) and is_array($model->ogImage)) ? $model['ogImage'][0] : $model->ogImage;
-		$twitterImage   = (!empty($model->twitterImage) and is_array($model->twitterImage)) ? $model['twitterImage'][0] : $model->twitterImage;
+		$ogImage        = (!empty($model->ogImage) and is_array($model->ogImage)) ? $model['ogImage'][0] : $optimizedImage;
+		$twitterImage   = (!empty($model->twitterImage) and is_array($model->twitterImage)) ? $model['twitterImage'][0] : $optimizedImage;
 
 		$model['optimizedImage'] = $optimizedImage;
 		$model['ogImage']        = $ogImage;

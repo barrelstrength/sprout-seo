@@ -67,41 +67,50 @@
 	}
 
 </style>
+
+{% set ogType = 'website' %}
+{% if prioritizedMetadata.ogImageWidth and prioritizedMetadata.ogImageHeight %}
+	{% if (prioritizedMetadata.ogImageWidth > 600) and (prioritizedMetadata.ogImageHeight > 1000)  %}
+		{% set ogType = 'article' %}
+	{% endif %}
+{% endif %}
+
 {% set ogImage = prioritizedMetadata.ogImage != null ?
 				prioritizedMetadata.ogImage :
 				craft.sproutSeo.getDefaultTwitterImage() %}
-<div class="opengraph-preview opengraph-preview-small">
-	<div class="unclickable">
 
-		<div class="preview-img">
-			<img src="{{ ogImage }}" alt="" width="158" height="158">
+{% set url = siteUrl|replace("http://", '')|replace("https:://", '')|trim('/') %}
+
+{% if ogType == 'website' %}
+	<div class="opengraph-preview opengraph-preview-small">
+		<div class="unclickable">
+
+			<div class="preview-img">
+				<img src="{{ ogImage }}" alt="" width="158" height="158">
+			</div>
+
+			<div class="preview-body">
+				<div class="og-heading">{{ prioritizedMetadata.ogTitle }}</div>
+				<div class="og-description">{{ prioritizedMetadata.ogDescription }}</div>
+				<div class="og-url">{{url}}</div>
+			</div>
+
+			<div class="unclickableMask"></div>
 		</div>
-
-		<div class="preview-body">
-			<div class="og-heading">{{ prioritizedMetadata.ogTitle }}</div>
-			<div class="og-description">{{ prioritizedMetadata.ogDescription }}</div>
-			<div class="og-url">{{siteUrl}}</div>
-		</div>
-
-		<div class="unclickableMask"></div>
 	</div>
-</div>
+{% else %}
+	<div class="opengraph-preview opengraph-preview-large">
+		<div class="unclickable">
+			<div class="preview-img">
+				<img src="{{ ogImage }}" alt="" width="526" height="275">
+			</div>
+			<div class="preview-body">
+				<div class="og-heading">{{ prioritizedMetadata.ogTitle }}</div>
+				<div class="og-description">{{ prioritizedMetadata.ogDescription }}</div>
+				<div class="og-url">{{url}}</div>
+			</div>
+			<div class="unclickableMask"></div>
+		</div>
+	</div>
 
-{#<br>#}
-
-{#<div class="opengraph-preview opengraph-preview-large">#}
-	{#<div class="unclickable">#}
-
-		{#<div class="preview-img">#}
-			{#<img src="https://external-lax3-1.xx.fbcdn.net/safe_image.php?d=AQA1nWq4jheAvUd-&amp;w=158&amp;h=158&amp;url=https%3A%2F%2Fstraightupcraft.com%2Fcontent%2Fgallery%2Flogo-olive.png&amp;cfs=1&amp;upscale=1" alt="" width="526" height="275">#}
-		{#</div>#}
-
-		{#<div class="preview-body">#}
-			{#<div class="og-heading">Tutorials for Craft CMS</div>#}
-			{#<div class="og-description">Learn Craft CMS and design easy to use, stunning websites and web applications for your business and your clients.</div>#}
-			{#<div class="og-url">straightupcraft.com</div>#}
-		{#</div>#}
-
-		{#<div class="unclickableMask"></div>#}
-	{#</div>#}
-{#</div>#}
+{% endif %}
