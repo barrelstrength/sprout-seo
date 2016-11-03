@@ -428,7 +428,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				$keywords     = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
 				$rake         = new Rake();
 				$rakeKeywords = array_keys($rake->extract($keywords));
-				$keywords     = implode(',', $rakeKeywords);
+				$fiveKeywords = array_slice($rakeKeywords, 0, 5);
+				$keywords     = implode(',', $fiveKeywords);
 
 				break;
 		}
