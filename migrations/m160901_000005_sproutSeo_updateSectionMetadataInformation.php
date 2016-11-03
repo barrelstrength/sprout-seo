@@ -133,6 +133,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 						'isCustom' => 1,
 						'handle'   => $row['handle'],
 						'priority' => '0.5',
+						'enabled'  => 1,
 						'appendTitleValue' => $siteName,
 						'customizationSettings' => json_encode($customizationSettings)
 					),
