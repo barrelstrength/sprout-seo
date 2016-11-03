@@ -129,6 +129,11 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				$siteName = $row['appendTitleValue'] == 1 ? craft()->getSiteName() : "";
 
+				if ($pluginSettings['seoDivider'] && $siteName)
+				{
+					$siteName = $pluginSettings['seoDivider']. " ".$siteName ;
+				}
+
 				craft()->db->createCommand()->update($tableName, array(
 						'isCustom' => 1,
 						'handle'   => $row['handle'],
