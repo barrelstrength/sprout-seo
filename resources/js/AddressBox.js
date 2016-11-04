@@ -165,6 +165,10 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 				self.$editButton.addClass('small right');
 				self.$editButton.text(Craft.t("Update Address"));
 
+				var $buttons = $("<div class='address-buttons'/>").appendTo(self.$addressBox);
+				self.$clearButton = $("<span class='clear-button'><a class='btn icon sproutaddress-edit small right' href=''>Clear</a></span>").appendTo($buttons);
+				self.addListener(self.$clearButton, 'click', 'clearAddressBox');
+
 				Craft.cp.displayNotice(Craft.t('Address Updated.'));
 
 				this.modal.hide();
