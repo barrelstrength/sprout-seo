@@ -413,3 +413,8 @@ Address Field
 	margin-right: -2px;
 	font-family: 'Craft';
 }
+
+.clear-button {
+	display: block;
+	padding-top: 50px;
+}

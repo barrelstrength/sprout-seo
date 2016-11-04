@@ -16,7 +16,7 @@ class SproutSeo_AddressController extends BaseController
 	 * @var array
 	 */
 
-	protected $allowAnonymous = array('actionGetAddressFormFields');
+	protected $allowAnonymous = array('actionGetAddressFormFields', 'actionDeleteAddress');
 
 	public function init()
 	{
@@ -147,6 +147,67 @@ class SproutSeo_AddressController extends BaseController
 		{
 			$result['result'] = false;
 			$result['errors'] = $addressInfoModel->getErrors();
+		}
+
+		$this->returnJson($result);
+	}
+
+	public function actionDeleteAddress()
+	{
+		$this->requireAjaxRequest();
+		$this->requirePostRequest();
+
+		$addressId        = null;
+		$addressInfoModel = null;
+
+		if (craft()->request->getPost('addressInfoId') != null)
+		{
+			$addressId = craft()->request->getPost('addressInfoId');
+			$addressInfoModel = sproutSeo()->address->getAddressById($addressId);
+		}
+
+		$result = array(
+			'result' => true,
+			'errors' => array()
+		);
+
+		try
+		{
+			$response = false;
+
+			if (isset($addressInfoModel->id) && $addressInfoModel->id)
+			{
+				$addressRecord = new SproutSeo_AddressRecord;
+				$response = $addressRecord->deleteByPk($addressInfoModel->id);
+			}
+
+			$globals = craft()->db->createCommand()
+					->select('*')
+					->from('sproutseo_metadata_globals')
+					->queryRow();
+
+			if ($globals && $response)
+			{
+				$identity = $globals['identity'];
+				$identity = json_decode($identity, true);
+
+				if ($identity['addressId'] != null)
+				{
+					$identity['addressId'] = "";
+					$globals['identity']   = json_encode($identity);
+
+					craft()->db->createCommand()->update('sproutseo_metadata_globals',
+							$globals,
+							'id=:id',
+							array(':id' => 1)
+						);
+				}
+			}
+
+		} catch (Exception $e)
+		{
+			$result['result'] = false;
+			$result['errors'] = $e->getMessage();
 		}
 
 		$this->returnJson($result);

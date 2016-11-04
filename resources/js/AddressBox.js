@@ -38,6 +38,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 	$none: null,
 	modal: null,
 	$editButton: null,
+	$clearButton: null,
 	init: function($addressBox, settings)
 	{
 		this.$addressBox = $addressBox;
@@ -54,6 +55,7 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 		this._renderAddress();
 
 		this.addListener(this.$editButton, 'click', 'editAddressBox');
+		this.addListener(this.$clearButton, 'click', 'clearAddressBox');
 	},
 	_renderAddress: function()
 	{
@@ -70,8 +72,9 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 			editLabel = Craft.t("Update Address");
 			this.$editButton = $("<a class='small btn right icon sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
 			this.$addressBox.find('.address-format').append("<div class='spinner' />");
-		}
 
+			this.$clearButton = $("<span class='clear-button'><a class='small btn right icon sproutaddress-edit' href=''>Clear</a></span>").appendTo($buttons);
+		}
 
 		$("<div class='address-format' />").appendTo(this.$addressBox);
 
@@ -105,12 +108,41 @@ Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 			}, this.$target);
 
 	},
+	clearAddressBox: function (ev) {
+
+			ev.preventDefault();
+			var self = this;
+			var data = {addressInfoId: self.addressInfoId};
+
+		  Craft.postActionRequest('sproutSeo/address/deleteAddress', data, $.proxy(function (response) {
+		  	if (response.result == true)
+		  	{
+		  		self.$editButton.removeClass('small right');
+		  		self.$editButton.addClass('add dashed');
+		  		self.$editButton.text(Craft.t("Add Address"));
+
+		  		self.addressInfoId = null;
+		  		self.$clearButton.remove();
+
+		  		this._getAddressFormFields();
+
+		  		Craft.cp.displayNotice(Craft.t('Address Deleted.'));
+		  	}
+		  	else
+		  	{
+		  		onError(response.errors);
+		  	}
+		  }, this))
+
+	},
 	_getAddressFormFields: function ()
 	{
 		var self = this;
 		Craft.postActionRequest('sproutSeo/address/getAddressFormFields', { addressInfoId: this.addressInfoId, namespace: this.settings.namespace }, $.proxy(function (response) {
 			this.$addressBox.find('.address-format .spinner').remove();
+			self.$addressBox.find('.address-format').empty();
 			self.$addressBox.find('.address-format').append(response.html);
+			self.$addressForm.empty();
 			self.$addressForm.append(response.countryCodeHtml);
 			self.$addressForm.append(response.formInputHtml);
 
