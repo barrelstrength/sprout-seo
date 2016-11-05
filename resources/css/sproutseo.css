@@ -93,6 +93,10 @@
 	color: #fff;
 }
 
+.matrixblock .sproutseo-info:before {
+	background-color: #dcdcdc;
+}
+
 /* Add support for multiline Craft.InfoIcon body content */
 .info .sprout-info-body {
 	display: none;
