@@ -7,7 +7,41 @@
 
 	<th style="padding-left:9px;width:35%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here. Enable each "~name~" you want to include in your sitemap. Prepare fallback Metadata if any meta values are not present for content within the matching domain section. Identify the Main Entity schema you wish to match to this URL."|t }}</span></th>
 	<th style="width:50%;">{{ "URL Pattern"|t }}</th>
-	<th style="width:15%;">{{ "Active Metadata?"|t }} {% if loop.index == 1 %} <span class="info">{{ "Each icon represents a type of metadata. A green icon indicates that this type of metadata is in place." }}</span>{% endif %}</th>
+	<th style="width:15%;">{{ "Active Metadata?"|t }} {% if loop.index == 1 %}
+
+			<span class="info">
+				<div class="sprout-info-body">
+					<p><i>{{ "A green icon indicates that a type of metadata has been setup."|t }}</i></p>
+
+					<h6>{{ "Entry Metadata Status"|t }}</h6>
+					<ul>
+						<li><span class="sproutseo-icon icon-edit sproutseo-status-pass">&#xe805;</span> {{ "Element Metadata field added"|t }}</li>
+					</ul>
+
+					<p><i>{{ "An Element Metadata field will help ensure you have unique metadata on all content you publish."|t }}</i></p>
+
+
+					<h6>{{ "Sitemap Status"|t }}</h6>
+					<ul>
+						<li><span class="sproutseo-icon icon-sitemap sproutseo-status-pass">&#xf0e8;</span> {{ "Sitemap setup"|t }}</li>
+					</ul>
+
+					<p><i>{{ "Display URLs for all content in this section in the XML Sitemap."|t }}</i></p>
+
+					<h6>{{ "Section Metadata Status"|t }}</h6>
+					<ul>
+						<li><span class="sproutseo-icon icon-search sproutseo-status-pass">&#xe800;</span> {{ "Search metadata exists"|t }}</li>
+						<li><span class="sproutseo-icon icon-facebook sproutseo-status-pass">&#xe802;</span> {{ "Open Graph metadata exists"|t }}</li>
+						<li><span class="sproutseo-icon icon-twitter sproutseo-status-pass">&#xe807;</span> {{ "Twitter Card metadata exists"|t }}</li>
+					</ul>
+
+					<p><i>{{ "Display Section-specific metadata in Search and Social Sharing."|t }}</i></p>
+
+
+				</div>
+			</span>
+
+		{% endif %}</th>
 	<th class="thin"></th>
 
 {% endblock %}
@@ -25,7 +59,6 @@
 		{% endif %}
 	</td>
 	<td>
-
 		<div class="sprout-metadata-status" style="color:#ccc;">
 			<span class="sproutseo-icon icon-search
 			{% if ((sectionMetadata.optimizedTitle or sectionMetadata.title) or

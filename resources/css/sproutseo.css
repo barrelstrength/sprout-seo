@@ -188,10 +188,10 @@ ul.sproutseo-metalevel-list li {
 }
 
 .sprout-metadata-status .icon-sitemap {
-
+	padding-left: 21px;
 }
 .sprout-metadata-status .icon-edit {
-	padding-left: 21px;
+	padding-left: 0;
 	top: 1px;
 }
 .sprout-metadata-status .icon-search {
