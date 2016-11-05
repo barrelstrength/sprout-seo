@@ -35,7 +35,7 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 
 	public function getElementType()
 	{
-		return ElementType::Entry;
+		return ElementType::Category;
 	}
 
 	public function getMatchedElementVariable()
