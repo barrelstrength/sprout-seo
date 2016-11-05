@@ -91,21 +91,21 @@
 		}) }}
 
 		{{ forms.selectField({
-			label: 'Twitter Image transform'|t,
-			instructions: 'Select Image Transforms for the twitter image'|t,
-			name: 'sproutseo[globals][settings][twitterTransform]',
+			label: 'Default Open Graph Image Transform'|t,
+			instructions: 'Select Image Transforms for the facebook image'|t,
+			name: 'sproutseo[globals][settings][ogTransform]',
 			options: transformOptions,
-			value: settings.twitterTransform ?  settings.twitterTransform : '',
+			value: settings.ogTransform ? settings.ogTransform : '',
 			errors: "",
 			required: false
 		}) }}
 
 		{{ forms.selectField({
-			label: 'Og Image transform'|t,
-			instructions: 'Select Image Transforms for the facebook image'|t,
-			name: 'sproutseo[globals][settings][ogTransform]',
+			label: 'Default Twitter Image Transform'|t,
+			instructions: 'Select Image Transforms for the twitter image'|t,
+			name: 'sproutseo[globals][settings][twitterTransform]',
 			options: transformOptions,
-			value: settings.ogTransform ?  settings.ogTransform : '',
+			value: settings.twitterTransform ? settings.twitterTransform : '',
 			errors: "",
 			required: false
 		}) }}
