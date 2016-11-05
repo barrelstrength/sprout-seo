@@ -177,6 +177,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$values['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($values->robots);
 
 		// Set elementType
+		// @todo - rename this variable, it is specific for Assets
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
 		// Cleanup the namespace around the $name handle
@@ -189,8 +190,9 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		$settings = $this->getSettings();
 
-		// Get the prioritized metadata at this level so we can use it as placeholder text
 		/**
+		 * Get the prioritized metadata at this level so we can use it as placeholder text
+		 *
 		 * @var SproutSeoBaseUrlEnabledSectionType $urlEnabledSectionType
 		 */
 		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($this->element->getElementType());
