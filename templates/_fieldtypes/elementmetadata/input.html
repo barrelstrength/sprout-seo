@@ -37,15 +37,6 @@
 	}) -}}
 </div>
 
-{% if fieldContext != 'sectionMetadata' %}
-	<div class="field">
-		<div id="sproutseo-seopreview" class="btn big sprout-livepreviewbtn" tabindex="0">
-			{{ "SEO Preview"|t }}
-			<div class="spinner hidden"></div>
-		</div>
-	</div>
-{% endif %}
-
 <div class="sproutseo-box-optimized">
 	{% set customizationSettings = values.getCustomizationSettings() %}
 	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][searchMetaSectionMetadataEnabled]'}}"
@@ -398,8 +389,22 @@ feel like they are part of the natural flow of fields #}
 {% includeJsResource  "sproutseo/js/lib/jquery.caret.min.js" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
 
+{#{% if fieldContext != 'sectionMetadata' %}#}
+	{#<div class="field">#}
+		{#<div id="sproutseo-seopreview" class="btn big sprout-livepreviewbtn">#}
+			{#{{ "SEO Preview"|t }}#}
+			{#<div class="spinner hidden"></div>#}
+		{#</div>#}
+	{#</div>#}
+
+{#{% endif %}#}
 
 {% includejs %}
+
+	{% if fieldContext != 'sectionMetadata' %}
+		$('.livepreviewbtn').parent().after('<div id="fields-sproutseo-seopreview" class="btn big sprout-livepreviewbtn"> {{ "SEO Preview"|t }}<div class="spinner hidden"></div></div>');
+	{% endif %}
+
 	var items = {{ schemaSubtypes|json_encode|raw }};
 	var entryValues = {{ mainEntityValues|json_encode|raw }};
 	$( document ).ready(function() {

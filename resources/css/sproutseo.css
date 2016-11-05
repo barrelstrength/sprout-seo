@@ -404,14 +404,17 @@ Address Field
 }
 
 .sprout-livepreviewbtn {
-	display: block; position: relative;
+	display: block;
+	position: relative;
+	margin-top:13px;
 }
 
 .sprout-livepreviewbtn:before {
 	content: 'view';
-	margin-left: -2px;
-	margin-right: -2px;
 	font-family: 'Craft';
+	font-size: 13px;
+	margin-left: -2px;
+	vertical-align: middle;
 }
 
 .clear-button {
