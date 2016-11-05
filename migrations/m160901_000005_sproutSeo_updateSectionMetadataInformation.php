@@ -127,19 +127,14 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					'class=:class', array(':class' => 'SproutSeo')
 				);
 
-				$siteName = $row['appendTitleValue'] == 1 ? craft()->getSiteName() : "";
-
-				if ($pluginSettings['seoDivider'] && $siteName)
-				{
-					$siteName = $pluginSettings['seoDivider']. " ".$siteName ;
-				}
+				$appendTitleValue = $row['appendTitleValue'] == 1 ? "{divider} {siteName}" : "";
 
 				craft()->db->createCommand()->update($tableName, array(
 						'isCustom' => 1,
 						'handle'   => $row['handle'],
 						'priority' => '0.5',
 						'enabled'  => 1,
-						'appendTitleValue' => $siteName,
+						'appendTitleValue' => $appendTitleValue,
 						'customizationSettings' => json_encode($customizationSettings)
 					),
 					'id = :id',
