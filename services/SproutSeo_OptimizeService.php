@@ -189,7 +189,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$prioritizedMetadataModel->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
 		$prioritizedMetadataModel->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
 
-		$schemaTypeId = null;
+		$schemaTypeId         = null;
 		$schemaOverrideTypeId = null;
 
 		foreach ($prioritizedMetadataLevels as $level => $model)
@@ -199,7 +199,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			$metadataModel = $metadataModel->setMeta($level, $codeMetadata);
 
 			$prioritizedMetadataLevels[$level] = $metadataModel;
-			$metadataModel->keywords = !is_null($metadataModel->optimizedKeywords) ? $metadataModel->optimizedKeywords : $metadataModel->keywords;
+			$metadataModel->keywords           = !is_null($metadataModel->optimizedKeywords) ? $metadataModel->optimizedKeywords : $metadataModel->keywords;
 
 			foreach ($prioritizedMetadataModel->getAttributes() as $key => $value)
 			{
@@ -214,8 +214,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 				// then we should make sure the $prioritizedMetadataModel also has a null value
 				// otherwise we still keep our lower level value
 				if ($key == 'schemaOverrideTypeId' &&
-						$metadataModel['schemaTypeId'] != null &&
-						$metadataModel->getAttribute($key) == null)
+					$metadataModel['schemaTypeId'] != null &&
+					$metadataModel->getAttribute($key) == null
+				)
 				{
 					$prioritizedMetadataModel[$key] = null;
 				}
@@ -282,11 +283,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// Website Identity Place
 		if (isset($identity['addressId']) && $identity['addressId'])
 		{
-			$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchema();
+			$placeSchema             = new SproutSeo_WebsiteIdentityPlaceSchema();
 			$placeSchema->addContext = true;
 
-			$placeSchema->globals = $this->globals;
-			$placeSchema->element = $this->urlEnabledSection->element;
+			$placeSchema->globals                  = $this->globals;
+			$placeSchema->element                  = $this->urlEnabledSection->element;
 			$placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$schema['place'] = $placeSchema;
@@ -311,9 +312,10 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 			if ($schemaUniqueKey)
 			{
-				$schema             = $this->getSchemaByUniqueKey($schemaUniqueKey);
-				$schema->attributes = $this->prioritizedMetadataModel->getAttributes();
-				$schema->addContext = true;
+				$schema               = $this->getSchemaByUniqueKey($schemaUniqueKey);
+				$schema->attributes   = $this->prioritizedMetadataModel->getAttributes();
+				$schema->addContext   = true;
+				$schema->isMainEntity = true;
 
 				$schema->globals                  = $this->globals;
 				$schema->element                  = $this->urlEnabledSection->element;

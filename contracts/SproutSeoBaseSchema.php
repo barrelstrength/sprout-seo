@@ -12,6 +12,11 @@ abstract class SproutSeoBaseSchema
 	public $addContext = false;
 
 	/**
+	 * @var bool
+	 */
+	public $isMainEntity = false;
+
+	/**
 	 * We build our Structured Data object here using the addProperty methods
 	 * and can later convert this into JsonLD using the ->getJsonLd() method
 	 *
@@ -226,6 +231,15 @@ abstract class SproutSeoBaseSchema
 
 	/**
 	 * @param $propertyName
+	 * @param $attributes
+	 */
+	public function removeProperty($propertyName)
+	{
+		unset($this->structuredData[$propertyName]);
+	}
+
+	/**
+	 * @param $propertyName
 	 * @param $string
 	 */
 	public function addText($propertyName, $string)
@@ -346,7 +360,7 @@ abstract class SproutSeoBaseSchema
 			$meta = $this->prioritizedMetadataModel;
 
 			$image = array(
-				"url"    => $meta->optimizedImage,
+				"url"    => $imageId,
 				"width"  => $meta->ogImageWidth,
 				"height" => $meta->ogImageHeight
 			);
@@ -485,12 +499,12 @@ abstract class SproutSeoBaseSchema
 	/**
 	 * @param string $type
 	 */
-	public function addMainEntityOfPage($type = 'Thing')
+	public function addMainEntityOfPage()
 	{
 		$meta = $this->prioritizedMetadataModel;
 
 		$mainEntity       = new SproutSeo_MainEntityOfPageSchema();
-		$mainEntity->type = $type;
+		$mainEntity->type = 'WebPage';
 		$mainEntity->id   = $meta->canonical;
 
 		$mainEntity->prioritizedMetadataModel = $this->prioritizedMetadataModel;

@@ -6,11 +6,6 @@ class SproutSeo_MainEntityOfPageSchema extends SproutSeoBaseSchema
 	/**
 	 * @var
 	 */
-	public $type = 'Thing';
-
-	/**
-	 * @var
-	 */
 	public $id;
 
 	/**
@@ -26,7 +21,7 @@ class SproutSeo_MainEntityOfPageSchema extends SproutSeoBaseSchema
 	 */
 	public function getType()
 	{
-		return $this->type;
+		return 'WebPage';
 	}
 
 	/**

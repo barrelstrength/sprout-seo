@@ -34,8 +34,11 @@ class SproutSeo_CreativeWorkSchema extends SproutSeo_ThingSchema
 	{
 		parent::addProperties();
 
+		$identity = $this->globals['identity'];
 		$element  = $this->element;
 		$metadata = $this->prioritizedMetadataModel;
+
+		$this->removeProperty('title');
 
 		$this->addText('headline', $metadata->optimizedTitle);
 		$this->addText('keywords', $metadata->optimizedKeywords);
@@ -57,6 +60,18 @@ class SproutSeo_CreativeWorkSchema extends SproutSeo_ThingSchema
 
 			$this->addProperty('author', $person->getSchema());
 			$this->addProperty('creator', $person->getSchema());
+		}
+
+		if ($identityType = $identity['@type'])
+		{
+			// Determine if we have an Organization or Person Schema Type
+			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
+
+			$identitySchema = new $schemaModel();
+
+			$identitySchema->globals                  = $this->globals;
+
+			$this->addProperty('publisher', $identitySchema->getSchema());
 		}
 	}
 }
