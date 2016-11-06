@@ -3,6 +3,7 @@
 namespace Craft;
 
 require_once 'Optimize_TokenParser.php';
+require_once 'SproutSeo_TokenParser.php';
 
 class SproutSeoTwigExtension extends \Twig_Extension
 {
@@ -19,7 +20,8 @@ class SproutSeoTwigExtension extends \Twig_Extension
 	public function getTokenParsers()
 	{
 		return array(
-			new Optimize_TokenParser()
+			new Optimize_TokenParser(),
+			new SproutSeo_TokenParser()
 		);
 	}
 
