@@ -1,5 +1,4 @@
-if (typeof Craft.SproutSeo === typeof undefined)
-{
+if (typeof Craft.SproutSeo === typeof undefined) {
 	Craft.SproutSeo = {};
 }
 (function($) {
@@ -8,7 +7,7 @@ if (typeof Craft.SproutSeo === typeof undefined)
 	$.extend(Craft.SproutSeo,
 	{
 		initFields: function($container) {
-			$('.sproutaddressinfo-box', $container).SproutSeoField();
+			$('.sproutaddressinfo-box', $container).SproutAddressBox();
 		}
 	});
 
@@ -18,167 +17,182 @@ if (typeof Craft.SproutSeo === typeof undefined)
 
 	$.extend($.fn,
 	{
-		SproutSeoField: function() {
+		SproutAddressBox: function() {
+			$container = $(this);
 			return this.each(function() {
-				if (!$.data(this, 'sproutaddress-edit')) {
-					new Craft.SproutSeo.AddressBox(this);
-				}
+				console.log('sumpin sumpin');
+				new Craft.SproutSeo.AddressBox($container);
 			});
-		},
+		}
 	});
 
+	Craft.SproutSeo.AddressBox = Garnish.Base.extend({
 
-Craft.SproutSeo.AddressBox = Garnish.Base.extend({
+		$addressBox: null,
 
-	$addressBox: null,
-	addressInfoId: null,
-	$addressForm: null,
-	countryCode: null,
-	actionUrl: null,
-	$none: null,
-	modal: null,
-	$editButton: null,
-	$clearButton: null,
-	init: function($addressBox, settings)
-	{
-		this.$addressBox = $addressBox;
+		$addButtons:    null,
+		$editButtons:   null,
+		$addressFormat: null,
 
-		this.settings = settings;
+		$addButton:    null,
+		$updateButton: null,
+		$clearButton:  null,
 
-		if (this.settings.namespace == null)
-		{
-			this.settings.namespace = 'address';
-		}
+		addressInfoId: null,
+		$addressForm:  null,
+		countryCode:   null,
+		actionUrl:     null,
+		$none:         null,
+		modal:         null,
 
-		this.addressInfoId = this.$addressBox.data('addressinfoid');
+		init: function($addressBox, settings) {
 
-		this._renderAddress();
+			this.$addressBox = $addressBox;
 
-		this.addListener(this.$editButton, 'click', 'editAddressBox');
-		this.addListener(this.$clearButton, 'click', 'clearAddressBox');
-	},
-	_renderAddress: function()
-	{
-		var $buttons = $("<div class='address-buttons'/>").appendTo(this.$addressBox);
+			this.$addButton    = this.$addressBox.find('.address-add-button a');
+			this.$updateButton = this.$addressBox.find('.address-edit-buttons a.update-button');
+			this.$clearButton  = this.$addressBox.find('.address-edit-buttons a.clear-button');
 
-		var editLabel = '';
-		if (this.addressInfoId == '' || this.addressInfoId == null)
-		{
-			editLabel = Craft.t("Add Address");
-			this.$editButton = $("<a class='btn add icon dashed sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
-			this.$clearButton = $("<div></div>").appendTo($buttons);
-		}
-		else
-		{
-			editLabel = Craft.t("Update Address");
-			this.$editButton = $("<a class='small btn right icon sproutaddress-edit' href=''>" + editLabel + "</a>").appendTo($buttons);
-			this.$addressBox.find('.address-format').append("<div class='spinner' />");
+			this.$addButtons    = this.$addressBox.find('.address-add-button');
+			this.$editButtons   = this.$addressBox.find('.address-edit-buttons');
+			this.$addressFormat = this.$addressBox.find('.address-format');
 
-			this.$clearButton = $("<span class='clear-button'><a class='small btn right icon sproutaddress-edit' href=''>Clear</a></span>").appendTo($buttons);
-		}
+			this.settings = settings;
 
-		$("<div class='address-format' />").appendTo(this.$addressBox);
+			if (this.settings.namespace == null) {
+				this.settings.namespace = 'address';
+			}
 
-		this.$none = $("<div style='display: none' />").appendTo(this.$addressBox);
-		this.$addressForm = $("<div class='sproutaddress-form' />").appendTo(this.$none);
+			this.addressInfoId = this.$addressBox.data('addressinfoid');
 
-		this._getAddressFormFields();
+			this._renderAddress();
 
-		this.actionUrl = Craft.getActionUrl('sproutSeo/address/changeForm');
-	},
-	editAddressBox: function (ev) {
+			this.addListener(this.$addButton, 'click', 'editAddressBox');
+			this.addListener(this.$updateButton, 'click', 'editAddressBox');
+			this.addListener(this.$clearButton, 'click', 'clearAddressBox');
+		},
+
+		_renderAddress: function() {
+
+			if (this.addressInfoId == '' || this.addressInfoId == null) {
+				this.$addButtons.removeClass('hidden');
+				this.$editButtons.addClass('hidden');
+				this.$addressFormat.addClass('hidden');
+			}
+			else {
+
+				this.$addButtons.addClass('hidden');
+				this.$editButtons.removeClass('hidden');
+				this.$addressFormat.removeClass('hidden');
+			}
+
+			this.$addressForm = $("<div class='sproutaddress-form hidden' />").appendTo(this.$addressBox);
+
+			this._getAddressFormFields();
+
+			this.actionUrl = Craft.getActionUrl('sproutSeo/address/changeForm');
+		},
+
+		editAddressBox: function(ev) {
 
 			ev.preventDefault();
 
-		  var source = null;
-			if (this.settings.source != null)
-			{
+			var source = null;
+
+			if (this.settings.source != null) {
 				source = this.settings.source;
 			}
+
 			this.$target = $(ev.currentTarget);
 
 			var countryCode = this.$addressForm.find('.sproutaddress-country-select select').val();
 
 			this.modal = new Craft.SproutSeo.EditAddressModal(this.$addressForm, {
-				onSubmit: $.proxy(this, '_getAddress'),
-				countryCode: countryCode,
-				actionUrl: this.actionUrl,
+				onSubmit:      $.proxy(this, '_getAddress'),
+				countryCode:   countryCode,
+				actionUrl:     this.actionUrl,
 				addressInfoId: this.addressInfoId,
-				namespace: this.settings.namespace,
-				source: source
+				namespace:     this.settings.namespace,
+				source:        source
 			}, this.$target);
 
-	},
-	clearAddressBox: function (ev) {
+		},
+
+		clearAddressBox: function(ev) {
 
 			ev.preventDefault();
+
 			var self = this;
-			var data = {addressInfoId: self.addressInfoId};
+			var data = { addressInfoId: self.addressInfoId };
 
-		  Craft.postActionRequest('sproutSeo/address/deleteAddress', data, $.proxy(function (response) {
-		  	if (response.result == true)
-		  	{
-		  		self.$editButton.removeClass('small right');
-		  		self.$editButton.addClass('add dashed');
-		  		self.$editButton.text(Craft.t("Add Address"));
+			// @todo - grab address form and update input fields on the page so
+			// the delete happens when the Website Identity is submitted, not immediately
+			// this.$addressBox.find('.sproutaddress-form')
 
-		  		self.addressInfoId = null;
-		  		self.$clearButton.html("<div></div>");
+			Craft.postActionRequest('sproutSeo/address/deleteAddress', data, $.proxy(function(response) {
+				if (response.result == true) {
 
-		  		this._getAddressFormFields();
+					this.$addButtons.removeClass('hidden');
+					this.$editButtons.addClass('hidden');
+					this.$addressFormat.addClass('hidden');
 
-		  		Craft.cp.displayNotice(Craft.t('Address Deleted.'));
-		  	}
-		  	else
-		  	{
-		  		onError(response.errors);
-		  	}
-		  }, this))
+					self.addressInfoId = null;
 
-	},
-	_getAddressFormFields: function ()
-	{
-		var self = this;
-		Craft.postActionRequest('sproutSeo/address/getAddressFormFields', { addressInfoId: this.addressInfoId, namespace: this.settings.namespace }, $.proxy(function (response) {
-			this.$addressBox.find('.address-format .spinner').remove();
-			self.$addressBox.find('.address-format').empty();
-			self.$addressBox.find('.address-format').append(response.html);
-			self.$addressForm.empty();
-			self.$addressForm.append(response.countryCodeHtml);
-			self.$addressForm.append(response.formInputHtml);
+					this._getAddressFormFields();
 
-			Craft.SproutSeo.initFields(self.$addressBox);
-		}, this))
-	},
-	_getAddress: function(data, onError)
-	{
-		var self = this;
+					Craft.cp.displayNotice(Craft.t('Address Deleted.'));
+				}
+				else {
+					onError(response.errors);
+				}
+			}, this))
 
-		Craft.postActionRequest('sproutSeo/address/getAddress', data, $.proxy(function (response) {
-			if (response.result == true)
-			{
-				self.$addressBox.find('.address-format').html(response.html);
+		},
+
+		_getAddressFormFields: function() {
+
+			var self = this;
+
+			Craft.postActionRequest('sproutSeo/address/getAddressFormFields', {
+				addressInfoId: this.addressInfoId,
+				namespace:     this.settings.namespace
+			}, $.proxy(function(response) {
+
+				this.$addressBox.find('.address-format .spinner').remove();
+				self.$addressBox.find('.address-format').empty();
+				self.$addressBox.find('.address-format').append(response.html);
 				self.$addressForm.empty();
 				self.$addressForm.append(response.countryCodeHtml);
 				self.$addressForm.append(response.formInputHtml);
 
-				self.$editButton.removeClass('add dashed');
-				self.$editButton.addClass('small right');
-				self.$editButton.text(Craft.t("Update Address"));
+			}, this))
+		},
 
-				self.$clearButton.html("<span class='clear-button'><a class='btn icon sproutaddress-edit small right' href=''>Clear</a></span>");
+		_getAddress: function(data, onError) {
 
-				Craft.cp.displayNotice(Craft.t('Address Updated.'));
+			var self = this;
 
-				this.modal.hide();
-				this.modal.destroy();
-			}
-			else
-			{
-				Garnish.shake(this.modal.$form);
-				onError(response.errors);
-			}
-		}, this))
-	}
-})
+			Craft.postActionRequest('sproutSeo/address/getAddress', data, $.proxy(function(response) {
+				if (response.result == true) {
+
+					this.$addressBox.find('.address-format').html(response.html);
+					self.$addressForm.empty();
+					self.$addressForm.append(response.countryCodeHtml);
+					self.$addressForm.append(response.formInputHtml);
+
+					self.$addButtons.addClass('hidden');
+					self.$editButtons.removeClass('hidden');
+					self.$addressFormat.removeClass('hidden');
+
+					this.modal.hide();
+					this.modal.destroy();
+				}
+				else {
+					Garnish.shake(this.modal.$form);
+					onError(response.errors);
+				}
+
+			}, this));
+		}
+	})
 })(jQuery);

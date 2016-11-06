@@ -178,12 +178,22 @@
 		}) }}
 
 		{% set addressInput %}
-		<div class="sproutaddressinfo-box"
-			{% if websiteIdentity.addressId is defined %}
-			data-addressinfoid='{{ websiteIdentity.addressId }}'
-			{% endif %}
-			>
-		</div>
+			<div class="sproutaddressinfo-box"
+				{% if websiteIdentity.addressId is defined %}
+				data-addressinfoid='{{ websiteIdentity.addressId }}'
+				{% endif %}
+				>
+				<div class='address-add-button hidden'>
+					<a class='btn add icon dashed sproutaddress-edit' href='#'>{{ "Add Address"|t }}</a>
+				</div>
+				<div class='address-edit-buttons hidden'>
+					<a class='small btn right icon sproutaddress-edit clear-button' href='#'>{{ "Clear"|t }}</a>
+					<a class='small btn right icon sproutaddress-edit update-button' href='#'>{{ "Edit"|t }}</a>
+				</div>
+				<div class='address-format hidden'>
+					<div class='spinner'></div>
+				</div>
+			</div>
 		{% endset %}
 
 		{{ forms.field({
@@ -193,6 +203,7 @@
 				structured: true,
 				priority: 'globals'
 			}),
+			fieldClass: 'sproutfields-addressfield',
 			required: false
 		}, addressInput) }}
 
@@ -442,7 +453,9 @@
 		});
 
 
-		new Craft.SproutSeo.AddressBox($('.sproutaddressinfo-box'), { source: 'websiteIdentity' })
+		new Craft.SproutSeo.AddressBox($('.sproutaddressinfo-box'), {
+			source: 'websiteIdentity'
+		})
 	});
 
 {% endincludejs %}

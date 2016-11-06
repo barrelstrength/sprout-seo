@@ -379,18 +379,20 @@ a.fieldtoggle.instructionstoggle {
 }
 
 /**
-Address Field
-*/
+ * Address Field
+ */
 .sproutaddressinfo-box {
 	display: inline-flex;
 	justify-content: flex-start;
-	align-items: flex-start;
 }
-.sproutaddressinfo-box .address-buttons {
-	order: 2;
+.sproutaddressinfo-box .address-add-button {
+	order: 1;
+}
+.sproutaddressinfo-box .address-edit-buttons {
+	order: 3;
 }
 .sproutaddressinfo-box .address-format {
-	order: 1;
+	order: 2;
 	padding-right: 20px;
 }
 
@@ -423,5 +425,5 @@ Address Field
 
 .clear-button {
 	display: block;
-	padding-top: 50px;
+	margin-left: 5px;
 }
