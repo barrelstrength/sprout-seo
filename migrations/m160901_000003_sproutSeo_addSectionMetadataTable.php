@@ -21,22 +21,22 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 		);
 
 		$columnsAfterId = array(
-			'type'                  => $varchar,
-			'enabled'               => array(
+			'type'                => $varchar,
+			'enabled'             => array(
 				'column'   => ColumnType::TinyInt,
 				'required' => true,
 				'default'  => 0,
 				'length'   => 1,
 				'unsigned' => true
 			),
-			'isCustom'              => array(
+			'isCustom'            => array(
 				'column'   => ColumnType::TinyInt,
 				'required' => true,
 				'default'  => 0,
 				'length'   => 1,
 				'unsigned' => true
 			),
-			'urlEnabledSectionId'   => array(
+			'urlEnabledSectionId' => array(
 				'column'   => ColumnType::Int,
 				'required' => false,
 				'default'  => null,
@@ -66,100 +66,65 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 			'url'                   => $varchar
 		);
 
-		if (craft()->db->tableExists($tableName))
+		foreach ($columnsAfterId as $columnName => $type)
 		{
-			foreach ($columnsAfterId as $columnName => $type)
-			{
-				if (!craft()->db->columnExists($tableName, $columnName))
-				{
-					$this->addColumnAfter($tableName, $columnName, $type, 'id');
+			$this->addColumnAfter($tableName, $columnName, $type, 'id');
 
-					SproutSeoPlugin::log("Created column `$columnName` in `$newTableName` .", LogLevel::Info, true);
-				}
-			}
-
-			foreach ($columnsAfterHandle as $columnName => $type)
-			{
-				if (!craft()->db->columnExists($tableName, $columnName))
-				{
-					$this->addColumnAfter($tableName, $columnName, $type, 'handle');
-
-					SproutSeoPlugin::log("Created column `$columnName` in `$newTableName` .", LogLevel::Info, true);
-				}
-			}
-
-			$columnsToMove = array(
-				'ogTitle' => array(
-					'type' => $varchar,
-					'after' => 'ogUrl'
-				),
-				'ogDescription' => array(
-					'type' => $varchar,
-					'after' => 'ogTitle'
-				),
-				'ogSiteName' => array(
-					'type' => $varchar,
-					'after' => 'ogUrl'
-				),
-				'twitterUrl' => array(
-					'type' => $varchar,
-					'after' => 'twitterCard'
-				),
-				'twitterCreator' => array(
-					'type' => $varchar,
-					'after' => 'twitterImage'
-				),
-
-			);
-
-			foreach ($columnsToMove as $columnToRename => $info)
-			{
-				if (craft()->db->columnExists($tableName, $columnToRename))
-				{
-					$this->alterColumn($tableName, $columnToRename, $info['type'], $columnToRename, $info['after']);
-				}
-			}
-
-			$columnToRename = 'appendSiteName';
-			if (craft()->db->columnExists($tableName, $columnToRename))
-			{
-				$this->alterColumn($tableName, $columnToRename, $varchar, 'appendTitleValue', 'title');
-			}
-
-			if (!craft()->db->columnExists($tableName, 'ogTransform'))
-			{
-				$this->addColumnAfter($tableName, 'ogTransform', $varchar, 'ogImage');
-
-				SproutSeoPlugin::log("Created column ogTransform in `$newTableName` .", LogLevel::Info, true);
-			}
-
-			if (!craft()->db->columnExists($tableName, 'twitterTransform'))
-			{
-				$this->addColumnAfter($tableName, 'twitterTransform', $varchar, 'twitterImage');
-
-				SproutSeoPlugin::log("Created column twitterTransform in `$newTableName` .", LogLevel::Info, true);
-			}
-
-			// Removes publisher and author columns
-			if (craft()->db->columnExists($tableName, 'publisher'))
-			{
-				$this->dropColumn($tableName, 'publisher');
-			}
-
-			if (craft()->db->columnExists($tableName, 'author'))
-			{
-				$this->dropColumn($tableName, 'author');
-			}
-
-			// finally rename table
-			MigrationHelper::dropIndexIfExists($tableName, array('name', 'handle'), true);
-			$this->renameTable($tableName, $newTableName);
-			$this->createIndex($newTableName, 'name,handle', true);
+			SproutSeoPlugin::log("Created column `$columnName` in `$newTableName` .", LogLevel::Info, true);
 		}
-		else
+
+		foreach ($columnsAfterHandle as $columnName => $type)
 		{
-			SproutSeoPlugin::log("Table {$tableName} does not exists", LogLevel::Error, true);
+			$this->addColumnAfter($tableName, $columnName, $type, 'handle');
+
+			SproutSeoPlugin::log("Created column `$columnName` in `$newTableName` .", LogLevel::Info, true);
 		}
+
+		$columnsToMove = array(
+			'ogTitle'        => array(
+				'type'  => $varchar,
+				'after' => 'ogUrl'
+			),
+			'ogDescription'  => array(
+				'type'  => $varchar,
+				'after' => 'ogTitle'
+			),
+			'ogSiteName'     => array(
+				'type'  => $varchar,
+				'after' => 'ogUrl'
+			),
+			'twitterUrl'     => array(
+				'type'  => $varchar,
+				'after' => 'twitterCard'
+			),
+			'twitterCreator' => array(
+				'type'  => $varchar,
+				'after' => 'twitterImage'
+			),
+
+		);
+
+		foreach ($columnsToMove as $columnToRename => $info)
+		{
+			$this->alterColumn($tableName, $columnToRename, $info['type'], $columnToRename, $info['after']);
+		}
+
+		$this->alterColumn($tableName, 'appendSiteName', $varchar, 'appendTitleValue', 'title');
+
+		$this->addColumnAfter($tableName, 'ogTransform', $varchar, 'ogImage');
+		SproutSeoPlugin::log("Created column ogTransform in `$newTableName` .", LogLevel::Info, true);
+
+		$this->addColumnAfter($tableName, 'twitterTransform', $varchar, 'twitterImage');
+		SproutSeoPlugin::log("Created column twitterTransform in `$newTableName` .", LogLevel::Info, true);
+
+		// Removes publisher and author columns
+		$this->dropColumn($tableName, 'publisher');
+		$this->dropColumn($tableName, 'author');
+
+		// finally rename table
+		MigrationHelper::dropIndexIfExists($tableName, array('name', 'handle'), true);
+		$this->renameTable($tableName, $newTableName);
+		$this->createIndex($newTableName, 'name,handle', true);
 
 		return true;
 	}

@@ -12,31 +12,28 @@ class m160901_000002_sproutSeo_addDefaultGlobalMetadata extends BaseMigration
 	{
 		$tableName = 'sproutseo_metadata_globals';
 
-		if (craft()->db->tableExists($tableName))
+		// Find all currents globals
+		$global = craft()->db->createCommand()
+			->select('*')
+			->from($tableName)
+			->queryRow();
+
+		if (!$global)
 		{
-			// Find all currents globals
-			$global = craft()->db->createCommand()
-				->select('*')
-				->from($tableName)
-				->queryRow();
+			$locale = craft()->i18n->getLocaleById(craft()->language);
 
-			if (!$global)
-			{
-				$locale = craft()->i18n->getLocaleById(craft()->language);
+			craft()->db->createCommand()->insert($tableName, array(
+				'locale'    => $locale,
+				'identity'  => null,
+				'ownership' => null,
+				'contacts'  => null,
+				'social'    => null,
+				'meta'      => null,
+				'robots'    => null,
+				'settings'  => null,
+			));
 
-				craft()->db->createCommand()->insert($tableName, array(
-					'locale'    => $locale,
-					'identity'  => null,
-					'ownership' => null,
-					'contacts'  => null,
-					'social'    => null,
-					'meta'      => null,
-					'robots'    => null,
-					'settings'  => null,
-				));
-
-				SproutSeoPlugin::log("Added default value to globals", LogLevel::Info, true);
-			}
+			SproutSeoPlugin::log("Added default value to globals", LogLevel::Info, true);
 		}
 
 		return true;

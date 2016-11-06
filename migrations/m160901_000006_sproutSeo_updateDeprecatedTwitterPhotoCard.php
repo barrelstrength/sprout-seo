@@ -17,29 +17,22 @@ class m160901_000006_sproutSeo_updateDeprecatedTwitterPhotoCard extends BaseMigr
 
 		foreach ($tableNames as $tableName)
 		{
-			if (craft()->db->tableExists($tableName))
-			{
-				// Find all currents globals
-				$rows = craft()->db->createCommand()
-					->select('id')
-					->from($tableName)
-					->where('twitterCard =:photo', array(':photo' => 'photo'))
-					->queryAll();
+			// Find all currents globals
+			$rows = craft()->db->createCommand()
+				->select('id')
+				->from($tableName)
+				->where('twitterCard =:photo', array(':photo' => 'photo'))
+				->queryAll();
 
-				foreach ($rows as $row)
-				{
-					craft()->db->createCommand()->update($tableName,
-						array('twitterCard' => 'summary_large_image'),
-						'id = :id',
-						array(':id' => $row['id'])
-					);
-
-					SproutSeoPlugin::log("Updated deprecated photo card", LogLevel::Info, true);
-				}
-			}
-			else
+			foreach ($rows as $row)
 			{
-				SproutSeoPlugin::log("Table {$tableName} does not exists", LogLevel::Error, true);
+				craft()->db->createCommand()->update($tableName,
+					array('twitterCard' => 'summary_large_image'),
+					'id = :id',
+					array(':id' => $row['id'])
+				);
+
+				SproutSeoPlugin::log("Updated deprecated photo card", LogLevel::Info, true);
 			}
 		}
 
