@@ -39,11 +39,12 @@ class SproutSeo_WebsiteIdentityWebsiteSchema extends SproutSeoBaseSchema
 		$this->addText('alternateName', $schema['alternateName']);
 		$this->addText('description', $schema['description']);
 		$this->addText('about', $schema['description']);
+		$this->addText('keywords', $schema['keywords']);
 		$this->addUrl('url', $schema['url']);
 
 		if (isset($schema['logo'][0]))
 		{
-			$this->addImage('logo', $schema['logo'][0]);
+			$this->addImage('image', $schema['logo'][0]);
 		}
 
 		if ($identityType = $schema['@type'])
@@ -58,6 +59,8 @@ class SproutSeo_WebsiteIdentityWebsiteSchema extends SproutSeoBaseSchema
 			$identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$this->addProperty('author', $identitySchema->getSchema());
+			$this->addProperty('copyrightHolder', $identitySchema->getSchema());
+			$this->addProperty('creator', $identitySchema->getSchema());
 		}
 
 		if (count($socialProfiles))

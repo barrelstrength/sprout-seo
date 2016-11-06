@@ -33,5 +33,30 @@ class SproutSeo_CreativeWorkSchema extends SproutSeo_ThingSchema
 	public function addProperties()
 	{
 		parent::addProperties();
+
+		$element  = $this->element;
+		$metadata = $this->prioritizedMetadataModel;
+
+		$this->addText('headline', $metadata->optimizedTitle);
+		$this->addText('keywords', $metadata->optimizedKeywords);
+		$this->addDate('dateCreated', $element->dateCreated);
+		$this->addDate('dateModified', $element->dateUpdated);
+
+		if (isset($element->postDate))
+		{
+			$this->addDate('datePublished', $element->postDate);
+		}
+
+		if (method_exists($element, 'getAuthor'))
+		{
+			$person = new SproutSeo_PersonSchema();
+
+			$person->globals                  = $this->globals;
+			$person->element                  = $element->getAuthor();
+			$person->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
+			$this->addProperty('author', $person->getSchema());
+			$this->addProperty('creator', $person->getSchema());
+		}
 	}
 }

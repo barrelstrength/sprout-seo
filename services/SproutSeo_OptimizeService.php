@@ -251,7 +251,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			$identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$schema['websiteIdentity'] = $identitySchema;
-			//$output = $identitySchema->getSchema();
 		}
 
 		// Website Identity Website
@@ -265,20 +264,21 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			$websiteSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$schema['website'] = $websiteSchema;
-			//$output .= $websiteSchema->getSchema();
 		}
 
 		// Website Identity Place
-		//if ($this->globals->identity['address'])
-		//{
-		//	$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchemaMap();
-		//  $placeSchema->addContext = true;
+		if ($this->globals->identity['addressId'])
+		{
+			$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchema();
+		  $placeSchema->addContext = true;
 
-		//  $placeSchema->globals = $this->globals;
-		//  $placeSchema->element = $this->elementModel;
-		//  $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
-		//  $output .= $placeSchema->getSchema();
-		//}
+		  $placeSchema->globals = $this->globals;
+		  $placeSchema->element = $this->urlEnabledSection->element;
+		  $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
+			$schema['place'] = $placeSchema;
+			//$output .= $placeSchema->getSchema();
+		}
 
 		$schema['mainEntity'] = $this->getMainEntityStructuredData();
 

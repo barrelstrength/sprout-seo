@@ -114,6 +114,7 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ContactPointSchema');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ImageObjectSchema');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_MainEntityOfPageSchema');
+		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_PostalAddressSchema');
 
 		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ThingSchema');
 		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_CreativeWorkSchema');
@@ -284,6 +285,7 @@ class SproutSeoPlugin extends BasePlugin
 			new SproutSeo_ContactPointSchema(),
 			new SproutSeo_ImageObjectSchema(),
 			new SproutSeo_MainEntityOfPageSchema(),
+			new SproutSeo_PostalAddressSchema(),
 
 			new SproutSeo_ThingSchema(),
 			new SproutSeo_CreativeWorkSchema(),

@@ -33,5 +33,15 @@ class SproutSeo_PersonSchema extends SproutSeo_ThingSchema
 	public function addProperties()
 	{
 		parent::addProperties();
+
+		$element = $this->element;
+
+		if ($element->firstName && $element->lastName)
+		{
+			$this->addText('givenName', $element->firstName);
+			$this->addText('familyName', $element->lastName);
+		}
+
+		$this->addEmail('email', $element->email);
 	}
 }

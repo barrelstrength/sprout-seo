@@ -32,22 +32,30 @@ class SproutSeo_WebsiteIdentityPersonSchema extends SproutSeoBaseSchema
 	 */
 	public function addProperties()
 	{
-		$person         = $this->globals['identity'];
+		$schema         = $this->globals['identity'];
 		$socialProfiles = $this->globals['social'];
 
-		$this->addText('name', $person['name']);
-		$this->addText('alternateName', $person['alternateName']);
-		$this->addText('description', $person['description']);
-		$this->addUrl('url', $person['url']);
-		$this->addTelephone('telephone', $person['telephone']);
-		$this->addEmail('email', $person['email']);
+		$this->addText('name', $schema['name']);
+		$this->addText('alternateName', $schema['alternateName']);
+		$this->addText('description', $schema['description']);
+		$this->addUrl('url', $schema['url']);
+		$this->addTelephone('telephone', $schema['telephone']);
+		$this->addEmail('email', $schema['email']);
+
+		if (isset($schema['addressId']) && $schema['addressId'])
+		{
+			$this->addAddress('address', $schema['addressId']);
+		}
 
 		if (isset($schema['logo'][0]))
 		{
-			$this->addImage('logo', $schema['logo'][0]);
+			$this->addImage('image', $schema['logo'][0]);
 		}
 
-		$this->addText('gender', $person['gender']);
+		$contacts = $this->globals['contacts'];
+		$this->addContactPoints($contacts);
+
+		$this->addText('gender', $schema['gender']);
 
 		if (count($socialProfiles))
 		{

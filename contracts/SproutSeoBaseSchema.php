@@ -172,7 +172,8 @@ abstract class SproutSeoBaseSchema
 	public function getSchemaOverrideType()
 	{
 		if ((isset($this->prioritizedMetadataModel->schemaOverrideTypeId) && $this->prioritizedMetadataModel->schemaOverrideTypeId != null) &&
-			($this->prioritizedMetadataModel->schemaTypeId == $this->getUniqueKey()))
+			($this->prioritizedMetadataModel->schemaTypeId == $this->getUniqueKey())
+		)
 		{
 			$this->type = $this->prioritizedMetadataModel->schemaOverrideTypeId;
 
@@ -400,7 +401,8 @@ abstract class SproutSeoBaseSchema
 
 			foreach ($contacts as $contact)
 			{
-				$schema          = new SproutSeo_ContactPointSchema();
+				$schema = new SproutSeo_ContactPointSchema();
+
 				$schema->contact = $contact;
 
 				$contactPoints[] = $schema->getSchema();
@@ -415,24 +417,28 @@ abstract class SproutSeoBaseSchema
 	 *
 	 * @info https://schema.org/address
 	 */
-	public function addAddress($addressId)
+	public function addAddress($propertyName, $addressId)
 	{
 		$address = array();
 
-		if ($addressId)
+		if (!$addressId)
 		{
-			$addressModel = sproutSeo()->address->getAddressById($addressId);
+			return $address;
+		}
 
-			if ($addressModel->id)
-			{
-				$address['@type']           = 'PostalAddress';
-				$address['addressLocality'] = $addressModel->locality;
-				$address['addressRegion']   = $addressModel->administrativeArea;
-				$address['postalCode']      = $addressModel->postalCode;
-				$address['streetAddress']   = $addressModel->address1.'. '.$addressModel->address2;
+		$addressModel = sproutSeo()->address->getAddressById($addressId);
 
-				$this->structuredData['address'] = $address;
-			}
+		$address = new SproutSeo_PostalAddressSchema();
+
+		if ($addressModel->id)
+		{
+			$address->addressCountry  = $addressModel->countryCode;
+			$address->addressLocality = $addressModel->locality;
+			$address->addressRegion   = $addressModel->administrativeArea;
+			$address->postalCode      = $addressModel->postalCode;
+			$address->streetAddress   = $addressModel->address1 . ' ' . $addressModel->address2;
+
+			$this->structuredData[$propertyName] = $address->getSchema();
 		}
 	}
 

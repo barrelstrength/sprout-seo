@@ -68,7 +68,7 @@ class SproutSeo_WebsiteIdentityOrganizationSchema extends SproutSeoBaseSchema
 
 		if (isset($schema['addressId']) && $schema['addressId'])
 		{
-			$this->addAddress($schema['addressId']);
+			$this->addAddress('address', $schema['addressId']);
 		}
 
 		if (isset($schema['foundingDate']['date']))

@@ -16,6 +16,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		$enableCustom = false;
 
 		// Find all Section Metadata Sections and set all the rows as custom pages
+
 		$rows = craft()->db->createCommand()
 			->select('*')
 			->from($tableName)
