@@ -1,4 +1,10 @@
 <?php
+/**
+  * @author    Barrel Strength Design LLC <sprout@barrelstrengthdesign.com>
+  * @copyright Copyright (c) 2016, Barrel Strength Design LLC
+  * @license   http://sprout.barrelstrengthdesign.com/license
+  * @see       http://sprout.barrelstrengthdesign.com
+ */
 namespace Craft;
 
 /**
@@ -208,9 +214,6 @@ class SproutSeoPlugin extends BasePlugin
 			'sproutseo/settings'                              => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
-			'sproutseo/settings/(?P<settingsTemplate>.*)/new' =>
-				'sproutseo/settings/schema/_edit',
-
 			'sproutseo/settings/(?P<settingsTemplate>.*)' => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
