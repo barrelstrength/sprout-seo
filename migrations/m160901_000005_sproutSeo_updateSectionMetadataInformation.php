@@ -300,6 +300,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				if ($section && $section18n)
 				{
+					$entryHandle = $this->_validateDuplicateHandle($section['handle'], 'Entry');
 					// Create a new row in sections
 					craft()->db->createCommand()->insert($tableName, array(
 						'urlEnabledSectionId' => $sitemap['elementGroupId'],
@@ -307,7 +308,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 						'enabled'             => $sitemap['enabled'],
 						'type'                => 'entries',
 						'name'                => $section['name'],
-						'handle'              => $section['handle'],
+						'handle'              => $entryHandle,
 						'url'                 => $section18n['urlFormat'],
 						'priority'            => $sitemap['priority'],
 						'changeFrequency'     => $sitemap['changeFrequency']
@@ -335,6 +336,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				if ($category && $category18n)
 				{
+					$categoryHandle = $this->_validateDuplicateHandle($category['handle'], 'Category');
 					// Create a new row in sections
 					craft()->db->createCommand()->insert($tableName, array(
 						'urlEnabledSectionId' => $sitemap['elementGroupId'],
@@ -342,7 +344,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 						'enabled'             => $sitemap['enabled'],
 						'type'                => 'categories',
 						'name'                => $category['name'],
-						'handle'              => $category['handle'],
+						'handle'              => $categoryHandle,
 						'url'                 => $category18n['urlFormat'],
 						'priority'            => $sitemap['priority'],
 						'changeFrequency'     => $sitemap['changeFrequency']
@@ -357,5 +359,39 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		$this->dropColumn($tableName, 'globalFallback');
 
 		return true;
+	}
+
+	private function _validateDuplicateHandle($handle, $source)
+	{
+		$section = $this->_getSectionByHandle($handle);
+
+		if ($section)
+		{
+			$aux = 1;
+			$newHandle = $handle.$source;
+			$section   = $this->_getSectionByHandle($newHandle);
+			while ($section)
+			{
+				$newHandle = $handle.$source.$aux;
+				$section   = $this->_getSectionByHandle($newHandle);
+			}
+
+			$handle = $newHandle;
+		}
+
+		return $handle;
+	}
+
+	private function _getSectionByHandle($handle)
+	{
+		$tableName = "sproutseo_metadata_sections";
+
+		$section = craft()->db->createCommand()
+			->select('*')
+			->from($tableName)
+			->where('handle=:handle', array(':handle'=>$handle))
+			->queryRow();
+
+		return $section;
 	}
 }
