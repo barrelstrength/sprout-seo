@@ -93,7 +93,6 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 		return array(
 			array(
 				'columns' => array(
-					'name',
 					'handle'
 				),
 				'unique'  => true
