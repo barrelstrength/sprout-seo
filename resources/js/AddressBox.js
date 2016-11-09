@@ -125,28 +125,14 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 			var self = this;
 			var data = { addressInfoId: self.addressInfoId };
 
-			// @todo - grab address form and update input fields on the page so
-			// the delete happens when the Website Identity is submitted, not immediately
-			// this.$addressBox.find('.sproutaddress-form')
+			this.$addButtons.removeClass('hidden');
+			this.$editButtons.addClass('hidden');
+			this.$addressFormat.addClass('hidden');
+			$( ".sproutaddressinfo-box" ).data( "addressinfoid", "" );
 
-			Craft.postActionRequest('sproutSeo/address/deleteAddress', data, $.proxy(function(response) {
-				if (response.result == true) {
+			self.addressInfoId = null;
 
-					this.$addButtons.removeClass('hidden');
-					this.$editButtons.addClass('hidden');
-					this.$addressFormat.addClass('hidden');
-
-					self.addressInfoId = null;
-
-					this._getAddressFormFields();
-
-					Craft.cp.displayNotice(Craft.t('Address Deleted.'));
-				}
-				else {
-					onError(response.errors);
-				}
-			}, this))
-
+			this._getAddressFormFields();
 		},
 
 		_getAddressFormFields: function() {
