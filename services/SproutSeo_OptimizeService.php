@@ -35,6 +35,11 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 */
 	public $codeMetadata = array();
 
+	/**
+	 * @var
+	 */
+	public $codeSection;
+
 	public function init()
 	{
 		$schemaIntegrations = craft()->plugins->call('registerSproutSeoSchemas');
@@ -103,7 +108,14 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			foreach ($meta as $key => $value)
 			{
-				$this->codeMetadata[$key] = $value;
+				if ($key == 'section')
+				{
+					$this->codeSection = $value;
+				}
+				else
+				{
+					$this->codeMetadata[$key] = $value;
+				}
 			}
 		}
 	}
@@ -202,8 +214,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 				// then we should make sure the $prioritizedMetadataModel also has a null value
 				// otherwise we still keep our lower level value
 				if ($key == 'schemaOverrideTypeId' &&
-					  $metadataModel['schemaTypeId'] != null &&
-					  $metadataModel->getAttribute($key) == null)
+						$metadataModel['schemaTypeId'] != null &&
+						$metadataModel->getAttribute($key) == null)
 				{
 					$prioritizedMetadataModel[$key] = null;
 				}
@@ -266,15 +278,16 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			$schema['website'] = $websiteSchema;
 		}
 
+		$idendity = $this->globals->identity;
 		// Website Identity Place
-		if ($this->globals->identity['addressId'])
+		if (isset($identity['addressId']) && $identity['addressId'])
 		{
 			$placeSchema = new SproutSeo_WebsiteIdentityPlaceSchema();
-		  $placeSchema->addContext = true;
+			$placeSchema->addContext = true;
 
-		  $placeSchema->globals = $this->globals;
-		  $placeSchema->element = $this->urlEnabledSection->element;
-		  $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+			$placeSchema->globals = $this->globals;
+			$placeSchema->element = $this->urlEnabledSection->element;
+			$placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$schema['place'] = $placeSchema;
 			//$output .= $placeSchema->getSchema();
@@ -346,7 +359,10 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		switch ($type)
 		{
 			case SproutSeo_MetadataLevels::SectionMetadata:
-				$response = $this->urlEnabledSection;
+				$response = array(
+					'urlEnabled'  => $this->urlEnabledSection,
+					'codeSection' => $this->codeSection
+				);
 				break;
 
 			case SproutSeo_MetadataLevels::ElementMetadata:

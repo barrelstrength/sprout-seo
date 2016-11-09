@@ -204,15 +204,31 @@ class SproutSeo_MetadataModel extends BaseModel
 	 *
 	 * @return SproutSeo_MetadataModel
 	 */
-	protected function prepareSectionMetadata($urlEnabledSection)
+	protected function prepareSectionMetadata($overrideInfo)
 	{
-		$attributes = array();
+		$attributes  = array();
+		$codeSection = isset($overrideInfo['codeSection']) ?
+			$overrideInfo['codeSection'] :
+			null;
+		$urlEnabledSection = isset($overrideInfo['urlEnabledSection']) ?
+				$overrideInfo['urlEnabledSection'] :
+				null;
 
 		if ($urlEnabledSection)
 		{
 			$metaTagsModel = sproutSeo()->sectionMetadata->getSectionMetadataByInfo($urlEnabledSection);
 
 			$attributes = $metaTagsModel->getAttributes();
+		}
+
+		if ($codeSection)
+		{
+			$section = sproutSeo()->sectionMetadata->getSectionMetadataByHandle($codeSection);
+
+			if ($section->id)
+			{
+				$attributes = $section->getAttributes();
+			}
 		}
 
 		return $attributes;
