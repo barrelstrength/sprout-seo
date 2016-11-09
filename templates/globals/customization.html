@@ -95,7 +95,7 @@
 			instructions: 'Select Image Transforms for the facebook image'|t,
 			name: 'sproutseo[globals][settings][ogTransform]',
 			options: transformOptions,
-			value: settings.ogTransform ? settings.ogTransform : '',
+			value: settings.ogTransform ?? '',
 			errors: "",
 			required: false
 		}) }}
@@ -105,7 +105,7 @@
 			instructions: 'Select Image Transforms for the twitter image'|t,
 			name: 'sproutseo[globals][settings][twitterTransform]',
 			options: transformOptions,
-			value: settings.twitterTransform ? settings.twitterTransform : '',
+			value: settings.twitterTransform ?? '',
 			errors: "",
 			required: false
 		}) }}
