@@ -37,6 +37,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 		$addButton:    null,
 		$updateButton: null,
 		$clearButton:  null,
+		$queryButton:  null,
 
 		addressInfoId: null,
 		$addressForm:  null,
@@ -52,6 +53,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 			this.$addButton    = this.$addressBox.find('.address-add-button a');
 			this.$updateButton = this.$addressBox.find('.address-edit-buttons a.update-button');
 			this.$clearButton  = this.$addressBox.find('.address-edit-buttons a.clear-button');
+			this.$queryButton  = $('.query-button');
 
 			this.$addButtons    = this.$addressBox.find('.address-add-button');
 			this.$editButtons   = this.$addressBox.find('.address-edit-buttons');
@@ -70,6 +72,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 			this.addListener(this.$addButton, 'click', 'editAddressBox');
 			this.addListener(this.$updateButton, 'click', 'editAddressBox');
 			this.addListener(this.$clearButton, 'click', 'clearAddressBox');
+			this.addListener(this.$queryButton, 'click', 'queryGoogleMaps');
 		},
 
 		_renderAddress: function() {
@@ -133,6 +136,37 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 			self.addressInfoId = null;
 
 			this._getAddressFormFields();
+		},
+
+		queryGoogleMaps: function(ev) {
+
+			ev.preventDefault();
+
+			var self = this;
+
+			if (self.addressInfoId)
+			{
+				var data = { addressInfoId: self.addressInfoId };
+
+				Craft.postActionRequest('sproutSeo/address/queryAddress', data, $.proxy(function(response) {
+						if (response.result == true) {
+							var latitude  = response.geo.latitude;
+							var longitude = response.geo.longitude;
+
+							$("input[name='sproutseo[globals][identity][latitude]']").val(latitude);
+							$("input[name='sproutseo[globals][identity][longitude]']").val(longitude);
+							Craft.cp.displayNotice(Craft.t('Latitude and Longitude Updated.'));
+						}
+						else {
+							onError(response.errors);
+						}
+				}, this))
+
+			}
+			else
+			{
+				Craft.cp.displayError(Craft.t('Please save globals with an address'));
+			}
 		},
 
 		_getAddressFormFields: function() {

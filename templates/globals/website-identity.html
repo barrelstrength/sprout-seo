@@ -207,6 +207,34 @@
 			required: false
 		}, addressInput) }}
 
+		<a class="small btn left icon query-button" href="#">{{ "Query google maps"|t }}</a>
+		<br>
+		{{ forms.textField({
+			label: "Latitude"|t ~ sprout.infoIcon({
+				label: "Latitude"|t,
+				search: true,
+				structured: true,
+				priority: 'globals'
+			}),
+			instructions: 'Latitude of your address.'|t,
+			name: 'sproutseo[globals][identity][latitude]',
+			value: websiteIdentity['latitude'] is defined ? websiteIdentity.latitude : null,
+			errors: ''
+		}) }}
+
+		{{ forms.textField({
+			label: "Longitude"|t ~ sprout.infoIcon({
+				label: "Longitude"|t,
+				search: true,
+				structured: true,
+				priority: 'globals'
+			}),
+			instructions: 'Longitude of your address.'|t,
+			name: 'sproutseo[globals][identity][longitude]',
+			value: websiteIdentity['longitude'] is defined ? websiteIdentity.longitude : null,
+			errors: ''
+		}) }}
+
 		<hr>
 
 		<div class="field identityType-field-wrapper">

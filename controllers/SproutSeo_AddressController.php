@@ -212,5 +212,69 @@ class SproutSeo_AddressController extends BaseController
 
 		$this->returnJson($result);
 	}
+
+	public function actionQueryAddress()
+	{
+		$this->requireAjaxRequest();
+		$this->requirePostRequest();
+
+		$addressId        = null;
+		$addressInfoModel = null;
+
+		if (craft()->request->getPost('addressInfoId') != null)
+		{
+			$addressId = craft()->request->getPost('addressInfoId');
+			$addressInfoModel = sproutSeo()->address->getAddressById($addressId);
+		}
+
+		$result = array(
+			'result' => false,
+			'errors' => array()
+		);
+
+		try
+		{
+			$data = array();
+
+			if (isset($addressInfoModel->id) && $addressInfoModel->id)
+			{
+				$blankSpace = ' ';
+				// Address
+				$address = $addressInfoModel->address1.
+						$blankSpace.
+						$addressInfoModel->address2.
+						$blankSpace.
+						$addressInfoModel->locality.
+						$blankSpace.
+						$addressInfoModel->administrativeArea.
+						$blankSpace.
+						$addressInfoModel->countryCode;
+
+				// Get JSON results from this request
+				$geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=false');
+
+				// Convert the JSON to an array
+				$geo = json_decode($geo, true);
+
+				if ($geo['status'] == 'OK')
+				{
+					$data['latitude']  = $geo['results'][0]['geometry']['location']['lat'];
+					$data['longitude'] = $geo['results'][0]['geometry']['location']['lng'];
+
+					$result = array(
+						'result' => true,
+						'errors' => array(),
+						'geo'    => $data
+					);
+				}
+			}
+		} catch (Exception $e)
+		{
+			$result['result'] = false;
+			$result['errors'] = $e->getMessage();
+		}
+
+		$this->returnJson($result);
+	}
 }
 
