@@ -9,11 +9,10 @@ class SproutSeo_Node extends \Twig_Node
 	 */
 	public function compile(\Twig_Compiler $compiler)
 	{
-		if ($this->getNode('action') == 'optimize')
-		{
-			$compiler
-				->addDebugInfo($this)
-				->write("echo \Craft\craft()->sproutSeo->optimize->getMetadata(\$context);\n\n");
-		}
+		// $this->getNode('action')
+
+		$compiler
+			->addDebugInfo($this)
+			->write("echo \Craft\craft()->sproutSeo->optimize->getMetadata(\$context);\n\n");
 	}
 }
