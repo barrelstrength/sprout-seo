@@ -56,13 +56,27 @@
 		})) }}
 
 		{{ forms.selectField({
-			label: 'Facebook Image transform'|t,
-			instructions: 'Select Image Transforms for the facebook image'|t,
+			label: 'Image Transform'|t,
+			instructions: 'Select the Open Graph Image Transform'|t,
 			name: nameContext~'[metadata][ogTransform]',
 			options: transformOptions,
 			value: values.ogTransform ?? prioritizedMetadata.ogTransform,
 			errors: "",
 			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Audio URL"|t,
+			instructions: "A URL to an audio file to accompany this content."|t,
+			name: "sproutseo[metadata][ogAudio]",
+			value: values.ogAudio
+		}) }}
+
+		{{ forms.textField({
+			label: "Video URL"|t,
+			instructions: "A URL to a video file that complements this content."|t,
+			name: "sproutseo[metadata][ogVideo]",
+			value: values.ogVideo
 		}) }}
 
 	</div>

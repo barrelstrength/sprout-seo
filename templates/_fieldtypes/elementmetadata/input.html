@@ -7,6 +7,7 @@
 {% set schemaSubtypes   = craft.sproutSeo.getSchemaSubtypes(schemas) %}
 {% set mainEntityValues = {'schemaTypeId': values.schemaTypeId, 'schemaOverrideTypeId': values.schemaOverrideTypeId} %}
 
+{# Prepare our SEO badge info icons #}
 <div class="sproutseo-metatitle-info hidden">
 {{- sprout.infoIcon({
 	label: "Meta Title"|t,

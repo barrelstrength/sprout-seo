@@ -91,8 +91,12 @@
 		}) }}
 
 		{{ forms.selectField({
-			label: 'Default Open Graph Image Transform'|t,
-			instructions: 'Select Image Transforms for the facebook image'|t,
+			label: 'Default Open Graph Image Transform'|t ~ sprout.infoIcon({
+				label: "Type"|t,
+				openGraph: true,
+				priority: 'globals'
+			}),
+			instructions: 'Select Image Transforms for the facebook image. Use images that are at least 1200 x 630 pixels for the best display on high resolution devices. Images larger than 600px by 315px will display as large images. The minimum image size is 200px by 200px pixels. Images can be up to 8MB in size.'|t,
 			name: 'sproutseo[globals][settings][ogTransform]',
 			options: transformOptions,
 			value: settings.ogTransform ?? '',
@@ -101,8 +105,12 @@
 		}) }}
 
 		{{ forms.selectField({
-			label: 'Default Twitter Image Transform'|t,
-			instructions: 'Select Image Transforms for the twitter image'|t,
+			label: 'Default Twitter Card Image Transform'|t ~ sprout.infoIcon({
+				label: "Type"|t,
+				twitterCard: true,
+				priority: 'globals'
+			}),
+			instructions: 'Select Image Transforms for the Twitter Card image. Summary Card image is square and must be a minimum of 120px by 120px. Summary Card with Large Image should be at least 280px in width, and at least 150px in height. Images must be less than 1MB in size.'|t,
 			name: 'sproutseo[globals][settings][twitterTransform]',
 			options: transformOptions,
 			value: settings.twitterTransform ?? '',
