@@ -331,7 +331,7 @@ abstract class SproutSeoBaseSchema
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false)
 		{
 			// Valid Email
-			$this->structuredData[$propertyName] = $email;
+			$this->structuredData[$propertyName] = 'mailto:'.$email;
 		}
 		else
 		{
