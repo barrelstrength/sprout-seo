@@ -54,8 +54,8 @@
 		})) }}
 
 		{{ forms.selectField({
-			label: 'Twitter Image transform'|t,
-			instructions: 'Select Image Transforms for the twitter image'|t,
+			label: 'Image Transform'|t,
+			instructions: 'Select the Twitter Card Image Transform'|t,
 			name: nameContext~'[metadata][twitterTransform]',
 			options: transformOptions,
 			value: values.twitterTransform ?? prioritizedMetadata.twitterTransform,

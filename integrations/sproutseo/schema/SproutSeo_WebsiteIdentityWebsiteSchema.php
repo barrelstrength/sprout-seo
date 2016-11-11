@@ -38,7 +38,6 @@ class SproutSeo_WebsiteIdentityWebsiteSchema extends SproutSeoBaseSchema
 		$this->addText('name', $schema['name']);
 		$this->addText('alternateName', $schema['alternateName']);
 		$this->addText('description', $schema['description']);
-		$this->addText('about', $schema['description']);
 		$this->addText('keywords', $schema['keywords']);
 		$this->addUrl('url', $schema['url']);
 
