@@ -52,9 +52,9 @@ class SproutSeo_WebsiteIdentityPersonSchema extends SproutSeoBaseSchema
 			$this->addGeo('geo', $schema['latitude'], $schema['longitude']);
 		}
 
-		if (isset($schema['logo'][0]))
+		if (isset($schema['image'][0]))
 		{
-			$this->addImage('image', $schema['logo'][0]);
+			$this->addImage('image', $schema['image'][0]);
 		}
 
 		$contacts = $this->globals['contacts'];

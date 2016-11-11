@@ -3,7 +3,7 @@
 {% import "sproutseo/_components/selectOther" as sproutFields %}
 {% import "sproutseo/_includes/sproutseo" as sprout %}
 
-{% set logoElement       = null %}
+{% set imageElement      = null %}
 {% set elementType       = craft.sproutseo.getAssetElementType %}
 {% set organizationItems = craft.sproutSeo.getOrganizationOptions() %}
 {% set globals           = craft.sproutSeo.getGlobalMetadata() %}
@@ -22,10 +22,10 @@
 	}) %}
 {% endfor %}
 
-{% if websiteIdentity.logo is defined and websiteIdentity.logo %}
-	{% for id in websiteIdentity.logo %}
-		{% set logo = craft.sproutSeo.getElementById(id) %}
-		{% set logoElement = logo %}
+{% if websiteIdentity.image is defined and websiteIdentity.image %}
+	{% for id in websiteIdentity.image %}
+		{% set image = craft.sproutSeo.getElementById(id) %}
+		{% set imageElement = image %}
 	{% endfor %}
 {%endif%}
 
@@ -106,14 +106,14 @@
 				twitterCard: true,
 				priority: 'globals'
 			}),
-			instructions: "The preferred logo or profile picture for your website."|t,
+			instructions: "The preferred image or profile picture for your website."|t,
 			required: true
 		}, forms.elementSelect({
-			elements: [logoElement],
-			sourceElementId: websiteIdentity['logo'] is defined ? websiteIdentity.logo : null,
+			elements: [imageElement],
+			sourceElementId: websiteIdentity['image'] is defined ? websiteIdentity.image : null,
 			elementType: elementType,
-			id: 'logo',
-			name: 'sproutseo[globals][identity][logo]',
+			id: 'image',
+			name: 'sproutseo[globals][identity][image]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image'|t,
 			limit: 1,

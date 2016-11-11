@@ -152,7 +152,7 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$identityName         = $identity['name'];
 			$optimizedTitle       = $identityName;
 			$optimizedDescription = $identity['description'];
-			$optimizedImage       = isset($identity['logo'][0]) ? $identity['logo'][0] : null;
+			$optimizedImage       = isset($identity['image'][0]) ? $identity['image'][0] : null;
 
 			$globalMetadata->optimizedTitle       = $optimizedTitle;
 			$globalMetadata->optimizedDescription = $optimizedDescription;

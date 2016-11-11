@@ -155,10 +155,9 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 			$identity['name']                 = $globalFallback['title'];
 			$identity['alternateName']        = "";
-			$identity['logo']                 = "";
+			$identity['image']                = "";
 			$identity['email']                = "";
 			$identity['telephone']            = "";
-			$identity['logo']                 = "";
 			$identity['@type']                = "Organization";
 			$identity['foundingDate']         = "";
 			$identity['openingHours']         = "";
@@ -170,12 +169,12 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 			if (is_numeric($globalFallback['twitterImage']))
 			{
-				$identity['logo'] = array($globalFallback['twitterImage']);
+				$identity['image'] = array($globalFallback['twitterImage']);
 			}
 
 			if (is_numeric($globalFallback['ogImage']))
 			{
-				$identity['logo'] = array($globalFallback['ogImage']);
+				$identity['image'] = array($globalFallback['ogImage']);
 			}
 
 			if ($globalFallback['robots'])

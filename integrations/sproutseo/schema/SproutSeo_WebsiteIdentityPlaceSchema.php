@@ -40,9 +40,9 @@ class SproutSeo_WebsiteIdentityPlaceSchema extends SproutSeoBaseSchema
 		$this->addText('description', $schema['description']);
 		$this->addUrl('url', $schema['url']);
 
-		if (isset($schema['logo'][0]))
+		if (isset($schema['image'][0]))
 		{
-			$this->addImage('logo', $schema['logo'][0]);
+			$this->addImage('image', $schema['image'][0]);
 		}
 
 		$this->addTelephone('telephone', $schema['telephone']);
