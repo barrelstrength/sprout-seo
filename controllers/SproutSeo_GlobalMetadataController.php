@@ -168,8 +168,8 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$globalMetadata->region    = ""; // @todo - add location info
 			$globalMetadata->placename = "";
 			$globalMetadata->position  = "";
-			$globalMetadata->latitude  = "";
-			$globalMetadata->longitude = "";
+			$globalMetadata->latitude  = isset($postData['identity']['latitude'])  ? $postData['identity']['latitude'] : "";
+			$globalMetadata->longitude = isset($postData['identity']['longitude']) ? $postData['identity']['longitude'] : "";
 
 			$globalMetadata->ogType        = 'website';
 			$globalMetadata->ogSiteName    = $siteName;

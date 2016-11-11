@@ -52,6 +52,11 @@ class SproutSeo_WebsiteIdentityPlaceSchema extends SproutSeoBaseSchema
 			$this->addAddress('address', $schema['addressId']);
 		}
 
+		if ((isset($schema['latitude']) && $schema['latitude']) && (isset($schema['longitude']) && $schema['longitude']))
+		{
+			$this->addGeo('geo', $schema['latitude'], $schema['longitude']);
+		}
+
 		if (count($socialProfiles))
 		{
 			$urls = array_column($socialProfiles, 'url');

@@ -98,32 +98,34 @@ class SproutSeoPlugin extends BasePlugin
 	{
 		// Import third party libraries
 		require_once dirname(__FILE__) . '/vendor/autoload.php';
+		$baseIntegrations = 'plugins.sproutseo.integrations.sproutseo.';
 
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
 		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseUrlEnabledSectionType');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.sectiontypes.SproutSeo_EntryUrlEnabledSectionType');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.sectiontypes.SproutSeo_CategoryUrlEnabledSectionType');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.sectiontypes.SproutSeo_CommerceProductUrlEnabledSectionType');
+		Craft::import($baseIntegrations.'sectiontypes.SproutSeo_EntryUrlEnabledSectionType');
+		Craft::import($baseIntegrations.'sectiontypes.SproutSeo_CategoryUrlEnabledSectionType');
+		Craft::import($baseIntegrations.'sectiontypes.SproutSeo_CommerceProductUrlEnabledSectionType');
 
 		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_WebsiteIdentityOrganizationSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_WebsiteIdentityPersonSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_WebsiteIdentityWebsiteSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_WebsiteIdentityPlaceSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ContactPointSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ImageObjectSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_MainEntityOfPageSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_PostalAddressSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_WebsiteIdentityOrganizationSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_WebsiteIdentityPersonSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_WebsiteIdentityWebsiteSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_WebsiteIdentityPlaceSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_ContactPointSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_ImageObjectSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_MainEntityOfPageSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_PostalAddressSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_GeoSchema');
 
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ThingSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_CreativeWorkSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_EventSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_IntangibleSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_OrganizationSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_PersonSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_PlaceSchema');
-		Craft::import('plugins.sproutseo.integrations.sproutseo.schema.SproutSeo_ProductSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_ThingSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_CreativeWorkSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_EventSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_IntangibleSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_OrganizationSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_PersonSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_PlaceSchema');
+		Craft::import($baseIntegrations.'schema.SproutSeo_ProductSchema');
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 		Craft::import('plugins.sproutseo.vendor.rake.Rake');
@@ -286,6 +288,7 @@ class SproutSeoPlugin extends BasePlugin
 			new SproutSeo_ImageObjectSchema(),
 			new SproutSeo_MainEntityOfPageSchema(),
 			new SproutSeo_PostalAddressSchema(),
+			new SproutSeo_GeoSchema(),
 
 			new SproutSeo_ThingSchema(),
 			new SproutSeo_CreativeWorkSchema(),

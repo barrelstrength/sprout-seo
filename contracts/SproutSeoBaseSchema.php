@@ -443,6 +443,30 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * @param $propertyName
+	 * @param $latitude
+	 * @param $longitude
+	 *
+	 * @info https://schema.org/geo
+	 */
+	public function addGeo($propertyName, $latitude, $longitude)
+	{
+		$geo = array();
+
+		if (!$latitude or !$longitude)
+		{
+			return $geo;
+		}
+
+		$geo = new SproutSeo_GeoSchema();
+
+		$geo->latitude  = $latitude;
+		$geo->longitude = $longitude;
+
+		$this->structuredData[$propertyName] = $geo->getSchema();
+	}
+
+	/**
 	 * @param array $openingHours
 	 */
 	public function addOpeningHours($openingHours = array())
