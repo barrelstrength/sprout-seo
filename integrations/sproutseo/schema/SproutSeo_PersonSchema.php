@@ -32,6 +32,20 @@ class SproutSeo_PersonSchema extends SproutSeo_ThingSchema
 	 */
 	public function addProperties()
 	{
+		$elementType = $this->element->getElementType();
+
+		if ($elementType == 'User')
+		{
+			$this->addUserElementProperties();
+		}
+		else
+		{
+			parent::addProperties();
+		}
+	}
+
+	public function addUserElementProperties()
+	{
 		$element = $this->element;
 
 		$name = null;
@@ -41,7 +55,7 @@ class SproutSeo_PersonSchema extends SproutSeo_ThingSchema
 			$name = $element->getFullName();
 		}
 
-		if ($element->firstName && $element->lastName)
+		if (isset($element->firstName) && isset($element->lastName))
 		{
 			$this->addText('givenName', $element->firstName);
 			$this->addText('familyName', $element->lastName);
@@ -50,7 +64,6 @@ class SproutSeo_PersonSchema extends SproutSeo_ThingSchema
 		}
 
 		$this->addText('name', $name);
-
 		$this->addEmail('email', $element->email);
 	}
 }
