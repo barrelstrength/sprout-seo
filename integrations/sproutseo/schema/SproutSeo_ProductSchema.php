@@ -40,10 +40,6 @@ class SproutSeo_ProductSchema extends SproutSeo_ThingSchema
 		{
 			$this->addCommerceProductProperties();
 		}
-		else
-		{
-			parent::addProperties();
-		}
 	}
 
 	public function addCommerceProductProperties()
