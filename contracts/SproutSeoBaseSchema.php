@@ -330,8 +330,10 @@ abstract class SproutSeoBaseSchema
 	{
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false)
 		{
+			$emailString = $this->encodeHtmlEntities('mailto:' . $email);
+
 			// Valid Email
-			$this->structuredData[$propertyName] = 'mailto:'.$email;
+			$this->structuredData[$propertyName] = $emailString;
 		}
 		else
 		{
@@ -534,5 +536,25 @@ abstract class SproutSeoBaseSchema
 		$mainEntity->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 		$this->structuredData['mainEntityOfPage'] = $mainEntity->getSchema();
+	}
+
+	/**
+	 * Returns a string converted to html entities
+	 * http://goo.gl/LPhtJ
+	 *
+	 * @param  string $string Value to be encoded
+	 *
+	 * @return mixed          Returns a string converted to html entities
+	 */
+	public function encodeHtmlEntities($string)
+	{
+		$string = mb_convert_encoding($string, 'UTF-32', 'UTF-8');
+		$t      = unpack("N*", $string);
+		$t      = array_map(function ($n)
+		{
+			return "&#$n;";
+		}, $t);
+
+		return implode("", $t);
 	}
 }
