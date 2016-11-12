@@ -108,8 +108,13 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			foreach ($meta as $key => $value)
 			{
-				if ($key == 'section')
+				if ($key == 'section' OR $key == 'default')
 				{
+					if ($key == 'default')
+					{
+						craft()->deprecator->log('meta default key deprecated', 'craft.sproutSeo.meta `default` key has been deprecated. Use `section` key instead: {% do craft.sproutSeo.meta( section: "' . $value . '"") %}');
+					}
+
 					$this->codeSection = $value;
 				}
 				else
