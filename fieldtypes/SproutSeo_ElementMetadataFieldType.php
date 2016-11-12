@@ -108,22 +108,29 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 	public function prepValue($value)
 	{
-		$globals  = sproutSeo()->optimize->globals;
-		$identity = $globals['identity'];
-		$schema   = new SproutSeo_WebsiteIdentityWebsiteSchema();
-
-		if ($identityType = $identity['@type'])
+		// Process the prioritized metadata for the front-end value
+		if (craft()->request->isSiteRequest())
 		{
-			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
-			$schema      = new $schemaModel();
+			$globals  = sproutSeo()->optimize->globals;
+			$identity = $globals['identity'];
+			$schema   = new SproutSeo_WebsiteIdentityWebsiteSchema();
+
+			if ($identityType = $identity['@type'])
+			{
+				$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
+				$schema      = new $schemaModel();
+			}
+
+			$schema->addContext               = true;
+			$schema->globals                  = sproutSeo()->optimize->globals;
+			$schema->element                  = $this->element;
+			$schema->prioritizedMetadataModel = sproutSeo()->optimize->prioritizedMetadataModel;
+
+			return $schema;
 		}
 
-		$schema->addContext               = true;
-		$schema->globals                  = sproutSeo()->optimize->globals;
-		$schema->element                  = $this->element;
-		$schema->prioritizedMetadataModel = sproutSeo()->optimize->prioritizedMetadataModel;
-
-		return $schema;
+		// For the CP, make sure we return the default value
+		return $value;
 	}
 
 	/**
@@ -145,7 +152,18 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		$locale = $this->element->locale;
 
+		// Grab our values from the db
 		$values = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
+
+		// If we have a value, we are probably loading a Draft Entry so let's override any of those values
+		// We need to undo a few things about how the Draft data gets stored so that it gets reprocessed
+		// properly
+		if (count($value))
+		{
+			$draftValues = SproutSeo_MetadataModel::populateModel($value['metadata']);
+
+			$values = $this->prepareDraftValuesForPage($values, $draftValues);
+		}
 
 		$ogImageElements      = array();
 		$metaImageElements    = array();
@@ -620,5 +638,40 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		}
 
 		return $value;
+	}
+
+	/**
+	 * @param $values
+	 * @param $draftValues
+	 *
+	 * @return mixed
+	 */
+	protected function prepareDraftValuesForPage($values, $draftValues)
+	{
+		foreach ($values->getAttributes() as $key => $value)
+		{
+			// Test for a value on each of our models in their order of priority
+			if ($draftValues->getAttribute($key))
+			{
+				$values[$key] = $draftValues[$key];
+			}
+
+			if (($key == 'ogImage' OR $key == 'twitterImage') AND count($values[$key]))
+			{
+				$values[$key] = $values[$key][0];
+			}
+
+			if ($key == 'robots')
+			{
+				$values[$key] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($values[$key]);
+			}
+
+			if ($key == 'customizationSettings')
+			{
+				$values[$key] = json_encode($values[$key]);
+			}
+		}
+
+		return $values;
 	}
 }
