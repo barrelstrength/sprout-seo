@@ -53,7 +53,7 @@ class SproutSeo_CreativeWorkSchema extends SproutSeo_ThingSchema
 	{
 		$identity = $this->globals['identity'];
 		$element  = $this->element;
-		
+
 		if (isset($element->postDate))
 		{
 			$this->addDate('datePublished', $element->postDate);
