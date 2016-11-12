@@ -39,7 +39,7 @@ class SproutSeo_ThingSchema extends SproutSeoBaseSchema
 			$this->addMainEntityOfPage($this->getSchemaOverrideType());
 		}
 
-		$this->addText('title', $metadata->optimizedTitle);
+		$this->addText('name', $metadata->optimizedTitle);
 		$this->addText('description', $metadata->optimizedDescription);
 		$this->addImage('image', $metadata->optimizedImage);
 		$this->addUrl('url', $metadata->canonical);

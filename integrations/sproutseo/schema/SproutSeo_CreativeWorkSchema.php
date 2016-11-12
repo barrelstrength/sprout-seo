@@ -38,9 +38,9 @@ class SproutSeo_CreativeWorkSchema extends SproutSeo_ThingSchema
 		$element  = $this->element;
 		$metadata = $this->prioritizedMetadataModel;
 
-		$this->removeProperty('title');
-
+		$this->removeProperty('name');
 		$this->addText('headline', $metadata->optimizedTitle);
+
 		$this->addText('keywords', $metadata->optimizedKeywords);
 		$this->addDate('dateCreated', $element->dateCreated);
 		$this->addDate('dateModified', $element->dateUpdated);
