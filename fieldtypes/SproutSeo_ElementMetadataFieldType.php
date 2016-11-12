@@ -155,14 +155,14 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		// Grab our values from the db
 		$values = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
 
-		// If we have a value, we are probably loading a Draft Entry so let's override any of those values
-		// We need to undo a few things about how the Draft data gets stored so that it gets reprocessed
-		// properly
+		// If we have a value, we are probably loading a Draft or Invalid Entry so let's override any
+		// of those values. We need to undo a few things about how the Draft data gets stored so
+		// that it gets reprocessed properly
 		if (count($value))
 		{
-			$draftValues = SproutSeo_MetadataModel::populateModel($value['metadata']);
+			$existingValues = SproutSeo_MetadataModel::populateModel($value['metadata']);
 
-			$values = $this->prepareDraftValuesForPage($values, $draftValues);
+			$values = $this->prepareExistingValuesForPage($values, $existingValues);
 		}
 
 		$ogImageElements      = array();
@@ -642,18 +642,18 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 	/**
 	 * @param $values
-	 * @param $draftValues
+	 * @param $existingValues
 	 *
 	 * @return mixed
 	 */
-	protected function prepareDraftValuesForPage($values, $draftValues)
+	protected function prepareExistingValuesForPage($values, $existingValues)
 	{
 		foreach ($values->getAttributes() as $key => $value)
 		{
 			// Test for a value on each of our models in their order of priority
-			if ($draftValues->getAttribute($key))
+			if ($existingValues->getAttribute($key))
 			{
-				$values[$key] = $draftValues[$key];
+				$values[$key] = $existingValues[$key];
 			}
 
 			if (($key == 'ogImage' OR $key == 'twitterImage') AND count($values[$key]))
