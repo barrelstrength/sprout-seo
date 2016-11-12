@@ -256,7 +256,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		$identityType = $this->globals->identity['@type'];
 
 		// Website Identity Schema
-		if ($identityType && isset($this->urlEnabledSection->element))
+		if ($identityType)
 		{
 			// Determine if we have an Organization or Person Schema Type
 			$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
@@ -265,26 +265,35 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			$identitySchema->addContext = true;
 
 			$identitySchema->globals                  = $this->globals;
-			$identitySchema->element                  = $this->urlEnabledSection->element;
 			$identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
+			if (isset($this->urlEnabledSection->element))
+			{
+				$identitySchema->element = $this->urlEnabledSection->element;
+			}
 
 			$schema['websiteIdentity'] = $identitySchema;
 		}
 
 		// Website Identity Website
-		if ($this->globals->identity['name'] && isset($this->urlEnabledSection->element))
+		if ($this->globals->identity['name'])
 		{
 			$websiteSchema             = new SproutSeo_WebsiteIdentityWebsiteSchema();
 			$websiteSchema->addContext = true;
 
 			$websiteSchema->globals                  = $this->globals;
-			$websiteSchema->element                  = $this->urlEnabledSection->element;
 			$websiteSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
+			if (isset($this->urlEnabledSection->element))
+			{
+				$websiteSchema->element = $this->urlEnabledSection->element;
+			}
 
 			$schema['website'] = $websiteSchema;
 		}
 
-		$idendity = $this->globals->identity;
+		$identity = $this->globals->identity;
+
 		// Website Identity Place
 		if (isset($identity['addressId']) && $identity['addressId'])
 		{
@@ -292,11 +301,14 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			$placeSchema->addContext = true;
 
 			$placeSchema->globals                  = $this->globals;
-			$placeSchema->element                  = $this->urlEnabledSection->element;
 			$placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
+			if (isset($this->urlEnabledSection->element))
+			{
+				$placeSchema->element = $this->urlEnabledSection->element;
+			}
+
 			$schema['place'] = $placeSchema;
-			//$output .= $placeSchema->getSchema();
 		}
 
 		$schema['mainEntity'] = $this->getMainEntityStructuredData();
