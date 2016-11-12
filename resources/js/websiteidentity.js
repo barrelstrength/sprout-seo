@@ -44,7 +44,7 @@ $(document).ready(function() {
 		for (var i = 0; i < children.length; i++)
 		{
 			// insert space before capital letters
-			name = children[i].name.replace(/([A-Z])/g, ' $1').trim();
+			name = children[i].name.replace(/([A-Z]{1}[^A-Z\b])/g, ' $1').trim();
 
 			options += '<option value="' + children[i].name + '">' + name + '</option>';
 		}

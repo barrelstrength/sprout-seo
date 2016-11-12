@@ -43,14 +43,14 @@ $(document).ready(function() {
 
 		$.each(children, function(index, value) {
 			// insert space before capital letters
-			name = index.replace(/([A-Z])/g, ' $1').trim();
+			name = index.replace(/([A-Z]{1}[^A-Z\b])/g, ' $1').trim();
 			options += '<option value="' + index + '">' + name + '</option>';
 
-			// let's foreach the childrens
+			// let's foreach the children
 			if (value)
 			{
 				$.each(value, function(key, level3) {
-					name  = "&nbsp;&nbsp;&nbsp;"+key.replace(/([A-Z])/g, ' $1').trim();
+					name  = "&nbsp;&nbsp;&nbsp;"+key.replace(/([A-Z]{1}[^A-Z\b])/g, ' $1').trim();
 					options += '<option value="' + key + '">' + name + '</option>';
 				});
 			}
