@@ -34,17 +34,26 @@ class SproutSeo_CreativeWorkSchema extends SproutSeo_ThingSchema
 	{
 		parent::addProperties();
 
+		$this->removeProperty('name');
+
+		$this->addText('headline', $this->prioritizedMetadataModel->optimizedTitle);
+		$this->addText('keywords', $this->prioritizedMetadataModel->optimizedKeywords);
+		$this->addDate('dateCreated', $this->element->dateCreated);
+		$this->addDate('dateModified', $this->element->dateUpdated);
+
+		$elementType = $this->element->getElementType();
+
+		if ($elementType == 'Entry')
+		{
+			$this->addEntryElementProperties();
+		}
+	}
+
+	public function addEntryElementProperties()
+	{
 		$identity = $this->globals['identity'];
 		$element  = $this->element;
-		$metadata = $this->prioritizedMetadataModel;
-
-		$this->removeProperty('name');
-		$this->addText('headline', $metadata->optimizedTitle);
-
-		$this->addText('keywords', $metadata->optimizedKeywords);
-		$this->addDate('dateCreated', $element->dateCreated);
-		$this->addDate('dateModified', $element->dateUpdated);
-
+		
 		if (isset($element->postDate))
 		{
 			$this->addDate('datePublished', $element->postDate);
