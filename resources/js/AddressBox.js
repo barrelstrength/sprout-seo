@@ -155,7 +155,8 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 
 							$("input[name='sproutseo[globals][identity][latitude]']").val(latitude);
 							$("input[name='sproutseo[globals][identity][longitude]']").val(longitude);
-							Craft.cp.displayNotice(Craft.t('Latitude and Longitude Updated.'));
+
+							Craft.cp.displayNotice(Craft.t('Latitude and Longitude updated.'));
 						}
 						else {
 							onError(response.errors);
