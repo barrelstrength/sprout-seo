@@ -4,7 +4,12 @@
 
 {% set navItems = {
 	'general': { title: "General"|t },
-	'advanced': { title: "Advanced"|t }
+	'advanced': { title: "Advanced"|t },
+
+	'integrations': { heading: 'Integrations'|t },
+	'craftcommerce': { title: "Craft Commerce"|t },
+	'sproutemail': { title: "Sprout Email"|t },
+	'sproutimport': { title: "Sprout Import"|t }
 } %}
 
 {% set selectedItem = craft.request.getSegment(3) %}

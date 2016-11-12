@@ -1,0 +1,24 @@
+{% extends "sproutseo/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+{% import 'sproutseo/_includes/sproutcp' as sprout %}
+
+{% includeCssResource "sproutseo/css/sproutcp.css" %}
+
+{% set title = 'Sprout Import' %}
+
+{% set content %}
+
+	{% set boxBody %}
+		<p>{{ "Migrate to Craft with all of your existing website metadata using Sprout SEO and <a href='{url}' target='_blank'>Sprout Import</a>. Sprout Import makes it easy to keep your Search, Social Sharing, Geo, and Robots metadata, and gives you the opportunity to enhance it with additional Structured Data and improve your workflow."|t({
+				url: "https://sprout.barrelstrengthdesign.com/craft-plugins/import"
+			})|raw }}</p>
+	{% endset %}
+
+	{{ sprout.mediaBox({
+		heading: "Migrate all of your SEO metadata"|t,
+		body: boxBody,
+		resourceUrl: resourceUrl('sproutseo/icons/sprout-icon.svg'),
+		resourceAltText: "Sprout Import Icon"|t,
+	}) }}
+
+{% endset %}
