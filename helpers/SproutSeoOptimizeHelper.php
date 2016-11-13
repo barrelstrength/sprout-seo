@@ -366,14 +366,18 @@ class SproutSeoOptimizeHelper
 
 		$globals = sproutSeo()->globalMetadata->getGlobalMetadata();
 
-		if (count($globals['social']))
+		if (empty($globals['social']))
 		{
-			foreach ($globals['social'] as $key => $socialProfile)
+		  return null;
+		}
+
+		foreach ($globals['social'] as $key => $socialProfile)
+		{
+			if ($socialProfile['profileName'] == "Google+")
 			{
-				if ($socialProfile['profileName'] == "Google+")
-				{
-					$googlePlusUrl = $socialProfile['url'];
-				}
+				// Get our first Google+ URL and bail
+				$googlePlusUrl = $socialProfile['url'];
+				break;
 			}
 		}
 
