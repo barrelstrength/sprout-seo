@@ -49,6 +49,16 @@
 			otherPlaceholderText: 'Custom Value'|t
 		})) }}
 
+		{{ forms.lightswitchField({
+			label: "Display Append Meta Title Value on Homepage"|t,
+			instructions: "Enable this setting to display the Append Meta Title value for your Homepage."|t,
+			name: 'sproutseo[globals][settings][appendTitleValueOnHomepage]',
+			on: settings.appendTitleValueOnHomepage is defined ? settings.appendTitleValueOnHomepage : null,
+			onLabel: "Enable"|t
+		}) }}
+
+		<hr>
+
 		{% set ogTypesOptions = {
 			'' : 'Select Open Graph Type...'|t,
 			'article' : 'Article'|t,

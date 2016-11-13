@@ -395,25 +395,29 @@ class SproutSeoOptimizeHelper
 	{
 		$globals  = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$settings = $globals->settings;
+		
+		$globalAppendTitleValue     = null;
+		$appendTitleValueOnHomepage = $settings['appendTitleValueOnHomepage'];
+		$seoDivider                 = $settings['seoDivider'];
 
-		// @todo - appendTitleValue should be saved/updated with globals so we don't have to make an extra query here
-		$globalAppendTitleValue = $settings['appendTitleValue'];
-		$seoDivider             = $settings['seoDivider'];
-
-		// @todo - should this logic happen while populating the $globalMetadataModel?
-		switch ($globalAppendTitleValue)
+		if ($appendTitleValueOnHomepage OR craft()->request->getPath())
 		{
-			case 'custom':
-				$globalAppendTitleValue = $globalAppendTitleValue;
-				break;
+			$globalAppendTitleValue = $settings['appendTitleValue'];
 
-			case 'sitename':
-				$globalAppendTitleValue = craft()->getInfo('siteName');
-				break;
+			switch ($globalAppendTitleValue)
+			{
+				case 'custom':
+					$globalAppendTitleValue = $globalAppendTitleValue;
+					break;
 
-			default:
-				$globalAppendTitleValue = null;
-				break;
+				case 'sitename':
+					$globalAppendTitleValue = craft()->getInfo('siteName');
+					break;
+
+				default:
+					$globalAppendTitleValue = null;
+					break;
+			}
 		}
 
 		// @todo - can probably make logic more concise
