@@ -10,6 +10,8 @@
 		{{ sectionMetadata.name }}
 	</a>
 
+	{% if urlEnabledSectionKey is defined %}
 	<input type="hidden" name="sproutseo[sections][{{ urlEnabledSectionKey }}][id]" value="{{ urlEnabledSectionKey }}">
+	{% endif %}
 
 </strong>

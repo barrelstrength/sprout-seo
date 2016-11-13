@@ -98,17 +98,9 @@
 {% block customSectionTableRow %}
 
 	<td>
-		<strong style="display:inline-block;padding:7px 10px;">
-			{% if customSection is defined and customSection.enabled %}
-				<span class="status live"></span>
-			{% else %}
-				<span class="status disabled"></span>
-			{% endif %}
-
-			<a href="{{ url('sproutseo/sections/' ~ customSection.id) }}">
-				{{ customSection.name }}
-			</a>
-		</strong>
+		{% include 'sproutseo/sections/_titlecolumn' with {
+			sectionMetadata: customSection
+		} %}
 	</td>
 	<td>
 		<code>{{ customSection.url }}</code>
