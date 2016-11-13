@@ -235,6 +235,12 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			}
 		}
 
+		// Remove the ogAuthor value if we don't have an article
+		if ($prioritizedMetadataModel->ogType != 'article')
+		{
+			$prioritizedMetadataModel->ogAuthor = null;
+		}
+
 		$prioritizedMetadataModel->title = SproutSeoOptimizeHelper::prepareAppendedTitleValue(
 			$prioritizedMetadataModel,
 			$prioritizedMetadataLevels[SproutSeo_MetadataLevels::SectionMetadata],
