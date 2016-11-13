@@ -50,6 +50,7 @@ class SproutSeo_MetadataModel extends BaseModel
 			'type'                 => array(AttributeType::String), // @todo - clarify what type is
 			'enabled'              => array(AttributeType::Bool, 'default' => false, 'required' => true),
 			'locale'               => array(AttributeType::String),
+			'appendTitleValue'     => array(AttributeType::String, 'default' => null),
 			'schemaTypeId'         => array(AttributeType::String),
 			'schemaOverrideTypeId' => array(AttributeType::String),
 			'ogTransform'          => array(AttributeType::String),
@@ -71,10 +72,9 @@ class SproutSeo_MetadataModel extends BaseModel
 		);
 
 		$this->searchMeta = array(
-			'title'            => array(AttributeType::String),
-			'appendTitleValue' => array(AttributeType::String, 'default' => null),
-			'description'      => array(AttributeType::String),
-			'keywords'         => array(AttributeType::String),
+			'title'       => array(AttributeType::String),
+			'description' => array(AttributeType::String),
+			'keywords'    => array(AttributeType::String),
 		);
 
 		$this->robotsMeta = array(
@@ -206,13 +206,13 @@ class SproutSeo_MetadataModel extends BaseModel
 	 */
 	protected function prepareSectionMetadata($overrideInfo)
 	{
-		$attributes  = array();
-		$codeSection = isset($overrideInfo['codeSection']) ?
+		$attributes        = array();
+		$codeSection       = isset($overrideInfo['codeSection']) ?
 			$overrideInfo['codeSection'] :
 			null;
 		$urlEnabledSection = isset($overrideInfo['urlEnabledSection']) ?
-				$overrideInfo['urlEnabledSection'] :
-				null;
+			$overrideInfo['urlEnabledSection'] :
+			null;
 
 		if ($urlEnabledSection)
 		{

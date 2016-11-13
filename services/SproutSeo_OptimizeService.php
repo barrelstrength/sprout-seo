@@ -16,7 +16,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	public $globals;
 
 	/**
-	 * The active Element Group integration with Section and Element info
+	 * The active Section integration with Section and Element info
 	 *
 	 * $urlEnabledSection->element will have the element that matches
 	 * the matchedElementVariable from the $context
@@ -201,6 +201,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			$metadataModel = new SproutSeo_MetadataModel();
 			$codeMetadata  = $this->getCodeMetadata($level);
+
 			$metadataModel = $metadataModel->setMeta($level, $codeMetadata);
 
 			$prioritizedMetadataLevels[$level] = $metadataModel;
@@ -379,8 +380,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			case SproutSeo_MetadataLevels::SectionMetadata:
 				$response = array(
-					'urlEnabled'  => $this->urlEnabledSection,
-					'codeSection' => $this->codeSection
+					'urlEnabledSection' => $this->urlEnabledSection,
+					'codeSection'       => $this->codeSection
 				);
 				break;
 

@@ -417,7 +417,7 @@ class SproutSeoOptimizeHelper
 		}
 
 		// @todo - can probably make logic more concise
-		if ($sectionMetadataModel->appendTitleValue != '')
+		if ($sectionMetadataModel->appendTitleValue)
 		{
 			$appendTitleValue = $sectionMetadataModel->appendTitleValue;
 		}
