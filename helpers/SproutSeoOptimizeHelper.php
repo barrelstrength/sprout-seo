@@ -395,7 +395,7 @@ class SproutSeoOptimizeHelper
 	{
 		$globals  = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$settings = $globals->settings;
-		
+
 		$globalAppendTitleValue     = null;
 		$appendTitleValueOnHomepage = $settings['appendTitleValueOnHomepage'];
 		$seoDivider                 = $settings['seoDivider'];
