@@ -199,14 +199,18 @@ class SproutSeo_SectionMetadataController extends BaseController
 	public function actionDeleteSectionMetadataById()
 	{
 		$this->requirePostRequest();
-		$this->requireAjaxRequest();
 
 		$sectionMetadataId = craft()->request->getRequiredPost('id');
 
 		$result = sproutSeo()->sectionMetadata->deleteSectionMetadataById($sectionMetadataId);
 
-		$this->returnJson(array(
-			'success' => $result >= 0 ? true : false
-		));
+		if (craft()->request->isAjaxRequest())
+		{
+			$this->returnJson(array(
+				'success' => $result >= 0 ? true : false
+			));
+		}
+
+		$this->redirectToPostedUrl();
 	}
 }
