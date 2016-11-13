@@ -47,11 +47,6 @@ class SproutSeo_WebsiteIdentityPersonSchema extends SproutSeoBaseSchema
 			$this->addAddress('address', $schema['addressId']);
 		}
 
-		if ((isset($schema['latitude']) && $schema['latitude']) && (isset($schema['longitude']) && $schema['longitude']))
-		{
-			$this->addGeo('geo', $schema['latitude'], $schema['longitude']);
-		}
-
 		if (isset($schema['image'][0]))
 		{
 			$this->addImage('image', $schema['image'][0]);
