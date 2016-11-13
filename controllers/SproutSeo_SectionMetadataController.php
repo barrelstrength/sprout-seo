@@ -176,7 +176,7 @@ class SproutSeo_SectionMetadataController extends BaseController
 
 		$model = SproutSeo_MetadataSitemapModel::populateModel($sectionMetadata);
 
-		if ($lastInsertId = sproutSeo()->sectionMetadata->saveSectionMetadataViaSitemapSection($model))
+		if (sproutSeo()->sectionMetadata->saveSectionMetadataViaSitemapSection($model))
 		{
 			$this->returnJson(array(
 				'success'         => true,

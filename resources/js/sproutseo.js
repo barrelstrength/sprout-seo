@@ -82,8 +82,6 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 
 			this.status = $('tr[data-rowid="' + rowId + '"] td span.status');
 
-			console.log(rowId);
-
 			data = {
 				"sproutseo": {
 					"metadata": {
@@ -100,20 +98,32 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 				}
 			};
 
-			console.log(data);
-
 			Craft.postActionRequest('sproutSeo/sectionMetadata/saveSectionMetadataViaSitemapSection', data, $.proxy(function(response, textStatus) {
 				if (textStatus == 'success') {
 					if (response.success) {
 
 						var keys     = rowId.split("-");
 						var type     = keys[0];
-						var newRowId = type + "-" + response.sectionMetadata.urlEnabledSectionId;
-						$(changedElement).closest('tr').data('rowid', newRowId);
+						var newRowId = null;
 
-						console.log(keys);
-						console.log(type);
-						console.log(newRowId);
+						if (response.sectionMetadata.urlEnabledSectionId) {
+							newRowId = type + "-" + response.sectionMetadata.urlEnabledSectionId;
+						}
+						else {
+							newRowId = type + "-" + response.sectionMetadata.id;
+						}
+
+						$changedElementRow       = $(changedElement).closest('tr');
+						$changedElementTitleLink = $changedElementRow.find('a.sproutseo-sectiontitle');
+
+						if ($changedElementRow.data('isNew')) {
+							$changedElementTitleLink.attr('href', 'sections/' + response.sectionMetadata.id);
+							$changedElementRow.removeClass('sectionmetadata-isnew');
+							$changedElementRow.data('isNew', 0);
+							$changedElementRow.data('id', response.sectionMetadata.id);
+
+							$changedElementTitleLink.unbind('click');
+						}
 
 						$sectionInputBase = 'input[name="sproutseo[sections][' + rowId + ']';
 

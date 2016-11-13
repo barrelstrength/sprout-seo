@@ -399,7 +399,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 
 		if ($record->save())
 		{
-			$model->id = $record->id;
+			$model->id = craft()->db->getLastInsertID();
 
 			if ($transaction !== null)
 			{
