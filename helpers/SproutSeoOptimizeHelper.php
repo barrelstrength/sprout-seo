@@ -477,43 +477,50 @@ class SproutSeoOptimizeHelper
 		// -------------------------------------------------------------
 		$customizationSettings = JsonHelper::decode($model->customizationSettings);
 
-		if (!$customizationSettings['searchMetaSectionMetadataEnabled'])
+		if (isset($customizationSettings['searchMetaSectionMetadataEnabled']) &&
+				isset($customizationSettings['openGraphSectionMetadataEnabled']) &&
+				isset($customizationSettings['twitterCardSectionMetadataEnabled']) &&
+				isset($customizationSettings['geoSectionMetadataEnabled']) &&
+				isset($customizationSettings['robotsSectionMetadataEnabled']))
 		{
-			foreach ($model['searchMeta'] as $attribute => $value)
+			if (!$customizationSettings['searchMetaSectionMetadataEnabled'])
 			{
-				$model->{$attribute} = null;
+				foreach ($model['searchMeta'] as $attribute => $value)
+				{
+					$model->{$attribute} = null;
+				}
 			}
-		}
 
-		if (!$customizationSettings['openGraphSectionMetadataEnabled'])
-		{
-			foreach ($model['openGraphMeta'] as $attribute => $value)
+			if (!$customizationSettings['openGraphSectionMetadataEnabled'])
 			{
-				$model->{$attribute} = null;
+				foreach ($model['openGraphMeta'] as $attribute => $value)
+				{
+					$model->{$attribute} = null;
+				}
 			}
-		}
 
-		if (!$customizationSettings['twitterCardSectionMetadataEnabled'])
-		{
-			foreach ($model['twitterCardsMeta'] as $attribute => $value)
+			if (!$customizationSettings['twitterCardSectionMetadataEnabled'])
 			{
-				$model->{$attribute} = null;
+				foreach ($model['twitterCardsMeta'] as $attribute => $value)
+				{
+					$model->{$attribute} = null;
+				}
 			}
-		}
 
-		if (!$customizationSettings['geoSectionMetadataEnabled'])
-		{
-			foreach ($model['geographicMeta'] as $attribute => $value)
+			if (!$customizationSettings['geoSectionMetadataEnabled'])
 			{
-				$model->{$attribute} = null;
+				foreach ($model['geographicMeta'] as $attribute => $value)
+				{
+					$model->{$attribute} = null;
+				}
 			}
-		}
 
-		if (!$customizationSettings['robotsSectionMetadataEnabled'])
-		{
-			foreach ($model['robotsMeta'] as $attribute => $value)
+			if (!$customizationSettings['robotsSectionMetadataEnabled'])
 			{
-				$model->{$attribute} = null;
+				foreach ($model['robotsMeta'] as $attribute => $value)
+				{
+					$model->{$attribute} = null;
+				}
 			}
 		}
 

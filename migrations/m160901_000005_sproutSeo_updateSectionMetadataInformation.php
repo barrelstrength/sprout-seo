@@ -281,6 +281,14 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 		$customUrl = 1;
 
+		$defaultCustomizationSettings = array(
+				'searchMetaSectionMetadataEnabled'  => 0,
+				'openGraphSectionMetadataEnabled'   => 0,
+				'twitterCardSectionMetadataEnabled' => 0,
+				'geoSectionMetadataEnabled'         => 0,
+				'robotsSectionMetadataEnabled'      => 0
+			);
+
 		foreach ($sitemaps as $sitemap)
 		{
 			$locale = craft()->i18n->getLocaleById(craft()->language);
@@ -291,15 +299,16 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				$customHandle = $this->_validateDuplicateHandle('customUrl'.$customUrl, '');
 				// Create a new row in sections
 				craft()->db->createCommand()->insert($tableName, array(
-					'urlEnabledSectionId' => null,
-					'isCustom'            => 1,
-					'enabled'             => 0,
-					'type'                => null,
-					'name'                => 'Custom Url '.$customUrl,
-					'handle'              => $customHandle,
-					'url'                 => $sitemap['url'],
-					'priority'            => '0.5',
-					'changeFrequency'     => 'weekly'
+					'urlEnabledSectionId'   => null,
+					'isCustom'              => 1,
+					'enabled'               => 0,
+					'type'                  => null,
+					'name'                  => 'Custom Url '.$customUrl,
+					'handle'                => $customHandle,
+					'url'                   => $sitemap['url'],
+					'priority'              => '0.5',
+					'changeFrequency'       => 'weekly',
+					'customizationSettings' => json_encode($defaultCustomizationSettings),
 				));
 
 				$customUrl++;
@@ -329,15 +338,16 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					$entryHandle = $this->_validateDuplicateHandle($section['handle'], 'Entry');
 					// Create a new row in sections
 					craft()->db->createCommand()->insert($tableName, array(
-						'urlEnabledSectionId' => $sitemap['elementGroupId'],
-						'isCustom'            => 0,
-						'enabled'             => $sitemap['enabled'],
-						'type'                => 'entries',
-						'name'                => $section['name'],
-						'handle'              => $entryHandle,
-						'url'                 => $section18n['urlFormat'],
-						'priority'            => $sitemap['priority'],
-						'changeFrequency'     => $sitemap['changeFrequency']
+						'urlEnabledSectionId'   => $sitemap['elementGroupId'],
+						'isCustom'              => 0,
+						'enabled'               => $sitemap['enabled'],
+						'type'                  => 'entries',
+						'name'                  => $section['name'],
+						'handle'                => $entryHandle,
+						'url'                   => $section18n['urlFormat'],
+						'priority'              => $sitemap['priority'],
+						'changeFrequency'       => $sitemap['changeFrequency'],
+						'customizationSettings' => json_encode($defaultCustomizationSettings),
 					));
 				}
 			}
@@ -365,15 +375,16 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					$categoryHandle = $this->_validateDuplicateHandle($category['handle'], 'Category');
 					// Create a new row in sections
 					craft()->db->createCommand()->insert($tableName, array(
-						'urlEnabledSectionId' => $sitemap['elementGroupId'],
-						'isCustom'            => 0,
-						'enabled'             => $sitemap['enabled'],
-						'type'                => 'categories',
-						'name'                => $category['name'],
-						'handle'              => $categoryHandle,
-						'url'                 => $category18n['urlFormat'],
-						'priority'            => $sitemap['priority'],
-						'changeFrequency'     => $sitemap['changeFrequency']
+						'urlEnabledSectionId'   => $sitemap['elementGroupId'],
+						'isCustom'              => 0,
+						'enabled'               => $sitemap['enabled'],
+						'type'                  => 'categories',
+						'name'                  => $category['name'],
+						'handle'                => $categoryHandle,
+						'url'                   => $category18n['urlFormat'],
+						'priority'              => $sitemap['priority'],
+						'changeFrequency'       => $sitemap['changeFrequency'],
+						'customizationSettings' => json_encode($defaultCustomizationSettings),
 					));
 				}
 			}
