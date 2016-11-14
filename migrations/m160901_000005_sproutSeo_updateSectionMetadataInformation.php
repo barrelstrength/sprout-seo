@@ -30,7 +30,6 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				'ogSiteName',
 				'ogAuthor',
 				'ogPublisher',
-				'ogUrl',
 				'ogTitle',
 				'ogDescription',
 				'ogImage',
@@ -40,13 +39,10 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				'ogImageType',
 				'ogAudio',
 				'ogVideo',
-				'ogLocale',
 			),
 			'enableTwitter'   => array(
 				'twitterCard',
-				'twitterSite',
 				'twitterCreator',
-				'twitterUrl',
 				'twitterTitle',
 				'twitterDescription',
 				'twitterImage',
@@ -101,6 +97,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 					{
 						$enableMetaDetails      = true;
 						$detailsValues[$detail] = 1;
+						break;
 					}
 				}
 			}
@@ -214,7 +211,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			}
 
 			$settings = array(
-				'seoDivider'                 => $pluginSettings['seoDivider'],
+				'seoDivider'                 => isset($pluginSettings['seoDivider']) ? $pluginSettings['seoDivider'] : "-",
 				'appendTitleValue'           => $globalFallback['appendTitleValue'] ? 'sitename' : "",
 				'appendTitleValueOnHomepage' => "",
 				'twitterTransform'           => "",
