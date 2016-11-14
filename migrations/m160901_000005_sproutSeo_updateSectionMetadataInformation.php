@@ -81,7 +81,6 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 		$enableMetaDetailsFields = false;
 
-
 		foreach ($rows as $row)
 		{
 			// let's validate any possible duplicate handle
@@ -94,17 +93,15 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				'enableRobots'    => 0,
 			);
 
-			if (!$enableMetaDetails)
+
+			foreach ($metaInfoDetails as $detail => $metaInfo)
 			{
-				foreach ($metaInfoDetails as $detail => $metaInfo)
+				foreach ($metaInfo as $meta)
 				{
-					foreach ($metaInfo as $meta)
+					if (isset($row[$meta]) && $row[$meta])
 					{
-						if (isset($row[$meta]) && $row[$meta])
-						{
-							$enableMetaDetails = true;
-							$detailsValues[$detail] = 1;
-						}
+						$enableMetaDetails = true;
+						$detailsValues[$detail] = 1;
 					}
 				}
 			}
