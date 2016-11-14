@@ -24,34 +24,55 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 		$enableMetaDetails = false;
 
-		$metaInfo = array(
-			'ogType',
-			'ogSiteName',
-			'ogAuthor',
-			'ogPublisher',
-			'ogUrl',
-			'ogTitle',
-			'ogDescription',
-			'ogImage',
-			'ogImageSecure',
-			'ogImageWidth',
-			'ogImageHeight',
-			'ogImageType',
-			'ogAudio',
-			'ogVideo',
-			'ogLocale',
-			'twitterCard',
-			'twitterSite',
-			'twitterCreator',
-			'twitterUrl',
-			'twitterTitle',
-			'twitterDescription',
-			'twitterImage',
-			'twitterPlayer',
-			'twitterPlayerStream',
-			'twitterPlayerStreamContentType',
-			'twitterPlayerWidth',
-			'twitterPlayerHeight',
+		$metaInfoDetails = array(
+			'enableOpenGraph' => array(
+				'ogType',
+				'ogSiteName',
+				'ogAuthor',
+				'ogPublisher',
+				'ogUrl',
+				'ogTitle',
+				'ogDescription',
+				'ogImage',
+				'ogImageSecure',
+				'ogImageWidth',
+				'ogImageHeight',
+				'ogImageType',
+				'ogAudio',
+				'ogVideo',
+				'ogLocale',
+			),
+			'enableTwitter' => array(
+				'twitterCard',
+				'twitterSite',
+				'twitterCreator',
+				'twitterUrl',
+				'twitterTitle',
+				'twitterDescription',
+				'twitterImage',
+				'twitterPlayer',
+				'twitterPlayerStream',
+				'twitterPlayerStreamContentType',
+				'twitterPlayerWidth',
+				'twitterPlayerHeight',
+			),
+			'enableGeo' => array(
+				'region',
+				'placename',
+				'position',
+				'latitude',
+				'longitude'
+			),
+			'enableRobots' => array(
+				'robots'
+			)
+		);
+
+		$detailsValues = array (
+			'enableOpenGraph' => false,
+			'enableTwitter'   => false,
+			'enableGeo'       => false,
+			'enableRobots'    => false,
 		);
 
 		$pluginSettings = craft()->db->createCommand()
@@ -67,6 +88,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 		$enableMetaDetailsFields = false;
 
+
 		foreach ($rows as $row)
 		{
 			// let's validate any possible duplicate handle
@@ -74,30 +96,30 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 			if (!$enableMetaDetails)
 			{
-				foreach ($metaInfo as $meta)
+				foreach ($metaInfoDetails as $detail => $metaInfo)
 				{
-					if (isset($row[$meta]) && $row[$meta])
+					foreach ($metaInfo as $meta)
 					{
-						$enableMetaDetails = true;
-						break;
+						if (isset($row[$meta]) && $row[$meta])
+						{
+							$enableMetaDetails = true;
+							$detailsValues[$detail] = true;
+						}
 					}
 				}
 			}
 
 			$customizationSettings = array(
 				'searchMetaSectionMetadataEnabled'  => 0,
-				'openGraphSectionMetadataEnabled'   => 0,
-				'twitterCardSectionMetadataEnabled' => 0,
-				'geoSectionMetadataEnabled'         => 0,
-				'robotsSectionMetadataEnabled'      => 0,
+				'openGraphSectionMetadataEnabled'   => $detailsValues['enableOpenGraph'],
+				'twitterCardSectionMetadataEnabled' => $detailsValues['enableTwitter'],
+				'geoSectionMetadataEnabled'         => $detailsValues['enableGeo'],
+				'robotsSectionMetadataEnabled'      => $detailsValues['enableRobots']
 			);
 
 			if ($enableMetaDetails)
 			{
 				$enableMetaDetailsFields = true;
-				$customizationSettings['openGraphSectionMetadataEnabled']   = 1;
-				$customizationSettings['twitterCardSectionMetadataEnabled'] = 1;
-				$customizationSettings['geoSectionMetadataEnabled']         = 1;
 			}
 
 			$appendTitleValue = $row['appendTitleValue'] == 1 ? "{divider} {siteName}" : "";
@@ -220,7 +242,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				),
 				'class=:class', array(':class' => 'SproutSeo')
 			);
-			// ends plung update.
+			// ends plugin update.
 
 			if ($globalFallback['ogType'] || $globalFallback['twitterCard'])
 			{
