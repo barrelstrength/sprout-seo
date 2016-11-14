@@ -264,6 +264,25 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		{
 			$locale = craft()->i18n->getLocaleById(craft()->language);
 
+			// support for custom urls
+			if ((!$sitemap['elementGroupId'] && !$sitemap['type']) && $sitemap['url'])
+			{
+				$customHandle = $this->_validateDuplicateHandle('Custom', 'url');
+				$customName   = ucfirst($customHandle);
+				// Create a new row in sections
+				craft()->db->createCommand()->insert($tableName, array(
+					'urlEnabledSectionId' => null,
+					'isCustom'            => 1,
+					'enabled'             => 0,
+					'type'                => null,
+					'name'                => $customName,
+					'handle'              => $customHandle,
+					'url'                 => $sitemap['url'],
+					'priority'            => '0.5',
+					'changeFrequency'     => 'weekly'
+				));
+			}
+
 			// support for sections (entries) and categories
 			if ($sitemap['elementGroupId'] && $sitemap['type'] == 'sections')
 			{
