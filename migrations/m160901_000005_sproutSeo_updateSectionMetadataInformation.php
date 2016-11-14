@@ -260,6 +260,8 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			->from($sitemapTable)
 			->queryAll();
 
+		$customUrl = 1;
+
 		foreach ($sitemaps as $sitemap)
 		{
 			$locale = craft()->i18n->getLocaleById(craft()->language);
@@ -267,20 +269,21 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			// support for custom urls
 			if ((!$sitemap['elementGroupId'] && !$sitemap['type']) && $sitemap['url'])
 			{
-				$customHandle = $this->_validateDuplicateHandle('Custom', 'url');
-				$customName   = ucfirst($customHandle);
+				$customHandle = $this->_validateDuplicateHandle('customUrl'.$customUrl, '');
 				// Create a new row in sections
 				craft()->db->createCommand()->insert($tableName, array(
 					'urlEnabledSectionId' => null,
 					'isCustom'            => 1,
 					'enabled'             => 0,
 					'type'                => null,
-					'name'                => $customName,
+					'name'                => 'Custom Url '.$customUrl,
 					'handle'              => $customHandle,
 					'url'                 => $sitemap['url'],
 					'priority'            => '0.5',
 					'changeFrequency'     => 'weekly'
 				));
+
+				$customUrl++;
 			}
 
 			// support for sections (entries) and categories
