@@ -42,7 +42,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				'ogVideo',
 				'ogLocale',
 			),
-			'enableTwitter' => array(
+			'enableTwitter'   => array(
 				'twitterCard',
 				'twitterSite',
 				'twitterCreator',
@@ -56,23 +56,23 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				'twitterPlayerWidth',
 				'twitterPlayerHeight',
 			),
-			'enableGeo' => array(
+			'enableGeo'       => array(
 				'region',
 				'placename',
 				'position',
 				'latitude',
 				'longitude'
 			),
-			'enableRobots' => array(
+			'enableRobots'    => array(
 				'robots'
 			)
 		);
 
 		$pluginSettings = craft()->db->createCommand()
-				->select('*')
-				->from('plugins')
-				->where('class=:class', array(':class' => 'SproutSeo'))
-				->queryRow();
+			->select('*')
+			->from('plugins')
+			->where('class=:class', array(':class' => 'SproutSeo'))
+			->queryRow();
 
 		$pluginSettings = json_decode($pluginSettings['settings'], true);
 
@@ -86,13 +86,12 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			// let's validate any possible duplicate handle
 			$row['handle'] = 'customSection' . ucfirst($row['handle']);
 
-			$detailsValues = array (
+			$detailsValues = array(
 				'enableOpenGraph' => 0,
 				'enableTwitter'   => 0,
 				'enableGeo'       => 0,
 				'enableRobots'    => 0,
 			);
-
 
 			foreach ($metaInfoDetails as $detail => $metaInfo)
 			{
@@ -100,7 +99,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				{
 					if (isset($row[$meta]) && $row[$meta])
 					{
-						$enableMetaDetails = true;
+						$enableMetaDetails      = true;
 						$detailsValues[$detail] = 1;
 					}
 				}
@@ -215,11 +214,11 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			}
 
 			$settings = array(
-				'seoDivider'       => $pluginSettings['seoDivider'],
-				'appendTitleValue' => $globalFallback['appendTitleValue'] ? 'sitename' : "",
+				'seoDivider'                 => $pluginSettings['seoDivider'],
+				'appendTitleValue'           => $globalFallback['appendTitleValue'] ? 'sitename' : "",
 				'appendTitleValueOnHomepage' => "",
-				'twitterTransform' => "",
-				'ogTransform'      => ""
+				'twitterTransform'           => "",
+				'ogTransform'                => ""
 			);
 
 			// updates plugin settings
@@ -282,12 +281,12 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		$customUrl = 1;
 
 		$defaultCustomizationSettings = array(
-				'searchMetaSectionMetadataEnabled'  => 0,
-				'openGraphSectionMetadataEnabled'   => 0,
-				'twitterCardSectionMetadataEnabled' => 0,
-				'geoSectionMetadataEnabled'         => 0,
-				'robotsSectionMetadataEnabled'      => 0
-			);
+			'searchMetaSectionMetadataEnabled'  => 0,
+			'openGraphSectionMetadataEnabled'   => 0,
+			'twitterCardSectionMetadataEnabled' => 0,
+			'geoSectionMetadataEnabled'         => 0,
+			'robotsSectionMetadataEnabled'      => 0
+		);
 
 		foreach ($sitemaps as $sitemap)
 		{
@@ -296,18 +295,18 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			// support for custom urls
 			if ((!$sitemap['elementGroupId'] && !$sitemap['type']) && $sitemap['url'])
 			{
-				$customHandle = $this->_validateDuplicateHandle('customUrl'.$customUrl, '');
+				$customHandle = $this->_validateDuplicateHandle('customSection' . $customUrl, '');
 				// Create a new row in sections
 				craft()->db->createCommand()->insert($tableName, array(
 					'urlEnabledSectionId'   => null,
 					'isCustom'              => 1,
-					'enabled'               => 0,
+					'enabled'               => $sitemap['enabled'],
 					'type'                  => null,
-					'name'                  => 'Custom Url '.$customUrl,
+					'name'                  => 'Custom Section ' . $customUrl,
 					'handle'                => $customHandle,
 					'url'                   => $sitemap['url'],
-					'priority'              => '0.5',
-					'changeFrequency'       => 'weekly',
+					'priority'              => $sitemap['priority'],
+					'changeFrequency'       => $sitemap['changeFrequency'],
 					'customizationSettings' => json_encode($defaultCustomizationSettings),
 				));
 
@@ -404,12 +403,12 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 		if ($section)
 		{
-			$aux = 1;
-			$newHandle = $handle.$source;
+			$aux       = 1;
+			$newHandle = $handle . $source;
 			$section   = $this->_getSectionByHandle($newHandle);
 			while ($section)
 			{
-				$newHandle = $handle.$source.$aux;
+				$newHandle = $handle . $source . $aux;
 				$section   = $this->_getSectionByHandle($newHandle);
 			}
 
@@ -426,7 +425,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		$section = craft()->db->createCommand()
 			->select('*')
 			->from($tableName)
-			->where('handle=:handle', array(':handle'=>$handle))
+			->where('handle=:handle', array(':handle' => $handle))
 			->queryRow();
 
 		return $section;
