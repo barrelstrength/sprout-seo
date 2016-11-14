@@ -268,7 +268,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		craft()->structures->saveStructure($structure);
 
 		// Add our default plugin settings
-		$settings = '{"pluginNameOverride":"' . $pluginName . '", "seoDivider":"-", "structureId":"' . $structure->id . '"}';
+		$settings = '{"pluginNameOverride":"' . $pluginName . '", "structureId":"' . $structure->id . '"}';
 
 		craft()->db->createCommand()->update('plugins', array(
 			'settings' => $settings

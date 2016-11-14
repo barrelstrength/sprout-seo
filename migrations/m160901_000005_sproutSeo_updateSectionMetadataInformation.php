@@ -54,6 +54,19 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			'twitterPlayerHeight',
 		);
 
+		$pluginSettings = craft()->db->createCommand()
+				->select('*')
+				->from('plugins')
+				->where('class=:class', array(':class' => 'SproutSeo'))
+				->queryRow();
+
+		$pluginSettings = json_decode($pluginSettings['settings'], true);
+
+		$pluginSettings['twitterTransform'] = '';
+		$pluginSettings['ogTransform']      = '';
+
+		$enableMetaDetailsFields = false;
+
 		foreach ($rows as $row)
 		{
 			// let's validate any possible duplicate handle
@@ -71,16 +84,6 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				}
 			}
 
-			$pluginSettings = craft()->db->createCommand()
-				->select('*')
-				->from('plugins')
-				->where('class=:class', array(':class' => 'SproutSeo'))
-				->queryRow();
-
-			$pluginSettings                     = json_decode($pluginSettings['settings'], true);
-			$pluginSettings['twitterTransform'] = '';
-			$pluginSettings['ogTransform']      = '';
-
 			$customizationSettings = array(
 				'searchMetaSectionMetadataEnabled'  => 0,
 				'openGraphSectionMetadataEnabled'   => 0,
@@ -91,17 +94,11 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 			if ($enableMetaDetails)
 			{
-				$pluginSettings['enableMetaDetailsFields']                  = 1;
+				$enableMetaDetailsFields = true;
 				$customizationSettings['openGraphSectionMetadataEnabled']   = 1;
 				$customizationSettings['twitterCardSectionMetadataEnabled'] = 1;
 				$customizationSettings['geoSectionMetadataEnabled']         = 1;
 			}
-
-			craft()->db->createCommand()->update('plugins', array(
-				'settings' => json_encode($pluginSettings)
-			),
-				'class=:class', array(':class' => 'SproutSeo')
-			);
 
 			$appendTitleValue = $row['appendTitleValue'] == 1 ? "{divider} {siteName}" : "";
 
@@ -120,24 +117,15 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			$enableCustom = true;
 		}
 
-		$pluginSettings = craft()->db->createCommand()
-			->select('*')
-			->from('plugins')
-			->where('class=:class', array(':class' => 'SproutSeo'))
-			->queryRow();
-
-		$pluginSettings = json_decode($pluginSettings['settings'], true);
+		if ($enableMetaDetailsFields)
+		{
+			$pluginSettings['enableMetaDetailsFields'] = 1;
+		}
 
 		if ($enableCustom)
 		{
 			// Plugin settings
 			$pluginSettings['enableCustomSections'] = 1;
-
-			craft()->db->createCommand()->update('plugins', array(
-				'settings' => json_encode($pluginSettings)
-			),
-				'class=:class', array(':class' => 'SproutSeo')
-			);
 		}
 
 		// Move globalFallback to globals
@@ -210,9 +198,29 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			$settings = array(
 				'seoDivider'       => $pluginSettings['seoDivider'],
 				'appendTitleValue' => $globalFallback['appendTitleValue'] ? 'sitename' : "",
+				'appendTitleValueOnHomepage' => "",
 				'twitterTransform' => "",
 				'ogTransform'      => ""
 			);
+
+			// updates plugin settings
+			if (isset($pluginSettings['seoDivider']))
+			{
+				unset($pluginSettings['seoDivider']);
+			}
+
+			if (isset($pluginSettings['appendTitleValue']))
+			{
+				unset($pluginSettings['appendTitleValue']);
+			}
+
+			craft()->db->createCommand()->update('plugins',
+				array(
+					'settings' => json_encode($pluginSettings)
+				),
+				'class=:class', array(':class' => 'SproutSeo')
+			);
+			// ends plung update.
 
 			if ($globalFallback['ogType'] || $globalFallback['twitterCard'])
 			{

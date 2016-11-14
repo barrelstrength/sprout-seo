@@ -8,7 +8,6 @@ class SproutSeo_SettingsModel extends BaseModel
 		return array(
 			'pluginNameOverride'      => AttributeType::String,
 			'appendTitleValue'        => AttributeType::Bool,
-			'seoDivider'              => AttributeType::String,
 			'localeIdOverride'        => AttributeType::String,
 			'enableCustomSections'    => AttributeType::Bool,
 			'enableMetaDetailsFields' => AttributeType::Bool,
