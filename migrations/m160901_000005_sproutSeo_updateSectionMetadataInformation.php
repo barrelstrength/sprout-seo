@@ -68,13 +68,6 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			)
 		);
 
-		$detailsValues = array (
-			'enableOpenGraph' => false,
-			'enableTwitter'   => false,
-			'enableGeo'       => false,
-			'enableRobots'    => false,
-		);
-
 		$pluginSettings = craft()->db->createCommand()
 				->select('*')
 				->from('plugins')
@@ -94,6 +87,13 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			// let's validate any possible duplicate handle
 			$row['handle'] = 'customSection' . ucfirst($row['handle']);
 
+			$detailsValues = array (
+				'enableOpenGraph' => 0,
+				'enableTwitter'   => 0,
+				'enableGeo'       => 0,
+				'enableRobots'    => 0,
+			);
+
 			if (!$enableMetaDetails)
 			{
 				foreach ($metaInfoDetails as $detail => $metaInfo)
@@ -103,7 +103,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 						if (isset($row[$meta]) && $row[$meta])
 						{
 							$enableMetaDetails = true;
-							$detailsValues[$detail] = true;
+							$detailsValues[$detail] = 1;
 						}
 					}
 				}
