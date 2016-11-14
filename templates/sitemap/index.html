@@ -98,19 +98,12 @@
 {% block customSectionTableRow %}
 
 	<td>
-		<div style="display:inline-block;padding:7px 0 7px 10px;">
-			{% if (customSection.enabled is defined and customSection.enabled == 1) %}
-				<span class="status live"></span>
-			{% else %}
-				<span class="status disabled"></span>
-			{% endif %}
-		</div>
+		{% include 'sproutseo/sections/_titlecolumn' with {
+			sectionMetadata: customSection
+		} %}
 
 		<input type="hidden" name="sproutseo[sections][{{ customSectionId }}][id]" value="{{ customSectionId }}">
 		<input type="hidden" name="sproutseo[sections][{{ customSectionId }}][url]" value="{{ customSection.url }}">
-
-		<strong>{{ customSection.title }}</strong>
-
 	</td>
 	<td>
 		<code>
