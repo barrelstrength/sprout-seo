@@ -40,6 +40,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 		$queryButton:  null,
 
 		addressInfoId: null,
+		addressInfo  : null,
 		$addressForm:  null,
 		countryCode:   null,
 		actionUrl:     null,
@@ -143,10 +144,17 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 			ev.preventDefault();
 
 			var self = this;
+			var spanValues = [];
 
-			if (self.addressInfoId)
+			$(".address-format").each(function(){
+					spanValues.push($(this).text());
+			});
+
+			self.addressInfo = spanValues.join("|");
+
+			if (!$('.address-format').is(':hidden'))
 			{
-				var data = { addressInfoId: self.addressInfoId };
+				var data = { addressInfo: self.addressInfo };
 
 				Craft.postActionRequest('sproutSeo/address/queryAddress', data, $.proxy(function(response) {
 						if (response.result == true) {
@@ -166,7 +174,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 			}
 			else
 			{
-				Craft.cp.displayError(Craft.t('Please save globals with an address'));
+				Craft.cp.displayError(Craft.t('Please add an address'));
 			}
 		},
 

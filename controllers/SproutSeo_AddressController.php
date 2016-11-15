@@ -218,13 +218,11 @@ class SproutSeo_AddressController extends BaseController
 		$this->requireAjaxRequest();
 		$this->requirePostRequest();
 
-		$addressId        = null;
-		$addressInfoModel = null;
+		$addressInfo      = null;
 
-		if (craft()->request->getPost('addressInfoId') != null)
+		if (craft()->request->getPost('addressInfo') != null)
 		{
-			$addressId = craft()->request->getPost('addressInfoId');
-			$addressInfoModel = sproutSeo()->address->getAddressById($addressId);
+			$addressInfo = craft()->request->getPost('addressInfo');
 		}
 
 		$result = array(
@@ -236,22 +234,11 @@ class SproutSeo_AddressController extends BaseController
 		{
 			$data = array();
 
-			if (isset($addressInfoModel->id) && $addressInfoModel->id)
+			if ($addressInfo)
 			{
-				$blankSpace = ' ';
-				// Address
-				$address = $addressInfoModel->address1.
-						$blankSpace.
-						$addressInfoModel->address2.
-						$blankSpace.
-						$addressInfoModel->locality.
-						$blankSpace.
-						$addressInfoModel->administrativeArea.
-						$blankSpace.
-						$addressInfoModel->countryCode;
-
+				$addressInfo = str_replace("\n", " ", $addressInfo);
 				// Get JSON results from this request
-				$geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=false');
+				$geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($addressInfo).'&sensor=false');
 
 				// Convert the JSON to an array
 				$geo = json_decode($geo, true);
