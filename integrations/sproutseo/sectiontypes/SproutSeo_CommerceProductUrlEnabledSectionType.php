@@ -78,7 +78,19 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	 */
 	public function getAllUrlEnabledSections()
 	{
-		return craft()->commerce_productTypes->getAllProductTypes();
+		$urlEnabledSections = array();
+
+		$sections = craft()->commerce_productTypes->getAllProductTypes();
+
+		foreach ($sections as $section) 
+		{
+			if ($section->hasUrls)
+			{
+				$urlEnabledSections[] = $section;
+			}
+		}
+
+		return $urlEnabledSections;
 	}
 
 	/**

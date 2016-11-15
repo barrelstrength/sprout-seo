@@ -45,7 +45,19 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 
 	public function getAllUrlEnabledSections()
 	{
-		return craft()->categories->getAllGroups();
+		$urlEnabledSections = array();
+
+		$sections = craft()->categories->getAllGroups();
+
+		foreach ($sections as $section) 
+		{
+			if ($section->hasUrls)
+			{
+				$urlEnabledSections[] = $section;
+			}
+		}
+
+		return $urlEnabledSections;
 	}
 
 	public function getTableName()
