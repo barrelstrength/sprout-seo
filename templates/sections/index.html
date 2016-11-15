@@ -107,9 +107,23 @@
 	</td>
 	<td>
 		<div class="sprout-metadata-status" style="color:#ccc;">
-			<span class="sproutseo-icon icon-search">&#xe800;</span>
-			<span class="sproutseo-icon icon-facebook">&#xe802;</span>
-			<span class="sproutseo-icon icon-twitter">&#xe807;</span>
+			<span class="sproutseo-icon icon-search
+			{% if ((customSection.optimizedTitle or customSection.title) or
+			(customSection.optimizedDescription or customSection.description))
+			%}sproutseo-status-pass{% endif %}">&#xe800;</span>
+
+			<span class="sproutseo-icon icon-facebook
+			{% if ((customSection.optimizedTitle or customSection.ogTitle) or
+			(customSection.optimizedDescription or customSection.ogDescription) or
+			(customSection.optimizedImage or customSection.ogImage))
+			%}sproutseo-status-pass{% endif %}">&#xe802;</span>
+
+			<span class="sproutseo-icon icon-twitter
+			{% if ((customSection.optimizedTitle or customSection.twitterTitle) or
+			(customSection.optimizedTitle or customSection.twitterDescription) or
+			(customSection.optimizedImage or customSection.twitterImage))
+			%}sproutseo-status-pass{% endif %}">&#xe807;</span>
+
 			{#<span class="sproutseo-icon icon-edit">&#xe805;</span>#}
 			<span class="sproutseo-icon icon-sitemap {% if customSection.enabled %}sproutseo-status-pass{% endif %}">&#xf0e8;</span>
 		</div>
