@@ -356,6 +356,41 @@ class SproutSeoOptimizeHelper
 	}
 
 	/**
+	 * Check our Social Profile settings for a facebook page.
+	 * Return the first facebook page
+	 *
+	 * @param $socialProfiles
+	 *
+	 * @return null|string
+	 */
+	public static function getFacebookPage($socialProfiles = array())
+	{
+		if (!isset($socialProfiles))
+		{
+			return null;
+		}
+
+		$facebookUrl = null;
+
+		foreach ($socialProfiles as $profile)
+		{
+			$socialProfileNameFromPost     = isset($profile[0]) ? $profile[0] : null;
+			$socialProfileNameFromSettings = isset($profile['profileName']) ? $profile['profileName'] : null;
+
+			// Support syntax for both POST data being saved and previous saved social settings
+			if ($socialProfileNameFromPost == 'Facebook' or $socialProfileNameFromSettings == 'Facebook')
+			{
+				$facebookUrlFromPost = isset($socialProfileNameFromPost) ? $profile[1] : null;
+				$facebookUrl         = isset($socialProfileNameFromSettings) ? $profile['url'] : $facebookUrlFromPost;
+
+				break;
+			}
+		}
+
+		return $facebookUrl;
+	}
+
+	/**
 	 * @param $socials
 	 *
 	 * @return null

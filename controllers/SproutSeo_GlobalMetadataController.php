@@ -147,6 +147,13 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$localeId = $settings->localeIdOverride;
 		}
 
+		$facebookPage = SproutSeoOptimizeHelper::getFacebookPage($socialProfiles);
+
+		if ($facebookPage)
+		{
+			$globalMetadata->ogPublisher = $facebookPage;
+		}
+
 		if ($identity)
 		{
 			$identityName         = $identity['name'];
@@ -174,7 +181,6 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$globalMetadata->ogType        = 'website';
 			$globalMetadata->ogSiteName    = $siteName;
 			$globalMetadata->ogUrl         = $siteUrl;
-			$globalMetadata->ogPublisher   = $identityName;
 			$globalMetadata->ogTitle       = $optimizedTitle;
 			$globalMetadata->ogDescription = $optimizedDescription;
 			$globalMetadata->ogImage       = $optimizedImage;
