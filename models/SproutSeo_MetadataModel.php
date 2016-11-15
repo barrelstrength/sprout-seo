@@ -463,7 +463,12 @@ class SproutSeo_MetadataModel extends BaseModel
 
 		if ($this->customizationSettings)
 		{
-			$response = json_decode($this->customizationSettings, true);
+			$customizationSettings = json_decode($this->customizationSettings, true);
+			
+			if (count($customizationSettings))
+			{
+				$response = $customizationSettings;
+			}
 		}
 
 		return $response;
