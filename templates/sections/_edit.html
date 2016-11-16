@@ -82,16 +82,6 @@
 					class: not isNew ? 'disabled' : ''
 				}) }}
 
-				{{ forms.textField({
-					label: "URL"|t,
-					id: "url",
-					name: 'sproutseo[metadata][url]',
-					value: (sectionMetadata.url == '__home__') ? "/" : sectionMetadata.url,
-					errors: sectionMetadata.getErrors('url'),
-					readonly: not isNew,
-					class: not isNew ? 'disabled' : ''
-				}) }}
-
 				<div class="field">
 					<div class="heading">
 						<label>{{ "Section"|t }}</label>
