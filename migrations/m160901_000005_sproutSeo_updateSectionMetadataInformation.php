@@ -231,13 +231,6 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			{
 				unset($pluginSettings['appendTitleValue']);
 			}
-
-			craft()->db->createCommand()->update('plugins',
-				array(
-					'settings' => json_encode($pluginSettings)
-				),
-				'class=:class', array(':class' => 'SproutSeo')
-			);
 			// ends plugin update.
 
 			if ($globalFallback['ogType'] || $globalFallback['twitterCard'])
@@ -269,6 +262,14 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 				array(':id' => 1)
 			);
 		}
+
+		//Update plugin settings
+		craft()->db->createCommand()->update('plugins',
+			array(
+				'settings' => json_encode($pluginSettings)
+			),
+			'class=:class', array(':class' => 'SproutSeo')
+		);
 
 		// Migrate Sitemap info
 		$sitemapTable = "sproutseo_sitemap";
