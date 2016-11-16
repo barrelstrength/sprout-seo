@@ -366,6 +366,14 @@ class SproutSeo_MetadataModel extends BaseModel
 			}
 		}
 
+		if (isset($tagData['og:publisher']))
+		{
+			if ($this->ogType != 'article')
+			{
+				unset($tagData['og:publisher']);
+			}
+		}
+
 		return $tagData;
 	}
 
@@ -464,7 +472,7 @@ class SproutSeo_MetadataModel extends BaseModel
 		if ($this->customizationSettings)
 		{
 			$customizationSettings = json_decode($this->customizationSettings, true);
-			
+
 			if (count($customizationSettings))
 			{
 				$response = $customizationSettings;
