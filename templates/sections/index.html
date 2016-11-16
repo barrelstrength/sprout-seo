@@ -57,7 +57,7 @@
 		{% if sectionMetadata.url == '__home__' %}
 			<span data-icon="home" title="Homepage"></span>
 		{% else %}
-			<code>{{ sectionMetadata.url }}</code>
+			{{ sectionMetadata.url }}
 		{% endif %}
 	</td>
 	<td>
@@ -96,9 +96,7 @@
 			sectionMetadata: customSection
 		} %}
 	</td>
-	<td>
-		<code>{{ customSection.url }}</code>
-	</td>
+	<td>{{ customSection.url }}</td>
 	<td>
 		<div class="sprout-metadata-status" style="color:#ccc;">
 			<span class="sproutseo-icon icon-search
