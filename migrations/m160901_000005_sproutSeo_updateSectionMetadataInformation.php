@@ -153,6 +153,8 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 		if ($globalFallback)
 		{
+			$pluginSettings['enableCustomSections'] = 1;
+
 			$identity                     = array();
 			$globalFallback['ogSiteName'] = '';
 			$values['meta'] = json_encode($globalFallback);
