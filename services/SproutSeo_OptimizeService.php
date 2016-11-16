@@ -238,8 +238,24 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// Remove the ogAuthor value if we don't have an article
 		if ($prioritizedMetadataModel->ogType != 'article')
 		{
-			$prioritizedMetadataModel->ogAuthor = null;
+			$prioritizedMetadataModel->ogAuthor  = null;
+
+			if (isset($prioritizedMetadataModel->publisher))
+			{
+				$prioritizedMetadataModel->publisher = null;
+			}
 		}
+		else
+		{
+			$prioritizedMetadataModel->ogDateCreated = isset($this->urlEnabledSection->element->dateCreated) ? $this->urlEnabledSection->element->dateCreated->iso8601() : null;
+			$prioritizedMetadataModel->ogDateUpdated = isset($this->urlEnabledSection->element->dateUpdated) ? $this->urlEnabledSection->element->dateUpdated->iso8601() : null;
+
+			if (isset($this->urlEnabledSection->element->expiryDate) && $this->urlEnabledSection->element->expiryDate)
+			{
+				$prioritizedMetadataModel->ogExpiryDate = $this->urlEnabledSection->element->expiryDate->iso8601();
+			}
+		}
+
 
 		$prioritizedMetadataModel->title = SproutSeoOptimizeHelper::prepareAppendedTitleValue(
 			$prioritizedMetadataModel,

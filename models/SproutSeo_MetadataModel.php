@@ -106,6 +106,9 @@ class SproutSeo_MetadataModel extends BaseModel
 			'ogAudio'       => array(AttributeType::String),
 			'ogVideo'       => array(AttributeType::String),
 			'ogLocale'      => array(AttributeType::String),
+			'ogDateUpdated' => array(AttributeType::String),
+			'ogDateCreated' => array(AttributeType::String),
+			'ogExpiryDate'  => array(AttributeType::String),
 		);
 
 		$this->twitterCardsMeta = array(
@@ -366,14 +369,6 @@ class SproutSeo_MetadataModel extends BaseModel
 			}
 		}
 
-		if (isset($tagData['og:publisher']))
-		{
-			if ($this->ogType != 'article')
-			{
-				unset($tagData['og:publisher']);
-			}
-		}
-
 		return $tagData;
 	}
 
@@ -437,6 +432,9 @@ class SproutSeo_MetadataModel extends BaseModel
 			'ogAudio'                        => 'og:audio',
 			'ogVideo'                        => 'og:video',
 			'ogLocale'                       => 'og:locale',
+			'ogDateCreated'                  => 'article:published_time',
+			'ogDateUpdated'                  => 'article:modified_time',
+			'ogExpiryDate'                   => 'article:expiration_time',
 
 			// Twitter Cards
 			'twitterCard'                    => 'twitter:card',
