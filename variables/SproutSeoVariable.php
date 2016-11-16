@@ -916,10 +916,53 @@ class SproutSeoVariable
 		return sproutSeo()->sectionMetadata->getTransforms();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDefaultTwitterImage()
 	{
 		$nullImage = 'sproutseo/img/null.png';
 
 		return UrlHelper::getResourceUrl($nullImage);
+	}
+
+	public function hasActiveMetadata($type, $metadataModel)
+	{
+		switch ($type)
+		{
+			case 'search':
+
+				if (($metadataModel['optimizedTitle'] OR $metadataModel['title']) &&
+					  ($metadataModel['optimizedDescription'] OR $metadataModel['description']))
+				{
+					return true;
+				}
+
+				break;
+
+			case 'openGraph':
+
+				if (($metadataModel['optimizedTitle'] OR $metadataModel['title']) &&
+						($metadataModel['optimizedDescription'] OR $metadataModel['description']) &&
+					  ($metadataModel['optimizedImage'] OR $metadataModel['ogImage']))
+				{
+					return true;
+				}
+
+				break;
+
+			case 'twitterCard':
+
+				if (($metadataModel['optimizedTitle'] OR $metadataModel['title']) &&
+						($metadataModel['optimizedDescription'] OR $metadataModel['description']) &&
+						($metadataModel['optimizedImage'] OR $metadataModel['twitterImage']))
+				{
+					return true;
+				}
+
+				break;
+		}
+
+		return false;
 	}
 }
