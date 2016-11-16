@@ -28,52 +28,11 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	{
 		craft()->templates->includeCssResource('sproutseo/css/sproutseo.css');
 
-		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
-		$element                           = isset($value->element) ? $value->element : null;
-		$message                           = '<span class="sproutseo-icon icon-ok-circled sproutseo-status-missing">&#xe801;
-</span>';
+		$html = craft()->templates->render('sproutseo/_includes/metadata-status-icons', array(
+			'sectionMetadata' => $value
+		));
 
-		if ($element)
-		{
-			foreach ($registeredUrlEnabledSectionsTypes as $plugin => $urlEnabledSectionTypes)
-			{
-				foreach ($urlEnabledSectionTypes as $urlEnabledSectionType)
-				{
-					if ($urlEnabledSectionType->getElementType() == $element->elementType)
-					{
-						if ($urlEnabledSectionType->getIdColumnName() != null && $urlEnabledSectionType->getElementTableName() != null)
-						{
-							$columnId = $urlEnabledSectionType->getIdColumnName();
-
-							$sectionMetadata = $urlEnabledSectionType->getSectionMetadataByTypeAndUrlEnabled(
-								$urlEnabledSectionType->getElementTableName(),
-								$element->{$columnId}
-							);
-
-							if ($sectionMetadata)
-							{
-								$message = '<span class="sproutseo-icon icon-ok-circled sproutseo-status-partial">&#xe801;
-</span>';
-
-								$elementId   = $element->id;
-								$locale      = $element->locale;
-								$elementData = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
-
-								if (isset($elementData->id) && $elementData->id)
-								{
-									$message = '<span class="sproutseo-icon icon-ok-circled sproutseo-status-pass">&#xe801;
-</span>';
-								}
-							}
-
-							break 2;
-						}
-					}
-				}
-			}
-		}
-
-		return $message;
+		return $html;
 	}
 
 	/**
@@ -129,8 +88,24 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			return $schema;
 		}
 
-		// For the CP, make sure we return the default value
-		return $value;
+		// Grab our values from the db
+		$elementId = $this->element->id;
+		$locale    = $this->element->locale;
+		$values    = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
+
+		// $value will be an array if there was a validation error or we're loading a draft/version.
+		// If we have a value, we are probably loading a Draft or Invalid Entry so let's override any
+		// of those values. We need to undo a few things about how the Draft data gets stored so
+		// that it gets reprocessed properly
+		if (is_array($value))
+		{
+			$existingValues = SproutSeo_MetadataModel::populateModel($value['metadata']);
+
+			return $this->prepareExistingValuesForPage($values, $existingValues);
+		}
+
+		// For the CP, return a SproutSeo_MetadataModel
+		return $values;
 	}
 
 	/**
@@ -148,43 +123,26 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$namespaceInputName = craft()->templates->namespaceInputName($inputId);
 		$namespaceInputId   = craft()->templates->namespaceInputId($inputId);
 
-		$elementId = $this->element->id;
-
-		$locale = $this->element->locale;
-
-		// Grab our values from the db
-		$values = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
-
-		// If we have a value, we are probably loading a Draft or Invalid Entry so let's override any
-		// of those values. We need to undo a few things about how the Draft data gets stored so
-		// that it gets reprocessed properly
-		if (count($value))
-		{
-			$existingValues = SproutSeo_MetadataModel::populateModel($value['metadata']);
-
-			$values = $this->prepareExistingValuesForPage($values, $existingValues);
-		}
-
 		$ogImageElements      = array();
 		$metaImageElements    = array();
 		$twitterImageElements = array();
 
 		// Set up our asset fields
-		if (isset($values->optimizedImage))
+		if (isset($value->optimizedImage))
 		{
-			$asset             = craft()->elements->getElementById($values->optimizedImage);
+			$asset             = craft()->elements->getElementById($value->optimizedImage);
 			$metaImageElements = array($asset);
 		}
 
-		if (isset($values->ogImage))
+		if (isset($value->ogImage))
 		{
-			$asset           = craft()->elements->getElementById($values->ogImage);
+			$asset           = craft()->elements->getElementById($value->ogImage);
 			$ogImageElements = array($asset);
 		}
 
-		if (isset($values->twitterImage))
+		if (isset($value->twitterImage))
 		{
-			$asset                = craft()->elements->getElementById($values->twitterImage);
+			$asset                = craft()->elements->getElementById($value->twitterImage);
 			$twitterImageElements = array($asset);
 		}
 
@@ -192,7 +150,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$sources            = craft()->assets->findFolders();
 		$assetsSourceExists = count($sources);
 
-		$values['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($values->robots);
+		$value['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($value->robots);
 
 		// Set elementType
 		// @todo - rename this variable, it is specific for Assets
@@ -222,8 +180,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$urlEnabledSectionId           = $this->element->{$urlEnabledSectionIdColumnName};
 		$urlEnabledSection             = $urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId];
 
-		sproutSeo()->optimize->globals           = sproutSeo()->globalMetadata->getGlobalMetadata();
-		sproutSeo()->optimize->urlEnabledSection = $urlEnabledSection;
+		sproutSeo()->optimize->globals                    = sproutSeo()->globalMetadata->getGlobalMetadata();
+		sproutSeo()->optimize->urlEnabledSection          = $urlEnabledSection;
 		sproutSeo()->optimize->urlEnabledSection->element = $this->element;
 
 		$prioritizedMetadata = sproutSeo()->optimize->getPrioritizedMetadataModel();
@@ -235,7 +193,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			'namespaceInputName'   => $namespaceInputName,
 			'namespaceInputId'     => $namespaceInputId,
 			'pluginTemplate'       => 'sproutseo',
-			'values'               => $values,
+			'values'               => $value,
 			'ogImageElements'      => $ogImageElements,
 			'twitterImageElements' => $twitterImageElements,
 			'metaImageElements'    => $metaImageElements,

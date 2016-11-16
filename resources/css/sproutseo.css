@@ -48,9 +48,6 @@
 
 /* Section Status and Element Metadata Status Icons
 ------------------------------------------------------------ */
-.elementindex .sproutseo-icon {
-	margin-left: 7px;
-}
 .sproutseo-status-pass {
 	color: #27AE60; // enabled green
 	/*color: #29323d; // home icon dark grey*/
@@ -60,6 +57,11 @@
 }
 .sproutseo-status-missing {
 	color: #CCCCCC; // grey
+}
+
+/* Adjust styles for IPreviewable Fieldtype Display in Element Index columns */
+.elementindex .sproutseo-icon {
+	margin-left: -30px;
 }
 
 /* Craft.InfoIcon styles - copied from Craft .info
