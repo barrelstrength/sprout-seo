@@ -419,8 +419,8 @@ class SproutSeo_MetadataModel extends BaseModel
 			// Open Graph
 			'ogType'                         => 'og:type',
 			'ogSiteName'                     => 'og:site_name',
+			'ogPublisher'                    => 'article:publisher',
 			'ogAuthor'                       => 'og:author',
-			'ogPublisher'                    => 'og:publisher',
 			'ogUrl'                          => 'og:url',
 			'ogTitle'                        => 'og:title',
 			'ogDescription'                  => 'og:description',

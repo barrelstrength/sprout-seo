@@ -239,11 +239,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		if ($prioritizedMetadataModel->ogType != 'article')
 		{
 			$prioritizedMetadataModel->ogAuthor  = null;
-
-			if (isset($prioritizedMetadataModel->publisher))
-			{
-				$prioritizedMetadataModel->publisher = null;
-			}
+			$prioritizedMetadataModel->ogPublisher = null;
 		}
 		else
 		{
