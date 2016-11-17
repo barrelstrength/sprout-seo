@@ -24,17 +24,6 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		return false;
 	}
 
-	public function getTableAttributeHtml($value)
-	{
-		craft()->templates->includeCssResource('sproutseo/css/sproutseo.css');
-
-		$html = craft()->templates->render('sproutseo/_includes/metadata-status-icons', array(
-			'sectionMetadata' => $value
-		));
-
-		return $html;
-	}
-
 	/**
 	 * @return array
 	 */
@@ -56,38 +45,12 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	}
 
 	/**
-	 * @return string
+	 * @param mixed $value
+	 *
+	 * @return
 	 */
-	public function getSettingsHtml()
-	{
-		return craft()->templates->render('sproutseo/_fieldtypes/elementmetadata/settings', array(
-			'settings' => $this->getSettings()
-		));
-	}
-
 	public function prepValue($value)
 	{
-		// Process the prioritized metadata for the front-end value
-		if (craft()->request->isSiteRequest())
-		{
-			$globals  = sproutSeo()->optimize->globals;
-			$identity = $globals['identity'];
-			$schema   = new SproutSeo_WebsiteIdentityWebsiteSchema();
-
-			if ($identityType = $identity['@type'])
-			{
-				$schemaModel = 'Craft\SproutSeo_WebsiteIdentity' . $identityType . 'Schema';
-				$schema      = new $schemaModel();
-			}
-
-			$schema->addContext               = true;
-			$schema->globals                  = sproutSeo()->optimize->globals;
-			$schema->element                  = $this->element;
-			$schema->prioritizedMetadataModel = sproutSeo()->optimize->prioritizedMetadataModel;
-
-			return $schema;
-		}
-
 		// Grab our values from the db
 		$elementId = $this->element->id;
 		$locale    = $this->element->locale;
@@ -106,6 +69,32 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		// For the CP, return a SproutSeo_MetadataModel
 		return $values;
+	}
+
+	/**
+	 * @param mixed $value
+	 *
+	 * @return string
+	 */
+	public function getTableAttributeHtml($value)
+	{
+		craft()->templates->includeCssResource('sproutseo/css/sproutseo.css');
+
+		$html = craft()->templates->render('sproutseo/_includes/metadata-status-icons', array(
+			'sectionMetadata' => $value
+		));
+
+		return $html;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSettingsHtml()
+	{
+		return craft()->templates->render('sproutseo/_fieldtypes/elementmetadata/settings', array(
+			'settings' => $this->getSettings()
+		));
 	}
 
 	/**

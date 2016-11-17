@@ -499,4 +499,32 @@ class SproutSeo_MetadataModel extends BaseModel
 
 		return UrlHelper::getSiteUrl($url);
 	}
+
+	public function getSchema()
+	{
+		//$schemaTypeId = $this->schemaTypeId;
+		//
+		//// Check for parent Section and Global values if the entry ones don't exist
+		//
+		//if ($schemaTypeId)
+		//{
+		//	$schema               = sproutSeo()->optimize->getSchemaByUniqueKey($schemaTypeId);
+		//	$schema->attributes   = $this->getAttributes();
+		//	$schema->addContext   = true;
+		//	$schema->isMainEntity = false;
+		//
+		//	$element = craft()->elements->getElementById($this->elementId);
+		//
+		//	// @todo - Might need to change these values, process our field, then set them back.
+		//	sproutSeo()->optimize->urlEnabledSection = '';
+		//	sproutSeo()->optimize->prioritizedMetadataModel = '';
+		//	sproutSeo()->optimize->codeMetadata = null;
+		//
+		//	$schema->globals                  = sproutSeo()->optimize->globals;
+		//	$schema->element                  = ;
+		//	//$schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
+		//}
+		//
+		//return $schema->getSchema();
+	}
 }
