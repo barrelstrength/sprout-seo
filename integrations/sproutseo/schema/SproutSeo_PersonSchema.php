@@ -32,11 +32,14 @@ class SproutSeo_PersonSchema extends SproutSeo_ThingSchema
 	 */
 	public function addProperties()
 	{
-		$elementType = $this->element->getElementType();
-
-		if ($elementType == 'User')
+		if (isset($this->element))
 		{
-			$this->addUserElementProperties();
+			$elementType = $this->element->getElementType();
+
+			if ($elementType == 'User')
+			{
+				$this->addUserElementProperties();
+			}
 		}
 		else
 		{
