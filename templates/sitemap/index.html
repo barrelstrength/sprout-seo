@@ -86,8 +86,8 @@
 
 {% block customSectionTableRowHead %}
 
-	<th style="padding-left:9px;width:30%">{{ "Custom Sections"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
-	<th style="width:32%;">{{ "URL Pattern"|t }}</th>
+	<th style="padding-left:9px;width:30%">{{ "Custom Sections"|t }} <span class="info">{{ "A Custom Section allows you to set a Custom URL that will display in your sitemap and create Section Metadata that you can reference in your templates using the Custom Section handle."|t }}</span></th>
+	<th style="width:32%;">{{ "Custom URL"|t }} <span class="info">{{ "This URL will display in your Sitemap when enabled."|t }}</span></th>
 	<th style="width:15%;">{{ "Priority"|t }}</th>
 	<th style="width:15%;">{{ "Change Frequency"|t }}</th>
 	<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
@@ -106,9 +106,7 @@
 		<input type="hidden" name="sproutseo[sections][{{ customSectionId }}][url]" value="{{ customSection.url }}">
 	</td>
 	<td>
-		<code>
-			{{ customSection.url }}
-		</code>
+		<code>{{ customSection.url }}</code>
 	</td>
 	<td>
 		{{ forms.selectField({

@@ -40,7 +40,7 @@
 {% block sectionMetadataTableRowHead %}
 
 	<th style="padding-left:9px;width:35%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here. Enable each "~name~" you want to include in your sitemap. Prepare fallback Metadata if any meta values are not present for content within the matching domain section. Identify the Main Entity schema you wish to match to this URL."|t }}</span></th>
-	<th style="width:50%;">{{ "Handle"|t }}</th>
+	<th style="width:50%;">{{ "URL Pattern"|t }}</th>
 	<th style="width:15%;">
 		{{ "Active Metadata?"|t }} {% if loop.index == 1 %}{{ macro.activeMetadataMessage() }}{% endif %}
 	</th>
@@ -54,7 +54,11 @@
 		{% include 'sproutseo/sections/_titlecolumn' %}
 	</td>
 	<td>
-		{{ sectionMetadata.handle }}
+		{% if sectionMetadata.url == '__home__' %}
+			<span data-icon="home" title="Homepage"></span>
+		{% else %}
+			{{ sectionMetadata.url }}
+		{% endif %}
 	</td>
 	<td>
 		<div class="sprout-metadata-status" style="color:#ccc;">
@@ -78,8 +82,8 @@
 
 {% block customSectionTableRowHead %}
 
-	<th style="padding-left:9px;width:35%">{{ "Custom Sections"|t }} <span class="info">{{ "Custom Sitemaps...."|t }}</span></th>
-	<th style="width:50%;">{{ "Handle"|t }}</th>
+	<th style="padding-left:9px;width:35%">{{ "Custom Sections"|t }} <span class="info">{{ "A Custom Section allows you to set a Custom URL that will display in your sitemap and create Section Metadata that you can reference in your templates using the Custom Section handle."|t }}</span></th>
+	<th style="width:50%;">{{ "Handle"|t }} <span class="info">{{ "Reference your Section Metadata by adding the Custom Section handle to your templates."|t }}</span></th>
 	<th style="width:15%;">{{ "Active Metadata?"|t }} {{ macro.activeMetadataMessage() }}</th>
 	<th class="thin"></th>
 
@@ -92,7 +96,7 @@
 			sectionMetadata: customSection
 		} %}
 	</td>
-	<td>{{ customSection.handle }}</td>
+	<td><code>{{ customSection.handle }}</code></td>
 	<td>
 		<div class="sprout-metadata-status" style="color:#ccc;">
 			<span class="sproutseo-icon icon-search
