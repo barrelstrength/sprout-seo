@@ -189,6 +189,7 @@ class SproutSeoOptimizeHelper
 					if (craft()->request->isSecureConnection())
 					{
 						$secureUrl            = preg_replace("/^http:/i", "https:", $model->ogImage);
+						$model->ogImage       = $secureUrl;
 						$model->ogImageSecure = $secureUrl;
 					}
 				}
@@ -230,6 +231,12 @@ class SproutSeoOptimizeHelper
 					{
 						$model->twitterImage = UrlHelper::getSiteUrl($imageUrl);
 					}
+
+					if (craft()->request->isSecureConnection())
+					{
+						$secureUrl           = preg_replace("/^http:/i", "https:", $model->twitterImage);
+						$model->twitterImage = $secureUrl;
+					}
 				}
 				else
 				{
@@ -263,6 +270,12 @@ class SproutSeoOptimizeHelper
 					else
 					{
 						$model->optimizedImage = UrlHelper::getSiteUrl($optimizedImage->url);
+					}
+
+					if (craft()->request->isSecureConnection())
+					{
+						$secureUrl             = preg_replace("/^http:/i", "https:", $model->optimizedImage);
+						$model->optimizedImage = $secureUrl;
 					}
 				}
 				else
@@ -403,7 +416,7 @@ class SproutSeoOptimizeHelper
 
 		if (empty($globals['social']))
 		{
-		  return null;
+			return null;
 		}
 
 		foreach ($globals['social'] as $key => $socialProfile)
@@ -513,10 +526,11 @@ class SproutSeoOptimizeHelper
 		$customizationSettings = JsonHelper::decode($model->customizationSettings);
 
 		if (isset($customizationSettings['searchMetaSectionMetadataEnabled']) &&
-				isset($customizationSettings['openGraphSectionMetadataEnabled']) &&
-				isset($customizationSettings['twitterCardSectionMetadataEnabled']) &&
-				isset($customizationSettings['geoSectionMetadataEnabled']) &&
-				isset($customizationSettings['robotsSectionMetadataEnabled']))
+			isset($customizationSettings['openGraphSectionMetadataEnabled']) &&
+			isset($customizationSettings['twitterCardSectionMetadataEnabled']) &&
+			isset($customizationSettings['geoSectionMetadataEnabled']) &&
+			isset($customizationSettings['robotsSectionMetadataEnabled'])
+		)
 		{
 			if (!$customizationSettings['searchMetaSectionMetadataEnabled'])
 			{
