@@ -254,7 +254,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 			if (isset($this->urlEnabledSection->element->dateUpdated) && $this->urlEnabledSection->element->dateUpdated)
 			{
-				$prioritizedMetadataModel->ogExpiryDate = $this->urlEnabledSection->element->dateUpdated->iso8601();
+				$prioritizedMetadataModel->ogDateUpdated = $this->urlEnabledSection->element->dateUpdated->iso8601();
 			}
 
 			if (isset($this->urlEnabledSection->element->expiryDate) && $this->urlEnabledSection->element->expiryDate)
