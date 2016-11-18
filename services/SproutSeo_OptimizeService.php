@@ -243,8 +243,19 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		}
 		else
 		{
-			$prioritizedMetadataModel->ogDateCreated = isset($this->urlEnabledSection->element->dateCreated) ? $this->urlEnabledSection->element->dateCreated->iso8601() : null;
-			$prioritizedMetadataModel->ogDateUpdated = isset($this->urlEnabledSection->element->dateUpdated) ? $this->urlEnabledSection->element->dateUpdated->iso8601() : null;
+			$prioritizedMetadataModel->ogDateCreated = null;
+			$prioritizedMetadataModel->ogDateUpdated = null;
+			$prioritizedMetadataModel->ogExpiryDate  = null;
+
+			if (isset($this->urlEnabledSection->element->dateCreated) && $this->urlEnabledSection->element->dateCreated)
+			{
+				$prioritizedMetadataModel->ogDateCreated = $this->urlEnabledSection->element->dateCreated->iso8601();
+			}
+
+			if (isset($this->urlEnabledSection->element->dateUpdated) && $this->urlEnabledSection->element->dateUpdated)
+			{
+				$prioritizedMetadataModel->ogExpiryDate = $this->urlEnabledSection->element->dateUpdated->iso8601();
+			}
 
 			if (isset($this->urlEnabledSection->element->expiryDate) && $this->urlEnabledSection->element->expiryDate)
 			{
