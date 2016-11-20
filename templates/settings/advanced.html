@@ -49,7 +49,7 @@
 
       {{ forms.lightswitchField({
         label: "Enable custom metadata variable"|t,
-        instructions: "Make a global `metadata` variable available to all of your templates. The `metadata` variable will contain page-specific Prioritized Metadata and Structured Data, and all of your Globals."|t,
+        instructions: "Make a global `metadata` variable available to all of your templates. The `metadata` variable will contain page-specific Prioritized Metadata and Structured Data, and all of your Globals. Ensure the {% sproutseo 'optimize' %} tag is in your template to generate the `metadata` variable. If you plan to handle the `metadata` variable on your own, you may also want to disable the 'Automatically render metadata' setting above, to ensure you don't output your metadata twice."|t,
         name: 'toggleMetadataVariable',
         toggle: 'settings-enablemetadatavariable',
         on: (settings.metadataVariable is empty ? false : true),
