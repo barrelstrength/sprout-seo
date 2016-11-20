@@ -246,6 +246,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		{
 			$attributes['optimizedTitle']       = null;
 			$attributes['optimizedDescription'] = null;
+			$attributes['optimizedKeywords']    = null;
 			$attributes['optimizedImage']       = null;
 			$attributes['elementId']            = null;
 		}
