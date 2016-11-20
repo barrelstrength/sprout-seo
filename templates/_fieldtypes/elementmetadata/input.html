@@ -403,7 +403,13 @@ feel like they are part of the natural flow of fields #}
 {% includejs %}
 
 	{% if fieldContext != 'sectionMetadata' %}
-		$('.livepreviewbtn').parent().after('<div id="fields-sproutseo-seopreview" class="btn big sprout-livepreviewbtn"> {{ "SEO Preview"|t }}<div class="spinner hidden"></div></div>');
+		// Existing Entries have a wrapper around the live preview and share buttons
+		var $previewButtonsElement = $('.previewbtns');
+		// New entries only have a live preview button
+		var $livePreviewButtonElement = $('.livepreviewbtn');
+
+		var $livePreviewElement = $previewButtonsElement.length ? $previewButtonsElement : $livePreviewButtonElement;
+		$livePreviewElement.after('<div id="fields-sproutseo-seopreview" class="btn big sprout-livepreviewbtn"> {{ "SEO Preview"|t }}<div class="spinner hidden"></div></div>');
 	{% endif %}
 
 	var items = {{ schemaSubtypes|json_encode|raw }};
