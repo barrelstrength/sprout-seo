@@ -275,6 +275,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// let's just prepare assets for final metadatamodel
 		SproutSeoOptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
 
+		// Trimmed description to 160 characters
+		$prioritizedMetadataModel->optimizedDescription = substr($prioritizedMetadataModel->optimizedDescription, 0, 160);
+
 		return $prioritizedMetadataModel;
 	}
 
