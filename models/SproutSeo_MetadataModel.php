@@ -234,6 +234,11 @@ class SproutSeo_MetadataModel extends BaseModel
 			}
 		}
 
+		if (isset($attributes['enabled']) && !$attributes['enabled'])
+		{
+			$attributes = array();
+		}
+
 		return $attributes;
 	}
 
