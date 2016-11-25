@@ -83,4 +83,11 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 			array('columns' => array('elementId, locale'), 'unique' => true),
 		);
 	}
+
+	public function defineRelations()
+	{
+		return array(
+			'element' => array(static::BELONGS_TO, 'ElementRecord', 'elementId', 'onDelete' => static::CASCADE),
+		);
+	}
 }
