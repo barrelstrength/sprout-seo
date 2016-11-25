@@ -134,7 +134,7 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import($baseIntegrations.'schema.SproutSeo_ProductSchema');
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
-		Craft::import('plugins.sproutseo.vendor.rake.Rake');
+		Craft::import('plugins.sproutseo.library.rake.Rake');
 
 		Craft::import('plugins.sproutseo.helpers.SproutSeoAddressHelper');
 

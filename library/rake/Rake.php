@@ -194,7 +194,7 @@ class Rake
 	{
 		$stopwords = array();
 
-		if ($h = @fopen(craft()->path->getPluginsPath()."sproutseo/vendor/rake/".$this->stopwords_path, 'r'))
+		if ($h = @fopen(craft()->path->getPluginsPath()."sproutseo/library/rake/".$this->stopwords_path, 'r'))
 		{
 			while (($line = fgets($h)) !== false)
 			{
