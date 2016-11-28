@@ -152,7 +152,15 @@ class SproutSeoVariable
 	 */
 	public function getDivider()
 	{
-		return craft()->plugins->getPlugin('sproutseo')->getSettings()->seoDivider;
+		$globals = sproutSeo()->globalMetadata->getGlobalMetadata();
+		$divider = '';
+
+		if (isset($globals['settings']['seoDivider']))
+		{
+			$divider = $globals->settings['seoDivider'];
+		}
+
+		return $divider;
 	}
 
 	/**
@@ -933,7 +941,7 @@ class SproutSeoVariable
 			case 'search':
 
 				if (($metadataModel['optimizedTitle'] OR $metadataModel['title']) &&
-					  ($metadataModel['optimizedDescription'] OR $metadataModel['description']))
+						($metadataModel['optimizedDescription'] OR $metadataModel['description']))
 				{
 					return true;
 				}
@@ -944,7 +952,7 @@ class SproutSeoVariable
 
 				if (($metadataModel['optimizedTitle'] OR $metadataModel['title']) &&
 						($metadataModel['optimizedDescription'] OR $metadataModel['description']) &&
-					  ($metadataModel['optimizedImage'] OR $metadataModel['ogImage']))
+						($metadataModel['optimizedImage'] OR $metadataModel['ogImage']))
 				{
 					return true;
 				}
