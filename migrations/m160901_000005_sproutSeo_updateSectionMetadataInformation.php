@@ -407,10 +407,12 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			$aux       = 1;
 			$newHandle = $handle . $source;
 			$section   = $this->_getSectionByHandle($newHandle);
+
 			while ($section)
 			{
 				$newHandle = $handle . $source . $aux;
 				$section   = $this->_getSectionByHandle($newHandle);
+				$aux++;
 			}
 
 			$handle = $newHandle;
