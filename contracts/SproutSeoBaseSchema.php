@@ -496,14 +496,14 @@ abstract class SproutSeoBaseSchema
 
 			if (isset($value['open']['time']) && $value['open']['time'] != '')
 			{
-				$time = DateTime::createFromString($value['open']);
-				$openingHours[$index] .= " " . $time->format('H:m');
+				$time = date("H:i", strtotime($value['open']['time']));
+				$openingHours[$index] .= " " . $time;
 			}
 
 			if (isset($value['close']['time']) && $value['close']['time'] != '')
 			{
-				$time = DateTime::createFromString($value['close']);
-				$openingHours[$index] .= "-" . $time->format('H:m');
+				$time = date("H:i", strtotime($value['close']['time']));
+				$openingHours[$index] .= "-" . $time;
 			}
 
 			// didn't work this day
