@@ -360,7 +360,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			$schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
 
-			if ($schemaUniqueKey)
+			if ($schemaUniqueKey && isset($this->urlEnabledSection->element))
 			{
 				$schema               = $this->getSchemaByUniqueKey($schemaUniqueKey);
 				$schema->attributes   = $this->prioritizedMetadataModel->getAttributes();
