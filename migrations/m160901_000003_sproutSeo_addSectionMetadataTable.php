@@ -124,7 +124,6 @@ class m160901_000003_sproutSeo_addSectionMetadataTable extends BaseMigration
 		// finally rename table
 		MigrationHelper::dropIndexIfExists($tableName, array('name', 'handle'), true);
 		$this->renameTable($tableName, $newTableName);
-		$this->createIndex($newTableName, 'handle', true);
 
 		return true;
 	}

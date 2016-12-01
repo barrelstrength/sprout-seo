@@ -23,13 +23,15 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 
 			$target = event.target;
 			$row    = $($target).closest('tr');
+			var handle = $($row).data('handle').split(':');
+			handle = handle.length == 2 ? handle[1] : $($row).data('handle');
 
 			data = {
 				"redirect":  'sproutseo/sections/{id}',
 				"sproutseo": {
 					"metadata": {
 						"name":                $($row).data('name'),
-						"handle":              $($row).data('handle'),
+						"handle":              handle,
 						"urlEnabledSectionId": $($row).data('urlEnabledSectionId'),
 						"type":                $($row).data('type'),
 						"url":                 $($row).data('url')

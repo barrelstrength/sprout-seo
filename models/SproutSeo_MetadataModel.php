@@ -226,11 +226,21 @@ class SproutSeo_MetadataModel extends BaseModel
 
 		if ($codeSection)
 		{
-			$section = sproutSeo()->sectionMetadata->getSectionMetadataByHandle($codeSection);
+			$format = explode(':', $codeSection);
 
-			if ($section->id)
+			if (count($format) == 2 )
 			{
-				$attributes = $section->getAttributes();
+				$handle  = $format[1];
+				$section = sproutSeo()->sectionMetadata->getSectionMetadataByHandle($handle);
+
+				if ($section->id)
+				{
+					$attributes = $section->getAttributes();
+				}
+			}
+			else
+			{
+				SproutSeoPlugin::log("Wrong format of handle, needs have the next format: elementtable:sectionhandle, example entries:blog", LogLevel::Info, true);
 			}
 		}
 

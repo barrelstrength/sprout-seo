@@ -296,7 +296,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			// support for custom urls
 			if ((!$sitemap['elementGroupId'] && !$sitemap['type']) && $sitemap['url'])
 			{
-				$customHandle = $this->_validateDuplicateHandle('customSection' . $customUrl, '');
+				$customHandle = 'customSection'.$customUrl;
 				// Create a new row in sections
 				craft()->db->createCommand()->insert($tableName, array(
 					'urlEnabledSectionId'   => null,
@@ -335,7 +335,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				if ($section && $section18n)
 				{
-					$entryHandle = $this->_validateDuplicateHandle($section['handle'], 'Entry');
+					$entryHandle = $section['handle'];
 					// Create a new row in sections
 					craft()->db->createCommand()->insert($tableName, array(
 						'urlEnabledSectionId'   => $sitemap['elementGroupId'],
@@ -372,7 +372,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 
 				if ($category && $category18n)
 				{
-					$categoryHandle = $this->_validateDuplicateHandle($category['handle'], 'Category');
+					$categoryHandle = $category['handle'];
 					// Create a new row in sections
 					craft()->db->createCommand()->insert($tableName, array(
 						'urlEnabledSectionId'   => $sitemap['elementGroupId'],
@@ -398,39 +398,4 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		return true;
 	}
 
-	private function _validateDuplicateHandle($handle, $source)
-	{
-		$section = $this->_getSectionByHandle($handle);
-
-		if ($section)
-		{
-			$aux       = 1;
-			$newHandle = $handle . $source;
-			$section   = $this->_getSectionByHandle($newHandle);
-
-			while ($section)
-			{
-				$newHandle = $handle . $source . $aux;
-				$section   = $this->_getSectionByHandle($newHandle);
-				$aux++;
-			}
-
-			$handle = $newHandle;
-		}
-
-		return $handle;
-	}
-
-	private function _getSectionByHandle($handle)
-	{
-		$tableName = "sproutseo_metadata_sections";
-
-		$section = craft()->db->createCommand()
-			->select('*')
-			->from($tableName)
-			->where('handle=:handle', array(':handle' => $handle))
-			->queryRow();
-
-		return $section;
-	}
 }

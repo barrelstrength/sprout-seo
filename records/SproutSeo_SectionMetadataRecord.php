@@ -86,21 +86,6 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 	}
 
 	/**
-	 * @return array
-	 */
-	public function defineIndexes()
-	{
-		return array(
-			array(
-				'columns' => array(
-					'handle'
-				),
-				'unique'  => true
-			),
-		);
-	}
-
-	/**
 	 * Create a new instance of the current class. This allows us to
 	 * properly unit test our service layer.
 	 *
