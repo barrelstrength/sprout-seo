@@ -10,6 +10,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 	Craft.SproutSeo.SectionMetadata = Garnish.Base.extend(
 	{
 		$newSectionMetadataLinks: null,
+		submitStatus: false,
 
 		init: function() {
 			this.$newSectionMetadataLinks = $('.sectionmetadata-isnew .sproutseo-sectiontitle');
@@ -19,33 +20,39 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 
 		createAndEditSectionMetadata: function(event) {
 
-			event.preventDefault();
+			if (!this.submitStatus)
+			{
+				this.submitStatus = true;
+				$target = event.target;
+				$row    = $($target).closest('tr');
+				var handle = $($row).data('handle').split(':');
+				handle = handle.length == 2 ? handle[1] : $($row).data('handle');
 
-			$target = event.target;
-			$row    = $($target).closest('tr');
-			var handle = $($row).data('handle').split(':');
-			handle = handle.length == 2 ? handle[1] : $($row).data('handle');
-
-			data = {
-				"redirect":  'sproutseo/sections/{id}',
-				"sproutseo": {
-					"metadata": {
-						"name":                $($row).data('name'),
-						"handle":              handle,
-						"urlEnabledSectionId": $($row).data('urlEnabledSectionId'),
-						"type":                $($row).data('type'),
-						"url":                 $($row).data('url')
+				data = {
+					"redirect":  'sproutseo/sections/{id}',
+					"sproutseo": {
+						"metadata": {
+							"name":                $($row).data('name'),
+							"handle":              handle,
+							"urlEnabledSectionId": $($row).data('urlEnabledSectionId'),
+							"type":                $($row).data('type'),
+							"url":                 $($row).data('url')
+						}
 					}
-				}
-			};
+				};
 
-			Craft.postActionRequest('sproutSeo/sectionMetadata/saveSectionMetadata', data, $.proxy(function(response, textStatus) {
-				if (textStatus == 'success') {
-					if (response.success) {
-						Craft.redirectTo('sproutseo/sections/' + response.sectionMetadata.id);
+				Craft.postActionRequest('sproutSeo/sectionMetadata/saveSectionMetadata', data, $.proxy(function(response, textStatus) {
+					if (textStatus == 'success') {
+						if (response.success) {
+							Craft.redirectTo('sproutseo/sections/' + response.sectionMetadata.id);
+						}
 					}
-				}
-			}, this));
+				}, this));
+			}
+			else
+			{
+				event.preventDefault();
+			}
 		}
 
 	});
