@@ -6,7 +6,7 @@
 		<span class="status disabled"></span>
 	{% endif %}
 
-	<a href="sections/{{ sectionMetadata.id }}" class="sproutseo-sectiontitle">
+	<a href="{{ cpUrl('sproutseo/sections/' ~ sectionMetadata.id) }}" class="sproutseo-sectiontitle">
 		{{ sectionMetadata.name }}
 	</a>
 
