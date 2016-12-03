@@ -228,7 +228,7 @@ class SproutSeo_MetadataModel extends BaseModel
 		{
 			$format = explode(':', $codeSection);
 
-			if (count($format) == 2 )
+			if (count($format) == 2)
 			{
 				$handle  = $format[1];
 				$section = sproutSeo()->sectionMetadata->getSectionMetadataByHandle($handle);
@@ -240,7 +240,7 @@ class SproutSeo_MetadataModel extends BaseModel
 			}
 			else
 			{
-				SproutSeoPlugin::log("Wrong format of handle, needs have the next format: elementtable:sectionhandle, example entries:blog", LogLevel::Info, true);
+				SproutSeoPlugin::log("The craft.sproutSeo.meta tag 'section' attribute format is cannot be found. Section handles must include both the element table name and the section handle: 'elementtable:sectionhandle', i.e.  entries:blog", LogLevel::Info, true);
 			}
 		}
 
