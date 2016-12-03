@@ -49,7 +49,7 @@ class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectio
 
 		$sections = craft()->sections->getAllSections();
 
-		foreach ($sections as $section) 
+		foreach ($sections as $section)
 		{
 			if ($section->hasUrls)
 			{
@@ -63,5 +63,34 @@ class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectio
 	public function getTableName()
 	{
 		return 'sections_i18n';
+	}
+
+	public function resaveElements()
+	{
+		// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+		$sectionId   = craft()->request->getSegment(3);
+		$entryTypeId = craft()->request->getSegment(5);
+
+		$criteria = craft()->elements->getCriteria(ElementType::Entry);
+
+		$locales = array_values(craft()->i18n->getSiteLocaleIds());
+
+		if ($locales)
+		{
+			foreach ($locales as $locale)
+			{
+				$criteria->locale        = $locale;
+				$criteria->type          = $entryTypeId;
+				$criteria->sectionId     = $sectionId;
+				$criteria->status        = null;
+				$criteria->localeEnabled = null;
+				$criteria->limit         = null;
+
+				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Entries and metadata'), array(
+					'elementType' => ElementType::Entry,
+					'criteria'    => $criteria->getAttributes()
+				));
+			}
+		}
 	}
 }

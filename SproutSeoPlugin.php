@@ -109,34 +109,39 @@ class SproutSeoPlugin extends BasePlugin
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
 
 		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseUrlEnabledSectionType');
-		Craft::import($baseIntegrations.'sectiontypes.SproutSeo_EntryUrlEnabledSectionType');
-		Craft::import($baseIntegrations.'sectiontypes.SproutSeo_CategoryUrlEnabledSectionType');
-		Craft::import($baseIntegrations.'sectiontypes.SproutSeo_CommerceProductUrlEnabledSectionType');
+		Craft::import($baseIntegrations . 'sectiontypes.SproutSeo_EntryUrlEnabledSectionType');
+		Craft::import($baseIntegrations . 'sectiontypes.SproutSeo_CategoryUrlEnabledSectionType');
+		Craft::import($baseIntegrations . 'sectiontypes.SproutSeo_CommerceProductUrlEnabledSectionType');
 
 		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_WebsiteIdentityOrganizationSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_WebsiteIdentityPersonSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_WebsiteIdentityWebsiteSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_WebsiteIdentityPlaceSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_ContactPointSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_ImageObjectSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_MainEntityOfPageSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_PostalAddressSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_GeoSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_WebsiteIdentityOrganizationSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_WebsiteIdentityPersonSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_WebsiteIdentityWebsiteSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_WebsiteIdentityPlaceSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_ContactPointSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_ImageObjectSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_MainEntityOfPageSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_PostalAddressSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_GeoSchema');
 
-		Craft::import($baseIntegrations.'schema.SproutSeo_ThingSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_CreativeWorkSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_EventSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_IntangibleSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_OrganizationSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_PersonSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_PlaceSchema');
-		Craft::import($baseIntegrations.'schema.SproutSeo_ProductSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_ThingSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_CreativeWorkSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_EventSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_IntangibleSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_OrganizationSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_PersonSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_PlaceSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_ProductSchema');
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 		Craft::import('plugins.sproutseo.library.rake.Rake');
 
 		Craft::import('plugins.sproutseo.helpers.SproutSeoAddressHelper');
+
+		craft()->on('fields.onSaveFieldLayout', function (Event $event)
+		{
+			sproutSeo()->elementMetadata->resaveElements($event);
+		});
 
 		if (!craft()->isConsole())
 		{
@@ -197,25 +202,25 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/sections/new'                          => array(
+			'sproutseo/sections/new'                        => array(
 				'action' => 'sproutSeo/sectionMetadata/sectionMetadataEditTemplate'
 			),
-			'sproutseo/sections/(?P<sectionMetadataId>\d+)'   => array(
+			'sproutseo/sections/(?P<sectionMetadataId>\d+)' => array(
 				'action' => 'sproutSeo/sectionMetadata/sectionMetadataEditTemplate'
 			),
-			'sproutseo/redirects'                             => array(
+			'sproutseo/redirects'                           => array(
 				'action' => 'sproutSeo/redirects/redirectIndex'
 			),
-			'sproutseo/redirects/new'                         => array(
+			'sproutseo/redirects/new'                       => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			),
-			'sproutseo/redirects/(?P<redirectId>\d+)'         => array(
+			'sproutseo/redirects/(?P<redirectId>\d+)'       => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			),
-			'sproutseo/settings'                              => array(
+			'sproutseo/settings'                            => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
-			'sproutseo/settings/(?P<settingsTemplate>.*)' => array(
+			'sproutseo/settings/(?P<settingsTemplate>.*)'   => array(
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
 		);

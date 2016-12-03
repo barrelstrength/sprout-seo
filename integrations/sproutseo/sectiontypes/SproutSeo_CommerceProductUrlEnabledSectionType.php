@@ -82,7 +82,7 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 
 		$sections = craft()->commerce_productTypes->getAllProductTypes();
 
-		foreach ($sections as $section) 
+		foreach ($sections as $section)
 		{
 			if ($section->hasUrls)
 			{
@@ -99,5 +99,32 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	public function getTableName()
 	{
 		return 'commerce_producttypes_i18n';
+	}
+
+	public function resaveElements()
+	{
+		//// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+		$productTypeId = craft()->request->getSegment(4);
+
+		$criteria = craft()->elements->getCriteria('Commerce_Product');
+
+		$locales = array_values(craft()->i18n->getSiteLocaleIds());
+
+		if ($locales)
+		{
+			foreach ($locales as $locale)
+			{
+				$criteria->locale        = $locale;
+				$criteria->productTypeId = $productTypeId;
+				$criteria->status        = null;
+				$criteria->localeEnabled = null;
+				$criteria->limit         = null;
+
+				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Commerce Products and metadata.'), array(
+					'elementType' => 'Commerce_Product',
+					'criteria'    => $criteria->getAttributes()
+				));
+			}
+		}
 	}
 }

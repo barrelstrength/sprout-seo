@@ -49,7 +49,7 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 
 		$sections = craft()->categories->getAllGroups();
 
-		foreach ($sections as $section) 
+		foreach ($sections as $section)
 		{
 			if ($section->hasUrls)
 			{
@@ -63,5 +63,32 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 	public function getTableName()
 	{
 		return 'categorygroups_i18n';
+	}
+
+	public function resaveElements()
+	{
+		// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+		$categoryGroupId = craft()->request->getSegment(3);
+
+		$criteria = craft()->elements->getCriteria(ElementType::Category);
+
+		$locales = array_values(craft()->i18n->getSiteLocaleIds());
+
+		if ($locales)
+		{
+			foreach ($locales as $locale)
+			{
+				$criteria->locale        = $locale;
+				$criteria->groupId       = $categoryGroupId;
+				$criteria->status        = null;
+				$criteria->localeEnabled = null;
+				$criteria->limit         = null;
+
+				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Categories and metadata.'), array(
+					'elementType' => ElementType::Category,
+					'criteria'    => $criteria->getAttributes()
+				));
+			}
+		}
 	}
 }
