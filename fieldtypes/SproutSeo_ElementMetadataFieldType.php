@@ -501,38 +501,20 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	{
 		$details = array();
 
-		if (!isset($attributes['customizationSettings']))
+		if (isset($attributes['customizationSettings']))
 		{
-			if ($settings['showSearchMeta'])
-			{
-				$details['searchMetaSectionMetadataEnabled'] = 0;
-			}
-
-			if ($settings['showOpenGraph'])
-			{
-				$details['openGraphSectionMetadataEnabled'] = 0;
-			}
-
-			if ($settings['showTwitter'])
-			{
-				$details['twitterCardSectionMetadataEnabled'] = 0;
-			}
-
-			if ($settings['showGeo'])
-			{
-				$details['geoSectionMetadataEnabled'] = 0;
-			}
-
-			if ($settings['showRobots'])
-			{
-				$details['robotsSectionMetadataEnabled'] = 0;
-			}
-
-			$attributes['customizationSettings'] = json_encode($details);
+			$attributes['customizationSettings'] = json_encode($attributes['customizationSettings']);
 		}
 		else
 		{
-			$attributes['customizationSettings'] = json_encode($attributes['customizationSettings']);
+			// Default everything to disabled
+			$details['searchMetaSectionMetadataEnabled']  = 0;
+			$details['openGraphSectionMetadataEnabled']   = 0;
+			$details['twitterCardSectionMetadataEnabled'] = 0;
+			$details['geoSectionMetadataEnabled']         = 0;
+			$details['robotsSectionMetadataEnabled']      = 0;
+
+			$attributes['customizationSettings'] = json_encode($details);
 		}
 
 		return $attributes;
