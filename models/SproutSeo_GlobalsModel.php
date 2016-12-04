@@ -78,6 +78,8 @@ class SproutSeo_GlobalsModel extends BaseModel
 	}
 
 	/**
+	 * Get the values associated with the Identity column in the database
+	 *
 	 * @return array
 	 */
 	protected function getIdentity()
@@ -86,6 +88,8 @@ class SproutSeo_GlobalsModel extends BaseModel
 	}
 
 	/**
+	 * Get the values associated with the Contacts column in the database
+	 *
 	 * @return array
 	 */
 	protected function getContacts()
@@ -110,6 +114,8 @@ class SproutSeo_GlobalsModel extends BaseModel
 	}
 
 	/**
+	 * Get the values associated with the Social column in the database
+	 *
 	 * @return array
 	 */
 	protected function getSocial()
@@ -133,6 +139,8 @@ class SproutSeo_GlobalsModel extends BaseModel
 	}
 
 	/**
+	 * Get the values associated with the Ownership column in the database
+	 *
 	 * @return mixed
 	 */
 	protected function getOwnership()
@@ -143,6 +151,8 @@ class SproutSeo_GlobalsModel extends BaseModel
 	}
 
 	/**
+	 * Get the values associated with the Robots column in the database
+	 *
 	 * @return mixed
 	 */
 	protected function getRobots()
@@ -153,6 +163,8 @@ class SproutSeo_GlobalsModel extends BaseModel
 	}
 
 	/**
+	 * Get the values associated with the Settings column in the database
+	 *
 	 * @return mixed
 	 */
 	protected function getSettings()
@@ -163,6 +175,8 @@ class SproutSeo_GlobalsModel extends BaseModel
 	}
 
 	/**
+	 * Determine if the selected Website Identity Schema Type is a Local Business
+	 *
 	 * @return null|string
 	 */
 	public function isLocalBusiness()
