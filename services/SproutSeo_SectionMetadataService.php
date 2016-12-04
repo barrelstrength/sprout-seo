@@ -243,12 +243,13 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 *
 	 * @return BaseModel|SproutSeo_MetadataModel
 	 */
-	public function getSectionMetadataByHandle($handle)
+	public function getSectionMetadataByUniqueKey($elementTable, $handle)
 	{
 		$query = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_metadata_sections')
-			->where('handle=:handle', array(':handle' => $handle))
+			->where('type=:type', array(':type' => $elementTable))
+			->andWhere('handle=:handle', array(':handle' => $handle))
 			->queryRow();
 
 		if (!isset($query))

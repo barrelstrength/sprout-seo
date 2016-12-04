@@ -108,16 +108,6 @@ class SproutSeoVariable
 	}
 
 	/**
-	 * @param $handle
-	 *
-	 * @return SproutSeo_MetadataModel
-	 */
-	public function getSectionMetadataByHandle($handle)
-	{
-		return sproutSeo()->sectionMetadata->getSectionMetadataByHandle($handle);
-	}
-
-	/**
 	 * @param array $options
 	 *
 	 * @return string

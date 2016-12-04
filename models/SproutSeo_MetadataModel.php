@@ -230,8 +230,9 @@ class SproutSeo_MetadataModel extends BaseModel
 
 			if (count($format) == 2)
 			{
-				$handle  = $format[1];
-				$section = sproutSeo()->sectionMetadata->getSectionMetadataByHandle($handle);
+				$elementTable = $format[0];
+				$handle       = $format[1];
+				$section      = sproutSeo()->sectionMetadata->getSectionMetadataByUniqueKey($elementTable, $handle);
 
 				if ($section->id)
 				{

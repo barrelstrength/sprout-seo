@@ -40,7 +40,7 @@
 {% block sectionMetadataTableRowHead %}
 
 	<th style="padding-left:9px;width:35%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here. Enable each "~name~" you want to include in your sitemap. Prepare fallback Metadata if any meta values are not present for content within the matching domain section. Identify the Main Entity schema you wish to match to this URL."|t }}</span></th>
-	<th style="width:50%;">{{ "URL Pattern"|t }}</th>
+	<th style="width:50%;">{{ "Handle"|t }} <span class="info">{{ "Reference your Section Metadata by adding the Custom Section handle to your templates."|t }}</span></th>
 	<th style="width:15%;">
 		{{ "Active Metadata?"|t }} {% if loop.index == 1 %}{{ macro.activeMetadataMessage() }}{% endif %}
 	</th>
@@ -54,10 +54,10 @@
 		{% include 'sproutseo/sections/_titlecolumn' %}
 	</td>
 	<td>
-		{% if sectionMetadata.url == '__home__' %}
-			<span data-icon="home" title="Homepage"></span>
+		{% if sectionMetadata.type %}
+			<code>{{ sectionMetadata.type }}:{{ sectionMetadata.handle }}</code>
 		{% else %}
-			{{ sectionMetadata.url }}
+			<em>{{ "Edit this section to create handle."|t }}</em>
 		{% endif %}
 	</td>
 	<td>
