@@ -238,7 +238,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		// Remove the ogAuthor value if we don't have an article
 		if ($prioritizedMetadataModel->ogType != 'article')
 		{
-			$prioritizedMetadataModel->ogAuthor  = null;
+			$prioritizedMetadataModel->ogAuthor    = null;
 			$prioritizedMetadataModel->ogPublisher = null;
 		}
 		else
@@ -263,7 +263,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			}
 		}
 
-
 		$prioritizedMetadataModel->title = SproutSeoOptimizeHelper::prepareAppendedTitleValue(
 			$prioritizedMetadataModel,
 			$prioritizedMetadataLevels[SproutSeo_MetadataLevels::SectionMetadata],
@@ -277,9 +276,9 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 		// Trim descriptions to 160 characters
 		$prioritizedMetadataModel->optimizedDescription = substr($prioritizedMetadataModel->optimizedDescription, 0, 160);
-		$prioritizedMetadataModel->description = substr($prioritizedMetadataModel->description, 0, 160);
-		$prioritizedMetadataModel->ogDescription = substr($prioritizedMetadataModel->ogDescription, 0, 160);
-		$prioritizedMetadataModel->twitterDescription = substr($prioritizedMetadataModel->twitterDescription, 0, 160);
+		$prioritizedMetadataModel->description          = substr($prioritizedMetadataModel->description, 0, 160);
+		$prioritizedMetadataModel->ogDescription        = substr($prioritizedMetadataModel->ogDescription, 0, 160);
+		$prioritizedMetadataModel->twitterDescription   = substr($prioritizedMetadataModel->twitterDescription, 0, 160);
 
 		return $prioritizedMetadataModel;
 	}

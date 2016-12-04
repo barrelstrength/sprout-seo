@@ -401,8 +401,11 @@ feel like they are part of the natural flow of fields #}
 
 	var items = {{ schemaSubtypes|json_encode|raw }};
 	var entryValues = {{ mainEntityValues|json_encode|raw }};
+
 	$( document ).ready(function() {
+
 		var nameContext = '{{nameContext|raw}}';
+
 		//Main entity dropdowns
 		$('.mainentity-firstdropdown select').change(function() {
 			if(this.value === 'craft-sproutseo-personschema')
