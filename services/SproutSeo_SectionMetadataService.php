@@ -248,16 +248,27 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		$query = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_metadata_sections')
-			->where('type=:type', array(':type' => $elementTable))
-			->andWhere('handle=:handle', array(':handle' => $handle))
-			->queryRow();
+			->where('handle=:handle', array(':handle' => $handle));
 
-		if (!isset($query))
+		if ($elementTable)
+		{
+			$query->andWhere('type=:type', array(':type' => $elementTable));
+		}
+		else
+		{
+			// @todo - update this to be null in the db
+			// $query->andWhere('type IS NULL');
+			$query->andWhere('type = ""');
+		}
+
+		$results = $query->queryRow();
+
+		if (!isset($results))
 		{
 			return new SproutSeo_MetadataModel();
 		}
 
-		$model = SproutSeo_MetadataModel::populateModel($query);
+		$model = SproutSeo_MetadataModel::populateModel($results);
 
 		$model->robots   = ($model->robots) ? SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($model->robots) : null;
 		$model->position = SproutSeoOptimizeHelper::prepareGeoPosition($model);

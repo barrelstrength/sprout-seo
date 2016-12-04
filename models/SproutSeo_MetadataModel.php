@@ -230,9 +230,18 @@ class SproutSeo_MetadataModel extends BaseModel
 
 			if (count($format) == 2)
 			{
-				$elementTable = $format[0];
-				$handle       = $format[1];
-				$section      = sproutSeo()->sectionMetadata->getSectionMetadataByUniqueKey($elementTable, $handle);
+				if ($format[0] == 'sproutseo_section')
+				{
+					$elementTable = null;
+					$handle       = $format[1];
+				}
+				else
+				{
+					$elementTable = $format[0];
+					$handle       = $format[1];
+				}
+
+				$section = sproutSeo()->sectionMetadata->getSectionMetadataByUniqueKey($elementTable, $handle);
 
 				if ($section->id)
 				{
@@ -241,7 +250,7 @@ class SproutSeo_MetadataModel extends BaseModel
 			}
 			else
 			{
-				SproutSeoPlugin::log("The craft.sproutSeo.meta tag 'section' attribute format is cannot be found. Section handles must include both the element table name and the section handle: 'elementtable:sectionhandle', i.e.  entries:blog", LogLevel::Info, true);
+				SproutSeoPlugin::log("The craft.sproutSeo.meta tag 'section' attribute format is cannot be found. Section handles must include both the element table name and the section handle: 'elementtable:sectionhandle', i.e.  entries:blog.", LogLevel::Info, true);
 			}
 		}
 
