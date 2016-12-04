@@ -80,7 +80,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 		foreach ($rows as $row)
 		{
 			// let's validate any possible duplicate handle
-			$row['handle'] = 'customSection' . ucfirst($row['handle']);
+			$row['handle'] = 'sproutseo_section' . ucfirst($row['handle']);
 
 			$detailsValues = array(
 				'enableOpenGraph' => 0,
@@ -296,7 +296,7 @@ class m160901_000005_sproutSeo_updateSectionMetadataInformation extends BaseMigr
 			// support for custom urls
 			if ((!$sitemap['elementGroupId'] && !$sitemap['type']) && $sitemap['url'])
 			{
-				$customHandle = 'customSection'.$customUrl;
+				$customHandle = 'sproutseo_section'.$customUrl;
 				// Create a new row in sections
 				craft()->db->createCommand()->insert($tableName, array(
 					'urlEnabledSectionId'   => null,
