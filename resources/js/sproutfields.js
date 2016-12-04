@@ -58,12 +58,12 @@ Craft.SproutFields.SelectOtherField = Garnish.Base.extend(
 
 		if (selectedValue == 'custom')
 		{
-			// Remove the Select Field and it's wrapping div
-			this.$dropdownField.val('');
+			// Hide the Select Field and it's wrapping div
 			this.$dropdownField.parent().addClass('hidden');
 
+			// Show the Text Field and display the existing value for editing
 			this.$textField.parent().removeClass('hidden');
-			this.$textField.find('input').focus();
+			this.$textField.focus().select();
 		}
 		else
 		{
