@@ -68,7 +68,7 @@
 			id: 'sproutseo-optimizedtitle',
 			maxlength: 60,
 			showCharsLeft: true,
-			value: values.title,
+			value: values.optimizedTitle,
 			errors: "",
 			class: 'nicetext',
 			first: true
@@ -109,7 +109,7 @@
 			maxlength: 160,
 			showCharsLeft: true,
 			id: 'sproutseo-optimizeddescription',
-			value: values.description,
+			value: values.optimizedDescription,
 			errors: "",
 		}) }}
 	{% endif %}
@@ -326,70 +326,57 @@
 
 {% endif %}
 
-<style>
-	.btngroup li {
-		display: inline-block;
-	}
+{% if settings.displayPreview %}
 
-	.sproutseo-previewbody {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 60%;
-	}
-	.sproutseo-previewbody div {
-		max-width:600px;
-	}
-</style>
-{% if settings.displayPreview %}{% endif %}
+	<div id="sproutseo-preview" class="modal hidden">
 
-<div id="sproutseo-preview" class="modal hidden">
-
-	<div class="header">
-		<div class="btngroup right">
-			<div class="btn active" id="sproutseo-preview-search"><span class="sproutseo-icon icon-search">&#xe800;</span> Search</div>
-			<div class="btn" id="sproutseo-preview-facebook"><span class="sproutseo-icon icon-facebook">&#xe802;</span> Facebook</div>
-			<div class="btn" id="sproutseo-preview-twitter"><span class="sproutseo-icon icon-twitter">&#xe807;</span> Twitter</div>
+		<div class="header">
+			<div class="btngroup right">
+				<div class="btn active" id="sproutseo-preview-search"><span class="sproutseo-icon icon-search">&#xe800;</span> Search</div>
+				<div class="btn" id="sproutseo-preview-facebook"><span class="sproutseo-icon icon-facebook">&#xe802;</span> Facebook</div>
+				<div class="btn" id="sproutseo-preview-twitter"><span class="sproutseo-icon icon-twitter">&#xe807;</span> Twitter</div>
+			</div>
+			<h2 class="left">{{ "Preview"|t|upper }}</h2><br>
+			<p style="width:50%;">{{ "An example of how your content might display in search and social sharing. Re-save your entry to see any changes."|t }}</p>
 		</div>
-		<h2 class="left">{{ "Preview"|t|upper }}</h2><br>
-		<p style="width:50%;">{{ "An example of how your content might display in search and social sharing. Re-save your entry to see any changes."|t }}</p>
+
+		<div class="body sproutseo-previewbody">
+			<div id="tab-sproutseo-preview-search">
+				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/search' %}
+			</div>
+			<div id="tab-sproutseo-preview-facebook" class="hidden">
+				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/opengraph' %}
+			</div>
+			<div id="tab-sproutseo-preview-twitter" class="hidden">
+				{% include 'sproutseo/_fieldtypes/elementmetadata/previews/twittercard' %}
+			</div>
+		</div>
+
 	</div>
 
-	<div class="body sproutseo-previewbody">
-		<div id="tab-sproutseo-preview-search">
-			{% include 'sproutseo/_fieldtypes/elementmetadata/previews/search' %}
-		</div>
-		<div id="tab-sproutseo-preview-facebook" class="hidden">
-			{% include 'sproutseo/_fieldtypes/elementmetadata/previews/opengraph' %}
-		</div>
-		<div id="tab-sproutseo-preview-twitter" class="hidden">
-			{% include 'sproutseo/_fieldtypes/elementmetadata/previews/twittercard' %}
-		</div>
-	</div>
+{% endif %}
 
-</div>
+{% includeCssResource "sproutseo/css/sproutseo.css" %}
+{% includeCssResource "sproutseo/css/lib/jquery.tag-editor.css" %}
 
-<style>
+{% includecss %}
 	{# Hide the Heading of our Field so all our grouped sub-fields
 feel like they are part of the natural flow of fields #}
 	{% if fieldId is defined %}
-	#{{ fieldId }} > .heading:first-of-type { display: none; }
+		#{{ fieldId }} > .heading:first-of-type { display: none; }
 	{% endif %}
-</style>
+{% endincludecss %}
 
-{% includeCssResource "sproutseo/css/sproutseo.css" %}
 {% includeJsResource "sproutseo/js/sproutbase.js" %}
 {% includeJsResource "sproutseo/js/metadataelement.js" %}
 {% includeJsResource "sproutseo/js/open-graph.js" %}
 {% includeJsResource "sproutseo/js/twitter-card.js" %}
-
-{% includeCssResource "sproutseo/css/lib/jquery.tag-editor.css" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.caret.min.js" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
 
 {% includejs %}
 
-	{% if fieldContext != 'sectionMetadata' %}
+	{% if fieldContext != 'sectionMetadata' and settings.displayPreview %}
 		// Existing Entries have a wrapper around the live preview and share buttons
 		var $previewButtonsElement = $('.previewbtns');
 		// New entries only have a live preview button
