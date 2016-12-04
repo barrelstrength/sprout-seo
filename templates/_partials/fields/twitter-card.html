@@ -22,15 +22,15 @@
 		{{ forms.textField({
 			label: "Title"|t,
 			name: nameContext~"[metadata][twitterTitle]",
-			value: values.twitterTitle,
-			placeholder: prioritizedMetadata.optimizedTitle ?? values.optimizedTitle ?? null,
+			instructions: 'The Title of your content which will appear in Twitter Card metadata.'|t,
+			value: values.twitterTitle
 		}) }}
 
 		{{ forms.textareaField({
 			label: "Description"|t,
 			name: nameContext~"[metadata][twitterDescription]",
-			value: values.twitterDescription,
-			placeholder: prioritizedMetadata.optimizedDescription ?? values.optimizedDescription ?? null,
+			instructions: 'A description of your content which will appear in Twitter Card metadata.'|t,
+			value: values.twitterDescription
 		}) }}
 
 		{{ forms.field({
@@ -40,7 +40,7 @@
 				twitterCard: true,
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}),
-			instructions: 'An image that represents your content that will display in social sharing.'|t,
+			instructions: 'An image that represents your content that will display in Twitter Card metadata.'|t,
 		}, forms.elementSelect({
 			elements: twitterImageElements,
 			sourceElementId: [values.twitterImage],

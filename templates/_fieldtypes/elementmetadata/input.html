@@ -70,7 +70,6 @@
 			showCharsLeft: true,
 			value: values.title,
 			errors: "",
-			placeholder: prioritizedMetadata.optimizedTitle ?? siteName,
 			class: 'nicetext',
 			first: true
 		}) }}
@@ -89,7 +88,7 @@
 				instructions: "Append a custom value at the end of all Meta Titles in this Section Metadata, i.e. <i>Article Title - " ~ siteName ~ "</i>. This setting overrides the <a href='" ~ cpUrl('sproutseo/globals/customization') ~ "'>default setting</a> and will apply to all titles within this Section Metadata."|t,
 				name: nameContext~'[metadata][appendTitleValue]',
 				value: values.appendTitleValue ?? null,
-				placeholder: 'Keywords {divider} {siteName}',
+				placeholder: 'Key Phrase {divider} {siteName}'|t,
 				errors: '',
 				class: 'nicetext'
 			}) }}
@@ -111,7 +110,6 @@
 			showCharsLeft: true,
 			id: 'sproutseo-optimizeddescription',
 			value: values.description,
-			placeholder: prioritizedMetadata.optimizedDescription ?? "The official website of {siteName}"|t({ siteName: siteName }),
 			errors: "",
 		}) }}
 	{% endif %}
@@ -152,7 +150,6 @@
 			id: 'sproutseo-optimizedkeywords',
 			name: nameContext~'[metadata][optimizedKeywords]',
 			value: values.optimizedKeywords,
-			placeholder: prioritizedMetadata.optimizedKeywords ?? values.optimizedKeywords,
 			errors: ''
 		}) }}
 	{% endif %}
@@ -347,6 +344,7 @@
 {% if settings.displayPreview %}{% endif %}
 
 <div id="sproutseo-preview" class="modal hidden">
+
 	<div class="header">
 		<div class="btngroup right">
 			<div class="btn active" id="sproutseo-preview-search"><span class="sproutseo-icon icon-search">&#xe800;</span> Search</div>
@@ -354,7 +352,7 @@
 			<div class="btn" id="sproutseo-preview-twitter"><span class="sproutseo-icon icon-twitter">&#xe807;</span> Twitter</div>
 		</div>
 		<h2 class="left">{{ "Preview"|t|upper }}</h2><br>
-		<p>An example of how your content might display in search and social sharing.</p>
+		<p style="width:50%;">{{ "An example of how your content might display in search and social sharing. Re-save your entry to see any changes."|t }}</p>
 	</div>
 
 	<div class="body sproutseo-previewbody">
@@ -368,6 +366,7 @@
 			{% include 'sproutseo/_fieldtypes/elementmetadata/previews/twittercard' %}
 		</div>
 	</div>
+
 </div>
 
 <style>
@@ -617,14 +616,19 @@ feel like they are part of the natural flow of fields #}
 		var divScenario = $('#sproutseo-preview').length ? '' : 'fields-' ;
 
 		$('#'+divScenario+'sproutseo-preview .header .btngroup .btn').on('click', function(e) {
+
 			e.preventDefault();
+
 			$currentBase = $('#'+divScenario+'sproutseo-preview .header .btngroup div.active');
+
 			currentHref = $currentBase.attr('id');
+
 			// Lets delete scenario prefix
 			if (divScenario == 'fields-')
 			{
 				currentHref = currentHref.replace(divScenario,'');
 			}
+
 			currentTab = '#'+divScenario+'tab-' + currentHref;
 
 			$currentBase.removeClass('active');
@@ -636,7 +640,6 @@ feel like they are part of the natural flow of fields #}
 				targetHref = targetHref.replace(divScenario,'');
 			}
 			targetTab = '#'+divScenario+'tab-' + targetHref;
-
 
 			$(this).addClass('active');
 			$(targetTab).removeClass('hidden');

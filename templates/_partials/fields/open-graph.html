@@ -24,15 +24,15 @@
 		{{ forms.textField({
 			label: "Title"|t,
 			name: nameContext~"[metadata][ogTitle]",
-			value: values.ogTitle,
-			placeholder: prioritizedMetadata.optimizedTitle ?? values.optimizedTitle ?? null,
+			instructions: 'The Title of your content which will appear in Open Graph metadata.'|t,
+			value: values.ogTitle
 		}) }}
 
 		{{ forms.textareaField({
 			label: "Description"|t,
 			name: nameContext~"[metadata][ogDescription]",
-			value: values.ogDescription,
-			placeholder: prioritizedMetadata.optimizedDescription ?? values.optimizedDescription ?? null,
+			instructions: 'A description of your content which will appear in Open Graph metadata.'|t,
+			value: values.ogDescription
 		}) }}
 
 		{{ forms.field({
@@ -42,7 +42,7 @@
 				twitterCard: true,
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}),
-			instructions: 'An image that represents your content that will display in social sharing.'|t,
+			instructions: 'An image that represents your content that will display in Open Graph metadata.'|t,
 		}, forms.elementSelect({
 			elements: ogImageElements,
 			sourceElementId: [values.ogImage],
