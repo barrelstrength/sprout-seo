@@ -318,7 +318,9 @@ class SproutSeoOptimizeHelper
 				}
 				else
 				{
-					$url = UrlHelper::getSiteUrl($asset->url);
+					$protocol = craft()->request->isSecureConnection() ? 'https' : 'http';
+
+					$url = UrlHelper::getUrlWithProtocol($asset->url, $protocol);
 				}
 			}
 			else
