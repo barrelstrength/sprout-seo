@@ -370,8 +370,6 @@
 	</div>
 </div>
 
-
-
 <style>
 	{# Hide the Heading of our Field so all our grouped sub-fields
 feel like they are part of the natural flow of fields #}
@@ -389,16 +387,6 @@ feel like they are part of the natural flow of fields #}
 {% includeCssResource "sproutseo/css/lib/jquery.tag-editor.css" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.caret.min.js" %}
 {% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
-
-{#{% if fieldContext != 'sectionMetadata' %}#}
-	{#<div class="field">#}
-		{#<div id="sproutseo-seopreview" class="btn big sprout-livepreviewbtn">#}
-			{#{{ "SEO Preview"|t }}#}
-			{#<div class="spinner hidden"></div>#}
-		{#</div>#}
-	{#</div>#}
-
-{#{% endif %}#}
 
 {% includejs %}
 
@@ -557,6 +545,26 @@ feel like they are part of the natural flow of fields #}
 
 		{% endif %}
 
+		{% set optimizedTitleFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedTitleField) %}
+
+		{% if optimizedTitleFieldHandles %}
+			{% for titleFieldHandle in optimizedTitleFieldHandles %}
+				{% set optimizedTitleFieldModel = craft.fields.getFieldByHandle(titleFieldHandle) %}
+				{% if optimizedTitleFieldModel %}
+
+					var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
+					var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';
+					$(metaTitleLabelId).append(metaTitleSeoButton).removeClass('hidden');
+					Craft.initUiElements($(metaTitleLabelId));
+
+					var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');
+					metaTitleInput.attr('maxlength', 60);
+					new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
+
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+
 		{% set optimizedDescriptionFieldModel = craft.fields.getFieldById(settings.optimizedDescriptionField) %}
 		{% if optimizedDescriptionFieldModel %}
 
@@ -573,6 +581,28 @@ feel like they are part of the natural flow of fields #}
 
 		{% endif %}
 
+		{% set optimizedDescriptionFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedDescriptionField) %}
+
+		{% if optimizedDescriptionFieldHandles %}
+			{% for descriptionFieldHandle in optimizedDescriptionFieldHandles %}
+				{% set optimizedDescriptionFieldModel = craft.fields.getFieldByHandle(descriptionFieldHandle) %}
+				{% if optimizedDescriptionFieldModel %}
+
+					var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();
+					var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';
+					$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
+					Craft.initUiElements($(metaDescriptionLabelId));
+
+					var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
+					metaDescriptionInput.attr('maxlength', 160);
+
+					{# @todo - this triggers the Double-instantiating console error #}
+					new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
+
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+
 		{% set optimizedImageFieldModel = craft.fields.getFieldById(settings.optimizedImageField) %}
 		{% if optimizedImageFieldModel %}
 
@@ -585,7 +615,6 @@ feel like they are part of the natural flow of fields #}
 		{% endif %}
 
 		var divScenario = $('#sproutseo-preview').length ? '' : 'fields-' ;
-
 
 		$('#'+divScenario+'sproutseo-preview .header .btngroup .btn').on('click', function(e) {
 			e.preventDefault();

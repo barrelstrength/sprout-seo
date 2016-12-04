@@ -699,6 +699,22 @@ class SproutSeoVariable
 		return $this->getOptimizedOptions("Assets");
 	}
 
+	public function getCustomSettingFieldHandles($value)
+	{
+		// If there are no dynamic tags, just return the template
+		if (strpos($value, '{') === false)
+		{
+			return null;
+		}
+
+		preg_match_all('/{(?<handles>[a-zA-Z_]*)/', $value, $matches);
+
+		if (count($matches['handles']))
+		{
+			return $matches['handles'];
+		}
+	}
+
 	/**
 	 * Returns all plain fields available given a type
 	 *
