@@ -615,4 +615,22 @@ class SproutSeoOptimizeHelper
 			'displayPreview'            => true,
 		);
 	}
+
+	/**
+	 * Return default customizationSettings as JSON
+	 *
+	 * @return string
+	 */
+	public static function getDefaultCustomizationSettings()
+	{
+		$defaultCustomizationSettings = array(
+			'searchMetaSectionMetadataEnabled'  => 0,
+			'openGraphSectionMetadataEnabled'   => 0,
+			'twitterCardSectionMetadataEnabled' => 0,
+			'geoSectionMetadataEnabled'         => 0,
+			'robotsSectionMetadataEnabled'      => 0
+		);
+
+		return $defaultCustomizationSettings;
+	}
 }

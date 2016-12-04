@@ -97,4 +97,43 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 			$urlEnabledSectionType->resaveElements();
 		}
 	}
+
+	public function resaveElementsIfUsingElementMetadataField($fieldId)
+	{
+		//Get all layoutIds where this field is used from craft_fieldlayoutfields.layoutId
+		$fieldLayoutIds = craft()->db->createCommand()
+			->select('layoutId')
+			->from('fieldlayoutfields')
+			->where('fieldId = :fieldId', array(':fieldId' => $fieldId))
+			->queryAll();
+
+		$fieldLayoutIds = array_column($fieldLayoutIds, 'layoutId');
+
+		foreach ($fieldLayoutIds as $fieldLayoutId)
+		{
+			//Use that id to get the Element Type of each layout via the craft_fieldlayouts.type column
+			$fieldLayout = craft()->db->createCommand()
+				->select('type')
+				->from('fieldlayouts')
+				->where('id = :id', array(':id' => $fieldLayoutId))
+				->queryRow();
+
+			$elementType = $fieldLayout['type'];
+
+			// Get the URL-Enabled Section Type based using the Element Type
+			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($elementType);
+
+			foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection)
+			{
+				if ($urlEnabledSection->hasElementMetadataField())
+				{
+					// Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
+					$elementGroupId = $urlEnabledSection->id;
+
+					//Resave Element on that URL-Enabled Section Type
+					$urlEnabledSectionType->resaveElements($elementGroupId);
+				}
+			}
+		}
+	}
 }

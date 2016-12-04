@@ -65,11 +65,14 @@ class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectio
 		return 'sections_i18n';
 	}
 
-	public function resaveElements()
+	public function resaveElements($elementGroupId = null)
 	{
-		// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
-		$sectionId   = craft()->request->getSegment(3);
-		$entryTypeId = craft()->request->getSegment(5);
+		if (!$elementGroupId)
+		{
+			// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+			$elementGroupId = craft()->request->getSegment(3);
+			//$entryTypeId = craft()->request->getSegment(5);
+		}
 
 		$criteria = craft()->elements->getCriteria(ElementType::Entry);
 
@@ -80,8 +83,8 @@ class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectio
 			foreach ($locales as $locale)
 			{
 				$criteria->locale        = $locale;
-				$criteria->type          = $entryTypeId;
-				$criteria->sectionId     = $sectionId;
+				//$criteria->type          = $entryTypeId;
+				$criteria->sectionId     = $elementGroupId;
 				$criteria->status        = null;
 				$criteria->localeEnabled = null;
 				$criteria->limit         = null;

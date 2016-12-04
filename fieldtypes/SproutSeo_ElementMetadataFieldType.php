@@ -196,6 +196,11 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		));
 	}
 
+	public function onAfterSave()
+	{
+		sproutSeo()->elementMetadata->resaveElementsIfUsingElementMetadataField($this->model->id);
+	}
+
 	/**
 	 * Performs any additional actions after the element has been saved.
 	 */
@@ -204,65 +209,65 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$fieldHandle = $this->model->handle;
 		$fields      = $this->element->getContent()->{$fieldHandle}['metadata'];
 		$locale      = $this->element->locale;
+		$settings    = $this->getSettings();
 
-		// Instance model if call comes from ResaveElements task
+		// Get instance of our Element Metadata model if a call comes from a ResaveElements task
 		// Get existing or new MetadataModel
 		$model = sproutSeo()->elementMetadata->getElementMetadataByElementId($this->element->id, $locale);
-
-		if ($fields)
-		{
-			// Test to see if we have any values in our Sprout SEO fields
-			$saveSproutSeoFields = false;
-
-			foreach ($fields as $key => $value)
-			{
-				if ($value)
-				{
-					$saveSproutSeoFields = true;
-					continue;
-				}
-			}
-
-			// If we don't have any values in our Sprout SEO fields
-			// don't add a record to the database
-			// If a record already exists, we should delete it.
-			if (!$saveSproutSeoFields)
-			{
-				// Remove record since it is now blank
-				if ($model->id)
-				{
-					sproutSeo()->elementMetadata->deleteElementMetadataById($model->id);
-				}
-
-				return;
-			}
-
-			if (isset($fields['robots']))
-			{
-				$fields['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
-			}
-		}
-		else
-		{
-			$attributes['optimizedTitle']       = null;
-			$attributes['optimizedDescription'] = null;
-			$attributes['optimizedKeywords']    = null;
-			$attributes['optimizedImage']       = null;
-			$attributes['elementId']            = null;
-		}
 
 		// Add the element ID to the field data we will submit for Sprout SEO
 		$attributes['elementId'] = $this->element->id;
 		$attributes['locale']    = $locale;
 
+		SproutSeoPlugin::log("Element ID: ". $this->element->id);
+
 		// Grab all the other Sprout SEO fields.
 		if ($fields)
 		{
+			if (isset($fields['robots']))
+			{
+				$fields['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
+			}
+
 			$attributes = array_merge($attributes, $fields);
 		}
+		else
+		{
+			// Make sure we have some default values in place
+			$attributes = $model->getAttributes();
 
-		$settings = $this->getSettings();
-		// meta details needs go first
+			$attributes['customizationSettings'] = json_decode($model->customizationSettings);
+
+			// @todo - this is excessive. Refactor how customizationSettings works.
+			unset($attributes['isNew']);
+			unset($attributes['default']);
+			unset($attributes['name']);
+			unset($attributes['handle']);
+			unset($attributes['hasUrls']);
+			unset($attributes['url']);
+			unset($attributes['priority']);
+			unset($attributes['changeFrequency']);
+			unset($attributes['urlEnabledSectionId']);
+			unset($attributes['isCustom']);
+			unset($attributes['type']);
+			unset($attributes['enabled']);
+			unset($attributes['appendTitleValue']);
+			unset($attributes['position']);
+			unset($attributes['ogImageSecure']);
+			unset($attributes['ogImageWidth']);
+			unset($attributes['ogImageHeight']);
+			unset($attributes['ogImageType']);
+			unset($attributes['ogDateUpdated']);
+			unset($attributes['ogDateCreated']);
+			unset($attributes['ogExpiryDate']);
+
+			// @todo - remove this once we simplify. Add these values back here
+			// since we overwrite them when we call getAttributes above.
+			$attributes['elementId'] = $this->element->id;
+			$attributes['locale']    = $locale;
+		}
+
+		// Meta Details needs to go first
 		$attributes = $this->processMetaDetails($attributes, $settings);
 		$attributes = $this->processOptimizedTitle($attributes, $settings);
 		$attributes = $this->processOptimizedDescription($attributes, $settings);
@@ -271,9 +276,11 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$attributes = $this->processMainEntity($attributes, $settings);
 
 		$model->setAttributes($attributes);
+		SproutSeoPlugin::log('elementID:' . $model->elementId);
 
 		$model = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($model);
 
+		// Overwrite any values we have from our existing model with the values from our attributes
 		$columns = array_intersect_key($model->getAttributes(), $attributes);
 
 		if ($model->id)
@@ -487,6 +494,12 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		return $attributes;
 	}
 
+	/**
+	 * @param $attributes
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
 	protected function processMainEntity($attributes, $settings)
 	{
 		if (!isset($attributes['schemaOverrideTypeId']))
@@ -497,22 +510,32 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		return $attributes;
 	}
 
+	/**
+	 * Make sure our Meta Details blocks behave as we need them to.
+	 *
+	 * Can be triggered via:
+	 * - Save Element
+	 * - ResaveElements via saving of Element Metadata Field
+	 * - ResaveElements via save Field Layout
+	 *
+	 * Handles several scenarios:
+	 * - New Metadata, Existing Metadata
+	 * - Meta Details Blocks - enabled, partially enabled, disabled
+	 *
+	 * @param $attributes
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
 	protected function processMetaDetails($attributes, $settings)
 	{
-		$details = array();
-
 		if (isset($attributes['customizationSettings']))
 		{
 			$attributes['customizationSettings'] = json_encode($attributes['customizationSettings']);
 		}
 		else
 		{
-			// Default everything to disabled
-			$details['searchMetaSectionMetadataEnabled']  = 0;
-			$details['openGraphSectionMetadataEnabled']   = 0;
-			$details['twitterCardSectionMetadataEnabled'] = 0;
-			$details['geoSectionMetadataEnabled']         = 0;
-			$details['robotsSectionMetadataEnabled']      = 0;
+			$details = SproutSeoOptimizeHelper::getDefaultCustomizationSettings();
 
 			$attributes['customizationSettings'] = json_encode($details);
 		}

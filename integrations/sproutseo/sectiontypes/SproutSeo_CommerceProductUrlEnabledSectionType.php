@@ -101,10 +101,13 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 		return 'commerce_producttypes_i18n';
 	}
 
-	public function resaveElements()
+	public function resaveElements($elementGroupId = null)
 	{
-		//// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
-		$productTypeId = craft()->request->getSegment(4);
+		if (!$elementGroupId)
+		{
+			// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+			$elementGroupId = craft()->request->getSegment(4);
+		}
 
 		$criteria = craft()->elements->getCriteria('Commerce_Product');
 
@@ -115,7 +118,7 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 			foreach ($locales as $locale)
 			{
 				$criteria->locale        = $locale;
-				$criteria->productTypeId = $productTypeId;
+				$criteria->productTypeId = $elementGroupId;
 				$criteria->status        = null;
 				$criteria->localeEnabled = null;
 				$criteria->limit         = null;
