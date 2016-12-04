@@ -20,6 +20,8 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 
 		createAndEditSectionMetadata: function(event) {
 
+			event.preventDefault();
+
 			if (!this.submitStatus)
 			{
 				this.submitStatus = true;
@@ -48,10 +50,6 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 						}
 					}
 				}, this));
-			}
-			else
-			{
-				event.preventDefault();
 			}
 		}
 
