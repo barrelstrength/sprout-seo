@@ -913,7 +913,18 @@ class SproutSeoVariable
 			{
 				$type = $schema['label'];
 
+				// Create a generic first item in our list that matches the top level schema
+				// We do this so we don't have a blank dropdown option for our secondary schemas
+				$firstItem = array(
+					$type => array()
+				);
+
 				$values[$schema['value']] = $this->getSchemaChildren($type);
+
+				if (count($values[$schema['value']]))
+				{
+					$values[$schema['value']] = array_merge($firstItem, $values[$schema['value']]);
+				}
 			}
 		}
 
