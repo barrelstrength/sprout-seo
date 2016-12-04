@@ -16,11 +16,9 @@
 	.opengraph-preview-small .preview-img {
 		float: left;
 		height:158px;
-		width:158px;
 	}
 	.opengraph-preview-small .preview-body {
 		height: 132px;
-		margin-left: 158px;
 	}
 	.preview-body {
 		font-size: 12px;
@@ -56,16 +54,10 @@
 		position: absolute;
 		bottom: 20px;
 	}
-
 	.opengraph-preview-small,
 	.opengraph-preview-large {
 		width: 526px;
 	}
-	.opengraph-preview-large .preview-img img {
-		width: 526px;
-		height: 275px;
-	}
-
 </style>
 
 {% set ogType = 'website' %}
@@ -77,17 +69,20 @@
 
 {% set ogImage = prioritizedMetadata.ogImage != null ?
 				prioritizedMetadata.ogImage :
-				craft.sproutSeo.getDefaultTwitterImage() %}
+				null %}
 
 {% set url = siteUrl|replace("http://", '')|replace("https:://", '')|trim('/') %}
 
 {% if ogType == 'website' %}
+
 	<div class="opengraph-preview opengraph-preview-small">
 		<div class="unclickable">
 
+			{% if ogImage %}
 			<div class="preview-img">
 				<img src="{{ ogImage }}" alt="" width="158" height="158">
 			</div>
+			{% endif %}
 
 			<div class="preview-body">
 				<div class="og-heading">{{ prioritizedMetadata.ogTitle }}</div>
@@ -98,12 +93,18 @@
 			<div class="unclickableMask"></div>
 		</div>
 	</div>
+
 {% else %}
+
 	<div class="opengraph-preview opengraph-preview-large">
 		<div class="unclickable">
+
+			{% if ogImage %}
 			<div class="preview-img">
 				<img src="{{ ogImage }}" alt="" width="526" height="275">
 			</div>
+			{% endif %}
+
 			<div class="preview-body">
 				<div class="og-heading">{{ prioritizedMetadata.ogTitle }}</div>
 				<div class="og-description">{{ prioritizedMetadata.ogDescription }}</div>
@@ -113,4 +114,19 @@
 		</div>
 	</div>
 
+{% endif %}
+
+{% if ogImage %}
+<style>
+	.opengraph-preview-small .preview-body {
+		margin-left: 158px;
+	}
+	.opengraph-preview-small .preview-img {
+		width:158px;
+	}
+	.opengraph-preview-large .preview-img img {
+		width: 526px;
+		height: 275px;
+	}
+</style>
 {% endif %}

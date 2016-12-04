@@ -914,16 +914,6 @@ class SproutSeoVariable
 		return sproutSeo()->sectionMetadata->getTransforms();
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getDefaultTwitterImage()
-	{
-		$nullImage = 'sproutseo/img/null.png';
-
-		return UrlHelper::getResourceUrl($nullImage);
-	}
-
 	public function hasActiveMetadata($type, $metadataModel)
 	{
 		switch ($type)
