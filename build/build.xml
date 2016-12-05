@@ -4,7 +4,7 @@
 
     <property name="pluginFileName" value="SproutSeo" />
     <property name="pluginName" value="sproutseo" />
-    <property name="pluginVersion" value="3.0.5" />
+    <property name="pluginVersion" value="3.0.6" />
 
     <target name="release">
         <echo msg="Preparing release distro..." />
