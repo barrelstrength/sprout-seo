@@ -307,7 +307,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		$this->values = $this->getMetadataFieldValues($fields);
 
-		if ($this->model->id)
+		if ($this->metadata->id)
 		{
 			sproutSeo()->elementMetadata->updateElementMetadata($this->metadata->id, $this->values);
 		}
