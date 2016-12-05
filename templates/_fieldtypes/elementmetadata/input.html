@@ -537,19 +537,34 @@ feel like they are part of the natural flow of fields #}
 		{% set optimizedTitleFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedTitleField) %}
 
 		{% if optimizedTitleFieldHandles %}
-			{% for titleFieldHandle in optimizedTitleFieldHandles %}
-				{% set optimizedTitleFieldModel = craft.fields.getFieldByHandle(titleFieldHandle) %}
-				{% if optimizedTitleFieldModel %}
 
-					var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
-					var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';
+			var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
+
+			{% for titleFieldHandle in optimizedTitleFieldHandles %}
+
+				{% if titleFieldHandle == 'title' %}
+					
+					var metaTitleLabelId = '#title-label';
 					$(metaTitleLabelId).append(metaTitleSeoButton).removeClass('hidden');
 					Craft.initUiElements($(metaTitleLabelId));
 
-					var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');
+					var metaTitleInput = $('#title-field input');
 					metaTitleInput.attr('maxlength', 60);
 					new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
 
+				{% else %}
+					{% set optimizedTitleFieldModel = craft.fields.getFieldByHandle(titleFieldHandle) %}
+					{% if optimizedTitleFieldModel %}
+
+						var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';
+						$(metaTitleLabelId).append(metaTitleSeoButton).removeClass('hidden');
+						Craft.initUiElements($(metaTitleLabelId));
+
+						var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');
+						metaTitleInput.attr('maxlength', 60);
+						new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
+
+					{% endif %}
 				{% endif %}
 			{% endfor %}
 		{% endif %}
@@ -574,19 +589,31 @@ feel like they are part of the natural flow of fields #}
 
 		{% if optimizedDescriptionFieldHandles %}
 			{% for descriptionFieldHandle in optimizedDescriptionFieldHandles %}
-				{% set optimizedDescriptionFieldModel = craft.fields.getFieldByHandle(descriptionFieldHandle) %}
-				{% if optimizedDescriptionFieldModel %}
 
-					var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();
-					var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';
+				var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();
+
+				{% if descriptionFieldHandle == 'title' %}
+					
+					var metaDescriptionLabelId = '#title-label';
 					$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
 					Craft.initUiElements($(metaDescriptionLabelId));
 
-					var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
-					metaDescriptionInput.attr('maxlength', 160);
+				{% else %}
 
-					{# @todo - this triggers the Double-instantiating console error #}
-					new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
+					{% set optimizedDescriptionFieldModel = craft.fields.getFieldByHandle(descriptionFieldHandle) %}
+					{% if optimizedDescriptionFieldModel %}
+
+						var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';
+						$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
+						Craft.initUiElements($(metaDescriptionLabelId));
+
+						var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
+						metaDescriptionInput.attr('maxlength', 160);
+
+						{# @todo - this triggers the Double-instantiating console error #}
+						new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
+
+					{% endif %}
 
 				{% endif %}
 			{% endfor %}
