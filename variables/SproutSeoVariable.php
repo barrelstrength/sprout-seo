@@ -711,7 +711,7 @@ class SproutSeoVariable
 
 		if (count($matches['handles']))
 		{
-			return $matches['handles'];
+			return array_unique($matches['handles']);
 		}
 	}
 
