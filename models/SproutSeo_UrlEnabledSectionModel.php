@@ -71,7 +71,7 @@ class SproutSeo_UrlEnabledSectionModel extends BaseModel
 		return $this->urlFormat;
 	}
 
-	public function hasElementMetadataField()
+	public function hasElementMetadataField($matchAll = true)
 	{
 		$fieldLayoutObjects = $this->type->getFieldLayoutSettingsObject($this->id);
 
@@ -105,11 +105,25 @@ class SproutSeo_UrlEnabledSectionModel extends BaseModel
 			}
 		}
 
-		// If we have an equal number of Element Metadata fields,
-		// the setup is optimized to handle metadata at each level
-		if ($totalElementMetaFields >= $totalFieldLayouts)
+		if ($matchAll)
 		{
-			return true;
+			// If we have an equal number of Element Metadata fields,
+			// the setup is optimized to handle metadata at each level
+			// We use this to indicate to the user if everything is setup
+			if ($totalElementMetaFields >= $totalFieldLayouts)
+			{
+				return true;
+			}
+		}
+		else
+		{
+			// When we're resaving our elements, we don't care if everything is
+			// setup, we just need to know if any Element Metadata Fields exist
+			// and need updating.
+			if ($totalElementMetaFields > 0)
+			{
+				return true;
+			}
 		}
 
 		return false;

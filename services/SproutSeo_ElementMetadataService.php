@@ -125,7 +125,7 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 
 			foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection)
 			{
-				if ($urlEnabledSection->hasElementMetadataField())
+				if ($urlEnabledSection->hasElementMetadataField(false))
 				{
 					// Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
 					$elementGroupId = $urlEnabledSection->id;
