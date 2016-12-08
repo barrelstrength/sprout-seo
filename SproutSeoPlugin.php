@@ -1,9 +1,9 @@
 <?php
 /**
-  * @author    Barrel Strength Design LLC <sprout@barrelstrengthdesign.com>
-  * @copyright Copyright (c) 2016, Barrel Strength Design LLC
-  * @license   http://sprout.barrelstrengthdesign.com/license
-  * @see       http://sprout.barrelstrengthdesign.com
+	* @author    Barrel Strength Design LLC <sprout@barrelstrengthdesign.com>
+	* @copyright Copyright (c) 2016, Barrel Strength Design LLC
+	* @license   http://sprout.barrelstrengthdesign.com/license
+	* @see       http://sprout.barrelstrengthdesign.com
  */
 namespace Craft;
 
@@ -145,18 +145,24 @@ class SproutSeoPlugin extends BasePlugin
 
 		if (!craft()->isConsole())
 		{
-			if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
+			craft()->onException = function(\CExceptionEvent $event)
 			{
-				$url = craft()->request->getUrl();
-
-				// check if the request url needs redirect
-				$redirect = sproutSeo()->redirects->getRedirect($url);
-
-				if ($redirect)
+				if (($event->exception instanceof \CHttpException) && ($event->exception->statusCode == 404))
 				{
-					craft()->request->redirect($redirect->newUrl, true, $redirect->method);
+					if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
+					{
+						$url = craft()->request->getUrl();
+
+						// check if the request url needs redirect
+						$redirect = sproutSeo()->redirects->getRedirect($url);
+
+						if ($redirect)
+						{
+							craft()->request->redirect($redirect->newUrl, true, $redirect->method);
+						}
+					}
 				}
-			}
+			};
 
 			if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutseo')
 			{
