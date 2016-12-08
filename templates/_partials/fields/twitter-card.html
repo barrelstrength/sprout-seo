@@ -14,7 +14,7 @@
 			instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
 			name: nameContext~'[metadata][twitterCard]',
 			options: twitterCardOptions,
-			value: values.twitterCard ?? prioritizedMetadata.twitterCard ?? 'summary',
+			value: values.twitterCard ?? 'summary',
 			errors: "",
 			required: false
 		}) }}
@@ -58,7 +58,7 @@
 			instructions: 'Select the Twitter Card Image Transform'|t,
 			name: nameContext~'[metadata][twitterTransform]',
 			options: transformOptions,
-			value: values.twitterTransform ?? prioritizedMetadata.twitterTransform,
+			value: values.twitterTransform,
 			errors: "",
 			required: false
 		}) }}
@@ -70,7 +70,7 @@
 			value: values.twitterCreator,
 			errors: "",
 			required: false,
-			placeholder: prioritizedMetadata.twitterCreator ?? '@ContentAuthor'
+			placeholder: '@ContentAuthor'
 		}) }}
 
 	</div>

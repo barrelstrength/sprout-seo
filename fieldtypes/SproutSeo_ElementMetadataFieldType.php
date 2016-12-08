@@ -183,24 +183,33 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$settings = $this->getSettings();
 
 		/**
+		 * --------------------
+		 * @todo - can delete this once we get SEO Preview button working dynamically
+		 *
 		 * Get the prioritized metadata at this level so we can use it as placeholder text
 		 *
 		 * @var SproutSeoBaseUrlEnabledSectionType $urlEnabledSectionType
 		 */
 		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($this->element->getElementType());
 
-		$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
+		if ($urlEnabledSectionType)
+		{
+			$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
 
-		$urlEnabledSectionIdColumnName = $urlEnabledSectionType->getIdColumnName();
-		$type                          = $urlEnabledSectionType->getId();
-		$urlEnabledSectionId           = $this->element->{$urlEnabledSectionIdColumnName};
-		$urlEnabledSection             = $urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId];
+			$urlEnabledSectionIdColumnName = $urlEnabledSectionType->getIdColumnName();
+			$type                          = $urlEnabledSectionType->getId();
+			$urlEnabledSectionId           = $this->element->{$urlEnabledSectionIdColumnName};
+			$urlEnabledSection             = $urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId];
 
-		sproutSeo()->optimize->globals                    = sproutSeo()->globalMetadata->getGlobalMetadata();
-		sproutSeo()->optimize->urlEnabledSection          = $urlEnabledSection;
-		sproutSeo()->optimize->urlEnabledSection->element = $this->element;
+			sproutSeo()->optimize->urlEnabledSection          = $urlEnabledSection;
+			sproutSeo()->optimize->urlEnabledSection->element = $this->element;
+		}
+
+		sproutSeo()->optimize->globals = sproutSeo()->globalMetadata->getGlobalMetadata();
 
 		$prioritizedMetadata = sproutSeo()->optimize->getPrioritizedMetadataModel();
+
+		// --------------------
 
 		// @todo - what are the ogImageElements, twitterImageElements, etc being used for?
 		// they don't appear to be used in the elementdata/input template...

@@ -16,7 +16,7 @@
 				target="_blank">How Open Graph Stories work.</a>'|t,
 			name: nameContext~'[metadata][ogType]',
 			options: ogTypesOptions,
-			value: values.ogType ?? prioritizedMetadata.ogType,
+			value: values.ogType,
 			errors: "",
 			required: false
 		}) }}
@@ -60,7 +60,7 @@
 			instructions: 'Select the Open Graph Image Transform'|t,
 			name: nameContext~'[metadata][ogTransform]',
 			options: transformOptions,
-			value: values.ogTransform ?? prioritizedMetadata.ogTransform,
+			value: values.ogTransform,
 			errors: "",
 			required: false
 		}) }}
