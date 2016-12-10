@@ -94,7 +94,7 @@ class Rake
 
 			foreach ($phrases as $p)
 			{
-				$p = strtolower(trim($p));
+				$p = mb_strtolower(trim($p));
 
 				if ($p != '') array_push($phrases_arr, $p);
 			}
