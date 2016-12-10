@@ -17,6 +17,8 @@ class SproutSeoOptimizeHelper
 			return UrlHelper::getSiteUrl();
 		}
 
+		$url = craft()->config->parseEnvironmentString($url);
+
 		return $url;
 	}
 

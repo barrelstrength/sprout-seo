@@ -28,6 +28,11 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 		$results['robots']    = isset($results['robots']) ? JsonHelper::decode($results['robots']) : null;
 		$results['settings']  = isset($results['settings']) ? JsonHelper::decode($results['settings']) : null;
 
+		if (isset($results['identity']['url']))
+		{
+			$results['identity']['url'] = SproutSeoOptimizeHelper::getGlobalMetadataSiteUrl($results['identity']['url']);
+		}
+
 		$schema = SproutSeo_GlobalsModel::populateModel($results);
 
 		return $schema;
