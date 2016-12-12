@@ -101,8 +101,49 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 		return 'commerce_producttypes_i18n';
 	}
 
+	/**
+	 * Don't have Sprout SEO trigger ResaveElements task after saving a field layout.
+	 * This is already supported by Craft Commerce.
+	 *
+	 * @return bool
+	 */
+	public function resaveElementsAfterFieldLayoutSaved()
+	{
+		return false;
+	}
+
+	/**
+	 * @param null $elementGroupId
+	 *
+	 * @return bool
+	 */
 	public function resaveElements($elementGroupId = null)
 	{
-		// Craft already supports CommerceProduct
+		if (!$elementGroupId)
+		{
+			// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+			$elementGroupId = craft()->request->getSegment(4);
+		}
+
+		$criteria = craft()->elements->getCriteria('Commerce_Product');
+
+		$productType = craft()->categories->getGroupById($elementGroupId);
+		$locales = array_values($productType->getLocales());
+
+		if ($locales)
+		{
+			$primaryLocale = $locales[0];
+
+			$criteria->locale        = $primaryLocale->locale;
+			$criteria->productTypeId = $elementGroupId;
+			$criteria->status        = null;
+			$criteria->localeEnabled = null;
+			$criteria->limit         = null;
+
+			craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Commerce Products and metadata.'), array(
+				'elementType' => 'Commerce_Product',
+				'criteria'    => $criteria->getAttributes()
+			));
+		}
 	}
 }

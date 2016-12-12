@@ -172,4 +172,22 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 
 		return $result;
 	}
+
+	/**
+	 * Disable support for resaving elements when a field layout
+	 * for this URL-Enabled Section is saved
+	 *
+	 * @return bool
+	 */
+	public function resaveElementsAfterFieldLayoutSaved()
+	{
+		return true;
+	}
+
+	/**
+	 * Add support for triggering the ResaveElements task for this URL-Enabled Section
+	 *
+	 * @return mixed
+	 */
+	abstract public function resaveElements();
 }

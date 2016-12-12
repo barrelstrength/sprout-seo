@@ -107,7 +107,7 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 
 			// We only need to save the current field layout. Some Elements, like Commerce_Products
 			// also need to save the related Variant field layout which returns as an array
-			if (!is_array($urlEnabledSectionType))
+			if (!is_array($urlEnabledSectionType) && $urlEnabledSectionType->resaveElementsAfterFieldLayoutSaved())
 			{
 				$urlEnabledSectionType->resaveElements();
 			}
@@ -134,20 +134,28 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 				->where('id = :id', array(':id' => $fieldLayoutId))
 				->queryRow();
 
-			$elementType = $fieldLayout['type'];
+			$elementTypes[] = $fieldLayout['type'];
+		}
 
-			// Get the URL-Enabled Section Type based using the Element Type
+		$elementTypes = array_unique($elementTypes);
+
+		foreach ($elementTypes as $elementType)
+		{
+			//Get the URL-Enabled Section Type based using the Element Type
 			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($elementType);
 
-			foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection)
+			if ($urlEnabledSectionType)
 			{
-				if ($urlEnabledSection->hasElementMetadataField(false))
+				foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection)
 				{
-					// Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
-					$elementGroupId = $urlEnabledSection->id;
+					if ($urlEnabledSection->hasElementMetadataField(false))
+					{
+						// Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
+						$elementGroupId = $urlEnabledSection->id;
 
-					//Resave Element on that URL-Enabled Section Type
-					$urlEnabledSectionType->resaveElements($elementGroupId);
+						//Resave Element on that URL-Enabled Section Type
+						$urlEnabledSectionType->resaveElements($elementGroupId);
+					}
 				}
 			}
 		}
