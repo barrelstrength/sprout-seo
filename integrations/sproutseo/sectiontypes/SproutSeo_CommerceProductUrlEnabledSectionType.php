@@ -103,31 +103,6 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 
 	public function resaveElements($elementGroupId = null)
 	{
-		if (!$elementGroupId)
-		{
-			// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
-			$elementGroupId = craft()->request->getSegment(4);
-		}
-
-		$criteria = craft()->elements->getCriteria('Commerce_Product');
-
-		$locales = array_values(craft()->i18n->getSiteLocaleIds());
-
-		if ($locales)
-		{
-			foreach ($locales as $locale)
-			{
-				$criteria->locale        = $locale;
-				$criteria->productTypeId = $elementGroupId;
-				$criteria->status        = null;
-				$criteria->localeEnabled = null;
-				$criteria->limit         = null;
-
-				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Commerce Products and metadata.'), array(
-					'elementType' => 'Commerce_Product',
-					'criteria'    => $criteria->getAttributes()
-				));
-			}
-		}
+		// Craft already supports CommerceProduct
 	}
 }

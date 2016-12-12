@@ -85,16 +85,32 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 		// Category, Entry, Commerce_Product, etc.
 		$fieldLayout = $event->params['layout'];
 
-		$elementGroupId = $fieldLayout->id;
-		$elementType    = $fieldLayout->type;
+		$elementGroupId          = $fieldLayout->id;
+		$elementType             = $fieldLayout->type;
+		$fieldLayoutFields       = $fieldLayout->getFields();
+		$hasElementMetadataField = false;
 
-		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($elementType);
-
-		// We only need to save the current field layout. Some Elements, like Commerce_Products
-		// also need to save the related Variant field layout which returns as an array
-		if (!is_array($urlEnabledSectionType))
+		foreach ($fieldLayoutFields as $fieldLayoutField)
 		{
-			$urlEnabledSectionType->resaveElements();
+			$field = $fieldLayoutField->field;
+
+			if ($field->type == 'SproutSeo_ElementMetadata')
+			{
+				$hasElementMetadataField = true;
+				break;
+			}
+		}
+
+		if ($hasElementMetadataField)
+		{
+			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($elementType);
+
+			// We only need to save the current field layout. Some Elements, like Commerce_Products
+			// also need to save the related Variant field layout which returns as an array
+			if (!is_array($urlEnabledSectionType))
+			{
+				$urlEnabledSectionType->resaveElements();
+			}
 		}
 	}
 

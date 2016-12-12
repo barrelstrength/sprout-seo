@@ -75,23 +75,23 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 
 		$criteria = craft()->elements->getCriteria(ElementType::Category);
 
-		$locales = array_values(craft()->i18n->getSiteLocaleIds());
+		$category = craft()->categories->getGroupById($elementGroupId);
+		$locales = array_values($category->getLocales());
 
 		if ($locales)
 		{
-			foreach ($locales as $locale)
-			{
-				$criteria->locale        = $locale;
-				$criteria->groupId       = $elementGroupId;
-				$criteria->status        = null;
-				$criteria->localeEnabled = null;
-				$criteria->limit         = null;
+			$primaryLocale = $locales[0];
 
-				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Categories and metadata.'), array(
-					'elementType' => ElementType::Category,
-					'criteria'    => $criteria->getAttributes()
-				));
-			}
+			$criteria->locale        = $primaryLocale->locale;
+			$criteria->groupId       = $elementGroupId;
+			$criteria->status        = null;
+			$criteria->localeEnabled = null;
+			$criteria->limit         = null;
+
+			craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Categories and metadata.'), array(
+				'elementType' => ElementType::Category,
+				'criteria'    => $criteria->getAttributes()
+			));
 		}
 	}
 }
