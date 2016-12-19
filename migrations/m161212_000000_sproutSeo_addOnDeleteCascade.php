@@ -40,7 +40,10 @@ class m161212_000000_sproutSeo_addOnDeleteCascade extends BaseMigration
 			craft()->db->createCommand()->delete($tableName, array('in', 'elementId', $elementsToDelete));
 		}
 
-		MigrationHelper::dropForeignKeyIfExists($tableName, array('elementId'));
+		if ($this->dbConnection->schema->getTable($tableName))
+		{
+			MigrationHelper::dropForeignKeyIfExists($tableName, array('elementId'));
+		}
 
 		$this->addForeignKey($tableName, 'elementId', 'elements', 'id', 'CASCADE');
 
