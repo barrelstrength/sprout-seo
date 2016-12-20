@@ -127,17 +127,16 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		{
 			$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
 
-			$matchedElementVariable = $urlEnabledSectionType->getMatchedElementVariable();
+			$matchedElementVariable        = $urlEnabledSectionType->getMatchedElementVariable();
+			$urlEnabledSectionTypeIdColumn = $urlEnabledSectionType->getIdColumnName();
 
-			if (isset($context[$matchedElementVariable]))
+			if (isset($context[$matchedElementVariable]->{$urlEnabledSectionTypeIdColumn}))
 			{
 				// Add the current page load matchedElementVariable to our Element Group
 				$element = $context[$matchedElementVariable];
+				$type    = $urlEnabledSectionType->getId();
 
-				$type = $urlEnabledSectionType->getId();
-
-				$urlEnabledSectionTypeIdColumn = $urlEnabledSectionType->getIdColumnName();
-				$urlEnabledSectionTypeId       = $element->{$urlEnabledSectionTypeIdColumn};
+				$urlEnabledSectionTypeId = $element->{$urlEnabledSectionTypeIdColumn};
 
 				$uniqueKey = $type . '-' . $urlEnabledSectionTypeId;
 
