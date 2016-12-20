@@ -125,6 +125,8 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 
 		$fieldLayoutIds = array_column($fieldLayoutIds, 'layoutId');
 
+		$elementTypes = array();
+
 		foreach ($fieldLayoutIds as $fieldLayoutId)
 		{
 			//Use that id to get the Element Type of each layout via the craft_fieldlayouts.type column

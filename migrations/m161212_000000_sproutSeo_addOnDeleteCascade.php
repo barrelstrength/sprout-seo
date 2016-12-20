@@ -42,7 +42,11 @@ class m161212_000000_sproutSeo_addOnDeleteCascade extends BaseMigration
 
 		MigrationHelper::refresh();
 
+		MigrationHelper::dropIndexIfExists($tableName, array('elementId'), true);
+
 		MigrationHelper::dropForeignKeyIfExists($tableName, array('elementId'));
+
+		$this->alterColumn($tableName, 'elementId', array(ColumnType::Int, 'null' => false));
 
 		$this->addForeignKey($tableName, 'elementId', 'elements', 'id', 'CASCADE');
 
