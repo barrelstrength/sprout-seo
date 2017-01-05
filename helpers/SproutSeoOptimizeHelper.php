@@ -590,8 +590,11 @@ class SproutSeoOptimizeHelper
 		$model->ogImage      = !is_null($model->ogImage) ? $model->ogImage : $optimizedImage;
 		$model->twitterImage = !is_null($model->twitterImage) ? $model->twitterImage : $optimizedImage;
 
-		$model->ogType      = !is_null($model->ogType) ? $model->ogType : $globalSettings['defaultOgType'];
-		$model->twitterCard = !is_null($model->twitterCard) ? $model->twitterCard : $globalSettings['defaultTwitterCard'];
+		$defaultOgType      = isset($globalSettings['defaultOgType']) ? $globalSettings['defaultOgType'] : null;
+		$defaultTwitterCard = isset($globalSettings['defaultTwitterCard']) ? $globalSettings['defaultTwitterCard'] : null;
+
+		$model->ogType      = !is_null($model->ogType) ? $model->ogType : $defaultOgType;
+		$model->twitterCard = !is_null($model->twitterCard) ? $model->twitterCard : $defaultTwitterCard;
 
 		return $model;
 	}
