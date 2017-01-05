@@ -40,6 +40,10 @@ class SproutSeo_PersonSchema extends SproutSeo_ThingSchema
 			{
 				$this->addUserElementProperties();
 			}
+			else
+			{
+				parent::addProperties();
+			}
 		}
 		else
 		{
