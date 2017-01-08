@@ -12,7 +12,7 @@
 {% case "publisher" %}
 	<link href="{{ value }}" rel="publisher">
 {% default %}
-	<meta name='{{ name }}' content='{{ value }}'>
+	<meta name="{{ name }}" content="{{ value }}">
 {% endswitch %}
 {% endfor %}
 {% if meta.googlePlus is defined and meta.googlePlus %}
@@ -21,22 +21,22 @@
 {% for name, value in meta.robots %}
 {% switch name %}
 {% case "canonical" %}
-	<link rel='canonical' href='{{ value }}'>
+	<link rel="canonical" href="{{ value }}">
 {% default %}
-	<meta name='{{ name }}' content='{{ value }}'>
+	<meta name="{{ name }}" content="{{ value }}">
 {% endswitch %}
 {% endfor %}
 {% for name, value in meta.geo %}
-	<meta name='{{ name }}' content='{{ value }}'>
+	<meta name="{{ name }}" content="{{ value }}">
 {% endfor %}
 {% for name, value in meta.openGraph %}
-	<meta property='{{ name }}' content='{{ value }}'>
+	<meta property="{{ name }}" content="{{ value }}">
 {% endfor %}
 {% for name, value in meta.twitterCard %}
-	<meta name='{{ name }}' content='{{ value }}'>
+	<meta name="{{ name }}" content="{{ value }}">
 {% endfor %}
 {% for property in globals.ownership %}
-	<meta name='{{ property.metaTag }}' property='{{ property.metaTag }}' content='{{ property.verificationCode }}'>
+	<meta name="{{ property.metaTag }}" property="{{ property.metaTag }}" content="{{ property.verificationCode }}">
 {% endfor %}
 
 {%- for item in schema -%}
