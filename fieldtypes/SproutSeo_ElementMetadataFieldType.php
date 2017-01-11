@@ -657,27 +657,34 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			$attributes['customizationSettings'] = json_decode($this->metadata->customizationSettings);
 
 			// @todo - this is excessive. Refactor how customizationSettings works.
-			unset($attributes['isNew']);
-			unset($attributes['default']);
-			unset($attributes['name']);
-			unset($attributes['handle']);
-			unset($attributes['hasUrls']);
-			unset($attributes['url']);
-			unset($attributes['priority']);
-			unset($attributes['changeFrequency']);
-			unset($attributes['urlEnabledSectionId']);
-			unset($attributes['isCustom']);
-			unset($attributes['type']);
-			unset($attributes['enabled']);
-			unset($attributes['appendTitleValue']);
-			unset($attributes['position']);
-			unset($attributes['ogImageSecure']);
-			unset($attributes['ogImageWidth']);
-			unset($attributes['ogImageHeight']);
-			unset($attributes['ogImageType']);
-			unset($attributes['ogDateUpdated']);
-			unset($attributes['ogDateCreated']);
-			unset($attributes['ogExpiryDate']);
+			$removeKeys = array(
+				'isNew',
+				'default',
+				'name',
+				'handle',
+				'hasUrls',
+				'url',
+				'priority',
+				'changeFrequency',
+				'urlEnabledSectionId',
+				'isCustom',
+				'type',
+				'enabled',
+				'appendTitleValue',
+				'position',
+				'ogImageSecure',
+				'ogImageWidth',
+				'ogImageHeight',
+				'ogImageType',
+				'ogDateUpdated',
+				'ogDateCreated',
+				'ogExpiryDate'
+			);
+
+			foreach ($removeKeys as $key)
+			{
+				unset($attributes[$key]);
+			}
 
 			// @todo - remove this once we simplify. Add these values back here
 			// since we overwrite them when we call getAttributes above.
