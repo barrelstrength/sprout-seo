@@ -634,6 +634,31 @@ feel like they are part of the natural flow of fields #}
 			{% endfor %}
 		{% endif %}
 
+		{% set optimizedImageFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedImageField) %}
+
+		{% if optimizedImageFieldHandles %}
+			{% for imageFieldHandle in optimizedImageFieldHandles %}
+
+				var metaImageSeoButton = $('div.sproutseo-metaimage-info').html();
+
+				{% set optimizedImageFieldModel = craft.fields.getFieldByHandle(imageFieldHandle) %}
+				{% if optimizedImageFieldModel %}
+
+				var metaImageLabelId = '#fields-{{ optimizedImageFieldModel.handle }}-label';
+				$(metaImageLabelId).append(metaImageSeoButton).removeClass('hidden');
+				Craft.initUiElements($(metaImageLabelId));
+
+				var metaImageInput = $('#fields-{{ optimizedImageFieldModel.handle }}-field input');
+				metaImageInput.attr('maxlength', 160);
+
+				{# @todo - this triggers the Double-instantiating console error #}
+				new Garnish.NiceText(metaImageInput, { showCharsLeft: true });
+
+
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+
 		{% set optimizedImageFieldModel = craft.fields.getFieldById(settings.optimizedImageField) %}
 		{% if optimizedImageFieldModel %}
 

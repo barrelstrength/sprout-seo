@@ -509,6 +509,13 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				$image = $this->getSelectedFieldForOptimizedMetadata($optimizedImageFieldSetting);
 
 				break;
+
+			// Custom Value
+			default:
+
+				$image = craft()->templates->renderObjectTemplate($optimizedImageFieldSetting, $this->element);
+
+				break;
 		}
 
 		$attributes['optimizedImage'] = $image;
@@ -715,7 +722,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				$values[$key] = $existingValues[$key];
 			}
 
-			if (($key == 'ogImage' OR $key == 'twitterImage') AND count($values[$key]))
+			if (($key == 'ogImage' OR $key == 'twitterImage') AND !empty($values[$key]))
 			{
 				$values[$key] = $values[$key][0];
 			}
