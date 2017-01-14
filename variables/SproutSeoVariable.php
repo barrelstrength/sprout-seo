@@ -748,7 +748,15 @@ class SproutSeoVariable
 			return null;
 		}
 
-		preg_match_all('/{(?<handles>[a-zA-Z_]*)/', $value, $matches);
+		/**
+		 *  {           - our pattern starts with an open bracket
+		 *  <space>?    - zero or one space
+		 *  (object\.)? - zero or one characters that spell "object."
+		 *  (?<handles> - begin capture pattern and name it 'handles'
+		 *  [a-zA-Z_]*  - any number of characters in Craft field handles
+		 *  )           - end capture pattern named 'handles'
+		 */
+		preg_match_all('/{ ?(object\.)?(?<handles>[a-zA-Z_]*)/', $value, $matches);
 
 		if (count($matches['handles']))
 		{
