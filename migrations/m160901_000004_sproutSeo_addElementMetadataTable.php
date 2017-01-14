@@ -110,54 +110,56 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 			->where(array('in', 'type', $oldFieldTypes))
 			->queryAll();
 
-		$idsToRemove  = array();
-		$defaultGroup = 1;
-
-		foreach ($oldFields as $field)
+		if ($oldFields)
 		{
-			array_push($idsToRemove, $field['id']);
-			$defaultGroup = $field['groupId'];
-		}
+			$idsToRemove  = array();
+			$defaultGroup = 1;
 
-		// let's create the a new element metadata field to replace old fields.
-		$fieldData['groupId']      = $defaultGroup;
-		$fieldData['name']         = Craft::t('Element Metadata');
-		$fieldData['handle']       = 'elementMetadata';
-		$fieldData['translatable'] = false;
-		$fieldData['type']         = 'SproutSeo_ElementMetadata';
-		// Default settings let's set to manually
-		$fieldData['settings']     = '{"optimizedTitleField":"manually","optimizedDescriptionField":"manually","optimizedImageField":"manually","optimizedKeywordsField":"manually","showMainEntity":"1","showSearchMeta":"1","showOpenGraph":"1","showTwitter":"1","showGeo":"1","showRobots":"1","displayPreview":"1","requiredTitle":"1","requiredDescription":"1","requiredImage":""}';
-
-		craft()->db->createCommand()->insert('fields', $fieldData);
-		$elementFildId = craft()->db->getLastInsertID();
-
-		$oldFieldlayoutFields = craft()->db->createCommand()
-			->select('*')
-			->from('fieldlayoutfields')
-			->where(array('in', 'fieldId', $idsToRemove))
-			->queryAll();
-
-		if ($elementFildId)
-		{
-			$layoutId = null;
-			foreach ($oldFieldlayoutFields as $key => $fieldlayoutField)
+			foreach ($oldFields as $field)
 			{
-				$data = array('fieldId' => $elementFildId);
+				array_push($idsToRemove, $field['id']);
+				$defaultGroup = $field['groupId'];
+			}
 
-				if ($key == 0)
+			// let's create the a new element metadata field to replace old fields.
+			$fieldData['groupId']      = $defaultGroup;
+			$fieldData['name']         = Craft::t('Element Metadata');
+			$fieldData['handle']       = 'elementMetadata';
+			$fieldData['translatable'] = false;
+			$fieldData['type']         = 'SproutSeo_ElementMetadata';
+			// Default settings let's set to manually
+			$fieldData['settings']     = '{"optimizedTitleField":"manually","optimizedDescriptionField":"manually","optimizedImageField":"manually","optimizedKeywordsField":"manually","showMainEntity":"1","showSearchMeta":"1","showOpenGraph":"1","showTwitter":"1","showGeo":"1","showRobots":"1","displayPreview":"1","requiredTitle":"1","requiredDescription":"1","requiredImage":""}';
+
+			craft()->db->createCommand()->insert('fields', $fieldData);
+			$elementFieldId = craft()->db->getLastInsertID();
+
+			$oldFieldlayoutFields = craft()->db->createCommand()
+				->select('*')
+				->from('fieldlayoutfields')
+				->where(array('in', 'fieldId', $idsToRemove))
+				->queryAll();
+
+			if ($elementFieldId)
+			{
+				$layoutId = null;
+				foreach ($oldFieldlayoutFields as $key => $fieldlayoutField)
 				{
-					$layoutId = $this->_updateFieldLayout($data, $fieldlayoutField);
-				}
-				else if ($layoutId != $fieldlayoutField['layoutId'])
-				{
-					$layoutId = $this->_updateFieldLayout($data, $fieldlayoutField);
+					$data = array('fieldId' => $elementFieldId);
+
+					if ($key == 0)
+					{
+						$layoutId = $this->_updateFieldLayout($data, $fieldlayoutField);
+					}
+					else if ($layoutId != $fieldlayoutField['layoutId'])
+					{
+						$layoutId = $this->_updateFieldLayout($data, $fieldlayoutField);
+					}
 				}
 			}
+
+			// finally delete old sprout seo fields
+			craft()->db->createCommand()->delete('fields', array('in', 'id', $idsToRemove));
 		}
-
-		// finally delete old sprout seo fields
-		craft()->db->createCommand()->delete('fields', array('in', 'id', $idsToRemove));
-
 		// finally rename table
 		$this->renameTable($tableName, $newTableName);
 		$this->createIndex($newTableName, 'elementId,locale', true);
