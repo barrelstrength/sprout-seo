@@ -76,6 +76,8 @@ class SproutSeo_WebsiteIdentityOrganizationSchema extends SproutSeoBaseSchema
 			$this->addDate('foundingDate', $schema['foundingDate']['date']);
 		}
 
+		$this->addText('priceRange', $schema['priceRange']);
+
 		if (count($socialProfiles))
 		{
 			$urls = array_column($socialProfiles, 'url');

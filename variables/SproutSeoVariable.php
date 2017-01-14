@@ -473,6 +473,50 @@ class SproutSeoVariable
 	/**
 	 * @return array
 	 */
+	public function getPriceRangeOptions()
+	{
+		$schemaType = "identity";
+		$options    = array(
+			array(
+				'label' => "Select...",
+				'value' => ''
+			),
+			array(
+				'label' => "$",
+				'value' => '$'
+			),
+			array(
+				'label' => "$$",
+				'value' => '$$'
+			),
+			array(
+				'label' => "$$$",
+				'value' => '$$$'
+			),
+			array(
+				'label' => "$$$$",
+				'value' => '$$$$'
+			)
+		);
+
+		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
+		$priceRange        = $schemaGlobals[$schemaType]['priceRange'];
+
+		array_push($options, array('optgroup' => 'Custom'));
+
+		if (!array_key_exists($priceRange, array('$' => 0, '$$' => 1, '$$$' => 2, '$$$$' => 4)) && $priceRange != '')
+		{
+			array_push($options, array('label' => $priceRange, 'value' => $priceRange));
+		}
+
+		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
+
+		return $options;
+	}
+
+	/**
+	 * @return array
+	 */
 	public function getGenderOptions()
 	{
 		$schemaType = "identity";

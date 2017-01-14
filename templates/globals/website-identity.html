@@ -305,6 +305,7 @@
 
 		{# These fields should only display when 'Organization' is selected #}
 		<div class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
+
 			{{ forms.dateField({
 				label: "Founding Date"|t ~ sprout.infoIcon({
 					label: "Founding Date"|t,
@@ -319,6 +320,23 @@
 				errors: '',
 				required: false
 			}) }}
+
+			{% set priceRangeOptions = craft.sproutseo.getPriceRangeOptions() %}
+
+			{{ forms.field({
+				label: "Price Range"|t ~ sprout.infoIcon({
+					label: "Price Range"|t,
+					search: true,
+					structured: true,
+					priority: 'globals'
+				}),
+				first: true,
+			}, sproutFields.selectOther({
+				name: 'sproutseo[globals][identity][priceRange]',
+				options: priceRangeOptions ,
+				value: websiteIdentity['priceRange'] is defined ? websiteIdentity.priceRange : null,
+				otherPlaceholderText: 'Custom Price Range'|t
+			})) }}
 
 			<hr>
 
