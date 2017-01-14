@@ -48,16 +48,27 @@
 	</div>
 </div>
 
-{% set optimizedImageOptions = craft.sproutSeo.getOptimizedAssetsOptions() %}
+{% set optimizedImageOptions = craft.sproutSeo.getOptimizedAssetsOptions(settings) %}
 
-{{ forms.selectField({
-	label: "Meta Image"|t,
-	instructions: "Select the Assets field to use for your basic, Open Graph, and Twitter Card meta tag feature image. Select 'Manually' if you want the Optimize field to display a custom Feature Image Field for your content editors to manage."|t,
-	id: 'optimizedImageField',
-	name: 'optimizedImageField',
-	options: optimizedImageOptions,
-	value: settings.optimizedImageField is defined ? settings.optimizedImageField : 'manually',
-}) }}
+<div class="field">
+	<div class="heading">
+		<label for="siteOwnerType">{{ "Meta Image"|t}}</label>
+		<p class="instructions">
+			{{"Select the Assets field to use for your basic, Open Graph, and Twitter Card meta tag feature image. Select 'Manually' if you want the Optimize field to display a custom Feature Image Field for your content editors to manage."|t}}
+		</p>
+	</div>
+	<div class="input">
+		<div class="field sprout-selectother">
+			{{ sproutFields.selectOther({
+				id: 'optimizedImageField',
+				name: 'optimizedImageField',
+				options: optimizedImageOptions,
+				value: settings.optimizedImageField is defined ? settings.optimizedImageField : 'manually',
+				otherPlaceholderText: 'Custom title pattern. Twig code allowed, i.e. {title} - {customField}'|t
+			}) }}
+		</div>
+	</div>
+</div>
 
 {% set optimizedKeywordOptions = craft.sproutSeo.getKeywordsOptions() %}
 

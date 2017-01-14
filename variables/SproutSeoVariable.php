@@ -661,10 +661,7 @@ class SproutSeoVariable
 			$options[$settings[$handle]] = $settings[$handle];
 		}
 
-		if ($type != 'Assets')
-		{
-			$options['custom'] = Craft::t('Add Custom Format');
-		}
+		$options['custom'] = Craft::t('Add Custom Format');
 
 		return $options;
 	}
@@ -694,9 +691,9 @@ class SproutSeoVariable
 	 *
 	 * @return array
 	 */
-	public function getOptimizedAssetsOptions()
+	public function getOptimizedAssetsOptions($settings)
 	{
-		return $this->getOptimizedOptions("Assets");
+		return $this->getOptimizedOptions("Assets", 'optimizedImageField', $settings);
 	}
 
 	public function getCustomSettingFieldHandles($value)
