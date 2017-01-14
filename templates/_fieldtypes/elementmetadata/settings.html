@@ -190,64 +190,6 @@
 	on: settings.displayPreview,
 }) }}
 
-<hr>
-
-{% set requiredFieldsInput %}
-	<table class="data" style="width: auto;">
-		<thead>
-		<tr>
-			<th scope="col">{{ "Field Name"|t }}</th>
-			<th scope="col">{{ "Required"|t }}</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr>
-			<td><label for="showMainEntity">{{ "Meta Title Field"|t }}</label></td>
-			<td class="centeralign">
-				<div>
-					{{ forms.lightswitch({
-						name: 'requiredTitle',
-						on:   settings.requiredTitle,
-						small: true
-					}) }}
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td><label for="showSearchMeta">{{ "Meta Description Field"|t }}</label></td>
-			<td class="centeralign">
-				<div>
-					{{ forms.lightswitch({
-						name: 'requiredDescription',
-						on:   settings.requiredDescription,
-						small: true
-					}) }}
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td><label for="showOpenGraph">{{ "Meta Image Field"|t }}</label></td>
-			<td class="centeralign">
-				<div>
-					{{ forms.lightswitch({
-						name: 'requiredImage',
-						on:   settings.requiredImage,
-						small: false
-					}) }}
-				</div>
-			</td>
-		</tr>
-		</tbody>
-	</table>
-
-{% endset %}
-
-	{{ forms.field({
-		label: "Require Metadata for Editable Fields"|t,
-		instructions: "Existing Fields are not managed by these settings. Make any Existing Fields in your settings required by marking that field as required in your Field Layout. These settings are specifically for the custom metadata fields you can use when you select 'Display Editable Field' from a field dropdown above. Note: You must select the option 'Display Editable Field' and mark this Element Metadata field as required in your Field Layout before these settings will be used."|t,
-		errors: ''
-	}, requiredFieldsInput) }}
-
 {% includeJsResource 'sproutseo/js/sproutfields.js' %}
 
 {% includejs %}

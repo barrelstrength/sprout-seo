@@ -58,10 +58,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			'showOpenGraph'             => array(AttributeType::Bool, 'default' => false),
 			'showTwitter'               => array(AttributeType::Bool, 'default' => false),
 			'showGeo'                   => array(AttributeType::Bool, 'default' => false),
-			'showRobots'                => array(AttributeType::Bool, 'default' => false),
-			'requiredTitle'             => array(AttributeType::Bool, 'default' => true),
-			'requiredDescription'       => array(AttributeType::Bool, 'default' => true),
-			'requiredImage'             => array(AttributeType::Bool, 'default' => false),
+			'showRobots'                => array(AttributeType::Bool, 'default' => false)
 		);
 	}
 
@@ -228,7 +225,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			'fieldContext'         => 'field',
 			'settings'             => $settings,
 			'prioritizedMetadata'  => $prioritizedMetadata,
-			'elementHandle'        => $this->model->handle
+			'elementHandle'        => $this->model->handle,
+			'field'                => $this->model
 		));
 	}
 
@@ -268,34 +266,24 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		$optimizedTitle       = $this->getSettings()->optimizedTitleField;
 		$optimizedDescription = $this->getSettings()->optimizedDescriptionField;
-		$optimizedImage       = $this->getSettings()->optimizedImageField;
 
 		if ($optimizedTitle != 'manually' &&
-			  $optimizedDescription != 'manually' &&
-			  $optimizedImage != 'manually')
+			$optimizedDescription != 'manually'
+		)
 		{
 			return true;
 		}
 
 		$errorMessage = array();
 
-		$requiredTitle       = $this->getSettings()->requiredTitle;
-		$requiredDescription = $this->getSettings()->requiredDescription;
-		$requiredImage       = $this->getSettings()->requiredImage;
-
-		if ($requiredTitle && $optimizedTitle == 'manually' && empty($this->values['optimizedTitle']))
+		if ($optimizedTitle == 'manually' && empty($this->values['optimizedTitle']))
 		{
 			$errorMessage[] = Craft::t("Meta Title field cannot be blank.");
 		}
 
-		if ($requiredDescription && $optimizedDescription == 'manually' && empty($this->values['optimizedDescription']))
+		if ($optimizedDescription == 'manually' && empty($this->values['optimizedDescription']))
 		{
 			$errorMessage[] = Craft::t("Meta Description field cannot be blank.");
-		}
-
-		if (!$requiredImage && $optimizedImage == 'manually' && empty($this->values['optimizedImage']))
-		{
-			$errorMessage[] = Craft::t("Meta Image field cannot be blank.");
 		}
 
 		return count($errorMessage) ? $errorMessage : true;
@@ -628,8 +616,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 	protected function getMetadataFieldValues($fields)
 	{
-		$locale      = $this->element->locale;
-		$settings    = $this->getSettings();
+		$locale   = $this->element->locale;
+		$settings = $this->getSettings();
 
 		// Get instance of our Element Metadata model if a call comes from a ResaveElements task
 		// Get existing or new MetadataModel

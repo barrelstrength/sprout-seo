@@ -69,8 +69,9 @@
 			maxlength: 60,
 			showCharsLeft: true,
 			value: values.optimizedTitle,
-			errors: "",
+			errors: '',
 			class: 'nicetext',
+			required: field.required,
 			first: true
 		}) }}
 
@@ -89,7 +90,6 @@
 				name: nameContext~'[metadata][appendTitleValue]',
 				value: values.appendTitleValue ?? null,
 				placeholder: 'Key Phrase {divider} {siteName}'|t,
-				errors: '',
 				class: 'nicetext'
 			}) }}
 		</div>
@@ -110,7 +110,7 @@
 			showCharsLeft: true,
 			id: 'sproutseo-optimizeddescription',
 			value: values.optimizedDescription,
-			errors: "",
+			required: field.required
 		}) }}
 	{% endif %}
 
@@ -149,8 +149,7 @@
 			instructions: "The primary keywords or phrases that describe your website."|t,
 			id: 'sproutseo-optimizedkeywords',
 			name: nameContext~'[metadata][optimizedKeywords]',
-			value: values.optimizedKeywords,
-			errors: ''
+			value: values.optimizedKeywords
 		}) }}
 	{% endif %}
 
@@ -169,7 +168,6 @@
 					name: nameContext~'[metadata][schemaTypeId]',
 					options: schemas,
 					value: '',
-					errors: "",
 					required: false
 				}) }}
 			</div>
@@ -180,7 +178,6 @@
 					name: nameContext~'[metadata][schemaOverrideTypeId]',
 					options: {'':''},
 					value: '',
-					errors: '',
 					required: false,
 				}) }}
 			</div>
