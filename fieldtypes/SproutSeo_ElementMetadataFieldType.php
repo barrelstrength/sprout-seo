@@ -226,7 +226,10 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			'settings'             => $settings,
 			'prioritizedMetadata'  => $prioritizedMetadata,
 			'elementHandle'        => $this->model->handle,
-			'field'                => $this->model
+
+			// @todo - this will begin to work in Craft 3
+			// http://craftcms.stackexchange.com/a/9494/115
+			'isRequired'           => $this->model->required
 		));
 	}
 
