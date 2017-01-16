@@ -124,8 +124,8 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 			// let's create the a new element metadata field to replace old fields.
 			$fieldData['groupId']      = $defaultGroup;
 			$fieldData['name']         = Craft::t('Element Metadata');
-			$fieldData['handle']       = 'elementMetadata';
-			$fieldData['translatable'] = false;
+			$fieldData['handle']       = 'sproutSeoElementMetadata';
+			$fieldData['translatable'] = 0;
 			$fieldData['type']         = 'SproutSeo_ElementMetadata';
 			// Default settings let's set to manually
 			$fieldData['settings']     = '{"optimizedTitleField":"manually","optimizedDescriptionField":"manually","optimizedImageField":"manually","optimizedKeywordsField":"manually","showMainEntity":"1","showSearchMeta":"1","showOpenGraph":"1","showTwitter":"1","showGeo":"1","showRobots":"1","displayPreview":"1","requiredTitle":"1","requiredDescription":"1","requiredImage":""}';
