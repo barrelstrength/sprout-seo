@@ -141,18 +141,16 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 
 			if ($elementFieldId)
 			{
-				$layoutId = null;
+				$layoutIds = array();
+
 				foreach ($oldFieldlayoutFields as $key => $fieldlayoutField)
 				{
 					$data = array('fieldId' => $elementFieldId);
 
-					if ($key == 0)
+					if (!in_array($fieldlayoutField['layoutId'], $layoutIds))
 					{
 						$layoutId = $this->_updateFieldLayout($data, $fieldlayoutField);
-					}
-					else if ($layoutId != $fieldlayoutField['layoutId'])
-					{
-						$layoutId = $this->_updateFieldLayout($data, $fieldlayoutField);
+						array_push($layoutIds, $layoutId);
 					}
 				}
 			}
