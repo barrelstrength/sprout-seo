@@ -158,6 +158,100 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 			// finally delete old sprout seo fields
 			craft()->db->createCommand()->delete('fields', array('in', 'id', $idsToRemove));
 		}
+
+		// Add values to new columns
+
+		$rows = craft()->db->createCommand()
+			->select('*')
+			->from($tableName)
+			->queryAll();
+
+		$metaInfoDetails = array(
+			'enableSearch' => array(
+				'title',
+				'description',
+				'keywords',
+			),
+			'enableOpenGraph' => array(
+				'ogType',
+				'ogSiteName',
+				'ogAuthor',
+				'ogPublisher',
+				'ogTitle',
+				'ogDescription',
+				'ogImage',
+				'ogImageSecure',
+				'ogImageWidth',
+				'ogImageHeight',
+				'ogImageType',
+				'ogAudio',
+				'ogVideo',
+			),
+			'enableTwitter'   => array(
+				'twitterCard',
+				'twitterCreator',
+				'twitterTitle',
+				'twitterDescription',
+				'twitterImage',
+				'twitterPlayer',
+				'twitterPlayerStream',
+				'twitterPlayerStreamContentType',
+				'twitterPlayerWidth',
+				'twitterPlayerHeight',
+			),
+			'enableGeo'       => array(
+				'region',
+				'placename',
+				'position',
+				'latitude',
+				'longitude'
+			),
+			'enableRobots'    => array(
+				'robots'
+			)
+		);
+
+		foreach ($rows as $row)
+		{
+			$detailsValues = array(
+				'enableSearch'    => 0,
+				'enableOpenGraph' => 0,
+				'enableTwitter'   => 0,
+				'enableGeo'       => 0,
+				'enableRobots'    => 0,
+			);
+
+			foreach ($metaInfoDetails as $detail => $metaInfo)
+			{
+				foreach ($metaInfo as $meta)
+				{
+					if (isset($row[$meta]) && $row[$meta])
+					{
+						$detailsValues[$detail] = 1;
+						break;
+					}
+				}
+			}
+
+			$customizationSettings = array(
+				'searchMetaSectionMetadataEnabled'  => $detailsValues['enableSearch'],
+				'openGraphSectionMetadataEnabled'   => $detailsValues['enableOpenGraph'],
+				'twitterCardSectionMetadataEnabled' => $detailsValues['enableTwitter'],
+				'geoSectionMetadataEnabled'         => $detailsValues['enableGeo'],
+				'robotsSectionMetadataEnabled'      => $detailsValues['enableRobots']
+			);
+			// updates new columns
+			craft()->db->createCommand()->update($tableName, array(
+				'optimizedKeywords'     => $row['keywords'],
+				'optimizedDescription'  => $row['description'],
+				'optimizedTitle'        => $row['title'],
+				'customizationSettings' => json_encode($customizationSettings)
+			),
+				'id = :id',
+				array(':id' => $row['id'])
+			);
+		}
+
 		// finally rename table
 		$this->renameTable($tableName, $newTableName);
 		$this->createIndex($newTableName, 'elementId,locale', true);
