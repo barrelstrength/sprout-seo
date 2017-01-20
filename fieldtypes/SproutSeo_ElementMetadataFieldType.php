@@ -424,11 +424,18 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			// Auto-generate keywords from target field
 			case (is_numeric($optimizedKeywordsFieldSetting)):
 
-				$keywords     = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
+				$bigKeywords  = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
 				$rake         = new Rake();
-				$rakeKeywords = array_keys($rake->extract($keywords));
+				$rakeKeywords = array_keys($rake->extract($bigKeywords));
 				$fiveKeywords = array_slice($rakeKeywords, 0, 5);
 				$keywords     = implode(',', $fiveKeywords);
+
+				$config   = new Config;
+				$textrank = new TextRank($config);
+
+				$keywords2 = $textrank->getKeywords($bigKeywords);
+
+				var_dump($keywords2);
 
 				break;
 		}
