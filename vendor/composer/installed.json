@@ -20,7 +20,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.0"
         },
-        "time": "2015-02-27 21:36:56",
+        "time": "2015-02-27T21:36:56+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -60,7 +60,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.0"
         },
-        "time": "2015-04-14 22:21:58",
+        "time": "2015-04-14T22:21:58+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -139,7 +139,7 @@
             "symfony/intl": "to use it as the source of country data",
             "symfony/validator": "to validate addresses"
         },
-        "time": "2015-08-25 11:49:46",
+        "time": "2015-08-25T11:49:46+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -195,7 +195,7 @@
             "mikey179/vfsstream": "1.*",
             "phpunit/phpunit": "~4.0"
         },
-        "time": "2015-06-16 23:20:58",
+        "time": "2015-06-16T23:20:58+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -218,5 +218,82 @@
             }
         ],
         "description": "Internationalization library powered by CLDR data."
+    },
+    {
+        "name": "crodas/languagedetector",
+        "version": "v0.1.1",
+        "version_normalized": "0.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/crodas/LanguageDetector.git",
+            "reference": "07aa8bb806cb71fe4e4352c12232a5c74bf416ed"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/crodas/LanguageDetector/zipball/07aa8bb806cb71fe4e4352c12232a5c74bf416ed",
+            "reference": "07aa8bb806cb71fe4e4352c12232a5c74bf416ed",
+            "shasum": ""
+        },
+        "require-dev": {
+            "crodas/autoloader": "~0.1"
+        },
+        "time": "2013-11-06T01:26:03+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "LanguageDetector": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-4-Clause"
+        ],
+        "authors": [
+            {
+                "name": "César D. Rodas",
+                "email": "crodas@php.net"
+            }
+        ],
+        "description": "simple library to classify texts"
+    },
+    {
+        "name": "crodas/text-rank",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/crodas/TextRank.git",
+            "reference": "8c113c5b0cae3eeb853891ef5afdf27d678a5940"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/crodas/TextRank/zipball/8c113c5b0cae3eeb853891ef5afdf27d678a5940",
+            "reference": "8c113c5b0cae3eeb853891ef5afdf27d678a5940",
+            "shasum": ""
+        },
+        "require": {
+            "crodas/languagedetector": "~0.1",
+            "ext-mbstring": "*"
+        },
+        "suggest": {
+            "ext-stem": "Improves keywords selection"
+        },
+        "time": "2013-12-08T07:56:52+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "lib/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "César D. Rodas",
+                "email": "crodas@php.net"
+            }
+        ],
+        "description": "Extract relevant keywords from a given text"
     }
 ]

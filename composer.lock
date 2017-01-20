@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9abe6b7a0f0106fab46f8ae04d72180e",
-    "content-hash": "628fdc6de48a063a6335d5ee8c0ab16d",
+    "content-hash": "63ca0179e84a386ee754e1548a5b1515",
     "packages": [
         {
             "name": "commerceguys/addressing",
@@ -68,7 +67,7 @@
                 "localization",
                 "postal"
             ],
-            "time": "2015-08-25 11:49:46"
+            "time": "2015-08-25T11:49:46+00:00"
         },
         {
             "name": "commerceguys/enum",
@@ -106,7 +105,7 @@
                 }
             ],
             "description": "A PHP 5.4+ enumeration library.",
-            "time": "2015-02-27 21:36:56"
+            "time": "2015-02-27T21:36:56+00:00"
         },
         {
             "name": "commerceguys/intl",
@@ -151,7 +150,80 @@
                 }
             ],
             "description": "Internationalization library powered by CLDR data.",
-            "time": "2015-06-16 23:20:58"
+            "time": "2015-06-16T23:20:58+00:00"
+        },
+        {
+            "name": "crodas/languagedetector",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crodas/LanguageDetector.git",
+                "reference": "07aa8bb806cb71fe4e4352c12232a5c74bf416ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crodas/LanguageDetector/zipball/07aa8bb806cb71fe4e4352c12232a5c74bf416ed",
+                "reference": "07aa8bb806cb71fe4e4352c12232a5c74bf416ed",
+                "shasum": ""
+            },
+            "require-dev": {
+                "crodas/autoloader": "~0.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "LanguageDetector": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-4-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "César D. Rodas",
+                    "email": "crodas@php.net"
+                }
+            ],
+            "description": "simple library to classify texts",
+            "time": "2013-11-06T01:26:03+00:00"
+        },
+        {
+            "name": "crodas/text-rank",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crodas/TextRank.git",
+                "reference": "8c113c5b0cae3eeb853891ef5afdf27d678a5940"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crodas/TextRank/zipball/8c113c5b0cae3eeb853891ef5afdf27d678a5940",
+                "reference": "8c113c5b0cae3eeb853891ef5afdf27d678a5940",
+                "shasum": ""
+            },
+            "require": {
+                "crodas/languagedetector": "~0.1",
+                "ext-mbstring": "*"
+            },
+            "suggest": {
+                "ext-stem": "Improves keywords selection"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "lib/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "César D. Rodas",
+                    "email": "crodas@php.net"
+                }
+            ],
+            "description": "Extract relevant keywords from a given text",
+            "time": "2013-12-08 07:56:52"
         },
         {
             "name": "doctrine/collections",
@@ -217,13 +289,15 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2015-04-14 22:21:58"
+            "time": "2015-04-14T22:21:58+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "crodas/text-rank": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

@@ -1,6 +1,7 @@
 {
     "require": {
         "commerceguys/addressing": "^0.7.1",
-        "commerceguys/intl": "^0.6.1"
+        "commerceguys/intl": "^0.6.1",
+        "crodas/text-rank" : "dev-master"
     }
 }
