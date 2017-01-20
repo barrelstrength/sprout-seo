@@ -275,10 +275,10 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		SproutSeoOptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
 
 		// Trim descriptions to 160 characters
-		$prioritizedMetadataModel->optimizedDescription = substr($prioritizedMetadataModel->optimizedDescription, 0, 160);
-		$prioritizedMetadataModel->description          = substr($prioritizedMetadataModel->description, 0, 160);
-		$prioritizedMetadataModel->ogDescription        = substr($prioritizedMetadataModel->ogDescription, 0, 160);
-		$prioritizedMetadataModel->twitterDescription   = substr($prioritizedMetadataModel->twitterDescription, 0, 160);
+		$prioritizedMetadataModel->optimizedDescription = mb_substr($prioritizedMetadataModel->optimizedDescription, 0, 160);
+		$prioritizedMetadataModel->description          = mb_substr($prioritizedMetadataModel->description, 0, 160);
+		$prioritizedMetadataModel->ogDescription        = mb_substr($prioritizedMetadataModel->ogDescription, 0, 160);
+		$prioritizedMetadataModel->twitterDescription   = mb_substr($prioritizedMetadataModel->twitterDescription, 0, 160);
 
 		return $prioritizedMetadataModel;
 	}

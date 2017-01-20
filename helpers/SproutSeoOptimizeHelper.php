@@ -140,7 +140,7 @@ class SproutSeoOptimizeHelper
 		// If a code override for ogImageSecure is provided, make sure it's an absolute URL
 		if (!empty($model->ogImageSecure))
 		{
-			if (substr($model->ogImageSecure, 0, 5) !== "https")
+			if (mb_substr($model->ogImageSecure, 0, 5) !== "https")
 			{
 				throw new \Exception('Open Graph Secure Image override value "' . $model->ogImageSecure . '" must be a secure, absolute url.');
 			}
@@ -151,7 +151,7 @@ class SproutSeoOptimizeHelper
 		{
 			// If ogImage starts with "http", roll with it
 			// If not, then process what we have to try to extract the URL
-			if (substr($model->ogImage, 0, 4) !== "http")
+			if (mb_substr($model->ogImage, 0, 4) !== "http")
 			{
 				if (!is_numeric($model->ogImage))
 				{
@@ -207,7 +207,7 @@ class SproutSeoOptimizeHelper
 		{
 			// If twitterImage starts with "http", roll with it
 			// If not, then process what we have to try to extract the URL
-			if (substr($model->twitterImage, 0, 4) !== "http")
+			if (mb_substr($model->twitterImage, 0, 4) !== "http")
 			{
 				if (!is_numeric($model->twitterImage))
 				{
@@ -252,7 +252,7 @@ class SproutSeoOptimizeHelper
 		{
 			// If twitterImage starts with "http", roll with it
 			// If not, then process what we have to try to extract the URL
-			if (substr($model->optimizedImage, 0, 4) !== "http")
+			if (mb_substr($model->optimizedImage, 0, 4) !== "http")
 			{
 				if (!is_numeric($model->optimizedImage))
 				{
@@ -300,7 +300,7 @@ class SproutSeoOptimizeHelper
 		$url = null;
 
 		// If not, then process what we have to try to extract the URL
-		if (substr($id, 0, 4) !== "http")
+		if (mb_substr($id, 0, 4) !== "http")
 		{
 			if (!is_numeric($id))
 			{
@@ -363,7 +363,7 @@ class SproutSeoOptimizeHelper
 				$twitterUrlFromPost = isset($socialProfileNameFromPost) ? $profile[1] : null;
 				$twitterUrl         = isset($socialProfileNameFromSettings) ? $profile['url'] : $twitterUrlFromPost;
 
-				$twitterProfileName = '@' . substr($twitterUrl, strrpos($twitterUrl, '/') + 1);
+				$twitterProfileName = '@' . mb_substr($twitterUrl, strrpos($twitterUrl, '/') + 1);
 
 				break;
 			}
