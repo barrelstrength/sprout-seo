@@ -34,34 +34,41 @@
   | Authors: César Rodas <crodas@php.net>                                           |
   +---------------------------------------------------------------------------------+
 */
-namespace Craft;
+namespace crodas\TextRank;
 
-class Summary extends TextRank
+class DefaultEvents
 {
-    public function getSummary($text)
+    public function normalize_keywords(Array $keywords)
     {
-        $sentences  = $this->config->trigger('get_sentences', $text);
-        $candidates = [];
-        $x= microtime(true);
-        foreach ($sentences as $id => $t) {
-            try {
-                $words = $this->config->trigger('get_words', $t);
-                $words = $this->config->trigger('filter_keywords', $words);
-                $words = $this->config->trigger('normalize_keywords', $words);
-                $words = array_filter($words, function($word) {
-                    return !ctype_punct($word);
-                });
-                $candidates[$id] = $words;
-            } catch (\Exception $e) {
+        return array_map(function ($keyword) {
+            return mb_strtolower($keyword);
+        }, $keywords);
+    }
+
+    public function filter_keywords(Array $keywords)
+    {
+        return array_filter($keywords, function ($keyword) {
+            if (is_numeric($keyword)) {
+                return false;
             }
-        }
-        $pr = new SummaryPageRank;
-        $sorted = $pr->sort($candidates);
-        $keys = array_slice($sorted, 0, ceil(count($sorted)*.05), true);
-        $txt  = "";
-        foreach (array_keys($keys) as $key) {
-            $txt .= $sentences[$key] . "\n";
-        }
-        return $txt;
+
+            if ($keyword[0] == mb_strtoupper($keyword[0])) {
+                return true;
+            }
+
+            return mb_strlen($keyword) > 3;
+        });
+    }
+
+    public function get_sentences($text)
+    {
+        $sentences = preg_split('/(\n+)|(\\.\W)/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        return array_values(array_filter(array_map('trim', $sentences)));
+    }
+
+    public function get_words($text)
+    {
+        $words = preg_split('/(?:(^\p{P}+)|(\p{P}*\s+\p{P}*)|(\p{P}+$))/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        return array_values(array_filter(array_map('trim', $words)));
     }
 }

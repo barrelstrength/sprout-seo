@@ -1,5 +1,8 @@
 <?php
 namespace Craft;
+use \crodas\TextRank\Config;
+use \crodas\TextRank\TextRank;
+use \crodas\TextRank\Stopword;
 
 class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPreviewableFieldType
 {
@@ -425,17 +428,27 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			case (is_numeric($optimizedKeywordsFieldSetting)):
 
 				$bigKeywords  = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
-				$rake         = new Rake();
-				$rakeKeywords = array_keys($rake->extract($bigKeywords));
-				$fiveKeywords = array_slice($rakeKeywords, 0, 5);
-				$keywords     = implode(',', $fiveKeywords);
+				$keywords     = null;
 
-				$config   = new Config;
-				$textrank = new TextRank($config);
+				if ($bigKeywords)
+				{
+					try
+					{
+						$config        = new Config;
+						$config->addListener(new Stopword);
+						$textRank      = new TextRank($config);
 
-				$keywords2 = $textrank->getKeywords($bigKeywords);
-
-				var_dump($keywords2);
+						$textRankKeywords = $textRank->getKeywords($bigKeywords);
+						$rankKeywords     = array_keys($textRankKeywords);
+						$fiveKeywords = array_slice($rankKeywords, 0, 5);
+						$keywords     = implode(',', $fiveKeywords);
+					}
+					catch (\RuntimeException $e)
+					{
+						// Cannot detect the language of the text, maybe to short.
+						$keywords = null;
+					}
+				}
 
 				break;
 		}

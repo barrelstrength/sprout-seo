@@ -103,7 +103,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function init()
 	{
 		// Import third party libraries
-		require_once dirname(__FILE__) . '/vendor/autoload.php';
+		require_once dirname(__FILE__) . '/vendor/TextRank/autoload.php';
 		$baseIntegrations = 'plugins.sproutseo.integrations.sproutseo.';
 
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
@@ -135,9 +135,6 @@ class SproutSeoPlugin extends BasePlugin
 
 		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
 		Craft::import('plugins.sproutseo.library.rake.Rake');
-		Craft::import('plugins.sproutseo.library.TextRank.TextRank');
-		Craft::import('plugins.sproutseo.library.TextRank.DefaultEvents');
-		Craft::import('plugins.sproutseo.library.TextRank.Config');
 
 		Craft::import('plugins.sproutseo.helpers.SproutSeoAddressHelper');
 

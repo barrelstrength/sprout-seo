@@ -34,54 +34,81 @@
   | Authors: César Rodas <crodas@php.net>                                           |
   +---------------------------------------------------------------------------------+
 */
-namespace Craft;
+namespace crodas\TextRank;
 
-class Config
+use LanguageDetector\Detect;
+
+/**
+ *  Data files has been borrowed from
+ *      https://github.com/ekorn/Keywords
+ */
+class Stopword extends DefaultEvents
 {
-    protected $events = array();
-    protected $listeners = array();
+    protected $stopword;
+    protected $lang;
 
-    public function __construct()
+    public function normalize_keywords(Array $keywords)
     {
-        $this->listeners[] = new DefaultEvents;
-    }
+        $normalized = parent::normalize_keywords($keywords);
+        $callback   = "stem_{$this->lang}";
 
-    public function on($event, Closure $callback)
-    {
-        if (empty($this->event[$event])) {
-            $this->event[$event] = [];
+        $tagger   = __NAMESPACE__ . '\POS\\' . ucfirst($this->lang) . '\Tagger';
+        if (is_callable($callback)) {
+            return array_map(function ($keyword) use ($callback) {
+                return $callback($keyword);
+            }, $normalized);
         }
-        $this->event[$event][] = $callback;
-        return $this;
+        return $normalized;
     }
 
-    public function addListener($object)
+    public function filter_keywords(Array $keywords)
     {
-        array_unshift($this->listeners, $object);
-        return $this;
-    }
+        $keywords = parent::filter_keywords($keywords);
+        $tagger   = __NAMESPACE__ . '\POS\\' . ucfirst($this->lang) . '\Tagger';
 
-    public function trigger($ev, $data)
-    {
-        if (!empty($this->events[$ev])) {
-            foreach ($this->events[$ev] as $callback) {
-                $output = $callback($data);
-                if (!empty($output)) {
-                    return $output;
-                }
-            }
-        }
-        foreach ($this->listeners as $object) {
-            $callback = array($object, $ev);
-            if (is_callable($callback)) {
-                $output = $object->$ev($data);
-                if (!empty($output)) {
-                    return $output;
-                }
-            }
+        if (class_exists($tagger)) {
+            $keywords = $tagger::get($keywords);
         }
 
-        throw new \RuntimeException("There was no handler for {$ev}");
+        $keywords = array_filter($keywords, function ($word) {
+            $word = mb_strtolower($word);
+            return empty($this->stopword[$word]);
+        });
+
+        return $keywords;
     }
 
+    protected function getClassifier()
+    {
+        static $detect;
+        if (empty($detect)) {
+            $detect = Detect::initByPath(__DIR__ . '/language-profile.php');
+        }
+        return $detect;
+    }
+    protected function getStopwords()
+    {
+        static $stopwords;
+        if (empty($stopwords)) {
+            $stopwords = require __DIR__ . '/Stopword/Stopword.php';
+        }
+        return $stopwords;
+    }
+
+    public function get_words($text)
+    {
+        $detect    = $this->getClassifier();
+        $stopwords = $this->getStopwords();
+        $lang = $detect->detect($text);
+        if (!is_string($lang)) {
+            throw new \RuntimeException("Cannot detect the language of the text");
+        }
+        if (empty($stopwords[$lang])) {
+            throw new \RuntimeException("We dont have an stop word for {$lang}, please add it in " . __DIR__ . "/Stopword/{$lang}-stopwords.txt and run generate.php");
+        }
+        $this->stopword = $stopwords[$lang];
+        $this->lang     = $lang;
+
+        return parent::get_words($text);
+    }
 }

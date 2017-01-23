@@ -34,7 +34,7 @@
   | Authors: César Rodas <crodas@php.net>                                           |
   +---------------------------------------------------------------------------------+
 */
-namespace Craft;
+namespace crodas\TextRank;
 
 use LanguageDetector\Sort\PageRank;
 

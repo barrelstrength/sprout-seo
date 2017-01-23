@@ -34,41 +34,97 @@
   | Authors: César Rodas <crodas@php.net>                                           |
   +---------------------------------------------------------------------------------+
 */
-namespace Craft;
+namespace crodas\TextRank;
 
-class DefaultEvents
+use LanguageDetector\Sort\PageRank;
+
+class TextRank
 {
-    public function normalize_keywords(Array $keywords)
+    protected $config;
+
+    public function __construct(Config $config)
     {
-        return array_map(function ($keyword) {
-            return mb_strtolower($keyword);
-        }, $keywords);
+        $this->config = $config;
     }
 
-    public function filter_keywords(Array $keywords)
+    public function getAllKeywordsSorted($text)
     {
-        return array_filter($keywords, function ($keyword) {
-            if (is_numeric($keyword)) {
-                return false;
+        // split the text into words
+        $words = $this->config->trigger('get_words', $text);
+
+        // get the candidates
+        $keywords  = $this->config->trigger('filter_keywords', $words);
+
+        // normalize each candidate
+        $normalized = $this->config->trigger('normalize_keywords', $keywords);
+
+        if (count($keywords) != count($normalized)) {
+            throw new \RuntimeException("{normalize_keywords} event returned invalid data");
+        }
+
+        $graph  = new PageRank;
+        $sorted = $graph->sort(array_values($normalized), true);
+
+        if ($sorted == $normalized) {
+            // PageRank failed, probably because the input was invalid
+            return [];
+        }
+
+        $top = array_slice($sorted, 0, 10);
+
+        // build an index of words and positions (so we can collapse compount keywords)
+        $index  = [];
+        $pindex = [];
+
+        // search for coumpounds keywords
+        $prev    = [];
+        $phrases = [];
+        foreach ($normalized as $pos => $word) {
+            if (empty($top[$word])) {
+                if (count($prev) > 1 && count($prev) < 4) {
+                    $phrases[] = $prev;
+                }
+                $prev = [];
+                continue;
             }
+            $prev[] = [$pos,  $word];
+        }
 
-            if ($keyword[0] == mb_strtoupper($keyword[0])) {
-                return true;
+        if (count($prev) > 1 && count($prev) < 4) {
+            $phrases[] = $prev;
+        }
+
+        foreach ($phrases as $prev) {
+            $start  = current($prev)[0];
+            $end    = end($prev)[0];
+            $zwords = array_slice($words, $start, $end - $start+1, true);
+            if (count(array_filter($zwords, 'ctype_punct')) > 0) {
+                continue;
             }
+            $phrase = implode(' ', $zwords);
+            $score  = 0;
+            foreach ($prev as $word) {
+                $score  += $top[$word[1]];
+            }
+            $sorted[ trim($phrase) ] = $score/($end - $start);
+        }
 
-            return mb_strlen($keyword) > 3;
-        });
+        // denormalize each single words
+        foreach ($normalized as $pos => $word) {
+            if (!empty($sorted[$word]) && $word != $words[$pos]) {
+                $sorted[$words[$pos]] = $sorted[$word];
+                unset($sorted[$word]);
+            }
+        }
+
+        arsort($sorted);
+
+        return $sorted;
     }
 
-    public function get_sentences($text)
+    public function getKeywords($text, $limit = 20)
     {
-        $sentences = preg_split('/(\n+)|(\\.\W)/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        return array_values(array_filter(array_map('trim', $sentences)));
-    }
-
-    public function get_words($text)
-    {
-        $words = preg_split('/(?:(^\p{P}+)|(\p{P}*\s+\p{P}*)|(\p{P}+$))/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        return array_values(array_filter(array_map('trim', $words)));
+        return array_slice($this->getAllKeywordsSorted($text), 0, $limit);
     }
 }
+

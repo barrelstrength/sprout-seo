@@ -34,97 +34,34 @@
   | Authors: César Rodas <crodas@php.net>                                           |
   +---------------------------------------------------------------------------------+
 */
-namespace Craft;
+namespace crodas\TextRank;
 
-use LanguageDetector\Sort\PageRank;
-
-class TextRank
+class Summary extends TextRank
 {
-    protected $config;
-
-    public function __construct(Config $config)
+    public function getSummary($text)
     {
-        $this->config = $config;
-    }
-
-    public function getAllKeywordsSorted($text)
-    {
-        // split the text into words
-        $words = $this->config->trigger('get_words', $text);
-
-        // get the candidates
-        $keywords  = $this->config->trigger('filter_keywords', $words);
-
-        // normalize each candidate
-        $normalized = $this->config->trigger('normalize_keywords', $keywords);
-
-        if (count($keywords) != count($normalized)) {
-            throw new \RuntimeException("{normalize_keywords} event returned invalid data");
-        }
-
-        $graph  = new PageRank;
-        $sorted = $graph->sort(array_values($normalized), true);
-
-        if ($sorted == $normalized) {
-            // PageRank failed, probably because the input was invalid
-            return [];
-        }
-
-        $top = array_slice($sorted, 0, 10);
-
-        // build an index of words and positions (so we can collapse compount keywords)
-        $index  = [];
-        $pindex = [];
-
-        // search for coumpounds keywords
-        $prev    = [];
-        $phrases = [];
-        foreach ($normalized as $pos => $word) {
-            if (empty($top[$word])) {
-                if (count($prev) > 1 && count($prev) < 4) {
-                    $phrases[] = $prev;
-                }
-                $prev = [];
-                continue;
-            }
-            $prev[] = [$pos,  $word];
-        }
-
-        if (count($prev) > 1 && count($prev) < 4) {
-            $phrases[] = $prev;
-        }
-
-        foreach ($phrases as $prev) {
-            $start  = current($prev)[0];
-            $end    = end($prev)[0];
-            $zwords = array_slice($words, $start, $end - $start+1, true);
-            if (count(array_filter($zwords, 'ctype_punct')) > 0) {
-                continue;
-            }
-            $phrase = implode(' ', $zwords);
-            $score  = 0;
-            foreach ($prev as $word) {
-                $score  += $top[$word[1]];
-            }
-            $sorted[ trim($phrase) ] = $score/($end - $start);
-        }
-
-        // denormalize each single words
-        foreach ($normalized as $pos => $word) {
-            if (!empty($sorted[$word]) && $word != $words[$pos]) {
-                $sorted[$words[$pos]] = $sorted[$word];
-                unset($sorted[$word]);
+        $sentences  = $this->config->trigger('get_sentences', $text);
+        $candidates = [];
+        $x= microtime(true);
+        foreach ($sentences as $id => $t) {
+            try {
+                $words = $this->config->trigger('get_words', $t);
+                $words = $this->config->trigger('filter_keywords', $words);
+                $words = $this->config->trigger('normalize_keywords', $words);
+                $words = array_filter($words, function($word) {
+                    return !ctype_punct($word);
+                });
+                $candidates[$id] = $words;
+            } catch (\Exception $e) {
             }
         }
-
-        arsort($sorted);
-
-        return $sorted;
-    }
-
-    public function getKeywords($text, $limit = 20)
-    {
-        return array_slice($this->getAllKeywordsSorted($text), 0, $limit);
+        $pr = new SummaryPageRank;
+        $sorted = $pr->sort($candidates);
+        $keys = array_slice($sorted, 0, ceil(count($sorted)*.05), true);
+        $txt  = "";
+        foreach (array_keys($keys) as $key) {
+            $txt .= $sentences[$key] . "\n";
+        }
+        return $txt;
     }
 }
-
