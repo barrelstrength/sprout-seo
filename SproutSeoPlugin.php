@@ -103,7 +103,7 @@ class SproutSeoPlugin extends BasePlugin
 	public function init()
 	{
 		// Import third party libraries
-		require_once dirname(__FILE__) . '/vendor/TextRank/autoload.php';
+		require_once dirname(__FILE__) . '/vendor/autoload.php';
 		$baseIntegrations = 'plugins.sproutseo.integrations.sproutseo.';
 
 		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
