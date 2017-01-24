@@ -646,7 +646,7 @@ class SproutSeoVariable
 		$options = array();
 		$fields  = craft()->fields->getAllFields();
 
-		$options[''] = Craft::t('Select...');
+		$options[''] = Craft::t('None');
 
 		$options[] = array('optgroup' => Craft::t('Generate from Existing Field'));
 
