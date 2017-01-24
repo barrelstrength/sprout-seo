@@ -500,7 +500,13 @@ class SproutSeoVariable
 		);
 
 		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
-		$priceRange        = $schemaGlobals[$schemaType]['priceRange'];
+
+		$priceRange = null;
+
+		if (isset($schemaGlobals[$schemaType]['priceRange']))
+		{
+			$priceRange = $schemaGlobals[$schemaType]['priceRange'];
+		}
 
 		array_push($options, array('optgroup' => 'Custom'));
 
