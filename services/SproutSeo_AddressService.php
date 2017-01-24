@@ -44,7 +44,9 @@ class SproutSeo_AddressService extends BaseApplicationComponent
 			}
 		}
 
-		if (!empty($model->getAttributes()))
+		$attributes = $model->getAttributes();
+
+		if (!empty($attributes))
 		{
 			foreach ($model->getAttributes() as $handle => $value)
 			{
