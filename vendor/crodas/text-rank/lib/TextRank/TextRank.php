@@ -38,7 +38,7 @@ namespace crodas\TextRank;
 
 use LanguageDetector\Sort\PageRank;
 
-class TextRank
+class TextRank 
 {
     protected $config;
 
@@ -89,7 +89,7 @@ class TextRank
             }
             $prev[] = [$pos,  $word];
         }
-
+        
         if (count($prev) > 1 && count($prev) < 4) {
             $phrases[] = $prev;
         }
@@ -116,7 +116,7 @@ class TextRank
                 unset($sorted[$word]);
             }
         }
-
+        
         arsort($sorted);
 
         return $sorted;
