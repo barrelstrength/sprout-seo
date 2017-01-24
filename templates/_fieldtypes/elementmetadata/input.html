@@ -167,7 +167,11 @@
 		}) }}
 	{% endif %}
 
+
 	{% if fieldContext == 'sectionMetadata' or (fieldContext == 'field' and pluginSettings.enableMetaDetailsFields and settings.showMainEntity) %}
+
+		{% set displayMetadataField = true %}
+
 		<div id ="organization" class="organization-info">
 			<div class="identitytype-dropdown organizationinfo-dropdown">
 				{{ forms.selectField({
@@ -201,6 +205,8 @@
 </div>
 
 {% if pluginSettings.enableMetaDetailsFields %}
+
+	{% set displayMetadataField = true %}
 
 	{% if settings.showSearchMeta or settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
 		{% set advancedSeoButtons %}
