@@ -55,7 +55,7 @@ class DefaultEvents
             if ($keyword[0] == mb_strtoupper($keyword[0])) {
                 return true;
             }
-
+            
             return mb_strlen($keyword) > 3;
         });
     }

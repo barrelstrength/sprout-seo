@@ -98,7 +98,7 @@ class Stopword extends DefaultEvents
     public function get_words($text)
     {
         $detect    = $this->getClassifier();
-        $stopwords = $this->getStopwords();
+        $stopwords = $this->getStopwords(); 
         $lang = $detect->detect($text);
         if (!is_string($lang)) {
             throw new \RuntimeException("Cannot detect the language of the text");

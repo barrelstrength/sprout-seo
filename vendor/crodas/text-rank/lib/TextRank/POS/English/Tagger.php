@@ -34,11 +34,11 @@
   | Authors: César Rodas <crodas@php.net>                                           |
   +---------------------------------------------------------------------------------+
 */
-namespace Craft;
+namespace crodas\TextRank\POS\English;
 
 
 /**
- *  POS Tagger borrowed from
+ *  POS Tagger borrowed from 
  *  http://phpir.com/part-of-speech-tagging
  */
 class Tagger
@@ -46,7 +46,7 @@ class Tagger
     public static function get(Array $words)
     {
         return array_map(function($word) {
-            return $word['token'];
+            return $word['token'];     
         }, array_filter(self::tag($words), function($word) {
             switch ($word['tag']) {
             case 'NN':
@@ -81,12 +81,12 @@ class Tagger
             // get from dict if set
             if(!empty($dict[$token])) {
                 $tmp[$i]['tag'] = $dict[$token][0];
-            }
+            }       
 
             // Converts verbs after 'the' to nouns
             if($i > 0) {
-                if($tmp[$i - 1]['tag'] == 'DT' &&
-                        in_array($tmp[$i]['tag'],
+                if($tmp[$i - 1]['tag'] == 'DT' && 
+                        in_array($tmp[$i]['tag'], 
                             array('VBD', 'VBP', 'VB'))) {
                     $tmp[$i]['tag'] = 'NN';
                 }
@@ -108,14 +108,14 @@ class Tagger
             }
 
             // Common noun to adjective if it ends with al
-            if(in_array($tmp[$i]['tag'], $nouns)
+            if(in_array($tmp[$i]['tag'], $nouns) 
                     && substr($token, -2) == 'al') {
                 $tmp[$i]['tag'] = 'JJ';
             }
 
             // Noun to verb if the word before is 'would'
             if($i > 0) {
-                if($tmp[$i]['tag'] == 'NN'
+                if($tmp[$i]['tag'] == 'NN' 
                         && $tmp[$i-1]['token'] == 'would') {
                     $tmp[$i]['tag'] = 'VB';
                 }
@@ -127,19 +127,19 @@ class Tagger
             }
 
             // Convert common noun to gerund
-            if(in_array($tmp[$i]['tag'], $nouns)
+            if(in_array($tmp[$i]['tag'], $nouns) 
                     && substr($token, -3) == 'ing') {
                 $tmp[$i]['tag'] = 'VBG';
             }
 
             // If we get noun noun, and the second can be a verb, convert to verb
             if($i > 0) {
-                if(in_array($tmp[$i]['tag'], $nouns)
-                        && in_array($tmp[$i-1]['tag'], $nouns)
+                if(in_array($tmp[$i]['tag'], $nouns) 
+                        && in_array($tmp[$i-1]['tag'], $nouns) 
                         && isset($dict[$token])) {
                     if(in_array('VBN', $dict[$token])) {
                         $tmp[$i]['tag'] = 'VBN';
-                    } else if(in_array('VBZ',
+                    } else if(in_array('VBZ', 
                                 $dict[$token])) {
                         $tmp[$i]['tag'] = 'VBZ';
                     }

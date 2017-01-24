@@ -44,8 +44,8 @@ class SummaryPageRank extends Pagerank
     {
         $outlinks = array();
         $graph    = array();
-        $values   = array();
-
+        $values   = array(); 
+        
         $index = [];
         foreach($sentences as $id => $words) {
             foreach ($words as $word) {
@@ -75,7 +75,7 @@ class SummaryPageRank extends Pagerank
                 }
             }
         }
-
+        
         return compact('graph', 'values', 'outlinks');
     }
 }

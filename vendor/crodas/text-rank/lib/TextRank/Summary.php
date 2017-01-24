@@ -48,7 +48,7 @@ class Summary extends TextRank
                 $words = $this->config->trigger('get_words', $t);
                 $words = $this->config->trigger('filter_keywords', $words);
                 $words = $this->config->trigger('normalize_keywords', $words);
-                $words = array_filter($words, function($word) {
+                $words = array_filter($words, function($word) { 
                     return !ctype_punct($word);
                 });
                 $candidates[$id] = $words;
