@@ -308,6 +308,13 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$fieldHandle = $this->model->handle;
 		$fields      = $this->element->getContent()->{$fieldHandle}['metadata'];
 
+		// @todo - Refactor. Optimize.
+		// In some instances, this method is run twice once in prepValueFromPost and once here.
+		// Scenarios to consider:
+		// - Saving an Element from CP
+		// - ResaveElements Task
+		// - IPreviewableFieldType HTML
+		// - Sprout Import
 		$this->values = $this->getMetadataFieldValues($fields);
 
 		if ($this->metadata->id)
