@@ -41,17 +41,16 @@
 </div>
 
 <div class="sproutseo-box-optimized">
-	{% set customizationSettings = values.getCustomizationSettings() %}
-	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][searchMetaSectionMetadataEnabled]'}}"
-	value = "{{customizationSettings['searchMetaSectionMetadataEnabled']}}">
-	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][openGraphSectionMetadataEnabled]'}}"
-	value = "{{customizationSettings['openGraphSectionMetadataEnabled']}}">
-	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][twitterCardSectionMetadataEnabled]'}}"
-	value = "{{customizationSettings['twitterCardSectionMetadataEnabled']}}">
-	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][geoSectionMetadataEnabled]'}}"
-	value = "{{customizationSettings['geoSectionMetadataEnabled']}}">
-	<input type="hidden" name="{{nameContext~'[metadata][customizationSettings][robotsSectionMetadataEnabled]'}}"
-	value = "{{customizationSettings['robotsSectionMetadataEnabled']}}">
+	<input type="hidden" name="{{nameContext~'[metadata][searchMetaSectionMetadataEnabled]'}}"
+	value = "{{values.searchMetaSectionMetadataEnabled}}">
+	<input type="hidden" name="{{nameContext~'[metadata][openGraphSectionMetadataEnabled]'}}"
+	value = "{{values.openGraphSectionMetadataEnabled}}">
+	<input type="hidden" name="{{nameContext~'[metadata][twitterCardSectionMetadataEnabled]'}}"
+	value = "{{values.twitterCardSectionMetadataEnabled}}">
+	<input type="hidden" name="{{nameContext~'[metadata][geoSectionMetadataEnabled]'}}"
+	value = "{{values.geoSectionMetadataEnabled}}">
+	<input type="hidden" name="{{nameContext~'[metadata][robotsSectionMetadataEnabled]'}}"
+	value = "{{values.robotsSectionMetadataEnabled}}">
 
 	{% if settings.optimizedTitleField == 'manually' %}
 
@@ -250,7 +249,7 @@
 		<div class="blocks">
 
 			<div class="matrixblock fields-searchMeta"
-				{% if (customizationSettings.searchMetaSectionMetadataEnabled is defined and customizationSettings.searchMetaSectionMetadataEnabled == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
+				{% if (values.searchMetaSectionMetadataEnabled is defined and values.searchMetaSectionMetadataEnabled == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -267,7 +266,7 @@
 			</div>
 
 			<div class="matrixblock fields-openGraph"
-				{% if customizationSettings.openGraphSectionMetadataEnabled == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
+				{% if values.openGraphSectionMetadataEnabled == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -286,7 +285,7 @@
 			</div>
 
 			<div class="matrixblock fields-twitterCard"
-				{% if customizationSettings.twitterCardSectionMetadataEnabled == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
+				{% if values.twitterCardSectionMetadataEnabled == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -302,7 +301,7 @@
 
 			</div>
 			<div class="matrixblock fields-geo"
-				{% if customizationSettings.geoSectionMetadataEnabled == 0 or not settings.showGeo %} style="display:none;" {% endif %}
+				{% if values.geoSectionMetadataEnabled == 0 or not settings.showGeo %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -320,7 +319,7 @@
 			</div>
 
 			<div class="matrixblock fields-robots"
-				{% if customizationSettings.robotsSectionMetadataEnabled == 0 or not settings.showRobots %} style="display:none;" {% endif %}
+				{% if values.robotsSectionMetadataEnabled == 0 or not settings.showRobots %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -440,13 +439,13 @@ feel like they are part of the natural flow of fields #}
 
 		function getScenario(customKey)
 		{
-			if ($("input[name='fields["+nameContext+"][metadata][customizationSettings]["+customKey+"]']").length)
+			if ($("input[name='fields["+nameContext+"][metadata]["+customKey+"]']").length)
 			{
-				return $("input[name='fields["+nameContext+"][metadata][customizationSettings]["+customKey+"]']");
+				return $("input[name='fields["+nameContext+"][metadata]["+customKey+"]']");
 			}
 			else
 			{
-				return $("input[name='sproutseo[metadata][customizationSettings]["+customKey+"]']");
+				return $("input[name='sproutseo[metadata]["+customKey+"]']");
 			}
 		}
 

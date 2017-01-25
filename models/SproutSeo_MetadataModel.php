@@ -68,7 +68,11 @@ class SproutSeo_MetadataModel extends BaseModel
 			'optimizedDescription'  => array(AttributeType::String),
 			'optimizedImage'        => array(AttributeType::String),
 			'optimizedKeywords'     => array(AttributeType::String),
-			'customizationSettings' => array(AttributeType::String),
+			'searchMetaSectionMetadataEnabled'  => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'openGraphSectionMetadataEnabled'   => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'twitterCardSectionMetadataEnabled' => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'geoSectionMetadataEnabled'         => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'robotsSectionMetadataEnabled'      => array(AttributeType::Bool, 'default' => false, 'required' => false),
 		);
 
 		$this->searchMeta = array(
@@ -477,32 +481,6 @@ class SproutSeo_MetadataModel extends BaseModel
 		);
 
 		return $tagNames[$handle];
-	}
-
-	/**
-	 * @return array
-	 **/
-	public function getCustomizationSettings()
-	{
-		$response = array(
-			'searchMetaSectionMetadataEnabled'  => 0,
-			'openGraphSectionMetadataEnabled'   => 0,
-			'twitterCardSectionMetadataEnabled' => 0,
-			'geoSectionMetadataEnabled'         => 0,
-			'robotsSectionMetadataEnabled'      => 0
-		);
-
-		if ($this->customizationSettings)
-		{
-			$customizationSettings = json_decode($this->customizationSettings, true);
-
-			if (count($customizationSettings))
-			{
-				$response = $customizationSettings;
-			}
-		}
-
-		return $response;
 	}
 
 	/**

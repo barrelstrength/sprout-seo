@@ -30,10 +30,14 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 			'schemaTypeId'                   => array(AttributeType::String),
 			'schemaOverrideTypeId'           => array(AttributeType::String),
 
-			'customizationSettings' => array(AttributeType::String),
-			'title'                 => array(AttributeType::String),
-			'description'           => array(AttributeType::String),
-			'keywords'              => array(AttributeType::String),
+			'searchMetaSectionMetadataEnabled'  => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'openGraphSectionMetadataEnabled'   => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'twitterCardSectionMetadataEnabled' => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'geoSectionMetadataEnabled'         => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'robotsSectionMetadataEnabled'      => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'title'                             => array(AttributeType::String),
+			'description'                       => array(AttributeType::String),
+			'keywords'                          => array(AttributeType::String),
 
 			'robots'    => array(AttributeType::String),
 			'canonical' => array(AttributeType::String),

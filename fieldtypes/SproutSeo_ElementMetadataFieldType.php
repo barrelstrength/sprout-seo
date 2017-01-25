@@ -372,8 +372,6 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 	private function setMetaDetailsValues($type, $value, $attributes)
 	{
-		$metaDetails = JsonHelper::decode($attributes['customizationSettings']);
-
 		$ogKey        = 'og' . ucfirst($type);
 		$twitterKey   = 'twitter' . ucfirst($type);
 		$ogValue      = isset($attributes[$ogKey]) ? $attributes[$ogKey] : null;
@@ -385,17 +383,17 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$attributes[$ogKey]      = $value;
 		$attributes[$twitterKey] = $value;
 
-		if (isset($metaDetails['searchMetaSectionMetadataEnabled']) && $metaDetails['searchMetaSectionMetadataEnabled'] && $searchValue)
+		if (isset($attributes['searchMetaSectionMetadataEnabled']) && $attributes['searchMetaSectionMetadataEnabled'] && $searchValue)
 		{
 			$attributes[$type] = $searchValue;
 		}
 
-		if (isset($metaDetails['openGraphSectionMetadataEnabled']) && $metaDetails['openGraphSectionMetadataEnabled'] && $ogValue)
+		if (isset($attributes['openGraphSectionMetadataEnabled']) && $attributes['openGraphSectionMetadataEnabled'] && $ogValue)
 		{
 			$attributes[$ogKey] = $ogValue;
 		}
 
-		if (isset($metaDetails['twitterCardSectionMetadataEnabled']) && $metaDetails['twitterCardSectionMetadataEnabled'] && $twitterValue)
+		if (isset($attributes['twitterCardSectionMetadataEnabled']) && $attributes['twitterCardSectionMetadataEnabled'] && $twitterValue)
 		{
 			$attributes[$twitterKey] = $twitterValue;
 		}
@@ -580,17 +578,6 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	 */
 	protected function processMetaDetails($attributes, $settings)
 	{
-		if (isset($attributes['customizationSettings']))
-		{
-			$attributes['customizationSettings'] = json_encode($attributes['customizationSettings']);
-		}
-		else
-		{
-			$details = SproutSeoOptimizeHelper::getDefaultCustomizationSettings();
-
-			$attributes['customizationSettings'] = json_encode($details);
-		}
-
 		return $attributes;
 	}
 
@@ -672,8 +659,6 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			// Make sure we have some default values in place
 			$attributes = $this->metadata->getAttributes();
 
-			$attributes['customizationSettings'] = json_decode($this->metadata->customizationSettings);
-
 			// @todo - this is excessive. Refactor how customizationSettings works.
 			$removeKeys = array(
 				'isNew',
@@ -750,11 +735,6 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			if ($key == 'robots')
 			{
 				$values[$key] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($values[$key]);
-			}
-
-			if ($key == 'customizationSettings')
-			{
-				$values[$key] = json_encode($values[$key]);
 			}
 		}
 

@@ -526,54 +526,44 @@ class SproutSeoOptimizeHelper
 
 		// Set null values for any Advanced SEO Optimization
 		// override fields whose blocks have been disabled
-		// -------------------------------------------------------------
-		$customizationSettings = JsonHelper::decode($model->customizationSettings);
 
-		if (isset($customizationSettings['searchMetaSectionMetadataEnabled']) &&
-			isset($customizationSettings['openGraphSectionMetadataEnabled']) &&
-			isset($customizationSettings['twitterCardSectionMetadataEnabled']) &&
-			isset($customizationSettings['geoSectionMetadataEnabled']) &&
-			isset($customizationSettings['robotsSectionMetadataEnabled'])
-		)
+		if (!$model->searchMetaSectionMetadataEnabled)
 		{
-			if (!$customizationSettings['searchMetaSectionMetadataEnabled'])
+			foreach ($model['searchMeta'] as $attribute => $value)
 			{
-				foreach ($model['searchMeta'] as $attribute => $value)
-				{
-					$model->{$attribute} = null;
-				}
+				$model->{$attribute} = null;
 			}
+		}
 
-			if (!$customizationSettings['openGraphSectionMetadataEnabled'])
+		if (!$model->openGraphSectionMetadataEnabled)
+		{
+			foreach ($model['openGraphMeta'] as $attribute => $value)
 			{
-				foreach ($model['openGraphMeta'] as $attribute => $value)
-				{
-					$model->{$attribute} = null;
-				}
+				$model->{$attribute} = null;
 			}
+		}
 
-			if (!$customizationSettings['twitterCardSectionMetadataEnabled'])
+		if (!$model->twitterCardSectionMetadataEnabled)
+		{
+			foreach ($model['twitterCardsMeta'] as $attribute => $value)
 			{
-				foreach ($model['twitterCardsMeta'] as $attribute => $value)
-				{
-					$model->{$attribute} = null;
-				}
+				$model->{$attribute} = null;
 			}
+		}
 
-			if (!$customizationSettings['geoSectionMetadataEnabled'])
+		if (!$model->geoSectionMetadataEnabled)
+		{
+			foreach ($model['geographicMeta'] as $attribute => $value)
 			{
-				foreach ($model['geographicMeta'] as $attribute => $value)
-				{
-					$model->{$attribute} = null;
-				}
+				$model->{$attribute} = null;
 			}
+		}
 
-			if (!$customizationSettings['robotsSectionMetadataEnabled'])
+		if (!$model->robotsSectionMetadataEnabled)
+		{
+			foreach ($model['robotsMeta'] as $attribute => $value)
 			{
-				foreach ($model['robotsMeta'] as $attribute => $value)
-				{
-					$model->{$attribute} = null;
-				}
+				$model->{$attribute} = null;
 			}
 		}
 
@@ -623,21 +613,4 @@ class SproutSeoOptimizeHelper
 		);
 	}
 
-	/**
-	 * Return default customizationSettings as JSON
-	 *
-	 * @return string
-	 */
-	public static function getDefaultCustomizationSettings()
-	{
-		$defaultCustomizationSettings = array(
-			'searchMetaSectionMetadataEnabled'  => 0,
-			'openGraphSectionMetadataEnabled'   => 0,
-			'twitterCardSectionMetadataEnabled' => 0,
-			'geoSectionMetadataEnabled'         => 0,
-			'robotsSectionMetadataEnabled'      => 0
-		);
-
-		return $defaultCustomizationSettings;
-	}
 }
