@@ -24,6 +24,11 @@ class SproutSeo_GlobalMetadataController extends BaseController
 
 		$globalKeys = explode(',', $globalKeys);
 
+		if (isset($postData['identity']['foundingDate']))
+		{
+			$postData['identity']['foundingDate'] = DateTime::createFromString($postData['identity']['foundingDate'], craft()->timezone);
+		}
+
 		$globals = SproutSeo_GlobalsModel::populateModel($postData);
 
 		$globalMetadata = $this->populateGlobalMetadata($postData);

@@ -316,7 +316,7 @@
 				id : "foundingDate",
 				instructions: 'The date that this organization was founded.'|t,
 				name: 'sproutseo[globals][identity][foundingDate]',
-				value: websiteIdentity['foundingDate']['date'] is defined ? craft.sproutSeo.getDate(websiteIdentity.foundingDate.date) : null,
+				value: websiteIdentity['foundingDate']['date'] is defined ? craft.sproutSeo.getDate(websiteIdentity.foundingDate) : null,
 				errors: '',
 				required: false
 			}) }}

@@ -232,7 +232,7 @@ class SproutSeoVariable
 	 */
 	public function getDate($string)
 	{
-		$date = new DateTime($string);
+		$date = new DateTime($string['date'], new \DateTimeZone(craft()->timezone));
 
 		return $date;
 	}
