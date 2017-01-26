@@ -23,11 +23,11 @@ class m170124_000000_sproutSeo_addCustomizationSettingsColumns extends BaseMigra
 		);
 
 		$columns = array(
-			'searchMetaSectionMetadataEnabled'  => $tinyInt,
-			'openGraphSectionMetadataEnabled'   => $tinyInt,
-			'twitterCardSectionMetadataEnabled' => $tinyInt,
-			'geoSectionMetadataEnabled'         => $tinyInt,
-			'robotsSectionMetadataEnabled'      => $tinyInt,
+			'enableMetaDetailsSearch'      => $tinyInt,
+			'enableMetaDetailsOpenGraph'   => $tinyInt,
+			'enableMetaDetailsTwitterCard' => $tinyInt,
+			'enableMetaDetailsGeo'         => $tinyInt,
+			'enableMetaDetailsRobots'      => $tinyInt,
 		);
 
 		foreach ($tableNames as $tableName)
@@ -56,11 +56,11 @@ class m170124_000000_sproutSeo_addCustomizationSettingsColumns extends BaseMigra
 
 				// updates new columns
 				craft()->db->createCommand()->update($tableName, array(
-					'searchMetaSectionMetadataEnabled'  => $customizationSettings['searchMetaSectionMetadataEnabled'],
-					'openGraphSectionMetadataEnabled'   => $customizationSettings['openGraphSectionMetadataEnabled'],
-					'twitterCardSectionMetadataEnabled' => $customizationSettings['twitterCardSectionMetadataEnabled'],
-					'geoSectionMetadataEnabled'         => $customizationSettings['geoSectionMetadataEnabled'],
-					'robotsSectionMetadataEnabled'      => $customizationSettings['robotsSectionMetadataEnabled']
+					'enableMetaDetailsSearch'      => $customizationSettings['searchMetaSectionMetadataEnabled'],
+					'enableMetaDetailsOpenGraph'   => $customizationSettings['openGraphSectionMetadataEnabled'],
+					'enableMetaDetailsTwitterCard' => $customizationSettings['twitterCardSectionMetadataEnabled'],
+					'enableMetaDetailsGeo'         => $customizationSettings['geoSectionMetadataEnabled'],
+					'enableMetaDetailsRobots'      => $customizationSettings['robotsSectionMetadataEnabled']
 				),
 					'id = :id',
 					array(':id' => $row['id'])

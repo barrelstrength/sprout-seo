@@ -41,16 +41,16 @@
 </div>
 
 <div class="sproutseo-box-optimized">
-	<input type="hidden" name="{{nameContext~'[metadata][searchMetaSectionMetadataEnabled]'}}"
-	value = "{{values.searchMetaSectionMetadataEnabled}}">
-	<input type="hidden" name="{{nameContext~'[metadata][openGraphSectionMetadataEnabled]'}}"
-	value = "{{values.openGraphSectionMetadataEnabled}}">
-	<input type="hidden" name="{{nameContext~'[metadata][twitterCardSectionMetadataEnabled]'}}"
-	value = "{{values.twitterCardSectionMetadataEnabled}}">
-	<input type="hidden" name="{{nameContext~'[metadata][geoSectionMetadataEnabled]'}}"
-	value = "{{values.geoSectionMetadataEnabled}}">
-	<input type="hidden" name="{{nameContext~'[metadata][robotsSectionMetadataEnabled]'}}"
-	value = "{{values.robotsSectionMetadataEnabled}}">
+	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsSearch]'}}"
+	value = "{{values.enableMetaDetailsSearch}}">
+	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsOpenGraph]'}}"
+	value = "{{values.enableMetaDetailsOpenGraph}}">
+	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsTwitterCard]'}}"
+	value = "{{values.enableMetaDetailsTwitterCard}}">
+	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsGeo]'}}"
+	value = "{{values.enableMetaDetailsGeo}}">
+	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsRobots]'}}"
+	value = "{{values.enableMetaDetailsRobots}}">
 
 	{% if settings.optimizedTitleField == 'manually' %}
 
@@ -213,23 +213,23 @@
 				<div id="btngroup" class="btngroup sproutseo-advancedoption-btns">
 
 					{% if settings.showSearchMeta %}
-						<div class="btn" id="btn-searchMeta" data-type="searchMeta"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
+						<div class="btn" id="btn-SearchMeta" data-type="SearchMeta"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
 					{% endif %}
 
 					{% if settings.showOpenGraph %}
-						<div class="btn" id="btn-openGraph" data-type="openGraph"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
+						<div class="btn" id="btn-OpenGraph" data-type="OpenGraph"><i class="sproutseo-icon icon-facebook">&#xe802;</i> Open Graph</div>
 					{% endif %}
 
 					{% if settings.showTwitter %}
-						<div class="btn" id="btn-twitterCard" data-type="twitterCard"><i class="sproutseo-icon icon-twitter">&#xe807;</i> Twitter Card</div>
+						<div class="btn" id="btn-TwitterCard" data-type="TwitterCard"><i class="sproutseo-icon icon-twitter">&#xe807;</i> Twitter Card</div>
 					{% endif %}
 
 					{% if settings.showGeo %}
-						<div class="btn" id="btn-geo" data-type="geo"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
+						<div class="btn" id="btn-Geo" data-type="Geo"><i class="sproutseo-icon icon-location">&#xe803;</i> Geo</div>
 					{% endif %}
 
 					{% if settings.showRobots %}
-						<div class="btn" id="btn-robots" data-type="robots"><i class="sproutseo-icon icon-robots">&#xe806;</i> Robots</div>
+						<div class="btn" id="btn-Robots" data-type="Robots"><i class="sproutseo-icon icon-robots">&#xe806;</i> Robots</div>
 					{% endif %}
 
 				</div>
@@ -248,8 +248,8 @@
 
 		<div class="blocks">
 
-			<div class="matrixblock fields-searchMeta"
-				{% if (values.searchMetaSectionMetadataEnabled is defined and values.searchMetaSectionMetadataEnabled == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
+			<div class="matrixblock fields-SearchMeta"
+				{% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -265,8 +265,8 @@
 
 			</div>
 
-			<div class="matrixblock fields-openGraph"
-				{% if values.openGraphSectionMetadataEnabled == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
+			<div class="matrixblock fields-OpenGraph"
+				{% if values.enableMetaDetailsOpenGraph == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -284,8 +284,8 @@
 
 			</div>
 
-			<div class="matrixblock fields-twitterCard"
-				{% if values.twitterCardSectionMetadataEnabled == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
+			<div class="matrixblock fields-TwitterCard"
+				{% if values.enableMetaDetailsTwitterCard == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -300,8 +300,8 @@
 				{% include 'sproutseo/_partials/fields/twitter-card' %}
 
 			</div>
-			<div class="matrixblock fields-geo"
-				{% if values.geoSectionMetadataEnabled == 0 or not settings.showGeo %} style="display:none;" {% endif %}
+			<div class="matrixblock fields-Geo"
+				{% if values.enableMetaDetailsGeo == 0 or not settings.showGeo %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -318,8 +318,8 @@
 
 			</div>
 
-			<div class="matrixblock fields-robots"
-				{% if values.robotsSectionMetadataEnabled == 0 or not settings.showRobots %} style="display:none;" {% endif %}
+			<div class="matrixblock fields-Robots"
+				{% if values.enableMetaDetailsRobots == 0 or not settings.showRobots %} style="display:none;" {% endif %}
 			>
 
 				<div class="titlebar">
@@ -456,8 +456,8 @@ feel like they are part of the natural flow of fields #}
 
 		function toggleActive(div, divId)
 		{
-			//searchMetaSectionMetadataEnabled
-			var customKey = divId+"SectionMetadataEnabled";
+			//enableMetaDetailsSearch
+			var customKey = "enableMetaDetails"+divId;
 			var customizationSettings = getCustomizationSettings(customKey);
 
 			if (div.hasClass("active"))
@@ -495,11 +495,11 @@ feel like they are part of the natural flow of fields #}
 		});
 
 		// Checking active class
-		var fields = ["searchMeta","openGraph","geo","robots","twitterCard"];
+		var fields = ["SearchMeta","OpenGraph","Geo","Robots","TwitterCard"];
 
 		for (var i = 0; i < fields.length; i++)
 		{
-			var customKey = fields[i]+"SectionMetadataEnabled";
+			var customKey = "enableMetaDetails"+fields[i];
 			var customizationSettings = getCustomizationSettings(customKey);
 			if(customizationSettings.val()==1)
 			{

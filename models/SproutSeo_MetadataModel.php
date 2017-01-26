@@ -68,11 +68,11 @@ class SproutSeo_MetadataModel extends BaseModel
 			'optimizedDescription'  => array(AttributeType::String),
 			'optimizedImage'        => array(AttributeType::String),
 			'optimizedKeywords'     => array(AttributeType::String),
-			'searchMetaSectionMetadataEnabled'  => array(AttributeType::Bool, 'default' => false, 'required' => false),
-			'openGraphSectionMetadataEnabled'   => array(AttributeType::Bool, 'default' => false, 'required' => false),
-			'twitterCardSectionMetadataEnabled' => array(AttributeType::Bool, 'default' => false, 'required' => false),
-			'geoSectionMetadataEnabled'         => array(AttributeType::Bool, 'default' => false, 'required' => false),
-			'robotsSectionMetadataEnabled'      => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'enableMetaDetailsSearch'      => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'enableMetaDetailsOpenGraph'   => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'enableMetaDetailsTwitterCard' => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'enableMetaDetailsGeo'         => array(AttributeType::Bool, 'default' => false, 'required' => false),
+			'enableMetaDetailsRobots'      => array(AttributeType::Bool, 'default' => false, 'required' => false),
 		);
 
 		$this->searchMeta = array(

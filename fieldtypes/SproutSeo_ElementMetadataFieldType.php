@@ -390,17 +390,17 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$attributes[$ogKey]      = $value;
 		$attributes[$twitterKey] = $value;
 
-		if (isset($attributes['searchMetaSectionMetadataEnabled']) && $attributes['searchMetaSectionMetadataEnabled'] && $searchValue)
+		if (isset($attributes['enableMetaDetailsSearch']) && $attributes['enableMetaDetailsSearch'] && $searchValue)
 		{
 			$attributes[$type] = $searchValue;
 		}
 
-		if (isset($attributes['openGraphSectionMetadataEnabled']) && $attributes['openGraphSectionMetadataEnabled'] && $ogValue)
+		if (isset($attributes['enableMetaDetailsOpenGraph']) && $attributes['enableMetaDetailsOpenGraph'] && $ogValue)
 		{
 			$attributes[$ogKey] = $ogValue;
 		}
 
-		if (isset($attributes['twitterCardSectionMetadataEnabled']) && $attributes['twitterCardSectionMetadataEnabled'] && $twitterValue)
+		if (isset($attributes['enableMetaDetailsTwitterCard']) && $attributes['enableMetaDetailsTwitterCard'] && $twitterValue)
 		{
 			$attributes[$twitterKey] = $twitterValue;
 		}

@@ -527,7 +527,7 @@ class SproutSeoOptimizeHelper
 		// Set null values for any Advanced SEO Optimization
 		// override fields whose blocks have been disabled
 
-		if (!$model->searchMetaSectionMetadataEnabled)
+		if (!$model->enableMetaDetailsSearch)
 		{
 			foreach ($model['searchMeta'] as $attribute => $value)
 			{
@@ -535,7 +535,7 @@ class SproutSeoOptimizeHelper
 			}
 		}
 
-		if (!$model->openGraphSectionMetadataEnabled)
+		if (!$model->enableMetaDetailsOpenGraph)
 		{
 			foreach ($model['openGraphMeta'] as $attribute => $value)
 			{
@@ -543,7 +543,7 @@ class SproutSeoOptimizeHelper
 			}
 		}
 
-		if (!$model->twitterCardSectionMetadataEnabled)
+		if (!$model->enableMetaDetailsTwitterCard)
 		{
 			foreach ($model['twitterCardsMeta'] as $attribute => $value)
 			{
@@ -551,7 +551,7 @@ class SproutSeoOptimizeHelper
 			}
 		}
 
-		if (!$model->geoSectionMetadataEnabled)
+		if (!$model->enableMetaDetailsGeo)
 		{
 			foreach ($model['geographicMeta'] as $attribute => $value)
 			{
@@ -559,7 +559,7 @@ class SproutSeoOptimizeHelper
 			}
 		}
 
-		if (!$model->robotsSectionMetadataEnabled)
+		if (!$model->enableMetaDetailsRobots)
 		{
 			foreach ($model['robotsMeta'] as $attribute => $value)
 			{
