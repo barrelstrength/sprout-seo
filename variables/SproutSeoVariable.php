@@ -871,8 +871,9 @@ class SproutSeoVariable
 			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
 			{
 				return array(
-					'label' => $schema->getType(),
-					'value' => $schema->getUniqueKey()
+					'label'    => $schema->getType(),
+					'value'    => $schema->getUniqueKey(),
+					'isCustom' => '1'
 				);
 			}, $customSchema));
 		}
@@ -974,11 +975,14 @@ class SproutSeoVariable
 					$type => array()
 				);
 
-				$values[$schema['value']] = $this->getSchemaChildren($type);
-
-				if (count($values[$schema['value']]))
+				if (!isset($schema['isCustom']))
 				{
-					$values[$schema['value']] = array_merge($firstItem, $values[$schema['value']]);
+					$values[$schema['value']] = $this->getSchemaChildren($type);
+
+					if (count($values[$schema['value']]))
+					{
+						$values[$schema['value']] = array_merge($firstItem, $values[$schema['value']]);
+					}
 				}
 			}
 		}
