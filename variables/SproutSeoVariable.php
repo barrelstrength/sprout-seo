@@ -859,7 +859,8 @@ class SproutSeoVariable
 		$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
 		{
 			return array(
-				'label' => $schema->getType(),
+				'label' => $schema->getName(),
+				'type'  => $schema->getType(),
 				'value' => $schema->getUniqueKey()
 			);
 		}, $defaultSchema));
@@ -871,7 +872,8 @@ class SproutSeoVariable
 			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
 			{
 				return array(
-					'label'    => $schema->getType(),
+					'label'    => $schema->getName(),
+					'type'  => $schema->getType(),
 					'value'    => $schema->getUniqueKey(),
 					'isCustom' => '1'
 				);
@@ -965,9 +967,9 @@ class SproutSeoVariable
 
 		foreach ($schemas as $schema)
 		{
-			if (isset($schema['label']))
+			if (isset($schema['type']))
 			{
-				$type = $schema['label'];
+				$type = $schema['type'];
 
 				// Create a generic first item in our list that matches the top level schema
 				// We do this so we don't have a blank dropdown option for our secondary schemas
