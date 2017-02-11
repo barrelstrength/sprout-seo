@@ -140,10 +140,13 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 
 				$uniqueKey = $type . '-' . $urlEnabledSectionTypeId;
 
-				$urlEnabledSection          = $urlEnabledSectionType->urlEnabledSections[$uniqueKey];
-				$urlEnabledSection->element = $element;
+				if (isset($urlEnabledSectionType->urlEnabledSections[$uniqueKey]))
+				{
+					$urlEnabledSection          = $urlEnabledSectionType->urlEnabledSections[$uniqueKey];
+					$urlEnabledSection->element = $element;
 
-				return $urlEnabledSection;
+					return $urlEnabledSection;
+				}
 			}
 		}
 	}
