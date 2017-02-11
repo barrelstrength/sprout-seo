@@ -6,16 +6,6 @@ class SproutSeo_RedirectSproutImportElementImporter extends BaseSproutImportElem
 	/**
 	 * @return mixed
 	 */
-	public function getModel()
-	{
-		$model = 'Craft\\SproutSeo_RedirectModel';
-
-		return new $model;
-	}
-
-	/**
-	 * @return mixed
-	 */
 	public function getModelName()
 	{
 		return 'SproutSeo_Redirect';
