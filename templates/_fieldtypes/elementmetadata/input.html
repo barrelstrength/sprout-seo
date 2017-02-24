@@ -42,15 +42,15 @@
 
 <div class="sproutseo-box-optimized">
 	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsSearch]'}}"
-	value = "{{values.enableMetaDetailsSearch}}">
+	value="{{ values.enableMetaDetailsSearch }}">
 	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsOpenGraph]'}}"
-	value = "{{values.enableMetaDetailsOpenGraph}}">
+	value="{{ values.enableMetaDetailsOpenGraph }}">
 	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsTwitterCard]'}}"
-	value = "{{values.enableMetaDetailsTwitterCard}}">
+	value="{{ values.enableMetaDetailsTwitterCard }}">
 	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsGeo]'}}"
-	value = "{{values.enableMetaDetailsGeo}}">
+	value="{{ values.enableMetaDetailsGeo }}">
 	<input type="hidden" name="{{nameContext~'[metadata][enableMetaDetailsRobots]'}}"
-	value = "{{values.enableMetaDetailsRobots}}">
+	value="{{ values.enableMetaDetailsRobots }}">
 
 	{% if settings.optimizedTitleField == 'manually' %}
 
@@ -213,7 +213,7 @@
 				<div id="btngroup" class="btngroup sproutseo-advancedoption-btns">
 
 					{% if settings.showSearchMeta %}
-						<div class="btn" id="btn-SearchMeta" data-type="SearchMeta"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
+						<div class="btn" id="btn-Search" data-type="Search"><i class="sproutseo-icon icon-search">&#xe800;</i> Search Meta</div>
 					{% endif %}
 
 					{% if settings.showOpenGraph %}
@@ -248,7 +248,7 @@
 
 		<div class="blocks">
 
-			<div class="matrixblock fields-SearchMeta"
+			<div class="matrixblock fields-Search"
 				{% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
 			>
 
@@ -458,6 +458,7 @@ feel like they are part of the natural flow of fields #}
 		{
 			//enableMetaDetailsSearch
 			var customKey = "enableMetaDetails"+divId;
+console.log(customKey);
 			var customizationSettings = getCustomizationSettings(customKey);
 
 			if (div.hasClass("active"))
@@ -495,7 +496,7 @@ feel like they are part of the natural flow of fields #}
 		});
 
 		// Checking active class
-		var fields = ["SearchMeta","OpenGraph","Geo","Robots","TwitterCard"];
+		var fields = ["Search","OpenGraph","Geo","Robots","TwitterCard"];
 
 		for (var i = 0; i < fields.length; i++)
 		{
