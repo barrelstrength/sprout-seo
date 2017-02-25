@@ -1,9 +1,9 @@
 <?php
 /**
-	* @author    Barrel Strength Design LLC <sprout@barrelstrengthdesign.com>
-	* @copyright Copyright (c) 2016, Barrel Strength Design LLC
-	* @license   http://sprout.barrelstrengthdesign.com/license
-	* @see       http://sprout.barrelstrengthdesign.com
+ * @author    Barrel Strength Design LLC <sprout@barrelstrengthdesign.com>
+ * @copyright Copyright (c) 2016, Barrel Strength Design LLC
+ * @license   http://sprout.barrelstrengthdesign.com/license
+ * @see       http://sprout.barrelstrengthdesign.com
  */
 namespace Craft;
 
@@ -145,7 +145,7 @@ class SproutSeoPlugin extends BasePlugin
 
 		if (!craft()->isConsole())
 		{
-			craft()->onException = function(\CExceptionEvent $event)
+			craft()->onException = function (\CExceptionEvent $event)
 			{
 				if (($event->exception instanceof \CHttpException) && ($event->exception->statusCode == 404))
 				{
@@ -193,6 +193,7 @@ class SproutSeoPlugin extends BasePlugin
 			'twitterCard'             => array(AttributeType::String, 'default' => null),
 			'ogType'                  => array(AttributeType::String, 'default' => null),
 			'localeIdOverride'        => array(AttributeType::String, 'default' => null),
+			'displayFieldHandles'     => array(AttributeType::Bool, 'default' => false),
 			'enableCustomSections'    => array(AttributeType::Bool, 'default' => false),
 			'enableMetaDetailsFields' => array(AttributeType::Bool, 'default' => false),
 			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => true),

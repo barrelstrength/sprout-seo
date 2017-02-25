@@ -666,7 +666,7 @@ class SproutSeoVariable
 			}
 		}
 
-		$options[] = array('optgroup' => Craft::t('Add Custom Field'));
+		$options[]           = array('optgroup' => Craft::t('Add Custom Field'));
 		$options['manually'] = Craft::t('Display Editable Field');
 
 		return $options;
@@ -679,8 +679,9 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedOptions($type = "PlainText", $handle = null, $settings = null)
 	{
-		$options = array();
-		$fields  = craft()->fields->getAllFields();
+		$options  = array();
+		$fields   = craft()->fields->getAllFields();
+		$pluginSettings = craft()->plugins->getPlugin('sproutseo')->getSettings();
 
 		$options[''] = Craft::t('None');
 		$options[]   = array('optgroup' => Craft::t('Use Existing Field'));
@@ -694,9 +695,17 @@ class SproutSeoVariable
 		{
 			if ($field->type == $type)
 			{
-				$context             = explode(":", $field->context);
-				$context             = isset($context[0]) ? $context[0] : 'global';
-				$options[$field->id] = $field->name;
+				$context = explode(":", $field->context);
+				$context = isset($context[0]) ? $context[0] : 'global';
+
+				if ($pluginSettings->displayFieldHandles)
+				{
+					$options[$field->id] = $field->name . ' – {' . $field->handle . '}';
+				}
+				else
+				{
+					$options[$field->id] = $field->name;
+				}
 			}
 		}
 
@@ -873,7 +882,7 @@ class SproutSeoVariable
 			{
 				return array(
 					'label'    => $schema->getName(),
-					'type'  => $schema->getType(),
+					'type'     => $schema->getType(),
 					'value'    => $schema->getUniqueKey(),
 					'isCustom' => '1'
 				);
@@ -1009,7 +1018,8 @@ class SproutSeoVariable
 			case 'search':
 
 				if (($metadataModel['optimizedTitle'] OR $metadataModel['title']) &&
-						($metadataModel['optimizedDescription'] OR $metadataModel['description']))
+					($metadataModel['optimizedDescription'] OR $metadataModel['description'])
+				)
 				{
 					return true;
 				}
@@ -1019,8 +1029,9 @@ class SproutSeoVariable
 			case 'openGraph':
 
 				if (($metadataModel['optimizedTitle'] OR $metadataModel['title']) &&
-						($metadataModel['optimizedDescription'] OR $metadataModel['description']) &&
-						($metadataModel['optimizedImage'] OR $metadataModel['ogImage']))
+					($metadataModel['optimizedDescription'] OR $metadataModel['description']) &&
+					($metadataModel['optimizedImage'] OR $metadataModel['ogImage'])
+				)
 				{
 					return true;
 				}
@@ -1030,8 +1041,9 @@ class SproutSeoVariable
 			case 'twitterCard':
 
 				if (($metadataModel['optimizedTitle'] OR $metadataModel['title']) &&
-						($metadataModel['optimizedDescription'] OR $metadataModel['description']) &&
-						($metadataModel['optimizedImage'] OR $metadataModel['twitterImage']))
+					($metadataModel['optimizedDescription'] OR $metadataModel['description']) &&
+					($metadataModel['optimizedImage'] OR $metadataModel['twitterImage'])
+				)
 				{
 					return true;
 				}

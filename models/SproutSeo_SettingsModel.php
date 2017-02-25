@@ -9,6 +9,7 @@ class SproutSeo_SettingsModel extends BaseModel
 			'pluginNameOverride'      => AttributeType::String,
 			'appendTitleValue'        => AttributeType::Bool,
 			'localeIdOverride'        => AttributeType::String,
+			'displayFieldHandles'     => AttributeType::Bool,
 			'enableCustomSections'    => AttributeType::Bool,
 			'enableMetaDetailsFields' => AttributeType::Bool,
 			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => true),

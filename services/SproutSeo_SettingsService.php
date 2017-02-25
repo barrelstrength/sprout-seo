@@ -50,6 +50,13 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 				$seoSettings->localeIdOverride;
 		}
 
+		if (isset($settings["displayFieldHandles"]))
+		{
+			$seoSettings->displayFieldHandles = isset($settings["displayFieldHandles"]) ?
+				$settings["displayFieldHandles"] :
+				$seoSettings->displayFieldHandles;
+		}
+
 		if (isset($settings["enableMetaDetailsFields"]))
 		{
 			$seoSettings->enableMetaDetailsFields = isset($settings["enableMetaDetailsFields"]) ?
