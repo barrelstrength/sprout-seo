@@ -649,8 +649,9 @@ class SproutSeoVariable
 	 */
 	public function getKeywordsOptions($type = "PlainText")
 	{
-		$options = array();
-		$fields  = craft()->fields->getAllFields();
+		$options        = array();
+		$fields         = craft()->fields->getAllFields();
+		$pluginSettings = craft()->plugins->getPlugin('sproutseo')->getSettings();
 
 		$options[''] = Craft::t('None');
 
@@ -662,7 +663,15 @@ class SproutSeoVariable
 			{
 				$context             = explode(":", $field->context);
 				$context             = isset($context[0]) ? $context[0] : 'global';
-				$options[$field->id] = $field->name;
+
+				if ($pluginSettings->displayFieldHandles)
+				{
+					$options[$field->id] = $field->name . ' – {' . $field->handle . '}';
+				}
+				else
+				{
+					$options[$field->id] = $field->name;
+				}
 			}
 		}
 
@@ -679,8 +688,8 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedOptions($type = "PlainText", $handle = null, $settings = null)
 	{
-		$options  = array();
-		$fields   = craft()->fields->getAllFields();
+		$options        = array();
+		$fields         = craft()->fields->getAllFields();
 		$pluginSettings = craft()->plugins->getPlugin('sproutseo')->getSettings();
 
 		$options[''] = Craft::t('None');
