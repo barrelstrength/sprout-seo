@@ -23,11 +23,11 @@ class m170124_000000_sproutSeo_addCustomizationSettingsColumns extends BaseMigra
 		);
 
 		$columns = array(
-			'enableMetaDetailsSearch'      => $tinyInt,
-			'enableMetaDetailsOpenGraph'   => $tinyInt,
-			'enableMetaDetailsTwitterCard' => $tinyInt,
-			'enableMetaDetailsGeo'         => $tinyInt,
 			'enableMetaDetailsRobots'      => $tinyInt,
+			'enableMetaDetailsGeo'         => $tinyInt,
+			'enableMetaDetailsTwitterCard' => $tinyInt,
+			'enableMetaDetailsOpenGraph'   => $tinyInt,
+			'enableMetaDetailsSearch'      => $tinyInt,
 		);
 
 		foreach ($tableNames as $tableName)
