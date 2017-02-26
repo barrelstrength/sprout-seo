@@ -43,13 +43,13 @@ class m170124_000000_sproutSeo_addCustomizationSettingsColumns extends BaseMigra
 			}
 		}
 
-		$rows = craft()->db->createCommand()
-			->select('*')
-			->from($tableName)
-			->queryAll();
-
 		foreach ($tableNames as $tableName)
 		{
+			$rows = craft()->db->createCommand()
+				->select('*')
+				->from($tableName)
+				->queryAll();
+
 			foreach ($rows as $row)
 			{
 				$customizationSettings = json_decode($row['customizationSettings'], true);
