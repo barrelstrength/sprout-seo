@@ -20,6 +20,8 @@ class m170124_000000_sproutSeo_addCustomizationSettingsColumns extends BaseMigra
 			'column'   => ColumnType::TinyInt,
 			'required' => false,
 			'default'  => 0,
+			'length'   => 1,
+			'unsigned' => true
 		);
 
 		$columns = array(
