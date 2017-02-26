@@ -192,7 +192,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		 */
 		$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($this->element->getElementType());
 
-		if ($urlEnabledSectionType)
+		// Ensure our urlEnabledSectionType exists and we have a section with URLs
+		if ($urlEnabledSectionType && count($urlEnabledSectionType->urlEnabledSections))
 		{
 			$urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
 
