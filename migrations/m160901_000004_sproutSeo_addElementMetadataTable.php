@@ -240,6 +240,7 @@ class m160901_000004_sproutSeo_addElementMetadataTable extends BaseMigration
 				'geoSectionMetadataEnabled'         => $detailsValues['enableGeo'],
 				'robotsSectionMetadataEnabled'      => $detailsValues['enableRobots']
 			);
+
 			// updates new columns
 			craft()->db->createCommand()->update($tableName, array(
 				'optimizedKeywords'     => $row['keywords'],
