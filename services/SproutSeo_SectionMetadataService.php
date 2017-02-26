@@ -436,7 +436,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	public function getTransforms()
 	{
 		$options = array(
-			'' => 'Select...'
+			'' => Craft::t('Select...')
 		);
 
 		$transforms = craft()->assetTransforms->getAllTransforms();

@@ -248,7 +248,7 @@ class SproutSeoVariable
 
 		if ($description == 'NGO')
 		{
-			$name = 'Non Government Organization';
+			$name = Craft::t('Non Government Organization');
 		}
 
 		return $name;
@@ -269,51 +269,51 @@ class SproutSeoVariable
 
 				$options = array(
 					array(
-						'label' => "Select Type...",
+						'label' => Craft::t('Select Type...'),
 						'value' => ''
 					),
 					array(
-						'label' => "Customer Service",
+						'label' => Craft::t('Customer Service'),
 						'value' => 'customer service'
 					),
 					array(
-						'label' => "Technical Support",
+						'label' => Craft::t('Technical Support'),
 						'value' => 'technical support'
 					),
 					array(
-						'label' => "Billing Support",
+						'label' => Craft::t('Billing Support'),
 						'value' => 'billing support'
 					),
 					array(
-						'label' => "Bill Payment",
+						'label' => Craft::t('Bill Payment'),
 						'value' => 'bill payment'
 					),
 					array(
-						'label' => "Sales",
+						'label' => Craft::t('Sales'),
 						'value' => 'sales'
 					),
 					array(
-						'label' => "Reservations",
+						'label' => Craft::t('Reservations'),
 						'value' => 'reservations'
 					),
 					array(
-						'label' => "Credit Card Support",
+						'label' => Craft::t('Credit Card Support'),
 						'value' => 'credit card support'
 					),
 					array(
-						'label' => "Emergency",
+						'label' => Craft::t('Emergency'),
 						'value' => 'emergency'
 					),
 					array(
-						'label' => "Baggage Tracking",
+						'label' => Craft::t('Baggage Tracking'),
 						'value' => 'baggage tracking'
 					),
 					array(
-						'label' => "Roadside Assistance",
+						'label' => Craft::t('Roadside Assistance'),
 						'value' => 'roadside assistance'
 					),
 					array(
-						'label' => "Package Tracking",
+						'label' => Craft::t('Package Tracking'),
 						'value' => 'package tracking'
 					)
 				);
@@ -324,48 +324,48 @@ class SproutSeoVariable
 
 				$options = array(
 					array(
-						'label' => "Select...",
+						'label' => Craft::t('Select...'),
 						'value' => ''
 					),
 					array(
-						'label' => "Facebook",
+						'label' => Craft::t('Facebook'),
 						'value' => 'Facebook'
 					),
 					array(
-						'label' => "Twitter",
+						'label' => Craft::t('Twitter'),
 						'value' => 'Twitter'
 					),
 					array(
-						'label' => "Google+",
+						'label' => Craft::t('Google+'),
 						'value' => 'Google+'
 					),
 					array(
-						'label' => "Instagram",
+						'label' => Craft::t('Instagram'),
 						'value' => 'Instagram',
 						'icon'  => 'ABCD'
 					),
 					array(
-						'label' => "YouTube",
+						'label' => Craft::t('YouTube'),
 						'value' => 'YouTube'
 					),
 					array(
-						'label' => "LinkedIn",
+						'label' => Craft::t('LinkedIn'),
 						'value' => 'LinkedIn'
 					),
 					array(
-						'label' => "Myspace",
+						'label' => Craft::t('Myspace'),
 						'value' => 'Myspace'
 					),
 					array(
-						'label' => "Pinterest",
+						'label' => Craft::t('Pinterest'),
 						'value' => 'Pinterest'
 					),
 					array(
-						'label' => "SoundCloud",
+						'label' => Craft::t('SoundCloud'),
 						'value' => 'SoundCloud'
 					),
 					array(
-						'label' => "Tumblr",
+						'label' => Craft::t('Tumblr'),
 						'value' => 'Tumblr'
 					)
 				);
@@ -376,41 +376,41 @@ class SproutSeoVariable
 
 				$options = array(
 					array(
-						'label' => "Select...",
+						'label' => Craft::t('Select...'),
 						'value' => ''
 					),
 					array(
-						'label'       => "Bing Webmaster Tools",
+						'label'       => Craft::t('Bing Webmaster Tools'),
 						'value'       => 'bingWebmasterTools',
 						'metaTagName' => 'msvalidate.01'
 					),
 					array(
-						'label'       => "Facebook App ID",
+						'label'       => Craft::t('Facebook App ID'),
 						'value'       => 'facebookAppId',
 						'metaTagName' => 'fb:app_id'
 					),
 					array(
-						'label'       => "Facebook Page",
+						'label'       => Craft::t('Facebook Page'),
 						'value'       => 'facebookPage',
 						'metaTagName' => 'fb:page_id'
 					),
 					array(
-						'label'       => "Facebook Admins",
+						'label'       => Craft::t('Facebook Admins'),
 						'value'       => 'facebookAdmins',
 						'metaTagName' => 'fb:admins'
 					),
 					array(
-						'label'       => "Google Search Console",
+						'label'       => Craft::t('Google Search Console'),
 						'value'       => 'googleSearchConsole',
 						'metaTagName' => 'google-site-verification'
 					),
 					array(
-						'label'       => "Pinterest",
+						'label'       => Craft::t('Pinterest'),
 						'value'       => 'pinterest',
 						'metaTagName' => 'p:domain_verify'
 					),
 					array(
-						'label'       => "Yandex Webmaster Tools",
+						'label'       => Craft::t('Yandex Webmaster Tools'),
 						'value'       => 'yandexWebmasterTools',
 						'metaTagName' => 'yandex-verification'
 					)
@@ -433,7 +433,7 @@ class SproutSeoVariable
 		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$options       = $this->getGlobalOptions($schemaType);
 
-		array_push($options, array('optgroup' => 'Custom'));
+		array_push($options, array('optgroup' => Craft::t('Custom')));
 
 		$schemas = $schemaGlobals->{$schemaType} != null ? $schemaGlobals->{$schemaType} : array();
 
@@ -445,7 +445,7 @@ class SproutSeoVariable
 			}
 		}
 
-		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
+		array_push($options, array('label' => Craft::t('Add Custom'), 'value' => 'custom'));
 
 		return $options;
 	}
@@ -478,23 +478,23 @@ class SproutSeoVariable
 		$schemaType = "identity";
 		$options    = array(
 			array(
-				'label' => "Select...",
+				'label' => Craft::t('None'),
 				'value' => ''
 			),
 			array(
-				'label' => "$",
+				'label' => Craft::t('$'),
 				'value' => '$'
 			),
 			array(
-				'label' => "$$",
+				'label' => Craft::t('$$'),
 				'value' => '$$'
 			),
 			array(
-				'label' => "$$$",
+				'label' => Craft::t('$$$'),
 				'value' => '$$$'
 			),
 			array(
-				'label' => "$$$$",
+				'label' => Craft::t('$$$$'),
 				'value' => '$$$$'
 			)
 		);
@@ -508,14 +508,14 @@ class SproutSeoVariable
 			$priceRange = $schemaGlobals[$schemaType]['priceRange'];
 		}
 
-		array_push($options, array('optgroup' => 'Custom'));
+		array_push($options, array('optgroup' => Craft::t('Custom')));
 
 		if (!array_key_exists($priceRange, array('$' => 0, '$$' => 1, '$$$' => 2, '$$$$' => 4)) && $priceRange != '')
 		{
 			array_push($options, array('label' => $priceRange, 'value' => $priceRange));
 		}
 
-		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
+		array_push($options, array('label' => Craft::t('Add Custom'), 'value' => 'custom'));
 
 		return $options;
 	}
@@ -528,15 +528,15 @@ class SproutSeoVariable
 		$schemaType = "identity";
 		$options    = array(
 			array(
-				'label' => "Select...",
+				'label' => Craft::t('None'),
 				'value' => ''
 			),
 			array(
-				'label' => "Female",
+				'label' => Craft::t('Female'),
 				'value' => 'female'
 			),
 			array(
-				'label' => "Male",
+				'label' => Craft::t('Male'),
 				'value' => 'male',
 			)
 		);
@@ -544,14 +544,14 @@ class SproutSeoVariable
 		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
 		$gender        = $schemaGlobals[$schemaType]['gender'];
 
-		array_push($options, array('optgroup' => 'Custom'));
+		array_push($options, array('optgroup' => Craft::t('Custom')));
 
 		if (!array_key_exists($gender, array('female' => 0, 'male' => 1)) && $gender != '')
 		{
 			array_push($options, array('label' => $gender, 'value' => $gender));
 		}
 
-		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
+		array_push($options, array('label' => Craft::t('Add Custom'), 'value' => 'custom'));
 
 		return $options;
 	}
@@ -563,11 +563,11 @@ class SproutSeoVariable
 	{
 		$options = array(
 			array(
-				'label' => "Select...",
+				'label' => Craft::t('None'),
 				'value' => ''
 			),
 			array(
-				'label' => "Site Name",
+				'label' => Craft::t('Site Name'),
 				'value' => 'sitename'
 			)
 		);
@@ -578,7 +578,7 @@ class SproutSeoVariable
 		{
 			$appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
 
-			array_push($options, array('optgroup' => 'Custom'));
+			array_push($options, array('optgroup' => Craft::t('Custom')));
 
 			if (!array_key_exists($appendTitleValue, array('sitename' => 0)) && $appendTitleValue != '')
 			{
@@ -586,7 +586,7 @@ class SproutSeoVariable
 			}
 		}
 
-		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
+		array_push($options, array('label' => Craft::t('Add Custom'), 'value' => 'custom'));
 
 		return $options;
 	}
@@ -598,7 +598,7 @@ class SproutSeoVariable
 	{
 		$options = array(
 			array(
-				'label' => "Select...",
+				'label' => Craft::t('None'),
 				'value' => ''
 			),
 			array(
@@ -629,7 +629,7 @@ class SproutSeoVariable
 		{
 			$seoDivider = $schemaGlobals['settings']['seoDivider'];
 
-			array_push($options, array('optgroup' => 'Custom'));
+			array_push($options, array('optgroup' => Craft::t('Custom')));
 
 			if (!array_key_exists($seoDivider, array('-' => 0, '•' => 1, '|' => 2, '/' => 3, ':' => 4)) && $seoDivider != '')
 			{
@@ -637,7 +637,7 @@ class SproutSeoVariable
 			}
 		}
 
-		array_push($options, array('label' => 'Add Custom', 'value' => 'custom'));
+		array_push($options, array('label' => Craft::t('Add Custom'), 'value' => 'custom'));
 
 		return $options;
 	}
@@ -809,7 +809,7 @@ class SproutSeoVariable
 		$locales = array(
 			array(
 				'value' => '',
-				'label' => 'Select locale...'
+				'label' => Craft::t('Select locale...')
 			)
 		);
 
@@ -872,7 +872,7 @@ class SproutSeoVariable
 		});
 
 		// Build our options
-		$schemaOptions = array('' => 'Select...', array('optgroup' => 'Default Types'));
+		$schemaOptions = array('' => Craft::t('None'), array('optgroup' => Craft::t('Default Types')));
 
 		$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
 		{
@@ -885,7 +885,7 @@ class SproutSeoVariable
 
 		if (count($customSchema))
 		{
-			array_push($schemaOptions, array('optgroup' => 'Custom Types'));
+			array_push($schemaOptions, array('optgroup' => Craft::t('Custom Types')));
 
 			$schemaOptions = array_merge($schemaOptions, array_map(function ($schema)
 			{
