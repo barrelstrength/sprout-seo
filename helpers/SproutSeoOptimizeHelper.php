@@ -360,8 +360,8 @@ class SproutSeoOptimizeHelper
 		$defaultTransforms = array(
 			'sproutSeo-socialSquare' => array(
 				'mode'     => 'crop',
-				'width'    => 300,
-				'height'   => 300,
+				'width'    => 400,
+				'height'   => 400,
 				'quality'  => 82,
 				'position' => 'center-center'
 			),

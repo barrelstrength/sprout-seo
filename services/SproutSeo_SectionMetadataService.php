@@ -441,7 +441,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 
 		array_push($options, array('optgroup' => Craft::t('Default Transforms')));
 
-		$options['sproutSeo-socialSquare']     = Craft::t('Square – 300x300');
+		$options['sproutSeo-socialSquare']     = Craft::t('Square – 400x400');
 		$options['sproutSeo-ogRectangle']      = Craft::t('Rectangle – 1200x630 – Open Graph');
 		$options['sproutSeo-twitterRectangle'] = Craft::t('Rectangle – 1024x512 – Twitter Card');
 
