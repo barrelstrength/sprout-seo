@@ -146,9 +146,17 @@ class SproutSeoOptimizeHelper
 			}
 		}
 
+		$ogTransform      = null;
+		$twitterTransform = null;
+
 		// Modify our Assets to reference their URLs
 		if (!empty($model->ogImage))
 		{
+			if ($model->ogTransform)
+			{
+				$ogTransform = SproutSeoOptimizeHelper::getSelectedTransform($model->ogTransform);
+			}
+
 			// If ogImage starts with "http", roll with it
 			// If not, then process what we have to try to extract the URL
 			if (mb_substr($model->ogImage, 0, 4) !== "http")
@@ -164,9 +172,9 @@ class SproutSeoOptimizeHelper
 				{
 					$imageUrl = (string) ($ogImage->getUrl());
 
-					if ($model->ogTransform)
+					if ($ogTransform)
 					{
-						$imageUrl = (string) ($ogImage->getUrl($model->ogTransform));
+						$imageUrl = (string) ($ogImage->getUrl($ogTransform));
 					}
 					// check to see if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
@@ -182,10 +190,10 @@ class SproutSeoOptimizeHelper
 					$model->ogImageHeight = $ogImage->height;
 					$model->ogImageType   = $ogImage->mimeType;
 
-					if ($model->ogTransform)
+					if ($ogTransform)
 					{
-						$model->ogImageWidth  = $ogImage->getWidth($model->ogTransform);
-						$model->ogImageHeight = $ogImage->getHeight($model->ogTransform);
+						$model->ogImageWidth  = $ogImage->getWidth($ogTransform);
+						$model->ogImageHeight = $ogImage->getHeight($ogTransform);
 					}
 
 					if (craft()->request->isSecureConnection())
@@ -205,6 +213,11 @@ class SproutSeoOptimizeHelper
 
 		if (!empty($model->twitterImage))
 		{
+			if ($model->twitterTransform)
+			{
+				$twitterTransform = SproutSeoOptimizeHelper::getSelectedTransform($model->twitterTransform);
+			}
+
 			// If twitterImage starts with "http", roll with it
 			// If not, then process what we have to try to extract the URL
 			if (mb_substr($model->twitterImage, 0, 4) !== "http")
@@ -220,9 +233,9 @@ class SproutSeoOptimizeHelper
 				{
 					$imageUrl = (string) ($twitterImage->getUrl());
 
-					if ($model->twitterTransform)
+					if ($twitterTransform)
 					{
-						$imageUrl = (string) ($twitterImage->getUrl($model->twitterTransform));
+						$imageUrl = (string) ($twitterImage->getUrl($twitterTransform));
 					}
 					// check to se	e if Asset already has full Site Url in folder Url
 					if (strpos($imageUrl, "http") !== false)
@@ -333,6 +346,47 @@ class SproutSeoOptimizeHelper
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Return pre-defined transform settings or the selected transform handle
+	 *
+	 * @param $transformHandle
+	 *
+	 * @return mixed
+	 */
+	public static function getSelectedTransform($transformHandle)
+	{
+		$defaultTransforms = array(
+			'sproutSeo-socialSquare' => array(
+				'mode'     => 'crop',
+				'width'    => 300,
+				'height'   => 300,
+				'quality'  => 82,
+				'position' => 'center-center'
+			),
+			'sproutSeo-ogRectangle' => array(
+				'mode'     => 'crop',
+				'width'    => 1200,
+				'height'   => 630,
+				'quality'  => 82,
+				'position' => 'center-center'
+			),
+			'sproutSeo-twitterRectangle' => array(
+				'mode'     => 'crop',
+				'width'    => 1024,
+				'height'   => 512,
+				'quality'  => 82,
+				'position' => 'center-center'
+			)
+		);
+
+		if (isset($defaultTransforms[$transformHandle]))
+		{
+			return $defaultTransforms[$transformHandle];
+		}
+
+		return $transformHandle;
 	}
 
 	/**

@@ -436,14 +436,25 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	public function getTransforms()
 	{
 		$options = array(
-			'' => Craft::t('Select...')
+			'' => Craft::t('None')
 		);
+
+		array_push($options, array('optgroup' => Craft::t('Default Transforms')));
+
+		$options['sproutSeo-socialSquare']     = Craft::t('Square – 300x300');
+		$options['sproutSeo-ogRectangle']      = Craft::t('Rectangle – 1200x630 – Open Graph');
+		$options['sproutSeo-twitterRectangle'] = Craft::t('Rectangle – 1024x512 – Twitter Card');
 
 		$transforms = craft()->assetTransforms->getAllTransforms();
 
-		foreach ($transforms as $transform)
+		if (count($transforms))
 		{
-			$options[$transform->handle] = $transform->name;
+			array_push($options, array('optgroup' => Craft::t('Custom Transforms')));
+
+			foreach ($transforms as $transform)
+			{
+				$options[$transform->handle] = $transform->name;
+			}
 		}
 
 		return $options;
