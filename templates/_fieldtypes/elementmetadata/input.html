@@ -396,6 +396,7 @@ feel like they are part of the natural flow of fields #}
 
 {% includejs %}
 
+	{# @todo - Coming soon - SEO Preview
 	{% if fieldContext != 'sectionMetadata' and settings.displayPreview %}
 		// Existing Entries have a wrapper around the live preview and share buttons
 		var $previewButtonsElement = $('.previewbtns');
@@ -418,6 +419,7 @@ feel like they are part of the natural flow of fields #}
 		}
 
 	{% endif %}
+	#}
 
 	var items = {{ schemaSubtypes|json_encode|raw }};
 	var entryValues = {{ mainEntityValues|json_encode|raw }};
