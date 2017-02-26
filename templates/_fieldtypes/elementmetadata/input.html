@@ -399,11 +399,24 @@ feel like they are part of the natural flow of fields #}
 	{% if fieldContext != 'sectionMetadata' and settings.displayPreview %}
 		// Existing Entries have a wrapper around the live preview and share buttons
 		var $previewButtonsElement = $('.previewbtns');
+
 		// New entries only have a live preview button
 		var $livePreviewButtonElement = $('.livepreviewbtn');
 
 		var $livePreviewElement = $previewButtonsElement.length ? $previewButtonsElement : $livePreviewButtonElement;
-		$livePreviewElement.after('<div id="fields-sproutseo-seopreview" class="btn big sprout-livepreviewbtn"> {{ "SEO Preview"|t }}<div class="spinner hidden"></div></div>');
+
+		if ($livePreviewElement.length)
+		{
+			$livePreviewElement.after('<div id="fields-sproutseo-seopreview" class="btn big sprout-livepreviewbtn"> {{ "SEO Preview"|t }}<div class="spinner hidden"></div></div>');
+		}
+		else
+		{
+			// Elements that don't have URLs enabled, have no live preview button
+			var $metaContainer = $('#meta-pane');
+
+			$metaContainer.prepend('<div id="fields-sproutseo-seopreview" class="btn big sprout-livepreviewbtn" style="margin-top:0"> {{ "SEO Preview"|t }}<div class="spinner hidden"></div></div>');
+		}
+
 	{% endif %}
 
 	var items = {{ schemaSubtypes|json_encode|raw }};
