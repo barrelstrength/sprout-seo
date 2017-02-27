@@ -3,9 +3,6 @@ namespace Craft;
 
 class SproutSeo_ChangeTemporaryMethodElementAction extends BaseElementAction
 {
-	// Public Methods
-	// =========================================================================
-
 	/**
 	 * @inheritDoc IComponentType::getName()
 	 *
@@ -38,6 +35,7 @@ class SproutSeo_ChangeTemporaryMethodElementAction extends BaseElementAction
 		$elementIds = $criteria->ids();
 
 		$response = false;
+
 		// Call updateMethods service
 		$response = sproutSeo()->redirects->updateMethods($elementIds, SproutSeo_RedirectMethods::Temporary);
 

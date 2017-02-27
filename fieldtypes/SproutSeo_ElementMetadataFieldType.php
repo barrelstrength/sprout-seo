@@ -1,5 +1,6 @@
 <?php
 namespace Craft;
+
 use \crodas\TextRank\Config;
 use \crodas\TextRank\TextRank;
 use \crodas\TextRank\Stopword;
@@ -7,26 +8,22 @@ use \crodas\TextRank\Stopword;
 class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPreviewableFieldType
 {
 	/**
-	 * Our active Metadata
+	 * The active metadata
 	 *
 	 * @var SproutSeo_MetadataModel
 	 */
 	public $metadata;
 
 	/**
-	 * An array of our metadata values to use for
-	 * processing, validation, and handing off to the db
-	 * We keep these separate from the supported $value parameter
-	 * as the $value parameter helps managed handing back values
-	 * after failed validation scenarios
+	 * An array of our metadata values to use for processing, validation, and handing
+	 * off to the db. We store these separately from the supported $value parameter because
+	 * the $value parameter helps managed handing back values after failed validation scenarios
 	 *
 	 * @var array()
 	 */
 	public $values;
 
 	/**
-	 * FieldType name
-	 *
 	 * @return string
 	 */
 	public function getName()
@@ -35,8 +32,6 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	}
 
 	/**
-	 * Define database column
-	 *
 	 * @return false
 	 */
 	public function defineContentAttribute()
@@ -68,7 +63,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	/**
 	 * @param mixed $value
 	 *
-	 * @return
+	 * @return BaseModel|mixed
 	 */
 	public function prepValue($value)
 	{
@@ -119,13 +114,10 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 	}
 
 	/**
-	 * Display our FieldType
+	 * @param string $name
+	 * @param mixed  $value
 	 *
-	 * @param string $name   Our FieldType handle
-	 * @param string $value  Always returns blank, our block
-	 *                       only styles the Instructions field
-	 *
-	 * @return string Return our blocks input template
+	 * @return string
 	 */
 	public function getInputHtml($name, $value)
 	{
@@ -169,7 +161,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$value['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($value->robots);
 
 		// Set elementType
-		// @todo - rename this variable, it is specific for Assets
+		// @todo - Refactor
+		//         rename this variable, it is specific for Assets
 		$elementType = craft()->elements->getElementType(ElementType::Asset);
 
 		// Cleanup the namespace around the $name handle
@@ -183,10 +176,10 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$settings = $this->getSettings();
 
 		/**
-		 * --------------------
-		 * @todo - can delete this once we get SEO Preview button working dynamically
-		 *
 		 * Get the prioritized metadata at this level so we can use it as placeholder text
+		 *
+		 * @todo - Refactor
+		 *         can delete this once we get SEO Preview button working dynamically?
 		 *
 		 * @var SproutSeoBaseUrlEnabledSectionType $urlEnabledSectionType
 		 */
@@ -210,10 +203,9 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		$prioritizedMetadata = sproutSeo()->optimize->getPrioritizedMetadataModel();
 
-		// --------------------
-
-		// @todo - what are the ogImageElements, twitterImageElements, etc being used for?
-		// they don't appear to be used in the elementdata/input template...
+		// @todo - Refactor
+		//         Can we simplify? This is a ton of variables.
+		//         What are the ogImageElements, twitterImageElements, etc being used for?
 		return craft()->templates->render('sproutseo/_fieldtypes/elementmetadata/input', array(
 			'name'                 => $name,
 			'namespaceInputName'   => $namespaceInputName,
@@ -231,8 +223,9 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			'prioritizedMetadata'  => $prioritizedMetadata,
 			'elementHandle'        => $this->model->handle,
 
-			// @todo - this will begin to work in Craft 3
-			// http://craftcms.stackexchange.com/a/9494/115
+			// @todo - Refactor - Craft 3
+			//         this will begin to work in Craft 3
+			//         http://craftcms.stackexchange.com/a/9494/115
 			'isRequired'           => $this->model->required
 		));
 	}
@@ -274,8 +267,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$optimizedTitle       = $this->getSettings()->optimizedTitleField;
 		$optimizedDescription = $this->getSettings()->optimizedDescriptionField;
 
-		if ($optimizedTitle != 'manually' &&
-			$optimizedDescription != 'manually'
+		if ($optimizedTitle !== 'manually' &&
+			$optimizedDescription !== 'manually'
 		)
 		{
 			return true;
@@ -283,12 +276,12 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		$errorMessage = array();
 
-		if ($optimizedTitle == 'manually' && empty($this->values['optimizedTitle']))
+		if ($optimizedTitle === 'manually' && empty($this->values['optimizedTitle']))
 		{
 			$errorMessage[] = Craft::t("Meta Title field cannot be blank.");
 		}
 
-		if ($optimizedDescription == 'manually' && empty($this->values['optimizedDescription']))
+		if ($optimizedDescription === 'manually' && empty($this->values['optimizedDescription']))
 		{
 			$errorMessage[] = Craft::t("Meta Description field cannot be blank.");
 		}
@@ -309,13 +302,13 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$fieldHandle = $this->model->handle;
 		$fields      = $this->element->getContent()->{$fieldHandle}['metadata'];
 
-		// @todo - Refactor. Optimize.
-		// In some instances, this method is run twice once in prepValueFromPost and once here.
-		// Scenarios to consider:
-		// - Saving an Element from CP
-		// - ResaveElements Task
-		// - IPreviewableFieldType HTML
-		// - Sprout Import
+		// @todo - Refactor
+		//         In some instances, this method is run twice once in prepValueFromPost and once here.
+		//         Scenarios to consider:
+		//         - Saving an Element from CP
+		//         - ResaveElements Task
+		//         - IPreviewableFieldType HTML
+		//         - Sprout Import
 		$this->values = $this->getMetadataFieldValues($fields);
 
 		if ($this->metadata->id)
@@ -343,14 +336,14 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		switch (true)
 		{
 			// Element Title
-			case ($optimizedTitleFieldSetting == 'elementTitle' && $this->element->id):
+			case ($optimizedTitleFieldSetting === 'elementTitle' && $this->element->id):
 
 				$title = $this->element->title;
 
 				break;
 
 			// Manual Title
-			case ($optimizedTitleFieldSetting == 'manually'):
+			case ($optimizedTitleFieldSetting === 'manually'):
 
 				$title = ($attributes['optimizedTitle']) ? $attributes['optimizedTitle'] : null;
 
@@ -373,9 +366,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 		$attributes['optimizedTitle'] = $title;
 
-		$attributes = $this->setMetaDetailsValues('title', $title, $attributes);
-
-		return $attributes;
+		return $this->setMetaDetailsValues('title', $title, $attributes);
 	}
 
 	private function setMetaDetailsValues($type, $value, $attributes)
@@ -424,7 +415,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		switch (true)
 		{
 			// Manual Keywords
-			case ($optimizedKeywordsFieldSetting == 'manually'):
+			case ($optimizedKeywordsFieldSetting === 'manually'):
 
 				$keywords = ($attributes['optimizedKeywords']) ? $attributes['optimizedKeywords'] : null;
 
@@ -433,21 +424,21 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			// Auto-generate keywords from target field
 			case (is_numeric($optimizedKeywordsFieldSetting)):
 
-				$bigKeywords  = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
-				$keywords     = null;
+				$bigKeywords = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
+				$keywords    = null;
 
 				if ($bigKeywords)
 				{
 					try
 					{
-						$config        = new Config;
+						$config = new Config;
 						$config->addListener(new Stopword);
-						$textRank      = new TextRank($config);
+						$textRank = new TextRank($config);
 
 						$textRankKeywords = $textRank->getKeywords($bigKeywords);
 						$rankKeywords     = array_keys($textRankKeywords);
-						$fiveKeywords = array_slice($rankKeywords, 0, 5);
-						$keywords     = implode(',', $fiveKeywords);
+						$fiveKeywords     = array_slice($rankKeywords, 0, 5);
+						$keywords         = implode(',', $fiveKeywords);
 					}
 					catch (\RuntimeException $e)
 					{
@@ -479,7 +470,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		switch (true)
 		{
 			// Manual Description
-			case ($optimizedDescriptionFieldSetting == 'manually'):
+			case ($optimizedDescriptionFieldSetting === 'manually'):
 
 				$description = ($attributes['optimizedDescription']) ? $attributes['optimizedDescription'] : null;
 
@@ -523,7 +514,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		switch (true)
 		{
 			// Manual Image
-			case ($optimizedImageFieldSetting == 'manually'):
+			case ($optimizedImageFieldSetting === 'manually'):
 
 				$image = !empty($attributes['optimizedImage']) ? $attributes['optimizedImage'][0] : null;
 
@@ -607,7 +598,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			{
 				if (isset($_POST['fields'][$field->handle]))
 				{
-					if ($field->type == 'Assets')
+					if ($field->type === 'Assets')
 					{
 						$value = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
 					}
@@ -623,7 +614,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 					{
 						$elementValue = $this->element->{$field->handle};
 
-						if ($field->type == 'Assets')
+						if ($field->type === 'Assets')
 						{
 							$value = (isset($elementValue[0]->id) ? $elementValue[0]->id : null);
 						}
@@ -667,7 +658,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			// Make sure we have some default values in place
 			$attributes = $this->metadata->getAttributes();
 
-			// @todo - this is excessive. Refactor how customizationSettings works.
+			// @todo - Refactor
+			//         this is excessive. Refactor how customizationSettings works.
 			$removeKeys = array(
 				'isNew',
 				'default',
@@ -697,8 +689,9 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				unset($attributes[$key]);
 			}
 
-			// @todo - remove this once we simplify. Add these values back here
-			// since we overwrite them when we call getAttributes above.
+			// @todo - Refactor
+			//         We overwrite these values when we call getAttributes above
+			//         So we have to add them back here. Simplify.
 			$attributes['elementId'] = $this->element->id;
 			$attributes['locale']    = $locale;
 		}
@@ -735,12 +728,12 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				$values[$key] = $existingValues[$key];
 			}
 
-			if (($key == 'ogImage' OR $key == 'twitterImage') AND !empty($values[$key]))
+			if (($key === 'ogImage' OR $key === 'twitterImage') AND !empty($values[$key]))
 			{
 				$values[$key] = $values[$key][0];
 			}
 
-			if ($key == 'robots')
+			if ($key === 'robots')
 			{
 				$values[$key] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($values[$key]);
 			}

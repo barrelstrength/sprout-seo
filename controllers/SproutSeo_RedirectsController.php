@@ -7,7 +7,7 @@ namespace Craft;
 class SproutSeo_RedirectsController extends BaseController
 {
 	/**
-	 * Load the Redirect index page
+	 * Loads the Redirect index page
 	 *
 	 * @throws HttpException
 	 */
@@ -17,7 +17,7 @@ class SproutSeo_RedirectsController extends BaseController
 	}
 
 	/**
-	 * Edit a Redirect.
+	 * Edit a Redirect
 	 *
 	 * @param array $variables
 	 *
@@ -58,7 +58,7 @@ class SproutSeo_RedirectsController extends BaseController
 	}
 
 	/**
-	 * Saves a Redirect.
+	 * Saves a Redirect
 	 */
 	public function actionSaveRedirect()
 	{
@@ -108,7 +108,7 @@ class SproutSeo_RedirectsController extends BaseController
 	}
 
 	/**
-	 * Deletes a Redirect.
+	 * Deletes a Redirect
 	 */
 	public function actionDeleteRedirect()
 	{

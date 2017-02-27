@@ -396,7 +396,7 @@ feel like they are part of the natural flow of fields #}
 
 {% includejs %}
 
-	{# @todo - Coming soon - SEO Preview
+	{# @todo - Upcoming Feature - SEO Preview
 	{% if fieldContext != 'sectionMetadata' and settings.displayPreview %}
 		// Existing Entries have a wrapper around the live preview and share buttons
 		var $previewButtonsElement = $('.previewbtns');
@@ -616,7 +616,8 @@ feel like they are part of the natural flow of fields #}
 			var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
 			metaDescriptionInput.attr('maxlength', 160);
 
-			{# @todo - this triggers the Double-instantiating console error #}
+			{# @todo - Can we improve this?
+			This triggers a double-instantiating console error #}
 			new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
 
 		{% endif %}
@@ -646,7 +647,8 @@ feel like they are part of the natural flow of fields #}
 						var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
 						metaDescriptionInput.attr('maxlength', 160);
 
-						{# @todo - this triggers the Double-instantiating console error #}
+						{# @todo - Can we improve this?
+						This triggers a double-instantiating console error #}
 						new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
 
 					{% endif %}
@@ -672,7 +674,8 @@ feel like they are part of the natural flow of fields #}
 				var metaImageInput = $('#fields-{{ optimizedImageFieldModel.handle }}-field input');
 				metaImageInput.attr('maxlength', 160);
 
-				{# @todo - this triggers the Double-instantiating console error #}
+				{# @todo - Can we improve this?
+				This triggers a double-instantiating console error #}
 				new Garnish.NiceText(metaImageInput, { showCharsLeft: true });
 
 

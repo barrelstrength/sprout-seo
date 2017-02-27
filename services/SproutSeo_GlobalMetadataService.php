@@ -45,12 +45,9 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 	 * @param $globals
 	 *
 	 * @return bool
-	 * @internal param $schemaType
 	 */
 	public function saveGlobalMetadata($globalKeys, $globals)
 	{
-		// @todo - what do we do if $schemaType doesn't have a value?
-
 		if (!is_array($globalKeys))
 		{
 			array($globalKeys);
@@ -69,7 +66,6 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 			);
 		};
 
-		// @todo - add proper validation. Currently the above assumes everything is always working.
 		return true;
 	}
 

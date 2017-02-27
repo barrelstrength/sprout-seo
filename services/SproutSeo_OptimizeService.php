@@ -402,7 +402,8 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	/**
 	 * Store our codeMetadata in a place so we can access when we need to
 	 *
-	 * @todo - document better. This also handles overrides for Section and Element data...
+	 * @todo - Rename method
+	 *         This is named 'getCodeMetadata' but also handles overrides for Section and Element data.
 	 *
 	 * @return array
 	 */

@@ -25,6 +25,10 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	public $typeIdContext;
 
 	/**
+	 * Get a unique ID for this URL-Enabled Section Type
+	 *
+	 * We use the element table name as the unique ID.
+	 *
 	 * @return mixed
 	 */
 	final public function getId()
@@ -44,11 +48,17 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	}
 
 	/**
+	 * The user-friendly name of your URL-Enabled Section Type
+	 *
+	 * This name will display in the user interface.
+	 *
 	 * @return mixed
 	 */
 	abstract public function getName();
 
 	/**
+	 * Allow an integration to define how to get its specific URL-Enabled Section by ID
+	 *
 	 * @param $id
 	 *
 	 * @return mixed
@@ -64,7 +74,9 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	abstract public function getFieldLayoutSettingsObject($id);
 
 	/**
-	 * @return mixed
+	 * Return the name of the table that we get URL-Enabled Section info from. In most cases, this is the i18n table.
+	 *
+	 * @return string
 	 */
 	abstract public function getTableName();
 
@@ -84,21 +96,33 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	}
 
 	/**
+	 * Return the name of the Element Type managed by this URL-Enabled Section Type
+	 *
 	 * @return mixed
 	 */
 	abstract public function getElementType();
 
 	/**
+	 * Return the name of the table that element-specific data is stored
+	 *
 	 * @return mixed
 	 */
 	abstract public function getElementTableName();
 
 	/**
+	 * Return the variable name that is used by the Element for this URL-Enabled section
+	 * when providing the Element data to the page with a URL.
+	 *
+	 * @example An Entry is made available to a page as `entry`.
+	 *          A Category is made available to a page as `category`.
+	 *
 	 * @return mixed
 	 */
 	abstract public function getMatchedElementVariable();
 
 	/**
+	 * Return all the URL-Enabled Sections for this URL-Enabled Section Type
+	 *
 	 * @return mixed
 	 */
 	abstract public function getAllUrlEnabledSections();
@@ -128,6 +152,8 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	}
 
 	/**
+	 * Get all the URL-Enabled Sections of a particular type that we have stored data for in the Sections section
+	 *
 	 * @param $type
 	 *
 	 * @return array|\CDbDataReader
@@ -149,33 +175,9 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	}
 
 	/**
-	 * @param $type
-	 *
-	 * @return SproutSeo_MetadataModel|null
-	 */
-	public function getSectionMetadataByTypeAndUrlEnabled($type, $urlEnabledSectionId)
-	{
-		$result = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_metadata_sections')
-			->where('type=:type and urlEnabledSectionId=:urlEnabledSectionId', array(
-				':type' => $type,
-				':urlEnabledSectionId' => $urlEnabledSectionId
-				)
-			)
-			->queryRow();
-
-		if ($result)
-		{
-			return SproutSeo_MetadataModel::populateModel($result);
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Disable support for resaving elements when a field layout
-	 * for this URL-Enabled Section is saved
+	 * Disable support for resaving elements when a field layout for this
+	 * URL-Enabled Section is saved. Some Elements already do this by default
+	 * and you may want to set this to false if they do.
 	 *
 	 * @return bool
 	 */

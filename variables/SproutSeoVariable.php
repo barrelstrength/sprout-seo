@@ -764,6 +764,11 @@ class SproutSeoVariable
 		return $this->getOptimizedOptions("Assets", 'optimizedImageField', $settings);
 	}
 
+	/**
+	 * @param $value
+	 *
+	 * @return array|null
+	 */
 	public function getCustomSettingFieldHandles($value)
 	{
 		// If there are no dynamic tags, just return the template
@@ -941,6 +946,11 @@ class SproutSeoVariable
 		return $socials;
 	}
 
+	/**
+	 * @param $type
+	 *
+	 * @return array
+	 */
 	private function getSchemaChildren($type)
 	{
 		$tree     = sproutSeo()->schema->getVocabularies($type);
@@ -1020,6 +1030,12 @@ class SproutSeoVariable
 		return sproutSeo()->sectionMetadata->getTransforms();
 	}
 
+	/**
+	 * @param $type
+	 * @param $metadataModel
+	 *
+	 * @return bool
+	 */
 	public function hasActiveMetadata($type, $metadataModel)
 	{
 		switch ($type)

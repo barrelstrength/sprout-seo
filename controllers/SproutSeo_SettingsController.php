@@ -4,7 +4,7 @@ namespace Craft;
 class SproutSeo_SettingsController extends BaseController
 {
 	/**
-	 * Load the Settings Index page
+	 * Loads the Settings Index page
 	 *
 	 * @throws HttpException
 	 */
@@ -29,7 +29,7 @@ class SproutSeo_SettingsController extends BaseController
 	}
 
 	/**
-	 * Save Plugin Settings
+	 * Saves Plugin Settings
 	 *
 	 * @throws HttpException
 	 */

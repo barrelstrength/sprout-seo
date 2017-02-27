@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * All supported Metadata Levels to establish which metadata gets priority
+ * Metadata Levels are used to establish which metadata gets priority
  */
 abstract class SproutSeo_MetadataLevels extends BaseEnum
 {
@@ -10,7 +10,7 @@ abstract class SproutSeo_MetadataLevels extends BaseEnum
 	// =========================================================================
 
 	/**
-	 * GlobalMetadata
+	 * Global Metadata
 	 *
 	 * UI Names: Globals, Global Metadata
 	 * Internal Names: GlobalMetadata, globalMetadataModel
@@ -19,6 +19,8 @@ abstract class SproutSeo_MetadataLevels extends BaseEnum
 	const GlobalMetadata = 'global';
 
 	/**
+	 * Section Metadata
+	 *
 	 * UI Names: Sections, Section Metadata
 	 * Internal Names: SectionMetadata, Section Metadata Sections, sectionMetadataModel
 	 * Priority: 2
@@ -26,7 +28,9 @@ abstract class SproutSeo_MetadataLevels extends BaseEnum
 	const SectionMetadata = 'section';
 
 	/**
-	 * UI Names: Pages, SEO Optimize FieldType, Element Metadata
+	 * Element Metadata
+	 *
+	 * UI Names: Pages, Element Metadata
 	 * Internal Names: ElementMetadata, $elementMetadataModel
 	 * Priority: 1
 	 */

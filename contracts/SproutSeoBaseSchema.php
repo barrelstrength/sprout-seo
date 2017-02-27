@@ -17,42 +17,47 @@ abstract class SproutSeoBaseSchema
 	public $isMainEntity = false;
 
 	/**
-	 * We build our Structured Data object here using the addProperty methods
-	 * and can later convert this into JsonLD using the ->getJsonLd() method
+	 * We build our Structured Data array here using the addProperty methods
+	 * and can later convert this into JsonLD using the getJsonLd() method
 	 *
-	 * @var
+	 * @var array
 	 */
 	public $structuredData = array();
 
 	/**
-	 * @var
+	 * @var string
 	 */
 	protected $type;
 
 	/**
-	 * @var
+	 * @var SproutSeo_GlobalsModel
 	 */
 	public $globals;
 
 	/**
 	 * The Matched Element or Primary Element of the schema
 	 *
-	 * @var
+	 * @var BaseElementType
 	 */
 	public $element;
 
 	/**
-	 * @var
+	 * The result after we optimize data from Globals, URL-Enabled Sections, and Element Metadata
+	 *
+	 * @var SproutSeo_MetadataModel
 	 */
 	public $prioritizedMetadataModel;
 
+	/**
+	 * @return string
+	 */
 	public function __toString()
 	{
 		return $this->getType();
 	}
 
 	/**
-	 *
+	 * Set the Element to be processed by the Schema
 	 */
 	public function setElement()
 	{
@@ -60,6 +65,8 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * The Schema context
+	 *
 	 * @return string
 	 */
 	final public function getContext()
@@ -96,6 +103,11 @@ abstract class SproutSeoBaseSchema
 	abstract public function getType();
 
 	/**
+	 * Determine if the Schema should be listed in the Main Entity dropdown.
+	 *
+	 * @example Some schema, such as a PostalAddress may not ever be used as the Main Entity
+	 *          of the page, but are still be helpful to define to be used within other schema.
+	 *
 	 * @return bool
 	 */
 	public function isUnlistedSchemaType()
@@ -104,14 +116,29 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
-	 * @return array
+	 * Allow Schema definitions to add properties to the the Structured Data array
+	 * which will be processed and output as Schema
+	 *
+	 * @return null
 	 */
 	abstract public function addProperties();
 
 	/**
 	 * Convert Schema Map attributes to valid JSON-LD
 	 *
-	 * @return string
+	 * This method can return schema data for two different contexts.
+	 *
+	 * 1. As JSON-LD for your page
+	 * 2. As an array for use as a property of another schema
+	 *
+	 * By default $this->addContext is set to false, which will make this getSchema
+	 * method return the schema array without setting the @context property and
+	 * processing the array of data into JSON-LD. If $this->addContext is set to
+	 * true, the complete JSON-LD metadata will be returned. It's likely Custom
+	 * Schema integrations will only need to use the default, as Sprout SEO handles
+	 * outputting the JSON-LD, but, you never know!
+	 *
+	 * @return string|array
 	 */
 	final public function getSchema()
 	{
@@ -150,7 +177,8 @@ abstract class SproutSeoBaseSchema
 		if ($this->addContext)
 		{
 			// Return the JSON-LD script tag and full context
-			// @todo Craft 3.0 - clean up logic once we can ditch PHP 5.3
+			// @todo - Refactor in Craft 3.0
+			//         clean up logic here once we can ditch PHP 5.3
 			$output = (version_compare(PHP_VERSION, '5.4.0', '>='))
 				? json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
 				: str_replace('\\/', '/', json_encode($schema));
@@ -190,8 +218,6 @@ abstract class SproutSeoBaseSchema
 
 	/**
 	 * Allow our schema to define what a generic or fake object will look like
-	 * Give the user a way to refresh or generate a new random mock object in the UI
-	 * And then run the markup from that UI directly into the Structured Data testing tool to validate
 	 *
 	 * @return null
 	 */
@@ -204,23 +230,8 @@ abstract class SproutSeoBaseSchema
 	// =========================================================================
 
 	/**
-	 * @param $dateTime
+	 * Add a property to our Structured Data array
 	 *
-	 * @return null
-	 */
-	public function getDateFromDatetime($dateTime)
-	{
-		$date = null;
-
-		if ($dateTime)
-		{
-			$date = $dateTime->format('Y-m-d');
-		}
-
-		return $date;
-	}
-
-	/**
 	 * @param $propertyName
 	 * @param $attributes
 	 */
@@ -230,8 +241,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Remove a property from our Structured Data array
+	 *
 	 * @param $propertyName
-	 * @param $attributes
 	 */
 	public function removeProperty($propertyName)
 	{
@@ -239,6 +251,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add a string to our Structured Data array.
+	 * If the property is not a string, don't add it.
+	 *
 	 * @param $propertyName
 	 * @param $string
 	 */
@@ -251,6 +266,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add a boolean value to our Structured Data array.
+	 * If the property is not a boolean value, don't add it.
+	 *
 	 * @param $propertyName
 	 * @param $bool
 	 */
@@ -263,6 +281,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add a number to our Structured Data array.
+	 * If the property is not an integer or float, don't add it.
+	 *
 	 * @param $propertyName
 	 * @param $number
 	 */
@@ -275,7 +296,11 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
-	 * Format a date string into ISO 8601
+	 * Add a date to our Structured Data array.
+	 * If the property is not a date, don't add it.
+	 *
+	 * Format the date string into ISO 8601.
+	 *
 	 * https://schema.org/Date
 	 * https://en.wikipedia.org/wiki/ISO_8601
 	 *
@@ -290,6 +315,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add a URL to our Structured Data array.
+	 * If the property is not a valid URL, don't add it.
+	 *
 	 * @param $propertyName
 	 * @param $url
 	 */
@@ -307,6 +335,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add a telephone number to our Structured Data array.
+	 * If the property is not a string, don't add it.
+	 *
 	 * @param $propertyName
 	 * @param $phone
 	 */
@@ -323,6 +354,12 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add an email to our Structured Data array.
+	 * If the property is not a valid email, don't add it.
+	 *
+	 * Additionally, encode the email as HTML entities so it
+	 * doesn't appear in the output as plain text.
+	 *
 	 * @param $propertyName
 	 * @param $email
 	 */
@@ -342,9 +379,10 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
-	 * Returns jsonLd for a image object id
+	 * Add an image to our Structured Data array as a SproutSeo_ImageObjectSchema.
+	 * If the property is not a valid URL or Asset ID, don't add it.
 	 *
-	 * @param $imageId int
+	 * @param $imageId int|string  Accepts Image ID or URL
 	 *
 	 * @return mixed
 	 */
@@ -389,6 +427,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add a list of URLs to our Structured Data array.
+	 * If the property is not an array of URLs, don't add it.
+	 *
 	 * @param $urls
 	 */
 	public function addSameAs($urls)
@@ -407,6 +448,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add a list of contacts to our Structured Data array as a SproutSeo_ContactPointSchema
+	 * If the property is not an array of contacts, don't add it.
+	 *
 	 * @param array $contacts
 	 */
 	public function addContactPoints($contacts = array())
@@ -429,9 +473,13 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add an Address to our Structured Data array as a SproutSeo_PostalAddressSchema
+	 * If the address ID is not found in our Globals, don't add it.
+	 *
+	 * @param $propertyName
 	 * @param $addressId
 	 *
-	 * @info https://schema.org/address
+	 * @return array|SproutSeo_PostalAddressSchema
 	 */
 	public function addAddress($propertyName, $addressId)
 	{
@@ -459,11 +507,14 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add longitude and latitude to our Structured Data array as a SproutSeo_GeoSchema
+	 * If longitude or latitude is not provided, don't add it.
+	 *
 	 * @param $propertyName
 	 * @param $latitude
 	 * @param $longitude
 	 *
-	 * @info https://schema.org/geo
+	 * @return array|SproutSeo_GeoSchema
 	 */
 	public function addGeo($propertyName, $latitude, $longitude)
 	{
@@ -483,6 +534,9 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
+	 * Add opening hours to our Structured Data array.
+	 * Opening hours must be in the correct array format.
+	 *
 	 * @param array $openingHours
 	 */
 	public function addOpeningHours($openingHours = array())
@@ -523,7 +577,8 @@ abstract class SproutSeoBaseSchema
 	}
 
 	/**
-	 * @param string $type
+	 * Add a Main Entity of Page to our Structured Data array of
+	 * type WebPage using the canonical URL.
 	 */
 	public function addMainEntityOfPage()
 	{

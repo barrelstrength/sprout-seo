@@ -121,7 +121,8 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	{
 		if (!$elementGroupId)
 		{
-			// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+			// @todo - Craft Feature Request
+			// This data should be available from the SaveFieldLayout event, not relied on in the URL
 			$elementGroupId = craft()->request->getSegment(4);
 		}
 

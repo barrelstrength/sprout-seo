@@ -1,26 +1,39 @@
 <?php
 namespace Craft;
 
-/**
- * Class SproutSeo_EntryUrlEnabledSectionType
- */
 class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectionType
 {
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
 		return 'Sections';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getIdColumnName()
 	{
 		return 'sectionId';
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return SectionModel|null
+	 */
 	public function getById($id)
 	{
 		return craft()->sections->getSectionById($id);
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return array
+	 */
 	public function getFieldLayoutSettingsObject($id)
 	{
 		$section = $this->getById($id);
@@ -28,21 +41,33 @@ class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectio
 		return $section->getEntryTypes();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getElementTableName()
 	{
 		return 'entries';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getElementType()
 	{
 		return ElementType::Entry;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getMatchedElementVariable()
 	{
 		return 'entry';
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getAllUrlEnabledSections()
 	{
 		$urlEnabledSections = array();
@@ -60,18 +85,24 @@ class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectio
 		return $urlEnabledSections;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTableName()
 	{
 		return 'sections_i18n';
 	}
 
+	/**
+	 * @param null $elementGroupId
+	 */
 	public function resaveElements($elementGroupId = null)
 	{
 		if (!$elementGroupId)
 		{
-			// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+			// @todo - Craft Feature Request
+			// This data should be available from the SaveFieldLayout event, not relied on in the URL
 			$elementGroupId = craft()->request->getSegment(3);
-			//$entryTypeId = craft()->request->getSegment(5);
 		}
 
 		$criteria = craft()->elements->getCriteria(ElementType::Entry);

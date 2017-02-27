@@ -2,7 +2,6 @@
 
 namespace Craft;
 
-
 class SproutSeo_AddressController extends BaseController
 {
 	/**
@@ -15,9 +14,11 @@ class SproutSeo_AddressController extends BaseController
 	 *
 	 * @var array
 	 */
-
 	protected $allowAnonymous = array('actionGetAddressFormFields', 'actionDeleteAddress');
 
+	/**
+	 * Initialize the Address Field Helper
+	 */
 	public function init()
 	{
 		$this->addressHelper = new SproutSeoAddressHelper();
@@ -25,6 +26,9 @@ class SproutSeo_AddressController extends BaseController
 		parent::init();
 	}
 
+	/**
+	 * Display the Country Input for the selected Country
+	 */
 	public function actionCountryInput()
 	{
 		$addressInfoId = craft()->request->getPost('addressInfoId');
@@ -33,7 +37,7 @@ class SproutSeo_AddressController extends BaseController
 
 		$countryCode = $addressInfoModel->countryCode;
 
-		$namespace = (craft()->request->getPost('namespace') != null)? craft()->request->getPost('namespace') : 'address';
+		$namespace = (craft()->request->getPost('namespace') != null) ? craft()->request->getPost('namespace') : 'address';
 
 		$this->addressHelper->setParams($countryCode, $namespace);
 
@@ -42,13 +46,16 @@ class SproutSeo_AddressController extends BaseController
 		exit;
 	}
 
+	/**
+	 * Update the Address Form HTML
+	 */
 	public function actionChangeForm()
 	{
 		$this->requireAjaxRequest();
 		$this->requirePostRequest();
 
 		$countryCode = craft()->request->getPost('countryCode');
-		$namespace   = (craft()->request->getPost('namespace') != null)? craft()->request->getPost('namespace') : 'address';
+		$namespace   = (craft()->request->getPost('namespace') != null) ? craft()->request->getPost('namespace') : 'address';
 
 		$this->addressHelper->setParams($countryCode, $namespace);
 
@@ -59,7 +66,6 @@ class SproutSeo_AddressController extends BaseController
 	/**
 	 * Return all Address Form Fields for the selected Country
 	 */
-
 	public function actionGetAddressFormFields()
 	{
 		$this->requireAjaxRequest();
@@ -89,7 +95,7 @@ class SproutSeo_AddressController extends BaseController
 
 		$countryCode = $addressInfoModel->countryCode;
 
-		$namespace = (craft()->request->getPost('namespace') != null)? craft()->request->getPost('namespace') : 'address';
+		$namespace = (craft()->request->getPost('namespace') != null) ? craft()->request->getPost('namespace') : 'address';
 
 		$this->addressHelper->setParams($countryCode, $namespace, $addressInfoModel);
 
@@ -104,6 +110,9 @@ class SproutSeo_AddressController extends BaseController
 		));
 	}
 
+	/**
+	 * Get an address
+	 */
 	public function actionGetAddress()
 	{
 		$this->requireAjaxRequest();
@@ -116,7 +125,7 @@ class SproutSeo_AddressController extends BaseController
 
 		$addressInfo = craft()->request->getPost('addressInfo');
 		$formValues  = craft()->request->getPost('formValues');
-		$namespace   = (craft()->request->getPost('namespace') != null)? craft()->request->getPost('namespace') : 'address';
+		$namespace   = (craft()->request->getPost('namespace') != null) ? craft()->request->getPost('namespace') : 'address';
 
 		$source = '';
 
@@ -129,7 +138,7 @@ class SproutSeo_AddressController extends BaseController
 
 		if ($addressInfoModel->validate() == true)
 		{
-			$html = $this->addressHelper->getAddressWithFormat($addressInfoModel);
+			$html        = $this->addressHelper->getAddressWithFormat($addressInfoModel);
 			$countryCode = $addressInfoModel->countryCode;
 
 			$this->addressHelper->setParams($countryCode, $namespace, $addressInfoModel);
@@ -152,6 +161,9 @@ class SproutSeo_AddressController extends BaseController
 		$this->returnJson($result);
 	}
 
+	/**
+	 * Delete an address
+	 */
 	public function actionDeleteAddress()
 	{
 		$this->requireAjaxRequest();
@@ -162,7 +174,7 @@ class SproutSeo_AddressController extends BaseController
 
 		if (craft()->request->getPost('addressInfoId') != null)
 		{
-			$addressId = craft()->request->getPost('addressInfoId');
+			$addressId        = craft()->request->getPost('addressInfoId');
 			$addressInfoModel = sproutSeo()->address->getAddressById($addressId);
 		}
 
@@ -178,13 +190,13 @@ class SproutSeo_AddressController extends BaseController
 			if (isset($addressInfoModel->id) && $addressInfoModel->id)
 			{
 				$addressRecord = new SproutSeo_AddressRecord;
-				$response = $addressRecord->deleteByPk($addressInfoModel->id);
+				$response      = $addressRecord->deleteByPk($addressInfoModel->id);
 			}
 
 			$globals = craft()->db->createCommand()
-					->select('*')
-					->from('sproutseo_metadata_globals')
-					->queryRow();
+				->select('*')
+				->from('sproutseo_metadata_globals')
+				->queryRow();
 
 			if ($globals && $response)
 			{
@@ -197,14 +209,14 @@ class SproutSeo_AddressController extends BaseController
 					$globals['identity']   = json_encode($identity);
 
 					craft()->db->createCommand()->update('sproutseo_metadata_globals',
-							$globals,
-							'id=:id',
-							array(':id' => 1)
-						);
+						$globals,
+						'id=:id',
+						array(':id' => 1)
+					);
 				}
 			}
-
-		} catch (Exception $e)
+		}
+		catch (Exception $e)
 		{
 			$result['result'] = false;
 			$result['errors'] = $e->getMessage();
@@ -213,12 +225,15 @@ class SproutSeo_AddressController extends BaseController
 		$this->returnJson($result);
 	}
 
+	/**
+	 * Find the longitude and latitude of an address
+	 */
 	public function actionQueryAddress()
 	{
 		$this->requireAjaxRequest();
 		$this->requirePostRequest();
 
-		$addressInfo      = null;
+		$addressInfo = null;
 
 		if (craft()->request->getPost('addressInfo') != null)
 		{
@@ -238,7 +253,7 @@ class SproutSeo_AddressController extends BaseController
 			{
 				$addressInfo = str_replace("\n", " ", $addressInfo);
 				// Get JSON results from this request
-				$geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($addressInfo).'&sensor=false');
+				$geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($addressInfo) . '&sensor=false');
 
 				// Convert the JSON to an array
 				$geo = json_decode($geo, true);
@@ -255,7 +270,8 @@ class SproutSeo_AddressController extends BaseController
 					);
 				}
 			}
-		} catch (Exception $e)
+		}
+		catch (Exception $e)
 		{
 			$result['result'] = false;
 			$result['errors'] = $e->getMessage();

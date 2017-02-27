@@ -29,25 +29,32 @@ class SproutSeo_MetadataModel extends BaseModel
 	protected $twitterCardsMeta = array();
 
 	/**
+	 * @todo - Refactor
+	 *         - Can we remove isNew now and just test for ID?
+	 *         - Do we need default still?
+	 *         - Do we need url? Can we just test for URL format?
+	 *         - Do we need isCustom still? Can we just test for urlEnabledSectionId?
+	 *         - Clarify what 'type' is.
+	 *
 	 * @return array
 	 */
 	protected function defineAttributes()
 	{
 		$sitemap = array(
 			'id'              => array(AttributeType::Number),
-			'isNew'           => array(AttributeType::Bool, 'default' => false), // @todo - Can we just test for ID?
+			'isNew'           => array(AttributeType::Bool, 'default' => false),
 			'elementId'       => array(AttributeType::Number),
-			'default'         => array(AttributeType::String), // @todo - ??
+			'default'         => array(AttributeType::String),
 			'name'            => array(AttributeType::String),
 			'handle'          => array(AttributeType::String),
 			'hasUrls'         => array(AttributeType::Number),
-			'url'             => array(AttributeType::String), // @todo - can we just test for URL format?
+			'url'             => array(AttributeType::String),
 			'priority'        => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
 			'changeFrequency' => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
 
 			'urlEnabledSectionId'  => array(AttributeType::Number),
-			'isCustom'             => array(AttributeType::Bool, 'default' => false, 'required' => true), // @todo - can we just test for urlEnabledSectionId?
-			'type'                 => array(AttributeType::String), // @todo - clarify what type is
+			'isCustom'             => array(AttributeType::Bool, 'default' => false, 'required' => true),
+			'type'                 => array(AttributeType::String),
 			'enabled'              => array(AttributeType::Bool, 'default' => false, 'required' => true),
 			'locale'               => array(AttributeType::String),
 			'appendTitleValue'     => array(AttributeType::String, 'default' => null),
@@ -61,13 +68,11 @@ class SproutSeo_MetadataModel extends BaseModel
 			'uid'         => array(AttributeType::String),
 		);
 
-		// @todo - do we need all these values here? Some could just be assigned elsewhere:
-		// name => title, url => canonical, default not in use...
 		$metaTags = array(
-			'optimizedTitle'        => array(AttributeType::String),
-			'optimizedDescription'  => array(AttributeType::String),
-			'optimizedImage'        => array(AttributeType::String),
-			'optimizedKeywords'     => array(AttributeType::String),
+			'optimizedTitle'               => array(AttributeType::String),
+			'optimizedDescription'         => array(AttributeType::String),
+			'optimizedImage'               => array(AttributeType::String),
+			'optimizedKeywords'            => array(AttributeType::String),
 			'enableMetaDetailsSearch'      => array(AttributeType::Bool, 'default' => 0, 'required' => false),
 			'enableMetaDetailsOpenGraph'   => array(AttributeType::Bool, 'default' => 0, 'required' => false),
 			'enableMetaDetailsTwitterCard' => array(AttributeType::Bool, 'default' => 0, 'required' => false),
@@ -518,7 +523,6 @@ class SproutSeo_MetadataModel extends BaseModel
 		//
 		//	$element = craft()->elements->getElementById($this->elementId);
 		//
-		//	// @todo - Might need to change these values, process our field, then set them back.
 		//	sproutSeo()->optimize->urlEnabledSection = '';
 		//	sproutSeo()->optimize->prioritizedMetadataModel = '';
 		//	sproutSeo()->optimize->codeMetadata = null;

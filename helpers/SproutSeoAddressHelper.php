@@ -10,16 +10,6 @@ use CommerceGuys\Addressing\Repository\CountryRepository;
 use CommerceGuys\Addressing\Formatter\DefaultFormatter;
 use CommerceGuys\Addressing\Model\Address;
 
-/**
- * Class SproutFields_AddressFormFieldService
- *
- * @author    Barrel Strength Design LLC <sprout@barrelstrengthdesign.com>
- * @copyright Copyright (c) $today.year, Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- * @see       http://sprout.barrelstrengthdesign.com
- * @package   craft.plugins.sproutfields
- * @since     2.0
- */
 class SproutSeoAddressHelper
 {
 	/**
@@ -48,11 +38,9 @@ class SproutSeoAddressHelper
 	protected $countryCode;
 
 	/**
-	 * @param        $countryCode
-	 * @param        $name
-	 * @param        $sproutAddress
-	 * @param        $addressModel
-	 * @param string $namespaceInputName
+	 * @param                             $countryCode
+	 * @param string                      $name
+	 * @param SproutSeo_AddressModel|null $addressModel
 	 */
 	public function setParams($countryCode,
 	                          $name = 'address',
@@ -139,10 +127,6 @@ class SproutSeoAddressHelper
 	}
 
 	/**
-	 * @todo - if we want to use this for both Craft CP and Sprout Forms output, we'll need to update
-	 * the render path as the templates for the front-end have to be in a different location:
-	 * templates/_integrations/sproutforms/fields/...
-	 *
 	 * @return string
 	 */
 	public function countryInput($hidden = null)
@@ -166,10 +150,6 @@ class SproutSeoAddressHelper
 	}
 
 	/**
-	 * @todo - if we want to use this for both Craft CP and Sprout Forms output, we'll need to update
-	 * the render path as the templates for the front-end have to be in a different location:
-	 * templates/_integrations/sproutforms/fields/...
-	 *
 	 * @param $addressName
 	 *
 	 * @return string

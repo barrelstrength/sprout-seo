@@ -1,26 +1,39 @@
 <?php
 namespace Craft;
 
-/**
- * Class SproutSeo_CategoryUrlEnabledSectionType
- */
 class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectionType
 {
+	/**
+	 * @return string
+	 */
 	public function getName()
 	{
 		return ElementType::Category;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getIdColumnName()
 	{
 		return 'groupId';
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return CategoryGroupModel|null
+	 */
 	public function getById($id)
 	{
 		return craft()->categories->getGroupById($id);
 	}
 
+	/**
+	 * @param $id
+	 *
+	 * @return CategoryGroupModel|null
+	 */
 	public function getFieldLayoutSettingsObject($id)
 	{
 		$group = $this->getById($id);
@@ -28,21 +41,33 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 		return $group;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getElementTableName()
 	{
 		return 'categories';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getElementType()
 	{
 		return ElementType::Category;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getMatchedElementVariable()
 	{
 		return 'category';
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getAllUrlEnabledSections()
 	{
 		$urlEnabledSections = array();
@@ -60,23 +85,30 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 		return $urlEnabledSections;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTableName()
 	{
 		return 'categorygroups_i18n';
 	}
 
+	/**
+	 * @param null $elementGroupId
+	 */
 	public function resaveElements($elementGroupId = null)
 	{
 		if (!$elementGroupId)
 		{
-			// @todo - This data should be available from the SaveFieldLayout event, not relied on in the URL
+			// @todo - Craft Feature Request
+			// This data should be available from the SaveFieldLayout event, not relied on in the URL
 			$elementGroupId = craft()->request->getSegment(3);
 		}
 
 		$criteria = craft()->elements->getCriteria(ElementType::Category);
 
 		$category = craft()->categories->getGroupById($elementGroupId);
-		$locales = array_values($category->getLocales());
+		$locales  = array_values($category->getLocales());
 
 		if ($locales)
 		{

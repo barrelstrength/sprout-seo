@@ -17,9 +17,7 @@ class SproutSeoOptimizeHelper
 			return UrlHelper::getSiteUrl();
 		}
 
-		$url = craft()->config->parseEnvironmentString($url);
-
-		return $url;
+		return craft()->config->parseEnvironmentString($url);
 	}
 
 	/**
@@ -129,7 +127,7 @@ class SproutSeoOptimizeHelper
 	}
 
 	/**
-	 * @todo - improve how images are being handled here
+	 * Prepare Asset URLs for metadata
 	 *
 	 * @param SproutSeo_MetadataModel $model
 	 *
@@ -412,7 +410,7 @@ class SproutSeoOptimizeHelper
 			$socialProfileNameFromSettings = isset($profile['profileName']) ? $profile['profileName'] : null;
 
 			// Support syntax for both POST data being saved and previous saved social settings
-			if ($socialProfileNameFromPost == 'Twitter' or $socialProfileNameFromSettings == 'Twitter')
+			if ($socialProfileNameFromPost === 'Twitter' or $socialProfileNameFromSettings === 'Twitter')
 			{
 				$twitterUrlFromPost = isset($socialProfileNameFromPost) ? $profile[1] : null;
 				$twitterUrl         = isset($socialProfileNameFromSettings) ? $profile['url'] : $twitterUrlFromPost;
@@ -427,8 +425,7 @@ class SproutSeoOptimizeHelper
 	}
 
 	/**
-	 * Check our Social Profile settings for a facebook page.
-	 * Return the first facebook page
+	 * Returns the first Facebook Page found in the Social Profile settings
 	 *
 	 * @param $socialProfiles
 	 *
@@ -449,7 +446,7 @@ class SproutSeoOptimizeHelper
 			$socialProfileNameFromSettings = isset($profile['profileName']) ? $profile['profileName'] : null;
 
 			// Support syntax for both POST data being saved and previous saved social settings
-			if ($socialProfileNameFromPost == 'Facebook' or $socialProfileNameFromSettings == 'Facebook')
+			if ($socialProfileNameFromPost === 'Facebook' or $socialProfileNameFromSettings === 'Facebook')
 			{
 				$facebookUrlFromPost = isset($socialProfileNameFromPost) ? $profile[1] : null;
 				$facebookUrl         = isset($socialProfileNameFromSettings) ? $profile['url'] : $facebookUrlFromPost;
@@ -462,9 +459,9 @@ class SproutSeoOptimizeHelper
 	}
 
 	/**
-	 * @param $socials
+	 * Returns the first Google+ Page found in the Social Profile settings
 	 *
-	 * @return null
+	 * @return null|string
 	 */
 	public static function getGooglePlusPage()
 	{
@@ -479,7 +476,7 @@ class SproutSeoOptimizeHelper
 
 		foreach ($globals['social'] as $key => $socialProfile)
 		{
-			if ($socialProfile['profileName'] == "Google+")
+			if ($socialProfile['profileName'] === "Google+")
 			{
 				// Get our first Google+ URL and bail
 				$googlePlusUrl = $socialProfile['url'];
@@ -530,7 +527,6 @@ class SproutSeoOptimizeHelper
 			}
 		}
 
-		// @todo - can probably make logic more concise
 		if ($sectionMetadataModel->appendTitleValue)
 		{
 			$appendTitleValue = $sectionMetadataModel->appendTitleValue;

@@ -2,10 +2,8 @@
 
 namespace Craft;
 
-
 class SproutSeo_AddressService extends BaseApplicationComponent
 {
-
 	public function saveAddressByPost($namespace = 'address', int $modelId = null)
 	{
 		if (craft()->request->getPost($namespace) != null)
@@ -78,7 +76,7 @@ class SproutSeo_AddressService extends BaseApplicationComponent
 
 					$event = new Event($this, $eventParams);
 
-					sproutSeo()->onSaveAdderssInfo($event);
+					sproutSeo()->onSaveAddressInfo($event);
 				}
 			}
 			catch (\Exception $e)
@@ -90,7 +88,6 @@ class SproutSeo_AddressService extends BaseApplicationComponent
 
 				throw $e;
 			}
-
 		}
 		else
 		{
@@ -131,7 +128,6 @@ class SproutSeo_AddressService extends BaseApplicationComponent
 
 		return $record->deleteByPk($id);
 	}
-
 
 	/**
 	 * @param null $id

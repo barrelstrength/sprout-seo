@@ -53,7 +53,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 				foreach ($elements as $element)
 				{
-					// @todo ensure that this check/logging is absolutely necessary
+					// @todo - Confirm this is necessary
+					// Confirm that this check/logging is necessary
 					// Catch null URLs, log them, and prevent them from being output to the sitemap
 					if (is_null($element->getUrl()))
 					{

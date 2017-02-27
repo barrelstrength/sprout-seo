@@ -4,7 +4,7 @@ namespace Craft;
 class SproutSeo_SectionMetadataController extends BaseController
 {
 	/**
-	 * Edit Section Metadata
+	 * Loads a Section Metadata Edit template
 	 *
 	 * @throws HttpException
 	 */
@@ -94,7 +94,7 @@ class SproutSeo_SectionMetadataController extends BaseController
 	}
 
 	/**
-	 * Save Section Metadata Section
+	 * Saves a Section Metadata Section
 	 *
 	 * @throws Exception
 	 * @throws HttpException
@@ -156,9 +156,10 @@ class SproutSeo_SectionMetadataController extends BaseController
 	}
 
 	/**
-	 * Save Sitemap Info to the Database
+	 * Saves a Section Metadata Section
 	 *
-	 * @todo - can we update this to use actionSaveSectionMetadata?
+	 * @todo - Refactor
+	 *         can we merge with actionSaveSectionMetadata?
 	 *
 	 * @throws HttpException
 	 */
@@ -186,7 +187,7 @@ class SproutSeo_SectionMetadataController extends BaseController
 	}
 
 	/**
-	 * Delete Section Metadata Section
+	 * Deletes a Section Metadata Section
 	 *
 	 * @throws HttpException
 	 */

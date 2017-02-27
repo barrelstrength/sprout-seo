@@ -80,7 +80,6 @@ class SproutSeo_GlobalMetadataController extends BaseController
 
 		foreach ($ownershipMeta as $key => $meta)
 		{
-			// @todo - add proper validation and return errors to template
 			if (count($meta) == 3)
 			{
 				$ownershipMetaWithKeys[$key]['service']          = $meta[0];
@@ -177,7 +176,8 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$globalMetadata->robots    = $robotsMetaValue;
 			$globalMetadata->canonical = $siteUrl;
 
-			$globalMetadata->region    = ""; // @todo - add location info
+			// @todo - Add location info
+			$globalMetadata->region    = "";
 			$globalMetadata->placename = "";
 			$globalMetadata->position  = "";
 			$globalMetadata->latitude  = isset($postData['identity']['latitude'])  ? $postData['identity']['latitude'] : "";

@@ -26,7 +26,8 @@
 		// ON INIT
 		init: function()
 		{
-			// @TODO - abstract this!
+			// @todo - Refactor
+			// abstract this!
 
 			// TWITTER
 			// select the twitter dropdown so we can grab the value later

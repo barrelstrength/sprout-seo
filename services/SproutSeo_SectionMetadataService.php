@@ -258,7 +258,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		}
 		else
 		{
-			// @todo - update this to be null in the db
+			// @todo - Refactor
+			// update this to be null in the db
 			// $query->andWhere('type IS NULL');
 			$query->andWhere('type = ""');
 		}
@@ -338,7 +339,8 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 			$record = $this->sectionMetadataRecord->create();
 		}
 
-		// @todo - is there a better way to do this flip/flop?
+		// @todo - Refactor
+		// is there a better way to do this flip/flop?
 		$model->dateUpdated = $record->dateUpdated;
 		$model->dateCreated = $record->dateCreated;
 		$model->uid         = $record->uid;
