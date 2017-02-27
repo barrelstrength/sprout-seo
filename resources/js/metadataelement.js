@@ -77,7 +77,7 @@ $(document).ready(function() {
 		disableDropDown($("#organization :input"), 1);
 
 		// Check current selection
-		if (firstSelection === '' || items[firstSelection].length <= 0)
+		if (typeof items[firstSelection] === 'undefined' || firstSelection === '' || items[firstSelection].length <= 0)
 		{
 			return;
 		}
