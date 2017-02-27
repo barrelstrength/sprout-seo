@@ -29,7 +29,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getDescription()
 	{
-		return 'Content-focused SEO. Curate every detail of your online visibility.';
+		return 'Content-focused SEO. Control every detail of your online visibility.';
 	}
 
 	/**
