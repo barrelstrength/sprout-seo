@@ -134,17 +134,21 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$identity['twitterTransform'] = $postData['settings']['twitterTransform'];
 		}
 
-		$globalMetadata = new SproutSeo_MetadataModel();
-		$siteName       = craft()->getSiteName();
+		$globalMetadata     = new SproutSeo_MetadataModel();
+		$siteName           = craft()->getSiteName();
 
-		$urlSetting = isset($postData['identity']['url']) ? $postData['identity']['url'] : null;
-		$siteUrl    = SproutSeoOptimizeHelper::getGlobalMetadataSiteUrl($urlSetting);
+		$urlSetting         = isset($postData['identity']['url']) ? $postData['identity']['url'] : null;
+		$siteUrl            = SproutSeoOptimizeHelper::getGlobalMetadataSiteUrl($urlSetting);
 
 		$socialProfiles     = isset($postData['social']) ? $postData['social'] : $oldSocialProfiles;
 		$twitterProfileName = SproutSeoOptimizeHelper::getTwitterProfileName($socialProfiles);
 
-		$robots          = isset($postData['robots']) ? $postData['robots'] : $oldGlobals->robots;
-		$robotsMetaValue = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($robots);
+		$twitterCard        = (isset($postData['settings']['defaultTwitterCard']) && $postData['settings']['defaultTwitterCard']) ? $postData['settings']['defaultTwitterCard'] : 'summary';
+
+		$ogType             = (isset($postData['settings']['defaultOgType']) && $postData['settings']['defaultOgType']) ? $postData['settings']['defaultOgType'] : 'website';
+
+		$robots             = isset($postData['robots']) ? $postData['robots'] : $oldGlobals->robots;
+		$robotsMetaValue    = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($robots);
 
 		if ($settings->localeIdOverride)
 		{
@@ -183,7 +187,7 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$globalMetadata->latitude  = isset($postData['identity']['latitude'])  ? $postData['identity']['latitude'] : "";
 			$globalMetadata->longitude = isset($postData['identity']['longitude']) ? $postData['identity']['longitude'] : "";
 
-			$globalMetadata->ogType        = 'website';
+			$globalMetadata->ogType        = $ogType;
 			$globalMetadata->ogSiteName    = $siteName;
 			$globalMetadata->ogUrl         = $siteUrl;
 			$globalMetadata->ogTitle       = $optimizedTitle;
@@ -193,7 +197,7 @@ class SproutSeo_GlobalMetadataController extends BaseController
 			$globalMetadata->ogTransform   = isset($identity['ogTransform']) ? $identity['ogTransform'] : null;
 			$globalMetadata->ogLocale      = $localeId;
 
-			$globalMetadata->twitterCard        = 'summary';
+			$globalMetadata->twitterCard        = $twitterCard;
 			$globalMetadata->twitterSite        = $twitterProfileName;
 			$globalMetadata->twitterCreator     = $twitterProfileName;
 			$globalMetadata->twitterUrl         = $siteUrl;
