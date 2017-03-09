@@ -78,6 +78,13 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 
 		$locale = craft()->i18n->getLocaleById(craft()->language);
 
+		$defaultSettings = '{
+			"seoDivider":"-",
+			"defaultOgType":"",
+			"ogTransform":"sproutSeo-socialSquare",
+			"twitterTransform":"sproutSeo-socialSquare"}
+		';
+
 		$result = craft()->db->createCommand()->insert($tableName, array(
 			'locale'    => $locale,
 			'identity'  => null,
@@ -85,7 +92,7 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 			'contacts'  => null,
 			'social'    => null,
 			'robots'    => null,
-			'settings'  => null
+			'settings'  => $defaultSettings
 		));
 
 		return $result;

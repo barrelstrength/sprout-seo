@@ -164,9 +164,9 @@ class SproutSeo_GlobalMetadataController extends BaseController
 
 		if ($identity)
 		{
-			$identityName         = $identity['name'];
+			$identityName         = isset($identity['name']) ? $identity['name'] : null;
 			$optimizedTitle       = $identityName;
-			$optimizedDescription = $identity['description'];
+			$optimizedDescription = isset($identity['description']) ? $identity['description'] : null;
 			$optimizedImage       = isset($identity['image'][0]) ? $identity['image'][0] : null;
 
 			$globalMetadata->optimizedTitle       = $optimizedTitle;
@@ -175,7 +175,7 @@ class SproutSeo_GlobalMetadataController extends BaseController
 
 			$globalMetadata->title       = $optimizedTitle;
 			$globalMetadata->description = $optimizedDescription;
-			$globalMetadata->keywords    = $identity['keywords'];
+			$globalMetadata->keywords    = isset($identity['keywords']) ? $identity['keywords'] : null;
 
 			$globalMetadata->robots    = $robotsMetaValue;
 			$globalMetadata->canonical = $siteUrl;
