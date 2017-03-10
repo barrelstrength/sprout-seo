@@ -42,5 +42,27 @@ class SproutSeo_ImageObjectSchema extends SproutSeoBaseSchema
 		$this->addUrl('url', $image['url']);
 		$this->addNumber('height', $height);
 		$this->addNumber('width', $width);
+
+		// let's check for any imageTransform
+
+		$prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
+		if (isset($prioritizedMetadataModel->ogTransform) && $prioritizedMetadataModel->ogTransform)
+		{
+			if ($prioritizedMetadataModel->ogImage)
+			{
+				$this->addUrl('url', $prioritizedMetadataModel->ogImage);
+			}
+
+			if ($prioritizedMetadataModel->ogImageHeight)
+			{
+				$this->addNumber('height', $prioritizedMetadataModel->ogImageHeight);
+			}
+
+			if ($prioritizedMetadataModel->ogImageWidth)
+			{
+				$this->addNumber('width', $prioritizedMetadataModel->ogImageWidth);
+			}
+		}
 	}
 }

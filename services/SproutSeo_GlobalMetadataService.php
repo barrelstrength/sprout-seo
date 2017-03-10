@@ -33,6 +33,16 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 			$results['identity']['url'] = SproutSeoOptimizeHelper::getGlobalMetadataSiteUrl($results['identity']['url']);
 		}
 
+		if (isset($results['settings']['ogTransform']))
+		{
+			$results['meta']['ogTransform'] = $results['settings']['ogTransform'];
+		}
+
+		if (isset($results['settings']['twitterTransform']))
+		{
+			$results['meta']['twitterTransform'] = $results['settings']['twitterTransform'];
+		}
+
 		$schema = SproutSeo_GlobalsModel::populateModel($results);
 
 		return $schema;

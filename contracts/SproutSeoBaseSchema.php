@@ -421,6 +421,7 @@ abstract class SproutSeoBaseSchema
 		{
 			$imageObjectSchema          = new SproutSeo_ImageObjectSchema();
 			$imageObjectSchema->element = $image;
+			$imageObjectSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
 			$this->structuredData[$propertyName] = $imageObjectSchema->getSchema();
 		}
