@@ -89,7 +89,7 @@ class SproutSeo_SectionMetadataController extends BaseController
 			'isCustom'              => $isCustom,
 			'isNew'                 => $isNew or $isCustom,
 			'urlEnabledSectionType' => $urlEnabledSectionType,
-			'prioritizedMetadata'   => $prioritizedMetadata
+			'prioritizedMetadata'   => $prioritizedMetadata,
 		));
 	}
 
