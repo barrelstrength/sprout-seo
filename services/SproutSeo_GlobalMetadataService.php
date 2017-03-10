@@ -92,7 +92,10 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 			"seoDivider":"-",
 			"defaultOgType":"",
 			"ogTransform":"sproutSeo-socialSquare",
-			"twitterTransform":"sproutSeo-socialSquare"}
+			"twitterTransform":"sproutSeo-socialSquare",
+			"defaultTwitterCard":"summary",
+			"appendTitleValueOnHomepage":"",
+			"appendTitleValue": ""}
 		';
 
 		$result = craft()->db->createCommand()->insert($tableName, array(
