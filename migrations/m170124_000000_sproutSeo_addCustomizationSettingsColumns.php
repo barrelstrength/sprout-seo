@@ -54,7 +54,20 @@ class m170124_000000_sproutSeo_addCustomizationSettingsColumns extends BaseMigra
 
 			foreach ($rows as $row)
 			{
-				$customizationSettings = json_decode($row['customizationSettings'], true);
+				if (isset($row['customizationSettings']) && $row['customizationSettings'] != '[]')
+				{
+					$customizationSettings = json_decode($row['customizationSettings'], true);
+				}
+				else
+				{
+					$customizationSettings = array(
+						'searchMetaSectionMetadataEnabled'  => 0,
+						'openGraphSectionMetadataEnabled'   => 0,
+						'twitterCardSectionMetadataEnabled' => 0,
+						'geoSectionMetadataEnabled'         => 0,
+						'robotsSectionMetadataEnabled'      => 0
+					);
+				}
 
 				// updates new columns
 				craft()->db->createCommand()->update($tableName, array(
