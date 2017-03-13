@@ -1,48 +1,30 @@
-{% extends "_layouts/cp" %}
+{% extends "sproutseo/_layouts/base" %}
 
-{% set title  = "Settings" %}
+{% set title = "Settings"|t %}
 
-{% set subnav = {
-  defaults: {
-    label: "Defaults"|t,
-    url: cpUrl('sproutseo/defaults')
-  },
-  sitemap: {
-    label: "Sitemap"|t,
-    url: cpUrl('sproutseo/sitemap'),
-  },
-  redirects: {
-    label: "Redirects"|t,
-    url: cpUrl('sproutseo/redirects'),
-  }
+{% set navItems = {
+	'general': { title: "General"|t },
+	'advanced': { title: "Advanced"|t },
+
+	'integrations': { heading: 'Integrations'|t },
+	'craftcommerce': { title: "Craft Commerce"|t },
+	'sproutemail': { title: "Sprout Email"|t },
+	'sproutimport': { title: "Sprout Import"|t }
 } %}
 
-{% if currentUser.can('editSproutSeoSettings') %}
-  {% set subnav = subnav|merge({
-    settings: {
-      label: "Settings"|t,
-      url: url('sproutseo/settings/general')
-    }
-  }) %}
-{% endif %}
+{% set selectedItem = craft.request.getSegment(3) %}
+{% set docTitle = navItems[selectedItem].title~' - '~title %}
 
-{% set selectedSubnavItem = craft.request.segment(2) ? craft.request.segment(2) : 'defaults' %}
-{% set selectedSidebarItem = craft.request.segment(3) %}
-
-{% set fullPageForm = true %}
-
-{% block saveButton %}{% endblock %}
-
-{% set sidebar %}
-
-  <nav class="last">
-    <ul>
-      <li><a href="{{ url('sproutseo/settings/general') }}" {% if selectedSidebarItem == 'general'
-        %}class="sel"{% endif %}>General Settings</a></li>
-      <li><a href="{{ url('sproutseo/settings/defaults') }}" {% if selectedSidebarItem == 'defaults' %}class="sel"{%
-        endif
-        %}>Defaults</a></li>
-    </ul>
-  </nav>
-
-{% endset %}
+{% block sidebar %}
+	<nav>
+		<ul>
+			{% for id, item in navItems %}
+				{% if item.heading is defined %}
+					<li class="heading"><span>{{ item.heading }}</span></li>
+				{% else %}
+					<li><a href="{{ url('sproutseo/settings/'~id) }}"{% if id == selectedItem %} class="sel"{% endif %}>{{ item.title }}</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</nav>
+{% endblock %}

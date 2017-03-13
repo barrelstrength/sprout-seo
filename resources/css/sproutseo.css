@@ -1,0 +1,409 @@
+
+/* Icons
+------------------------------------------------------------ */
+
+@font-face {
+	font-family: 'fontello';
+	src: url('../fonts/fontello.eot?63285905');
+	src: url('../fonts/fontello.eot?63285905#iefix') format('embedded-opentype'),
+	url('../fonts/fontello.woff?63285905') format('woff'),
+	url('../fonts/fontello.ttf?63285905') format('truetype'),
+	url('../fonts/fontello.svg?63285905#fontello') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.sproutseo-icon
+{
+	font-family: "fontello";
+	font-style: normal;
+	font-weight: normal;
+	speak: none;
+
+	display: inline-block;
+	text-decoration: inherit;
+	width: 1em;
+	margin-right: .2em;
+	text-align: center;
+
+	/* For safety - reset parent styles, that can break glyph codes*/
+	font-variant: normal;
+	text-transform: none;
+
+	/* fix buttons height, for twitter bootstrap */
+	line-height: 1em;
+
+	/* Animation center compensation - margins should be symmetric */
+	/* remove if not needed */
+	margin-left: .2em;
+
+	/* Font smoothing. That was taken from TWBS */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.sprout-metadata-status .sproutseo-icon {
+	margin: 0;
+}
+
+/* Section Status and Element Metadata Status Icons
+------------------------------------------------------------ */
+.sproutseo-status-pass {
+	color: #27AE60; // enabled green
+	/*color: #29323d; // home icon dark grey*/
+}
+.sproutseo-status-partial {
+	color: #F2842D; // orange
+}
+.sproutseo-status-missing {
+	color: #CCCCCC; // grey
+}
+
+/* Adjust styles for IPreviewable Fieldtype Display in Element Index columns */
+.elementindex .sproutseo-icon {
+	margin-left: -30px;
+}
+
+/* Craft.InfoIcon styles - copied from Craft .info
+------------------------------------------------------------ */
+
+.sproutseo-info:before {
+	border-radius: 3px;
+	background: #ebedef;
+	color: #8f98a3;
+	padding: 0 4px;
+	margin-left: 7px;
+	vertical-align: baseline;
+	display: inline-block;
+	position: relative;
+	top: 1px;
+
+	speak: none;
+	font-weight: bold;
+	line-height: 18px;
+
+	font-family: HelveticaNeue, sans-serif;
+	font-size: 11px;
+	content: "seo";
+
+	-webkit-font-smoothing: auto;
+	-webkit-user-select: text;
+}
+
+.info.sproutseo-info:hover:before {
+	background-color: #0d78f2;
+	color: #fff;
+}
+
+.matrixblock .sproutseo-info:before {
+	background-color: #dcdcdc;
+}
+
+/* Add support for multiline Craft.InfoIcon body content */
+.info .sprout-info-body {
+	display: none;
+}
+.info-hud .sprout-info-body {
+	display: block;
+}
+
+/* Sprout SEO Info HUD
+------------------------------------------------------------ */
+
+.sproutseo-metalevel-hud h6 {
+	margin-bottom: 4px;
+}
+
+ul.sproutseo-metalevel-list li {
+	margin-bottom: 2px;
+}
+
+.sproutseo-metalevel-number {
+	display:inline-block;
+	margin-right: 2px;
+
+	border-radius:50%;
+	color: #8f98a3;
+	background-color: #ebedef;
+	font-weight: bold;
+
+	font-size:10px;
+}
+
+.sproutseo-metalevel-number:before,
+.sproutseo-metalevel-number:after {
+	content:'\200B';
+	display:inline-block;
+	line-height:0px;
+
+	padding-top:20%;
+	padding-bottom:20%;
+}
+
+.sproutseo-metalevel-number:before {
+	padding-left:6px;
+}
+.sproutseo-metalevel-number:after {
+	padding-right:6px;
+}
+
+.sproutseo-metalevel-number.active {
+	background-color: #00b007;
+	color: #fff;
+}
+
+/* Sections & Sitemap
+------------------------------------------------------------ */
+
+.sitemap-custom-url:focus {
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	padding: 6px 4px;
+	outline: none;
+}
+.sitemap-custom-url {
+	display: inline-block;
+	margin-left:-4px;
+	width: 85%;
+	border: none;
+	padding: 7px 5px;
+	background: #fff;
+	overflow: hidden;
+}
+.sitemap-settings {
+	margin-top: 30px;
+}
+.sitemap-settings:first-of-type {
+	margin-top: 0;
+}
+.sitemap-settings:last-of-type {
+	margin-bottom: 30px;
+}
+
+/* Optimized Meta Icons */
+.sprout-metadata-status {
+	position: relative;
+	margin-top: -7px;
+}
+.sprout-metadata-status span {
+	display: inline-block;
+	position: absolute;
+}
+
+.sprout-metadata-status .icon-sitemap {
+	padding-left: 21px;
+}
+.sprout-metadata-status .icon-edit {
+	padding-left: 0;
+	top: 1px;
+}
+.sprout-metadata-status .icon-search {
+	padding-left: 40px;
+}
+.sprout-metadata-status .icon-facebook {
+	padding-left: 57px;
+	top: 1px;
+}
+.sprout-metadata-status .icon-twitter {
+	padding-left: 75px;
+	top: 1px;
+}
+
+
+/*.sitemap-custom-url:focus {*/
+/*border: 1px solid rgba(0, 0, 0, 0.15);*/
+/*padding: 6px 4px;*/
+/*outline: none;*/
+/*}*/
+/*.sitemap-custom-url {*/
+/*display: inline-block;*/
+/*margin-left:-4px;*/
+/*width: 85%;*/
+/*border: none;*/
+/*padding: 7px 5px;*/
+/*background: #fff;*/
+/*overflow: hidden;*/
+/*}*/
+.sitemap-settings {
+	margin-top: 30px;
+}
+.sitemap-settings:first-of-type {
+	margin-top: 0;
+}
+.sitemap-settings:last-of-type {
+	margin-bottom: 30px;
+}
+
+/* Preview Buttons for Example Search, Facebook, & Twitter results
+------------------------------------------------------------ */
+
+.btngroup li {
+	display: inline-block;
+}
+.sproutseo-previewbody {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 60%;
+}
+.sproutseo-previewbody div {
+	max-width:600px;
+}
+.sproutseo-preview-btns {
+	text-align: right;
+	margin-bottom: -1px;
+}
+.sproutseo-preview-btns li {
+	display: inline-block;
+	box-shadow: 0 0 0 1px #e3e5e8;
+	padding: 3px 5px 2px;
+	font-size: 12px;
+	margin-right: -3px;
+	background-image: linear-gradient(#f7f7f8, #f4f5f6);
+}
+.sproutseo-preview-btns li.selected {
+	background-color: #fff;
+	background-image: none;
+	border-bottom: 1px solid #fff;
+}
+
+/*.action-menu .mn-dwn-arw {*/
+/*border-color: #006621 transparent;*/
+/*margin-top: -4px;*/
+/*margin-left: 3px;*/
+/*left: 0;*/
+/*}*/
+/*.mn-dwn-arw {*/
+/*border-width: 5px 4px 0 4px !important;*/
+/*border-color: #909090 transparent;*/
+/*border-style: solid;*/
+/*border-width: 4px 4px 0 4px;*/
+/*width: 0;*/
+/*height: 0;*/
+/*margin-left: -2px;*/
+/*top: 50%;*/
+/*margin-top: -2px;*/
+/*position: absolute;*/
+/*}*/
+
+/* Override hr on matrix blocks to display nicely */
+.pane hr {
+	margin: 14px -14px;
+}
+
+
+
+
+/* field-related styles
+------------------------------------------------------------ */
+
+/* .sproutseo-box {
+	background-color: #f5f5f5;
+	background-color: rgb(235, 237, 239);
+	border:1px solid #ebebeb;
+	padding:20px;
+	padding-top: 21px;
+}
+ */
+#fields-twitterImage {
+	margin-bottom: 21px;
+}
+
+.sproutseo-fields {
+	margin-bottom: 28px;
+}
+
+.sproutseo-matrixfields .titlebar .blocktype {
+	margin-left: -24px;
+}
+.sproutseo-advancedoption-btns div,
+.sproutseo-advancedoption-btns .sproutseo-icon {
+	opacity: .65;
+}
+.sproutseo-advancedoption-btns div.active,
+.sproutseo-advancedoption-btns .active .sproutseo-icon {
+	opacity: 1;
+}
+
+/* website-identity.html styles
+------------------------------------------------------------ */
+
+div.inline-item {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+}
+.inline-item > div > label {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+}
+
+/* Override default a tag fieldtoggle behavior to play more nicely with instructions text */
+body.ltr a.instructionstoggle {
+	padding-left: 0;
+}
+a.instructionstoggle {
+	display: inline;
+}
+a.instructionstoggle:before {
+	content: '';
+}
+
+a.fieldtoggle.instructionstoggle {
+	color: #0d78f2;
+}
+/* Space the Website Identify Fields */
+.identitytype-dropdown .input {
+	height: 32px; /* necessary to stop on select event adjusting height */
+	margin-top: 5px;
+}
+
+/**
+ * Address Field
+ */
+.sproutaddressinfo-box {
+	display: inline-flex;
+	justify-content: flex-start;
+}
+.sproutaddressinfo-box .address-add-button {
+	order: 1;
+}
+.sproutaddressinfo-box .address-edit-buttons {
+	order: 3;
+}
+.sproutaddressinfo-box .address-format {
+	order: 2;
+	padding-right: 20px;
+}
+
+.sproutaddress-body .text,
+.sproutaddress-body .select {
+	padding: 0;
+}
+
+.sproutaddress-modal {
+	overflow: visible
+}
+
+.modal .sproutaddress-body {
+	padding: 0;
+}
+
+.sprout-livepreviewbtn {
+	display: block;
+	position: relative;
+	margin-top:13px;
+}
+
+.sprout-livepreviewbtn:before {
+	content: 'view';
+	font-family: 'Craft';
+	font-size: 13px;
+	margin-left: -2px;
+	vertical-align: middle;
+}
+
+.clear-button {
+	display: block;
+	margin-left: 5px;
+}

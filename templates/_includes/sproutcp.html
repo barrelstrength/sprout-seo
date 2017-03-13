@@ -1,0 +1,24 @@
+{% macro mediaBox(settings) %}
+
+	{% set resourceUrl = settings.resourceUrl ?? null %}
+	{% set resourceAltText = settings.resourceAltText ?? null %}
+	{% set heading = settings.heading ?? null %}
+	{% set body = settings.body ?? null %}
+	{% set alignItems = settings.alignItems ?? null %}
+
+	<div class="sprout-mediabox-outer">
+		<div class="sprout-mediabox-inner" {% if alignItems %}style="align-items: {{ alignItems }};"{% endif %}>
+			<div class="sprout-mediathumb">
+				<img src="{{ resourceUrl }}" alt="{{ resourceAltText }}" />
+			</div>
+			<div class="sprout-mediabody">
+				<h2>{{ heading }}</h2>
+				<hr>
+
+				{{ body|raw }}
+
+			</div>
+		</div>
+	</div>
+
+{% endmacro %}

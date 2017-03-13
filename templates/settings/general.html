@@ -1,0 +1,33 @@
+{% extends "sproutseo/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set title = "Settings"|t %}
+
+{% set content %}
+
+	<form method="post" accept-charset="UTF-8" data-saveshortcut data-saveshortcut-redirect="sproutseo/settings/general">
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="sproutSeo/settings/saveSettings">
+
+		<div id="settings-cp">
+			{% namespace 'settings' %}
+				{{ forms.textField({
+					label: "Plugin Name"|t,
+					instructions: "Intuitive, human-readable plugin name for the end user."|t,
+					id: 'pluginNameOverride',
+					name: 'pluginNameOverride',
+					value: settings.pluginNameOverride,
+					autofocus: true,
+					first: true,
+					errors: ''
+				}) }}
+			{% endnamespace %}
+		</div>
+
+		<div class="buttons">
+			<input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+		</div>
+
+	</form>
+
+{% endset %}

@@ -5,40 +5,28 @@
 	{{ forms.textField({
 		label: "Title"|t,
 		instructions: "The Title of your content which will appear in search results"|t,
-		name: 'sproutseo_fields[title]',
-		maxlength: 55,
+		name: nameContext~'[metadata][title]',
 		showCharsLeft: true,
 		value: values.title,
 		errors: "",
 		required: false,
-		placeholder: " "
 	}) }}
-
-	{% if fieldContext is defined and fieldContext == 'defaults' %}
-		{{ forms.checkboxField({
-			label: 'Append Site Name "' ~ siteName ~ '" to all Titles'|t,
-			name: 'sproutseo_fields[appendSiteName]',
-			checked: (values.appendSiteName == 1 ? 1 : 0),
-			errors: ''
-		}) }}
-	{% endif %}
 
 	{{ forms.textField({
 		label: "Description"|t,
 		instructions: "A description of your content which will appear in search results."|t,
-		name: 'sproutseo_fields[description]',
-		maxlength: 160,
+		name: nameContext~'[metadata][description]',
 		showCharsLeft: true,
 		value: values.description,
 		errors: "",
 		required: false,
-		placeholder: " "
 	}) }}
 
 	{{ forms.textField({
 		label: "Keywords"|t,
+		id: 'sproutseo-searchKeywords',
 		instructions: "A list of keywords that describe your content"|t,
-		name: 'sproutseo_fields[keywords]',
+		name: nameContext~'[metadata][keywords]',
 		value: values.keywords,
 		errors: "",
 		required: false
@@ -46,4 +34,4 @@
 
 </div>
 
-{% includeCssResource "sproutseo/css/fields.css" %}
+{% includeCssResource "sproutseo/css/sproutseo.css" %}

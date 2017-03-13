@@ -1,9 +1,13 @@
 {% extends "_layouts/elementindex" %}
 
 {% set subnav = {
-	defaults: {
-		label: "Defaults"|t,
-		url: cpUrl('sproutseo/defaults')
+	globals: {
+		label: "Globals"|t,
+		url: cpUrl('sproutseo/globals/website-identity')
+	},
+	sections: {
+		label: "Sections"|t,
+		url: cpUrl('sproutseo/sections')
 	},
 	sitemap: {
 		label: "Sitemap"|t,

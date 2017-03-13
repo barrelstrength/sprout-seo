@@ -1,0 +1,50 @@
+/*
+ * Sprout Styles in the Control Panel
+ *
+ * A collection of styles to be reused across Sprout Plugins.
+ * For better consistency, use along with the sproutcp.html macro library.
+ *
+ * To use:
+ * {% import 'pluginname/_includes/sproutcp' as sprout %}
+ * {% includeCssResource "pluginname/css/sproutcp.css" %}
+ */
+
+/*
+ * Media Box
+ *
+ * Use the media box to create a more stylized header or fallback body area.
+ */
+.sprout-mediabox-outer {
+	display: flex;
+	justify-content: center;
+	margin: 2em auto;
+}
+.sprout-mediabox-inner {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	align-content: space-between;
+	width: 70%;
+}
+.sprout-mediathumb {
+	margin-right: 2em;
+}
+.sprout-mediathumb img {
+	height: 140px;
+	opacity: .3;
+	width: 140px;
+}
+.sprout-mediabody h2 {
+	font-size: 18px;
+}
+.sprout-mediabody hr {
+	margin: 0;
+}
+.sprout-mediabody a {
+	font-weight: bold;
+}
+.sprout-mediabody {
+	flex-grow: 1;
+	width: 60%;
+}

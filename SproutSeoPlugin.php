@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author    Barrel Strength Design LLC <sprout@barrelstrengthdesign.com>
+ * @copyright Copyright (c) 2016, Barrel Strength Design LLC
+ * @license   http://sprout.barrelstrengthdesign.com/license
+ * @see       http://sprout.barrelstrengthdesign.com
+ */
 namespace Craft;
 
 /**
@@ -23,7 +29,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getDescription()
 	{
-		return 'All-in-One SEO, Social Media Sharing, Redirects, and Sitemap';
+		return 'Content-focused SEO. Control every detail of your online visibility.';
 	}
 
 	/**
@@ -31,7 +37,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '2.2.2';
+		return '3.2.0';
 	}
 
 	/**
@@ -39,7 +45,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '2.2.0';
+		return '3.2.0';
 	}
 
 	/**
@@ -87,7 +93,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSettingsUrl()
 	{
-		return 'sproutseo/settings';
+		return 'sproutseo/settings/general';
 	}
 
 	/* --------------------------------------------------------------
@@ -96,42 +102,79 @@ class SproutSeoPlugin extends BasePlugin
 
 	public function init()
 	{
-		Craft::import('plugins.sproutseo.helpers.SproutSeoMetaHelper');
+		// Import third party libraries
+		require_once dirname(__FILE__) . '/vendor/autoload.php';
+		$baseIntegrations = 'plugins.sproutseo.integrations.sproutseo.';
 
-		// Prevent yiic from failing
-		// @deprecate - Craft 3.0 should no longer require this
-		if (craft()->isConsole())
+		Craft::import('plugins.sproutseo.helpers.SproutSeoOptimizeHelper');
+
+		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseUrlEnabledSectionType');
+		Craft::import($baseIntegrations . 'sectiontypes.SproutSeo_EntryUrlEnabledSectionType');
+		Craft::import($baseIntegrations . 'sectiontypes.SproutSeo_CategoryUrlEnabledSectionType');
+		Craft::import($baseIntegrations . 'sectiontypes.SproutSeo_CommerceProductUrlEnabledSectionType');
+
+		Craft::import('plugins.sproutseo.contracts.SproutSeoBaseSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_WebsiteIdentityOrganizationSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_WebsiteIdentityPersonSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_WebsiteIdentityWebsiteSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_WebsiteIdentityPlaceSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_ContactPointSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_ImageObjectSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_MainEntityOfPageSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_PostalAddressSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_GeoSchema');
+
+		Craft::import($baseIntegrations . 'schema.SproutSeo_ThingSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_CreativeWorkSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_EventSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_IntangibleSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_OrganizationSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_PersonSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_PlaceSchema');
+		Craft::import($baseIntegrations . 'schema.SproutSeo_ProductSchema');
+
+		Craft::import('plugins.sproutseo.integrations.sproutimport.SproutSeo_RedirectSproutImportElementImporter');
+
+		Craft::import('plugins.sproutseo.helpers.SproutSeoAddressHelper');
+
+		craft()->on('fields.onSaveFieldLayout', function (Event $event)
 		{
-		  return false;
-		}
+			sproutSeo()->elementMetadata->resaveElements($event);
+		});
 
-		if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
+		if (!craft()->isConsole())
 		{
-			$url = craft()->request->getUrl();
-			// check if the request url needs redirect
-			$redirect = sproutSeo()->redirects->getRedirect($url);
-
-			if ($redirect)
+			craft()->onException = function (\CExceptionEvent $event)
 			{
-				craft()->request->redirect($redirect->newUrl, true, $redirect->method);
-			}
-		}
+				if ((($event->exception instanceof \CHttpException) && ($event->exception->statusCode == 404)) || (($event->exception->getPrevious() instanceof \CHttpException) && ($event->exception->getPrevious()->statusCode == 404)))
+				{
+					if (craft()->request->isSiteRequest() && !craft()->request->isLivePreview())
+					{
+						$url = craft()->request->getUrl();
 
-		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutseo')
-		{
-			// @todo Craft 3 - update to use info from config.json
-			craft()->templates->includeJsResource('sproutseo/js/brand.js');
-			craft()->templates->includeJs("
-				sproutFormsBrand = new Craft.SproutBrand();
-				sproutFormsBrand.displayFooter({
+						// check if the request url needs redirect
+						$redirect = sproutSeo()->redirects->getRedirect($url);
+
+						if ($redirect)
+						{
+							craft()->request->redirect($redirect->newUrl, true, $redirect->method);
+						}
+					}
+				}
+			};
+
+			if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutseo')
+			{
+				craft()->templates->includeJsResource('sproutseo/js/sproutbase.js');
+				craft()->templates->includeJs("new Craft.SproutBase({
 					pluginName: 'Sprout SEO',
 					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo',
 					pluginVersion: '" . $this->getVersion() . "',
 					pluginDescription: '" . $this->getDescription() . "',
 					developerName: '(Barrel Strength)',
 					developerUrl: '" . $this->getDeveloperUrl() . "'
-				});
-			");
+				})");
+			}
 		}
 	}
 
@@ -144,9 +187,18 @@ class SproutSeoPlugin extends BasePlugin
 		// in the plugin table so in order to use getSettings() we need
 		// these defined here
 		return array(
-			'pluginNameOverride' => AttributeType::String,
-			'seoDivider'         => array(AttributeType::String, 'default' => '-'),
-			'structureId'        => array(AttributeType::Number, 'default' => null)
+			'pluginNameOverride'      => AttributeType::String,
+			'structureId'             => array(AttributeType::Number, 'default' => null),
+			'twitterCard'             => array(AttributeType::String, 'default' => null),
+			'ogType'                  => array(AttributeType::String, 'default' => null),
+			'localeIdOverride'        => array(AttributeType::String, 'default' => null),
+			'displayFieldHandles'     => array(AttributeType::Bool, 'default' => false),
+			'enableCustomSections'    => array(AttributeType::Bool, 'default' => false),
+			'enableMetaDetailsFields' => array(AttributeType::Bool, 'default' => false),
+			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => true),
+			'metadataVariable'        => array(AttributeType::String, 'default' => null),
+			'twitterTransform'        => array(AttributeType::String, 'default' => null),
+			'ogTransform'             => array(AttributeType::String, 'default' => null),
 		);
 	}
 
@@ -156,33 +208,27 @@ class SproutSeoPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutseo/defaults/new'                      => array(
-				'action' => 'sproutSeo/defaults/editDefault'
+			'sproutseo/sections/new'                        => array(
+				'action' => 'sproutSeo/sectionMetadata/sectionMetadataEditTemplate'
 			),
-			'sproutseo/defaults/(?P<defaultId>\d+)'       => array(
-				'action' => 'sproutSeo/defaults/editDefault'
+			'sproutseo/sections/(?P<sectionMetadataId>\d+)' => array(
+				'action' => 'sproutSeo/sectionMetadata/sectionMetadataEditTemplate'
 			),
-			'sproutseo/sitemap'                           => array(
-				'action' => 'sproutSeo/sitemap/sitemapIndex'
-			),
-			'sproutseo/sitemap/newPage'                   => array(
-				'action' => 'sproutSeo/sitemap/editSitemap'
-			),
-			'sproutseo/settings'                          => array(
-				'action' => 'sproutSeo/settings/settingsIndex'
-			),
-			'sproutseo/settings/(?P<settingsTemplate>.*)' => array(
-				'action' => 'sproutSeo/settings/settingsIndex'
-			),
-			'sproutseo/redirects'                         => array(
+			'sproutseo/redirects'                           => array(
 				'action' => 'sproutSeo/redirects/redirectIndex'
 			),
-			'sproutseo/redirects/new'                     => array(
+			'sproutseo/redirects/new'                       => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
 			),
-			'sproutseo/redirects/(?P<redirectId>\d+)'     => array(
+			'sproutseo/redirects/(?P<redirectId>\d+)'       => array(
 				'action' => 'sproutSeo/redirects/editRedirect'
-			)
+			),
+			'sproutseo/settings'                            => array(
+				'action' => 'sproutSeo/settings/settingsIndex'
+			),
+			'sproutseo/settings/(?P<settingsTemplate>.*)'   => array(
+				'action' => 'sproutSeo/settings/settingsIndex'
+			),
 		);
 	}
 
@@ -199,49 +245,118 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
+	 * Add any Twig extensions.
+	 *
+	 * @return mixed
+	 */
+	public function addTwigExtension()
+	{
+		Craft::import('plugins.sproutseo.twigextensions.SproutSeoTwigExtension');
+
+		return new SproutSeoTwigExtension();
+	}
+
+	/**
+	 * Register Sprout Import importers classes for the Sprout Import plugin integration
+	 *
 	 * @return array
 	 */
-	public function sproutMigrateRegisterElements()
+	public function registerSproutImportImporters()
 	{
 		return array(
-			'sproutseo_redirect' => array(
-				'model'   => 'Craft\\SproutSeo_Redirect',
-				'method'  => 'saveRedirect',
-				'service' => 'sproutSeo_redirects',
-			)
+			new SproutSeo_RedirectSproutImportElementImporter()
 		);
 	}
 
-	public function registerSproutSeoSitemap()
+	/**
+	 * Register any supported URL-enabled Section Types
+	 *
+	 * @return array
+	 */
+	public function registerSproutSeoUrlEnabledSectionTypes()
+	{
+		$sections = array(
+			new SproutSeo_EntryUrlEnabledSectionType(),
+			new SproutSeo_CategoryUrlEnabledSectionType()
+		);
+
+		$craftCommercePlugin = craft()->plugins->getPlugin('commerce');
+
+		if (isset($craftCommercePlugin))
+		{
+			array_push($sections, new SproutSeo_CommerceProductUrlEnabledSectionType());
+		}
+
+		return $sections;
+	}
+
+	public function registerSproutSeoSchemas()
 	{
 		return array(
-			'sections'         => array(
-				'name'           => 'Sections',
-				'elementType'    => ElementType::Entry,
-				'elementGroupId' => 'sectionId',
-				'service'        => 'sections',
-				'method'         => 'getAllSections'
-			),
-			'categories'       => array(
-				'name'           => 'Categories',
-				'elementType'    => ElementType::Category,
-				'elementGroupId' => 'groupId',
-				'service'        => 'categories',
-				'method'         => 'getAllGroups'
-			),
-			'commerce_product' => array(
-				'name'           => "Commerce Products",
-				'elementType'    => 'Commerce_Product',
-				'elementGroupId' => 'productTypeId',
-				'service'        => 'commerce_productTypes',
-				'method'         => 'getAllProductTypes'
-			)
+			new SproutSeo_WebsiteIdentityOrganizationSchema(),
+			new SproutSeo_WebsiteIdentityPersonSchema(),
+			new SproutSeo_WebsiteIdentityWebsiteSchema(),
+			new SproutSeo_WebsiteIdentityPlaceSchema(),
+			new SproutSeo_ContactPointSchema(),
+			new SproutSeo_ImageObjectSchema(),
+			new SproutSeo_MainEntityOfPageSchema(),
+			new SproutSeo_PostalAddressSchema(),
+			new SproutSeo_GeoSchema(),
+
+			new SproutSeo_ThingSchema(),
+			new SproutSeo_CreativeWorkSchema(),
+			new SproutSeo_EventSchema(),
+			new SproutSeo_IntangibleSchema(),
+			new SproutSeo_OrganizationSchema(),
+			new SproutSeo_PersonSchema(),
+			new SproutSeo_PlaceSchema(),
+			new SproutSeo_ProductSchema()
 		);
 	}
 
 	public function onAfterInstall()
 	{
-		sproutSeo()->redirects->installDefaultSettings();
+		craft()->sproutSeo_redirects->installDefaultSettings();
+		craft()->sproutSeo_globalMetadata->installDefaultGlobalMetadata();
+	}
+
+	/**
+	 * Override SproutImportPlugin::log() method to allow the logging of
+	 * multiple messages and arrays
+	 *
+	 * Examples:
+	 *
+	 * Standard log:
+	 * SproutImportPlugin::log($msg);
+	 *
+	 * Enhanced log:
+	 * $messages['thing1'] = Craft::t('Something happened');
+	 * $messages['thing2'] = $model->getErrors();
+	 * SproutImportPlugin::log($messages);
+	 *
+	 * @param string $messages
+	 * @param string $level
+	 * @param bool   $force
+	 *
+	 * @return null - writes log to logfile
+	 */
+	public static function log($messages, $level = LogLevel::Info, $force = false)
+	{
+		$msg = "";
+
+		if (is_array($messages))
+		{
+			foreach ($messages as $message)
+			{
+				$msg .= PHP_EOL . print_r($message, true);
+			}
+		}
+		else
+		{
+			$msg = $messages;
+		}
+
+		parent::log($msg, $level = LogLevel::Info, $force = false);
 	}
 }
 

@@ -13,7 +13,7 @@ class SproutSeo_SetStatusElementAction extends BaseElementAction
 	 */
 	public function getTriggerHtml()
 	{
-		return craft()->templates->render('sproutseo/_setStatus/trigger');
+		return craft()->templates->render('sproutseo/_components/elementactions/setstatus');
 	}
 
 	/**
@@ -26,7 +26,8 @@ class SproutSeo_SetStatusElementAction extends BaseElementAction
 	public function performAction(ElementCriteriaModel $criteria)
 	{
 		$status = $this->getParams()->status;
-		//False by default
+
+		// False by default
 		$enable = 0;
 
 		switch ($status)

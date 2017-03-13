@@ -1,21 +1,21 @@
-{% if entries is iterable %}
+{% if elements is iterable %}
 {% set urls %}
-{% for entry in entries %}
+{% for element in elements %}
     <url>
-        <loc>{{ entry.url }}</loc>
-        <lastmod>{{ entry.modified }}</lastmod>
-        <changefreq>{{ entry.frequency }}</changefreq>
-        <priority>{{ entry.priority }}</priority>
-        {% if entry.alternates is defined and entry.alternates|length %}
-        {%- for alternate in entry.alternates %}
+        <loc>{{ element.url }}</loc>
+        <lastmod>{{ element.modified }}</lastmod>
+        <changefreq>{{ element.changeFrequency }}</changefreq>
+        <priority>{{ element.priority }}</priority>
+        {% if element.alternates is defined and element.alternates|length %}
+        {%- for alternate in element.alternates %}
 <xhtml:link rel="alternate" hreflang="{{ alternate.locale }}" href="{{ alternate.url }}" />
         {% endfor %}{# alternates #}
         {% endif -%}{# alternates? #}
 
     </url>
-{% endfor %}{# entries #}
-{% endset %}{# urls #}
-{% endif %}{# entries? #}
+{% endfor %}{# end element loop #}
+{% endset %}{# end urls set #}
+{% endif %}{# end element if #}
 {#
  #
  # Returns URL nodes or the full sitemap based on options provided/supported #}

@@ -1,149 +1,79 @@
 {% import "_includes/forms" as forms %}
+{% set transformOptions = craft.sproutseo.getTransforms() %}
+<div class="sproutseo-box-twitter">
+	<div class="sproutseo-fields" id="twitter-card">
 
-<div class="sproutseo-fields" id="twitter-card">
+		{% set twitterCardOptions = {
+			'' : 'Select Twitter Card Type...'|t,
+			'summary' : 'Summary Card'|t,
+			'summary_large_image' : 'Summary Card with Large Image'|t,
+		} %}
 
-	{% set twitterCardOptions = {
-	'' : 'Select Twitter Card Type...'|t,
-	'summary' : 'Summary Card'|t,
-	'summary_large_image' : 'Summary Card with Large Image'|t,
-	'player' : 'Player Card'|t,
-    'photo' : 'Photo Card'|t,
-	} %}
+		{{ forms.selectField({
+			label: 'Twitter Card Type'|t,
+			instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
+			name: nameContext~'[metadata][twitterCard]',
+			options: twitterCardOptions,
+			value: values.twitterCard ?? 'summary',
+			errors: "",
+			required: false
+		}) }}
 
-	<h2>Twitter Card Meta Data</h2>
+		{{ forms.textField({
+			label: "Title"|t,
+			name: nameContext~"[metadata][twitterTitle]",
+			instructions: 'The Title of your content which will appear in Twitter Card metadata.'|t,
+			value: values.twitterTitle
+		}) }}
 
-	{{ forms.selectField({
-		label: 'Twitter Card Type'|t,
-		instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards"
-		target="_blank">How Twitter Cards work</a>.'|t,
-		name: 'sproutseo_fields[twitterCard]',
-		options: twitterCardOptions,
-		value: (values.twitterCard is defined ? values.twitterCard : 'summary'),
-		errors: "",
-		required: false
-	}) }}
-
-	<hr>
-
-	{{ forms.textField({
-		label: "Site"|t,
-		instructions: "The Twitter username of the owner of this card's domain."|t,
-		name: 'sproutseo_fields[twitterSite]',
-		value: values.twitterSite,
-		errors: "",
-		required: false,
-		placeholder: '@ContentPublisher'
-	}) }}
-
-	{{ forms.textField({
-		label: "Creator"|t,
-		instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
-		name: 'sproutseo_fields[twitterCreator]',
-		value: values.twitterCreator,
-		errors: "",
-		required: false,
-		placeholder: '@ContentAuthor'
-	}) }}
-
-	{{ forms.textField({
-		label: "Title"|t,
-		instructions: 'The title of your content as it should appear in the card.'|t,
-		name: 'sproutseo_fields[twitterTitle]',
-		maxlength: 70,
-		showCharsLeft: true,
-		value: values.twitterTitle,
-		errors: "",
-		required: false,
-		placeholder: " "
-	}) }}
-
-	{{ forms.textField({
-		label: "Description"|t,
-		instructions: 'A description of the content.'|t,
-		name: 'sproutseo_fields[twitterDescription]',
-		maxlength: 200,
-		showCharsLeft: true,
-		value: values.twitterDescription,
-		errors: "",
-		required: false,
-		placeholder: " "
-	}) }}
-
-	{% if assetsSourceExists %}
+		{{ forms.textareaField({
+			label: "Description"|t,
+			name: nameContext~"[metadata][twitterDescription]",
+			instructions: 'A description of your content which will appear in Twitter Card metadata.'|t,
+			value: values.twitterDescription
+		}) }}
 
 		{{ forms.field({
-			label: 'Image'|t,
+			label: 'Image'|t ~ sprout.infoIcon({
+				label: 'Image'|t,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
+			}),
+			instructions: 'An image that represents your content that will display in Twitter Card metadata.'|t,
 		}, forms.elementSelect({
 			elements: twitterImageElements,
-			sourceElementId: values.twitterImage,
+			sourceElementId: [values.twitterImage],
 			elementType: elementType,
-			id: 'twitterImage',
-			name: 'sproutseo_fields[twitterImage]',
+			id: 'metaDetailsTwitterImage',
+			name: nameContext~'[metadata][twitterImage]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image'|t,
 			limit: 1,
 			criteria: {"localeEnabled":null}
 		})) }}
 
-	{% else %}
-
-		<p class="error">{{ 'No assets sources currently exist. <a href="' ~ url('settings/assets/sources/new') ~ '">Asset
-				Source settings page.'|t }}</a></p>
-
-	{% endif %}
-
-	<div id="twitter-player" class="hidden">
-
-		<hr>
-
-		{{ forms.textField({
-			label: "Player"|t,
-			instructions: "HTTPS URL to iframe player. This must be a HTTPS URL which does not generate mixed content warnings in a web browser."|t,
-			name: 'sproutseo_fields[twitterPlayer]',
-			value: values.twitterPlayer,
+		{{ forms.selectField({
+			label: 'Image Transform'|t,
+			instructions: 'Select the Twitter Card Image Transform'|t,
+			name: nameContext~'[metadata][twitterTransform]',
+			options: transformOptions,
+			value: values.twitterTransform,
 			errors: "",
 			required: false
 		}) }}
 
 		{{ forms.textField({
-			label: "Stream"|t,
-			instructions: "URL to raw stream that will be rendered in Twitter's Mobile App Integrations directly. If
-			provided, the stream must be delivered in the MPEG-4 container format."|t,
-			name: 'sproutseo_fields[twitterPlayerStream]',
-			value: values.twitterPlayerStream,
+			label: "Creator"|t,
+			instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
+			name: nameContext~'[metadata][twitterCreator]',
+			value: values.twitterCreator,
 			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Stream Content Type"|t,
-			instructions: "The MIME type subtype combination that describes the content contained in twitter player stream."|t,
-			name: 'sproutseo_fields[twitterPlayerStreamContentType]',
-			value: values.twitterPlayerStreamContentType,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Height"|t,
-			instructions: "Height of IFRAME specified in twitter player in pixels."|t,
-			name: 'sproutseo_fields[twitterPlayerHeight]',
-			value: values.twitterPlayerHeight,
-			errors: "",
-			required: false
-		}) }}
-
-		{{ forms.textField({
-			label: "Width"|t,
-			instructions: 'Width of IFRAME specified in twitter player in pixels.'|t,
-			name: 'sproutseo_fields[twitterPlayerWidth]',
-			value: values.twitterPlayerWidth,
-			errors: "",
-			required: false
+			required: false,
+			placeholder: '@ContentAuthor'
 		}) }}
 
 	</div>
-
 </div>
 
 {% includeJsResource "sproutseo/js/twitter-card.js" %}

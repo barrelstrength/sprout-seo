@@ -10,8 +10,8 @@ class m160315_020000_sproutSeo_addSitemapTypeColumn extends BaseMigration
 	 */
 	public function safeUp()
 	{
-		$tableName    = 'sproutseo_sitemap';
-		$columnName   = 'type';
+		$tableName  = 'sproutseo_sitemap';
+		$columnName = 'type';
 
 		if (!craft()->db->columnExists($tableName, $columnName))
 		{

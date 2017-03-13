@@ -3,15 +3,17 @@ namespace Craft;
 
 class SproutSeo_SettingsModel extends BaseModel
 {
-
 	protected function defineAttributes()
 	{
 		return array(
-			'pluginNameOverride' => AttributeType::String,
-			'appendSiteName'     => AttributeType::Bool,
-			'seoDivider'         => AttributeType::String,
-			'sitemapTemplate'    => AttributeType::String,
-			'pingServices'       => AttributeType::Mixed,
+			'pluginNameOverride'      => AttributeType::String,
+			'appendTitleValue'        => AttributeType::Bool,
+			'localeIdOverride'        => AttributeType::String,
+			'displayFieldHandles'     => AttributeType::Bool,
+			'enableCustomSections'    => AttributeType::Bool,
+			'enableMetaDetailsFields' => AttributeType::Bool,
+			'enableMetadataRendering' => array(AttributeType::Bool, 'default' => true),
+			'metadataVariable'        => AttributeType::String
 		);
 	}
 

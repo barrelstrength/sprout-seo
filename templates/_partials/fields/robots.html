@@ -1,119 +1,123 @@
-{% import "_includes/forms" as forms %}
+{# This needs to be here to make sure the checkboxes work properly #}
+<input type="hidden" name="{{nameContext}}[{{robotsNamespace}}][robots]" value="">
 
-{% macro isSelected(target, string) %}
-	{% if target in string %}checked="checked"{% endif %}
-{% endmacro %}
-{% import _self as checkbox %}
+{% set robotsCheckboxes %}
+	<table class="data" style="width: auto;">
+		<thead>
+		<tr>
+			<th scope="col">{{ "Enable?"|t }}</th>
+			<th scope="col">{{ "Description"|t }}</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noindex]',
+						on:   values.robots.noindex,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showGeo">
+					<code>noindex</code> - {{ "search engines should not index this page"|t }}
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][nofollow]',
+						on:   values.robots.nofollow,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showRobots">
+					<code>nofollow</code> - {{ "search engines should not follow links on this page"|t }}
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noarchive]',
+						on:   values.robots.noarchive,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showOpenGraph">
+					<code>noarchive</code> - {{ "search engines should not provide archived versions of this page"|t }}
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noimageindex]',
+						on:   values.robots.noimageindex,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showTwitter">
+					<code>noimageindex</code> - {{ "search engines should not index images on this page"|t }}
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noodp]',
+						on:   values.robots.noodp,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showTwitter">
+					<code>noodp</code> - {{ "Google should use page descriptions from the website"|t }} <span class="info">{{ "I don't want Google to use the titles and descriptions from the Open Directory Project (ODP) for this page. I want Google to use the titles and descriptions from the website."|t }}</span>
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noydir]',
+						on:   values.robots.noydir ,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showTwitter">
+					<code>noydir</code> - {{ "Bing and Yahoo! should use the titles and descriptions on the website."|t }} <span class="info">{{ "I don't want Bing or Yahoo! to use the Yahoo! Directory titles and descriptions for this page.  I want Bing and Yahoo! to use the titles and descriptions from the website."|t }}</span>
+				</label>
+			</td>
+		</tr>
+		</tbody>
+	</table>
 
-<div class="sproutseo-box">
+{% endset %}
 
-	{% if fieldContext is defined and fieldContext == 'defaults' %}
-
-		<h3>{{ "Canonical URL"|t }}</h3>
-
-		<p>{{  "Canonical URL will default to the URL of the current page. Canonical URL cannot be overriden
-			at the template level, however, it can be override with on-page or entry-specific overrides."|t }}</p>
-
-	{% endif %}
-
-	{% if fieldContext is defined and fieldContext == 'robots' %}
-		{{ forms.textField({
-			label: "Canonical"|t,
-			name: "sproutseo_fields[canonical]",
-			value: values.canonical
-		}) }}
-	{% endif %}
-
-	{# This needs to be here to make sure the checkboxes work properly #}
-	<input type="hidden" name="sproutseo_fields[robots]" value="">
-
-	<h3>{{ "Robots - Basic"|t }}</h3>
-	<div>
-		{{ forms.checkbox({
-			label: "noindex",
-			id: "noindex-choice",
-			name: "sproutseo_fields[robots][]",
-			value: "noindex",
-			reverseToggle: "single-uri-container",
-			checked: ('noindex' in values.robots)
-		}) }}
-		<span class="info">{{ "I don't want this page to be indexed by search engines"|t }}</span>
-	</div>
-	<div>
-		{{ forms.checkbox({
-			label: "nofollow",
-			id: "nofollow-choice",
-			name: "sproutseo_fields[robots][]",
-			value: "nofollow",
-			reverseToggle: "single-uri-container",
-			checked: ('nofollow' in values.robots)
-		}) }}
-		<span class="info">{{ "I don't want robots to follow links on this page"|t }}</span>
-	</div>
-
-	<h3>{{ "Robots - Advanced"|t }}</h3>
-
-	{# Consider adding a link or posting a help article in our docs to clarify these:
-	http://tech4sky.com/noodp-noarchive-nosnippet-noydir-meta-tag #}
-
-	<div>
-		{{ forms.checkbox({
-			label: "noarchive",
-			id: "noarchive-choice",
-			name: "sproutseo_fields[robots][]",
-			value: "noarchive",
-			reverseToggle: "single-uri-container",
-			checked: ('noarchive' in values.robots)
-		}) }}
-		<span class="info">{{ "I don't want search engines to provide archived versions of this page to users"|t }}</span>
-	</div>
-	<div>
-		{{ forms.checkbox({
-			label: "noimageindex",
-			id: "noimageindex-choice",
-			name: "sproutseo_fields[robots][]",
-			value: "noimageindex",
-			reverseToggle: "single-uri-container",
-			checked: ('noimageindex' in values.robots)
-		}) }}
-		<span class="info">{{ "I don't want images on this page to be indexed by search engines"|t }}</span>
-	</div>
-	<div>
-		{{ forms.checkbox({
-			label: "nosnippet",
-			id: "nosnippet-choice",
-			name: "sproutseo_fields[robots][]",
-			value: "nosnippet",
-			reverseToggle: "single-uri-container",
-			checked: ('nosnippet' in values.robots)
-		}) }}
-		<span class="info">{{ "I don't want Google to cache this page or display a description below the page in search
-		results"|t }}</span>
-	</div>
-	<div>
-		{{ forms.checkbox({
-			label: "noodp",
-			id: "noodp-choice",
-			name: "sproutseo_fields[robots][]",
-			value: "noodp",
-			reverseToggle: "single-uri-container",
-			checked: ('noodp' in values.robots)
-		}) }}
-		<span class="info">{{ "I don't want Google to use the Open Directory Project (ODP) description for this page. I
-		want Google to use the description on the website."|t }}</span>
-	</div>
-	<div>
-		{{ forms.checkbox({
-			label: "noydir",
-			id: "noydir-choice",
-			name: "sproutseo_fields[robots][]",
-			value: "noydir",
-			reverseToggle: "single-uri-container",
-			checked: ('noydir' in values.robots)
-		}) }}
-		<span class="info">{{ "I don't want Bing or Yahoo! to use the Yahoo! Directory titles and descriptions for this
-		page.  I want Bing and Yahoo! to use the titles and descriptions on the website."|t }}</span>
-	</div>
-</div>
-
-{% includeCssResource "sproutseo/css/fields.css" %}
+{{ forms.field({
+	label: "Robots"|t ~ sprout.infoIcon({
+		label: "Robots"|t,
+		search: true,
+		priority: 'globals'
+	}),
+	instructions: "Communicate with robots and try to make them behave a bit differently&mdash;if they listen!",
+	errors: '',
+	first: true,
+}, robotsCheckboxes) }}

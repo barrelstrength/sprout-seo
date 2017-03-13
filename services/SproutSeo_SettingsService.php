@@ -4,6 +4,8 @@ namespace Craft;
 class SproutSeo_SettingsService extends BaseApplicationComponent
 {
 	/**
+	 * Save the plugin settings to the database
+	 *
 	 * @param $settings
 	 *
 	 * @return bool
@@ -25,6 +27,70 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 			$seoSettings->seoDivider = $settings["seoDivider"] != null ?
 				$settings["seoDivider"] :
 				$seoSettings->seoDivider;
+		}
+
+		if (isset($settings["twitterCard"]))
+		{
+			$seoSettings->twitterCard = $settings["twitterCard"] != null ?
+				$settings["twitterCard"] :
+				$seoSettings->twitterCard;
+		}
+
+		if (isset($settings["ogType"]))
+		{
+			$seoSettings->ogType = $settings["ogType"] != null ?
+				$settings["ogType"] :
+				$seoSettings->ogType;
+		}
+
+		if (isset($settings["localeIdOverride"]))
+		{
+			$seoSettings->localeIdOverride = isset($settings["localeIdOverride"]) ?
+				$settings["localeIdOverride"] :
+				$seoSettings->localeIdOverride;
+		}
+
+		if (isset($settings["displayFieldHandles"]))
+		{
+			$seoSettings->displayFieldHandles = isset($settings["displayFieldHandles"]) ?
+				$settings["displayFieldHandles"] :
+				$seoSettings->displayFieldHandles;
+		}
+
+		if (isset($settings["enableMetaDetailsFields"]))
+		{
+			$seoSettings->enableMetaDetailsFields = isset($settings["enableMetaDetailsFields"]) ?
+				$settings["enableMetaDetailsFields"] :
+				$seoSettings->enableMetaDetailsFields;
+		}
+
+		if (isset($settings["enableCustomSections"]))
+		{
+			$seoSettings->enableCustomSections = isset($settings["enableCustomSections"]) ?
+				$settings["enableCustomSections"] :
+				$seoSettings->enableCustomSections;
+		}
+
+		if (isset($settings["enableMetadataRendering"]))
+		{
+			$seoSettings->enableMetadataRendering = isset($settings["enableMetadataRendering"]) ?
+				$settings["enableMetadataRendering"] :
+				$seoSettings->enableMetadataRendering;
+		}
+
+		if (isset($settings['toggleMetadataVariable']) and isset($settings["metadataVariable"]))
+		{
+			if (isset($settings['toggleMetadataVariable']) and $settings['toggleMetadataVariable'] == 0)
+			{
+				$seoSettings->metadataVariable = null;
+			}
+
+			if (isset($settings['toggleMetadataVariable']) and $settings['toggleMetadataVariable'] == 1)
+			{
+				$seoSettings->metadataVariable = isset($settings["metadataVariable"])
+					? $settings["metadataVariable"]
+					: $seoSettings->metadataVariable;
+			}
 		}
 
 		$settings = JsonHelper::encode($seoSettings);

@@ -1,128 +1,85 @@
 {% import "_includes/forms" as forms %}
+{% set transformOptions = craft.sproutseo.getTransforms() %}
+<div class="sproutseo-box-opengraph">
 
-<div class="sproutseo-fields" id="open-graph">
+	<div class="sproutseo-fields" id="open-graph">
 
-	{% set ogTypesOptions = {
-	'' : 'Select Open Graph Type...'|t,
-	'article' : 'Article'|t,
-	'website' : 'Website'|t,
-	} %}
+		{% set ogTypesOptions = {
+		'' : 'Select Open Graph Type...'|t,
+		'article' : 'Article'|t,
+		'website' : 'Website'|t,
+		} %}
 
-	<h2>Facebook Open Graph Meta Data</h2>
+		{{ forms.selectField({
+			label: 'Open Graph Type'|t,
+			instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
+				target="_blank">How Open Graph Stories work.</a>'|t,
+			name: nameContext~'[metadata][ogType]',
+			options: ogTypesOptions,
+			value: values.ogType,
+			errors: "",
+			required: false
+		}) }}
 
-	{{ forms.selectField({
-		label: 'Open Graph Type'|t,
-		instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
-target="_blank">How Open Graph Stories work.</a>'|t,
-		name: 'sproutseo_fields[ogType]',
-		options: ogTypesOptions,
-		value: values.ogType,
-		errors: "",
-		required: false
-	}) }}
+		{{ forms.textField({
+			label: "Title"|t,
+			name: nameContext~"[metadata][ogTitle]",
+			instructions: 'The Title of your content which will appear in Open Graph metadata.'|t,
+			value: values.ogTitle
+		}) }}
 
-	<hr />
-
-	<h2>Basic Metadata</h2>
-
-	{{ forms.textField({
-		label: "Title"|t,
-		instructions: "The title of your content as it should appear within the graph"|t,
-		name: 'sproutseo_fields[ogTitle]',
-		maxlength: 88,
-		showCharsLeft: true,
-		value: values.ogTitle,
-		errors: "",
-		required: false,
-		placeholder: " "
-	}) }}
-
-	{{ forms.textField({
-		label: "URL"|t,
-		instructions: "The canonical URL of your content that will be used as its permanent ID in the graph."|t,
-		name: 'sproutseo_fields[ogUrl]',
-		value: values.ogUrl,
-		errors: "",
-		required: false
-	}) }}
-
-	{% if assetsSourceExists %}
+		{{ forms.textareaField({
+			label: "Description"|t,
+			name: nameContext~"[metadata][ogDescription]",
+			instructions: 'A description of your content which will appear in Open Graph metadata.'|t,
+			value: values.ogDescription
+		}) }}
 
 		{{ forms.field({
-			label: 'Image'|t,
+			label: 'Image'|t ~ sprout.infoIcon({
+				label: 'Image'|t,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
+			}),
+			instructions: 'An image that represents your content that will display in Open Graph metadata.'|t,
 		}, forms.elementSelect({
 			elements: ogImageElements,
-			sourceElementId: values.ogImage,
+			sourceElementId: [values.ogImage],
 			elementType: elementType,
-			id: 'ogImage',
-			name: 'sproutseo_fields[ogImage]',
+			id: 'metaDetailsOgImage',
+			name: nameContext~'[metadata][ogImage]',
 			jsClass: 'Craft.AssetSelectInput',
 			addButtonLabel: 'Select Image'|t,
 			limit: 1,
 			criteria: {"localeEnabled":null}
 		})) }}
 
-	{% else %}
+		{{ forms.selectField({
+			label: 'Image Transform'|t,
+			instructions: 'Select the Open Graph Image Transform'|t,
+			name: nameContext~'[metadata][ogTransform]',
+			options: transformOptions,
+			value: values.ogTransform,
+			errors: "",
+			required: false
+		}) }}
 
-		<p class="error">{{ 'No assets sources currently exist. <a href="' ~ url('settings/assets/sources/new') ~ '">Asset
-				Source settings page.'|t }}</a></p>
+		{{ forms.textField({
+			label: "Audio URL"|t,
+			instructions: "A URL to an audio file to accompany this content."|t,
+			name: nameContext~"[metadata][ogAudio]",
+			value: values.ogAudio
+		}) }}
 
-	{% endif %}
+		{{ forms.textField({
+			label: "Video URL"|t,
+			instructions: "A URL to a video file that complements this content."|t,
+			name: nameContext~"[metadata][ogVideo]",
+			value: values.ogVideo
+		}) }}
 
-</div>
-
-<div id="optional-metadata">
-
-	<hr>
-
-	<h2>Optional Metadata</h2>
-
-	{{ forms.textField({
-		label: "Site Name"|t,
-		instructions: "If your content is part of a larger web site, the name which should be displayed for the overall site."|t,
-		name: 'sproutseo_fields[ogSiteName]',
-		value: values.ogSiteName,
-		errors: "",
-		required: false
-	}) }}
-
-	{{ forms.textField({
-		label: "Description"|t,
-		name: 'sproutseo_fields[ogDescription]',
-		maxlength: 200,
-		showCharsLeft: true,
-		value: values.ogDescription,
-		errors: "",
-		required: false,
-		placeholder: " "
-	}) }}
-
-	{{ forms.textField({
-		label: "Locale"|t,
-		instructions: "The locale these tags are marked up in. Defaults to the current locale."|t,
-		name: 'sproutseo_fields[ogLocale]',
-		value: values.ogLocale,
-		errors: "",
-		required: false
-	}) }}
-
-	{{ forms.textField({
-		label: "Audio"|t,
-		instructions: "A URL to an audio file to accompany this content."|t,
-		name: 'sproutseo_fields[ogAudio]',
-		value: values.ogAudio,
-		errors: "",
-		required: false
-	}) }}
-
-	{{ forms.textField({
-		label: "Video"|t,
-		instructions: "A URL to a video file that complements this content."|t,
-		name: 'sproutseo_fields[ogVideo]',
-		value: values.ogVideo,
-		errors: "",
-		required: false
-	}) }}
+	</div>
 
 </div>
 

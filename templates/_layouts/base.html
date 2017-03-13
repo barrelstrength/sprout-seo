@@ -5,18 +5,22 @@
 {% endif %}
 
 {% set subnav = {
-    defaults: {
-      label: "Defaults"|t,
-      url: cpUrl('sproutseo/defaults')
-    },
-    sitemap: {
-      label: "Sitemap"|t,
-      url: cpUrl('sproutseo/sitemap'),
-    },
-		redirects: {
-      label: "Redirects"|t,
-      url: cpUrl('sproutseo/redirects'),
-    }
+	globals: {
+    label: "Globals"|t,
+    url: cpUrl('sproutseo/globals/website-identity')
+  },
+	sections: {
+		label: "Sections"|t,
+		url: cpUrl('sproutseo/sections')
+	},
+  sitemap: {
+    label: "Sitemap"|t,
+    url: cpUrl('sproutseo/sitemap'),
+  },
+	redirects: {
+    label: "Redirects"|t,
+    url: cpUrl('sproutseo/redirects'),
+  }
 } %}
 
 {% if currentUser.can('editSproutSeoSettings') %}
