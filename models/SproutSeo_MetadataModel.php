@@ -255,6 +255,10 @@ class SproutSeo_MetadataModel extends BaseModel
 				if ($section->id)
 				{
 					$attributes = $section->getAttributes();
+					// Set request url
+					$attributes['canonical']  = SproutSeoOptimizeHelper::prepareCanonical(null);
+					$attributes['ogUrl']      = SproutSeoOptimizeHelper::prepareCanonical(null);
+					$attributes['twitterUrl'] = SproutSeoOptimizeHelper::prepareCanonical(null);
 				}
 			}
 			else
