@@ -116,6 +116,9 @@ class SproutSeo_SectionMetadataController extends BaseController
 			$sectionMetadata['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($sectionMetadata['robots']);
 		}
 
+		// let's validate to send the image id instead of an array
+		$sectionMetadata = $this->_validateImages($sectionMetadata);
+
 		$model->setAttributes($sectionMetadata);
 
 		$model = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($model);
@@ -207,5 +210,37 @@ class SproutSeo_SectionMetadataController extends BaseController
 		}
 
 		$this->redirectToPostedUrl();
+	}
+
+	private function _validateImages($sectionMetadata)
+	{
+		$image = null;
+
+		if (isset($sectionMetadata['optimizedImage'][0]))
+		{
+			$image = $sectionMetadata['optimizedImage'][0];
+		}
+
+		$sectionMetadata['optimizedImage'] = $image;
+
+		if (isset($sectionMetadata['ogImage'][0]))
+		{
+			$sectionMetadata['ogImage'] = $sectionMetadata['ogImage'][0];
+		}
+		else
+		{
+			$sectionMetadata['ogImage'] = $image;
+		}
+
+		if (isset($sectionMetadata['twitterImage'][0]))
+		{
+			$sectionMetadata['twitterImage'] = $sectionMetadata['twitterImage'][0];
+		}
+		else
+		{
+			$sectionMetadata['twitterImage'] = $image;
+		}
+
+		return $sectionMetadata;
 	}
 }
