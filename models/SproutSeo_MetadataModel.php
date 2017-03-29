@@ -256,9 +256,9 @@ class SproutSeo_MetadataModel extends BaseModel
 				{
 					$attributes = $section->getAttributes();
 					// Set request url
-					$attributes['canonical']  = SproutSeoOptimizeHelper::prepareCanonical(null);
-					$attributes['ogUrl']      = SproutSeoOptimizeHelper::prepareCanonical(null);
-					$attributes['twitterUrl'] = SproutSeoOptimizeHelper::prepareCanonical(null);
+					//$attributes['canonical']  = SproutSeoOptimizeHelper::prepareCanonical(null);
+					//$attributes['ogUrl']      = SproutSeoOptimizeHelper::prepareCanonical(null);
+					//$attributes['twitterUrl'] = SproutSeoOptimizeHelper::prepareCanonical(null);
 				}
 			}
 			else
