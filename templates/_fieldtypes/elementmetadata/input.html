@@ -369,7 +369,7 @@
 		</div>
 
 	</div>
-
+	
 {% endif %}
 
 {% includeCssResource "sproutseo/css/sproutseo.css" %}
@@ -391,12 +391,12 @@ feel like they are part of the natural flow of fields #}
 {% includeJsResource "sproutseo/js/metadataelement.js" %}
 {% includeJsResource "sproutseo/js/open-graph.js" %}
 {% includeJsResource "sproutseo/js/twitter-card.js" %}
-{% includeJsResource  "sproutseo/js/lib/jquery.caret.min.js" %}
-{% includeJsResource  "sproutseo/js/lib/jquery.tag-editor.min.js" %}
+{% includeJsResource "sproutseo/js/live-preview.js" %}
+{% includeJsResource "sproutseo/js/lib/jquery.caret.min.js" %}
+{% includeJsResource "sproutseo/js/lib/jquery.tag-editor.min.js" %}
 
 {% includejs %}
 
-	{# @todo - Upcoming Feature - SEO Preview
 	{% if fieldContext != 'sectionMetadata' and settings.displayPreview %}
 		// Existing Entries have a wrapper around the live preview and share buttons
 		var $previewButtonsElement = $('.previewbtns');
@@ -419,7 +419,6 @@ feel like they are part of the natural flow of fields #}
 		}
 
 	{% endif %}
-	#}
 
 	var items = {{ schemaSubtypes|json_encode|raw }};
 	var entryValues = {{ mainEntityValues|json_encode|raw }};
@@ -563,7 +562,6 @@ feel like they are part of the natural flow of fields #}
 			var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';
 			$(metaTitleLabelId).append(metaTitleSeoButton).removeClass('hidden');
 			Craft.initUiElements($(metaTitleLabelId));
-
 			var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');
 			metaTitleInput.attr('maxlength', 60);
 			new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
@@ -573,7 +571,6 @@ feel like they are part of the natural flow of fields #}
 		{% set optimizedTitleFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedTitleField) %}
 
 		{% if optimizedTitleFieldHandles %}
-
 			var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
 
 			{% for titleFieldHandle in optimizedTitleFieldHandles %}
@@ -749,5 +746,4 @@ feel like they are part of the natural flow of fields #}
 
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
-
 {% endincludejs %}

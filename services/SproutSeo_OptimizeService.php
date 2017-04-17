@@ -3,6 +3,8 @@ namespace Craft;
 
 class SproutSeo_OptimizeService extends BaseApplicationComponent
 {
+	public $rawMetadata = false;
+
 	/**
 	 * @var array
 	 */
@@ -147,11 +149,16 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 			'schema'  => $this->getStructuredData()
 		);
 
+		if ($this->rawMetadata == true)
+		{
+			return $metadata;
+		}
+
 		// Output metadata
 		if ($settings->enableMetadataRendering)
 		{
 			$output = $this->renderMetadata($metadata);
-		}
+		}		
 
 		// Add metadata variable to Twig context
 		if ($settings->metadataVariable)
