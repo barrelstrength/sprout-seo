@@ -14,6 +14,14 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 	/**
 	 * @return string
 	 */
+	public function getIdVariableName()
+	{
+		return 'categoryId';
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getIdColumnName()
 	{
 		return 'groupId';

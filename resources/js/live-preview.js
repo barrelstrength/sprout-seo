@@ -1,5 +1,4 @@
 var SproutSEOLivePreview = (function () {
-
   var _config = {
     seoPreviewButtonSelector: '#fields-sproutseo-seopreview',
     targets : {
@@ -36,14 +35,20 @@ var SproutSEOLivePreview = (function () {
   };
 
   var _updateMetadata = function() {
-    var data = {};
+    var data = $('form#container').serialize();
 
     Craft.postActionRequest('sproutSeo/livePreview/getPrioritizedMetadata', data, function(response) {
-       _updateSearchEngineMetaData(response.meta.search);
-       _updateOpenGraphMetaData(response.meta.openGraph);
-       _updateTwitterCardMetaData(response.meta.twitterCard);
-
-       console.log('response: ', response);
+       if (response.success)
+       {
+         var optimized = response.optimized;
+         _updateSearchEngineMetaData(optimized.meta.search);
+         _updateOpenGraphMetaData(optimized.meta.openGraph);
+         _updateTwitterCardMetaData(optimized.meta.twitterCard);
+       }
+       else
+       {
+        console.log('errors: ', response.errors);
+       }
     });
   };
 
@@ -73,7 +78,7 @@ var SproutSEOLivePreview = (function () {
       $(targetSelector).html(content);
     }
   };
-  
+
   return {
     init: init,
   };

@@ -158,7 +158,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		if ($settings->enableMetadataRendering)
 		{
 			$output = $this->renderMetadata($metadata);
-		}		
+		}
 
 		// Add metadata variable to Twig context
 		if ($settings->metadataVariable)

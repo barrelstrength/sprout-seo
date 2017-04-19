@@ -57,6 +57,16 @@ abstract class SproutSeoBaseUrlEnabledSectionType
 	abstract public function getName();
 
 	/**
+	 * The variable name where is saved the elementId value
+	 * example: entryId, categoryId, productId
+	 *
+	 * This will help show more easily the live preview
+	 *
+	 * @return string
+	 */
+	abstract public function getIdVariableName();
+
+	/**
 	 * Allow an integration to define how to get its specific URL-Enabled Section by ID
 	 *
 	 * @param $id

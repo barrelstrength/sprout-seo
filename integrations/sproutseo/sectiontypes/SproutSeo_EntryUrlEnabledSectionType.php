@@ -14,6 +14,14 @@ class SproutSeo_EntryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSectio
 	/**
 	 * @return string
 	 */
+	public function getIdVariableName()
+	{
+		return 'entryId';
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getIdColumnName()
 	{
 		return 'sectionId';
