@@ -35,9 +35,52 @@ var SproutSEOLivePreview = (function () {
   };
 
   var _updateMetadata = function() {
-    var data = $('form#container').serialize();
+    var metadata = {};  
+
+    // get title value
+    if ('selector' in _config.sources.title) {
+      metadata.title = $(_config.sources.title.selector).val();
+    }
+    if ('template' in _config.sources.title) {
+      metadata.title = {};
+      metadata.title.fields = {};
+      metadata.title.template = _config.sources.title.template;
+
+      $.each(_config.sources.title.fields, function(index, value) {
+        metadata.title.fields[value] = $('#fields-' + value).val();
+      });
+    }
+
+    // get description value
+    if ('selector' in _config.sources.description) {
+      metadata.description = $(_config.sources.description.selector).val();
+    }
+    if ('template' in _config.sources.description) {
+      metadata.description = {};
+      metadata.description.fields = {};
+      metadata.description.template = _config.sources.description.template;
+
+      $.each(_config.sources.description.fields, function(index, value) {
+        metadata.description.fields[value] = $('#fields-' + value).val();
+      });
+    }
+  
+    // get image value
+    if ('selector' in _config.sources.image) {
+      metadata.image = $(_config.sources.image.selector + ' input[type=hidden]').val();
+    }
+
+    // prepare data
+    var data = {
+      elementId: $('input[name=entryId]').val(),
+      metadata: metadata
+    };
+
+    console.log('data: ', data);
 
     Craft.postActionRequest('sproutSeo/livePreview/getPrioritizedMetadata', data, function(response) {
+      console.log('response: ', response);
+
        if (response.success)
        {
          var optimized = response.optimized;

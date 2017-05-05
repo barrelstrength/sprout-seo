@@ -5,33 +5,37 @@ class SproutSeo_LivePreviewController extends BaseController
 {
 	protected $allowAnonymous = true;
 
-	// public function actionParseSeoValue()
-	// {
-	//   $this->requireAjaxRequest();
-
-	//   $post     = craft()->request->getPost();
-
-	//   $template = $post['template'];
-	//   $object   = $post['dataObject'];
-
-	//   $this->returnJson(craft()->templates->renderObjectTemplate($template, $object));
-	// }
-
-	// public function actionGetImageUrl()
-	// {
-	//   $this->requireAjaxRequest();
-
-	//   $post    = craft()->request->getPost();
-
-	//   $imageId = $post['imageId'];
-
-	//   $this->returnJson(craft()->assets->getFileById($imageId)->getUrl());
-	// }
-
 	public function actionGetPrioritizedMetadata()
 	{
 		$this->requirePostRequest();
 
+    $post     = craft()->request->getPost();
+    $data     = $post['metadata'];
+    $metadata = array();
+
+    // prepare title value
+    if(is_string($data['title']))
+    {
+      $metadata['optimizedTitle'] = $data['title'];
+    }
+    if(is_array($data['title']))
+    {
+      $metadata['title'] = craft()->templates->renderObjectTemplate($data['title']['template'], $data['title']['fields']);
+    }
+
+    // prepare description value
+    if(is_string($data['description']))
+    {
+      $metadata['description'] = $data['description'];
+    }
+    if(is_array($data['description']))
+    {
+      $metadata['description'] = craft()->templates->renderObjectTemplate($data['description']['template'], $data['description']['fields']);
+    }
+
+    // prepare image value 
+
+    sproutSeo()->optimize->updateMeta($metadata);
 		sproutSeo()->optimize->rawMetadata = true;
 
 		// default response without element metadata field. (global) level
@@ -47,11 +51,13 @@ class SproutSeo_LivePreviewController extends BaseController
 			foreach ($urlEnabledSectionTypes as $urlEnabledSectionType)
 			{
 				// Let's get the optimized metadata model
-				$idVariableName = $urlEnabledSectionType->getIdVariableName();
+				// $idVariableName = $urlEnabledSectionType->getIdVariableName();
 
-				$idVariableValue = craft()->request->getPost($idVariableName, null);
+				// $idVariableValue = craft()->request->getPost($idVariableName, null);
 
-				if ($idVariableValue)
+				// if ($idVariableValue)
+        $idVariableValue = $post['elementId'];
+        if($idVariableValue)
 				{
 					// example: entry, category, etc.
 					$elementType = $urlEnabledSectionType->getMatchedElementVariable();
@@ -93,7 +99,3 @@ class SproutSeo_LivePreviewController extends BaseController
 		$this->returnJson($response);
 	}
 }
-
-
-
-
