@@ -10,7 +10,7 @@
 
   {{ forms.field({
     label: "Advanced Settings"|t|upper,
-    instructions: "Sprout SEO provides you with powerful, comprehensive management of all types of metadata from your Control Panel and the ability to setup sensible, reusable defaults with existing fields. This makes preparing metadata for search and social sharing more predictable and leads to good SEO and an easy to manage content experience. Some folks, however, want to have the ability to fine-tune each type of metadata. This requires a more complicated UI, more complicated codebase, and more time necessary to curate, prepare, post, and maintain content. If you'd like to go down that path and have the necessary budget, team, or training processes to do it well, go ahead and enable these settings."|t,
+    instructions: "Sprout SEO provides you with powerful, comprehensive management of all types of metadata from your Control Panel and the ability to setup sensible, reusable defaults with existing fields in your content worklow. The default setup makes preparing metadata for search and social sharing more predictable, generates extensive SEO metadata, and an easy to manage content experience.<br><br> Some folks, however, want to have the ability to fine-tune each type of metadata. This requires a more complicated UI, more complicated codebase, and more time necessary to curate, prepare, post, and maintain content. If you'd like to go down that path and have the necessary budget, team, or training processes to do it well, go ahead and enable these settings."|t,
   }, null) }}
 
   <hr>
@@ -23,7 +23,7 @@
 
       {{ forms.lightswitchField({
         label: "Enable Meta Details fields"|t,
-        instructions: "Meta Details fields add one more level of fine-tuning over your metadata. With Meta Details fields enabled, content editors will have the option to refine Open Graph, Twitter Card, Geo and Robots metadata at the Section level and the Element Metadata Field will display additional settings to allow customization of Structured Data, Search Meta, Open Graph, Twitter Card, Geo and Robots metadata at the level of individual Pages."|t,
+        instructions: "Meta Details fields add one more level of fine-tuning over your metadata. With Meta Details fields enabled, content editors will have the option to refine Open Graph, Twitter Card, Geo, and Robots metadata within Sections and the Element Metadata Field will display additional settings to allow customization of Structured Data, Search, Open Graph, Twitter Card, Geo, and Robots metadata on any Element that supports the Element Metadata field."|t,
         name: 'enableMetaDetailsFields',
         on: settings.enableMetaDetailsFields,
         onLabel: "Enable"|t
@@ -31,7 +31,7 @@
 
       {{ forms.lightswitchField({
         label: "Enable Custom Sections"|t,
-        instructions: "By default, Section and Sitemap metadata is enabled for all URL-enabled Sections. Enable this setting to manage metadata for Sections with Custom URL requirements."|t,
+        instructions: "Enable this setting to manage metadata for Sections with Custom URL requirements. Custom Sections require an additional step within your templates to output your metadata."|t,
         name: 'enableCustomSections',
         on: (settings.enableCustomSections is empty ? false : true),
         onLabel: "Enable"|t
@@ -41,7 +41,7 @@
 
       {{ forms.lightswitchField({
         label: "Automatically render metadata"|t,
-        instructions: "By default, Sprout SEO prepares and outputs all of your metadata in your template. If you'd like to manage this output manually, you can disable this setting."|t,
+        instructions: "Sprout SEO prepares and outputs all of your metadata in your template. If you'd like to manage this output manually, you can disable this setting and enable the 'Enable custom metadata variable' setting below."|t,
         name: 'enableMetadataRendering',
         on: (settings.enableMetadataRendering is empty ? false : true),
         onLabel: "Enable"|t
@@ -60,7 +60,7 @@
 
         {{ forms.textField({
           label: "Custom metadata variable name"|t,
-          instructions: "Give your global `metadata` variable a name."|t,
+          instructions: "Give your global `metadata` variable a name. You will use this variable name to access your metadata in your templates."|t,
           name: 'metadataVariable',
           value: settings.metadataVariable,
           placeholder: 'metadata',
@@ -73,7 +73,7 @@
 
       {{ forms.lightswitchField({
         label: "Override default locale behavior"|t,
-        instructions: "By default we assume you are using Craft Locales to manage multiple languages on your site. Locales in Craft, however, can be used for multi-language or multi-site behavior. If you are using Craft's Locales for multi-site behavior, enable this setting and select your website locale."|t,
+        instructions: "Metadata is generated with the assumption that you are using Craft Locales to manage multiple languages on your site. Locales in Craft, however, can be used for multi-language or multi-site behavior. If you are using Craft's Locales for multi-site behavior, enable this setting and select your website locale."|t,
         name: 'toggleLocaleOverride',
         toggle: 'settings-localeoverride',
         on: settings.localeIdOverride ? true : false,

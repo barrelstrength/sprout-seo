@@ -33,6 +33,16 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 			$results['identity']['url'] = SproutSeoOptimizeHelper::getGlobalMetadataSiteUrl($results['identity']['url']);
 		}
 
+		if (isset($results['settings']['ogTransform']))
+		{
+			$results['meta']['ogTransform'] = $results['settings']['ogTransform'];
+		}
+
+		if (isset($results['settings']['twitterTransform']))
+		{
+			$results['meta']['twitterTransform'] = $results['settings']['twitterTransform'];
+		}
+
 		$schema = SproutSeo_GlobalsModel::populateModel($results);
 
 		return $schema;
@@ -78,6 +88,16 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 
 		$locale = craft()->i18n->getLocaleById(craft()->language);
 
+		$defaultSettings = '{
+			"seoDivider":"-",
+			"defaultOgType":"",
+			"ogTransform":"sproutSeo-socialSquare",
+			"twitterTransform":"sproutSeo-socialSquare",
+			"defaultTwitterCard":"summary",
+			"appendTitleValueOnHomepage":"",
+			"appendTitleValue": ""}
+		';
+
 		$result = craft()->db->createCommand()->insert($tableName, array(
 			'locale'    => $locale,
 			'identity'  => null,
@@ -85,7 +105,7 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 			'contacts'  => null,
 			'social'    => null,
 			'robots'    => null,
-			'settings'  => null
+			'settings'  => $defaultSettings
 		));
 
 		return $result;

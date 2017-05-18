@@ -196,11 +196,6 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 
 		$prioritizedMetadataModel = new SproutSeo_MetadataModel();
 
-		// Default to the Current URL
-		$prioritizedMetadataModel->canonical  = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-		$prioritizedMetadataModel->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-		$prioritizedMetadataModel->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-
 		$schemaTypeId         = null;
 		$schemaOverrideTypeId = null;
 
@@ -208,6 +203,14 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		{
 			$metadataModel = new SproutSeo_MetadataModel();
 			$codeMetadata  = $this->getCodeMetadata($level);
+
+			// Assume our canonical URL is the current URL unless there is a codeOverride
+			if ($level == SproutSeo_MetadataLevels::CodeMetadata)
+			{
+				$prioritizedMetadataModel->canonical  = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+				$prioritizedMetadataModel->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+				$prioritizedMetadataModel->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+			}
 
 			$metadataModel = $metadataModel->setMeta($level, $codeMetadata);
 

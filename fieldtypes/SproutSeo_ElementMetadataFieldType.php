@@ -516,7 +516,18 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			// Manual Image
 			case ($optimizedImageFieldSetting === 'manually'):
 
-				$image = !empty($attributes['optimizedImage']) ? $attributes['optimizedImage'][0] : null;
+				$image = null;
+
+				if (isset($attributes['optimizedImage'][0]) && is_array($attributes['optimizedImage']))
+				{
+					// the value comes from post data from elementmetada field
+					$image = $attributes['optimizedImage'][0];
+				}
+				else if(isset($attributes['optimizedImage']) && $attributes['optimizedImage'] && is_numeric($attributes['optimizedImage']))
+				{
+					// the value comes from resavaElement task - we store a numeric value on the table
+					$image = $attributes['optimizedImage'];
+				}
 
 				break;
 
@@ -536,8 +547,35 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		}
 
 		$attributes['optimizedImage'] = $image;
-		$attributes['ogImage']        = $image;
-		$attributes['twitterImage']   = $image;
+
+		if (isset($attributes['ogImage'][0]) && is_array($attributes['ogImage']))
+		{
+			// the value comes from post data from elementmetada field
+			$attributes['ogImage'] = $attributes['ogImage'][0];
+		}
+		else if(isset($attributes['ogImage']) && $attributes['ogImage'] && is_numeric($attributes['ogImage']))
+		{
+			// the value comes from resavaElement task - we store a numeric value on the table
+			$attributes['ogImage'] = $attributes['ogImage'];
+		}
+		else
+		{
+			$attributes['ogImage'] = $image;
+		}
+
+		if (isset($attributes['twitterImage'][0])  && is_array($attributes['twitterImage']))
+		{
+			$attributes['twitterImage'] = $attributes['twitterImage'][0];
+		}
+		else if(isset($attributes['twitterImage']) && $attributes['twitterImage'] && is_numeric($attributes['twitterImage']))
+		{
+			// the value comes from resavaElement task - we store a numeric value on the table
+			$attributes['twitterImage'] = $attributes['twitterImage'];
+		}
+		else
+		{
+			$attributes['twitterImage'] = $image;
+		}
 
 		return $attributes;
 	}

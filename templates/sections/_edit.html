@@ -85,15 +85,19 @@
 					class: not isNew ? 'disabled' : ''
 				}) }}
 
-				{{ forms.textField({
-					label: "URL"|t,
-					id: "url",
-					name: 'sproutseo[metadata][url]',
-					value: (sectionMetadata.url == '__home__') ? "/" : sectionMetadata.url,
-					errors: sectionMetadata.getErrors('url'),
-					readonly: not isNew,
-					class: not isNew ? 'disabled' : ''
-				}) }}
+				{% if not isCustom %}
+
+					{{ forms.textField({
+						label: "URL"|t,
+						id: "url",
+						name: 'sproutseo[metadata][url]',
+						value: (sectionMetadata.url == '__home__') ? "/" : sectionMetadata.url,
+						errors: sectionMetadata.getErrors('url'),
+						readonly: not isNew,
+						class: not isNew ? 'disabled' : ''
+					}) }}
+
+				{% endif %}
 
 				<div class="field">
 					<div class="heading">
@@ -180,6 +184,15 @@
 				}) }}
 
 			</div>
+
+			{% if isCustom %}
+			<div class="pane">
+				<h6>{{ 'Using Custom Sections'|t }}</h6>
+				<p>{{ 'See the <a href="{documentationUrl}" target="_blank">Custom Section</a> documentation to learn how to add support for your Custom Section in your website templates.'|t({
+						documentationUrl: 'https://sprout.barrelstrengthdesign.com/craft-plugins/seo/docs'
+					})|raw }}</p>
+			</div>
+			{% endif %}
 
 		</div>
 	</div>
