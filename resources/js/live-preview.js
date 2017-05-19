@@ -20,6 +20,16 @@ var SproutSEOLivePreview = (function () {
     }
   };
 
+  var getInputScenario =function (customKey){
+    if ($("input[name='fields["+_config.nameContext+"][metadata]"+customKey+"']").length)
+    {
+      return $("input[name='fields["+_config.nameContext+"][metadata]"+customKey+"']");
+    }
+    else
+    {
+      return $("input[name='sproutseo[metadata]"+customKey+"']");
+    }
+  };
   var init = function (options) {
     if (typeof(options) === 'object') {
       $.extend(_config, options);
@@ -70,6 +80,33 @@ var SproutSEOLivePreview = (function () {
     if ('selector' in _config.sources.image) {
       metadata.image = $(_config.sources.image.selector + ' input[type=hidden]').val();
     }
+    // Get the twitter and facebook values
+
+    var $facebookBtn = $('#'+scenario+'btn-OpenGraph');
+    var $twitterBtn = $('#'+scenario+'btn-TwitterCard');
+
+    if ($facebookBtn.length)
+    {
+      if ($facebookBtn.hasClass('active'))
+      {
+        var ogTitle = getInputScenario('[ogTitle]').val();
+        var ogDescription = getInputScenario('[ogDescription]').val();
+        var ogImage = getInputScenario('[ogImage][]').val();
+
+        if (ogTitle)
+        {
+          metadata.ogTitle = ogTitle;
+        }
+        if (ogDescription)
+        {
+          metadata.ogDescription = ogDescription;
+        }
+        if (ogImage)
+        {
+          metadata.ogImage = ogImage;
+        }
+      }
+    }
     // Let's send the scenario
 
     var variableNames = _config.variableIdNames;
@@ -88,7 +125,8 @@ var SproutSEOLivePreview = (function () {
         break;
       }
     }
-
+    console.log("before send");
+    console.log(data);
     // it's a SproutSEO section
     if (data == null)
     {

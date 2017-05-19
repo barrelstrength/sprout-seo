@@ -747,7 +747,7 @@ feel like they are part of the natural flow of fields #}
 	});
 
 	{# SEO Live Preview #}
-
+	var divScenario = $('#sproutseo-preview').length ? '' : 'fields-' ;
 	{# title #}
 
 	{% if settings.optimizedTitleField == 'manually' %}
@@ -797,7 +797,7 @@ feel like they are part of the natural flow of fields #}
 	{% endif %}
 
 	{% set variableIdNames = craft.sproutseo.getVariableIdNames() %}
-	{% set livePreviewData = { 'variableIdNames': variableIdNames, 'sources': livePreviewSources } %}
+	{% set livePreviewData = { 'nameContext': nameContext, 'variableIdNames': variableIdNames, 'sources': livePreviewSources } %}
 
 	{SproutSEOLivePreview.init({{livePreviewData|json_encode|raw}})}
 
