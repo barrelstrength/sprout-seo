@@ -20,14 +20,14 @@ var SproutSEOLivePreview = (function () {
     }
   };
 
-  var getInputScenario =function (customKey){
-    if ($("input[name='fields["+_config.nameContext+"][metadata]"+customKey+"']").length)
+  var getInputScenario =function (customKey, type = 'input'){
+    if ($(type+"[name='fields["+_config.nameContext+"][metadata]"+customKey+"']").length)
     {
-      return $("input[name='fields["+_config.nameContext+"][metadata]"+customKey+"']");
+      return $(type+"[name='fields["+_config.nameContext+"][metadata]"+customKey+"']");
     }
     else
     {
-      return $("input[name='sproutseo[metadata]"+customKey+"']");
+      return $(type+"[name='sproutseo[metadata]"+customKey+"']");
     }
   };
   var init = function (options) {
@@ -90,7 +90,8 @@ var SproutSEOLivePreview = (function () {
       if ($facebookBtn.hasClass('active'))
       {
         var ogTitle = getInputScenario('[ogTitle]').val();
-        var ogDescription = getInputScenario('[ogDescription]').val();
+        var ogDescription = getInputScenario('[ogDescription]', 'textarea').val();
+        var ogType = getInputScenario('[ogType]', 'select').val();
         var ogImage = getInputScenario('[ogImage][]').val();
 
         if (ogTitle)
@@ -104,6 +105,38 @@ var SproutSEOLivePreview = (function () {
         if (ogImage)
         {
           metadata.ogImage = ogImage;
+        }
+        if (ogType)
+        {
+          metadata.ogType = ogType;
+        }
+      }
+    }
+
+    if ($twitterBtn.length)
+    {
+      if ($facebookBtn.hasClass('active'))
+      {
+        var twitterTitle = getInputScenario('[twitterTitle]').val();
+        var twitterDescription = getInputScenario('[twitterDescription]', 'textarea').val();
+        var twitterCard = getInputScenario('[twitterCard]', 'select').val();
+        var twitterImage = getInputScenario('[twitterImage][]').val();
+
+        if (twitterTitle)
+        {
+          metadata.twitterTitle = twitterTitle;
+        }
+        if (twitterDescription)
+        {
+          metadata.twitterDescription = twitterDescription;
+        }
+        if (twitterImage)
+        {
+          metadata.twitterImage = twitterImage;
+        }
+        if (twitterCard)
+        {
+          metadata.twitterCard = twitterCard;
         }
       }
     }

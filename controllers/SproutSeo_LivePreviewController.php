@@ -55,6 +55,32 @@ class SproutSeo_LivePreviewController extends BaseController
 			$metadata['ogImage'] = $data['ogImage'];
 		}
 
+		if (isset($data['ogType']))
+		{
+			$metadata['ogType'] = $data['ogType'];
+		}
+
+		//Twitter
+		if (isset($data['twitterTitle']))
+		{
+			$metadata['twitterTitle'] = $data['twitterTitle'];
+		}
+
+		if (isset($data['twitterDescription']))
+		{
+			$metadata['twitterDescription'] = $data['twitterDescription'];
+		}
+
+		if (isset($data['twitterImage']))
+		{
+			$metadata['twitterImage'] = $data['twitterImage'];
+		}
+
+		if (isset($data['twitterCard']))
+		{
+			$metadata['twitterCard'] = $data['twitterCard'];
+		}
+
 		// We need to check wich scenario is calling the live-preview
 		// check if the sproutseoSection value is true
 		// if not we just need get the elementId
