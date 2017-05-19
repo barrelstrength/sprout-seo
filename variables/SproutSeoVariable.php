@@ -1078,4 +1078,22 @@ class SproutSeoVariable
 
 		return false;
 	}
+
+	public function getVariableIdNames()
+	{
+		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
+
+		$variableTypes = array();
+
+		foreach ($registeredUrlEnabledSectionsTypes as $plugin => $urlEnabledSectionTypes)
+		{
+			foreach ($urlEnabledSectionTypes as $urlEnabledSectionType)
+			{
+				$idVariableName = $urlEnabledSectionType->getIdVariableName();
+				array_push($variableTypes, $idVariableName);
+			}
+		}
+
+		return $variableTypes;
+	}
 }

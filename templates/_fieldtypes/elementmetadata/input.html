@@ -746,44 +746,46 @@ feel like they are part of the natural flow of fields #}
 
 	});
 
-	SproutSEOLivePreview.init();
-
-	
 	{# SEO Live Preview #}
-	{% set segment1 = craft.request.segment(1) %}
 
 	{# title #}
-	{% if settings.optimizedTitleField == 'manually' %}
-		{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#fields-sproutseo-optimizedtitle'}}) %}
-	{% elseif settings.optimizedTitleField == 'elementTitle' %}
-		{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#title'}}) %}
-	{% elseif optimizedTitleFieldHandles %}
-		{% set source = {'title': {
-														'template': settings.optimizedTitleField,
-														'fields':   optimizedTitleFieldHandles|raw
 
-		}}%}
+	{% if settings.optimizedTitleField == 'manually' %}
+
+		{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#fields-sproutseo-optimizedtitle'}}) %}
+		{% elseif settings.optimizedTitleField == 'elementTitle' %}
+			{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#title'}}) %}
+		{% elseif optimizedTitleFieldHandles %}
+			{% set source = {'title': {
+				'template': settings.optimizedTitleField,
+				'fields':   optimizedTitleFieldHandles|raw
+				}}
+			%}
 
 		{% set livePreviewSources = livePreviewSources|merge(source) %}
-	{% elseif optimizedTitleFieldModel %}
+		{% elseif optimizedTitleFieldModel %}
 		{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#fields-' ~ optimizedTitleFieldModel.handle }}) %}
-	
+
 	{% endif %}
 
 	{# description #}
+
 	{% if settings.optimizedDescriptionField == 'manually' %}
+
 		{% set livePreviewSources = livePreviewSources|merge({'description':{'selector': '#fields-sproutseo-optimizeddescription'}}) %}
+
 	{% elseif optimizedDescriptionFieldHandles %}
 		{% set source = {'description': {
-														'template': settings.optimizedDescriptionField,
-														'fields':   optimizedDescriptionFieldHandles|raw
-
-		}}%}
-
+				'template': settings.optimizedDescriptionField,
+				'fields':   optimizedDescriptionFieldHandles|raw
+			}}
+		%}
 		{% set livePreviewSources = livePreviewSources|merge(source) %}
+
 	{% elseif optimizedDescriptionFieldModel %}
+
 		{% set livePreviewSources = livePreviewSources|merge({'description':{'selector': '#fields-' ~ optimizedDescriptionFieldModel.handle }}) %}
-	
+
 	{% endif %}
 
 
@@ -794,9 +796,10 @@ feel like they are part of the natural flow of fields #}
 		{% set livePreviewSources = livePreviewSources|merge({'image':{ 'selector': '#fields-' ~ optimizedImageFieldModel.handle }}) %}
 	{% endif %}
 
-	{% set livePreviewData = { 'sources': livePreviewSources } %}
+	{% set variableIdNames = craft.sproutseo.getVariableIdNames() %}
+	{% set livePreviewData = { 'variableIdNames': variableIdNames, 'sources': livePreviewSources } %}
 
-	SproutSEOLivePreview.init({{livePreviewData|json_encode|raw}})
+	{SproutSEOLivePreview.init({{livePreviewData|json_encode|raw}})}
 
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();

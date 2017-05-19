@@ -1,6 +1,7 @@
 var SproutSEOLivePreview = (function () {
+  var scenario = $('#sproutseo-preview').length ? '' : 'fields-' ;
   var _config = {
-    seoPreviewButtonSelector: '#fields-sproutseo-seopreview',
+    seoPreviewButtonSelector: '#'+scenario+'sproutseo-seopreview',
     targets : {
       searchEngine: {
         titleSelector: ".google-result-heading",
@@ -35,7 +36,7 @@ var SproutSEOLivePreview = (function () {
   };
 
   var _updateMetadata = function() {
-    var metadata = {};  
+    var metadata = {};
 
     // get title value
     if ('selector' in _config.sources.title) {
@@ -47,7 +48,7 @@ var SproutSEOLivePreview = (function () {
       metadata.title.template = _config.sources.title.template;
 
       $.each(_config.sources.title.fields, function(index, value) {
-        metadata.title.fields[value] = $('#fields-' + value).val();
+        metadata.title.fields[value] = $('#'+scenario+ value).val();
       });
     }
 
@@ -61,22 +62,41 @@ var SproutSEOLivePreview = (function () {
       metadata.description.template = _config.sources.description.template;
 
       $.each(_config.sources.description.fields, function(index, value) {
-        metadata.description.fields[value] = $('#fields-' + value).val();
+        metadata.description.fields[value] = $('#'+scenario+ value).val();
       });
     }
-  
+
     // get image value
     if ('selector' in _config.sources.image) {
       metadata.image = $(_config.sources.image.selector + ' input[type=hidden]').val();
     }
+    // Let's send the scenario
 
-    // prepare data
-    var data = {
-      elementId: $('input[name=entryId]').val(),
-      metadata: metadata
-    };
+    var variableNames = _config.variableIdNames;
+    var data = null;
 
-    console.log('data: ', data);
+    for (var i = variableNames.length - 1; i >= 0; i--)
+    {
+      if ($('input[name='+variableNames[i]+']').length)
+      {
+        // prepare data
+        var data = {
+          variableNameId: variableNames[i],
+          variableIdValue: $('input[name='+variableNames[i]+']').val(),
+          metadata: metadata
+        };
+        break;
+      }
+    }
+
+    // it's a SproutSEO section
+    if (data == null)
+    {
+      if ($('input[name="sproutseo[metadata][urlEnabledSectionId]"]').length)
+      {
+        console.log("BINGO SECTION: "+$('input[name="sproutseo[metadata][urlEnabledSectionId]"]').val());
+      }
+    }
 
     Craft.postActionRequest('sproutSeo/livePreview/getPrioritizedMetadata', data, function(response) {
       console.log('response: ', response);
