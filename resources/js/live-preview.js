@@ -36,7 +36,6 @@ var SproutSEOLivePreview = (function () {
     }
 
     _setUpEvents();
-    console.log('_config: ', _config);
   };
 
   var _setUpEvents = function() {
@@ -84,6 +83,11 @@ var SproutSEOLivePreview = (function () {
 
     var $facebookBtn = $('#'+scenario+'btn-OpenGraph');
     var $twitterBtn = $('#'+scenario+'btn-TwitterCard');
+    metadata.enableMetaDetailsSearch      = getInputScenario('[enableMetaDetailsSearch]').val();
+    metadata.enableMetaDetailsOpenGraph   = getInputScenario('[enableMetaDetailsOpenGraph]').val();
+    metadata.enableMetaDetailsTwitterCard = getInputScenario('[enableMetaDetailsTwitterCard]').val();
+    metadata.enableMetaDetailsGeo         = getInputScenario('[enableMetaDetailsGeo]').val();
+    metadata.enableMetaDetailsRobots      = getInputScenario('[enableMetaDetailsRobots]').val();
 
     if ($facebookBtn.length)
     {
@@ -115,7 +119,7 @@ var SproutSEOLivePreview = (function () {
 
     if ($twitterBtn.length)
     {
-      if ($facebookBtn.hasClass('active'))
+      if ($twitterBtn.hasClass('active'))
       {
         var twitterTitle = getInputScenario('[twitterTitle]').val();
         var twitterDescription = getInputScenario('[twitterDescription]', 'textarea').val();
@@ -150,7 +154,7 @@ var SproutSEOLivePreview = (function () {
       if ($('input[name='+variableNames[i]+']').length)
       {
         // prepare data
-        var data = {
+        data = {
           variableNameId: variableNames[i],
           variableIdValue: $('input[name='+variableNames[i]+']').val(),
           metadata: metadata
@@ -158,20 +162,25 @@ var SproutSEOLivePreview = (function () {
         break;
       }
     }
-    console.log("before send");
-    console.log(data);
+
     // it's a SproutSEO section
     if (data == null)
     {
       if ($('input[name="sproutseo[metadata][urlEnabledSectionId]"]').length)
       {
-        console.log("BINGO SECTION: "+$('input[name="sproutseo[metadata][urlEnabledSectionId]"]').val());
+        metadata.title       = getInputScenario('[optimizedTitle]').val();
+        metadata.description = getInputScenario('[optimizedDescription]', 'textarea').val();
+        metadata.image       = getInputScenario('[optimizedImage][]').val();
+        var sectionId        = getInputScenario('[id]').val();
+        data = {
+          section: true,
+          sectionId: sectionId,
+          metadata: metadata
+        };
       }
     }
 
     Craft.postActionRequest('sproutSeo/livePreview/getPrioritizedMetadata', data, function(response) {
-      console.log('response: ', response);
-
        if (response.success)
        {
          var optimized = response.optimized;

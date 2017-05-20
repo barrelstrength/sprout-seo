@@ -454,7 +454,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	 * @param $variableNameId string
 	 * @return array
 	 */
-	public function getContextByElementVariable($variableNameId = null, $variableIdValue)
+	public function getContextByElementVariable($variableIdValue, $variableNameId)
 	{
 		$response = array();
 

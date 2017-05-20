@@ -12,16 +12,20 @@ class SproutSeo_LivePreviewController extends BaseController
 		$post     = craft()->request->getPost();
 		$data     = $post['metadata'];
 		$metadata = array();
+		$response = array('success'=>false,'errors'=>'Not defined');
 
 		// prepare title value
 		if (is_string($data['title']))
 		{
-			$metadata['optimizedTitle'] = $data['title'];
+			$metadata['title'] = $data['title'];
 		}
 		if (is_array($data['title']))
 		{
 			$metadata['title'] = craft()->templates->renderObjectTemplate($data['title']['template'], $data['title']['fields']);
 		}
+		// lets update the title also on og
+		$metadata['ogTitle']      = $metadata['title'];
+		$metadata['twitterTitle'] = $metadata['title'];
 
 		// prepare description value
 		if (is_string($data['description']))
@@ -33,11 +37,31 @@ class SproutSeo_LivePreviewController extends BaseController
 		{
 			$metadata['description'] = craft()->templates->renderObjectTemplate($data['description']['template'], $data['description']['fields']);
 		}
+		// lets update the description also on twitter
+		$metadata['ogDescription']      = $metadata['description'];
+		$metadata['twitterDescription'] = $metadata['description'];
 
-		if (is_string($data['image']))
+		if (isset($data['image']) && is_string($data['image']))
 		{
 			$metadata['optimizedImage'] = $data['image'];
+			$metadata['ogImage'] = $data['image'];
+			$metadata['twitterImage'] = $data['image'];
 		}
+
+		// Meta details
+		if (isset($data['enableMetaDetailsSearch']) &&
+				isset($data['enableMetaDetailsOpenGraph']) &&
+				isset($data['enableMetaDetailsTwitterCard']) &&
+				isset($data['enableMetaDetailsGeo']) &&
+				isset($data['enableMetaDetailsRobots']))
+		{
+			$metadata['enableMetaDetailsSearch']      = $data['enableMetaDetailsSearch'];
+			$metadata['enableMetaDetailsOpenGraph']   = $data['enableMetaDetailsOpenGraph'];
+			$metadata['enableMetaDetailsTwitterCard'] = $data['enableMetaDetailsTwitterCard'];
+			$metadata['enableMetaDetailsGeo']         = $data['enableMetaDetailsGeo'];
+			$metadata['enableMetaDetailsRobots']      = $data['enableMetaDetailsRobots'];
+		}
+
 
 		// Facebook
 		if (isset($data['ogTitle']))
@@ -81,25 +105,15 @@ class SproutSeo_LivePreviewController extends BaseController
 			$metadata['twitterCard'] = $data['twitterCard'];
 		}
 
-		// We need to check wich scenario is calling the live-preview
-		// check if the sproutseoSection value is true
-		// if not we just need get the elementId
-
-		// prepare image value
-
 		sproutSeo()->optimize->updateMeta($metadata);
 		sproutSeo()->optimize->rawMetadata = true;
+		$context = array();
 
-		// default response without element metadata field. (global) level
-		$response = array(
-			'success'   => true,
-			'optimized' => sproutSeo()->optimize->getMetadata($context)
-		);
-
-		if (isset($data['variableIdValue']) && isset($data['variableNameId']))
+		// Sprout SEO Element metadata field type
+		if (isset($post['variableIdValue']) && isset($post['variableNameId']))
 		{
 			$context = sproutSeo()->optimize->getContextByElementVariable(
-				$data['variableIdValue'], $data['variableNameId']
+				$post['variableIdValue'], $post['variableNameId']
 			);
 
 			if ($context)
@@ -113,15 +127,22 @@ class SproutSeo_LivePreviewController extends BaseController
 			{
 				$response = array(
 					'success' => false,
-					'errors' => 'Unable to find '.$data['variableNameId'].':'.$data['variableIdValue'].''
+					'errors' => 'Unable to find '.$post['variableNameId'].':'.$post['variableIdValue'].''
 				);
 			}
 			// we don't need to continue searching the section
 			$this->returnJson($response);
 		}
-		else
+		else if (isset($post['section']) && isset($post['sectionId']))
 		{
 			//it's a SproutSEO section
+			$section = sproutSeo()->sectionMetadata->getSectionMetadataById($post['sectionId']);
+			$metadata['section'] = $section->type.':'.$section->handle;
+			sproutSeo()->optimize->updateMeta($metadata);
+			$response = array(
+				'success'   => true,
+				'optimized' => sproutSeo()->optimize->getMetadata($context)
+			);
 		}
 
 		$this->returnJson($response);
