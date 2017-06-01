@@ -137,13 +137,16 @@ class SproutSeoPlugin extends BasePlugin
 
 		Craft::import('plugins.sproutseo.helpers.SproutSeoAddressHelper');
 
-		craft()->on('fields.onSaveFieldLayout', function (Event $event)
-		{
-			sproutSeo()->elementMetadata->resaveElements($event);
-		});
-
 		if (!craft()->isConsole())
 		{
+			// @todo - this should also be possible from the console however
+			//         we need to wait until the URL-enabled element types don't rely on URL
+			//         in the resaveElements method
+			craft()->on('fields.onSaveFieldLayout', function (Event $event)
+			{
+				sproutSeo()->elementMetadata->resaveElements($event);
+			});
+
 			craft()->onException = function (\CExceptionEvent $event)
 			{
 				if ((($event->exception instanceof \CHttpException) && ($event->exception->statusCode == 404)) || (($event->exception->getPrevious() instanceof \CHttpException) && ($event->exception->getPrevious()->statusCode == 404)))
