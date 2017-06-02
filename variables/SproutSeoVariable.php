@@ -1079,6 +1079,13 @@ class SproutSeoVariable
 		return false;
 	}
 
+	/**
+	 * Returns array of URL Enabled Section types and the name of Element ID associated with each
+	 *
+	 * @todo - rename this getElementIdName() or something like that
+	 *
+	 * @return array
+	 */
 	public function getVariableIdNames()
 	{
 		$registeredUrlEnabledSectionsTypes = craft()->plugins->call('registerSproutSeoUrlEnabledSectionTypes');
