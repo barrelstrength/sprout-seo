@@ -354,8 +354,8 @@
 				<div class="btn" id="sproutseo-preview-facebook"><span class="sproutseo-icon icon-facebook">&#xe802;</span> Facebook</div>
 				<div class="btn" id="sproutseo-preview-twitter"><span class="sproutseo-icon icon-twitter">&#xe807;</span> Twitter</div>
 			</div>
-			<h2 class="left" style="margin:0;">{{ "Preview"|t|upper }}</h2><br>
-			<p style="margin:0;width:50%;">{{ "An example of how your content might display in search and social sharing. Re-save your entry to see any changes."|t }}</p>
+			<h2 class="left" style="margin:7px 0 0;">{{ 'SEO Preview'|t|upper }} <span class="info">{{ "An example of how your
+			content might display in search and social sharing."|t }}</span></h2>
 		</div>
 
 		<div class="body sproutseo-previewbody">
@@ -748,23 +748,29 @@ feel like they are part of the natural flow of fields #}
 
 	{# SEO Live Preview #}
 	var divScenario = $('#sproutseo-preview').length ? '' : 'fields-' ;
-	{# title #}
 
+	{# title #}
 	{% if settings.optimizedTitleField == 'manually' %}
 
 		{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#fields-sproutseo-optimizedtitle'}}) %}
-		{% elseif settings.optimizedTitleField == 'elementTitle' %}
-			{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#title'}}) %}
-		{% elseif optimizedTitleFieldHandles %}
-			{% set source = {'title': {
-				'template': settings.optimizedTitleField,
-				'fields':   optimizedTitleFieldHandles|raw
-				}}
-			%}
+
+	{% elseif settings.optimizedTitleField == 'elementTitle' %}
+
+		{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#title'}}) %}
+
+	{% elseif optimizedTitleFieldHandles %}
+
+		{% set source = {'title': {
+			'template': settings.optimizedTitleField,
+			'fields':   optimizedTitleFieldHandles|raw
+			}}
+		%}
 
 		{% set livePreviewSources = livePreviewSources|merge(source) %}
-		{% elseif optimizedTitleFieldModel %}
-		{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#fields-' ~ optimizedTitleFieldModel.handle }}) %}
+
+	{% elseif optimizedTitleFieldModel %}
+
+			{% set livePreviewSources = livePreviewSources|merge({'title':{'selector': '#fields-' ~ optimizedTitleFieldModel.handle }}) %}
 
 	{% endif %}
 
@@ -791,16 +797,21 @@ feel like they are part of the natural flow of fields #}
 
 	{# image #}
 	{% if settings.optimizedImageField == 'manually' %}
+
 		{% set livePreviewSources = livePreviewSources|merge({'image':{ 'selector': '#fields-optimizedImage'}}) %}
+
 	{% elseif optimizedImageFieldModel %}
+
 		{% set livePreviewSources = livePreviewSources|merge({'image':{ 'selector': '#fields-' ~ optimizedImageFieldModel.handle }}) %}
+
 	{% endif %}
 
 	{% set variableIdNames = craft.sproutseo.getVariableIdNames() %}
 	{% set livePreviewData = { 'nameContext': nameContext, 'variableIdNames': variableIdNames, 'sources': livePreviewSources } %}
 
-	{SproutSEOLivePreview.init({{livePreviewData|json_encode|raw}})}
+	{ SproutSEOLivePreview.init({{ livePreviewData|json_encode|raw }}) }
 
 	new Craft.SproutSeoOpenGraph();
 	new Craft.SproutSeoTwitterCard();
+
 {% endincludejs %}
