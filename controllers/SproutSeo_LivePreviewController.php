@@ -115,6 +115,17 @@ class SproutSeo_LivePreviewController extends BaseController
 			$metadata['twitterCard'] = $data['twitterCard'];
 		}
 
+		//Search details
+		if (isset($data['searchTitle']))
+		{
+			$metadata['title'] = $data['searchTitle'];
+		}
+
+		if (isset($data['searchDescription']))
+		{
+			$metadata['description'] = $data['searchDescription'];
+		}
+
 		sproutSeo()->optimize->updateMeta($metadata);
 		sproutSeo()->optimize->rawMetadata = true;
 

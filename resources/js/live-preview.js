@@ -83,11 +83,30 @@ var SproutSEOLivePreview = (function () {
 
     var $facebookBtn = $('#'+scenario+'btn-OpenGraph');
     var $twitterBtn = $('#'+scenario+'btn-TwitterCard');
+    var $searchBtn = $('#'+scenario+'btn-Search');
     metadata.enableMetaDetailsSearch      = getInputScenario('[enableMetaDetailsSearch]').val();
     metadata.enableMetaDetailsOpenGraph   = getInputScenario('[enableMetaDetailsOpenGraph]').val();
     metadata.enableMetaDetailsTwitterCard = getInputScenario('[enableMetaDetailsTwitterCard]').val();
     metadata.enableMetaDetailsGeo         = getInputScenario('[enableMetaDetailsGeo]').val();
     metadata.enableMetaDetailsRobots      = getInputScenario('[enableMetaDetailsRobots]').val();
+
+    if ($searchBtn.length)
+    {
+      if ($searchBtn.hasClass('active'))
+      {
+        var searchTitle = getInputScenario('[title]').val();
+        var searchDescription = getInputScenario('[description]').val();
+
+        if (searchTitle)
+        {
+          metadata.searchTitle = searchTitle;
+        }
+        if (searchDescription)
+        {
+          metadata.searchDescription = searchDescription;
+        }
+      }
+    }
 
     if ($facebookBtn.length)
     {
