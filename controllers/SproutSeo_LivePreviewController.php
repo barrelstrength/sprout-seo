@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 class SproutSeo_LivePreviewController extends BaseController
@@ -12,17 +13,26 @@ class SproutSeo_LivePreviewController extends BaseController
 		$post     = craft()->request->getPost();
 		$data     = $post['metadata'];
 		$metadata = array();
-		$response = array('success'=>false,'errors'=>'Not defined');
+		$response = array('success' => false, 'errors' => 'Not defined');
 
 		// prepare title value
-		if (is_string($data['title']))
+		if (isset($data['title']) && is_string($data['title']))
 		{
 			$metadata['title'] = $data['title'];
 		}
-		if (is_array($data['title']))
+
+		if (isset($data['title']) && is_array($data['title']))
 		{
 			$metadata['title'] = craft()->templates->renderObjectTemplate($data['title']['template'], $data['title']['fields']);
 		}
+
+		// True when a Section uses a Title Format
+		if (!isset($data['title']))
+		{
+			// @todo - need to process Title Format
+			$metadata['title'] = '';
+		}
+
 		// lets update the title also on og
 		$metadata['ogTitle']      = $metadata['title'];
 		$metadata['twitterTitle'] = $metadata['title'];
@@ -44,16 +54,17 @@ class SproutSeo_LivePreviewController extends BaseController
 		if (isset($data['image']) && is_string($data['image']))
 		{
 			$metadata['optimizedImage'] = $data['image'];
-			$metadata['ogImage'] = $data['image'];
-			$metadata['twitterImage'] = $data['image'];
+			$metadata['ogImage']        = $data['image'];
+			$metadata['twitterImage']   = $data['image'];
 		}
 
-		// Meta details
+		// Meta Details
 		if (isset($data['enableMetaDetailsSearch']) &&
-				isset($data['enableMetaDetailsOpenGraph']) &&
-				isset($data['enableMetaDetailsTwitterCard']) &&
-				isset($data['enableMetaDetailsGeo']) &&
-				isset($data['enableMetaDetailsRobots']))
+			isset($data['enableMetaDetailsOpenGraph']) &&
+			isset($data['enableMetaDetailsTwitterCard']) &&
+			isset($data['enableMetaDetailsGeo']) &&
+			isset($data['enableMetaDetailsRobots'])
+		)
 		{
 			$metadata['enableMetaDetailsSearch']      = $data['enableMetaDetailsSearch'];
 			$metadata['enableMetaDetailsOpenGraph']   = $data['enableMetaDetailsOpenGraph'];
@@ -61,7 +72,6 @@ class SproutSeo_LivePreviewController extends BaseController
 			$metadata['enableMetaDetailsGeo']         = $data['enableMetaDetailsGeo'];
 			$metadata['enableMetaDetailsRobots']      = $data['enableMetaDetailsRobots'];
 		}
-
 
 		// Facebook
 		if (isset($data['ogTitle']))
@@ -84,7 +94,7 @@ class SproutSeo_LivePreviewController extends BaseController
 			$metadata['ogType'] = $data['ogType'];
 		}
 
-		//Twitter
+		// Twitter
 		if (isset($data['twitterTitle']))
 		{
 			$metadata['twitterTitle'] = $data['twitterTitle'];
@@ -107,6 +117,7 @@ class SproutSeo_LivePreviewController extends BaseController
 
 		sproutSeo()->optimize->updateMeta($metadata);
 		sproutSeo()->optimize->rawMetadata = true;
+
 		$context = array();
 
 		// Sprout SEO Element metadata field type
@@ -127,22 +138,25 @@ class SproutSeo_LivePreviewController extends BaseController
 			{
 				$response = array(
 					'success' => false,
-					'errors' => 'Unable to find '.$post['variableNameId'].':'.$post['variableIdValue'].''
+					'errors'  => 'Unable to find ' . $post['variableNameId'] . ':' . $post['variableIdValue'] . ''
 				);
 			}
 			// we don't need to continue searching the section
 			$this->returnJson($response);
 		}
-		else if (isset($post['section']) && isset($post['sectionId']))
+		else
 		{
-			//it's a SproutSEO section
-			$section = sproutSeo()->sectionMetadata->getSectionMetadataById($post['sectionId']);
-			$metadata['section'] = $section->type.':'.$section->handle;
-			sproutSeo()->optimize->updateMeta($metadata);
-			$response = array(
-				'success'   => true,
-				'optimized' => sproutSeo()->optimize->getMetadata($context)
-			);
+			if (isset($post['section']) && isset($post['sectionId']))
+			{
+				// It's a SproutSEO section
+				$section             = sproutSeo()->sectionMetadata->getSectionMetadataById($post['sectionId']);
+				$metadata['section'] = $section->type . ':' . $section->handle;
+				sproutSeo()->optimize->updateMeta($metadata);
+				$response = array(
+					'success'   => true,
+					'optimized' => sproutSeo()->optimize->getMetadata($context)
+				);
+			}
 		}
 
 		$this->returnJson($response);
