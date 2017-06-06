@@ -27,8 +27,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 				this.submitStatus = true;
 				$target = event.target;
 				$row    = $($target).closest('tr');
-				var handle = $($row).data('handle').split(':');
-				handle = handle.length == 2 ? handle[1] : $($row).data('handle');
+				var handle = $($row).data('handle');
 
 				data = {
 					"redirect":  'sproutseo/sections/{id}',
