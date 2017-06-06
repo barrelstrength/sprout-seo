@@ -10,9 +10,10 @@ class SproutSeo_SectionMetadataController extends BaseController
 	 */
 	public function actionSectionMetadataEditTemplate(array $variables = array())
 	{
-		$isCustom          = true;
-		$segment           = craft()->request->getSegment(3);
-		$sectionMetadataId = ($segment == 'new') ? null : $segment;
+		$isCustom           = true;
+		$segment            = craft()->request->getSegment(3);
+		$sectionMetadataId  = ($segment == 'new') ? null : $segment;
+		$sectionsRegistered = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypes();
 
 		// Get our Section Metadata Model
 		$sectionMetadata       = sproutSeo()->sectionMetadata->getSectionMetadataById($sectionMetadataId);
@@ -21,6 +22,20 @@ class SproutSeo_SectionMetadataController extends BaseController
 
 		$twitterImageElements = array();
 		$ogImageElements      = array();
+
+		// Let's get the handle and url from the Craft cms database to don't store this information
+		if ($sectionMetadata->id)
+		{
+			if (isset($sectionsRegistered[$sectionMetadata->type]))
+			{
+				$sectionType    = $sectionsRegistered[$sectionMetadata->type];
+				$uniqueKey      = $sectionType->getId() . '-' . $sectionMetadata->urlEnabledSectionId;
+				$elementSection = $sectionType->urlEnabledSections[$uniqueKey];
+				// let's update the handle and the url
+				$sectionMetadata->handle = $sectionMetadata->type.':'.$elementSection->sectionMetadata->handle;
+				$sectionMetadata->url = $elementSection->sectionMetadata->url;
+			}
+		}
 
 		if (isset($variables['sectionMetadata']))
 		{

@@ -247,21 +247,38 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	 */
 	public function getSectionMetadataByUniqueKey($elementTable, $handle)
 	{
+		$sectionsRegistered  = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypes();
+		$urlEnabledSectionId = null;
 		$query = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_metadata_sections')
-			->where('handle=:handle', array(':handle' => $handle));
+			->from('sproutseo_metadata_sections');
 
-		if ($elementTable)
+		if ($elementTable == 'sproutseo_section')
 		{
-			$query->andWhere('type=:type', array(':type' => $elementTable));
+			$query->where('handle=:handle', array(':handle' => $handle));
 		}
-		else
+		else if (isset($sectionsRegistered[$elementTable]))
 		{
-			// @todo - Refactor
-			// update this to be null in the db
-			// $query->andWhere('type IS NULL');
-			$query->andWhere('type = ""');
+			$sectionType    = $sectionsRegistered[$elementTable];
+			$elementSection = null;
+
+			foreach ($sectionType->urlEnabledSections as $uniqueKey => $urlEnabledSection)
+			{
+				if ($urlEnabledSection->sectionMetadata->handle == $handle)
+				{
+					$elementSection = $urlEnabledSection;
+					break;
+				}
+			}
+
+			if ($elementSection)
+			{
+				$urlEnabledSectionId = $elementSection->sectionMetadata->urlEnabledSectionId;
+			}
+
+			$query->where('urlEnabledSectionId=:urlEnabledSectionId', array(':urlEnabledSectionId' => $urlEnabledSectionId));
+
+			$query->andWhere('type=:type', array(':type' => $elementTable));
 		}
 
 		$results = $query->queryRow();

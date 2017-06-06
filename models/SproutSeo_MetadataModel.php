@@ -239,16 +239,8 @@ class SproutSeo_MetadataModel extends BaseModel
 
 			if (count($format) == 2)
 			{
-				if ($format[0] == 'sproutseo_section')
-				{
-					$elementTable = null;
-					$handle       = $format[1];
-				}
-				else
-				{
-					$elementTable = $format[0];
-					$handle       = $format[1];
-				}
+				$elementTable = $format[0];
+				$handle       = $format[1];
 
 				$section = sproutSeo()->sectionMetadata->getSectionMetadataByUniqueKey($elementTable, $handle);
 
