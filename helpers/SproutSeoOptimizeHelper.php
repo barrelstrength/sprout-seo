@@ -506,6 +506,7 @@ class SproutSeoOptimizeHelper
 		$globalAppendTitleValue     = null;
 		$appendTitleValueOnHomepage = $settings['appendTitleValueOnHomepage'];
 		$seoDivider                 = $settings['seoDivider'];
+		$appendTitleValue           = null;
 
 		if ($appendTitleValueOnHomepage OR craft()->request->getPath())
 		{
@@ -513,23 +514,15 @@ class SproutSeoOptimizeHelper
 
 			switch ($globalAppendTitleValue)
 			{
-				case 'custom':
-					$globalAppendTitleValue = $globalAppendTitleValue;
-					break;
-
 				case 'sitename':
 					$globalAppendTitleValue = craft()->getInfo('siteName');
-					break;
-
-				default:
-					$globalAppendTitleValue = null;
 					break;
 			}
 		}
 
-		if ($sectionMetadataModel->appendTitleValue)
+		if ($prioritizedMetadataModel->appendTitleValue)
 		{
-			$appendTitleValue = $sectionMetadataModel->appendTitleValue;
+			$appendTitleValue = $prioritizedMetadataModel->appendTitleValue;
 		}
 		else
 		{
