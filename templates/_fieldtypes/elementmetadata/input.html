@@ -399,7 +399,7 @@ feel like they are part of the natural flow of fields #}
 
 {% includejs %}
 
-	{% if fieldContext != 'sectionMetadata' and settings.displayPreview %}
+	{# % if fieldContext != 'sectionMetadata' and settings.displayPreview %}
 		// Existing Entries have a wrapper around the live preview and share buttons
 		var $previewButtonsElement = $('.previewbtns');
 
@@ -420,7 +420,7 @@ feel like they are part of the natural flow of fields #}
 			$metaContainer.prepend('<div id="fields-sproutseo-seopreview" class="btn big sprout-livepreviewbtn" style="margin-top:0"> {{ "SEO Preview"|t }}<div class="spinner hidden"></div></div>');
 		}
 
-	{% endif %}
+	{% endif % #}
 
 	var items = {{ schemaSubtypes|json_encode|raw }};
 	var entryValues = {{ mainEntityValues|json_encode|raw }};
