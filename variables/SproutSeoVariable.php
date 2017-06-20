@@ -53,15 +53,14 @@ class SproutSeoVariable
 	/**
 	 * Processes and outputs SEO meta tags
 	 *
+	 * @deprecated Remove in SproutSeo 4.x in Craft 3.0
 	 * @return \Twig_Markup
 	 */
 	public function optimize()
 	{
-		$output = "The craft.sproutseo.optimize() tag has been deprecated.
-		Use {% sproutseo 'optimize' %} instead.
-		To see a list of all changes in Sprout SEO 3: <a href='https://sprout.barrelstrengthdesign.com/craft-plugins/seo/docs/getting-started/updating-to-sprout-seo-3'>click here.</a>";
+		$output = "The craft.sproutseo.optimize() tag has been deprecated. Use {% sproutseo 'optimize' %} instead. See a list of all changes in Sprout SEO 3 here: https://sprout.barrelstrengthdesign.com/craft-plugins/seo/docs/getting-started/updating-to-sprout-seo-3";
 
-		return TemplateHelper::getRaw($output);
+		throw new Exception(Craft::t($output));
 	}
 
 	/**
