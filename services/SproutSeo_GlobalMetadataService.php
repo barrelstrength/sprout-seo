@@ -43,6 +43,16 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 			$results['meta']['twitterTransform'] = $results['settings']['twitterTransform'];
 		}
 
+		$settings = craft()->plugins->getPlugin('sproutseo')->getSettings();
+		$locale   = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
+
+		if ($settings->localeIdOverride)
+		{
+			$locale = $settings->localeIdOverride;
+		}
+
+		$results['meta']['ogLocale'] = $locale;
+
 		$schema = SproutSeo_GlobalsModel::populateModel($results);
 
 		return $schema;
