@@ -280,7 +280,6 @@ class SproutSeo_MetadataModel extends BaseModel
 		{
 			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
 			$elementMetadata = sproutSeo()->elementMetadata->getElementMetadataByElementId($overrideInfo['elementId'], $locale);
-			$elementMetadata->ogLocale = $locale;
 
 			// Default to the current URL, if no overrides exist
 			$elementMetadata->canonical  = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
