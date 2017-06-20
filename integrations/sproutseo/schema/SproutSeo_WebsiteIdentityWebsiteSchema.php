@@ -64,7 +64,7 @@ class SproutSeo_WebsiteIdentityWebsiteSchema extends SproutSeoBaseSchema
 
 		if (count($socialProfiles))
 		{
-			$urls = array_column($socialProfiles, 'url');
+			$urls = sproutSeo()->elementMetadata->arrayColumn($socialProfiles, 'url');
 			$this->addSameAs($urls);
 		}
 	}

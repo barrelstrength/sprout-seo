@@ -57,7 +57,9 @@ class SproutSeoVariable
 	 */
 	public function optimize()
 	{
-		$output = sproutSeo()->optimize->getMetaTagHtml();
+		$output = "The craft.sproutseo.optimize() tag has been deprecated.
+		Use {% sproutseo 'optimize' %} instead.
+		To see a list of all changes in Sprout SEO 3: <a href='https://sprout.barrelstrengthdesign.com/craft-plugins/seo/docs/getting-started/updating-to-sprout-seo-3'>click here.</a>";
 
 		return TemplateHelper::getRaw($output);
 	}
