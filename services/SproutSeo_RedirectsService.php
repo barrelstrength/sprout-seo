@@ -260,12 +260,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function installDefaultSettings($pluginName = null)
 	{
-		// Add a new Structure for our Redirects
-		$maxLevels            = 1;
-		$structure            = new StructureModel();
-		$structure->maxLevels = $maxLevels;
-
-		craft()->structures->saveStructure($structure);
+		$structure = $this->createStructureRecord();
 
 		// Add our default plugin settings
 		$settings = '{"pluginNameOverride":"' . $pluginName . '", "structureId":"' . $structure->id . '"}';
@@ -277,5 +272,20 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		);
 
 		return $structure->id;
+	}
+
+	/**
+	 * Adds structure for redirects
+	 */
+	public function createStructureRecord()
+	{
+		// Add a new Structure for our Redirects
+		$maxLevels            = 1;
+		$structure            = new StructureModel();
+		$structure->maxLevels = $maxLevels;
+
+		craft()->structures->saveStructure($structure);
+
+		return $structure;
 	}
 }
