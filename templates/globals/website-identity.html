@@ -110,7 +110,7 @@
 			required: true
 		}, forms.elementSelect({
 			elements: [imageElement],
-			sourceElementId: websiteIdentity['image'] is defined ? websiteIdentity.image : null,
+			sourceElementId: websiteIdentity['image'] is defined and imageElement ? websiteIdentity.image : null,
 			elementType: elementType,
 			id: 'image',
 			name: 'sproutseo[globals][identity][image]',

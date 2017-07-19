@@ -197,7 +197,7 @@ class SproutSeoVariable
 	{
 		$element = craft()->elements->getElementById($id);
 
-		return $element != null ? $element : false;
+		return $element != null ? $element : null;
 	}
 
 	/**
