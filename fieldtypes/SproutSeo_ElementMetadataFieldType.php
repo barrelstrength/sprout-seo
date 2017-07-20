@@ -196,8 +196,9 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 
 			if (!isset($urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId]))
 			{
-				// it's a section without url - let's return a proper message
-				return "<span class='error'>The Element Metadata Field type is just available for entries with URLs enabled</span>";
+				return '<span class="error">' .
+					Craft::t('This field requires a URL-Enabled Element Type.') .
+					'</span>';
 			}
 
 			$urlEnabledSection = $urlEnabledSectionType->urlEnabledSections[$type . '-' . $urlEnabledSectionId];
