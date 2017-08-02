@@ -129,7 +129,9 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 
 			$matchedElementVariable        = $urlEnabledSectionType->getMatchedElementVariable();
 			$urlEnabledSectionTypeIdColumn = $urlEnabledSectionType->getIdColumnName();
-
+			// @todo - Fix bug when a variable is created in the template like
+			// {% set category    = product.category.last() %}
+			// and the name is the same as getMatchedElementVariable() could override the section
 			if (isset($context[$matchedElementVariable]->{$urlEnabledSectionTypeIdColumn}))
 			{
 				// Add the current page load matchedElementVariable to our Element Group
