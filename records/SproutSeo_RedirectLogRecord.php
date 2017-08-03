@@ -22,8 +22,8 @@ class SproutSeo_RedirectLogRecord extends BaseRecord
 	{
 		return array(
 			'redirectId'  => array(AttributeType::Number, 'required' => true),
-			'ipAddress'   => array(AttributeType::String, 'required' => false),
 			'referralURL' => array(AttributeType::String, 'required' => false),
+			'ipAddress'   => array(AttributeType::String, 'required' => false),
 		);
 	}
 

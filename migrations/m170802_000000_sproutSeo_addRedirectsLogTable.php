@@ -18,8 +18,8 @@ class m170802_000000_sproutSeo_addRedirectsLogTable extends BaseMigration
 		craft()->db->createCommand()->createTable($tableName, array(
 			'id'                 => array('column' => ColumnType::PK, 'null' => false),
 			'redirectId'         => array('column' => ColumnType::Int, 'length' => 10, 'null' => true),
-			'ipAddress'          => array('column' => ColumnType::Varchar, 'length' => 255, 'null' => true),
 			'referralURL'        => array('column' => ColumnType::Varchar, 'length' => 255, 'null' => true),
+			'ipAddress'          => array('column' => ColumnType::Varchar, 'length' => 255, 'null' => true),
 			'dateCreated'        => array('column' => ColumnType::DateTime, 'null' => false),
 			'dateUpdated'        => array('column' => ColumnType::DateTime, 'null' => false),
 			'uid'                => array('column' => 'char(36)', 'null' => false, 'default' => '0'),
