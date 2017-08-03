@@ -142,7 +142,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 
 					if (preg_match($oldUrlPattern, $url))
 					{
-						$this->saveLogRedirect($redirect->id);
+						$this->logRedirect($redirect->id);
 						// Replace capture groups if any
 						$redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
 
@@ -153,7 +153,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 				{
 					if ($redirect->oldUrl == $url)
 					{
-						$this->saveLogRedirect($redirect->id);
+						$this->logRedirect($redirect->id);
 
 						return $redirect;
 					}
@@ -165,18 +165,21 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Logs when a redirect match
+	 * Logs a redirect when a match is found
+	 *
+	 * @todo - escape this log data when we output it
+	 *         https://stackoverflow.com/questions/13199095/escaping-variables
 	 *
 	 * @param $redirectId int
 	 *
 	 * @return bool
 	 */
-	public function saveLogRedirect($redirectId)
+	public function logRedirect($redirectId)
 	{
 		$redirectLog              = new SproutSeo_RedirectLogRecord();
 		$redirectLog->redirectId  = $redirectId;
+		$redirectLog->referralURL = craft()->request->getUrlReferrer();
 		$redirectLog->ipAddress   = $_SERVER["REMOTE_ADDR"];
-		$redirectLog->referralURL = craft()->request->getHostInfo() . craft()->request->getRequestUri();
 
 		return $redirectLog->save(false);
 	}
