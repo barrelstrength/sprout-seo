@@ -24,7 +24,6 @@
 {% endblock %}
 
 {% block main %}
-
 	<input type="hidden" name="action" value="sproutSeo/redirects/saveRedirect">
 	<input type="hidden" name="redirect" value="sproutseo/redirects">
 	<input type="hidden" name="redirectId" value="{{ redirect.id }}">
@@ -43,8 +42,19 @@
 		</div>
 
 		<div class="item" data-position="right" data-colspan="1">
-
 			<div class="pane meta">
+				{% if redirect.id %}
+					{% set hits = craft.sproutSeo.getHitsByRedirect(redirect.id) %}
+					{{ forms.textField({
+						label: "Hits <span class='info'>This number represents the count for the number of redirects</span>"|t,
+						id: 'hits',
+						name: 'hits',
+						value: hits,
+						readonly: true,
+						first: true,
+						errors: ''
+					}) }}
+				{% endif %}
 
 				{% set statusInput %}
 					<div class="left">

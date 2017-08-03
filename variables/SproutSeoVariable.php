@@ -1104,4 +1104,9 @@ class SproutSeoVariable
 
 		return $variableTypes;
 	}
+
+	public function getHitsByRedirect($redirectId)
+	{
+		return sproutSeo()->redirects->getHitsByRedirect($redirectId);
+	}
 }
