@@ -67,6 +67,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 			'oldUrl' => Craft::t('Old Url'),
 			'newUrl' => Craft::t('New Url'),
 			'method' => Craft::t('Method'),
+			'count' => Craft::t('Count'),
 			'test'   => Craft::t('Test')
 		);
 	}
@@ -187,6 +188,10 @@ class SproutSeo_RedirectElementType extends BaseElementType
 				$methods = array_flip(SproutSeo_RedirectMethods::getConstants());
 
 				return $method . ' - ' . $methods[$method];
+
+			case 'count':
+
+				return sproutSeo()->redirects->getRedirectCount($element->id);
 
 			case 'test':
 				// Send link for testing

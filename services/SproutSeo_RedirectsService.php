@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 /**
@@ -153,6 +154,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 					if ($redirect->oldUrl == $url)
 					{
 						$this->saveLogRedirect($redirect->id);
+
 						return $redirect;
 					}
 				}
@@ -163,32 +165,36 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
-	* Logs when a redirect match
-	* @param $redirectId int
-	* @return bool
-	*/
+	 * Logs when a redirect match
+	 *
+	 * @param $redirectId int
+	 *
+	 * @return bool
+	 */
 	public function saveLogRedirect($redirectId)
 	{
-		$redirectLog = new SproutSeo_RedirectLogRecord();
+		$redirectLog              = new SproutSeo_RedirectLogRecord();
 		$redirectLog->redirectId  = $redirectId;
 		$redirectLog->ipAddress   = $_SERVER["REMOTE_ADDR"];
-		$redirectLog->referralURL = craft()->request->getHostInfo().craft()->request->getRequestUri();
+		$redirectLog->referralURL = craft()->request->getHostInfo() . craft()->request->getRequestUri();
 
 		return $redirectLog->save(false);
 	}
 
 	/**
-	* Returns total of hits from given redirect id
-	* @param $redirectId int
-	* @return int
-	*/
-	public function getHitsByRedirect($redirectId)
+	 * Returns the total of number of times a given redirect has been used
+	 *
+	 * @param $redirectId int
+	 *
+	 * @return int
+	 */
+	public function getRedirectCount($redirectId)
 	{
 		$total = craft()->db->createCommand()
 			->select('COUNT(id)')
 			->from('sproutseo_redirects_log')
 			->where(array(
-				'redirectId' => $redirectId
+					'redirectId' => $redirectId
 				)
 			)
 			->queryScalar();
