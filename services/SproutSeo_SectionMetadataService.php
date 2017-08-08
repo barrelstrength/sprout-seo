@@ -129,9 +129,12 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 
 			$matchedElementVariable        = $urlEnabledSectionType->getMatchedElementVariable();
 			$urlEnabledSectionTypeIdColumn = $urlEnabledSectionType->getIdColumnName();
-			// @todo - Fix bug when a variable is created in the template like
-			// {% set category    = product.category.last() %}
-			// and the name is the same as getMatchedElementVariable() could override the section
+
+			// Note: If a template uses a variable with the same name as a potential matched element
+			// (getMatchedElementVariable()) on a page where that element doesn't exists Sprout SEO
+			// can return the wrong metadata. For example, if an Entry page is loading and someone
+			// defines a 'category' variable {% set category = product.category.last() %}, the
+			// 'category' variable will be matched before the 'entry' variable.
 			if (isset($context[$matchedElementVariable]->{$urlEnabledSectionTypeIdColumn}))
 			{
 				// Add the current page load matchedElementVariable to our Element Group
