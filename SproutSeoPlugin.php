@@ -37,7 +37,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '3.2.3';
+		return '3.3.0';
 	}
 
 	/**
@@ -45,7 +45,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '3.2.1';
+		return '3.3.0';
 	}
 
 	/**
