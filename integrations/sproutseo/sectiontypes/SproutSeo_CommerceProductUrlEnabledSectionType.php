@@ -110,17 +110,6 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 	}
 
 	/**
-	 * Don't have Sprout SEO trigger ResaveElements task after saving a field layout.
-	 * This is already supported by Craft Commerce.
-	 *
-	 * @return bool
-	 */
-	public function resaveElementsAfterFieldLayoutSaved()
-	{
-		return false;
-	}
-
-	/**
 	 * @param null $elementGroupId
 	 *
 	 * @return bool

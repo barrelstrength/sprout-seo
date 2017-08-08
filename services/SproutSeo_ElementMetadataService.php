@@ -106,8 +106,8 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByElementType($elementType);
 
 			// We only need to save the current field layout. Some Elements, like Commerce_Products
-			// also need to save the related Variant field layout which returns as an array
-			if (!is_array($urlEnabledSectionType) && $urlEnabledSectionType->resaveElementsAfterFieldLayoutSaved())
+			// also need to save the related Variant field layout which returns an array
+			if (!is_array($urlEnabledSectionType))
 			{
 				$urlEnabledSectionType->resaveElements();
 			}
