@@ -120,18 +120,19 @@ class SproutSeo_CategoryUrlEnabledSectionType extends SproutSeoBaseUrlEnabledSec
 
 		if ($locales)
 		{
-			$primaryLocale = $locales[0];
+			foreach ($locales as $key => $locale)
+			{
+				$criteria->locale        = $locale->locale;
+				$criteria->groupId       = $elementGroupId;
+				$criteria->status        = null;
+				$criteria->localeEnabled = null;
+				$criteria->limit         = null;
 
-			$criteria->locale        = $primaryLocale->locale;
-			$criteria->groupId       = $elementGroupId;
-			$criteria->status        = null;
-			$criteria->localeEnabled = null;
-			$criteria->limit         = null;
-
-			craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Categories and metadata.'), array(
-				'elementType' => ElementType::Category,
-				'criteria'    => $criteria->getAttributes()
-			));
+				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Categories and metadata. '.$locale->locale), array(
+					'elementType' => ElementType::Category,
+					'criteria'    => $criteria->getAttributes()
+				));
+			}
 		}
 	}
 }
