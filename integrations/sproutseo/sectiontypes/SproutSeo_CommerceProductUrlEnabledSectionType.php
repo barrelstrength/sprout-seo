@@ -149,7 +149,7 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 				$criteria->localeEnabled = null;
 				$criteria->limit         = null;
 
-				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Commerce Products and metadata. '.$locale->locale), array(
+				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Commerce Product'.$productType->name.' language: '.$locale->locale), array(
 					'elementType' => 'Commerce_Product',
 					'criteria'    => $criteria->getAttributes()
 				));

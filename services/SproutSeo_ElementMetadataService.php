@@ -116,6 +116,8 @@ class SproutSeo_ElementMetadataService extends BaseApplicationComponent
 
 	public function resaveElementsIfUsingElementMetadataField($fieldId)
 	{
+		// we may need ..
+		craft()->config->maxPowerCaptain();
 		//Get all layoutIds where this field is used from craft_fieldlayoutfields.layoutId
 		$fieldLayoutIds = craft()->db->createCommand()
 			->select('layoutId')
