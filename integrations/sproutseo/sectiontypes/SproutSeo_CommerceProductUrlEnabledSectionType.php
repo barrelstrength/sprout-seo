@@ -130,19 +130,17 @@ class SproutSeo_CommerceProductUrlEnabledSectionType extends SproutSeoBaseUrlEna
 
 		if ($locales)
 		{
-			foreach ($locales as $key => $locale)
-			{
-				$criteria->locale        = $locale->locale;
-				$criteria->productTypeId = $elementGroupId;
-				$criteria->status        = null;
-				$criteria->localeEnabled = null;
-				$criteria->limit         = null;
+			$primaryLocale           = $locales[0];
+			$criteria->locale        = $primaryLocale->locale;
+			$criteria->productTypeId = $elementGroupId;
+			$criteria->status        = null;
+			$criteria->localeEnabled = null;
+			$criteria->limit         = null;
 
-				craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Commerce Product'.$productType->name.' language: '.$locale->locale), array(
-					'elementType' => 'Commerce_Product',
-					'criteria'    => $criteria->getAttributes()
-				));
-			}
+			craft()->tasks->createTask('ResaveElements', Craft::t('Re-saving Products and metadata.'), array(
+				'elementType' => 'Commerce_Product',
+				'criteria'    => $criteria->getAttributes()
+			));
 		}
 	}
 }
