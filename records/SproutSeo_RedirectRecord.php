@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 /**
@@ -24,7 +25,8 @@ class SproutSeo_RedirectRecord extends BaseRecord
 			'oldUrl' => array(AttributeType::String, 'required' => true),
 			'newUrl' => array(AttributeType::String, 'required' => true),
 			'method' => array(AttributeType::Number, 'required' => true),
-			'regex'  => array(AttributeType::Bool, 'required' => true)
+			'regex'  => array(AttributeType::Bool, 'required' => true),
+			'count'  => array(AttributeType::Number, 'required' => true, 'default' => 0),
 		);
 	}
 
@@ -72,10 +74,10 @@ class SproutSeo_RedirectRecord extends BaseRecord
 		$criteria        = $this->getDbCriteria();
 		$criteria->alias = 'redirects';
 		$criteria->join  = 'LEFT JOIN ' . $tablePrefix . 'elements element ON element.id=redirects.id ';
-		$criteria->join .= 'LEFT JOIN ' . $tablePrefix . 'structures structures ON structures.id=:structureId ';
-		$criteria->join .= 'LEFT JOIN ' . $tablePrefix . 'structureelements elements ON elements.structureId=structures.id ';
+		$criteria->join  .= 'LEFT JOIN ' . $tablePrefix . 'structures structures ON structures.id=:structureId ';
+		$criteria->join  .= 'LEFT JOIN ' . $tablePrefix . 'structureelements elements ON elements.structureId=structures.id ';
 		$criteria->order = 'elements.lft ASC';
-		$criteria->addCondition('element.enabled = 1 and elements.elementID = element.id');
+		$criteria->addCondition('elements.elementID = element.id');
 
 		$criteria->params = array(':structureId' => $structureId);
 

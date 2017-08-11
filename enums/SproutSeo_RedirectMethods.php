@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 /**
@@ -9,6 +10,7 @@ abstract class SproutSeo_RedirectMethods extends BaseEnum
 	// Constants
 	// =========================================================================
 
-	const Permanent = 301;
-	const Temporary = 302;
+	const Permanent    = 301;
+	const Temporary    = 302;
+	const PageNotFound = 404;
 }

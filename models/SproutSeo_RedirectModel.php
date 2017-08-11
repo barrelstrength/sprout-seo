@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 /**
@@ -23,7 +24,8 @@ class SproutSeo_RedirectModel extends BaseElementModel
 			'oldUrl' => AttributeType::String,
 			'newUrl' => AttributeType::String,
 			'method' => AttributeType::Number,
-			'regex'  => AttributeType::Bool
+			'regex'  => AttributeType::Bool,
+			'count'  => AttributeType::Number,
 		));
 	}
 

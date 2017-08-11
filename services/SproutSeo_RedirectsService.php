@@ -52,6 +52,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$redirectRecord->newUrl = $redirect->newUrl;
 		$redirectRecord->method = $redirect->method;
 		$redirectRecord->regex  = $redirect->regex;
+		$redirectRecord->count  = $redirect->count;
 
 		$redirectRecord->validate();
 		$redirect->addErrors($redirectRecord->getErrors());
@@ -112,7 +113,10 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	{
 		$response = craft()->db->createCommand()->update(
 			'sproutseo_redirects',
-			array('method' => $newMethod),
+			array(
+				'method' => $newMethod,
+				'count' => 0
+			),
 			array('in', 'id', $ids)
 		);
 
@@ -129,7 +133,9 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function findUrl($url)
 	{
-		$redirects = SproutSeo_RedirectRecord::model()->structured()->findAll();
+		$redirectRecords = SproutSeo_RedirectRecord::model()->structured()->findAll();
+
+		$redirects = SproutSeo_RedirectModel::populateModels($redirectRecords);
 
 		if ($redirects)
 		{
@@ -142,7 +148,6 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 
 					if (preg_match($oldUrlPattern, $url))
 					{
-						$this->logRedirect($redirect->id);
 						// Replace capture groups if any
 						$redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
 
@@ -153,8 +158,6 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 				{
 					if ($redirect->oldUrl == $url)
 					{
-						$this->logRedirect($redirect->id);
-
 						return $redirect;
 					}
 				}
@@ -176,12 +179,26 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 */
 	public function logRedirect($redirectId)
 	{
-		$redirectLog              = new SproutSeo_RedirectLogRecord();
-		$redirectLog->redirectId  = $redirectId;
-		$redirectLog->referralURL = craft()->request->getUrlReferrer();
-		$redirectLog->ipAddress   = $_SERVER["REMOTE_ADDR"];
+		try
+		{
+			$redirectLog              = new SproutSeo_RedirectLogRecord();
+			$redirectLog->redirectId  = $redirectId;
+			$redirectLog->referralURL = craft()->request->getUrlReferrer();
+			$redirectLog->ipAddress   = $_SERVER["REMOTE_ADDR"];
 
-		return $redirectLog->save(false);
+			$redirectLog->save(false);
+
+			$redirect        = $this->getRedirectById($redirectId);
+			$redirect->count += 1;
+
+			$this->saveRedirect($redirect);
+		}
+		catch (\Exception $e)
+		{
+			SproutSeoPlugin::log('Unable to log redirect.', LogLevel::Info, true);
+		}
+
+		return true;
 	}
 
 	/**

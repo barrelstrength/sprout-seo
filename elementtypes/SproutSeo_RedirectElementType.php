@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 /**
@@ -67,7 +68,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 			'oldUrl' => Craft::t('Old Url'),
 			'newUrl' => Craft::t('New Url'),
 			'method' => Craft::t('Method'),
-			'count' => Craft::t('Count'),
+			'count'  => Craft::t('Count'),
 			'test'   => Craft::t('Test')
 		);
 	}
@@ -84,7 +85,8 @@ class SproutSeo_RedirectElementType extends BaseElementType
 		return array(
 			'oldUrl' => Craft::t('Old Url'),
 			'newUrl' => Craft::t('New Url'),
-			'method' => Craft::t('Method')
+			'method' => Craft::t('Method'),
+			'count'  => Craft::t('Count'),
 		);
 	}
 
@@ -109,9 +111,11 @@ class SproutSeo_RedirectElementType extends BaseElementType
 
 		foreach ($methods as $code => $method)
 		{
-			$key           = 'method:' . $method;
+			$key   = 'method:' . $method;
+			$label = $method . ' - ' . preg_replace('/([a-z])([A-Z])/', '$1 $2', $code);
+
 			$sources[$key] = array(
-				'label'             => $method . ' - ' . $code,
+				'label'             => $label,
 				'criteria'          => array('method' => $method),
 				'structureId'       => sproutSeo()->redirects->getStructureId(),
 				'structureEditable' => true
@@ -182,20 +186,9 @@ class SproutSeo_RedirectElementType extends BaseElementType
 	{
 		switch ($attribute)
 		{
-			case 'method':
-				$method = $element->$attribute;
-				//Get method options
-				$methods = array_flip(SproutSeo_RedirectMethods::getConstants());
-
-				return $method . ' - ' . $methods[$method];
-
-			case 'count':
-
-				return sproutSeo()->redirects->getRedirectCount($element->id);
-
 			case 'test':
 				// Send link for testing
-				$link = "<a href='{$element->oldUrl}' target='_blank' class='go'>Test</a>";
+				$link = "<a href='{$element->oldUrl}' target='_blank' data-icon='world'></a>";
 
 				if ($element->regex)
 				{
@@ -223,7 +216,7 @@ class SproutSeo_RedirectElementType extends BaseElementType
 		$structureId = sproutSeo()->redirects->getStructureId();
 
 		$query
-			->addSelect('redirects.oldUrl, redirects.newUrl, redirects.method, redirects.id, redirects.regex')
+			->addSelect('redirects.oldUrl, redirects.newUrl, redirects.method, redirects.id, redirects.regex, redirects.count')
 			->join('sproutseo_redirects redirects', 'redirects.id = elements.id')
 			->leftJoin('structures structures', 'structures.id = :structureId', array(':structureId' => $structureId))
 			->leftJoin('structureelements structureelements', array('and', 'structureelements.structureId = structures.id', 'structureelements.elementId = redirects.id'));

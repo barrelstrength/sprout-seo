@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 /**
@@ -89,6 +90,7 @@ class SproutSeo_RedirectsController extends BaseController
 		$redirect->method  = craft()->request->getPost('method');
 		$redirect->regex   = craft()->request->getPost('regex');
 		$redirect->enabled = craft()->request->getPost('enabled');
+		$redirect->count   = craft()->request->getPost('count');
 
 		if (sproutSeo()->redirects->saveRedirect($redirect))
 		{

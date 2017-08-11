@@ -5,6 +5,7 @@
  * @license   http://sprout.barrelstrengthdesign.com/license
  * @see       http://sprout.barrelstrengthdesign.com
  */
+
 namespace Craft;
 
 /**
@@ -45,7 +46,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '3.3.0';
+		return '3.3.1';
 	}
 
 	/**
@@ -158,8 +159,27 @@ class SproutSeoPlugin extends BasePlugin
 						// check if the request url needs redirect
 						$redirect = sproutSeo()->redirects->getRedirect($url);
 
-						if ($redirect)
+						if (!$redirect)
 						{
+							// Save new 404 Redirect
+							$redirect = new SproutSeo_RedirectModel();
+
+							$redirect->oldUrl  = $url;
+							$redirect->newUrl  = null;
+							$redirect->method  = 404;
+							$redirect->regex   = 0;
+							$redirect->enabled = 0;
+							$redirect->count   = 0;
+
+							sproutSeo()->redirects->saveRedirect($redirect);
+						}
+
+						sproutSeo()->redirects->logRedirect($redirect->id);
+
+						// Use != instead of !== as 404 can be both as integer or string
+						if ($redirect->enabled && $redirect->method != 404)
+						{
+							// Redirect away
 							craft()->request->redirect($redirect->newUrl, true, $redirect->method);
 						}
 					}
