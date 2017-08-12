@@ -1,69 +1,65 @@
-{%- set urls -%}
-    {# singles #}
-    {% if sitemap['entryTypes']['single'] %}
-        <sitemap>
-            <loc>{{siteUrl}}singles-sitemap.xml</loc>
-            <lastmod>{{ now|date('Y-m-d') }}</lastmod>
-        </sitemap>
-    {% endif %}
+{% set urls %}
 
-    {# channels #}
-    {% for channel in sitemap['entryTypes']['channel'] %}
-        {% for handle,total in channel %}
-        <sitemap>
-            {% for item in 1..(total/20) |round(0, 'ceil') %}
-                <loc>{{siteUrl}}{{handle}}-entries-sitemap-{{item}}.xml</loc>
-                <lastmod>{{ now|date('Y-m-d') }}</lastmod>
-            {% endfor %}
-        </sitemap>
-        {% endfor %}
-    {% endfor %}
+{# Singles #}
+{% if sitemap['entryTypes']['single'] %}
+    <sitemap>
+        <loc>{{siteUrl}}singles-sitemap.xml</loc>
+        <lastmod>{{ now|date('Y-m-d') }}</lastmod>
+    </sitemap>
+{% endif %}
 
-    {# structures #}
-    {% for structure in sitemap['entryTypes']['structure'] %}
-        {% for handle,total in structure %}
-        <sitemap>
-            {% for item in 1..(total/20) |round(0, 'ceil') %}
-                <loc>{{siteUrl}}{{handle}}-entries-sitemap-{{item}}.xml</loc>
-                <lastmod>{{ now|date('Y-m-d') }}</lastmod>
-            {% endfor %}
-        </sitemap>
-        {% endfor %}
-    {% endfor %}
+{# Channels #}
+{% for channel in sitemap['entryTypes']['channel'] %}
+{% for handle,total in channel %}
+{% for item in 1..(total/20) |round(0, 'ceil') %}
+    <sitemap>
+        <loc>{{siteUrl}}{{handle}}-entries-sitemap{{item}}.xml</loc>
+        <lastmod>{{ now|date('Y-m-d') }}</lastmod>
+    </sitemap>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% for structure in sitemap['entryTypes']['structure'] %}
+{% for handle,total in structure %}
+{% for item in 1..(total/20) |round(0, 'ceil') %}
+    <sitemap>
+        <loc>{{siteUrl}}{{handle}}-entries-sitemap{{item}}.xml</loc>
+        <lastmod>{{ now|date('Y-m-d') }}</lastmod>
+    </sitemap>
+{% endfor %}
+{% endfor %}
+{% endfor %}
 
-    {# categories #}
-    {% for handle,total in sitemap['categoryTypes'] %}
-        {% for item in 1..(total/20) |round(0, 'ceil') %}
-        <sitemap>
-            <loc>{{siteUrl}}{{handle}}-categories-sitemap-{{item}}.xml</loc>
-            <lastmod>{{ now|date('Y-m-d') }}</lastmod>
-        </sitemap>
-        {% endfor %}
-    {% endfor %}
+{# Categories #}
+{% for handle,total in sitemap['categoryTypes'] %}
+{% for item in 1..(total/20) |round(0, 'ceil') %}
+    <sitemap>
+        <loc>{{siteUrl}}{{handle}}-categories-sitemap{{item}}.xml</loc>
+        <lastmod>{{ now|date('Y-m-d') }}</lastmod>
+    </sitemap>
+{% endfor %}
+{% endfor %}
 
-    {# products #}
-    {% for handle,total in sitemap['productTypes'] %}
-        {% for item in 1..(total/20) |round(0, 'ceil') %}
-        <sitemap>
-            <loc>{{siteUrl}}{{handle}}-products-sitemap-{{item}}.xml</loc>
-            <lastmod>{{ now|date('Y-m-d') }}</lastmod>
-        </sitemap>
-        {% endfor %}
-    {% endfor %}
+{# Commerce Products #}
+{% for handle,total in sitemap['productTypes'] %}
+{% for item in 1..(total/20) |round(0, 'ceil') %}
+    <sitemap>
+        <loc>{{siteUrl}}{{handle}}-products-sitemap{{item}}.xml</loc>
+        <lastmod>{{ now|date('Y-m-d') }}</lastmod>
+    </sitemap>
+{% endfor %}
+{% endfor %}
 
-    {# customs #}
-    {% if sitemap['custom'] %}
-        <sitemap>
-            <loc>{{siteUrl}}custom-sitemap.xml</loc>
-            <lastmod>{{ now|date('Y-m-d') }}</lastmod>
-        </sitemap>
-    {% endif %}
-
+{# Custom Sections #}
+{% if sitemap['custom'] %}
+    <sitemap>
+        <loc>{{siteUrl}}custom-sections-sitemap.xml</loc>
+        <lastmod>{{ now|date('Y-m-d') }}</lastmod>
+    </sitemap>
+{% endif %}
 {% endset %}{# end urls set #}
 {#
  #
  # Returns URL nodes or the full sitemap based on options provided/supported #}
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-{{ urls }}
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{{ urls }}</sitemapindex>
