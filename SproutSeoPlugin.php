@@ -238,6 +238,18 @@ class SproutSeoPlugin extends BasePlugin
 	/**
 	 * @return array
 	 */
+	public function registerSiteRoutes()
+	{
+		return array(
+			'(?P<sitemapHandle>.*)sitemap(.*).xml'  => array(
+				'action' => 'sproutSeo/sitemap/index'
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
 	public function registerUserPermissions()
 	{
 		return array(

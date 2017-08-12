@@ -151,4 +151,144 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		return $structure;
 	}
+
+	public function getSitemapIndex()
+	{
+		$enabledSitemaps = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_metadata_sections')
+			->where('enabled = 1 and urlEnabledSectionId is not null')
+			->queryAll();
+
+		$entryTypes    = $this->getEntriesByType($enabledSitemaps);
+		$categoryTypes = $this->getCategoriesByType($enabledSitemaps);
+		$productTypes  = $this->getProductsByType($enabledSitemaps);
+
+		$response = array(
+			'entryTypes'=> $entryTypes,
+			'categoryTypes'=> $categoryTypes,
+			'productTypes'=> $productTypes,
+			'custom'=> $this->getCustoms($enabledSitemaps)
+		);
+
+		return $response;
+	}
+
+	public function getElementsPerSite()
+	{
+		return 20;
+	}
+
+	public function getEntriesByType($enabledSitemaps)
+	{
+		$entryTypes = array(
+			'single' => 0,
+			'channel' => array(),
+			'structure' => array());
+		// Fetching settings for each enabled section in Sprout SEO
+		foreach ($enabledSitemaps as $key => $sitemapSettings)
+		{
+			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
+
+			// lets make sure that are entries
+			if ($urlEnabledSectionType->getElementType() == ElementType::Entry)
+			{
+				$sectionModel = $urlEnabledSectionType->getById($sitemapSettings['urlEnabledSectionId']);
+
+				$criteria = craft()->elements->getCriteria(ElementType::Entry);
+
+				if ($sectionModel->type == 'single')
+				{
+					$entryTypes['single'] = 1;
+				}
+				//'channel' or 'structure'
+				else
+				{
+					$criteria->sectionId = $sitemapSettings['urlEnabledSectionId'];
+					$criteria->limit = null;
+					$rowCount = $criteria->total();
+					$handle = $sectionModel->handle;
+
+					if ($rowCount>0)
+					{
+						array_push($entryTypes[$sectionModel->type], array($handle => $rowCount));
+					}
+				}
+			}
+		}
+
+		return $entryTypes;
+	}
+
+	public function getCategoriesByType($enabledSitemaps)
+	{
+		$categoryTypes = array();
+		// Fetching settings for each enabled category groups in Sprout SEO
+		foreach ($enabledSitemaps as $key => $sitemapSettings)
+		{
+			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
+
+			// lets make sure that are entries
+			if ($urlEnabledSectionType->getElementType() == ElementType::Category)
+			{
+				$categoryGroupModel = $urlEnabledSectionType->getById($sitemapSettings['urlEnabledSectionId']);
+
+				$criteria = craft()->elements->getCriteria(ElementType::Category);
+				$criteria->groupId = $sitemapSettings['urlEnabledSectionId'];
+				$criteria->limit = null;
+				$rowCount = $criteria->total();
+				$handle = $categoryGroupModel->handle;
+
+				if ($rowCount>0)
+				{
+					$categoryTypes[$handle] = $rowCount;
+				}
+			}
+		}
+
+		return $categoryTypes;
+	}
+
+	public function getProductsByType($enabledSitemaps)
+	{
+		$productTypes = array();
+		// Fetching settings for each enabled products in Sprout SEO
+		foreach ($enabledSitemaps as $key => $sitemapSettings)
+		{
+			$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
+
+			// lets make sure that are entries
+			if ($urlEnabledSectionType->getElementType() == 'Commerce_Product')
+			{
+				$productTypeModel = $urlEnabledSectionType->getById($sitemapSettings['urlEnabledSectionId']);
+
+				$criteria = craft()->elements->getCriteria('Commerce_Product');
+				$criteria->productId = $sitemapSettings['urlEnabledSectionId'];
+				$criteria->limit = null;
+				$rowCount = $criteria->total();
+				$handle = $productTypeModel->handle;
+
+				if ($rowCount>0)
+				{
+					$productTypes[$handle] = $rowCount;
+				}
+			}
+		}
+
+		return $productTypes;
+	}
+
+	public function getCustoms($enabledSitemaps)
+	{
+		// Fetching settings for each enabled custom in Sprout SEO
+		foreach ($enabledSitemaps as $key => $sitemapSettings)
+		{
+			if ($sitemapSettings['isCustom'])
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
