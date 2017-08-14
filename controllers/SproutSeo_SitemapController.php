@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 class SproutSeo_SitemapController extends BaseController
@@ -12,44 +13,65 @@ class SproutSeo_SitemapController extends BaseController
 	 */
 	public function actionIndex()
 	{
+		// Get URL and remove .xml extension
 		$url = craft()->request->getPath();
 
-		$segments = explode('-', $url);
+		$sitemapSlug    = substr($url, 0, -4);
+		$segments       = explode('-', $sitemapSlug);
+		$sitemapSegment = array_pop($segments);
 
-		$variables = array();
+		// Extract the page number, if we have one.
+		preg_match('/\d+/', $sitemapSegment, $match);
+		$pageNumber = isset($match[0]) ? $match[0] : null;
 
-		#header('Content-Type: text/xml');
-		// Rendering the template and passing in received options
-		$path = craft()->templates->getTemplatesPath();
+		// Prepare Sitemap Index content
+		$sitemapIndexItems = array();
+		$elements          = array();
 
-		craft()->templates->setTemplatesPath(dirname(__FILE__) . '/../templates/');
-		//@todo add criteria by number at the end
-		//https://craftcms.stackexchange.com/a/16474/4798
+		// @todo - need to distinguish between 4 scenarios:
+		// 1. Singles
+		// 2. Custom Sections
+		// 3. Url-Enabled Section with Offset and Limit
+		// 4. Sitemapindex
 
-		foreach ($segments as $segment)
+		switch ($sitemapSlug)
 		{
-			switch ($segment)
-			{
-				case 'sitemap.xml':
-					$sitemap = sproutSeo()->sitemap->getSitemapIndex();
+			// Generate Sitemap Index
+			case 'sitemap':
+				$sitemapIndexItems = sproutSeo()->sitemap->getSitemapIndex();
+				break;
 
-					$template = "sitemap/_frontend/sitemap";
-					$variables = array(
-						'sitemap' => $sitemap
-					);
-					break;
-				case 'category':
-					# code...
-					break;
-				case 'product':
-					# code...
-					break;
-				case 'entry':
-					# code...
-					break;
-			}
+			// Display Singles Sitemap
+			case 'singles-sitemap':
+				$elements = sproutSeo()->sitemap->getDynamicSitemapElements('singles-sitemap', $pageNumber);
+				break;
+
+			// Display Custom Section Sitemap
+			case 'custom-sections-sitemap':
+				$elements = sproutSeo()->sitemap->getDynamicSitemapElements('custom-sections-sitemap', $pageNumber);
+				break;
+
+			default:
+				$sitemapHandle = $segments[1] . ':' . $segments[0];
+				$elements      = sproutSeo()->sitemap->getDynamicSitemapElements($sitemapHandle, $pageNumber);
 		}
 
-		$this->renderTemplate($template, $variables);
+		header('Content-Type: text/xml');
+
+		$templatePath = craft()->path->getPluginsPath() . 'sproutseo/templates';
+		craft()->templates->setTemplatesPath($templatePath);
+
+		if ($sitemapSlug === 'sitemap')
+		{
+			$this->renderTemplate('_special/sitemapindex', array(
+				'sitemapIndexItems' => $sitemapIndexItems
+			));
+		}
+		else
+		{
+			$this->renderTemplate('_special/sitemap-dynamic', array(
+				'elements' => $elements
+			));
+		}
 	}
 }

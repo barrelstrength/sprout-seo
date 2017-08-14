@@ -236,12 +236,22 @@ class SproutSeoPlugin extends BasePlugin
 	}
 
 	/**
+	 * Match dynamic sitemap URLs
+	 *
+	 * Example matches include:
+	 * - sitemap.xml
+	 * - singles-sitemap.xml
+	 * - custom-sections-sitemap.xml
+	 * - blog-entries-sitemap1.xml
+	 * - blog-entries-sitemap2.xml
+	 *
 	 * @return array
 	 */
 	public function registerSiteRoutes()
 	{
+		// @todo - allow user to disable. migration should disable for existing installs.
 		return array(
-			'(?P<sitemapHandle>.*)sitemap(.*).xml'  => array(
+			'(.+-)?sitemap(\d+)?.xml'  => array(
 				'action' => 'sproutSeo/sitemap/index'
 			)
 		);
