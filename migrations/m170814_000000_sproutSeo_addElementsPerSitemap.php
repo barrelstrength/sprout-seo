@@ -21,6 +21,7 @@ class m170814_000000_sproutSeo_addElementsPerSitemap extends BaseMigration
 		$settings = json_decode($settings, true);
 
 		$settings['totalElementsPerSitemap'] = 500;
+		$settings['enableDynamicSitemaps']   = 0;
 
 		$settingsJson = JsonHelper::encode($settings);
 

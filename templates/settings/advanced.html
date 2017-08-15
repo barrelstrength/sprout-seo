@@ -72,6 +72,28 @@
       <hr>
 
       {{ forms.lightswitchField({
+        label: "Enable dynamic sitemap"|t,
+        instructions: "Enable this setting to output a dynamic XML sitemap of all your website pages with URLs."|t,
+        name: 'enableDynamicSitemaps',
+        toggle: 'settings-total-elements',
+        on: settings.enableDynamicSitemaps,
+        onLabel: "Enable"|t
+      }) }}
+
+      <div id="settings-total-elements" class="{% if not settings.enableDynamicSitemaps %} hidden {% endif %}">
+        {{ forms.textField({
+          label: "Total Elements Per Sitemap"|t,
+          instructions: "Please change this value if you have timeout issues on your sitemaps"|t,
+          name: 'totalElementsPerSitemap',
+          size:'10',
+          value: settings.totalElementsPerSitemap,
+          errors: ''
+        }) }}
+      </div>
+
+      <hr>
+
+      {{ forms.lightswitchField({
         label: "Override default locale behavior"|t,
         instructions: "Metadata is generated with the assumption that you are using Craft Locales to manage multiple languages on your site. Locales in Craft, however, can be used for multi-language or multi-site behavior. If you are using Craft's Locales for multi-site behavior, enable this setting and select your website locale."|t,
         name: 'toggleLocaleOverride',
@@ -102,14 +124,6 @@
 		  on: settings.displayFieldHandles ? true : false,
 		  onLabel: "Enable"|t
 	  }) }}
-
-    {{ forms.textField({
-      label: "Total Elements Per Sitemap"|t,
-      instructions: "Please change this value if you have timeout issues on your sitemaps"|t,
-      name: 'totalElementsPerSitemap',
-      value: settings.totalElementsPerSitemap,
-      errors: ''
-    }) }}
 
     {% endnamespace %}
 

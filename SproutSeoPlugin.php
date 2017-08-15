@@ -203,6 +203,7 @@ class SproutSeoPlugin extends BasePlugin
 			'twitterTransform'        => array(AttributeType::String, 'default' => null),
 			'ogTransform'             => array(AttributeType::String, 'default' => null),
 			'totalElementsPerSitemap' => array(AttributeType::Number, 'default' => 500),
+			'enableDynamicSitemaps'   => array(AttributeType::Bool, 'default' => true),
 		);
 	}
 
@@ -250,12 +251,17 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function registerSiteRoutes()
 	{
-		// @todo - allow user to disable. migration should disable for existing installs.
-		return array(
-			'(.+-)?sitemap(\d+)?.xml'  => array(
-				'action' => 'sproutSeo/sitemap/index'
-			)
-		);
+		$plugin      = craft()->plugins->getPlugin('sproutseo');
+		$seoSettings = $plugin->getSettings();
+
+		if (isset($seoSettings->enableDynamicSitemaps) && $seoSettings->enableDynamicSitemaps)
+		{
+			return array(
+				'(.+-)?sitemap(\d+)?.xml'  => array(
+					'action' => 'sproutSeo/sitemap/index'
+				)
+			);
+		}
 	}
 
 	/**

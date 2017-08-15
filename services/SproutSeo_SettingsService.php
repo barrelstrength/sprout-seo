@@ -113,6 +113,11 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 			$seoSettings->totalElementsPerSitemap = $settings["totalElementsPerSitemap"];
 		}
 
+		if (isset($settings["enableDynamicSitemaps"]))
+		{
+			$seoSettings->enableDynamicSitemaps = $settings["enableDynamicSitemaps"];
+		}
+
 		$settings = JsonHelper::encode($seoSettings);
 
 		$affectedRows = craft()->db->createCommand()->update('plugins', array(
