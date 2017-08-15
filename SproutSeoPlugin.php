@@ -222,6 +222,8 @@ class SproutSeoPlugin extends BasePlugin
 			'metadataVariable'        => array(AttributeType::String, 'default' => null),
 			'twitterTransform'        => array(AttributeType::String, 'default' => null),
 			'ogTransform'             => array(AttributeType::String, 'default' => null),
+			'totalElementsPerSitemap' => array(AttributeType::Number, 'default' => 500),
+			'enableDynamicSitemaps'   => array(AttributeType::Bool, 'default' => true),
 		);
 	}
 
@@ -253,6 +255,33 @@ class SproutSeoPlugin extends BasePlugin
 				'action' => 'sproutSeo/settings/settingsIndex'
 			),
 		);
+	}
+
+	/**
+	 * Match dynamic sitemap URLs
+	 *
+	 * Example matches include:
+	 * - sitemap.xml
+	 * - singles-sitemap.xml
+	 * - custom-sections-sitemap.xml
+	 * - blog-entries-sitemap1.xml
+	 * - blog-entries-sitemap2.xml
+	 *
+	 * @return array
+	 */
+	public function registerSiteRoutes()
+	{
+		$plugin      = craft()->plugins->getPlugin('sproutseo');
+		$seoSettings = $plugin->getSettings();
+
+		if (isset($seoSettings->enableDynamicSitemaps) && $seoSettings->enableDynamicSitemaps)
+		{
+			return array(
+				'(.+-)?sitemap(\d+)?.xml'  => array(
+					'action' => 'sproutSeo/sitemap/index'
+				)
+			);
+		}
 	}
 
 	/**
