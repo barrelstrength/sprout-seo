@@ -19,8 +19,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		$sitemapIndexItems       = array();
 		$hasSingles              = false;
 
-		// @todo - allow user to set $totalElementsPerSitemap default value
-		$totalElementsPerSitemap = 10;
+		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
 		$urlEnabledSectionTypes = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypes();
 
@@ -98,9 +97,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 * @return array
 	 * @throws HttpException
 	 */
-	public function getDynamicSitemapElements($sitemapHandle, $pageNumber, $totalElementsPerSitemap = 10)
+	public function getDynamicSitemapElements($sitemapHandle, $pageNumber)
 	{
 		$urls = array();
+		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
 		// Our offset should be zero for the first page
 		$offset = ($totalElementsPerSitemap * $pageNumber) - $totalElementsPerSitemap;
@@ -504,5 +504,23 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return false;
+	}
+
+	public function getTotalElementsPerSitemap()
+	{
+		$plugin      = craft()->plugins->getPlugin('sproutseo');
+		$seoSettings = $plugin->getSettings();
+
+		if (isset($seoSettings['totalElementsPerSitemap']) && $seoSettings['totalElementsPerSitemap'])
+		{
+			$total = $seoSettings['totalElementsPerSitemap'];
+		}
+		else
+		{
+			// default $seoSettings['totalElementsPerSitemap'] is 500
+			$total = 500;
+		}
+
+		return $total;
 	}
 }

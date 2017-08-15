@@ -108,6 +108,11 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 			}
 		}
 
+		if (isset($settings["totalElementsPerSitemap"]))
+		{
+			$seoSettings->totalElementsPerSitemap = $settings["totalElementsPerSitemap"];
+		}
+
 		$settings = JsonHelper::encode($seoSettings);
 
 		$affectedRows = craft()->db->createCommand()->update('plugins', array(

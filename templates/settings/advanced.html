@@ -103,6 +103,14 @@
 		  onLabel: "Enable"|t
 	  }) }}
 
+    {{ forms.textField({
+      label: "Total Elements Per Sitemap"|t,
+      instructions: "Please change this value if you have timeout issues on your sitemaps"|t,
+      name: 'totalElementsPerSitemap',
+      value: settings.totalElementsPerSitemap,
+      errors: ''
+    }) }}
+
     {% endnamespace %}
 
     <hr>

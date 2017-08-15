@@ -45,7 +45,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '3.3.0';
+		return '3.3.1';
 	}
 
 	/**
@@ -202,6 +202,7 @@ class SproutSeoPlugin extends BasePlugin
 			'metadataVariable'        => array(AttributeType::String, 'default' => null),
 			'twitterTransform'        => array(AttributeType::String, 'default' => null),
 			'ogTransform'             => array(AttributeType::String, 'default' => null),
+			'totalElementsPerSitemap' => array(AttributeType::Number, 'default' => 500),
 		);
 	}
 
