@@ -88,8 +88,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	/**
 	 * Prepares urls for a dynamic sitemap
 	 *
-	 * @todo - allow user to set $totalElementsPerSitemap default value
-	 *
 	 * @param     $sitemapHandle
 	 * @param     $pageNumber
 	 * @param int $totalElementsPerSitemap
