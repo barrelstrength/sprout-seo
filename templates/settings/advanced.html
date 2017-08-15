@@ -125,6 +125,16 @@
 		  onLabel: "Enable"|t
 	  }) }}
 
+    <hr>
+
+    {{ forms.lightswitchField({
+      label: "Enable 404 Redirect Log"|t,
+      instructions: "Enable this setting to save 404 urls"|t,
+      name: 'enable404RedirectLog',
+      on: settings.enable404RedirectLog ? true : false,
+      onLabel: "Enable"|t
+     }) }}
+
     {% endnamespace %}
 
     <hr>

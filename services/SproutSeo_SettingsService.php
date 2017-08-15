@@ -118,6 +118,11 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 			$seoSettings->enableDynamicSitemaps = $settings["enableDynamicSitemaps"];
 		}
 
+		if (isset($settings["enable404RedirectLog"]))
+		{
+			$seoSettings->enable404RedirectLog = $settings["enable404RedirectLog"];
+		}
+
 		$settings = JsonHelper::encode($seoSettings);
 
 		$affectedRows = craft()->db->createCommand()->update('plugins', array(

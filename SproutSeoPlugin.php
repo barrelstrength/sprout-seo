@@ -46,7 +46,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '3.3.1';
+		return '3.3.2';
 	}
 
 	/**
@@ -159,7 +159,10 @@ class SproutSeoPlugin extends BasePlugin
 						// check if the request url needs redirect
 						$redirect = sproutSeo()->redirects->getRedirect($url);
 
-						if (!$redirect)
+						$plugin      = craft()->plugins->getPlugin('sproutseo');
+						$seoSettings = $plugin->getSettings();
+
+						if (!$redirect && $seoSettings->enable404RedirectLog)
 						{
 							// Save new 404 Redirect
 							$redirect = new SproutSeo_RedirectModel();
@@ -174,13 +177,16 @@ class SproutSeoPlugin extends BasePlugin
 							sproutSeo()->redirects->saveRedirect($redirect);
 						}
 
-						sproutSeo()->redirects->logRedirect($redirect->id);
-
-						// Use != instead of !== as 404 can be both as integer or string
-						if ($redirect->enabled && $redirect->method != 404)
+						if ($redirect)
 						{
-							// Redirect away
-							craft()->request->redirect($redirect->newUrl, true, $redirect->method);
+							sproutSeo()->redirects->logRedirect($redirect->id);
+
+							// Use != instead of !== as 404 can be both as integer or string
+							if ($redirect->enabled && $redirect->method != 404)
+							{
+								// Redirect away
+								craft()->request->redirect($redirect->newUrl, true, $redirect->method);
+							}
 						}
 					}
 				}
@@ -224,6 +230,7 @@ class SproutSeoPlugin extends BasePlugin
 			'ogTransform'             => array(AttributeType::String, 'default' => null),
 			'totalElementsPerSitemap' => array(AttributeType::Number, 'default' => 500),
 			'enableDynamicSitemaps'   => array(AttributeType::Bool, 'default' => true),
+			'enable404RedirectLog'    => array(AttributeType::Bool, 'default' => false)
 		);
 	}
 

@@ -109,8 +109,19 @@ class SproutSeo_RedirectElementType extends BaseElementType
 
 		$methods = SproutSeo_RedirectMethods::getConstants();
 
+		$plugin      = craft()->plugins->getPlugin('sproutseo');
+		$seoSettings = $plugin->getSettings();
+
 		foreach ($methods as $code => $method)
 		{
+			if ($method == 404)
+			{
+				if (!$seoSettings->enable404RedirectLog)
+				{
+					continue;
+				}
+			}
+
 			$key   = 'method:' . $method;
 			$label = $method . ' - ' . preg_replace('/([a-z])([A-Z])/', '$1 $2', $code);
 
