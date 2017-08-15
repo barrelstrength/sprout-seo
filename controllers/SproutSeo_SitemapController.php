@@ -48,7 +48,7 @@ class SproutSeo_SitemapController extends BaseController
 
 			// Display Custom Section Sitemap
 			case 'custom-sections-sitemap':
-				$elements = sproutSeo()->sitemap->getDynamicSitemapElements('custom-sections-sitemap', $pageNumber);
+				$elements = sproutSeo()->sitemap->getCustomsUrls();
 				break;
 
 			default:

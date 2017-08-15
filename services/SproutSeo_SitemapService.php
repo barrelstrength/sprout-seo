@@ -105,12 +105,21 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		// Our offset should be zero for the first page
 		$offset = ($totalElementsPerSitemap * $pageNumber) - $totalElementsPerSitemap;
 
-		$enabledSitemaps = craft()->db->createCommand()
+		$criteria = craft()->db->createCommand()
 			->select('*')
 			->from('sproutseo_metadata_sections')
-			->where('enabled = 1 and urlEnabledSectionId is not null')
-			->andWhere('handle = :handle', array(':handle' => $sitemapHandle))
-			->queryAll();
+			->where('enabled = 1 and urlEnabledSectionId is not null');
+
+		if ($sitemapHandle == 'singles-sitemap')
+		{
+			$criteria->andWhere('type = :type', array(':type' => 'entries'));
+		}
+		else
+		{
+			$criteria->andWhere('handle = :handle', array(':handle' => $sitemapHandle));
+		}
+
+		$enabledSitemaps = $criteria->queryAll();
 
 		if (empty($enabledSitemaps))
 		{
@@ -140,7 +149,20 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					$criteria->enabled = true;
 					$criteria->locale  = $locale->id;
 
-					$elements = $criteria->find();
+					if ($sitemapHandle == 'singles-sitemap')
+					{
+						$sectionModel = $urlEnabledSectionType->getById($sitemapSettings['urlEnabledSectionId']);
+
+						if ($sectionModel->type == 'single')
+						{
+							$elements = $criteria->find();
+						}
+					}
+					else
+					{
+						$elements = $criteria->find();
+					}
+
 				}
 
 				foreach ($elements as $element)
@@ -166,6 +188,30 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					);
 				}
 			}
+		}
+
+		$urls = $this->getLocalizedSitemapStructure($urls);
+
+		return $urls;
+	}
+
+	public function getCustomsUrls()
+	{
+		$urls = array();
+		// Fetching all Custom Section Metadata defined in Sprout SEO
+		$customSectionMetadata = craft()->db->createCommand()
+			->select('url, priority, changeFrequency, dateUpdated')
+			->from('sproutseo_metadata_sections')
+			->where('enabled = 1')
+			->andWhere('url is not null and isCustom = 1')
+			->queryAll();
+
+		foreach ($customSectionMetadata as $customSection)
+		{
+			// Adding each custom location indexed by its URL
+			$modified                    = new DateTime($customSection['dateUpdated']);
+			$customSection['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
+			$urls[$customSection['url']] = craft()->config->parseEnvironmentString($customSection);
 		}
 
 		$urls = $this->getLocalizedSitemapStructure($urls);
