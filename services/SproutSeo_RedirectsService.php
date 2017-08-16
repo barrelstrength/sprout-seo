@@ -136,6 +136,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$redirectRecords = SproutSeo_RedirectRecord::model()->structured()->findAll();
 
 		$redirects = SproutSeo_RedirectModel::populateModels($redirectRecords);
+		$url       = urldecode($url);
 
 		if ($redirects)
 		{
