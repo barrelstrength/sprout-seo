@@ -28,12 +28,6 @@ class SproutSeo_SitemapController extends BaseController
 		$sitemapIndexItems = array();
 		$elements          = array();
 
-		// @todo - need to distinguish between 4 scenarios:
-		// 1. Singles
-		// 2. Custom Sections
-		// 3. Url-Enabled Section with Offset and Limit
-		// 4. Sitemapindex
-
 		switch ($sitemapSlug)
 		{
 			// Generate Sitemap Index
@@ -48,7 +42,7 @@ class SproutSeo_SitemapController extends BaseController
 
 			// Display Custom Section Sitemap
 			case 'custom-sections-sitemap':
-				$elements = sproutSeo()->sitemap->getCustomsUrls();
+				$elements = sproutSeo()->sitemap->getCustomSectionUrls();
 				break;
 
 			default:

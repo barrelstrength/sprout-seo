@@ -371,21 +371,14 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		return $structure;
 	}
 
-	public function getCustoms($enabledSitemaps)
-	{
-		// Fetching settings for each enabled custom in Sprout SEO
-		foreach ($enabledSitemaps as $key => $sitemapSettings)
-		{
-			if ($sitemapSettings['isCustom'])
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public function getTotalElementsPerSitemap()
+	/**
+	 * Returns the value for the totalElementsPerSitemap setting. Default is 500.
+	 *
+	 * @param int $total
+	 *
+	 * @return int
+	 */
+	public function getTotalElementsPerSitemap($total = 500)
 	{
 		$plugin      = craft()->plugins->getPlugin('sproutseo');
 		$seoSettings = $plugin->getSettings();
@@ -393,11 +386,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		if (isset($seoSettings['totalElementsPerSitemap']) && $seoSettings['totalElementsPerSitemap'])
 		{
 			$total = $seoSettings['totalElementsPerSitemap'];
-		}
-		else
-		{
-			// default $seoSettings['totalElementsPerSitemap'] is 500
-			$total = 500;
 		}
 
 		return $total;
