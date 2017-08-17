@@ -39,7 +39,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					$criteria->{$urlEnabledSectionTypeId} = $urlEnabledSection->id;
 					$totalElements                        = $criteria->total();
 
-					if ($totalElements === 1)
+					// Is this a Singles Section?
+					$section = $urlEnabledSectionType->getById($urlEnabledSection->id);
+
+					if (isset($section->type) && $section->type === 'single')
 					{
 						// only add this once
 						if ($hasSingles === false)
