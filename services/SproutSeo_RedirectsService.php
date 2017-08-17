@@ -203,27 +203,6 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Returns the total of number of times a given redirect has been used
-	 *
-	 * @param $redirectId int
-	 *
-	 * @return int
-	 */
-	public function getRedirectCount($redirectId)
-	{
-		$total = craft()->db->createCommand()
-			->select('COUNT(id)')
-			->from('sproutseo_redirects_log')
-			->where(array(
-					'redirectId' => $redirectId
-				)
-			)
-			->queryScalar();
-
-		return $total;
-	}
-
-	/**
 	 * Get methods
 	 *
 	 * @return array

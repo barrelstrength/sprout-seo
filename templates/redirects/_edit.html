@@ -44,12 +44,11 @@
 		<div class="item" data-position="right" data-colspan="1">
 			<div class="pane meta">
 				{% if redirect.id %}
-					{% set count = craft.sproutSeo.getRedirectCount(redirect.id) %}
 					{{ forms.textField({
 						label: "Count <span class='info'>The total number of times a redirect has been used.</span>"|t,
 						id: 'count',
 						name: 'count',
-						value: count,
+						value: redirect.count,
 						readonly: true,
 						first: true,
 						disabled: true,

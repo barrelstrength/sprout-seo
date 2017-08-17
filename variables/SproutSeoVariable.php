@@ -1104,9 +1104,4 @@ class SproutSeoVariable
 
 		return $variableTypes;
 	}
-
-	public function getRedirectCount($redirectId)
-	{
-		return sproutSeo()->redirects->getRedirectCount($redirectId);
-	}
 }
