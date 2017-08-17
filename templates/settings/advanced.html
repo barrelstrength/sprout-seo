@@ -72,8 +72,8 @@
       <hr>
 
       {{ forms.lightswitchField({
-        label: "Enable dynamic sitemap"|t,
-        instructions: "Enable this setting to output a dynamic XML sitemap of all your website pages with URLs."|t,
+        label: "Enable Dynamic Sitemaps"|t,
+        instructions: "Output a dynamic XML sitemap of all pages in your URL-Enabled Sections."|t,
         name: 'enableDynamicSitemaps',
         toggle: 'settings-total-elements',
         on: settings.enableDynamicSitemaps,
@@ -83,7 +83,8 @@
       <div id="settings-total-elements" class="{% if not settings.enableDynamicSitemaps %} hidden {% endif %}">
         {{ forms.textField({
           label: "Total Elements Per Sitemap"|t,
-          instructions: "Please change this value if you have timeout issues on your sitemaps"|t,
+          instructions: "The number of items that display on each page of your sitemap. A lower number may be
+          necessary for sitemaps with a large number of elements or limited server resources."|t,
           name: 'totalElementsPerSitemap',
           size:'10',
           value: settings.totalElementsPerSitemap,
@@ -119,7 +120,7 @@
 
 	  {{ forms.lightswitchField({
 		  label: "Display Field Handles"|t,
-		  instructions: "Enable this setting to display field handle next to the field name in your Element Metadata field settings."|t,
+		  instructions: "Display field handles next to the field names in your Element Metadata field settings."|t,
 		  name: 'displayFieldHandles',
 		  on: settings.displayFieldHandles ? true : false,
 		  onLabel: "Enable"|t
@@ -129,7 +130,8 @@
 
     {{ forms.lightswitchField({
       label: "Enable 404 Redirect Log"|t,
-      instructions: "Enable this setting to save 404 urls"|t,
+      instructions: "Log 'Page Not Found' errors in the database. Each unique 'Page Not Found' URL will appear on
+      your Sprout SEO Redirects tab as a disabled 404 Redirect Element."|t,
       name: 'enable404RedirectLog',
       on: settings.enable404RedirectLog ? true : false,
       onLabel: "Enable"|t

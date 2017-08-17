@@ -16,8 +16,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 */
 	public function getSitemapIndex()
 	{
-		$sitemapIndexItems       = array();
-		$hasSingles              = false;
+		$sitemapIndexItems = array();
+		$hasSingles        = false;
 
 		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
@@ -39,7 +39,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					$criteria->{$urlEnabledSectionTypeId} = $urlEnabledSection->id;
 					$totalElements                        = $criteria->total();
 
-					if ($totalElements === 1)
+					// Is this a Singles Section?
+					$section = $urlEnabledSectionType->getById($urlEnabledSection->id);
+
+					if (isset($section->type) && $section->type === 'single')
 					{
 						// only add this once
 						if ($hasSingles === false)
@@ -90,14 +93,13 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 *
 	 * @param     $sitemapHandle
 	 * @param     $pageNumber
-	 * @param int $totalElementsPerSitemap
 	 *
 	 * @return array
 	 * @throws HttpException
 	 */
 	public function getDynamicSitemapElements($sitemapHandle, $pageNumber)
 	{
-		$urls = array();
+		$urls                    = array();
 		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
 		// Our offset should be zero for the first page
@@ -160,7 +162,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					{
 						$elements = $criteria->find();
 					}
-
 				}
 
 				foreach ($elements as $element)
@@ -193,10 +194,16 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		return $urls;
 	}
 
-	public function getCustomsUrls()
+	/**
+	 * Returns all Custom Section URLs
+	 *
+	 * @return array
+	 */
+	public function getCustomSectionUrls()
 	{
 		$urls = array();
-		// Fetching all Custom Section Metadata defined in Sprout SEO
+
+		// Fetch all Custom Section Metadata defined in Sprout SEO
 		$customSectionMetadata = craft()->db->createCommand()
 			->select('url, priority, changeFrequency, dateUpdated')
 			->from('sproutseo_metadata_sections')
@@ -364,21 +371,14 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		return $structure;
 	}
 
-	public function getCustoms($enabledSitemaps)
-	{
-		// Fetching settings for each enabled custom in Sprout SEO
-		foreach ($enabledSitemaps as $key => $sitemapSettings)
-		{
-			if ($sitemapSettings['isCustom'])
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public function getTotalElementsPerSitemap()
+	/**
+	 * Returns the value for the totalElementsPerSitemap setting. Default is 500.
+	 *
+	 * @param int $total
+	 *
+	 * @return int
+	 */
+	public function getTotalElementsPerSitemap($total = 500)
 	{
 		$plugin      = craft()->plugins->getPlugin('sproutseo');
 		$seoSettings = $plugin->getSettings();
@@ -386,11 +386,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		if (isset($seoSettings['totalElementsPerSitemap']) && $seoSettings['totalElementsPerSitemap'])
 		{
 			$total = $seoSettings['totalElementsPerSitemap'];
-		}
-		else
-		{
-			// default $seoSettings['totalElementsPerSitemap'] is 500
-			$total = 500;
 		}
 
 		return $total;
