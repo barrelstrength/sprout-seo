@@ -16,8 +16,8 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 */
 	public function getSitemapIndex()
 	{
-		$sitemapIndexItems       = array();
-		$hasSingles              = false;
+		$sitemapIndexItems = array();
+		$hasSingles        = false;
 
 		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
@@ -93,14 +93,13 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 *
 	 * @param     $sitemapHandle
 	 * @param     $pageNumber
-	 * @param int $totalElementsPerSitemap
 	 *
 	 * @return array
 	 * @throws HttpException
 	 */
 	public function getDynamicSitemapElements($sitemapHandle, $pageNumber)
 	{
-		$urls = array();
+		$urls                    = array();
 		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
 		// Our offset should be zero for the first page
@@ -163,7 +162,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 					{
 						$elements = $criteria->find();
 					}
-
 				}
 
 				foreach ($elements as $element)
@@ -196,10 +194,16 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		return $urls;
 	}
 
-	public function getCustomsUrls()
+	/**
+	 * Returns all Custom Section URLs
+	 *
+	 * @return array
+	 */
+	public function getCustomSectionUrls()
 	{
 		$urls = array();
-		// Fetching all Custom Section Metadata defined in Sprout SEO
+
+		// Fetch all Custom Section Metadata defined in Sprout SEO
 		$customSectionMetadata = craft()->db->createCommand()
 			->select('url, priority, changeFrequency, dateUpdated')
 			->from('sproutseo_metadata_sections')
