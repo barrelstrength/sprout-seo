@@ -214,6 +214,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		foreach ($customSectionMetadata as $customSection)
 		{
 			// Adding each custom location indexed by its URL
+			if (!UrlHelper::isAbsoluteUrl($customSection['url']))
+			{
+				$customSection['url'] = UrlHelper::getSiteUrl($customSection['url']);
+			}
 			$modified                    = new DateTime($customSection['dateUpdated']);
 			$customSection['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
 			$urls[$customSection['url']] = craft()->config->parseEnvironmentString($customSection);
