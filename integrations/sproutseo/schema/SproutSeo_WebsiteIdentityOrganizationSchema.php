@@ -64,6 +64,11 @@ class SproutSeo_WebsiteIdentityOrganizationSchema extends SproutSeoBaseSchema
 		{
 			$openingHours = isset($schema['openingHours']) ? $schema['openingHours'] : null;
 			$this->addOpeningHours($openingHours);
+
+			if (isset($schema['priceRange']))
+			{
+				$this->addText('priceRange', $schema['priceRange']);
+			}
 		}
 
 		if (isset($schema['addressId']) && $schema['addressId'])
@@ -74,11 +79,6 @@ class SproutSeo_WebsiteIdentityOrganizationSchema extends SproutSeoBaseSchema
 		if (isset($schema['foundingDate']['date']))
 		{
 			$this->addDate('foundingDate', $schema['foundingDate']['date']);
-		}
-
-		if (isset($schema['priceRange']))
-		{
-			$this->addText('priceRange', $schema['priceRange']);
 		}
 
 		if (count($socialProfiles))
