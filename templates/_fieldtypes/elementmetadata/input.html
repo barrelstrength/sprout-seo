@@ -631,7 +631,10 @@ feel like they are part of the natural flow of fields #}
 				{% if descriptionFieldHandle == 'title' %}
 
 					var metaDescriptionLabelId = '#title-label';
-					$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
+					if ($(metaDescriptionLabelId).find(".sproutseo-info").length < 1)
+					{
+						$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
+					}
 					Craft.initUiElements($(metaDescriptionLabelId));
 
 				{% else %}
@@ -640,7 +643,10 @@ feel like they are part of the natural flow of fields #}
 					{% if optimizedDescriptionFieldModel %}
 
 						var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';
-						$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
+						if ($(metaDescriptionLabelId).find(".sproutseo-info").length < 1)
+						{
+							$(metaDescriptionLabelId).append(metaDescriptionSeoButton).removeClass('hidden');
+						}
 						Craft.initUiElements($(metaDescriptionLabelId));
 
 						var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
@@ -667,7 +673,10 @@ feel like they are part of the natural flow of fields #}
 				{% if optimizedImageFieldModel %}
 
 				var metaImageLabelId = '#fields-{{ optimizedImageFieldModel.handle }}-label';
-				$(metaImageLabelId).append(metaImageSeoButton).removeClass('hidden');
+				if ($(metaImageLabelId).find(".sproutseo-info").length < 1)
+				{
+					$(metaImageLabelId).append(metaImageSeoButton).removeClass('hidden');
+				}
 				Craft.initUiElements($(metaImageLabelId));
 
 				var metaImageInput = $('#fields-{{ optimizedImageFieldModel.handle }}-field input');
