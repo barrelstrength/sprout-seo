@@ -322,28 +322,26 @@
 				required: false
 			}) }}
 
-			{% set priceRangeOptions = craft.sproutseo.getPriceRangeOptions() %}
-
-			{{ forms.field({
-				label: "Price Range"|t ~ sprout.infoIcon({
-					label: "Price Range"|t,
-					search: true,
-					structured: true,
-					priority: 'globals'
-				}),
-				first: true,
-			}, sproutFields.selectOther({
-				name: 'sproutseo[globals][identity][priceRange]',
-				options: priceRangeOptions ,
-				value: websiteIdentity['priceRange'] is defined ? websiteIdentity.priceRange : null,
-				otherPlaceholderText: 'Custom Price Range'|t
-			})) }}
-
-			<hr>
-
 			{# These fields should only display when 'Organization => LocalBusiness' is selected #}
 			<div id="localbusiness" {% if not globals.isLocalBusiness() %}class="hidden"{% endif %}>
+				{% set priceRangeOptions = craft.sproutseo.getPriceRangeOptions() %}
 
+				{{ forms.field({
+					label: "Price Range"|t ~ sprout.infoIcon({
+						label: "Price Range"|t,
+						search: true,
+						structured: true,
+						priority: 'globals'
+					}),
+					first: true,
+				}, sproutFields.selectOther({
+					name: 'sproutseo[globals][identity][priceRange]',
+					options: priceRangeOptions ,
+					value: websiteIdentity['priceRange'] is defined ? websiteIdentity.priceRange : null,
+					otherPlaceholderText: 'Custom Price Range'|t
+				})) }}
+
+				<hr>
 				<div class="field">
 					<div class="heading">
 						<label for="siteOwnerType">{{ "Opening Hours"|t }} {{ sprout.infoIcon({
