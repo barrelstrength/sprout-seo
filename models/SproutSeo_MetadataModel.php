@@ -530,4 +530,28 @@ class SproutSeo_MetadataModel extends BaseModel
 		//
 		//return $schema->getSchema();
 	}
+
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		return array(
+			array('url', 'sectionUri', 'on' => 'customSection'),
+			array('url', 'required', 'on' => 'customSection', 'message' => 'Uri cannot be blank.'),
+			array('name,handle', 'required', 'on' => 'customSection'),
+		);
+	}
+
+	/**
+	 * Check is the url saved on custom sections are URI's
+	 * This is the 'sectionUri' validator as declared in rules().
+	 */
+	public function sectionUri($attribute,$params)
+	{
+		if (UrlHelper::isAbsoluteUrl($this->$attribute))
+		{
+			$this->addError($attribute, 'Invalid URI');
+		}
+	}
 }

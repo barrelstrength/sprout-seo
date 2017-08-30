@@ -361,6 +361,16 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 			$record = $this->sectionMetadataRecord->create();
 		}
 
+		if ($model->isCustom)
+		{
+			$model->setScenario('customSection');
+
+			if (!$model->validate())
+			{
+				return false;
+			}
+		}
+
 		// @todo - Refactor
 		// is there a better way to do this flip/flop?
 		$model->dateUpdated = $record->dateUpdated;
