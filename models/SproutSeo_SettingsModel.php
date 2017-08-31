@@ -16,7 +16,8 @@ class SproutSeo_SettingsModel extends BaseModel
 			'metadataVariable'        => AttributeType::String,
 			'totalElementsPerSitemap' => AttributeType::Number,
 			'enableDynamicSitemaps'   => AttributeType::Bool,
-			'enable404RedirectLog'    => AttributeType::Bool
+			'enable404RedirectLog'    => AttributeType::Bool,
+			'total404Redirects'       => AttributeType::Number
 		);
 	}
 

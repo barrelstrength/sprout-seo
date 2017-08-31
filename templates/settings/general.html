@@ -52,9 +52,21 @@
 					instructions: "Log 'Page Not Found' errors in the database. Each unique 'Page Not Found' URL will appear on
 					your Sprout SEO Redirects tab as a disabled 404 Redirect Element."|t,
 					name: 'enable404RedirectLog',
+					toggle: 'settings-total-404redirects',
 					on: settings.enable404RedirectLog ? true : false,
 					onLabel: "Enable"|t
 				 }) }}
+
+				 <div id="settings-total-404redirects" class="{% if not settings.enableDynamicSitemaps %} hidden {% endif %}">
+					{{ forms.textField({
+						label: "Total 404 Redirects"|t,
+						instructions: ""|t,
+						name: 'total404Redirects',
+						size:'10',
+						value: settings.total404Redirects,
+						errors: ''
+					}) }}
+				</div>
 			{% endnamespace %}
 		</div>
 

@@ -38,7 +38,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '3.3.2';
+		return '3.3.3';
 	}
 
 	/**
@@ -46,7 +46,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '3.3.2';
+		return '3.3.3';
 	}
 
 	/**
@@ -165,16 +165,7 @@ class SproutSeoPlugin extends BasePlugin
 						if (!$redirect && $seoSettings->enable404RedirectLog)
 						{
 							// Save new 404 Redirect
-							$redirect = new SproutSeo_RedirectModel();
-
-							$redirect->oldUrl  = $url;
-							$redirect->newUrl  = null;
-							$redirect->method  = 404;
-							$redirect->regex   = 0;
-							$redirect->enabled = 0;
-							$redirect->count   = 0;
-
-							sproutSeo()->redirects->saveRedirect($redirect);
+							$redirect = sproutSeo()->redirects->save404Redirect($url);
 						}
 
 						if ($redirect)
@@ -230,7 +221,8 @@ class SproutSeoPlugin extends BasePlugin
 			'ogTransform'             => array(AttributeType::String, 'default' => null),
 			'totalElementsPerSitemap' => array(AttributeType::Number, 'default' => 500),
 			'enableDynamicSitemaps'   => array(AttributeType::Bool, 'default' => true),
-			'enable404RedirectLog'    => array(AttributeType::Bool, 'default' => false)
+			'enable404RedirectLog'    => array(AttributeType::Bool, 'default' => false),
+			'total404Redirects'       => array(AttributeType::Number, 'default' => 1000)
 		);
 	}
 
