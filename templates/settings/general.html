@@ -57,7 +57,7 @@
 					onLabel: "Enable"|t
 				 }) }}
 
-				 <div id="settings-total-404redirects" class="{% if not settings.enableDynamicSitemaps %} hidden {% endif %}">
+				 <div id="settings-total-404redirects" class="{% if not settings.enable404RedirectLog %} hidden {% endif %}">
 					{{ forms.textField({
 						label: "Total 404 Redirects"|t,
 						instructions: ""|t,

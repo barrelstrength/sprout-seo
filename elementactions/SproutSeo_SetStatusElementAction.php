@@ -42,6 +42,17 @@ class SproutSeo_SetStatusElementAction extends BaseElementAction
 
 		$elementIds = $criteria->ids();
 
+		foreach ($elementIds as $key => $redirectId)
+		{
+			$redirect = sproutSeo()->redirects->getRedirectById($redirectId);
+
+			if ($redirect->method == SproutSeo_RedirectMethods::PageNotFound)
+			{
+				$this->setMessage(Craft::t('Unable to enabled 404 method'));
+				return false;
+			}
+		}
+
 		// Update their statuses
 		craft()->db->createCommand()->update(
 			'elements',

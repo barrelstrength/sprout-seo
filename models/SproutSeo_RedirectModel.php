@@ -48,5 +48,27 @@ class SproutSeo_RedirectModel extends BaseElementModel
 	{
 		return UrlHelper::getCpUrl('sproutseo/redirects/' . $this->id);
 	}
-	//Get layout
+
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		return array(
+			array('oldUrl, newUrl, method', 'required'),
+			array('method', 'validateMethod')
+		);
+	}
+
+	/**
+	 * Add validation so a user can't save a 404 in "enabled" status
+	 */
+	public function validateMethod($attribute,$params)
+	{
+		if ($this->enabled && $this->$attribute == SproutSeo_RedirectMethods::PageNotFound)
+		{
+			$this->addError($attribute, 'Unable to enable a redirect with 404 method');
+		}
+	}
+
 }

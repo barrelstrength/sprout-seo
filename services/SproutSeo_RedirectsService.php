@@ -54,10 +54,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$redirectRecord->regex  = $redirect->regex;
 		$redirectRecord->count  = $redirect->count;
 
-		$redirectRecord->validate();
-		$redirect->addErrors($redirectRecord->getErrors());
-
-		if (!$redirect->hasErrors())
+		if ($redirect->validate())
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
@@ -71,7 +68,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 						$redirectRecord->id = $redirect->id;
 					}
 
-					$redirectRecord->save(false);
+					$redirectRecord->save();
 
 					if ($isNewRedirect)
 					{
@@ -182,7 +179,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$seoSettings = $plugin->getSettings();
 
 		$redirect->oldUrl  = $url;
-		$redirect->newUrl  = null;
+		$redirect->newUrl  = '/';
 		$redirect->method  = SproutSeo_RedirectMethods::PageNotFound;
 		$redirect->regex   = 0;
 		$redirect->enabled = 0;
