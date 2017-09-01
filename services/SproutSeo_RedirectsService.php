@@ -352,10 +352,17 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$structure = $this->createStructureRecord();
 
 		// Add our default plugin settings
-		$settings = '{"pluginNameOverride":"' . $pluginName . '", "structureId":"' . $structure->id . '"}';
+		$settings = array(
+			'pluginNameOverride' => $pluginName,
+			'structureId' => $structure->id,
+			'enableDynamicSitemaps' => 1,
+			'totalElementsPerSitemap' => 500,
+			'enable404RedirectLog' => 1,
+			'total404Redirects' => 1000
+		);
 
 		craft()->db->createCommand()->update('plugins', array(
-			'settings' => $settings
+			'settings' => json_encode($settings)
 		),
 			'class=:class', array(':class' => 'SproutSeo')
 		);

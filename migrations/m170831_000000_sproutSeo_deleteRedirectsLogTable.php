@@ -24,7 +24,8 @@ class m170831_000000_sproutSeo_deleteRedirectsLogTable extends BaseMigration
 
 		$settings = json_decode($settings, true);
 
-		$settings['total404Redirects'] = 1000;
+		$settings['enable404RedirectLog'] = 1;
+		$settings['total404Redirects']    = 1000;
 
 		$settingsJson = JsonHelper::encode($settings);
 
