@@ -190,17 +190,25 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		{
 			$count = SproutSeo_RedirectRecord::model()->count('method=:method', array(':method' => SproutSeo_RedirectMethods::PageNotFound));
 
-			if ($count > $seoSettings['total404Redirects'])
+			if ($count >= $seoSettings['total404Redirects'])
 			{
-				$model = SproutSeo_RedirectRecord::model()->find('method=404',
-					array(
-					'order'=> 'dateUpdated DESC'
-					)
-				);
+				$totalToDelete = $count - $seoSettings['total404Redirects'];
+				$totalToDelete = $totalToDelete <= 0 ? 1 : $totalToDelete + 1;
 
-				if ($model)
+				$criteria = new \CDbCriteria;
+				$criteria->condition = 'method=:method';
+				$criteria->limit = $totalToDelete;
+				$criteria->order = "dateUpdated DESC";
+				$criteria->params = array(':method' => SproutSeo_RedirectMethods::PageNotFound);
+
+				$models = SproutSeo_RedirectRecord::model()->findAll($criteria);
+
+				foreach ($models as $key => $model)
 				{
-					craft()->elements->deleteElementById($model->id);
+					if ($model)
+					{
+						craft()->elements->deleteElementById($model->id);
+					}
 				}
 			}
 		}
