@@ -185,37 +185,33 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$redirect->enabled = 0;
 		$redirect->count   = 0;
 
-		// delete new one
-		if (isset($seoSettings['total404Redirects']) && $seoSettings['total404Redirects'])
+		if (!sproutSeo()->redirects->saveRedirect($redirect))
 		{
-			$count = SproutSeo_RedirectRecord::model()->count('method=:method', array(':method' => SproutSeo_RedirectMethods::PageNotFound));
+			$redirect = null;
+		}
+
+		// delete new one
+		if (isset($seoSettings['total404Redirects']) && $seoSettings['total404Redirects'] && $redirect)
+		{
+			$count = SproutSeo_RedirectRecord::model()->count('method=:method and id!=:redirectId', array(
+				':method' => SproutSeo_RedirectMethods::PageNotFound,
+				':redirectId' => $redirect->id
+				)
+			);
 
 			if ($count >= $seoSettings['total404Redirects'])
 			{
 				$totalToDelete = $count - $seoSettings['total404Redirects'];
 				$totalToDelete = $totalToDelete <= 0 ? 1 : $totalToDelete + 1;
 
-				$criteria = new \CDbCriteria;
-				$criteria->condition = 'method=:method';
-				$criteria->limit = $totalToDelete;
-				$criteria->order = "dateUpdated DESC";
-				$criteria->params = array(':method' => SproutSeo_RedirectMethods::PageNotFound);
-
-				$models = SproutSeo_RedirectRecord::model()->findAll($criteria);
-
-				foreach ($models as $key => $model)
-				{
-					if ($model)
-					{
-						craft()->elements->deleteElementById($model->id);
-					}
-				}
+				// Call the delete redirects task
+				craft()->tasks->createTask('SproutSeo_Delete404', null,
+					array(
+						'totalToDelete' => $totalToDelete,
+						'redirectIdToExclude' => isset($redirect) ? $redirect->id : null
+					)
+				);
 			}
-		}
-
-		if (!sproutSeo()->redirects->saveRedirect($redirect))
-		{
-			$redirect = null;
 		}
 
 		return $redirect;
