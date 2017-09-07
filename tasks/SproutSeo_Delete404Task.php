@@ -58,8 +58,8 @@ class SproutSeo_Delete404Task extends BaseTask
 			$params[':redirectId'] =  $this->_redirectIdToExclude;
 		}
 
-		$criteria->limit = $this->_totalToDelete;
-		$criteria->order = "dateUpdated DESC";
+		$criteria->limit  = $this->_totalToDelete;
+		$criteria->order  = "dateUpdated ASC";
 		$criteria->params = $params;
 
 		$this->_redirectModels = SproutSeo_RedirectRecord::model()->findAll($criteria);
