@@ -48,7 +48,7 @@ class SproutSeo_MetadataModel extends BaseModel
 			'name'            => array(AttributeType::String),
 			'handle'          => array(AttributeType::String),
 			'hasUrls'         => array(AttributeType::Number),
-			'url'             => array(AttributeType::String),
+			'uri'             => array(AttributeType::String),
 			'priority'        => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
 			'changeFrequency' => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
 
@@ -489,7 +489,7 @@ class SproutSeo_MetadataModel extends BaseModel
 	 **/
 	public function getPreviewUrl()
 	{
-		$url = $this->url;
+		$url = $this->uri;
 
 		if ($this->elementId && $this->locale)
 		{
@@ -537,8 +537,8 @@ class SproutSeo_MetadataModel extends BaseModel
 	public function rules()
 	{
 		return array(
-			array('url', 'sectionUri', 'on' => 'customSection'),
-			array('url', 'required', 'on' => 'customSection', 'message' => 'Uri cannot be blank.'),
+			array('uri', 'sectionUri', 'on' => 'customSection'),
+			array('uri', 'required', 'on' => 'customSection', 'message' => 'Uri cannot be blank.'),
 			array('name,handle', 'required', 'on' => 'customSection'),
 		);
 	}
@@ -553,5 +553,16 @@ class SproutSeo_MetadataModel extends BaseModel
 		{
 			$this->addError($attribute, 'Invalid URI');
 		}
+	}
+
+	/**
+	 * Updates "uri" to starts without a "/"
+	 *
+	 */
+	protected function beforeValidate()
+	{
+		$this->uri = sproutSeo()->sitemap->removeSlash($this->uri);
+
+		return true;
 	}
 }

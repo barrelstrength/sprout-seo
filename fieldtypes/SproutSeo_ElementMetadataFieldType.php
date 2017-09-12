@@ -712,7 +712,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				'name',
 				'handle',
 				'hasUrls',
-				'url',
+				'uri',
 				'priority',
 				'changeFrequency',
 				'urlEnabledSectionId',

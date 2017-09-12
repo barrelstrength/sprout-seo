@@ -87,7 +87,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 
 					$sectionMetadata->name    = $urlEnabledSection->name;
 					$sectionMetadata->handle  = $urlEnabledSection->handle;
-					$sectionMetadata->url     = $model->getUrlFormat();
+					$sectionMetadata->uri     = $model->getUrlFormat();
 					$sectionMetadata->hasUrls = $urlEnabledSection->hasUrls;
 
 					$model->sectionMetadata = $sectionMetadata;
@@ -438,7 +438,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 		$record->handle              = $model->handle;
 		$record->type                = $model->type;
 		$record->urlEnabledSectionId = $model->urlEnabledSectionId;
-		$record->url                 = $model->url;
+		$record->uri                 = $model->uri;
 		$record->priority            = $model->priority;
 		$record->changeFrequency     = $model->changeFrequency;
 		$record->enabled             = $model->enabled;

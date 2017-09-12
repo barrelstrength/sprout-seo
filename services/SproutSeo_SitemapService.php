@@ -77,7 +77,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			->select('id')
 			->from('sproutseo_metadata_sections')
 			->where('enabled = 1')
-			->andWhere('url is not null and isCustom = 1')
+			->andWhere('uri is not null and isCustom = 1')
 			->query();
 
 		if ($customSectionMetadata->getRowCount() > 0)
@@ -205,22 +205,24 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		// Fetch all Custom Section Metadata defined in Sprout SEO
 		$customSectionMetadata = craft()->db->createCommand()
-			->select('url, priority, changeFrequency, dateUpdated')
+			->select('uri, priority, changeFrequency, dateUpdated')
 			->from('sproutseo_metadata_sections')
 			->where('enabled = 1')
-			->andWhere('url is not null and isCustom = 1')
+			->andWhere('uri is not null and isCustom = 1')
 			->queryAll();
 
 		foreach ($customSectionMetadata as $customSection)
 		{
+			$customSection['url'] = null;
 			// Adding each custom location indexed by its URL
-			if (!UrlHelper::isAbsoluteUrl($customSection['url']))
+			if (!UrlHelper::isAbsoluteUrl($customSection['uri']))
 			{
-				$customSection['url'] = UrlHelper::getSiteUrl($customSection['url']);
+				$customSection['url'] = UrlHelper::getSiteUrl($customSection['uri']);
 			}
+
 			$modified                    = new DateTime($customSection['dateUpdated']);
 			$customSection['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
-			$urls[$customSection['url']] = craft()->config->parseEnvironmentString($customSection);
+			$urls[$customSection['uri']] = craft()->config->parseEnvironmentString($customSection);
 		}
 
 		$urls = $this->getLocalizedSitemapStructure($urls);
@@ -301,10 +303,10 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 		// Fetching all Custom Section Metadata defined in Sprout SEO
 		$customSectionMetadata = craft()->db->createCommand()
-			->select('url, priority, changeFrequency, dateUpdated')
+			->select('uri, priority, changeFrequency, dateUpdated')
 			->from('sproutseo_metadata_sections')
 			->where('enabled = 1')
-			->andWhere('url is not null and isCustom = 1')
+			->andWhere('uri is not null and isCustom = 1')
 			->queryAll();
 
 		foreach ($customSectionMetadata as $customSection)
@@ -312,7 +314,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 			// Adding each custom location indexed by its URL
 			$modified                    = new DateTime($customSection['dateUpdated']);
 			$customSection['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
-			$urls[$customSection['url']] = craft()->config->parseEnvironmentString($customSection);
+			$urls[$customSection['uri']] = craft()->config->parseEnvironmentString($customSection);
 		}
 
 		$urls = $this->getLocalizedSitemapStructure($urls);
@@ -393,5 +395,22 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		}
 
 		return $total;
+	}
+
+	/**
+	 * Remove Slash to URI
+	 * @param string $uri
+	 * @return array
+	 */
+	public function removeSlash($uri)
+	{
+		$slash = '/';
+
+		if (isset($uri[0]) && $uri[0] == $slash)
+		{
+			$uri = ltrim($uri, $slash);
+		}
+
+		return $uri;
 	}
 }

@@ -41,7 +41,7 @@
 						{% set elementTableName = urlEnabledSectionType.getElementTableName() %}
 						{% set sproutSeoHandle = elementTableName~':'~sectionMetadata.handle %}
 
-						<tr class="{{ sectionMetadata.isNew ? 'sectionmetadata-isnew' : null }}" data-rowid="{{ urlEnabledSectionKey }}" data-id="{{ sectionMetadata.id ? sectionMetadata.id : null }}" data-name="{{ sectionMetadata.name }}" data-handle="{{ sproutSeoHandle }}" data-type="{{ urlEnabledSection.type.getId() }}" data-url-enabled-section-id="{{ sectionMetadata.urlEnabledSectionId }}" data-url="{{ sectionMetadata.url }}" data-is-new="{{ sectionMetadata.isNew  }}">
+						<tr class="{{ sectionMetadata.isNew ? 'sectionmetadata-isnew' : null }}" data-rowid="{{ urlEnabledSectionKey }}" data-id="{{ sectionMetadata.id ? sectionMetadata.id : null }}" data-name="{{ sectionMetadata.name }}" data-handle="{{ sproutSeoHandle }}" data-type="{{ urlEnabledSection.type.getId() }}" data-url-enabled-section-id="{{ sectionMetadata.urlEnabledSectionId }}" data-url="{{ sectionMetadata.uri }}" data-is-new="{{ sectionMetadata.isNew  }}">
 
 							{% block sectionMetadataTableRow %}{% endblock %}
 

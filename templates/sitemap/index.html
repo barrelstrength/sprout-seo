@@ -43,13 +43,13 @@
 		{% include 'sproutseo/sections/_titlecolumn' %}
 	</td>
 	<td>
-		{% if sectionMetadata.url == '__home__' %}
+		{% if sectionMetadata.uri == '__home__' %}
 			<span data-icon="home" title="Homepage"></span>
 		{% else %}
-			<code>{{ sectionMetadata.url }}</code>
+			<code>{{ sectionMetadata.uri }}</code>
 		{% endif %}
 
-		<input type="hidden" name="sproutseo[sections][{{ urlEnabledSectionKey }}][url]" value="{{ sectionMetadata.url }}">
+		<input type="hidden" name="sproutseo[sections][{{ urlEnabledSectionKey }}][uri]" value="{{ sectionMetadata.uri }}">
 	</td>
 	<td>
 		{{ forms.selectField({
@@ -104,10 +104,10 @@
 		} %}
 
 		<input type="hidden" name="sproutseo[sections][{{ customSectionId }}][id]" value="{{ customSectionId }}">
-		<input type="hidden" name="sproutseo[sections][{{ customSectionId }}][url]" value="{{ customSection.url }}">
+		<input type="hidden" name="sproutseo[sections][{{ customSectionId }}][uri]" value="{{ customSection.uri }}">
 	</td>
 	<td>
-		<code>{{ customSection.url }}</code>
+		<code>{{ customSection.uri }}</code>
 	</td>
 	<td>
 		{{ forms.selectField({

@@ -24,7 +24,7 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 
 			'name'                 => array(AttributeType::String, 'required' => true),
 			'handle'               => array(AttributeType::String, 'required' => true),
-			'url'                  => array(AttributeType::String),
+			'uri'                  => array(AttributeType::String),
 			'priority'             => array(AttributeType::Number, 'maxLength' => 2, 'decimals' => 1, 'default' => '0.5', 'required' => true),
 			'changeFrequency'      => array(AttributeType::String, 'maxLength' => 7, 'default' => 'weekly', 'required' => true),
 

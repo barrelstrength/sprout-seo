@@ -17,7 +17,7 @@ class SproutSeo_MetadataSitemapModel extends BaseModel
 			'handle'              => array(AttributeType::String),
 			'urlEnabledSectionId' => array(AttributeType::Number),
 			'type'                => array(AttributeType::String),
-			'url'                 => array(AttributeType::String),
+			'uri'                 => array(AttributeType::String),
 			'changeFrequency'     => array(AttributeType::String, 'maxLength' => 3),
 			'priority'            => array(AttributeType::String, 'maxLength' => 7),
 			'enabled'             => array(AttributeType::Bool),

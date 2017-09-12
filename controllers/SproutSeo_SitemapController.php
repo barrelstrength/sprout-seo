@@ -55,17 +55,20 @@ class SproutSeo_SitemapController extends BaseController
 		$templatePath = craft()->path->getPluginsPath() . 'sproutseo/templates';
 		craft()->templates->setTemplatesPath($templatePath);
 
-		if ($sitemapSlug === 'sitemap')
+		// sitemap index by default
+		$template = '_special/sitemapindex';
+		$params = array(
+			'sitemapIndexItems' => $sitemapIndexItems
+		);
+
+		if ($sitemapSlug !== 'sitemap')
 		{
-			$this->renderTemplate('_special/sitemapindex', array(
-				'sitemapIndexItems' => $sitemapIndexItems
-			));
-		}
-		else
-		{
-			$this->renderTemplate('_special/sitemap-dynamic', array(
+			$template = '_special/sitemap-dynamic';
+			$params = array(
 				'elements' => $elements
-			));
+			);
 		}
+
+		$this->renderTemplate($template, $params);
 	}
 }

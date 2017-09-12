@@ -36,8 +36,7 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 							"name":                $($row).data('name'),
 							"handle":              handle,
 							"urlEnabledSectionId": $($row).data('urlEnabledSectionId'),
-							"type":                $($row).data('type'),
-							"url":                 $($row).data('url')
+							"type":                $($row).data('type')
 						}
 					}
 				};
@@ -96,7 +95,6 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 						"handle":              $row.data('handle'),
 						"type":                $row.data('type'),
 						"urlEnabledSectionId": $row.data('urlEnabledSectionId'),
-						"url":                 $('input[name="sproutseo[sections][' + rowId + '][url]"]').val(),
 						"priority":            $('select[name="sproutseo[sections][' + rowId + '][priority]"]').val(),
 						"changeFrequency":     $('select[name="sproutseo[sections][' + rowId + '][changeFrequency]"]').val(),
 						"enabled":             this.enabled
@@ -136,7 +134,6 @@ if (typeof Craft.SproutSeo === typeof undefined) {
 						$($sectionInputBase + '[id]"]').val(newRowId);
 						$($sectionInputBase + '[id]"]').attr('name', 'sproutseo[sections][' + newRowId + '][id]');
 						$($sectionInputBase + '[urlEnabledSectionId]"]').attr('name', 'sproutseo[sections][' + newRowId + '][urlEnabledSectionId]');
-						$($sectionInputBase + '[url]"]').attr('name', 'sproutseo[sections][' + newRowId + '][url]');
 						$($sectionInputBase + '[priority]"]').attr('name', 'sproutseo[sections][' + newRowId + '][priority]');
 						$($sectionInputBase + '[changeFrequency]"]').attr('name', 'sproutseo[sections][' + newRowId + '][changeFrequency]');
 						$($sectionInputBase + '[enabled]"]').attr('name', 'sproutseo[sections][' + newRowId + '][enabled]');

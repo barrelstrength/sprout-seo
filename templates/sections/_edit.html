@@ -90,9 +90,9 @@
 					label: "URI"|t,
 					id: "url",
 					required: sectionMetadata.isCustom,
-					name: 'sproutseo[metadata][url]',
-					value: (sectionMetadata.url == '__home__') ? "/" : sectionMetadata.url,
-					errors: sectionMetadata.getErrors('url'),
+					name: 'sproutseo[metadata][uri]',
+					value: (sectionMetadata.uri == '__home__') ? "/" : sectionMetadata.uri,
+					errors: sectionMetadata.getErrors('uri'),
 					readonly: not isNew,
 					class: not isNew ? 'disabled' : ''
 				}) }}

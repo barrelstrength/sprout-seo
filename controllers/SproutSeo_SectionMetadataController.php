@@ -33,7 +33,7 @@ class SproutSeo_SectionMetadataController extends BaseController
 				$elementSection = $sectionType->urlEnabledSections[$uniqueKey];
 				// let's update the handle and the url
 				$sectionMetadata->handle = $sectionMetadata->type.':'.$elementSection->sectionMetadata->handle;
-				$sectionMetadata->url = $elementSection->sectionMetadata->url;
+				$sectionMetadata->uri = $elementSection->sectionMetadata->uri;
 			}
 		}
 
