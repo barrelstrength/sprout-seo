@@ -264,6 +264,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		$newMethods = array();
 		foreach ($methods as $key => $value)
 		{
+			$value = preg_replace('/([a-z])([A-Z])/', '$1 $2', $value);
 			$newMethods[$key] = $key . ' - ' . $value;
 		}
 
