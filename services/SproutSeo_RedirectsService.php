@@ -238,7 +238,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 			$log['ipAddress']   = $_SERVER["REMOTE_ADDR"];
 			$log['dateCreated'] = date('Y-m-d h:m:s');
 
-			SproutSeoPlugin::log('404 Redirect Log: '.json_encode($log), LogLevel::Info, true);
+			SproutSeoPlugin::log('404 - Page Not Found: '.json_encode($log), LogLevel::Warning, true);
 
 			$redirect        = $this->getRedirectById($redirectId);
 			$redirect->count += 1;
