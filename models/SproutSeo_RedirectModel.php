@@ -67,7 +67,7 @@ class SproutSeo_RedirectModel extends BaseElementModel
 	{
 		if ($this->enabled && $this->$attribute == SproutSeo_RedirectMethods::PageNotFound)
 		{
-			$this->addError($attribute, 'Unable to enable a redirect with 404 method');
+			$this->addError($attribute, 'Cannot enable a 404 Redirect. Update Redirect method.');
 		}
 	}
 
