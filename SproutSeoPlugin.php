@@ -222,7 +222,7 @@ class SproutSeoPlugin extends BasePlugin
 			'totalElementsPerSitemap' => array(AttributeType::Number, 'default' => 500),
 			'enableDynamicSitemaps'   => array(AttributeType::Bool, 'default' => true),
 			'enable404RedirectLog'    => array(AttributeType::Bool, 'default' => false),
-			'total404Redirects'       => array(AttributeType::Number, 'default' => 1000)
+			'total404Redirects'       => array(AttributeType::Number, 'default' => 500)
 		);
 	}
 

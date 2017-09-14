@@ -362,7 +362,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 			'enableDynamicSitemaps' => 1,
 			'totalElementsPerSitemap' => 500,
 			'enable404RedirectLog' => 1,
-			'total404Redirects' => 1000
+			'total404Redirects' => 500
 		);
 
 		craft()->db->createCommand()->update('plugins', array(
@@ -396,7 +396,7 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 	 *
 	 * @return int
 	 */
-	public function getTotal404Redirects($total = 1000)
+	public function getTotal404Redirects($total = 500)
 	{
 		$plugin      = craft()->plugins->getPlugin('sproutseo');
 		$seoSettings = $plugin->getSettings();
