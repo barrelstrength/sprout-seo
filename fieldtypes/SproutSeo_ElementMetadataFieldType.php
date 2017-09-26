@@ -443,8 +443,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 						$config->addListener(new Stopword);
 						$textRank = new TextRank($config);
 
-						// Adds support to rich text using strip_tags
-						$textRankKeywords = $textRank->getKeywords(strip_tags($bigKeywords));
+						$textRankKeywords = $textRank->getKeywords($bigKeywords);
 						$rankKeywords     = array_keys($textRankKeywords);
 						$fiveKeywords     = array_slice($rankKeywords, 0, 5);
 						$keywords         = implode(',', $fiveKeywords);
@@ -651,7 +650,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 					}
 					else
 					{
-						$value = $_POST['fields'][$field->handle];
+						$value = strip_tags($_POST['fields'][$field->handle]);
 					}
 				}
 				//Resave elements
@@ -667,7 +666,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 						}
 						else
 						{
-							$value = $elementValue;
+							$value = strip_tags($elementValue);
 						}
 					}
 				}
