@@ -648,7 +648,7 @@ class SproutSeoVariable
 	 *
 	 * @return array
 	 */
-	public function getKeywordsOptions($type = "PlainText")
+	public function getKeywordsOptions($types = array("PlainText", 'RichText'))
 	{
 		$options        = array();
 		$fields         = craft()->fields->getAllFields();
@@ -660,7 +660,7 @@ class SproutSeoVariable
 
 		foreach ($fields as $key => $field)
 		{
-			if ($field->type == $type)
+			if (in_array($field->type, $types))
 			{
 				$context             = explode(":", $field->context);
 				$context             = isset($context[0]) ? $context[0] : 'global';

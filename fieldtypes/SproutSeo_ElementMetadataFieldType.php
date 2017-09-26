@@ -443,7 +443,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 						$config->addListener(new Stopword);
 						$textRank = new TextRank($config);
 
-						$textRankKeywords = $textRank->getKeywords($bigKeywords);
+						// Adds support to rich text using strip_tags
+						$textRankKeywords = $textRank->getKeywords(strip_tags($bigKeywords));
 						$rankKeywords     = array_keys($textRankKeywords);
 						$fiveKeywords     = array_slice($rankKeywords, 0, 5);
 						$keywords         = implode(',', $fiveKeywords);
