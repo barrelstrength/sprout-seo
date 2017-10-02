@@ -194,7 +194,7 @@ class SproutSeoVariable
 			}
 		}
 
-		$globalMetadata['organization'] = $organization;
+		$identity['organization'] = $organization;
 		unset($identity['@type']);
 		unset($identity['organizationSubTypes']);
 
@@ -209,7 +209,7 @@ class SproutSeoVariable
 
 		$globalMetadata['identity'] = $identity;
 
-		$globalMetadata['social']   = $this->getSocialProfiles();
+		$globalMetadata['socials']   = $this->getSocialProfiles();
 
 		$globalMetadata['contacts'] = $this->getContacts();
 
