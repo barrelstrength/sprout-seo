@@ -1,0 +1,37 @@
+{% import "_includes/forms" as forms %}
+
+<div class="sproutseo-box">
+
+	{{ forms.textField({
+		label: "Title"|t,
+		instructions: "The Title of your content which will appear in search results"|t,
+		name: nameContext~'[metadata][title]',
+		showCharsLeft: true,
+		value: values.title,
+		errors: "",
+		required: false,
+	}) }}
+
+	{{ forms.textField({
+		label: "Description"|t,
+		instructions: "A description of your content which will appear in search results."|t,
+		name: nameContext~'[metadata][description]',
+		showCharsLeft: true,
+		value: values.description,
+		errors: "",
+		required: false,
+	}) }}
+
+	{{ forms.textField({
+		label: "Keywords"|t,
+		id: 'sproutseo-searchKeywords',
+		instructions: "A list of keywords that describe your content"|t,
+		name: nameContext~'[metadata][keywords]',
+		value: values.keywords,
+		errors: "",
+		required: false
+	}) }}
+
+</div>
+
+{% includeCssResource "sproutseo/css/sproutseo.css" %}

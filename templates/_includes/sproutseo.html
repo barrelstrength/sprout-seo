@@ -1,0 +1,40 @@
+{% macro infoIcon(params) %}
+	{%- set label = params.label ?? null -%}
+	{%- set class = params.class ?? null -%}
+	{%- set search = params.search ?? false -%}
+	{%- set structured = params.structured ?? false -%}
+	{%- set openGraph = params.openGraph ?? false -%}
+	{%- set twitterCard = params.twitterCard ?? false -%}
+	{%- set geo = params.geo ?? false -%}
+	{%- set robots = params.robots ?? false -%}
+	{%- set priority = params.priority ?? null -%}
+	{%- set message = params.message ?? null -%}
+
+	<span class="info sproutseo-info {{ class }}">
+		<div class="sprout-info-body sproutseo-metalevel-hud">
+			<h6>{{ label }} {{ "Scope"|t }}</h6>
+			{% if search %}<span class="sproutseo-icon icon-search">&#xe800;</span> {{ "Search"|t }}<br>{% endif %}
+			{% if structured %}<span class="sproutseo-icon icon-puzzle">&#xf12e;</span> {{ "Structured Data"|t }}<br>{% endif %}
+
+			{% if openGraph %}<span class="sproutseo-icon icon-facebook">&#xe802;</span> {{ "Open Graph"|t }}<br>{% endif %}
+			{% if twitterCard %}<span class="sproutseo-icon icon-twitter">&#xe807;</span> {{ "Twitter Card"|t }}<br>{% endif %}
+			{% if geo %}<span class="sproutseo-icon icon-location">&#xe803;</span> {{ "Geo"|t }}<br>{% endif %}
+			{% if robots %}<span class="sproutseo-icon icon-robots">&#xe806;</span> {{ "Robots"|t }}<br>{% endif %}
+
+			{% if message %}<p><i>{{ message }}</i></p>{% endif %}
+			<hr style="margin-left:-24px;margin-right:-24px;">
+			<h6>{{ label }} {{ "Priority"|t }}</h6>
+			<ul class="sproutseo-metalevel-list">
+				<li>
+					<span class="sproutseo-metalevel-number {% if priority == 'globals' %}active{% endif %}">3</span> {% if priority == 'globals' %}<b>{{ "Global"|t }}</b>{% else %}{{ "Global"|t }}{% endif %}
+				</li>
+				<li>
+					<span class="sproutseo-metalevel-number {% if priority == 'sections' %}active{% endif %}">2</span> {% if priority == 'sections' %}<b>{{ "Section"|t }}</b>{% else %}{{ "Section"|t }}{% endif %}
+				</li>
+				<li>
+					<span class="sproutseo-metalevel-number {% if priority == 'elements' %}active{% endif %}">1</span> {% if priority == 'elements' %}<b>{{ "Entry"|t }}</b>{% else %}{{ "Entry"|t }}{% endif %}
+				</li>
+			</ul>
+		</div>
+	</span>
+{% endmacro %}

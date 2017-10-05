@@ -17,14 +17,14 @@ class m140623_000000_sproutSeo_addTwitterCardFieldsToOverrides extends BaseMigra
 		$tableName = 'sproutseo_overrides';
 
 		// specify columns and AttributeType
-		$newColumns = array (
-			'twitterCard'                         => ColumnType::Varchar,
-			'twitterImage'                        => ColumnType::Varchar,
-			'twitterPlayer'                       => ColumnType::Varchar,
-			'twitterPlayerStream'                 => ColumnType::Varchar,
-			'twitterPlayerStreamContentType'      => ColumnType::Varchar,
-			'twitterPlayerWidth'                  => ColumnType::Varchar,
-			'twitterPlayerHeight'                 => ColumnType::Varchar,
+		$newColumns = array(
+			'twitterCard'                    => ColumnType::Varchar,
+			'twitterImage'                   => ColumnType::Varchar,
+			'twitterPlayer'                  => ColumnType::Varchar,
+			'twitterPlayerStream'            => ColumnType::Varchar,
+			'twitterPlayerStreamContentType' => ColumnType::Varchar,
+			'twitterPlayerWidth'             => ColumnType::Varchar,
+			'twitterPlayerHeight'            => ColumnType::Varchar,
 		);
 
 		// this is a foreach loop, enough said
@@ -35,7 +35,7 @@ class m140623_000000_sproutSeo_addTwitterCardFieldsToOverrides extends BaseMigra
 			{
 				// add the column to the table
 				$this->addColumn($tableName, $columnName, array(
-						'column' => $columnType,
+						'column'   => $columnType,
 						'required' => false)
 				);
 
@@ -44,11 +44,11 @@ class m140623_000000_sproutSeo_addTwitterCardFieldsToOverrides extends BaseMigra
 			}
 
 			// if the column already exists in the table
-			else {
+			else
+			{
 
 				// tell craft that we couldn't create the column as it alredy exists.
 				SproutSeoPlugin::log("Column `$columnName` already exists in the `$tableName` table.", LogLevel::Info, true);
-
 			}
 		}
 

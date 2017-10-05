@@ -12,11 +12,11 @@ class m140427_000000_sproutSeo_changeFallbacksToTemplates extends BaseMigration
 	 * @return bool
 	 */
 	public function safeUp()
-	{	
+	{
 		// The Table you wish to add. 'craft_' prefix will be added automatically.
 		$oldTableName = 'sproutseo_fallbacks';
 		$newTableName = 'sproutseo_templates';
-		
+
 		if (!craft()->db->tableExists($newTableName))
 		{
 			SproutSeoPlugin::log("New table `$newTableName` doesn't exist.", LogLevel::Info, true);
@@ -25,15 +25,14 @@ class m140427_000000_sproutSeo_changeFallbacksToTemplates extends BaseMigration
 			{
 				SproutSeoPlugin::log("Old table `$oldTableName` does exist.", LogLevel::Info, true);
 				SproutSeoPlugin::log("Renaming the `$oldTableName` table.", LogLevel::Info, true);
-		
+
 				// Rename table
 				$this->renameTable($oldTableName, $newTableName);
 
 				SproutSeoPlugin::log("`$oldTableName` table has been renamed to `$newTableName`.", LogLevel::Info, true);
 			}
-			
 		}
-		
+
 		return true;
 	}
 }

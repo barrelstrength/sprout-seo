@@ -1,0 +1,147 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+{% import "sproutseo/_components/selectOther" as sproutFields %}
+{% import "sproutseo/_includes/sproutseo" as sprout %}
+
+{% set verifyOwnershipOptions = craft.sproutSeo.getFinalOptions('ownership', 'service') %}
+
+{% set cols = [
+	{
+		type: 'selectOther',
+		options: verifyOwnershipOptions
+	},
+	{
+		type: 'textual',
+	},
+	{
+		type: 'textual',
+	}
+] %}
+
+{% set globals = craft.sproutSeo.getGlobalMetadata() %}
+
+{% set content %}
+
+	<div class="field" style="margin-bottom:0;">
+		<div class="heading">
+			<label>{{ "Verify Ownership"|t }} {{ sprout.infoIcon({
+					label: "Verify Ownership"|t,
+					search: true,
+					openGraph: true,
+					twitterCard: true,
+					priority: 'globals'
+				}) }}</label>
+			<p class="instructions">{{ 'Verify your site or app ownership for enhanced integration with several services. Each service you verify will add a meta tag to the &lt;head&gt; of your home page template. View instructions on where to find your verification code for <a href="http://www.alexa.com/siteowners/claim">Alexa</a>, <a href="http://www.bing.com/webmaster/?rfp=1#/Dashboard/?url={siteUrl}">Bing Webmaster Tools</a>, <a href="https://www.google.com/webmasters/verification/verification?hl=en&siteUrl={siteUrl}/">Google Search Console</a>, <a href="http://help.yandex.com/webmaster/service/rights.xml#how-to">Yandex Webmaster Tools</a>, <a href="https://developers.facebook.com/docs/apps/register">Facebook App ID</a>, and <a href="https://help.pinterest.com/en/articles/confirm-your-website#html_file">Pinterest</a>. Select `Custom` if you wish to add a verification meta tag for additional services.'|t({
+					siteUrl: siteUrl|url_encode
+				})|raw }}</p>
+		</div>
+	</div>
+
+	<form method="post" accept-charset="UTF-8" data-saveshortcut>
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="sproutSeo/globalMetadata/saveVerifyOwnership">
+		<input type="hidden" name="redirect" value="sproutseo/globals/verify-ownership">
+
+		<table id="sproutseo-schema-ownership" class="data fullwidth">
+			<thead>
+			<tr>
+				<th>{{ 'Name'|t }}</th>
+				<th>{{ 'Meta Tag Name'|t }}</th>
+				<th>{{ 'Verification Code'|t }}</th>
+				<th class="thin"></th>
+				<th class="thin"></th>
+			</tr>
+			</thead>
+			<tbody>
+
+			{% for property in globals.ownership %}
+
+				<tr data-id="{{ loop.index }}">
+					<td>
+						{{ sproutFields.selectOther({
+							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][0]',
+							options: verifyOwnershipOptions,
+							value: property.service,
+							otherPlaceholderText: 'Name of Service'|t
+						}) }}
+					</td>
+					<td>
+						{{ forms.text({
+							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][1]',
+							value: property.metaTag,
+							errors: ''
+						}) }}
+					</td>
+					<td>
+						{{ forms.text({
+							name: 'sproutseo[meta][ownership][' ~ loop.index ~ '][2]',
+							value: property.verificationCode,
+							errors: ''
+						}) }}
+					</td>
+					<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+					<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+				</tr>
+
+			{% endfor %}
+
+			</tbody>
+		</table>
+
+		<div class="buttons">
+			<div id="addOwnership" class="btn add icon small" tabindex="0">Add a Verification Code</div>
+		</div>
+
+		<hr>
+
+		<div class="buttons">
+			<input type="submit" class="btn submit" value="Save" />
+		</div>
+
+	</form>
+
+{% endset %}
+
+{% includeCssResource  "sproutseo/css/sproutseo.css" %}
+{% includeJsResource 'sproutseo/js/sproutfields.js' %}
+{% includeJsResource 'sproutseo/js/EditableTable.js' %}
+
+{% includejs %}
+
+	function setDefault (field)
+	{
+		var columns = {{ verifyOwnershipOptions|json_encode|raw }};
+		var name = field.name;
+		var metagName = name.substring(0,29) + '[1]';
+
+		for (var colId in columns)
+		{
+			if (columns[colId].value == field.value)
+			{
+				$('input[name="' + metagName + '"]').val(columns[colId].metaTagName);
+				break;
+			}
+		}
+	}
+
+	$( document ).ready(function() {
+		var globals = {{ globals.ownership|json_encode|raw }};
+
+		if (globals == null)
+		{
+			$('#addOwnership').trigger('click');
+		}
+	});
+
+	(function() {
+
+		var tableId = 'sproutseo-schema-ownership';
+		var baseName = 'sproutseo[meta][ownership]';
+		var columns = {{ cols|json_encode|raw }};
+		var settings = {};
+
+		new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
+
+	})();
+
+{% endincludejs %}

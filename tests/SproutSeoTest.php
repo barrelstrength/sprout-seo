@@ -7,7 +7,7 @@ class SproutSeoTest extends BaseTest
 {
 	protected $config;
 	protected $settings;
-	protected $sproutSeoMetaService;
+	protected $sproutSeoOptimizeService;
 
 	public function setUp()
 	{
@@ -36,30 +36,20 @@ class SproutSeoTest extends BaseTest
 	}
 
 	/*
-	 * @beginTestSuite
-	 */
-
-	public function testNewMetaModel()
-	{
-		// Dummy test since $this->sproutSeo_meta->newMetaModel() is not currently testable
-		$this->assertTrue(false);
-	}
-
-	/*
 	 * @endTestSuite
 	 */
 
 	protected function setEnvironment()
 	{
-		$this->settings = m::mock('Craft\Model');
+		$this->settings         = m::mock('Craft\Model');
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 	}
 
 	protected function loadServices()
 	{
-		require_once __DIR__ . '/../services/SproutSeo_MetaService.php';
+		require_once __DIR__ . '/../services/SproutSeo_OptimizeService.php';
 
-		$this->sproutSeoMetaService = new SproutSeo_MetaService(true, true);
+		$this->sproutSeoOptimizeService = new SproutSeo_OptimizeService(true, true);
 	}
 
 	protected function inspect($data)

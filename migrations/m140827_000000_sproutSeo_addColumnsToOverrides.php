@@ -14,17 +14,17 @@ class m140827_000000_sproutSeo_addColumnsToOverrides extends BaseMigration
 	public function safeUp()
 	{
 		// specify columns and AttributeType
-		$newColumnsAuthorPublisher = array (
-			'author'             => ColumnType::Varchar,
-			'publisher'          => ColumnType::Varchar,
+		$newColumnsAuthorPublisher = array(
+			'author'    => ColumnType::Varchar,
+			'publisher' => ColumnType::Varchar,
 		);
 
-		$newColumnsOg = array (
-			'ogAuthor'           => ColumnType::Varchar,
-			'ogPublisher'        => ColumnType::Varchar,
+		$newColumnsOg = array(
+			'ogAuthor'    => ColumnType::Varchar,
+			'ogPublisher' => ColumnType::Varchar,
 		);
 
-		$newColumnsTwitter = array (
+		$newColumnsTwitter = array(
 			'twitterSite'        => ColumnType::Varchar,
 			'twitterTitle'       => ColumnType::Varchar,
 			'twitterCreator'     => ColumnType::Varchar,
@@ -52,9 +52,9 @@ class m140827_000000_sproutSeo_addColumnsToOverrides extends BaseMigration
 			if (!craft()->db->columnExists($tableName, $columnName))
 			{
 				$this->addColumnAfter($tableName, $columnName, array(
-					'column' => $columnType,
+					'column'   => $columnType,
 					'required' => false
-					),
+				),
 					$afterColumnHandle
 				);
 
@@ -63,11 +63,11 @@ class m140827_000000_sproutSeo_addColumnsToOverrides extends BaseMigration
 			}
 
 			// if the column already exists in the table
-			else {
+			else
+			{
 
 				// tell craft that we couldn't create the column as it alredy exists.
 				SproutSeoPlugin::log("Column `$columnName` already exists in the `$tableName` table.", LogLevel::Info, true);
-
 			}
 		}
 	}

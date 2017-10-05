@@ -1,7 +1,6 @@
-{% extends "sproutseo/_layouts/base" %}
-{% import "_includes/forms" as forms %}
+{% extends "sproutseo/_layouts/sections" %}
 
-{% set selectedTab = 'sitemap' %}
+{% set title = "Sitemap Metadata"|t %}
 
 {% set priorityList = {
 	'1.0': '1.0 ↑ Highest'|t,
@@ -27,207 +26,124 @@
 	'never': 'Never'|t
 } %}
 
-{% macro isSelected(target) %}
-	{% if target %}checked="checked"{% endif %}
-{% endmacro %}
-{% import _self as checkbox %}
+{% block sectionMetadataTableRowHead %}
 
-{% set allSectionsWithUrls = craft.sproutSeo.getAllSectionsWithUrls() %}
-{% set customPages = craft.sproutSeo.getAllCustomPages() %}
+	<th style="padding-left:9px;width:30%">{{ name }} <span class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span></th>
+	<th style="width:32%;">{{ "URL Pattern"|t }}</th>
+	<th style="width:15%;">{{ "Priority"|t }} {% if loop.index == 1 %} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span>{% endif %}</th>
+	<th style="width:15%;">{{ "Change Frequency"|t }} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span></th>
+	<th style="width:8%;text-align: center;">{{ "Enabled"|t }} {% if loop.index == 1 %}<span class="info">{{ "Make the content in this section appear in your sitemap."|t }}</span>{% endif %}</th>
+	<th class="thin"></th>
 
-{% set body %}
+{% endblock %}
 
-<form method="post" action="" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
-	<input type="hidden" name="action" value="sproutSeo/sitemap/saveSitemap">
-	<input type="hidden" name="redirect" value="sproutSeo/sitemap">
+{% block sectionMetadataTableRow %}
 
-<h2>Sections</h2>
-
-<table class="data fullwidth sitemap-settings">
-	<thead>
-		<th style="padding-left:9px;width:50%">{{ "Section"|t }} <span class="info">{{ "All of your sections that have unique URLs are listed here.  Enable each section you want to include in your sitemap."|t }}</span></th>
-		<th style="width:15%;">{{ "Priority"|t }} <span class="info">{{ "The priority of this URL relative to other URLs on your site. Valid values range from 0.0 to 1.0. This value does not affect how your pages are compared to pages on other sites—it only lets the search engines know which pages you deem most important for the crawlers." }}</span></th>
-		<th style="width:15%;">{{ "Change Frequency"|t }} <span class="info">{{ "The value 'always' should be used to describe documents that change each time they are accessed. The value 'never' should be used to describe archived URLs." }}</span></th>
-		<th style="width:8%;text-align: center;">{{ "Enabled"|t }} <span class="info">{{ "Make the content in this section appear in your sitemap."|t }}</span></th>
-		{# <th style="width:8%;text-align: center;">{{ "Ping on Save"|t }} <span class="info">{{ "Each time an entry in this section is saved, the services that you selected in your"|t }} <a href="{{ cpUrl('sproutseo/settings#settings-sitemap') }}">{{ "sitemap settings"|t }}</a> {{ "will be notified."|t }}</span></th> #}
-		<th class="thin"></th>
-	</thead>
-	<tbody>
-
-	{% for section in allSectionsWithUrls %}
-
-		{% set sitemap = null %}
-		{% if section.settings is defined %}
-			{% set sitemap = section.settings %}
-		{% endif %}
-
-		{% if sitemap.id is defined %}
-			{% set sitemapId = sitemap.id %}
+	<td>
+		{% include 'sproutseo/sections/_titlecolumn' %}
+	</td>
+	<td>
+		{% if sectionMetadata.uri == '__home__' %}
+			<span data-icon="home" title="Homepage"></span>
 		{% else %}
-		  {% set sitemapId = 'new-' ~ loop.index %}
+			<code>{{ sectionMetadata.uri }}</code>
 		{% endif %}
 
-		<tr data-rowid="{{ sitemapId }}">
-			<td>
-				<strong style="display:inline-block;padding:7px 10px;">
-					{% if (sitemap.enabled is defined and sitemap.enabled == 1) %}
-						<span class="status live"></span>
-					{% else %}
-						<span class="status disabled"></span>
-					{% endif %}
-					{{ section.name }}
+		<input type="hidden" name="sproutseo[sections][{{ urlEnabledSectionKey }}][uri]" value="{{ sectionMetadata.uri }}">
+	</td>
+	<td>
+		{{ forms.selectField({
+			name: 'sproutseo[sections][' ~ urlEnabledSectionKey ~ '][priority]',
+			options: priorityList,
+			value: (sectionMetadata.priority is defined ? sectionMetadata.priority : 0.5),
+			errors: "",
+			required: false
+		}) }}
+	</td>
+	<td>
+		{{ forms.selectField({
+			name: 'sproutseo[sections][' ~ urlEnabledSectionKey ~ '][changeFrequency]',
+			options: frequencyList,
+			value: (sectionMetadata.changeFrequency is defined ? sectionMetadata.changeFrequency : 'weekly'),
+			errors: "",
+			required: false
+		}) }}
+	</td>
+	<td style="text-align: center;">
+		{{ forms.lightswitch({
+			name: 'sproutseo[sections][' ~ urlEnabledSectionKey ~ '][enabled]',
+			on: sectionMetadata.enabled is defined and sectionMetadata.enabled == 1 ? true : false,
+			small: true
+		}) }}
+	</td>
+	<td>
+		{# @todo - Refactor
+		Find a better way to get the columns to be even. This tag is unnecessary
+		aside from helping to style the table column widths evenly. #}
+		<span style="display: inline-block;width:13px;"></span>
+	</td>
 
+{% endblock %}
 
-					<input type="hidden" name="sitemap_fields[{{ sitemapId }}][id]" value="{{ sitemapId }}">
-					<input type="hidden" name="sitemap_fields[{{ sitemapId }}][sectionId]" value="{{ section.id }}">
+{% block customSectionTableRowHead %}
 
-				</strong>
-			</td>
-			<td>
-				{{ forms.selectField({
-					name: 'sitemap_fields[' ~ sitemapId ~ '][priority]',
-					options: priorityList,
-					value: (sitemap.priority is defined ? sitemap.priority : 0.5),
-					errors: "",
-					required: false
-				}) }}
-			</td>
-			<td>
-				{{ forms.selectField({
-					name: 'sitemap_fields[' ~ sitemapId ~ '][changeFrequency]',
-					options: frequencyList,
-					value: (sitemap.changeFrequency is defined ? sitemap.changeFrequency : 'weekly'),
-					errors: "",
-					required: false
-				}) }}
-			</td>
-			<td style="text-align: center;">
-				<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][enabled]" {{ checkbox.isSelected((sitemap.enabled is defined and sitemap.enabled == 1) ? true : false) }}>
-			</td>
-			{# <td style="text-align: center;">
-				<input type="checkbox" name="sitemap_fields[{{ sitemapId }}][ping]" {{ checkbox.isSelected((sitemap.ping is defined and sitemap.ping == 1) ? true : false) }} {% if (sitemap.enabled is defined and sitemap.enabled == 0) or (sitemap.enabled is not defined) %}disabled{% endif %}>
-			</td> #}
-			<td></td>
-		</tr>
+	<th style="padding-left:9px;width:30%">{{ "Custom Sections"|t }} <span class="info">{{ "A Custom Section allows you to set a Custom URL that will display in your sitemap and create Section Metadata that you can reference in your templates using the Custom Section handle."|t }}</span></th>
+	<th style="width:32%;">{{ "Custom URL"|t }} <span class="info">{{ "This URL will display in your Sitemap when enabled."|t }}</span></th>
+	<th style="width:15%;">{{ "Priority"|t }}</th>
+	<th style="width:15%;">{{ "Change Frequency"|t }}</th>
+	<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
+	<th class="thin"></th>
 
-	{% endfor %}
+{% endblock %}
 
-	</tbody>
-</table>
+{% block customSectionTableRow %}
 
-<br/>
-<h2>{{ "Custom Pages"|t }} </h2>
+	<td>
+		{% include 'sproutseo/sections/_titlecolumn' with {
+			sectionMetadata: customSection
+		} %}
 
-	{% if customPages|length %}
+		<input type="hidden" name="sproutseo[sections][{{ customSectionId }}][id]" value="{{ customSectionId }}">
+		<input type="hidden" name="sproutseo[sections][{{ customSectionId }}][uri]" value="{{ customSection.uri }}">
+	</td>
+	<td>
+		<code>{{ customSection.uri }}</code>
+	</td>
+	<td>
+		{{ forms.selectField({
+			name: 'sproutseo[sections][' ~ customSectionId ~ '][priority]',
+			options: priorityList,
+			value: (customSection.priority is defined ? customSection.priority : 0.5),
+			errors: "",
+			required: false
+		}) }}
+	</td>
+	<td>
+		{{ forms.selectField({
+			name: 'sproutseo[sections][' ~ customSectionId ~ '][changeFrequency]',
+			options: frequencyList,
+			value: (customSection.changeFrequency is defined ? customSection.changeFrequency : 'weekly'),
+			errors: "",
+			required: false
+		}) }}
+	</td>
+	<td style="text-align: center;">
+		{{ forms.lightswitch({
+			name: 'sproutseo[sections][' ~ customSectionId ~ '][enabled]',
+			on: customSection.enabled is defined and customSection.enabled == 1 ? true : false,
+			small: true
+		}) }}
+	</td>
+	<td>
+		<a class="delete icon" title="Delete"></a>
+	</td>
 
-	<table class="data fullwidth sitemap-settings custom-pages" id="custom-pages">
-		<thead>
-			<th style="padding-left:9px;width:50%">{{ "Custom URL"|t }} <span class="info">{{ "Add any Custom URLs you wish to appear in your sitemap here." }}</span></th>
-			<th style="width:15%;">{{ "Priority"|t }}</th>
-			<th style="width:15%;">{{ "Change Frequency"|t }}</th>
-			<th style="width:8%;text-align: center;">{{ "Enabled"|t }}</th>
-			{# <th style="width:8%;"></th> #}
-			<th class="thin"></th>
-		</thead>
-		<tbody>
+{% endblock %}
 
-		{% for page in customPages %}
-
-		<tr data-rowid="{{ page.id }}" data-id="{{ page.id }}" data-name="{{ page.url }}">
-			<td>
-				<div style="display:inline-block;padding:7px 0 7px 10px;">
-				{% if (page.enabled is defined and page.enabled == 1) %}
-					<span class="status live"></span>
-				{% else %}
-					<span class="status disabled"></span>
-				{% endif %}
-				</div>
-
-				<input type="hidden" name="sitemap_fields[{{ page.id }}][id]" value="{{ page.id }}">
-
-				<input type="text" name="sitemap_fields[{{ page.id }}][url]" placeholder="{{ siteUrl }}custom" value="{{ page.url }}" class="sitemap-custom-url">
-			</td>
-			<td>
-				{{ forms.selectField({
-					name: 'sitemap_fields[' ~ page.id ~ '][priority]',
-					options: priorityList,
-					value: (page.priority is defined ? page.priority : 0.5),
-					errors: "",
-					required: false
-				}) }}
-			</td>
-			<td>
-				{{ forms.selectField({
-					name: 'sitemap_fields[' ~ page.id ~ '][changeFrequency]',
-					options: frequencyList,
-					value: (page.changeFrequency is defined ? page.changeFrequency : 'weekly'),
-					errors: "",
-					required: false
-				}) }}
-			</td>
-			<td style="text-align: center;">
-				<input type="checkbox" name="sitemap_fields[{{ page.id }}][enabled]" {{ checkbox.isSelected((page.enabled is defined and page.enabled == 1) ? true : false) }}>
-			</td>
-			{# <td></td> #}
-			<td>
-				<a class="delete icon" title="Delete"></a>
-			</td>
-		</tr>
-
-		{% endfor %}
-
-	{% else %}
-
-	<p>Add your first custom page.</p>
-
-	{% endif %}
-
-	</tbody>
-</table>
-
-<div class="buttons">
-	<a class="btn submit add icon" href="{{ url('sproutseo/sitemap/newPage') }}">New Custom Page</a>
-</div>
-
-
-</form>
-
-<style type="text/css">
-.sitemap-custom-url:focus {
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	padding: 6px 4px;
-	outline: none;
-}
-.sitemap-custom-url {
-	display: inline-block;
-	margin-left:-4px;
-	width: 85%;
-	border: none;
-	padding: 7px 5px;
-	background: #fff;
-	overflow: hidden;
-}
-</style>
-
-{% endset %}
-
-{% includeJsResource "sproutseo/js/sitemap.js" %}
+{% includeJsResource "sproutseo/js/sproutseo.js" %}
 
 {% set js %}
-	new Craft.SproutSeoSitemap();
-
-	new Craft.AdminTable({
-		tableSelector: '#custom-pages',
-		deleteAction: 'sproutSeo/sitemap/deleteCustomPage',
-		onDeleteObject: function(id)
-		{
-			if($('#custom-pages').find('tbody').find('tr').size() == 0)
-			{
-				$('#custom-pages').show();
-				$('#custom-pages').find('tbody').html('<tr id="no-sproutseo-results"><td colspan="4"><p>Add your first custom page.</p></td></tr>');
-			}
-		}
-	});
+	new Craft.SproutSeo.Sitemap();
 {% endset %}
 
 {% includeJs js %}

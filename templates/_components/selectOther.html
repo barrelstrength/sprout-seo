@@ -1,0 +1,49 @@
+{% macro selectOther(config) %}
+
+	{%- set class = [
+		'select sprout-selectotherdropdown',
+		(config.class is defined ? config.class : null)
+	]|filter|join(' ') %}
+
+	{%- set options = (config.options is defined ? config.options : []) %}
+	{%- set value = (config.value is defined ? config.value : null) %}
+	{%- set hasOptgroups = false -%}
+
+	<div class="sprout-selectother">
+
+		<div class="{{ class }}">
+			<select
+				{%- if config.id is defined %} id="{{ config.id }}"{% endif %}
+				{%- if config.toggle is defined and config.toggle %} class="fieldtoggle"{% endif %}
+				{%- if config.name is defined %} name="{{ config.name }}"{% endif %}
+				{%- if config.autofocus is defined and config.autofocus and not craft.request.isMobileBrowser(true) %} autofocus{% endif %}
+				{%- if config.disabled is defined and config.disabled %} disabled{% endif %}
+				{%- if config.targetPrefix is defined %} data-target-prefix="{{ config.targetPrefix }}"{% endif %}>
+				{% for key, option in config.options %}
+				{% if option.optgroup is defined %}
+				{% if hasOptgroups %}
+					</optgroup>
+				{% else %}
+					{% set hasOptgroups = true %}
+				{% endif %}
+				<optgroup label="{{ option.optgroup }}">
+					{% else %}
+						{% set optionLabel = (option.label is defined ? option.label : option) %}
+						{% set optionValue = (option.value is defined ? option.value : key) %}
+						{% set optionDisabled = (option.disabled is defined ? option.disabled : false) %}
+						<option value="{{ optionValue }}"{% if optionValue == value %} selected{% endif %}{% if optionDisabled %} disabled{% endif %}>{{ optionLabel }}</option>
+					{% endif %}
+					{% endfor %}
+					{% if hasOptgroups %}
+				</optgroup>
+				{% endif %}
+			</select>
+		</div>
+
+		<div class="texticon clearable sprout-selectothertext hidden">
+			<input class="text fullwidth" type="text"{%- if config.name is defined %} name="{{ config.name }}"{% endif %} value="{{ value }}" autocomplete="off"{%- if config.otherPlaceholderText is defined %} placeholder="{{ config.otherPlaceholderText }}"{% endif %}>
+			<div class="clear" title="Clear"></div>
+		</div>
+
+	</div>
+{% endmacro %}

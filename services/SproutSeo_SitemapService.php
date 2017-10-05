@@ -1,230 +1,416 @@
 <?php
+
 namespace Craft;
 
+/**
+ * Class SproutSeo_SitemapService
+ *
+ * @package Craft
+ */
 class SproutSeo_SitemapService extends BaseApplicationComponent
 {
-	protected $sitemapRecord;
-
-	public function __construct($sitemapRecord = null)
+	/**
+	 * Prepares sitemaps for a sitemapindex
+	 *
+	 * @return array
+	 */
+	public function getSitemapIndex()
 	{
-		$this->sitemapRecord = $sitemapRecord;
-		if (is_null($this->sitemapRecord)) {
-			$this->sitemapRecord = SproutSeo_SitemapRecord::model();
+		$sitemapIndexItems = array();
+		$hasSingles        = false;
+
+		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
+
+		$urlEnabledSectionTypes = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypes();
+
+		foreach ($urlEnabledSectionTypes as $urlEnabledSectionType)
+		{
+			$urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
+
+			foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection)
+			{
+				$sectionMetadata = $urlEnabledSection->sectionMetadata;
+
+				if ($sectionMetadata->enabled and $sectionMetadata->hasUrls)
+				{
+
+					// Get Total Elements for this URL-Enabled Section
+					$criteria                             = craft()->elements->getCriteria($urlEnabledSectionType->getElementType());
+					$criteria->{$urlEnabledSectionTypeId} = $urlEnabledSection->id;
+					$totalElements                        = $criteria->total();
+
+					// Is this a Singles Section?
+					$section = $urlEnabledSectionType->getById($urlEnabledSection->id);
+
+					if (isset($section->type) && $section->type === 'single')
+					{
+						// only add this once
+						if ($hasSingles === false)
+						{
+							$hasSingles = true;
+
+							// Add the singles at the beginning of our sitemap
+							array_unshift($sitemapIndexItems, craft()->getSiteUrl() . 'singles-sitemap.xml');
+						}
+					}
+					else
+					{
+						$totalSitemaps = ceil($totalElements / $totalElementsPerSitemap);
+
+						// Build Sitemap Index URLs
+						for ($i = 1; $i <= $totalSitemaps; $i++)
+						{
+							$elementTableName = $urlEnabledSectionType->getElementTableName();
+							$sitemapHandle    = strtolower($sectionMetadata->handle . '-' . $elementTableName);
+
+							$sitemapIndexUrl = craft()->getSiteUrl() . $sitemapHandle . '-sitemap' . $i . '.xml';
+
+							$sitemapIndexItems[] = $sitemapIndexUrl;
+						}
+					}
+				}
+			}
 		}
+
+		// Fetching all Custom Section Metadata defined in Sprout SEO
+		$customSectionMetadata = craft()->db->createCommand()
+			->select('id')
+			->from('sproutseo_metadata_sections')
+			->where('enabled = 1')
+			->andWhere('uri is not null and isCustom = 1')
+			->query();
+
+		if ($customSectionMetadata->getRowCount() > 0)
+		{
+			$sitemapIndexItems[] = UrlHelper::getSiteUrl('custom-sections-sitemap.xml');
+		}
+
+		return $sitemapIndexItems;
 	}
 
-	public function saveSitemap(SproutSeo_SitemapModel $attributes)
+	/**
+	 * Prepares urls for a dynamic sitemap
+	 *
+	 * @param     $sitemapHandle
+	 * @param     $pageNumber
+	 *
+	 * @return array
+	 * @throws HttpException
+	 */
+	public function getDynamicSitemapElements($sitemapHandle, $pageNumber)
 	{
-		$row = array();
-		$isNew = false;
+		$urls                    = array();
+		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
-		if (isset($attributes->id) && (substr( $attributes->id, 0, 3 ) === "new"))
+		// Our offset should be zero for the first page
+		$offset = ($totalElementsPerSitemap * $pageNumber) - $totalElementsPerSitemap;
+
+		$criteria = craft()->db->createCommand()
+			->select('*')
+			->from('sproutseo_metadata_sections')
+			->where('enabled = 1 and urlEnabledSectionId is not null');
+
+		if ($sitemapHandle == 'singles-sitemap')
 		{
-			$isNew = true;
-		}
-
-		if (!$isNew)
-		{
-			$row = craft()->db->createCommand()
-				->select('*')
-				->from('sproutseo_sitemap')
-				->where('id=:id',array(':id'=>$attributes->id))
-				->queryRow();
-		}
-
-		$model = SproutSeo_SitemapModel::populateModel($row);
-
-		$model->id = (!$isNew) ? $attributes->id : null;
-		$model->sectionId = (isset($attributes->sectionId)) ? $attributes->sectionId : null;
-		$model->url = (isset($attributes->url)) ? $attributes->url : null;
-		$model->priority = $attributes->priority;
-		$model->changeFrequency = $attributes->changeFrequency;
-		$model->enabled = ($attributes->enabled == 'true') ? 1 : 0;
-		$model->ping = ($attributes->ping == 'true') ? 1 : 0;
-		$model->dateUpdated = DateTimeHelper::currentTimeForDb();
-		$model->uid = StringHelper::UUID();
-
-		if ($isNew)
-		{
-			$model->dateCreated = DateTimeHelper::currentTimeForDb();
-			craft()->db->createCommand()->insert('sproutseo_sitemap', $model->getAttributes());
-
-			return craft()->db->lastInsertID;
+			$criteria->andWhere('type = :type', array(':type' => 'entries'));
 		}
 		else
 		{
-			$result = craft()->db->createCommand()
-				->update('sproutseo_sitemap',
-				$model->getAttributes(),
-				'id=:id', array(
-					':id' => $model->id
-				)
-			);
-
-			return $model->id;
+			$criteria->andWhere('handle = :handle', array(':handle' => $sitemapHandle));
 		}
-	}
 
-	public function saveCustomPage(SproutSeo_SitemapModel $customPage)
-	{
-		$result = craft()->db->createCommand()->insert('sproutseo_sitemap', $customPage->getAttributes());
+		$enabledSitemaps = $criteria->queryAll();
 
-		return $result;
-	}
-
-	public function getSitemap()
-	{
-		$enabledSections = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_sitemap')
-			->where('enabled = :enabled', array(
-				'enabled' => 1
-			))
-			->queryAll();
-
-		// Begin sitemap
-		// @TODO - let's break out this code so that we can return the full sitemap,
-		// or just the data so that someone could build it on their own
-		$sitemap = '<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-
-		// Loop through each of our enabled sections
-		foreach ($enabledSections as $key => $sitemapSettings)
+		if (empty($enabledSitemaps))
 		{
+			throw new HttpException(404);
+		}
 
-			// Grab all of the entries associated with that section
-			// @TODO - how do we grab "LIVE" entries?  Do we need to update
-			// things to use the ElementCriteriaModel?
-			$entries = craft()->db->createCommand()
-				->select('elements_i18n.uri, elements_i18n.dateUpdated')
-				->from('elements_i18n AS elements_i18n')
-				->join('entries AS entries', 'entries.id = elements_i18n.elementId')
-				->where('elements_i18n.enabled = :enabled', array(
-					'enabled' => 1
-				))
-				->andWhere('entries.sectionId = :sectionId', array(
-					'sectionId' => $sitemapSettings['sectionId']
-				))
-				->queryAll();
-
-			// Loop through each entry
-			foreach ($entries as $key => $entry)
+		// Fetching settings for each enabled section in Sprout SEO
+		foreach ($enabledSitemaps as $key => $sitemapSettings)
+		{
+			// Fetching all enabled locales
+			foreach (craft()->i18n->getSiteLocales() as $locale)
 			{
+				$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
 
-				// check if the uri is the Craft home page
-				if ($entry['uri'] == '__home__') {
-					$entry['uri'] = null;
+				$elements = array();
+
+				if ($urlEnabledSectionType != null)
+				{
+					$urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
+
+					$criteria = craft()->elements->getCriteria($urlEnabledSectionType->getElementType());
+
+					$criteria->{$urlEnabledSectionTypeId} = $sitemapSettings['urlEnabledSectionId'];
+
+					$criteria->offset  = $offset;
+					$criteria->limit   = $totalElementsPerSitemap;
+					$criteria->enabled = true;
+					$criteria->locale  = $locale->id;
+
+					if ($sitemapHandle == 'singles-sitemap')
+					{
+						$sectionModel = $urlEnabledSectionType->getById($sitemapSettings['urlEnabledSectionId']);
+
+						if ($sectionModel->type == 'single')
+						{
+							$elements = $criteria->find();
+						}
+					}
+					else
+					{
+						$elements = $criteria->find();
+					}
 				}
 
-				$url = craft()->getSiteUrl() . $entry['uri'];
+				foreach ($elements as $element)
+				{
+					// @todo - Confirm this is necessary
+					// Confirm that this check/logging is necessary
+					// Catch null URLs, log them, and prevent them from being output to the sitemap
+					if (is_null($element->getUrl()))
+					{
+						SproutSeoPlugin::log('Element ID ' . $element->id . ' does not have a URL.', LogLevel::Warning, true);
 
-				$dateUpdated = new DateTime($entry['dateUpdated']);
-				$date = $dateUpdated->format('Y-m-d');
-				$time = $dateUpdated->format('h:m:s');
-				$lastMod = $date . 'T' . $time . 'Z';
+						continue;
+					}
 
-				$sitemap .= '<url>';
-				$sitemap .= '<loc>' . $url . '</loc>';
-				$sitemap .= '<lastmod>' . $lastMod . '</lastmod>';
-				$sitemap .= '<changefreq>' . $sitemapSettings['changeFrequency'] . '</changefreq>';
-				$sitemap .= '<priority>' . $sitemapSettings['priority'] . '</priority>';
-				$sitemap .= '</url>';
-
+					// Add each location indexed by its id
+					$urls[$element->id][] = array(
+						'id'              => $element->id,
+						'url'             => $element->getUrl(),
+						'locale'          => $locale->id,
+						'modified'        => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+						'priority'        => $sitemapSettings['priority'],
+						'changeFrequency' => $sitemapSettings['changeFrequency'],
+					);
+				}
 			}
-
 		}
 
-		// query all of the custom URL's in the database that are enabled
-		$customUrls = craft()->db->createCommand()
-			->select('url, priority, changeFrequency, enabled, dateUpdated')
-			->from('sproutseo_sitemap')
-			->where('enabled = :enabled', array(
-				'enabled' => 1
-			))
-			->andWhere('url is not null')
-			->queryAll();
+		$urls = $this->getLocalizedSitemapStructure($urls);
 
-		// Loop through each custom page
-		foreach ($customUrls as $key => $entry)
-		{
-
-			$url = $entry['url'];
-
-			$dateUpdated = new DateTime($entry['dateUpdated']);
-			$date = $dateUpdated->format('Y-m-d');
-			$time = $dateUpdated->format('h:m:s');
-			$lastMod = $date . 'T' . $time . 'Z';
-
-			$sitemap .= '<url>';
-			$sitemap .= '<loc>' . $url . '</loc>';
-			$sitemap .= '<lastmod>' . $lastMod . '</lastmod>';
-			$sitemap .= '<changefreq>' . $entry['changeFrequency'] . '</changefreq>';
-			$sitemap .= '<priority>' . $entry['priority'] . '</priority>';
-			$sitemap .= '</url>';
-
-		}
-
-		// End sitemap
-		$sitemap .= '</urlset>';
-
-		return $sitemap;
+		return $urls;
 	}
 
-	public function getAllSectionsWithUrls()
+	/**
+	 * Returns all Custom Section URLs
+	 *
+	 * @return array
+	 */
+	public function getCustomSectionUrls()
 	{
-		// @TODO - Probably can do this with a SitemapSettingsModel
-		$sectionData = array();
+		$urls = array();
 
-		// Get all of our Sections
-		$sections = craft()->sections->getAllSections();
-
-		// Get all of the Sitemap Settings regarding our Sections
-		$sitemapSettings = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_sitemap')
+		// Fetch all Custom Section Metadata defined in Sprout SEO
+		$customSectionMetadata = craft()->db->createCommand()
+			->select('uri, priority, changeFrequency, dateUpdated')
+			->from('sproutseo_metadata_sections')
+			->where('enabled = 1')
+			->andWhere('uri is not null and isCustom = 1')
 			->queryAll();
 
-		// Loop through the sections and
-		// 1) Remove any sections without URLs
-		foreach ($sections as $key => $section)
+		foreach ($customSectionMetadata as $customSection)
 		{
-			if (!$section->hasUrls)
+			$customSection['url'] = null;
+			// Adding each custom location indexed by its URL
+			if (!UrlHelper::isAbsoluteUrl($customSection['uri']))
 			{
-				// remove sections without URLs
-				unset($sections[$key]);
+				$customSection['url'] = UrlHelper::getSiteUrl($customSection['uri']);
 			}
 
-			$sectionData[$section->id] = $section->getAttributes();
+			$modified                    = new DateTime($customSection['dateUpdated']);
+			$customSection['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
+			$urls[$customSection['uri']] = craft()->config->parseEnvironmentString($customSection);
 		}
 
-		// 2) Add Sitemap data to any sectionIds that match
-		foreach ($sitemapSettings as $key => $settings)
-		{
-			if (array_key_exists($settings['sectionId'], $sectionData))
-			{
-				$sectionData[$settings['sectionId']]['settings'] = $settings;
-			}
-		}
+		$urls = $this->getLocalizedSitemapStructure($urls);
 
-		return $sectionData;
+		return $urls;
 	}
 
-	public function getAllCustomPages()
+	/**
+	 * Returns all URLs for a given sitemap or the rendered sitemap itself
+	 *
+	 * @deprecated - this method was used for the simple Craft Variable based sitemap
+	 *               and will be retired for Craft 3. Use dynamic sitemaps instead.
+	 *
+	 * @param array|null $options
+	 *
+	 * @throws Exception
+	 * @return array|string
+	 */
+	public function getSitemap(array $options = null)
 	{
-		$customPages = craft()->db->createCommand()
+		$urls = array();
+
+		$enabledSitemaps = craft()->db->createCommand()
 			->select('*')
-			->from('sproutseo_sitemap')
-			->where('url IS NOT NULL')
+			->from('sproutseo_metadata_sections')
+			->where('enabled = 1 and urlEnabledSectionId is not null')
 			->queryAll();
 
-		return $customPages;
+		// Fetching settings for each enabled section in Sprout SEO
+		foreach ($enabledSitemaps as $key => $sitemapSettings)
+		{
+			// Fetching all enabled locales
+			foreach (craft()->i18n->getSiteLocales() as $locale)
+			{
+				$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
 
+				$elements = array();
+
+				if ($urlEnabledSectionType != null)
+				{
+					$urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
+
+					$criteria = craft()->elements->getCriteria($urlEnabledSectionType->getElementType());
+
+					$criteria->{$urlEnabledSectionTypeId} = $sitemapSettings['urlEnabledSectionId'];
+
+					$criteria->limit   = null;
+					$criteria->enabled = true;
+					$criteria->locale  = $locale->id;
+
+					$elements = $criteria->find();
+				}
+
+				foreach ($elements as $element)
+				{
+					// @todo - Confirm this is necessary
+					// Confirm that this check/logging is necessary
+					// Catch null URLs, log them, and prevent them from being output to the sitemap
+					if (is_null($element->getUrl()))
+					{
+						SproutSeoPlugin::log('Element ID ' . $element->id . " does not have a URL.", LogLevel::Warning, true);
+
+						continue;
+					}
+
+					// Add each location indexed by its id
+					$urls[$element->id][] = array(
+						'id'              => $element->id,
+						'url'             => $element->getUrl(),
+						'locale'          => $locale->id,
+						'modified'        => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+						'priority'        => $sitemapSettings['priority'],
+						'changeFrequency' => $sitemapSettings['changeFrequency'],
+					);
+				}
+			}
+		}
+
+		// Fetching all Custom Section Metadata defined in Sprout SEO
+		$customSectionMetadata = craft()->db->createCommand()
+			->select('uri, priority, changeFrequency, dateUpdated')
+			->from('sproutseo_metadata_sections')
+			->where('enabled = 1')
+			->andWhere('uri is not null and isCustom = 1')
+			->queryAll();
+
+		foreach ($customSectionMetadata as $customSection)
+		{
+			// Adding each custom location indexed by its URL
+			$modified                    = new DateTime($customSection['dateUpdated']);
+			$customSection['modified']   = $modified->format('Y-m-d\Th:m:s\Z');
+			$urls[$customSection['uri']] = craft()->config->parseEnvironmentString($customSection);
+		}
+
+		$urls = $this->getLocalizedSitemapStructure($urls);
+
+		// Rendering the template and passing in received options
+		$path = craft()->templates->getTemplatesPath();
+
+		craft()->templates->setTemplatesPath(dirname(__FILE__) . '/../templates/');
+
+		$source = craft()->templates->render('_special/sitemap', array(
+			'elements' => $urls,
+			'options'  => is_array($options) ? $options : array(),
+		));
+
+		craft()->templates->setTemplatesPath($path);
+
+		return TemplateHelper::getRaw($source);
 	}
 
-	public function deleteCustomPageById($id)
+	/**
+	 * Returns an array of localized entries for a sitemap from a set of URLs indexed by id
+	 *
+	 * The returned structure is compliant with multiple locale google sitemap spec
+	 *
+	 * @param array $stack
+	 *
+	 * @return array
+	 */
+	protected function getLocalizedSitemapStructure(array $stack)
 	{
-		$record = new SproutSeo_SitemapRecord;
+		// Defining the containing structure
+		$structure = array();
 
-		return $record->deleteByPk($id);
+		// Looping through all entries indexed by id
+		foreach ($stack as $id => $locations)
+		{
+			if (is_string($id))
+			{
+				// Adding a custom location indexed by its URL
+				$structure[] = $locations;
+			}
+			else
+			{
+				// Looping through each element and adding it as primary and creating its alternates
+				foreach ($locations as $index => $location)
+				{
+					// Add secondary locations as alternatives to primary
+					if (count($locations) > 1)
+					{
+						$structure[] = array_merge($location, array('alternates' => $locations));
+					}
+					else
+					{
+						$structure[] = $location;
+					}
+				}
+			}
+		}
+
+		return $structure;
+	}
+
+	/**
+	 * Returns the value for the totalElementsPerSitemap setting. Default is 500.
+	 *
+	 * @param int $total
+	 *
+	 * @return int
+	 */
+	public function getTotalElementsPerSitemap($total = 500)
+	{
+		$plugin      = craft()->plugins->getPlugin('sproutseo');
+		$seoSettings = $plugin->getSettings();
+
+		if (isset($seoSettings['totalElementsPerSitemap']) && $seoSettings['totalElementsPerSitemap'])
+		{
+			$total = $seoSettings['totalElementsPerSitemap'];
+		}
+
+		return $total;
+	}
+
+	/**
+	 * Remove Slash to URI
+	 * @param string $uri
+	 * @return array
+	 */
+	public function removeSlash($uri)
+	{
+		$slash = '/';
+
+		if (isset($uri[0]) && $uri[0] == $slash)
+		{
+			$uri = ltrim($uri, $slash);
+		}
+
+		return $uri;
 	}
 }

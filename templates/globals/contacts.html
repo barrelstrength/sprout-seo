@@ -1,0 +1,120 @@
+{% extends "sproutseo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+{% import "sproutseo/_components/selectOther" as sproutFields %}
+{% import "sproutseo/_includes/sproutseo" as sprout %}
+
+{% set settings = craft.sproutSeo.getSettings() %}
+
+{% set contactOptions = craft.sproutSeo.getFinalOptions("contacts", 'contactType') %}
+
+{% set cols = [
+	{
+		type: 'selectOther',
+		options: contactOptions
+	},
+	{
+		type: 'textual'
+	}
+] %}
+
+{% set content %}
+
+	<div class="field" style="margin-bottom:0;">
+		<div class="heading">
+			<label>{{ "Contacts"|t }} {{ sprout.infoIcon({
+					label: "Contacts"|t,
+					search: true,
+					structured: true,
+					priority: 'globals'
+				}) }}</label>
+			<p class="instructions">{{ "Adding <a href='https://developers.google.com/structured-data/customize/contact-points' target='_blank'>Corporate Contacts</a> to your site's structured data can prominently display contact information on the Google Knowledge panel in some searches. Telephone numbers must use an international format starting with the '+' character such as:
+			+1-800-555-1212"|t|raw }}</p>
+		</div>
+	</div>
+
+	{% set globals = craft.sproutSeo.getGlobalMetadata() %}
+
+	<form method="post" accept-charset="UTF-8" data-saveshortcut>
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="sproutSeo/globalMetadata/saveGlobalMetadata">
+		<input type="hidden" name="redirect" value="sproutseo/globals/{{ craft.request.getSegment(3) }}">
+		<input type="hidden" name="globalKeys" value="contacts">
+
+		<table id="sproutseo-schema-contacts" class="data fullwidth">
+			<thead>
+			<tr>
+				<th>{{ "Contact Type"|t }}</th>
+				<th>{{ "Telephone"|t }}</th>
+				<th class="thin"></th>
+				<th class="thin"></th>
+			</tr>
+			</thead>
+			<tbody>
+
+				{% for contact in globals.contacts %}
+
+				<tr data-id="{{ loop.index }}">
+					<td>
+						{{ sproutFields.selectOther({
+							name: 'sproutseo[globals][contacts][' ~ loop.index ~ '][0]',
+							options: contactOptions,
+							value: contact.contactType,
+							otherPlaceholderText: 'Custom Contact Type'|t
+						}) }}
+					</td>
+					<td>
+						{{ forms.text({
+							name: 'sproutseo[globals][contacts][' ~ loop.index ~ '][1]',
+							value: contact.telephone,
+							errors: ''
+						}) }}
+					</td>
+					<td class="thin action"><a class="move icon" title="Reorder"></a></td>
+					<td class="thin action"><a class="delete icon" title="Delete"></a></td>
+				</tr>
+
+				{% endfor %}
+
+			</tbody>
+		</table>
+
+		<div class="buttons">
+			<div id="addContact" class="btn add icon small" tabindex="0">Add a Contact</div>
+		</div>
+
+		<hr>
+
+		<div class="buttons">
+			<input type="submit" class="btn submit" value="Save" />
+		</div>
+
+	</form>
+
+{% endset %}
+
+{% includeCssResource  "sproutseo/css/sproutseo.css" %}
+{% includeJsResource 'sproutseo/js/sproutfields.js' %}
+{% includeJsResource 'sproutseo/js/EditableTable.js' %}
+
+{% includejs %}
+	$( document ).ready(function() {
+		var globals = {{ globals.contacts|json_encode|raw }};
+
+		if (globals == null)
+		{
+			$('#addContact').trigger('click');
+		}
+	});
+
+	(function() {
+
+		var tableId = 'sproutseo-schema-contacts';
+		var baseName = 'sproutseo[globals][contacts]';
+		var columns = {{ cols|json_encode|raw }};
+		var settings = {};
+
+		new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
+
+	})();
+
+{% endincludejs %}

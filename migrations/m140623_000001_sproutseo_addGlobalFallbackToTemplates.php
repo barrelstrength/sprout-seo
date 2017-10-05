@@ -17,7 +17,7 @@ class m140623_000001_sproutseo_addGlobalFallbackToTemplates extends BaseMigratio
 		$tableName = 'sproutseo_templates';
 
 		// specify columns and AttributeType
-		$newColumns = array (
+		$newColumns = array(
 			'globalFallback' => ColumnType::TinyInt,
 		);
 
@@ -29,22 +29,22 @@ class m140623_000001_sproutseo_addGlobalFallbackToTemplates extends BaseMigratio
 			{
 				// add the column to the table
 				$this->addColumnAfter($tableName, $columnName, array(
-					'column' => $columnType,
+					'column'   => $columnType,
 					'required' => false
-					),
+				),
 					'handle'
 				);
 
 				// log that we created the new column
-					SproutSeoPlugin::log("Created the `$columnName` in the `$tableName` table.", LogLevel::Info, true);
+				SproutSeoPlugin::log("Created the `$columnName` in the `$tableName` table.", LogLevel::Info, true);
 			}
 
 			// if the column already exists in the table
-			else {
+			else
+			{
 
 				// tell craft that we couldn't create the column as it alredy exists.
 				SproutSeoPlugin::log("Column `$columnName` already exists in the `$tableName` table.", LogLevel::Info, true);
-
 			}
 		}
 

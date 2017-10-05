@@ -1,28 +1,30 @@
-{% extends "_layouts/cp" %}
+{% extends "sproutseo/_layouts/base" %}
 
-{% set title  = "Settings" %}
+{% set title = "Settings"|t %}
 
-{% set crumbs = [
-  { label: "Sprout SEO"|t, url: url('sproutseo') }
-] %}
+{% set navItems = {
+	'general': { title: "General"|t },
+	'advanced': { title: "Advanced"|t },
 
-{% set tabs = {
-    defaults: {
-        label: "Meta Defaults"|t,
-        url: "#settings-seo"
-    },
-    general: {
-        label: "Control Panel"|t,
-        url: "#settings-cp"
-    }
+	'integrations': { heading: 'Integrations'|t },
+	'craftcommerce': { title: "Craft Commerce"|t },
+	'sproutemail': { title: "Sprout Email"|t },
+	'sproutimport': { title: "Sprout Import"|t }
 } %}
 
-{% set content %}
+{% set selectedItem = craft.request.getSegment(3) %}
+{% set docTitle = navItems[selectedItem].title~' - '~title %}
 
-  {{ body }}
-
-  {% include 'sproutseo/_partials/brand/footer' %}
-
-{% endset %}
-
-{% includeCssResource "sproutseo/css/brand.css" %}
+{% block sidebar %}
+	<nav>
+		<ul>
+			{% for id, item in navItems %}
+				{% if item.heading is defined %}
+					<li class="heading"><span>{{ item.heading }}</span></li>
+				{% else %}
+					<li><a href="{{ url('sproutseo/settings/'~id) }}"{% if id == selectedItem %} class="sel"{% endif %}>{{ item.title }}</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</nav>
+{% endblock %}

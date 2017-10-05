@@ -4,39 +4,41 @@ namespace Craft;
 class SproutSeo_SettingsController extends BaseController
 {
 	/**
-	 * Save Settings to the Database
+	 * Loads the Settings Index page
 	 *
-	 * @return mixed Return to Page
+	 * @throws HttpException
 	 */
 	public function actionSettingsIndex()
 	{
 		$settingsModel = new SproutSeo_SettingsModel;
 
-		// Create any variables you want available in your template
-		// $variables['items'] = craft()->pluginName->getAllItems();
 		$settings = craft()->db->createCommand()
 			->select('settings')
 			->from('plugins')
-			->where('class=:class', array(':class'=> 'SproutSeo'))
+			->where('class=:class', array(':class' => 'SproutSeo'))
 			->queryScalar();
 
 		$settings = JsonHelper::decode($settings);
 		$settingsModel->setAttributes($settings);
 
-		$variables['settings'] = $settingsModel;
+		$settingsTemplate = craft()->request->getSegment(3);
 
-		// Load a particular template and with all of the variables you've created
-		$this->renderTemplate('sproutseo/settings', $variables);
-
+		$this->renderTemplate('sproutseo/settings/' . $settingsTemplate, array(
+			'settings' => $settingsModel
+		));
 	}
 
+	/**
+	 * Saves Plugin Settings
+	 *
+	 * @throws HttpException
+	 */
 	public function actionSaveSettings()
 	{
-
 		$this->requirePostRequest();
 		$settings = craft()->request->getPost('settings');
 
-		if (craft()->sproutSeo_settings->saveSettings($settings))
+		if (sproutSeo()->settings->saveSettings($settings))
 		{
 			craft()->userSession->setNotice(Craft::t('Settings saved.'));
 
@@ -46,7 +48,6 @@ class SproutSeo_SettingsController extends BaseController
 		{
 			craft()->userSession->setError(Craft::t('Couldn’t save settings.'));
 
-			// Send the settings back to the template
 			craft()->urlManager->setRouteVariables(array(
 				'settings' => $settings
 			));

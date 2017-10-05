@@ -1,95 +1,74 @@
 <?php
+
 namespace Craft;
 
 class SproutSeo_SitemapController extends BaseController
 {
-	/**
-	* Show Sitemap index
-	*
-	* @return mixed Return to Page
-	*/
-	public function actionSitemapIndex()
-	{
-		$this->renderTemplate('sproutSeo/sitemap/index');
-	}
+	protected $allowAnonymous = true;
 
 	/**
-	* Create a new page for the sitemap
-	*
-	* @return mixed Return to Page
-	*/
-	public function actionEditSitemap()
-	{
-		$this->renderTemplate('sproutSeo/sitemap/_edit');
-	}
-
-	/**
-	 * Save Sitemap Info to the Database
+	 * Generates the proper xml
 	 *
-	 * @return mixed Return to Page
+	 * @throws HttpException
 	 */
-	public function actionSaveSitemap()
+	public function actionIndex()
 	{
-		$this->requireAjaxRequest();
+		// Get URL and remove .xml extension
+		$url = craft()->request->getPath();
 
-		$sitemapSettings['id'] = craft()->request->getPost('id');
-		$sitemapSettings['sectionId'] = craft()->request->getPost('sectionId');
-		$sitemapSettings['url'] = craft()->request->getPost('url');
-		$sitemapSettings['priority'] = craft()->request->getRequiredPost('priority');
-		$sitemapSettings['changeFrequency'] = craft()->request->getRequiredPost('changeFrequency');
-		$sitemapSettings['enabled'] = craft()->request->getRequiredPost('enabled');
-		$sitemapSettings['ping'] = craft()->request->getPost('ping');
+		$sitemapSlug    = substr($url, 0, -4);
+		$segments       = explode('-', $sitemapSlug);
+		$sitemapSegment = array_pop($segments);
 
-		$model = SproutSeo_SitemapModel::populateModel($sitemapSettings);
+		// Extract the page number, if we have one.
+		preg_match('/\d+/', $sitemapSegment, $match);
+		$pageNumber = isset($match[0]) ? $match[0] : null;
 
-		$lastInsertId = craft()->sproutSeo_sitemap->saveSitemap($model);
-		$this->returnJson(array(
-			'lastInsertId' => $lastInsertId)
+		// Prepare Sitemap Index content
+		$sitemapIndexItems = array();
+		$elements          = array();
+
+		switch ($sitemapSlug)
+		{
+			// Generate Sitemap Index
+			case 'sitemap':
+				$sitemapIndexItems = sproutSeo()->sitemap->getSitemapIndex();
+				break;
+
+			// Display Singles Sitemap
+			case 'singles-sitemap':
+				$elements = sproutSeo()->sitemap->getDynamicSitemapElements('singles-sitemap', $pageNumber);
+				break;
+
+			// Display Custom Section Sitemap
+			case 'custom-sections-sitemap':
+				$elements = sproutSeo()->sitemap->getCustomSectionUrls();
+				break;
+
+			default:
+				$sitemapHandle = $segments[1] . ':' . $segments[0];
+				$elements      = sproutSeo()->sitemap->getDynamicSitemapElements($sitemapHandle, $pageNumber);
+		}
+
+		header('Content-Type: text/xml');
+
+		$templatePath = craft()->path->getPluginsPath() . 'sproutseo/templates';
+		craft()->templates->setTemplatesPath($templatePath);
+
+		// sitemap index by default
+		$template = '_special/sitemapindex';
+		$params = array(
+			'sitemapIndexItems' => $sitemapIndexItems
 		);
 
-	}
-
-	public function actionSaveCustomPage()
-	{
-		// REQUIRE POST REQUEST
-		$this->requirePostRequest();
-
-		// HAND OFF TO MODEL
-		$customPage = new SproutSeo_SitemapModel();
-
-		// ATTRIBUTES
-		$customPage->url = craft()->request->getPost('url');
-		$customPage->priority = craft()->request->getPost('priority');
-		$customPage->changeFrequency 	= craft()->request->getPost('changeFrequency');
-		$customPage->enabled 	= craft()->request->getPost('enabled');
-
-		// @TODO - maybe add these as defaults to the model?  We don't need this for the Custom URLs.
-		$customPage->ping = 0;
-
-		// SAVE CUSTOM PAGE - PASS TO SERVICE
-		// @TODO clean up
-		if (craft()->sproutSeo_sitemap->saveCustomPage($customPage))
+		if ($sitemapSlug !== 'sitemap')
 		{
-			craft()->userSession->setNotice(Craft::t('Custom page saved.'));
-			$this->redirectToPostedUrl();
-		}
-		else
-		{
-			craft()->userSession->setError(Craft::t('Couldn’t save custom page.'));
+			$template = '_special/sitemap-dynamic';
+			$params = array(
+				'elements' => $elements
+			);
 		}
 
-	}
-
-	// @TODO make it delete the custom pages
-
-	public function actionDeleteCustomPage()
-	{
-    $this->requirePostRequest();
-    $this->requireAjaxRequest();
-
-    $id = craft()->request->getRequiredPost('id');
-    $result = craft()->sproutSeo_sitemap->deleteCustomPageById($id);
-
-    $this->returnJson(array('success' => $result));
+		$this->renderTemplate($template, $params);
 	}
 }

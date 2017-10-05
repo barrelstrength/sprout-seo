@@ -1,0 +1,86 @@
+{% import "_includes/forms" as forms %}
+{% set transformOptions = craft.sproutseo.getTransforms() %}
+<div class="sproutseo-box-twitter">
+	<div class="sproutseo-fields" id="twitter-card">
+
+		{% set twitterCardOptions = {
+			'' : 'Select Twitter Card Type...'|t,
+			'summary' : 'Summary Card'|t,
+			'summary_large_image' : 'Summary Card with Large Image'|t,
+		} %}
+
+		{{ forms.selectField({
+			label: 'Twitter Card Type'|t,
+			instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
+			name: nameContext~'[metadata][twitterCard]',
+			options: twitterCardOptions,
+			value: values.twitterCard ?? 'summary',
+			errors: "",
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Title"|t,
+			name: nameContext~"[metadata][twitterTitle]",
+			instructions: 'The Title of your content which will appear in Twitter Card metadata.'|t,
+			value: values.twitterTitle
+		}) }}
+
+		{{ forms.textareaField({
+			label: "Description"|t,
+			name: nameContext~"[metadata][twitterDescription]",
+			instructions: 'A description of your content which will appear in Twitter Card metadata.'|t,
+			value: values.twitterDescription
+		}) }}
+
+		{{ forms.field({
+			label: 'Image'|t ~ sprout.infoIcon({
+				label: 'Image'|t,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
+			}),
+			instructions: 'An image that represents your content that will display in Twitter Card metadata.'|t,
+		}, forms.elementSelect({
+			elements: twitterImageElements,
+			sourceElementId: [values.twitterImage],
+			elementType: elementType,
+			id: 'metaDetailsTwitterImage',
+			name: nameContext~'[metadata][twitterImage]',
+			jsClass: 'Craft.AssetSelectInput',
+			addButtonLabel: 'Select Image'|t,
+			limit: 1,
+			criteria: {"localeEnabled":null}
+		})) }}
+
+		{{ forms.selectField({
+			label: 'Image Transform'|t,
+			instructions: 'Select the Twitter Card Image Transform'|t,
+			name: nameContext~'[metadata][twitterTransform]',
+			options: transformOptions,
+			value: values.twitterTransform,
+			errors: "",
+			required: false
+		}) }}
+
+		{{ forms.textField({
+			label: "Creator"|t,
+			instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
+			name: nameContext~'[metadata][twitterCreator]',
+			value: values.twitterCreator,
+			errors: "",
+			required: false,
+			placeholder: '@ContentAuthor'
+		}) }}
+
+	</div>
+</div>
+
+{% includeJsResource "sproutseo/js/twitter-card.js" %}
+
+{% set js %}
+
+new Craft.SproutSeoTwitterCard();
+
+{% endset %}
+{% includeJs js %}

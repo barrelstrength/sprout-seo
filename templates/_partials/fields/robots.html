@@ -1,0 +1,123 @@
+{# This needs to be here to make sure the checkboxes work properly #}
+<input type="hidden" name="{{nameContext}}[{{robotsNamespace}}][robots]" value="">
+
+{% set robotsCheckboxes %}
+	<table class="data" style="width: auto;">
+		<thead>
+		<tr>
+			<th scope="col">{{ "Enable?"|t }}</th>
+			<th scope="col">{{ "Description"|t }}</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noindex]',
+						on:   values.robots.noindex,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showGeo">
+					<code>noindex</code> - {{ "search engines should not index this page"|t }}
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][nofollow]',
+						on:   values.robots.nofollow,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showRobots">
+					<code>nofollow</code> - {{ "search engines should not follow links on this page"|t }}
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noarchive]',
+						on:   values.robots.noarchive,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showOpenGraph">
+					<code>noarchive</code> - {{ "search engines should not provide archived versions of this page"|t }}
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noimageindex]',
+						on:   values.robots.noimageindex,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showTwitter">
+					<code>noimageindex</code> - {{ "search engines should not index images on this page"|t }}
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noodp]',
+						on:   values.robots.noodp,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showTwitter">
+					<code>noodp</code> - {{ "Google should use page descriptions from the website"|t }} <span class="info">{{ "I don't want Google to use the titles and descriptions from the Open Directory Project (ODP) for this page. I want Google to use the titles and descriptions from the website."|t }}</span>
+				</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="centeralign">
+				<div>
+					{{ forms.lightswitch({
+						name: nameContext~'[' ~ robotsNamespace ~ '][robots][noydir]',
+						on:   values.robots.noydir ,
+						small: true
+					}) }}
+				</div>
+			</td>
+			<td>
+				<label for="showTwitter">
+					<code>noydir</code> - {{ "Bing and Yahoo! should use the titles and descriptions on the website."|t }} <span class="info">{{ "I don't want Bing or Yahoo! to use the Yahoo! Directory titles and descriptions for this page.  I want Bing and Yahoo! to use the titles and descriptions from the website."|t }}</span>
+				</label>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+
+{% endset %}
+
+{{ forms.field({
+	label: "Robots"|t ~ sprout.infoIcon({
+		label: "Robots"|t,
+		search: true,
+		priority: 'globals'
+	}),
+	instructions: "Communicate with robots and try to make them behave a bit differently&mdash;if they listen!",
+	errors: '',
+	first: true,
+}, robotsCheckboxes) }}
