@@ -141,7 +141,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 
 							if ($sitemapHandle == 'singles-sitemap')
 							{
-								if ($sectionModel->type == 'single')
+								if (isset($sectionModel->type) && $sectionModel->type == 'single')
 								{
 									$elements = $criteria->find();
 								}
