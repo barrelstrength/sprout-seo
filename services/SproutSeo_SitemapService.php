@@ -99,11 +99,6 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 	 */
 	public function getDynamicSitemapElements($sitemapHandle, $pageNumber)
 	{
-		if ($pageNumber < 1)
-		{
-			throw new HttpException(404);
-		}
-
 		$urls                    = array();
 		$totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
@@ -143,6 +138,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 							$criteria->locale  = $locale->id;
 
 							$sectionModel = $urlEnabledSectionType->getById($sectionMetadata->urlEnabledSectionId);
+
 							if ($sitemapHandle == 'singles-sitemap')
 							{
 								if ($sectionModel->type == 'single')
