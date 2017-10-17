@@ -150,7 +150,7 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 							{
 								$urlEnabledSectionHandle = $urlEnabledSectionType->getElementTableName().':'.$sectionModel->handle;
 
-								if ($urlEnabledSectionHandle == $sitemapHandle)
+								if (strtolower($urlEnabledSectionHandle) == $sitemapHandle)
 								{
 									$elements = $criteria->find();
 								}
