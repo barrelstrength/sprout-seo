@@ -171,6 +171,52 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * Returns all the global metadata into one variable
+	 *
+	 * @return mixed
+	 */
+	public function getGlobals()
+	{
+		$globalMetadata = sproutSeo()->globalMetadata->getGlobalMetadata();
+		$globalMetadata = $globalMetadata->getAttributes();
+		unset($globalMetadata['meta']);
+		$identity = $globalMetadata['identity'];
+		$organization = null;
+
+		if (isset($identity['organizationSubTypes']))
+		{
+			foreach ($identity['organizationSubTypes'] as $key => $organizationSubType)
+			{
+				if ($organizationSubType)
+				{
+					$organization = $organizationSubType;
+				}
+			}
+		}
+
+		$identity['organization'] = $organization;
+		unset($identity['@type']);
+		unset($identity['organizationSubTypes']);
+
+		$identity['foundingDate'] = isset($identity['foundingDate']['date']) ? $this->getDate($identity['foundingDate']) : null;
+
+		// we could just get the attributes instead of the model
+		$identity['address'] = isset($identity['addressId']) ? sproutSeo()->address->getAddressById($identity['addressId']) : null;
+
+		unset($identity['addressId']);
+
+		$identity['image'] = isset($identity['image'][0]) ? SproutSeoOptimizeHelper::getAssetUrl($identity['image'][0]) : null;
+
+		$globalMetadata['identity'] = $identity;
+
+		$globalMetadata['socials']   = $this->getSocialProfiles();
+
+		$globalMetadata['contacts'] = $this->getContacts();
+
+		return $globalMetadata;
+	}
+
+	/**
 	 * @return \Twig_Markup
 	 */
 	public function getKnowledgeGraphLinkedData()
