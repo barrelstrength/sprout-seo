@@ -105,91 +105,91 @@ class SproutSeo_SitemapService extends BaseApplicationComponent
 		// Our offset should be zero for the first page
 		$offset = ($totalElementsPerSitemap * $pageNumber) - $totalElementsPerSitemap;
 
-		$criteria = craft()->db->createCommand()
-			->select('*')
-			->from('sproutseo_metadata_sections')
-			->where('enabled = 1 and urlEnabledSectionId is not null');
+		$urlEnabledSectionTypes = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypes();
 
-		if ($sitemapHandle == 'singles-sitemap')
+		foreach ($urlEnabledSectionTypes as $urlEnabledSectionType)
 		{
-			$criteria->andWhere('type = :type', array(':type' => 'entries'));
-		}
-		else
-		{
-			$criteria->andWhere('handle = :handle', array(':handle' => $sitemapHandle));
-		}
+			$urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
 
-		$enabledSitemaps = $criteria->queryAll();
-
-		if (empty($enabledSitemaps))
-		{
-			throw new HttpException(404);
-		}
-
-		// Fetching settings for each enabled section in Sprout SEO
-		foreach ($enabledSitemaps as $key => $sitemapSettings)
-		{
-			// Fetching all enabled locales
-			foreach (craft()->i18n->getSiteLocales() as $locale)
+			foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection)
 			{
-				$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
+				$sectionMetadata = $urlEnabledSection->sectionMetadata;
 
-				$elements = array();
-
-				if ($urlEnabledSectionType != null)
+				if ($sectionMetadata->enabled and $sectionMetadata->hasUrls)
 				{
-					$urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
-
-					$criteria = craft()->elements->getCriteria($urlEnabledSectionType->getElementType());
-
-					$criteria->{$urlEnabledSectionTypeId} = $sitemapSettings['urlEnabledSectionId'];
-
-					$criteria->offset  = $offset;
-					$criteria->limit   = $totalElementsPerSitemap;
-					$criteria->enabled = true;
-					$criteria->locale  = $locale->id;
-
-					if ($sitemapHandle == 'singles-sitemap')
+					// Fetching all enabled locales
+					foreach (craft()->i18n->getSiteLocales() as $locale)
 					{
-						$sectionModel = $urlEnabledSectionType->getById($sitemapSettings['urlEnabledSectionId']);
+						$urlEnabledSectionType = sproutSeo()->sectionMetadata->getUrlEnabledSectionTypeByType($sectionMetadata->type);
 
-						if ($sectionModel->type == 'single')
+						$elements = array();
+
+						if ($urlEnabledSectionType != null)
 						{
-							$elements = $criteria->find();
+							$urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
+
+							$criteria = craft()->elements->getCriteria($urlEnabledSectionType->getElementType());
+
+							$criteria->{$urlEnabledSectionTypeId} = $sectionMetadata->urlEnabledSectionId;
+
+							$criteria->offset  = $offset;
+							$criteria->limit   = $totalElementsPerSitemap;
+							$criteria->enabled = true;
+							$criteria->locale  = $locale->id;
+
+							$sectionModel = $urlEnabledSectionType->getById($sectionMetadata->urlEnabledSectionId);
+
+							if ($sitemapHandle == 'singles-sitemap')
+							{
+								if (isset($sectionModel->type) && $sectionModel->type == 'single')
+								{
+									$elements = $criteria->find();
+								}
+							}
+							else
+							{
+								$urlEnabledSectionHandle = $urlEnabledSectionType->getElementTableName().':'.$sectionModel->handle;
+
+								if (strtolower($urlEnabledSectionHandle) == $sitemapHandle)
+								{
+									$elements = $criteria->find();
+								}
+							}
+						}
+
+						foreach ($elements as $element)
+						{
+							// @todo - Confirm this is necessary
+							// Confirm that this check/logging is necessary
+							// Catch null URLs, log them, and prevent them from being output to the sitemap
+							if (is_null($element->getUrl()))
+							{
+								SproutSeoPlugin::log('Element ID ' . $element->id . ' does not have a URL.', LogLevel::Warning, true);
+
+								continue;
+							}
+
+							// Add each location indexed by its id
+							$urls[$element->id][] = array(
+								'id'              => $element->id,
+								'url'             => $element->getUrl(),
+								'locale'          => $locale->id,
+								'modified'        => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
+								'priority'        => $sectionMetadata->priority,
+								'changeFrequency' => $sectionMetadata->changeFrequency,
+							);
 						}
 					}
-					else
-					{
-						$elements = $criteria->find();
-					}
-				}
-
-				foreach ($elements as $element)
-				{
-					// @todo - Confirm this is necessary
-					// Confirm that this check/logging is necessary
-					// Catch null URLs, log them, and prevent them from being output to the sitemap
-					if (is_null($element->getUrl()))
-					{
-						SproutSeoPlugin::log('Element ID ' . $element->id . ' does not have a URL.', LogLevel::Warning, true);
-
-						continue;
-					}
-
-					// Add each location indexed by its id
-					$urls[$element->id][] = array(
-						'id'              => $element->id,
-						'url'             => $element->getUrl(),
-						'locale'          => $locale->id,
-						'modified'        => $element->dateUpdated->format('Y-m-d\Th:m:s\Z'),
-						'priority'        => $sitemapSettings['priority'],
-						'changeFrequency' => $sitemapSettings['changeFrequency'],
-					);
 				}
 			}
 		}
 
 		$urls = $this->getLocalizedSitemapStructure($urls);
+
+		if (empty($urls))
+		{
+			throw new HttpException(404);
+		}
 
 		return $urls;
 	}
