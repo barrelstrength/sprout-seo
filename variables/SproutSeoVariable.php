@@ -209,7 +209,7 @@ class SproutSeoVariable
 
 		$globalMetadata['identity'] = $identity;
 
-		$globalMetadata['socials']   = $this->getSocialProfiles();
+		$globalMetadata['social']   = $this->getSocialProfiles();
 
 		$globalMetadata['contacts'] = $this->getContacts();
 
