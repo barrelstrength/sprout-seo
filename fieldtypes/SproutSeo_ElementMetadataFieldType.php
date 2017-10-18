@@ -650,7 +650,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 					}
 					else
 					{
-						$value = $_POST['fields'][$field->handle];
+						$value = strip_tags($_POST['fields'][$field->handle]);
 					}
 				}
 				//Resave elements
@@ -666,7 +666,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 						}
 						else
 						{
-							$value = $elementValue;
+							$value = strip_tags($elementValue);
 						}
 					}
 				}

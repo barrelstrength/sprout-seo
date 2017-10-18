@@ -648,7 +648,7 @@ class SproutSeoVariable
 	 *
 	 * @return array
 	 */
-	public function getKeywordsOptions($type = "PlainText")
+	public function getKeywordsOptions($types = array("PlainText", 'RichText'))
 	{
 		$options        = array();
 		$fields         = craft()->fields->getAllFields();
@@ -660,7 +660,7 @@ class SproutSeoVariable
 
 		foreach ($fields as $key => $field)
 		{
-			if ($field->type == $type)
+			if (in_array($field->type, $types))
 			{
 				$context             = explode(":", $field->context);
 				$context             = isset($context[0]) ? $context[0] : 'global';
@@ -687,7 +687,7 @@ class SproutSeoVariable
 	 *
 	 * @return array
 	 */
-	public function getOptimizedOptions($type = "PlainText", $handle = null, $settings = null)
+	public function getOptimizedOptions($types = array("PlainText"), $handle = null, $settings = null)
 	{
 		$options        = array();
 		$fields         = craft()->fields->getAllFields();
@@ -703,7 +703,7 @@ class SproutSeoVariable
 
 		foreach ($fields as $key => $field)
 		{
-			if ($field->type == $type)
+			if (in_array($field->type, $types))
 			{
 				$context = explode(":", $field->context);
 				$context = isset($context[0]) ? $context[0] : 'global';
@@ -742,7 +742,7 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedTitleOptions($settings)
 	{
-		return $this->getOptimizedOptions('PlainText', 'optimizedTitleField', $settings);
+		return $this->getOptimizedOptions(array('PlainText', 'RichText'), 'optimizedTitleField', $settings);
 	}
 
 	/**
@@ -752,7 +752,7 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedDescriptionOptions($settings)
 	{
-		return $this->getOptimizedOptions('PlainText', 'optimizedDescriptionField', $settings);
+		return $this->getOptimizedOptions(array('PlainText', 'RichText'), 'optimizedDescriptionField', $settings);
 	}
 
 	/**
@@ -762,7 +762,7 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedAssetsOptions($settings)
 	{
-		return $this->getOptimizedOptions("Assets", 'optimizedImageField', $settings);
+		return $this->getOptimizedOptions(array("Assets"), 'optimizedImageField', $settings);
 	}
 
 	/**
