@@ -11,7 +11,15 @@ class SproutSeo_RedirectModel extends BaseElementModel
 
 	public function __toString()
 	{
-		return (string) $this->oldUrl;
+		$oldUrl = $this->oldUrl;
+
+		if (strlen($oldUrl) > 80)
+		{
+			$oldUrl = substr($oldUrl, 0, 78);
+			$oldUrl .= "...";
+		}
+
+		return (string) $oldUrl;
 	}
 
 	/**

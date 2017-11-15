@@ -208,6 +208,17 @@ class SproutSeo_RedirectElementType extends BaseElementType
 
 				return $link;
 
+			case 'newUrl':
+				$newUrl = $element->newUrl;
+
+				if (strlen($element->newUrl) > 50)
+				{
+					$newUrl = substr($element->newUrl, 0, 48);
+					$newUrl .= "...";
+				}
+
+				return $newUrl;
+
 			default:
 				return parent::getTableAttributeHtml($element, $attribute);
 				break;
