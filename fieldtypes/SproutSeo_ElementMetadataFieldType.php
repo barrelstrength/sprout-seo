@@ -51,6 +51,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			'optimizedImageField'       => array(AttributeType::String),
 			'optimizedKeywordsField'    => array(AttributeType::String),
 			'displayPreview'            => array(AttributeType::Bool, 'default' => true),
+			'editCanonical'             => array(AttributeType::Bool, 'default' => false),
 			'showMainEntity'            => array(AttributeType::Bool, 'default' => false),
 			'showSearchMeta'            => array(AttributeType::Bool, 'default' => false),
 			'showOpenGraph'             => array(AttributeType::Bool, 'default' => false),
@@ -317,6 +318,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		//         - ResaveElements Task
 		//         - IPreviewableFieldType HTML
 		//         - Sprout Import
+
 		$this->values = $this->getMetadataFieldValues($fields);
 
 		if ($this->metadata->id)
@@ -753,6 +755,11 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$this->metadata->setAttributes($attributes);
 
 		$this->metadata = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($this->metadata);
+
+		if (isset($attributes['canonical']) && $attributes['canonical'])
+		{
+			$this->metadata->canonical = $attributes['canonical'];
+		}
 
 		// Overwrite any values we have from our existing model with the values from our attributes
 		return array_intersect_key($this->metadata->getAttributes(), $attributes);

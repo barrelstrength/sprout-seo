@@ -192,6 +192,17 @@
 	on: settings.displayPreview,
 }) }}
 
+<hr>
+
+{{ forms.lightswitchField({
+	label: "Edit Canonical?"|t,
+	instructions: "Override Canonical URL at Element Metadata field level"|t,
+	warning: '',
+	id: 'editCanonical',
+	name: 'editCanonical',
+	on: settings.editCanonical,
+}) }}
+
 
 {% includeJsResource 'sproutseo/js/sproutfields.js' %}
 

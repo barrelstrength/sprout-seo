@@ -27,7 +27,14 @@ class SproutSeoOptimizeHelper
 	 */
 	public static function prepareCanonical($metadataModel)
 	{
-		return UrlHelper::getSiteUrl(craft()->request->path);
+		$canonical = UrlHelper::getSiteUrl(craft()->request->path);
+
+		if ($metadataModel->canonical)
+		{
+			$canonical = $metadataModel->canonical;
+		}
+
+		return $canonical;
 	}
 
 	/**

@@ -149,6 +149,25 @@
 
 	{% endif %}
 
+	{% if settings.editCanonical %}
+
+		{{ forms.textField({
+			label: "URL"|t ~ sprout.infoIcon({
+				label: "URL"|t,
+				search: true,
+				structured: true,
+				openGraph: true,
+				twitterCard: true,
+				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
+			}),
+			instructions: "The URL of your webpage"|t,
+			id: 'sproutseo-canonical',
+			name: nameContext~'[metadata][canonical]',
+			value: values.canonical
+		}) }}
+
+	{% endif %}
+
 	{% if settings.optimizedKeywordsField == 'manually' %}
 
 		{% set displayMetadataField = true %}
