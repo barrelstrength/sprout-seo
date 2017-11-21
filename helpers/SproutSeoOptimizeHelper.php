@@ -660,6 +660,7 @@ class SproutSeoOptimizeHelper
 			'showGeo'                   => true,
 			'showRobots'                => true,
 			'displayPreview'            => true,
+			'editCanonical'             => false
 		);
 	}
 
