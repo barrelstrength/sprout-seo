@@ -51,7 +51,6 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 			'optimizedImageField'       => array(AttributeType::String),
 			'optimizedKeywordsField'    => array(AttributeType::String),
 			'displayPreview'            => array(AttributeType::Bool, 'default' => true),
-			'editCanonical'             => array(AttributeType::Bool, 'default' => false),
 			'showMainEntity'            => array(AttributeType::Bool, 'default' => false),
 			'showSearchMeta'            => array(AttributeType::Bool, 'default' => false),
 			'showOpenGraph'             => array(AttributeType::Bool, 'default' => false),

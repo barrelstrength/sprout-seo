@@ -31,7 +31,7 @@ class SproutSeoOptimizeHelper
 
 		if ($metadataModel->canonical)
 		{
-			$canonical = $metadataModel->canonical;
+			$canonical = craft()->config->parseEnvironmentString($metadataModel->canonical);
 		}
 
 		return $canonical;
