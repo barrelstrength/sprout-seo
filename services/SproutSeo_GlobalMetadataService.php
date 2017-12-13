@@ -53,6 +53,10 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 
 		$results['meta']['ogLocale'] = $locale;
 
+		$results['identity']['name'] = craft()->templates->renderObjectTemplate($results['identity']['name'], []);
+
+		$results['identity']['description'] = craft()->templates->renderObjectTemplate($results['identity']['description'], []);
+
 		$schema = SproutSeo_GlobalsModel::populateModel($results);
 
 		return $schema;
