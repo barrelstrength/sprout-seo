@@ -171,6 +171,52 @@ class SproutSeoVariable
 	}
 
 	/**
+	 * Returns all the global metadata into one variable
+	 *
+	 * @return mixed
+	 */
+	public function getGlobals()
+	{
+		$globalMetadata = sproutSeo()->globalMetadata->getGlobalMetadata();
+		$globalMetadata = $globalMetadata->getAttributes();
+		unset($globalMetadata['meta']);
+		$identity = $globalMetadata['identity'];
+		$organization = null;
+
+		if (isset($identity['organizationSubTypes']))
+		{
+			foreach ($identity['organizationSubTypes'] as $key => $organizationSubType)
+			{
+				if ($organizationSubType)
+				{
+					$organization = $organizationSubType;
+				}
+			}
+		}
+
+		$identity['organization'] = $organization;
+		unset($identity['@type']);
+		unset($identity['organizationSubTypes']);
+
+		$identity['foundingDate'] = isset($identity['foundingDate']['date']) ? $this->getDate($identity['foundingDate']) : null;
+
+		// we could just get the attributes instead of the model
+		$identity['address'] = isset($identity['addressId']) ? sproutSeo()->address->getAddressById($identity['addressId']) : null;
+
+		unset($identity['addressId']);
+
+		$identity['image'] = isset($identity['image'][0]) ? SproutSeoOptimizeHelper::getAssetUrl($identity['image'][0]) : null;
+
+		$globalMetadata['identity'] = $identity;
+
+		$globalMetadata['social']   = $this->getSocialProfiles();
+
+		$globalMetadata['contacts'] = $this->getContacts();
+
+		return $globalMetadata;
+	}
+
+	/**
 	 * @return \Twig_Markup
 	 */
 	public function getKnowledgeGraphLinkedData()
@@ -648,7 +694,7 @@ class SproutSeoVariable
 	 *
 	 * @return array
 	 */
-	public function getKeywordsOptions($type = "PlainText")
+	public function getKeywordsOptions($types = array("PlainText", 'RichText'))
 	{
 		$options        = array();
 		$fields         = craft()->fields->getAllFields();
@@ -660,7 +706,7 @@ class SproutSeoVariable
 
 		foreach ($fields as $key => $field)
 		{
-			if ($field->type == $type)
+			if (in_array($field->type, $types))
 			{
 				$context             = explode(":", $field->context);
 				$context             = isset($context[0]) ? $context[0] : 'global';
@@ -687,7 +733,7 @@ class SproutSeoVariable
 	 *
 	 * @return array
 	 */
-	public function getOptimizedOptions($type = "PlainText", $handle = null, $settings = null)
+	public function getOptimizedOptions($types = array("PlainText"), $handle = null, $settings = null)
 	{
 		$options        = array();
 		$fields         = craft()->fields->getAllFields();
@@ -703,7 +749,7 @@ class SproutSeoVariable
 
 		foreach ($fields as $key => $field)
 		{
-			if ($field->type == $type)
+			if (in_array($field->type, $types))
 			{
 				$context = explode(":", $field->context);
 				$context = isset($context[0]) ? $context[0] : 'global';
@@ -742,7 +788,7 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedTitleOptions($settings)
 	{
-		return $this->getOptimizedOptions('PlainText', 'optimizedTitleField', $settings);
+		return $this->getOptimizedOptions(array('PlainText', 'RichText'), 'optimizedTitleField', $settings);
 	}
 
 	/**
@@ -752,7 +798,7 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedDescriptionOptions($settings)
 	{
-		return $this->getOptimizedOptions('PlainText', 'optimizedDescriptionField', $settings);
+		return $this->getOptimizedOptions(array('PlainText', 'RichText'), 'optimizedDescriptionField', $settings);
 	}
 
 	/**
@@ -762,7 +808,7 @@ class SproutSeoVariable
 	 */
 	public function getOptimizedAssetsOptions($settings)
 	{
-		return $this->getOptimizedOptions("Assets", 'optimizedImageField', $settings);
+		return $this->getOptimizedOptions(array("Assets"), 'optimizedImageField', $settings);
 	}
 
 	/**

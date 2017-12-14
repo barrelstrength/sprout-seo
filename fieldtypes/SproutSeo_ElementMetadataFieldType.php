@@ -317,6 +317,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		//         - ResaveElements Task
 		//         - IPreviewableFieldType HTML
 		//         - Sprout Import
+
 		$this->values = $this->getMetadataFieldValues($fields);
 
 		if ($this->metadata->id)
@@ -650,7 +651,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 					}
 					else
 					{
-						$value = $_POST['fields'][$field->handle];
+						$value = strip_tags($_POST['fields'][$field->handle]);
 					}
 				}
 				//Resave elements
@@ -666,7 +667,7 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 						}
 						else
 						{
-							$value = $elementValue;
+							$value = strip_tags($elementValue);
 						}
 					}
 				}
@@ -753,6 +754,11 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 		$this->metadata->setAttributes($attributes);
 
 		$this->metadata = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($this->metadata);
+
+		if (isset($attributes['canonical']) && $attributes['canonical'])
+		{
+			$this->metadata->canonical = $attributes['canonical'];
+		}
 
 		// Overwrite any values we have from our existing model with the values from our attributes
 		return array_intersect_key($this->metadata->getAttributes(), $attributes);

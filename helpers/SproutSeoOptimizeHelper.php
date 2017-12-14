@@ -27,7 +27,14 @@ class SproutSeoOptimizeHelper
 	 */
 	public static function prepareCanonical($metadataModel)
 	{
-		return UrlHelper::getSiteUrl(craft()->request->path);
+		$canonical = UrlHelper::getSiteUrl(craft()->request->path);
+
+		if ($metadataModel->canonical)
+		{
+			$canonical = craft()->config->parseEnvironmentString($metadataModel->canonical);
+		}
+
+		return $canonical;
 	}
 
 	/**
@@ -653,6 +660,7 @@ class SproutSeoOptimizeHelper
 			'showGeo'                   => true,
 			'showRobots'                => true,
 			'displayPreview'            => true,
+			'editCanonical'             => false
 		);
 	}
 

@@ -32,6 +32,14 @@
 		required: false
 	}) }}
 
+	{{ forms.textField({
+		label: "Canonical URL"|t,
+		instructions: "Defaults to current page URL. You can include environment variables such as {siteUrl}."|t,
+		id: 'sproutseo-canonical',
+		name: nameContext~'[metadata][canonical]',
+		value: values.canonical
+	}) }}
+
 </div>
 
 {% includeCssResource "sproutseo/css/sproutseo.css" %}

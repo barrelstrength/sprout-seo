@@ -68,7 +68,8 @@
 				twitterCard: true,
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}),
-			instructions: "The Title of your content which will appear in search results and social sharing."|t ~ (fieldContext == 'sectionMetadata' ? appendTitleValueInstructions : ""),
+			instructions: "Your Title appears in search results and social sharing."|t ~ (fieldContext == 'sectionMetadata'
+		? appendTitleValueInstructions : ""),
 			name: nameContext~'[metadata][optimizedTitle]',
 			id: 'sproutseo-optimizedtitle',
 			maxlength: 60,
@@ -112,7 +113,7 @@
 				twitterCard: true,
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}),
-			instructions: "A description of your content which will appear in search results and social sharing."|t,
+			instructions: "The description appears in search results and social sharing."|t,
 			name: nameContext~'[metadata][optimizedDescription]',
 			maxlength: 160,
 			showCharsLeft: true,
@@ -133,7 +134,7 @@
 				twitterCard: true,
 				priority: (fieldContext == 'sectionMetadata') ? 'sections' : 'elements'
 			}),
-			instructions: 'A featured image that represents your content that will display in social sharing.'|t,
+			instructions: 'The featured image will display in social sharing.'|t,
 			id: 'sproutseo-optimizedimage',
 		}, forms.elementSelect({
 			elements: metaImageElements,

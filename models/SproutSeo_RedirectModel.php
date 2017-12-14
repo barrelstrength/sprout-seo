@@ -56,6 +56,7 @@ class SproutSeo_RedirectModel extends BaseElementModel
 	{
 		return array(
 			array('oldUrl, newUrl, method', 'required'),
+			array('oldUrl', 'uniqueUrl'),
 			array('method', 'validateMethod')
 		);
 	}
@@ -71,4 +72,16 @@ class SproutSeo_RedirectModel extends BaseElementModel
 		}
 	}
 
+	/**
+	 * Add validation to unique oldUrl's
+	 */
+	public function uniqueUrl($attribute,$params)
+	{
+		$redirect = sproutSeo()->redirects->findUrl($this->$attribute);
+
+		if ($redirect)
+		{
+			$this->addError($attribute, 'This url already exists.');
+		}
+	}
 }
