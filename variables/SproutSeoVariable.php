@@ -589,7 +589,12 @@ class SproutSeoVariable
 		);
 
 		$schemaGlobals = sproutSeo()->globalMetadata->getGlobalMetadata();
-		$gender        = $schemaGlobals[$schemaType]['gender'];
+		$gender = null;
+
+		if (isset($schemaGlobals[$schemaType]['gender']))
+		{
+			$gender = $schemaGlobals[$schemaType]['gender'];
+		}
 
 		array_push($options, array('optgroup' => Craft::t('Custom')));
 
