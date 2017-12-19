@@ -55,7 +55,11 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 
 		$results['identity']['name'] = craft()->config->parseEnvironmentString($results['identity']['name']);
 
-		$results['identity']['description'] = craft()->config->parseEnvironmentString($results['identity']['description']);
+		if (isset($results['identity']['description']))
+		{
+			$results['identity']['description'] = craft()->config->parseEnvironmentString($results['identity']['description']);
+		}
+
 
 		$schema = SproutSeo_GlobalsModel::populateModel($results);
 
