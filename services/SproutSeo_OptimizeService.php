@@ -300,8 +300,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	{
 		$schema = array();
 
-		//$output       = null;
-		$identityType = isset($this->globals->identity['@type']) ? $this->globals->identity['@type'] : null;
+		$identityType = $this->globals->identity['@type'];
 
 		// Website Identity Schema
 		if ($identityType)
