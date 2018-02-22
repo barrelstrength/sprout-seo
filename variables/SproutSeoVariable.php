@@ -1155,4 +1155,9 @@ class SproutSeoVariable
 
 		return $variableTypes;
 	}
+
+	public function getDescriptionLength()
+	{
+		return sproutSeo()->settings->getDescriptionLength();
+	}
 }

@@ -285,8 +285,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		SproutSeoOptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
 
 		// Trim descriptions to maxMetaDescriptionLength or 160 characters
-		$descriptionLength = craft()->config->get('maxMetaDescriptionLength', 'sproutseo');
-		$descriptionLength = $descriptionLength > 160 ? $descriptionLength : 160;
+		$descriptionLength = sproutSeo()->settings->getDescriptionLength();
 
 		$prioritizedMetadataModel->optimizedDescription = mb_substr($prioritizedMetadataModel->optimizedDescription, 0, $descriptionLength);
 		$prioritizedMetadataModel->description          = mb_substr($prioritizedMetadataModel->description, 0, $descriptionLength);

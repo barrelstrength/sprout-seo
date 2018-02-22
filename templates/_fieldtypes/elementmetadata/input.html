@@ -9,6 +9,8 @@
 
 {% set displayMetadataField = false %}
 
+{% set maxDescriptionLength = craft.sproutSeo.getDescriptionLength() %}
+
 {% set livePreviewSources= {} %}
 
 {# Prepare our SEO badge info icons #}
@@ -115,7 +117,7 @@
 			}),
 			instructions: "The description appears in search results and social sharing."|t,
 			name: nameContext~'[metadata][optimizedDescription]',
-			maxlength: 160,
+			maxlength: maxDescriptionLength,
 			showCharsLeft: true,
 			id: 'sproutseo-optimizeddescription',
 			value: values.optimizedDescription,
@@ -614,7 +616,7 @@ feel like they are part of the natural flow of fields #}
 			Craft.initUiElements($(metaDescriptionLabelId));
 
 			var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
-			metaDescriptionInput.attr('maxlength', 160);
+			metaDescriptionInput.attr('maxlength', {{maxDescriptionLength}});
 
 			{# @todo - Can we improve this?
 			This triggers a double-instantiating console error #}
@@ -651,7 +653,7 @@ feel like they are part of the natural flow of fields #}
 						Craft.initUiElements($(metaDescriptionLabelId));
 
 						var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
-						metaDescriptionInput.attr('maxlength', 160);
+						metaDescriptionInput.attr('maxlength', {{maxDescriptionLength}});
 
 						{# @todo - Can we improve this?
 						This triggers a double-instantiating console error #}
