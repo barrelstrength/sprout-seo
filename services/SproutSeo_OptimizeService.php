@@ -285,13 +285,12 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 		SproutSeoOptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
 
 		// Trim descriptions to maxMetaDescriptionLength or 160 characters
-		$descriptionLenght = craft()->config->get('maxMetaDescriptionLength', 'sproutseo');
-		$descriptionLenght = $descriptionLenght > 160 ? $descriptionLenght : 160;
+		$descriptionLength = sproutSeo()->settings->getDescriptionLength();
 
-		$prioritizedMetadataModel->optimizedDescription = mb_substr($prioritizedMetadataModel->optimizedDescription, 0, $descriptionLenght);
-		$prioritizedMetadataModel->description          = mb_substr($prioritizedMetadataModel->description, 0, $descriptionLenght);
-		$prioritizedMetadataModel->ogDescription        = mb_substr($prioritizedMetadataModel->ogDescription, 0, $descriptionLenght);
-		$prioritizedMetadataModel->twitterDescription   = mb_substr($prioritizedMetadataModel->twitterDescription, 0, $descriptionLenght);
+		$prioritizedMetadataModel->optimizedDescription = mb_substr($prioritizedMetadataModel->optimizedDescription, 0, $descriptionLength);
+		$prioritizedMetadataModel->description          = mb_substr($prioritizedMetadataModel->description, 0, $descriptionLength);
+		$prioritizedMetadataModel->ogDescription        = mb_substr($prioritizedMetadataModel->ogDescription, 0, $descriptionLength);
+		$prioritizedMetadataModel->twitterDescription   = mb_substr($prioritizedMetadataModel->twitterDescription, 0, $descriptionLength);
 
 		return $prioritizedMetadataModel;
 	}
@@ -300,8 +299,7 @@ class SproutSeo_OptimizeService extends BaseApplicationComponent
 	{
 		$schema = array();
 
-		//$output       = null;
-		$identityType = isset($this->globals->identity['@type']) ? $this->globals->identity['@type'] : null;
+		$identityType = $this->globals->identity['@type'];
 
 		// Website Identity Schema
 		if ($identityType)

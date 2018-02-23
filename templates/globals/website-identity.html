@@ -8,6 +8,7 @@
 {% set organizationItems = craft.sproutSeo.getOrganizationOptions() %}
 {% set globals           = craft.sproutSeo.getGlobalMetadata() %}
 {% set websiteIdentity   = globals.identity %}
+{% set maxDescriptionLength = craft.sproutSeo.getDescriptionLength() %}
 
 {% set websiteIdentityTypes = [
 	{ label: "Organization", value: "Organization" },
@@ -92,7 +93,7 @@
 			value: websiteIdentity['description'] is defined ? websiteIdentity.description : null,
 			errors: '',
 			required: true,
-			maxlength: 160,
+			maxlength: maxDescriptionLength,
 			showCharsLeft: true,
 			placeholder: "The official website of " ~ siteName
 		}) }}

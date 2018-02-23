@@ -139,4 +139,12 @@ class SproutSeo_SettingsService extends BaseApplicationComponent
 		return (bool) $affectedRows;
 	}
 
+	public function getDescriptionLength()
+	{
+		$descriptionLength = craft()->config->get('maxMetaDescriptionLength', 'sproutseo');
+		$descriptionLength = $descriptionLength > 160 ? $descriptionLength : 160;
+
+		return $descriptionLength;
+	}
+
 }

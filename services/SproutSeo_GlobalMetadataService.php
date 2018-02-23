@@ -53,13 +53,15 @@ class SproutSeo_GlobalMetadataService extends BaseApplicationComponent
 
 		$results['meta']['ogLocale'] = $locale;
 
-		$results['identity']['name'] = craft()->config->parseEnvironmentString($results['identity']['name']);
+		if (isset($results['identity']['name']))
+		{
+			$results['identity']['name'] = craft()->config->parseEnvironmentString($results['identity']['name']);
+		}
 
 		if (isset($results['identity']['description']))
 		{
 			$results['identity']['description'] = craft()->config->parseEnvironmentString($results['identity']['description']);
 		}
-
 
 		$schema = SproutSeo_GlobalsModel::populateModel($results);
 
