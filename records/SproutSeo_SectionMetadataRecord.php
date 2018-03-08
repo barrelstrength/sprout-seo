@@ -30,7 +30,7 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 
 			// Optimized Meta
 			'optimizedTitle'       => array(AttributeType::String),
-			'optimizedDescription' => array(AttributeType::String),
+			'optimizedDescription' => array(AttributeType::Mixed),
 			'optimizedImage'       => array(AttributeType::String),
 			'optimizedKeywords'    => array(AttributeType::String),
 
@@ -45,7 +45,7 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 			'enableMetaDetailsRobots'      => array(AttributeType::Bool, 'default' => false, 'required' => false),
 			'title'                        => array(AttributeType::String),
 			'appendTitleValue'             => array(AttributeType::String),
-			'description'                  => array(AttributeType::String),
+			'description'                  => array(AttributeType::Mixed),
 			'keywords'                     => array(AttributeType::String),
 
 			'robots'                         => array(AttributeType::String),
@@ -61,7 +61,7 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 			'ogUrl'                          => array(AttributeType::String),
 			'ogSiteName'                     => array(AttributeType::String),
 			'ogTitle'                        => array(AttributeType::String),
-			'ogDescription'                  => array(AttributeType::String),
+			'ogDescription'                  => array(AttributeType::Mixed),
 			'ogImage'                        => array(AttributeType::String),
 			'ogTransform'                    => array(AttributeType::String),
 			'ogAuthor'                       => array(AttributeType::String),
@@ -75,7 +75,7 @@ class SproutSeo_SectionMetadataRecord extends BaseRecord
 			'twitterUrl'                     => array(AttributeType::String),
 			'twitterSite'                    => array(AttributeType::String),
 			'twitterTitle'                   => array(AttributeType::String),
-			'twitterDescription'             => array(AttributeType::String),
+			'twitterDescription'             => array(AttributeType::Mixed),
 			'twitterImage'                   => array(AttributeType::String),
 			'twitterTransform'               => array(AttributeType::String),
 			'twitterCreator'                 => array(AttributeType::String),
