@@ -500,8 +500,8 @@ class SproutSeo_ElementMetadataFieldType extends BaseFieldType implements IPrevi
 				break;
 		}
 
-		// Just save the first 255 characters (we only output 160...)
-		$description                        = mb_substr(trim($description), 0, 255);
+		$descriptionLength = craft()->config->get('maxMetaDescriptionLength', 'sproutseo');
+		$description                        = mb_substr(trim($description), 0, $descriptionLength);
 		$attributes['optimizedDescription'] = $description;
 		$attributes                         = $this->setMetaDetailsValues('description', $description, $attributes);
 

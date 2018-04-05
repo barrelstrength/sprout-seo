@@ -81,7 +81,10 @@ class SproutSeo_RedirectModel extends BaseElementModel
 
 		if ($redirect)
 		{
-			$this->addError($attribute, 'This url already exists.');
+			if ($redirect->id != $this->id)
+			{
+				$this->addError($attribute, 'This url already exists.');
+			}
 		}
 	}
 }

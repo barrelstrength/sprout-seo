@@ -22,7 +22,7 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 
 			// Optimized Meta
 			'optimizedTitle'       => array(AttributeType::String, 'required' => false),
-			'optimizedDescription' => array(AttributeType::String, 'required' => false),
+			'optimizedDescription' => array(AttributeType::Mixed, 'required' => false),
 			'optimizedImage'       => array(AttributeType::String, 'required' => false),
 			'optimizedKeywords'    => array(AttributeType::String, 'required' => false),
 
@@ -36,7 +36,7 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 			'enableMetaDetailsGeo'         => array(AttributeType::Bool, 'default' => false, 'required' => false),
 			'enableMetaDetailsRobots'      => array(AttributeType::Bool, 'default' => false, 'required' => false),
 			'title'                        => array(AttributeType::String),
-			'description'                  => array(AttributeType::String),
+			'description'                  => array(AttributeType::Mixed),
 			'keywords'                     => array(AttributeType::String),
 
 			'robots'    => array(AttributeType::String),
@@ -51,7 +51,7 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 			'ogUrl'         => array(AttributeType::String),
 			'ogSiteName'    => array(AttributeType::String),
 			'ogTitle'       => array(AttributeType::String),
-			'ogDescription' => array(AttributeType::String),
+			'ogDescription' => array(AttributeType::Mixed),
 			'ogImage'       => array(AttributeType::String),
 			'ogTransform'   => array(AttributeType::String),
 			'ogAuthor'      => array(AttributeType::String),
@@ -64,7 +64,7 @@ class SproutSeo_ElementMetadataRecord extends BaseRecord
 			'twitterUrl'                     => array(AttributeType::String),
 			'twitterSite'                    => array(AttributeType::String),
 			'twitterTitle'                   => array(AttributeType::String),
-			'twitterDescription'             => array(AttributeType::String),
+			'twitterDescription'             => array(AttributeType::Mixed),
 			'twitterImage'                   => array(AttributeType::String),
 			'twitterTransform'               => array(AttributeType::String),
 			'twitterCreator'                 => array(AttributeType::String),
