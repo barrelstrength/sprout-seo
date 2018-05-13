@@ -1,0 +1,19 @@
+{% extends "sprout-seo/_layouts/elementindex" %}
+{% set elementType = 'barrelstrength\\sproutseo\\elements\\Redirect' %}
+
+{% set title = "Redirects" %}
+
+{% set extraPageHeaderHtml %}
+    <div class="buttons">
+        <a class="btn submit add icon"
+           href="{{ url('sprout-seo/redirects/new') }}">{{ "New Redirect"|t }}</a>
+    </div>
+{% endset %}
+
+{% css %}
+    .element.small.hasstatus
+    {
+    word-break: break-all;
+    hyphens: auto;
+    }
+{% endcss %}

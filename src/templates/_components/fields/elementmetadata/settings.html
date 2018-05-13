@@ -1,0 +1,230 @@
+{% import "_includes/forms" as forms %}
+{% import "sprout-base-fields/_includes/forms" as sproutFields %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\app\\fields\\web\\assets\\selectother\\SelectOtherFieldAsset") %}
+
+{% set pluginSettings = craft.sproutseo.getSettings() %}
+{% set optimizedTitleOptions = craft.sproutseo.getOptimizedTitleOptions(settings) %}
+
+<div class="field">
+    <div class="heading">
+        <label for="siteOwnerType">{{ "Meta Title"|t }}</label>
+        <p class="instructions">
+            {{ "Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select
+'   Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t }}
+        </p>
+    </div>
+    <div class="input">
+        <div class="field sprout-selectother">
+            {{ sproutFields.selectOther({
+                name: 'optimizedTitleField',
+                id: 'optimizedTitleField',
+                options: optimizedTitleOptions ,
+                value: settings.optimizedTitleField is defined ? settings.optimizedTitleField : null,
+                otherPlaceholderText: 'Custom title pattern. Twig code allowed, i.e. {title} - {customField}'|t
+            }) }}
+        </div>
+    </div>
+</div>
+
+{% set optimizedDescriptionOptions = craft.sproutseo.getOptimizedDescriptionOptions(settings) %}
+
+<div class="field">
+    <div class="heading">
+        <label for="siteOwnerType">{{ "Meta Description"|t }}</label>
+        <p class="instructions">
+            {{ "Select the field to use for your basic, Open Graph, and Twitter Card meta tag descriptions. Select 'Manually' if you want the Optimize field to display a custom Description Field for your content editors to manage."|t }}
+        </p>
+    </div>
+    <div class="input">
+        <div class="field sprout-selectother">
+            {{ sproutFields.selectOther({
+                name: 'optimizedDescriptionField',
+                id: 'optimizedDescriptionField',
+                options: optimizedDescriptionOptions,
+                value: settings.optimizedDescriptionField is defined ? settings.optimizedDescriptionField : 'manually',
+                otherPlaceholderText: 'Custom title pattern. Twig code allowed, i.e. {title} - {customField}'|t
+            }) }}
+        </div>
+    </div>
+</div>
+
+{% set optimizedImageOptions = craft.sproutseo.getOptimizedAssetsOptions(settings) %}
+
+<div class="field">
+    <div class="heading">
+        <label for="siteOwnerType">{{ "Meta Image"|t }}</label>
+        <p class="instructions">
+            {{ "Select the Assets field to use for your basic, Open Graph, and Twitter Card meta tag feature image. Select 'Manually' if you want the Optimize field to display a custom Feature Image Field for your content editors to manage."|t }}
+        </p>
+    </div>
+    <div class="input">
+        <div class="field sprout-selectother">
+            {{ sproutFields.selectOther({
+                id: 'optimizedImageField',
+                name: 'optimizedImageField',
+                options: optimizedImageOptions,
+                value: settings.optimizedImageField is defined ? settings.optimizedImageField : 'manually',
+                otherPlaceholderText: 'Custom title pattern. Twig code allowed, i.e. {title} - {customField}'|t
+            }) }}
+        </div>
+    </div>
+</div>
+
+{% set optimizedKeywordOptions = craft.sproutseo.getKeywordsOptions() %}
+
+{{ forms.selectField({
+    label: "Meta Keywords"|t,
+    instructions: "Generate keywords and key phrases dynamically based on an algorithm or add them manually."|t,
+    id: 'optimizedKeywordsField',
+    name: 'optimizedKeywordsField',
+    options: optimizedKeywordOptions,
+    value: settings.optimizedKeywordsField is defined ? settings.optimizedKeywordsField : 'manually',
+}) }}
+
+{% if pluginSettings.enableMetaDetailsFields %}
+
+    <hr>
+
+    {% set advancedInput %}
+        <table class="data" style="width: auto;">
+            <thead>
+            <tr>
+                <th scope="col">{{ "Meta Tag Type"|t }}</th>
+                <th scope="col">{{ "Editable?"|t }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <label for="showMainEntity">{{ "Allow Main Entity to be edited?"|t }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'showMainEntity',
+                            on:   settings.showMainEntity,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="showSearchMeta">{{ "Allow Search Meta fields to be edited?"|t }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'showSearchMeta',
+                            on:   settings.showSearchMeta,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="showOpenGraph">{{ "Allow Open Graph fields to be edited?"|t }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'showOpenGraph',
+                            on:   settings.showOpenGraph,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="showTwitter">{{ "Allow Twitter fields to be edited?"|t }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'showTwitter',
+                            on:   settings.showTwitter,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="showGeo">{{ "Allow Geo fields to be edited?"|t }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'showGeo',
+                            on:   settings.showGeo,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="showRobots">{{ "Allow Robots fields to be edited?"|t }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'showRobots',
+                            on:   settings.showRobots,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    {% endset %}
+
+    {{ forms.field({
+        label: "Meta Details"|t,
+        instructions: "Enable one more level of control to fine-tune your metadata to your specific SEO needs. Note: enabling Meta Details fields may require additional time to content planning and monitoring in your SEO strategy."|t,
+        errors: ''
+    }, advancedInput) }}
+
+{% endif %}
+
+ {# @todo - Upcoming Feature - SEO Preview #}
+
+<hr>
+
+{{ forms.lightswitchField({
+    label: "Display Preview?"|t,
+    instructions: "Display an SEO Preview button to review an example of your metadata as it could appear in Search or Social Sharing. The SEO Preview button will display below the Live Preview button."|t,
+    warning: '',
+    id: 'displayPreview',
+    name: 'displayPreview',
+    on: settings.displayPreview,
+}) }}
+
+<hr>
+
+{{ forms.lightswitchField({
+    label: "Edit Canonical?"|t,
+    instructions: "Override Canonical URL at Element Metadata field level"|t,
+    warning: '',
+    id: 'editCanonical',
+    name: 'editCanonical',
+    on: settings.editCanonical,
+}) }}
+
+{% js %}
+    $(document).ready(function() {
+    Craft.SproutFields.initFields($("#content"));
+    });
+{% endjs %}
+
+{% css %}
+    .sprout-selectotherdropdown    select {
+    max-width: 300px;
+    }
+{% endcss %}
+

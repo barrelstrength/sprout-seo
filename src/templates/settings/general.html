@@ -1,0 +1,142 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: "Plugin Name"|t('sprout-seo'),
+    instructions: "Intuitive, human-readable plugin name for the end user."|t('sprout-seo'),
+    id: 'pluginNameOverride',
+    name: 'pluginNameOverride',
+    value: settings.pluginNameOverride,
+    autofocus: true,
+    first: true,
+    errors: ''
+}) }}
+
+<hr>
+
+{{ forms.lightswitchField({
+    label: "Log 404 Redirects"|t('sprout-seo'),
+    instructions: "Log 'Page Not Found' errors as 404 Redirects. 404 Redirects will appear on the Redirects tab as a disabled 404 Redirect Element and can be updated to 301 or 302 Redirects."|t('sprout-seo'),
+    name: 'enable404RedirectLog',
+    toggle: 'settings-total-404redirects',
+    on: settings.enable404RedirectLog ? true : false,
+    onLabel: "Enable"|t('sprout-seo')
+}) }}
+
+<div id="settings-total-404redirects"
+     class="{% if not settings.enable404RedirectLog %} hidden {% endif %}">
+    {{ forms.textField({
+        label: "404 Redirect Limit"|t('sprout-seo'),
+        instructions: "The total number of 404 Redirects that will be stored in the database. When the limit is reached, the least recently updated 404 Redirect will be deleted."|t('sprout-seo'),
+        name: 'total404Redirects',
+        size:'10',
+        value: settings.total404Redirects,
+        errors: ''
+    }) }}
+</div>
+
+<hr>
+
+{{ forms.textField({
+    label: "Total Elements Per Sitemap"|t('sprout-seo'),
+    instructions: "The number of items that display on each page of your sitemap. A lower number may be necessary for sitemaps with a large number of elements or limited server resources."|t('sprout-seo'),
+    name: 'totalElementsPerSitemap',
+    placeholder: '500',
+    size:'10',
+    value: settings.totalElementsPerSitemap,
+    errors: ''
+}) }}
+
+{% if craft.app.isMultiSite %}
+    {{ forms.lightswitchField({
+        label: "Enable multi-lingual sitemap"|t('sprout-seo'),
+        instructions: "Generate a single, multilingual sitemap.xml file for each Site Group. By default, a sitemap.xml is generated for every Site on your Craft website. If you are managing content in multiple languages, enable this setting to generate a single, multi-lingual sitemap.xml for all Sites in each Site Group. The sitemap.xml be created for the primary domain or the first domain that appears in the list of a specific Site Group."|t,
+        name: 'enableMultilingualSitemaps',
+        on: settings.enableMultilingualSitemaps,
+        id: 'enableMultilingualSitemaps',
+        onLabel: "Enable"|t
+    }) }}
+
+    {% set siteRows = [] %}
+    {% set siteGroupRows = [] %}
+    {% set siteErrors = settings.getErrors('siteSettings') %}
+    {% set groupErrors = settings.getErrors('groupSettings') %}
+
+    {% for site in craft.app.sites.getAllSites() %}
+        {% set siteSettings = settings.siteSettings[site.id] ?? null %}
+
+        {% set siteRows = siteRows|merge({
+            (site.handle): {
+                heading: site.name|t('site'),
+                enabled: include('_includes/forms/lightswitch', {
+                    name: 'siteSettings['~site.id~']',
+                    on: siteSettings,
+                    value: site.id,
+                    small: true
+                })
+            }
+        }) %}
+    {% endfor %}
+
+    {% for group in craft.app.sites.getAllGroups() %}
+        {% set groupSettings = settings.groupSettings[group.id] ?? null %}
+
+        {% set siteGroupRows = siteGroupRows|merge({
+            (group.name): {
+                heading: group.name|t('site'),
+                enabled: include('_includes/forms/lightswitch', {
+                    name: 'groupSettings['~group.id~']',
+                    on: groupSettings,
+                    value: group.id,
+                    small: true
+                })
+            }
+        }) %}
+    {% endfor %}
+    <div id="siteWrapper" {% if settings.enableMultilingualSitemaps %} class="hidden" {% endif %}>
+    {{ forms.editableTableField({
+        label: "Enable Sitemaps"|t('sprout-seo'),
+        instructions: "Enable each section you wish to include in your XML sitemaps."|t('sprout-seo'),
+        id: 'sites',
+        name: 'sites',
+        cols: {
+            heading: {
+                type: 'heading',
+                heading: "Site"|t('app'),
+                class: 'thin'
+            },
+            enabled: {
+                type: 'heading',
+                class: 'thin'~(not craft.app.getIsMultiSite() ? ' hidden')
+            }
+        },
+        rows: siteRows,
+        staticRows: true,
+        errors: siteErrors|unique
+    }) }}
+    </div>
+
+    <div id="groupWrapper" {% if not settings.enableMultilingualSitemaps %} class="hidden" {% endif %}>
+        {{ forms.editableTableField({
+            label: "Enable Sitemaps"|t('sprout-seo'),
+            instructions: "Enable each group you wish to include in your XML sitemaps."|t('sprout-seo'),
+            id: 'groups',
+            name: 'groups',
+            cols: {
+                heading: {
+                    type: 'heading',
+                    heading: "Group"|t('app'),
+                    class: 'thin'
+                },
+                enabled: {
+                    type: 'heading',
+                    class: 'thin'~(not craft.app.getIsMultiSite() ? ' hidden')
+                }
+            },
+            rows: siteGroupRows,
+            staticRows: true,
+            errors: groupErrors|unique
+        }) }}
+    </div>
+{% endif %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\app\\seo\\web\\assets\\general\\GeneralAsset") %}

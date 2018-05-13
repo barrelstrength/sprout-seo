@@ -1,0 +1,145 @@
+{% extends "sprout-seo/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+
+{% set sectionLayout = craft.app.request.getSegment(2) %}
+
+{% set pluginSettings = craft.sproutseo.getSettings() %}
+{% set urlEnabledSectionTypes = craft.sproutseo.getUrlEnabledSectionTypes(siteId) %}
+
+{% block content %}
+    <input type="hidden" name="siteId" value="{{ siteId }}" >
+    <div class="pane">
+
+        <div class="header" style="display: flex;align-items: center;">
+            <div style="flex-grow: 1;">
+                <h3 style="text-transform: uppercase;">{{ "Sections"|t }} <span
+                            class="info">{{ "Manage all of your Section-level SEO for Search, Social Sharing, Sitemaps, and Structured Data."|t }}
+                </h3>
+            </div>
+        </div>
+
+        {% for urlEnabledSectionTypeKey, urlEnabledSectionType in urlEnabledSectionTypes %}
+
+            {% for urlEnabledSectionKey, urlEnabledSection in urlEnabledSectionType.urlEnabledSections %}
+
+                {% set sectionMetadata = urlEnabledSection.sectionMetadata %}
+
+                {% if loop.first %}
+
+                    {% set name = urlEnabledSectionType.getName() %}
+
+                    <table class="data fullwidth sitemap-settings">
+                    <thead>
+
+                    {% block sectionMetadataTableRowHead %}{% endblock %}
+
+                    </thead>
+                    <tbody>
+
+                {% endif %}
+
+                {% if sectionMetadata.name is defined %}
+                    {% set elementTableName = urlEnabledSectionType.getElementTableName() %}
+                    {% set sproutSeoHandle = elementTableName~':'~sectionMetadata.handle %}
+
+                    <tr class="{{ sectionMetadata.isNew ? 'sectionmetadata-isnew' : null }}"
+                        data-rowid="{{ urlEnabledSectionKey }}"
+                        data-id="{{ sectionMetadata.id ? sectionMetadata.id : null }}"
+                        data-name="{{ sectionMetadata.name }}"
+                        data-handle="{{ sproutSeoHandle }}"
+                        data-type="{{ urlEnabledSection.type.getId() }}"
+                        data-url-enabled-section-id="{{ sectionMetadata.urlEnabledSectionId }}"
+                        data-url="{{ sectionMetadata.uri }}"
+                        data-is-new="{{ sectionMetadata.isNew }}">
+
+                        {% block sectionMetadataTableRow %}{% endblock %}
+
+                    </tr>
+                {% endif %}
+
+                {% if loop.last %}
+
+                    </tbody>
+                    </table>
+                    <br>
+
+                {% endif %}
+
+            {% endfor %}
+
+        {% endfor %}
+
+    </div>
+
+    {% if pluginSettings.enableCustomSections %}
+
+        {% set customSections = craft.sproutseo.getCustomSections() %}
+
+        <div class="pane">
+
+            <div class="header" style="display: flex;align-items: center;">
+                <div style="flex-grow: 1;">
+                    <h3 style="text-transform: uppercase;">{{ "Custom Sections"|t }}</h3>
+                </div>
+                <div style="flex-shrink: 0;">
+                    <div class="buttons right">
+                        <a class="btn submit add icon"
+                           href="{{ url('sprout-seo/sections/new') }}">{{ "New section"|t }}</a>
+                    </div>
+                </div>
+            </div>
+
+            {% if customSections|length %}
+
+
+                <table class="data fullwidth custom-pages sitemap-settings"
+                       id="custom-pages">
+                    <thead>
+
+                    {% block customSectionTableRowHead %}{% endblock %}
+
+                    </thead>
+                    <tbody>
+
+                    {% for customSection in customSections %}
+
+                        {% set customSectionId = "customUrl-" ~ customSection.id %}
+
+                        <tr data-rowid="{{ customSectionId }}"
+                            data-id="{{ customSection.id }}"
+                            data-name="{{ customSection.name }}"
+                            data-handle="{{ customSection.handle }}"
+                            data-type="">
+
+                            {% block customSectionTableRow %}{% endblock %}
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+{% endblock %}
+
+{% js %}
+    new Craft.SproutSeo.SectionMetadata();
+
+    new Craft.AdminTable({
+    tableSelector: '#custom-pages',
+    deleteAction: 'sprout-seo/section-metadata/delete-section-metadata-by-id',
+    onDeleteObject: function(id)
+    {
+    if($('#custom-pages').find('tbody').find('tr').size() == 0)
+    {
+    $('#custom-pages').hide();
+    }
+    }
+    });
+{% endjs %}

@@ -1,0 +1,31 @@
+{% extends "_layouts/elementindex" %}
+
+{% set subnav = {
+    globals: {
+        label: "Globals"|t,
+        url: cpUrl('sprout-seo/globals/website-identity')
+    },
+    sections: {
+        label: "Sections"|t,
+        url: cpUrl('sprout-seo/sections')
+    },
+    sitemap: {
+        label: "Sitemap"|t,
+        url: cpUrl('sprout-seo/sitemap'),
+    },
+    redirects: {
+        label: "Redirects"|t,
+        url: cpUrl('sprout-seo/redirects'),
+    }
+} %}
+
+{% if currentUser.can('editSproutSeoSettings') %}
+    {% set subnav = subnav|merge({
+        settings: {
+            label: "Settings"|t,
+            url: url('sprout-seo/settings/general')
+        }
+    }) %}
+{% endif %}
+
+{% set selectedSubnavItem = craft.request.segment(2) ? craft.request.segment(2) : 'defaults' %}

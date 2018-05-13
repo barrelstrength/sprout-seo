@@ -1,0 +1,70 @@
+{% import "_includes/forms" as forms %}
+
+{% set settings = craft.sproutseo.getSettings() %}
+{% set localeOptions = craft.sproutseo.getLocaleOptions() %}
+
+{{ forms.field({
+    label: "Advanced Settings"|t|upper,
+    instructions: "Sprout SEO provides you with powerful, comprehensive management of all types of metadata from your Control Panel and the ability to setup sensible, reusable defaults with existing fields in your content worklow. The default setup makes preparing metadata for search and social sharing more predictable, generates extensive SEO metadata, and an easy to manage content experience.<br><br> Some folks, however, want to have the ability to fine-tune each type of metadata. This requires a more complicated UI, more complicated codebase, and more time necessary to curate, prepare, post, and maintain content. If you'd like to go down that path and have the necessary budget, team, or training processes to do it well, go ahead and enable these settings."|t,
+}, null) }}
+
+<hr>
+
+{{ forms.lightswitchField({
+    label: "Enable Meta Details fields"|t,
+    instructions: "Meta Details fields add one more level of fine-tuning over your metadata. With Meta Details fields enabled, content editors will have the option to refine Open Graph, Twitter Card, Geo, and Robots metadata within Sections and the Element Metadata Field will display additional settings to allow customization of Structured Data, Search, Open Graph, Twitter Card, Geo, and Robots metadata on any Element that supports the Element Metadata field."|t,
+    name: 'enableMetaDetailsFields',
+    on: settings.enableMetaDetailsFields,
+    onLabel: "Enable"|t
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Enable Custom Sections"|t,
+    instructions: "Enable this setting to manage metadata for Sections with Custom URL requirements. Custom Sections require an additional step within your templates to output your metadata."|t,
+    name: 'enableCustomSections',
+    on: (settings.enableCustomSections is empty ? false : true),
+    onLabel: "Enable"|t
+}) }}
+
+<hr>
+
+{{ forms.lightswitchField({
+    label: "Automatically render metadata"|t,
+    instructions: "Sprout SEO prepares and outputs all of your metadata in your template. If you'd like to manage this output manually, you can disable this setting and enable the 'Enable custom metadata variable' setting below."|t,
+    name: 'enableMetadataRendering',
+    on: (settings.enableMetadataRendering is empty ? false : true),
+    onLabel: "Enable"|t
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Enable custom metadata variable"|t,
+    instructions: "Make a global `metadata` variable available to all of your templates. The `metadata` variable will contain page-specific Prioritized Metadata and Structured Data, and all of your Globals. Ensure the {% sproutseo 'optimize' %} tag is in your template to generate the `metadata` variable. If you plan to handle the `metadata` variable on your own, you may also want to disable the 'Automatically render metadata' setting above, to ensure you don't output your metadata twice."|t,
+    name: 'toggleMetadataVariable',
+    toggle: 'settings-enablemetadatavariable',
+    on: settings.toggleMetadataVariable,
+    onLabel: "Enable"|t
+}) }}
+
+<div id="settings-enablemetadatavariable"
+     class="{% if not settings.toggleMetadataVariable %} hidden {% endif %}">
+
+    {{ forms.textField({
+        label: "Custom metadata variable name"|t,
+        instructions: "Give your global `metadata` variable a name. You will use this variable name to access your metadata in your templates."|t,
+        name: 'metadataVariable',
+        placeholder: 'metadata',
+        value: settings.metadataVariable,
+        errors: ''
+    }) }}
+
+</div>
+
+<hr>
+
+{{ forms.lightswitchField({
+    label: "Display Field Handles"|t,
+    instructions: "Enable this setting to display field handle next to the field name in your Element Metadata field settings."|t,
+    name: 'displayFieldHandles',
+    on: settings.displayFieldHandles ? true : false,
+    onLabel: "Enable"|t
+}) }}

@@ -1,0 +1,8 @@
+<div class="sprout-metadata-status" style="color:#ccc;">
+    <span class="sproutseo-icon icon-search
+        {% if craft.sproutseo.hasActiveMetadata('search', sectionMetadata) %}sproutseo-status-pass{% endif %}">&#xe800;</span>
+    <span class="sproutseo-icon icon-facebook
+        {% if craft.sproutseo.hasActiveMetadata('openGraph', sectionMetadata) %}sproutseo-status-pass{% endif %}">&#xe802;</span>
+    <span class="sproutseo-icon icon-twitter
+        {% if craft.sproutseo.hasActiveMetadata('twitterCard', sectionMetadata) %}sproutseo-status-pass{% endif %}">&#xe807;</span>
+</div>

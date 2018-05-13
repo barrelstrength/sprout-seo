@@ -1,0 +1,15 @@
+{% if sitemapIndexItems|length %}
+    {% set urls %}
+
+        {% for sitemapIndex in sitemapIndexItems %}
+            <sitemap>
+                <loc>{{ sitemapIndex }}</loc>
+                <lastmod>{{ now|date('Y-m-d') }}</lastmod>
+            </sitemap>
+        {% endfor %}
+
+    {% endset %}{# end urls set #}
+    <?xml version="1.0" encoding="UTF-8"?>
+    <sitemapindex
+            xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{{ urls }}</sitemapindex>
+{% endif %}

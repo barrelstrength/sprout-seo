@@ -1,0 +1,54 @@
+<div class="google-result-border">
+    <h3 class="google-result-heading">{{ prioritizedMetadata.optimizedTitle }} {{ prioritizedMetadata.appendTitleValue }}</h3>
+    <div class="s">
+        <div>
+            <div style="white-space:nowrap">
+                <cite class="google-result-cite">{{ prioritizedMetadata.getPreviewUrl() }}</cite>
+                {#<div class="action-menu">#}
+                {#<a href="#"><span class="mn-dwn-arw"></span></a>#}
+                {#</div>#}
+                <div class="google-result-identity">
+                    <div class="crl">{{ siteName }}<span class="_Bs"></span>
+                    </div>
+                </div>
+            </div>
+            <span class="google-result-description">{{ prioritizedMetadata.optimizedDescription }}
+                <wbr>&nbsp;...</span>
+        </div>
+    </div>
+</div>
+
+{% css %}
+    /* Example Google Results */
+    .google-result-border {
+    /*border-bottom: 1px solid rgba(0,0,0,0.07);*/
+    /*border-top: 1px solid rgba(0,0,0,0.07);*/
+    font-family: arial, sans-serif;
+    }
+    .google-result-heading {
+    color: #1a0dab;
+    font-family: arial, sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 0;
+    }
+    .google-result-cite {
+    color: #006621;
+    display: inline-block;
+    font-family: arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    }
+    .google-result-identity {
+    color: #777;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial, sans-serif;
+    font-size: 14px;
+    }
+    .google-result-description {
+    color: #545454;
+    font-family: arial, sans-serif;
+    font-size: 13px;
+    }
+{% endcss %}

@@ -1,0 +1,41 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: "Old URL"|t('sprout-seo'),
+    id: 'oldUrl',
+    name: 'oldUrl',
+    value: redirect.oldUrl,
+    errors: redirect.getErrors('oldUrl'),
+    first: true,
+    autofocus: true,
+    required: true
+}) }}
+
+{{ forms.textField({
+    label: "New URL"|t('sprout-seo'),
+    id: 'newUrl',
+    name: 'newUrl',
+    value: redirect.newUrl,
+    errors: redirect.getErrors('newUrl'),
+    required: true
+}) }}
+
+{{ forms.selectField({
+    label: 'Method'|t('sprout-seo'),
+    id: 'method',
+    name: 'method',
+    value: (redirect.method != "" ? redirect.method : '302'),
+    options: methodOptions,
+    errors: redirect.getErrors('method'),
+    required: true
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Match Patterns"|t('sprout-seo'),
+    id: 'regex',
+    name: 'regex',
+    class: 'sproutseo',
+    on: redirect.regex,
+    onLabel: "On"|t('sprout-seo'),
+    offLabel: "Off"|t('sprout-seo')
+}) }}

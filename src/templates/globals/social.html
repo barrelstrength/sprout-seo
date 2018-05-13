@@ -1,0 +1,122 @@
+{% extends "sprout-seo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+{% import "sprout-base-fields/_includes/forms" as sproutFields %}
+{% import "sprout-seo/_includes/sproutseo" as sprout %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\app\\seo\\web\\assets\\globals\\GlobalsAsset") %}
+
+{% set socialProfileOptions = craft.sproutseo.getFinalOptions('social', 'profileName', globals) %}
+
+{% set cols = [
+    {
+        type: 'selectOther',
+        heading: 'Profile',
+        options: socialProfileOptions
+    },
+    {
+        type: 'textual',
+        heading: 'URL'
+    }
+] %}
+
+{% block content %}
+
+    <div class="field" style="margin-bottom:0;">
+        <div class="heading">
+            <label>{{ "Social Profiles"|t }} {{ sprout.infoIcon({
+                    label: "Social Profiles"|t,
+                    search: true,
+                    structured: true,
+                    openGraph: true,
+                    twitterCard: true,
+                    priority: 'globals'
+                }) }}</label>
+            <p class="instructions">{{ "Adding <a href='https://developers.google.com/structured-data/customize/social-profiles' target='_blank'>Social Profile Links</a> helps establish a relationship between your website and your related online profiles. Supported social profiles can be prominently displayed in your Google Knowledge panel, however, it's encouraged to add any other social profiles you have as well."|t|raw }}</p>
+        </div>
+    </div>
+
+    <form method="post" accept-charset="UTF-8" data-saveshortcut>
+        {{ csrfInput() }}
+        <input type="hidden" name="action"
+               value="sprout-seo/global-metadata/save-global-metadata">
+        <input type="hidden" name="globalKeys" value="meta,social">
+        <input type="hidden" name="siteId" value="{{ globals.siteId }}">
+
+        <table id="sproutseo-schema-social" class="data fullwidth collapsible">
+            <thead>
+            <tr>
+                <th scope="col">{{ "Profile"|t }}</th>
+                <th scope="col">{{ "URL"|t }}</th>
+                <th class="thin"></th>
+                <th class="thin"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for socialProfile in globals.social %}
+
+                <tr data-id="{{ loop.index }}">
+                    <td>
+                        <div class="field sprout-selectother">
+                            {{ sproutFields.selectOther({
+                                name: 'sproutseo[globals][social][' ~ loop.index ~ '][0]',
+                                options: socialProfileOptions,
+                                value: socialProfile.profileName,
+                                otherPlaceholderText: 'Custom Profile'|t
+                            }) }}
+                        </div>
+                    </td>
+                    <td>
+                        {{ forms.text({
+                            name: 'sproutseo[globals][social][' ~ loop.index ~ '][1]',
+                            value: socialProfile.url,
+                            errors: ''
+                        }) }}
+                    </td>
+                    <td class="thin action"><a class="move icon"
+                                               title="Reorder"></a></td>
+                    <td class="thin action"><a class="delete icon"
+                                               title="Delete"></a></td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        <div class="buttons">
+            <div id="addSocial" class="btn add icon small" tabindex="0">Add a
+                Profile
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="buttons">
+            <input type="submit" class="btn submit" value="Save"/>
+        </div>
+
+    </form>
+    {% js %}
+
+        $( document ).ready(function() {
+                var globals = {{ globals.social|json_encode|raw }};
+
+                if (globals == null){
+                    $('#addSocial').trigger('click');
+                }
+            });
+
+            (function() {
+
+            var tableId = 'sproutseo-schema-social';
+            var baseName = 'sproutseo[globals][social]';
+            var columns = {{ cols|json_encode|raw }};
+            var settings = {};
+
+            new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
+
+        })();
+
+    {% endjs %}
+{% endblock %}
