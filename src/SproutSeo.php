@@ -68,7 +68,7 @@ class SproutSeo extends Plugin
      *
      * @var string
      */
-    public static $pluginId = 'sprout-seo';
+    public static $pluginHandle = 'sprout-seo';
 
     /**
      * @var bool
@@ -155,7 +155,7 @@ class SproutSeo extends Plugin
             SproutBaseSettings::class,
             SproutBaseSettings::EVENT_BEFORE_SAVE_SETTINGS,
             function(BeforeSaveSettingsEvent $event) {
-                if ($event->plugin->id == self::$pluginId) {
+                if ($event->plugin->id == self::$pluginHandle) {
                     //Craft::dd($event->settings);
                     // @todo - copy default fields as urlEnabledSectionId and type
                 }
