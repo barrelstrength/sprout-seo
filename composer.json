@@ -25,8 +25,8 @@
     "rss": "https://github.com/barrelstrength/sprout-seo/commits/v2.atom"
   },
   "require": {
-    "craftcms/cms": "^3.0.0-RC1",
-    "barrelstrength/sprout-base": "^1.0.0",
+    "craftcms/cms": "^3.0.0",
+    "barrelstrength/sprout-base": "^2.0.0",
     "crodas/text-rank": "dev-master",
     "crodas/languagedetector": "^0.1.0"
   },

@@ -79,6 +79,11 @@ class SproutSeo extends Plugin
      * @var string
      */
     public $schemaVersion = '4.0.0';
+    
+    /**
+     * @var string
+     */
+    public $minVersionRequired = '3.4.2';
 
     public function init()
     {
