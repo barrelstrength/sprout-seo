@@ -380,6 +380,7 @@ class SectionMetadata extends Component
             return false;
         }
 
+        $sectionRecord->siteId = $model->siteId;
         $sectionRecord->urlEnabledSectionId = $model->urlEnabledSectionId;
         $sectionRecord->isCustom = $model->isCustom ?? false;
         $sectionRecord->enabled = $model->enabled ?? false;
