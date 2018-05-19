@@ -1,21 +1,23 @@
 {% extends "sprout-seo/_layouts/sections" %}
 {% import "_includes/forms" as forms %}
+{% import 'sprout-base/_includes/sproutcp' as sprout %}
+
 {% set title = "Section Metadata"|t %}
 
 {% block contextMenu %}
     {% if craft.app.getIsMultiSite() %}
         {% if enableMultilingualSitemaps %}
             {% include "sprout-seo/_layouts/groupmenu" with {
-                selectedSiteId: siteId,
-                siteIds: siteIds,
+                selectedSiteId: currentSite.id,
+                siteIds: enabledSiteIds,
                 urlFormat: "sprout-seo/sections/{handle}"
             } %}
         {% else %}
-                {% include "_elements/sitemenu" with {
-                    selectedSiteId: siteId,
-                    siteIds: siteIds,
-                    urlFormat: "sprout-seo/sections/{handle}"
-                } %}
+            {% include "_elements/sitemenu" with {
+                selectedSiteId: currentSite.id,
+                siteIds: enabledSiteIds,
+                urlFormat: "sprout-seo/sections/{handle}"
+            } %}
         {% endif %}
     {% endif %}
 {% endblock %}
@@ -46,6 +48,8 @@
 
 {% block sectionMetadataTableRowHead %}
 
+    {% if not enableMultilingualSitemaps or (enableMultilingualSitemaps and currentSite.id == firstSiteInGroup.id) %}
+
     <th style="padding-left:9px;width:30%">{{ name }} <span
                 class="info">{{ "All of your " ~name~" that have unique URLs are listed here.  Enable each "~name~" you want to include in your sitemap."|t }}</span>
     </th>
@@ -61,9 +65,14 @@
     </th>
     <th class="thin"></th>
 
+    {% endif %}
+
 {% endblock %}
 
 {% block sectionMetadataTableRow %}
+
+    {# @todo - only display the settings for the first site. #}
+    {% if not enableMultilingualSitemaps or (enableMultilingualSitemaps and currentSite.id == firstSiteInGroup.id) %}
 
     <td>
         {% include 'sprout-seo/sections/_titlecolumn' %}
@@ -109,6 +118,20 @@
         aside from helping to style the table column widths evenly. #}
         <span style="display: inline-block;width:13px;"></span>
     </td>
+
+    {% else %}
+
+        {% set boxBody %}
+            <p>{{ "Multi-lingual sitemaps have a single set of settings for all sites in a group. You can edit those on the paimary site page."|t('sprout-base')|raw }}</p>
+        {% endset %}
+
+        {{ sprout.mediaBox({
+            heading: "Multi-lingual Sitemaps"|t('sprout-seo'),
+            body: boxBody,
+            resourcePath: '@barrelstrength/sproutseo/icon.svg'
+        }) }}
+
+    {% endif %}
 
 {% endblock %}
 
@@ -174,6 +197,8 @@
     </td>
 
 {% endblock %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
 
 {% set js %}
     new Craft.SproutSeo.Sitemap();

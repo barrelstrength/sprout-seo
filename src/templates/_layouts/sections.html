@@ -1,128 +1,142 @@
 {% extends "sprout-seo/_layouts/base" %}
 {% import "_includes/forms" as forms %}
+{% import 'sprout-base/_includes/sproutcp' as sprout %}
 
 {% set sectionLayout = craft.app.request.getSegment(2) %}
 
 {% set pluginSettings = craft.sproutseo.getSettings() %}
-{% set urlEnabledSectionTypes = craft.sproutseo.getUrlEnabledSectionTypes(siteId) %}
+{% set urlEnabledSectionTypes = craft.sproutseo.getUrlEnabledSectionTypes(currentSite.id) %}
 
 {% block content %}
-    <input type="hidden" name="siteId" value="{{ siteId }}" >
-    <div class="pane">
+    <input type="hidden" name="siteId" value="{{ currentSite.id }}">
 
-        <div class="header" style="display: flex;align-items: center;">
-            <div style="flex-grow: 1;">
-                <h3 style="text-transform: uppercase;">{{ "Sections"|t }} <span
-                            class="info">{{ "Manage all of your Section-level SEO for Search, Social Sharing, Sitemaps, and Structured Data."|t }}
-                </h3>
-            </div>
+    <div class="sproutseo-section-header" style="display: flex;align-items: center;">
+        <div style="flex-grow: 1;">
+            <h3 style="text-transform: uppercase;">{{ "Sections"|t }}
+                <span class="info">{{ "Manage all of your Section-level SEO for Search, Social Sharing, Sitemaps, and Structured Data."|t }}</span>
+            </h3>
         </div>
+        <div style="flex-shrink: 0;">
+            {% if enableMultilingualSitemaps and currentSite.id != firstSiteInGroup.id %}
+            <div class="buttons right">
+                <a class="btn submit icon"
+                   href="{{ url('sprout-seo/sections/') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit Sitemap"|t }}</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 
-        {% for urlEnabledSectionTypeKey, urlEnabledSectionType in urlEnabledSectionTypes %}
+    {% for urlEnabledSectionTypeKey, urlEnabledSectionType in urlEnabledSectionTypes %}
 
-            {% for urlEnabledSectionKey, urlEnabledSection in urlEnabledSectionType.urlEnabledSections %}
+        {% for urlEnabledSectionKey, urlEnabledSection in urlEnabledSectionType.urlEnabledSections %}
 
-                {% set sectionMetadata = urlEnabledSection.sectionMetadata %}
+            {% set sectionMetadata = urlEnabledSection.sectionMetadata %}
 
-                {% if loop.first %}
+            {% if loop.first %}
 
-                    {% set name = urlEnabledSectionType.getName() %}
+                {% set name = urlEnabledSectionType.getName() %}
 
-                    <table class="data fullwidth sitemap-settings">
-                    <thead>
+                <table class="data fullwidth sitemap-settings">
+                <thead>
 
-                    {% block sectionMetadataTableRowHead %}{% endblock %}
+                {% block sectionMetadataTableRowHead %}{% endblock %}
 
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
 
-                {% endif %}
+            {% endif %}
 
-                {% if sectionMetadata.name is defined %}
-                    {% set elementTableName = urlEnabledSectionType.getElementTableName() %}
-                    {% set sproutSeoHandle = elementTableName~':'~sectionMetadata.handle %}
+            {% if sectionMetadata.name is defined %}
+                {% set elementTableName = urlEnabledSectionType.getElementTableName() %}
+                {% set sproutSeoHandle = elementTableName~':'~sectionMetadata.handle %}
 
-                    <tr class="{{ sectionMetadata.isNew ? 'sectionmetadata-isnew' : null }}"
-                        data-rowid="{{ urlEnabledSectionKey }}"
-                        data-id="{{ sectionMetadata.id ? sectionMetadata.id : null }}"
-                        data-name="{{ sectionMetadata.name }}"
-                        data-handle="{{ sproutSeoHandle }}"
-                        data-type="{{ urlEnabledSection.type.getId() }}"
-                        data-url-enabled-section-id="{{ sectionMetadata.urlEnabledSectionId }}"
-                        data-url="{{ sectionMetadata.uri }}"
-                        data-is-new="{{ sectionMetadata.isNew }}">
+                <tr class="{{ sectionMetadata.isNew ? 'sectionmetadata-isnew' : null }}"
+                    data-rowid="{{ urlEnabledSectionKey }}"
+                    data-id="{{ sectionMetadata.id ? sectionMetadata.id : null }}"
+                    data-name="{{ sectionMetadata.name }}"
+                    data-handle="{{ sproutSeoHandle }}"
+                    data-type="{{ urlEnabledSection.type.getId() }}"
+                    data-url-enabled-section-id="{{ sectionMetadata.urlEnabledSectionId }}"
+                    data-url="{{ sectionMetadata.uri }}"
+                    data-is-new="{{ sectionMetadata.isNew }}">
 
-                        {% block sectionMetadataTableRow %}{% endblock %}
+                    {% block sectionMetadataTableRow %}{% endblock %}
 
-                    </tr>
-                {% endif %}
+                </tr>
+            {% endif %}
 
-                {% if loop.last %}
+            {% if loop.last %}
 
-                    </tbody>
-                    </table>
-                    <br>
+                </tbody>
+                </table>
+                <br>
 
-                {% endif %}
-
-            {% endfor %}
+            {% endif %}
 
         {% endfor %}
 
-    </div>
+    {% endfor %}
 
     {% if pluginSettings.enableCustomSections %}
 
         {% set customSections = craft.sproutseo.getCustomSections() %}
 
-        <div class="pane">
-
-            <div class="header" style="display: flex;align-items: center;">
-                <div style="flex-grow: 1;">
-                    <h3 style="text-transform: uppercase;">{{ "Custom Sections"|t }}</h3>
-                </div>
-                <div style="flex-shrink: 0;">
-                    <div class="buttons right">
-                        <a class="btn submit add icon"
-                           href="{{ url('sprout-seo/sections/new') }}">{{ "New section"|t }}</a>
-                    </div>
+        <div class="sproutseo-section-header" style="display: flex;align-items: center;margin-top:40px;">
+            <div style="flex-grow: 1;">
+                <h3 style="text-transform: uppercase;">{{ "Custom Sections"|t }}</h3>
+            </div>
+            <div style="flex-shrink: 0;">
+                <div class="buttons right">
+                    <a class="btn submit add icon"
+                       href="{{ url('sprout-seo/sections/new') }}">{{ "New section"|t }}</a>
                 </div>
             </div>
+        </div>
+
+        <table class="data fullwidth custom-pages sitemap-settings"
+               id="custom-pages">
+            <thead>
+
+            {% block customSectionTableRowHead %}{% endblock %}
+
+            </thead>
+            <tbody>
 
             {% if customSections|length %}
 
+                {% for customSection in customSections %}
 
-                <table class="data fullwidth custom-pages sitemap-settings"
-                       id="custom-pages">
-                    <thead>
+                    {% set customSectionId = "customUrl-" ~ customSection.id %}
 
-                    {% block customSectionTableRowHead %}{% endblock %}
+                    <tr data-rowid="{{ customSectionId }}"
+                        data-id="{{ customSection.id }}"
+                        data-name="{{ customSection.name }}"
+                        data-handle="{{ customSection.handle }}"
+                        data-type="">
 
-                    </thead>
-                    <tbody>
+                        {% block customSectionTableRow %}{% endblock %}
 
-                    {% for customSection in customSections %}
+                    </tr>
 
-                        {% set customSectionId = "customUrl-" ~ customSection.id %}
+                {% endfor %}
 
-                        <tr data-rowid="{{ customSectionId }}"
-                            data-id="{{ customSection.id }}"
-                            data-name="{{ customSection.name }}"
-                            data-handle="{{ customSection.handle }}"
-                            data-type="">
+            {% else %}
 
-                            {% block customSectionTableRow %}{% endblock %}
+                {% set boxBody %}
+                    <p>{{ "Add your first Custom Section."|t('sprout-seo')|raw }}</p>
+                {% endset %}
 
-                        </tr>
-
-                    {% endfor %}
-
-                    </tbody>
-                </table>
+                {{ sprout.mediaBox({
+                    heading: "Custom Sections"|t('sprout-seo'),
+                    body: boxBody,
+                    resourcePath: '@barrelstrength/sproutseo/icon.svg'
+                }) }}
 
             {% endif %}
 
-        </div>
+            </tbody>
+        </table>
+
 
     {% endif %}
 

@@ -23,7 +23,10 @@
                                 '{id}': siteId,
                                 '{handle}': site.handle
                             })) %}
-                            <li {% if not loop.first %} class="disabled" {% endif %}>{% if loop.first %}<a{% if selectedSiteId and siteId == selectedSiteId %} class="sel"{% endif %} data-site-id="{{ siteId }}"{% if url %} href="{{ url }}"{% endif %}>{{ site.name|t('site') }}</a>{% else %} <span class="no-link">{{ site.name|t('site') }}</span>  {% endif %}</li>
+                            <li>
+                                <a{% if selectedSiteId and siteId == selectedSiteId %} class="sel"{% endif %} data-site-id="{{ siteId }}"{% if url %} href="{{ url }}"{% endif %}>
+                                    {{ site.name|t('site') }}
+                                </a></li>
                         {% endfor %}
                     </ul>
                 {% endif %}

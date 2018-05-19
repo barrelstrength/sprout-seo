@@ -27,6 +27,7 @@ class SectionMetadataController extends Controller
 {
     /**
      * @param string|null $siteHandle
+     *
      * @return Response
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
@@ -35,66 +36,103 @@ class SectionMetadataController extends Controller
     public function actionIndex(string $siteHandle = null): Response
     {
         $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-        $siteId = null;
-        $siteIds = $seoSettings->siteSettings;
-        $firstSiteId = $this->getFirstSettingsSite($siteIds);
-        $is404 = false;
+        $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $seoSettings->enableMultilingualSitemaps;
 
-        if (Craft::$app->getIsMultiSite()) {
-            // Editing a specific site?
+        // Get enabled IDs. Remove any disabled IDS.
+        // @todo - should we merge these settings with the Site Enabled/Disabled settings right here?
+        $enabledSiteIds = array_filter($seoSettings->siteSettings);
+        $enabledSiteGroupIds = array_filter($seoSettings->groupSettings);
+
+        if (!$enableMultilingualSitemaps && empty($enabledSiteIds))
+        {
+            throw new NotFoundHttpException('No Sites are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site for your Sitemap.');
+        }
+
+        if ($enableMultilingualSitemaps && empty($enabledSiteGroupIds))
+        {
+            throw new NotFoundHttpException('No Site Groups are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site Group for your Sitemap.' );
+        }
+
+        $currentSite = null;
+        $currentSiteGroup = null;
+        $firstSiteInGroup = null;
+
+        if (Craft::$app->getIsMultiSite())
+        {
+
+            // Form Multi-Site we have to figure out which Site and Site Group matter
             if ($siteHandle !== null) {
-                $site = Craft::$app->getSites()->getSiteByHandle($siteHandle);
 
-                if (!$site) {
+                // If we have a handle, the Current Site and First Site in Group may be different
+                $currentSite = Craft::$app->getSites()->getSiteByHandle($siteHandle);
+
+                if (!$currentSite) {
                     throw new NotFoundHttpException('Invalid site handle: '.$siteHandle);
                 }
-                $siteId = $site->id;
-            } else {
-                $siteId = $firstSiteId ?? Craft::$app->getSites()->getPrimarySite()->id;
-            }
-        } else {
-            $siteId = Craft::$app->getSites()->getPrimarySite()->id;
-        }
 
-        if ($seoSettings->enableMultilingualSitemaps){
-            $groupIds = array_filter($seoSettings->groupSettings);
-            $siteIds = [];
-            $is404 = true;
-            $firstGroupSiteId = null;
-            foreach ($groupIds as $groupId) {
-                $sites = Craft::$app->getSites()->getSitesByGroupId($groupId);
-                foreach ($sites as $site) {
-                    if (is_null($siteHandle) && is_null($firstGroupSiteId)){
-                        $siteId = $site->id;
-                        $firstGroupSiteId = $siteId;
-                    }
-                    if ($siteId == $site->id){
-                        $is404 = false;
-                    }
-                    array_push($siteIds, $site->id);
-                }
+                $currentSiteGroup = Craft::$app->sites->getGroupById($currentSite->groupId);
+                $sitesInCurrentSiteGroup = Craft::$app->sites->getSitesByGroupId($currentSiteGroup->id);
+                $firstSiteInGroup = $sitesInCurrentSiteGroup[0];
+            }
+            else
+            {
+                // If we don't have a handle, we'll load the first site in the first group
+                // We'll assume that we have at least one site group and the Current Site will be the same as the First Site
+                $allSiteGroups = Craft::$app->sites->getAllGroups();
+                $currentSiteGroup = $allSiteGroups[0];
+                $sitesInCurrentSiteGroup = Craft::$app->sites->getSitesByGroupId($currentSiteGroup->id);
+                $firstSiteInGroup = $sitesInCurrentSiteGroup[0];
+                $currentSite = $firstSiteInGroup;
             }
         }
-
-        if ($is404){
-            // The group site that allows to this siteHandle could be disabled in the Sprout SEO settings
-            throw new NotFoundHttpException('Invalid site handle: '.$siteHandle);
+        else
+        {
+            // For a single site, the primary site ID will do
+            $currentSite = Craft::$app->getSites()->getPrimarySite();
+            $firstSiteInGroup = $currentSite->id;
         }
 
-        // Render the template!
+        // @todo - I think we can remove this now
+        // For multi-lingual sitemaps, get the Group ID and first site in that group
+//        if ($enableMultilingualSitemaps) {
+//
+////            $firstGroupSiteId = null;
+//            foreach ($enabledSiteGroupIds as $siteGroupId) {
+//                $sites = Craft::$app->getSites()->getSitesByGroupId($siteGroupId);
+//                foreach ($sites as $currentSite) {
+//                    if (is_null($siteHandle) && is_null($firstGroupSiteId)) {
+//                        $siteId = $currentSite->id;
+//                        $firstGroupSiteId = $siteId;
+//                    }
+//                    if ($siteId == $currentSite->id) {
+//                        $is404 = false;
+//                    }
+//                    array_push($enabledSiteIds, $currentSite->id);
+//                }
+//            }
+//        }
+
+//        if ($is404){
+//            // The group site that allows to this siteHandle could be disabled in the Sprout SEO settings
+//            throw new NotFoundHttpException('Invalid site handle: '.$siteHandle);
+//        }
+
         return $this->renderTemplate('sprout-seo/sections', [
-            'siteId' => $siteId,
-            'siteIds' => $siteIds,
-             'enableMultilingualSitemaps' => $seoSettings->enableMultilingualSitemaps
+            'currentSite' => $currentSite,
+            'firstSiteInGroup' => $firstSiteInGroup,
+            'enabledSiteIds' => $enabledSiteIds,
+            'enableMultilingualSitemaps' => $enableMultilingualSitemaps,
+
         ]);
     }
 
     /**
      * Loads a Section Metadata Edit template
      *
-     * @param int|null $sectionMetadataId
-     * @param string|null $siteHandle
+     * @param int|null      $sectionMetadataId
+     * @param string|null   $siteHandle
      * @param Metadata|null $sectionMetadata
+     *
      * @return Response
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
@@ -411,8 +449,8 @@ class SectionMetadataController extends Controller
     {
         $firstSiteId = null;
         foreach ($siteIds as $settingsSiteId) {
-            if ($settingsSiteId){
-                $firstSiteId  = $settingsSiteId;
+            if ($settingsSiteId) {
+                $firstSiteId = $settingsSiteId;
             }
         }
 
