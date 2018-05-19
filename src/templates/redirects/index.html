@@ -3,12 +3,12 @@
 
 {% set title = "Redirects" %}
 
-{% set extraPageHeaderHtml %}
+{% block actionButton %}
     <div class="buttons">
         <a class="btn submit add icon"
            href="{{ url('sprout-seo/redirects/new') }}">{{ "New Redirect"|t }}</a>
     </div>
-{% endset %}
+{% endblock %}
 
 {% css %}
     .element.small.hasstatus
