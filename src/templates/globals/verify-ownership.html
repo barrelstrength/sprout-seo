@@ -37,10 +37,11 @@
         </div>
     </div>
 
-	<form method="post" accept-charset="UTF-8" data-saveshortcut>
-		{{ csrfInput() }}
-		<input type="hidden" name="action" value="sprout-seo/global-metadata/save-verify-ownership">
-		<input type="hidden" name="siteId" value="{{globals.siteId}}">
+    <form method="post" accept-charset="UTF-8" data-saveshortcut>
+        {{ csrfInput() }}
+        <input type="hidden" name="action"
+               value="sprout-seo/global-metadata/save-verify-ownership">
+        <input type="hidden" name="siteId" value="{{ globals.siteId }}">
 
         <table id="sproutseo-schema-ownership" class="data fullwidth">
             <thead>

@@ -25,14 +25,14 @@ class InsertDefaultGlobalsBySite extends Migration
         $tableName = '{{%sproutseo_metadata_globals}}';
 
         $defaultSettings = '{
-			"seoDivider":"-",
-			"defaultOgType":"",
-			"ogTransform":"sproutSeo-socialSquare",
-			"twitterTransform":"sproutSeo-socialSquare",
-			"defaultTwitterCard":"summary",
-			"appendTitleValueOnHomepage":"",
-			"appendTitleValue": ""}
-		';
+            "seoDivider":"-",
+            "defaultOgType":"",
+            "ogTransform":"sproutSeo-socialSquare",
+            "twitterTransform":"sproutSeo-socialSquare",
+            "defaultTwitterCard":"summary",
+            "appendTitleValueOnHomepage":"",
+            "appendTitleValue": ""}
+        ';
 
         $result = $this->db->createCommand()->insert($tableName, [
                 'siteId' => $this->siteId,

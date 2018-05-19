@@ -32,8 +32,10 @@ class GlobalMetadataController extends Controller
      * @param Globals|null $globals      The global set being edited, if there were any validation errors.
      *
      * @return Response
-     * @throws ForbiddenHttpException if the user is not permitted to edit the global set
-     * @throws NotFoundHttpException if the requested site handle is invalid
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
      */
     public function actionEditGlobalMetadata(string $globalHandle, string $siteHandle = null, Globals $globals = null): Response
     {
@@ -97,10 +99,12 @@ class GlobalMetadataController extends Controller
     /**
      * Save Globals to the database
      *
-     * @return null|\yii\web\Response
+     * @return null|Response
      * @throws BadRequestHttpException
-     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\base\Exception
      * @throws \yii\db\Exception
+     * @throws \yii\web\ServerErrorHttpException
      */
     public function actionSaveGlobalMetadata()
     {
@@ -156,8 +160,9 @@ class GlobalMetadataController extends Controller
     /**
      * Save the Verify Ownership Structured Data to the database
      *
-     * @return void|\yii\web\Response
+     * @return void|Response
      * @throws BadRequestHttpException
+     * @throws \Throwable
      * @throws \yii\db\Exception
      */
     public function actionSaveVerifyOwnership()

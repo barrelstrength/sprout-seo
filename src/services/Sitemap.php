@@ -22,6 +22,7 @@ class Sitemap extends Component
      * Prepares sitemaps for a sitemapindex
      *
      * @param $siteId
+     *
      * @return array
      * @throws \yii\base\Exception
      */
@@ -94,12 +95,14 @@ class Sitemap extends Component
     /**
      * Prepares urls for a dynamic sitemap
      *
-     * @param $sitemapHandle
-     * @param $pageNumber
-     * @param $siteId
+     * @param      $sitemapHandle
+     * @param      $pageNumber
+     * @param      $siteId
+     * @param bool $enableMultilingualSitemaps
      *
      * @return array
      * @throws NotFoundHttpException
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getDynamicSitemapElements($sitemapHandle, $pageNumber, $siteId, $enableMultilingualSitemaps = false)
     {
@@ -138,7 +141,7 @@ class Sitemap extends Component
         foreach ($enabledSitemaps as $key => $sitemapSettings) {
             $uniqueId = $sitemapSettings['type'].$sitemapSettings['handle'];
 
-            if (isset($uniqueSitemapHandles[$uniqueId]) && !$enableMultilingualSitemaps){
+            if (isset($uniqueSitemapHandles[$uniqueId]) && !$enableMultilingualSitemaps) {
                 // we already add this section we just need one, lets validate the siteIds in getLocalizedSitemapStructure so go ahead with the next iteration
                 continue;
             }
@@ -148,7 +151,7 @@ class Sitemap extends Component
             foreach ($sitesIds as $siteId) {
                 $site = Craft::$app->getSites()->getSiteById((int)$siteId);
 
-                if (!$this->isSiteSectionEnabled($enabledSitemaps, $sitemapSettings['type'], $sitemapSettings['handle'], $siteId) && !$enableMultilingualSitemaps){
+                if (!$this->isSiteSectionEnabled($enabledSitemaps, $sitemapSettings['type'], $sitemapSettings['handle'], $siteId) && !$enableMultilingualSitemaps) {
                     // This site is not enabled so don't added to sitemap
                     continue;
                 }
@@ -206,13 +209,13 @@ class Sitemap extends Component
      * @param $type
      * @param $handle
      * @param $siteId
+     *
      * @return bool
      */
     private function isSiteSectionEnabled($enabledSitemaps, $type, $handle, $siteId)
     {
         foreach ($enabledSitemaps as $enabledSitemap) {
-            if ($enabledSitemap['type'] == $type && $enabledSitemap['handle'] == $handle && $enabledSitemap['siteId'] == $siteId)
-            {
+            if ($enabledSitemap['type'] == $type && $enabledSitemap['handle'] == $handle && $enabledSitemap['siteId'] == $siteId) {
                 // All sections are enabled so we don't need to check if enabled
                 return true;
             }

@@ -79,7 +79,7 @@ class SproutSeo extends Plugin
      * @var string
      */
     public $schemaVersion = '4.0.0';
-    
+
     /**
      * @var string
      */

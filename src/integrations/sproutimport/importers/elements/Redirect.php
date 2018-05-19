@@ -14,7 +14,7 @@ use barrelstrength\sproutseo\SproutSeo;
 class Redirect extends ElementImporter
 {
     /**
-     * @return mixed
+     * @inheritdoc
      */
     public function getModelName()
     {
@@ -22,10 +22,10 @@ class Redirect extends ElementImporter
     }
 
     /**
-     * @return bool
-     * @throws \Exception
+     * @inheritdoc
+     *
      * @throws \Throwable
-     * @throws \yii\db\Exception
+     * @throws \yii\base\Exception
      */
     public function save()
     {

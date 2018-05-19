@@ -10,7 +10,8 @@
 {% block content %}
     <input type="hidden" name="siteId" value="{{ currentSite.id }}">
 
-    <div class="sproutseo-section-header" style="display: flex;align-items: center;">
+    <div class="sproutseo-section-header"
+         style="display: flex;align-items: center;">
         <div style="flex-grow: 1;">
             <h3 style="text-transform: uppercase;">{{ "Sections"|t }}
                 <span class="info">{{ "Manage all of your Section-level SEO for Search, Social Sharing, Sitemaps, and Structured Data."|t }}</span>
@@ -18,10 +19,10 @@
         </div>
         <div style="flex-shrink: 0;">
             {% if enableMultilingualSitemaps and currentSite.id != firstSiteInGroup.id %}
-            <div class="buttons right">
-                <a class="btn submit icon"
-                   href="{{ url('sprout-seo/sections/') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit Sitemap"|t }}</a>
-            </div>
+                <div class="buttons right">
+                    <a class="btn submit icon"
+                       href="{{ url('sprout-seo/sections/') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit Sitemap"|t }}</a>
+                </div>
             {% endif %}
         </div>
     </div>
@@ -81,7 +82,8 @@
 
         {% set customSections = craft.sproutseo.getCustomSections() %}
 
-        <div class="sproutseo-section-header" style="display: flex;align-items: center;margin-top:40px;">
+        <div class="sproutseo-section-header"
+             style="display: flex;align-items: center;margin-top:40px;">
             <div style="flex-grow: 1;">
                 <h3 style="text-transform: uppercase;">{{ "Custom Sections"|t }}</h3>
             </div>

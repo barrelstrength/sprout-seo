@@ -9,10 +9,10 @@ namespace barrelstrength\sproutseo\services;
 
 use yii\base\Component;
 use craft\db\Query;
-use barrelstrength\sproutseo\models\Metadata;
+
 use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
 use barrelstrength\sproutseo\SproutSeo;
-use Craft;
+
 use yii\base\Event;
 
 class ElementMetadata extends Component
@@ -26,6 +26,8 @@ class ElementMetadata extends Component
      * Element Metadata field type.
      *
      * @param Event $event
+     *
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function resaveElements(Event $event)
     {
@@ -58,6 +60,8 @@ class ElementMetadata extends Component
 
     /**
      * @param $fieldId
+     *
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function resaveElementsIfUsingElementMetadataField($fieldId)
     {

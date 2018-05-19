@@ -14,7 +14,7 @@ use barrelstrength\sproutseo\SproutSeo;
 use craft\web\Controller;
 use craft\elements\Asset;
 use Craft;
-use yii\base\InvalidParamException;
+
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
@@ -29,7 +29,6 @@ class SectionMetadataController extends Controller
      * @param string|null $siteHandle
      *
      * @return Response
-     * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      * @throws \craft\errors\SiteNotFoundException
      */
@@ -43,22 +42,19 @@ class SectionMetadataController extends Controller
         $enabledSiteIds = array_filter($seoSettings->siteSettings);
         $enabledSiteGroupIds = array_filter($seoSettings->groupSettings);
 
-        if (!$enableMultilingualSitemaps && empty($enabledSiteIds))
-        {
+        if (!$enableMultilingualSitemaps && empty($enabledSiteIds)) {
             throw new NotFoundHttpException('No Sites are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site for your Sitemap.');
         }
 
-        if ($enableMultilingualSitemaps && empty($enabledSiteGroupIds))
-        {
-            throw new NotFoundHttpException('No Site Groups are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site Group for your Sitemap.' );
+        if ($enableMultilingualSitemaps && empty($enabledSiteGroupIds)) {
+            throw new NotFoundHttpException('No Site Groups are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site Group for your Sitemap.');
         }
 
         $currentSite = null;
         $currentSiteGroup = null;
         $firstSiteInGroup = null;
 
-        if (Craft::$app->getIsMultiSite())
-        {
+        if (Craft::$app->getIsMultiSite()) {
 
             // Form Multi-Site we have to figure out which Site and Site Group matter
             if ($siteHandle !== null) {
@@ -73,9 +69,7 @@ class SectionMetadataController extends Controller
                 $currentSiteGroup = Craft::$app->sites->getGroupById($currentSite->groupId);
                 $sitesInCurrentSiteGroup = Craft::$app->sites->getSitesByGroupId($currentSiteGroup->id);
                 $firstSiteInGroup = $sitesInCurrentSiteGroup[0];
-            }
-            else
-            {
+            } else {
                 // If we don't have a handle, we'll load the first site in the first group
                 // We'll assume that we have at least one site group and the Current Site will be the same as the First Site
                 $allSiteGroups = Craft::$app->sites->getAllGroups();
@@ -84,9 +78,7 @@ class SectionMetadataController extends Controller
                 $firstSiteInGroup = $sitesInCurrentSiteGroup[0];
                 $currentSite = $firstSiteInGroup;
             }
-        }
-        else
-        {
+        } else {
             // For a single site, the primary site ID will do
             $currentSite = Craft::$app->getSites()->getPrimarySite();
             $firstSiteInGroup = $currentSite->id;
@@ -302,8 +294,10 @@ class SectionMetadataController extends Controller
     /**
      * Saves a Section Metadata Section
      *
-     * @return null|\yii\web\Response
-     * @throws \Exception
+     * @return null|Response
+     * @throws \Throwable
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
@@ -443,17 +437,5 @@ class SectionMetadataController extends Controller
         }
 
         return $sectionMetadata;
-    }
-
-    private function getFirstSettingsSite($siteIds)
-    {
-        $firstSiteId = null;
-        foreach ($siteIds as $settingsSiteId) {
-            if ($settingsSiteId) {
-                $firstSiteId = $settingsSiteId;
-            }
-        }
-
-        return $firstSiteId;
     }
 }

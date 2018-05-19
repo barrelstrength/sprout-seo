@@ -34,14 +34,14 @@ class ChangePermanentMethod extends ElementAction
     }
 
     /**
-     * @inheritDoc IElementAction::performAction()
+     * @todo - ElementCriteriaModel doesn't exist any longer. Update for Craft 3: ElementQueryInterface
      *
-     * @todo - ElementCriteriaModel doesn't exist any longer. Update for Craft 3.
      * @param ElementCriteriaModel $query
      *
-     * @return bool
+     * @return bool|int
+     * @throws \yii\base\Exception
      */
-    public function performAction(ElementCriteriaModek $query)
+    public function performAction(ElementCriteriaModel $query)
     {
         $elementIds = $query->ids();
 

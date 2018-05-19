@@ -331,6 +331,8 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
 
     /**
      * @param bool $isNew
+     *
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function afterSave(bool $isNew)
     {

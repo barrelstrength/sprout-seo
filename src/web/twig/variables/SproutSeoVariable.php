@@ -12,7 +12,7 @@ use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\elements\Asset;
-use craft\helpers\Template as TemplateHelper;
+
 use DateTime;
 use craft\fields\PlainText;
 use craft\fields\Assets;
@@ -114,8 +114,10 @@ class SproutSeoVariable
     /**
      * Returns all URL-Enabled Sections Types
      *
-     * @param $siteId
-     * @return array of Sections
+     * @param null $siteId
+     *
+     * @return mixed
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionTypes($siteId = null)
     {
@@ -417,9 +419,9 @@ class SproutSeoVariable
     /**
      * @param $schemaType
      * @param $handle
+     * @param $schemaGlobals
      *
      * @return array
-     * @throws \yii\base\Exception
      */
     public function getFinalOptions($schemaType, $handle, $schemaGlobals)
     {

@@ -9,13 +9,15 @@
     {% endif %}
     {% set groups = craft.app.sites.getAllGroups() %}
     <div>
-        <div class="btn menubtn sitemenubtn" data-icon="world">{{ selectedSiteId ? craft.app.sites.getSiteById(selectedSiteId).name|t('site') }}</div>
+        <div class="btn menubtn sitemenubtn"
+             data-icon="world">{{ selectedSiteId ? craft.app.sites.getSiteById(selectedSiteId).name|t('site') }}</div>
         <div class="menu">
             {% for group in groups %}
                 {% set groupSiteIds = group.getSiteIds()|intersect(siteIds) %}
 
                 {% if groupSiteIds %}
-                    {% if groups|length > 1 %}<h6>{{ group.name|t('site') }}</h6>{% endif %}
+                    {% if groups|length > 1 %}
+                        <h6>{{ group.name|t('site') }}</h6>{% endif %}
                     <ul class="padded">
                         {% for siteId in groupSiteIds %}
                             {% set site = craft.app.sites.getSiteById(siteId) %}
@@ -24,7 +26,8 @@
                                 '{handle}': site.handle
                             })) %}
                             <li>
-                                <a{% if selectedSiteId and siteId == selectedSiteId %} class="sel"{% endif %} data-site-id="{{ siteId }}"{% if url %} href="{{ url }}"{% endif %}>
+                                <a{% if selectedSiteId and siteId == selectedSiteId %} class="sel"{% endif %}
+                                        data-site-id="{{ siteId }}"{% if url %} href="{{ url }}"{% endif %}>
                                     {{ site.name|t('site') }}
                                 </a></li>
                         {% endfor %}

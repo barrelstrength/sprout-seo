@@ -26,9 +26,10 @@ class SetStatus extends ElementAction
     public $status;
 
     /**
-     * @inheritDoc IElementAction::getTriggerHtml()
+     * @inheritdoc
      *
-     * @return string|null
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getTriggerHtml()
     {
@@ -48,11 +49,9 @@ class SetStatus extends ElementAction
     }
 
     /**
-     * @inheritDoc IElementAction::performAction()
+     * @inheritdoc
      *
-     * @param ElementQueryInterface $query
-     *
-     * @return bool
+     * @throws \yii\db\Exception
      */
     public function performAction(ElementQueryInterface $query): bool
     {

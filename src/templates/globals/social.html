@@ -100,21 +100,21 @@
     {% js %}
 
         $( document ).ready(function() {
-                var globals = {{ globals.social|json_encode|raw }};
+        var globals = {{ globals.social|json_encode|raw }};
 
-                if (globals == null){
-                    $('#addSocial').trigger('click');
-                }
-            });
+        if (globals == null){
+        $('#addSocial').trigger('click');
+        }
+        });
 
-            (function() {
+        (function() {
 
-            var tableId = 'sproutseo-schema-social';
-            var baseName = 'sproutseo[globals][social]';
-            var columns = {{ cols|json_encode|raw }};
-            var settings = {};
+        var tableId = 'sproutseo-schema-social';
+        var baseName = 'sproutseo[globals][social]';
+        var columns = {{ cols|json_encode|raw }};
+        var settings = {};
 
-            new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
+        new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
 
         })();
 

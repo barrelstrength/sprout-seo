@@ -27,8 +27,10 @@
 {% set saveShortcutRedirect = continueEditingUrl %}
 
 {% block actionButton %}
-    <input type="hidden" name="action" value="sprout-seo/section-metadata/save-section-metadata">
-    <input type="hidden" name="sproutseo[metadata][isCustom]" value="{{ isCustom ?? 0 }}">
+    <input type="hidden" name="action"
+           value="sprout-seo/section-metadata/save-section-metadata">
+    <input type="hidden" name="sproutseo[metadata][isCustom]"
+           value="{{ isCustom ?? 0 }}">
     {{ redirectInput('sprout-seo/sections') }}
     <input type="hidden" id="sectionId" name="id"
            value="{{ sectionMetadata.id is defined ? sectionMetadata.id : '' }}">

@@ -460,7 +460,9 @@ class Optimize extends Component
      * @todo - Rename method
      *         This is named 'getCodeMetadata' but also handles overrides for Section and Element data.
      *
-     * @return array
+     * @param null $type
+     *
+     * @return array|Metadata
      */
     public function getCodeMetadata($type = null)
     {

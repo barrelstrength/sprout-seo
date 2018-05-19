@@ -371,15 +371,16 @@ class Redirect extends Element
 
     /**
      * Add validation to unique oldUrl's
+     *
+     * @param $attribute
+     * @param $params
      */
     public function uniqueUrl($attribute, $params)
     {
         $redirect = SproutSeo::$app->redirects->findUrl($this->$attribute);
 
-        if ($redirect)
-        {
-            if ($redirect->id != $this->id)
-            {
+        if ($redirect) {
+            if ($redirect->id != $this->id) {
                 $this->addError($attribute, 'This url already exists.');
             }
         }

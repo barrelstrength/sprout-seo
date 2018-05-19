@@ -18,7 +18,7 @@ use yii\base\Component;
 use craft\db\Query;
 use Craft;
 use barrelstrength\sproutseo\records\SectionMetadata as SectionMetadataRecord;
-use yii\base\Exception;
+
 
 class SectionMetadata extends Component
 {
@@ -41,6 +41,11 @@ class SectionMetadata extends Component
 
     /**
      * Prepare the $this->urlEnabledSectionTypes variable for use in Sections and Sitemap pages
+     *
+     * @param null $siteId
+     *
+     * @return null
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function prepareUrlEnabledSectionTypes($siteId = null)
     {
@@ -99,8 +104,11 @@ class SectionMetadata extends Component
 
     /**
      * Get all registered Element Groups via hook
-     * @param $siteId
-     * @return array
+     *
+     * @param null $siteId
+     *
+     * @return mixed
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionTypes($siteId = null)
     {
@@ -113,6 +121,7 @@ class SectionMetadata extends Component
      * @param $context
      *
      * @return mixed
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionsViaContext($context)
     {
@@ -147,6 +156,7 @@ class SectionMetadata extends Component
      * @param $type
      *
      * @return array
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionTypeByType($type)
     {
@@ -167,6 +177,7 @@ class SectionMetadata extends Component
      * @param $elementType
      *
      * @return array
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionTypeByElementType($elementType)
     {
@@ -256,9 +267,11 @@ class SectionMetadata extends Component
     }
 
     /**
+     * @param $elementTable
      * @param $handle
      *
      * @return Metadata
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getSectionMetadataByUniqueKey($elementTable, $handle)
     {
@@ -305,9 +318,11 @@ class SectionMetadata extends Component
     }
 
     /**
-     * @param $urlEnabledSection
+     * @param      $urlEnabledSection
+     * @param null $siteId
      *
      * @return Metadata
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getSectionMetadataByInfo($urlEnabledSection, $siteId = null)
     {
@@ -349,7 +364,7 @@ class SectionMetadata extends Component
      * @param Metadata $model
      *
      * @return bool
-     * @throws \Exception
+     * @throws \Throwable
      * @throws \yii\db\Exception
      */
     public function saveSectionMetadata(Metadata $model): bool
@@ -358,7 +373,7 @@ class SectionMetadata extends Component
 
         if (!$isNewSection) {
             if (null === ($sectionRecord = SectionMetadataRecord::findOne($model->id))) {
-                throw new \Exception(Craft::t('sprout-seo','Can\'t find Section Metadata with ID "{id}"', [
+                throw new \Exception(Craft::t('sprout-seo', 'Can\'t find Section Metadata with ID "{id}"', [
                     'id' => $model->id
                 ]));
             }
@@ -455,7 +470,7 @@ class SectionMetadata extends Component
         $transaction->commit();
 
         // Let's copy this site behavior to all the group
-        if ($seoSettings->enableMultilingualSitemaps){
+        if ($seoSettings->enableMultilingualSitemaps) {
             $site = Craft::$app->getSites()->getSiteById($record->siteId);
             $groupSites = Craft::$app->getSites()->getSitesByGroupId($site->groupId);
             // all sections saved for this site
@@ -469,7 +484,7 @@ class SectionMetadata extends Component
                         'handle' => $rowBehavior->handle
                     ]);
 
-                    if (is_null($sectionMetadata)){
+                    if (is_null($sectionMetadata)) {
                         $sectionMetadata = new SectionMetadataRecord();
                     }
 

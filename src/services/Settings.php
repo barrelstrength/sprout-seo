@@ -92,7 +92,7 @@ class Settings extends Component
 
             if (isset($settings['toggleMetadataVariable']) and $settings['toggleMetadataVariable'] == 1) {
                 $seoSettings->metadataVariable = $settings['metadataVariable']
-                ?? $seoSettings->metadataVariable;
+                    ?? $seoSettings->metadataVariable;
             }
         }
 

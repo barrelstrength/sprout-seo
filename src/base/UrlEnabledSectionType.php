@@ -154,9 +154,11 @@ abstract class UrlEnabledSectionType
      *
      * Order the results by URL-Enabled Section ID: type-id
      * Example: entries-5, categories-12
+     * 
+     * @param null $siteId
      *
-     * @param $siteId
-     * @return mixed
+     * @return array
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getAllSectionMetadataSections($siteId = null)
     {
@@ -180,12 +182,13 @@ abstract class UrlEnabledSectionType
      * @param $type
      *
      * @param $siteId
+     *
      * @return array
      * @throws \craft\errors\SiteNotFoundException
      */
     public function getSectionMetadataByType($type, $siteId = null)
     {
-        if (is_null($siteId)){
+        if (is_null($siteId)) {
             $site = Craft::$app->getSites()->getPrimarySite();
             $siteId = $site->id;
         }

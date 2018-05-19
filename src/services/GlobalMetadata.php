@@ -25,7 +25,10 @@ class GlobalMetadata extends Component
     /**
      * Get Global Metadata values
      *
+     * @param null $siteId
+     *
      * @return Globals
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
     public function getGlobalMetadata($siteId = null)
@@ -76,6 +79,7 @@ class GlobalMetadata extends Component
      * @param $globals
      *
      * @return bool
+     * @throws \Throwable
      * @throws \yii\db\Exception
      */
     public function saveGlobalMetadata($globalKeys, $globals)

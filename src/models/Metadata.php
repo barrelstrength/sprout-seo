@@ -516,8 +516,9 @@ class Metadata extends Model
     }
 
     /**
+     * @param $overrideInfo
+     *
      * @return mixed
-     * @throws \yii\base\Exception
      */
     protected function prepareGlobalMetadata($overrideInfo)
     {

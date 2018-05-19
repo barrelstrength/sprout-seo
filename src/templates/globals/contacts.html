@@ -33,11 +33,12 @@
         </div>
     </div>
 
-	<form method="post" accept-charset="UTF-8" data-saveshortcut>
-		{{ csrfInput() }}
-		<input type="hidden" name="action" value="sprout-seo/global-metadata/save-global-metadata">
-		<input type="hidden" name="globalKeys" value="contacts">
-		<input type="hidden" name="siteId" value="{{globals.siteId}}">
+    <form method="post" accept-charset="UTF-8" data-saveshortcut>
+        {{ csrfInput() }}
+        <input type="hidden" name="action"
+               value="sprout-seo/global-metadata/save-global-metadata">
+        <input type="hidden" name="globalKeys" value="contacts">
+        <input type="hidden" name="siteId" value="{{ globals.siteId }}">
 
         <table id="sproutseo-schema-contacts" class="data fullwidth">
             <thead>
@@ -50,29 +51,31 @@
             </thead>
             <tbody>
 
-				{% for contact in globals.contacts %}
+            {% for contact in globals.contacts %}
 
-					<tr data-id="{{ loop.index }}">
-						<td>
-							{{ sproutFields.selectOther({
-								name: 'sproutseo[globals][contacts][' ~ loop.index ~ '][0]',
-								options: contactOptions,
-								value: contact.contactType,
-								otherPlaceholderText: 'Custom Contact Type'|t
-							}) }}
-						</td>
-						<td>
-							{{ forms.text({
-								name: 'sproutseo[globals][contacts][' ~ loop.index ~ '][1]',
-								value: contact.telephone,
-								errors: ''
-							}) }}
-						</td>
-						<td class="thin action"><a class="move icon" title="Reorder"></a></td>
-						<td class="thin action"><a class="delete icon" title="Delete"></a></td>
-					</tr>
+                <tr data-id="{{ loop.index }}">
+                    <td>
+                        {{ sproutFields.selectOther({
+                            name: 'sproutseo[globals][contacts][' ~ loop.index ~ '][0]',
+                            options: contactOptions,
+                            value: contact.contactType,
+                            otherPlaceholderText: 'Custom Contact Type'|t
+                        }) }}
+                    </td>
+                    <td>
+                        {{ forms.text({
+                            name: 'sproutseo[globals][contacts][' ~ loop.index ~ '][1]',
+                            value: contact.telephone,
+                            errors: ''
+                        }) }}
+                    </td>
+                    <td class="thin action"><a class="move icon"
+                                               title="Reorder"></a></td>
+                    <td class="thin action"><a class="delete icon"
+                                               title="Delete"></a></td>
+                </tr>
 
-				{% endfor %}
+            {% endfor %}
 
             </tbody>
         </table>

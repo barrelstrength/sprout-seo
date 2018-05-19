@@ -70,11 +70,9 @@ class RedirectsController extends Controller
     /**
      * Saves a Redirect
      *
-     * @return void
      * @throws BadRequestHttpException
-     * @throws \Exception
+     * @throws Exception
      * @throws \Throwable
-     * @throws \yii\db\Exception
      */
     public function actionSaveRedirect()
     {

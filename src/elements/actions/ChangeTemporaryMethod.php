@@ -38,7 +38,7 @@ class ChangeTemporaryMethod extends ElementAction
      * @param ElementQueryInterface $query
      *
      * @return bool|int
-     * @throws \yii\db\Exception
+     * @throws \yii\base\Exception
      */
     public function performAction(ElementQueryInterface $query)
     {
