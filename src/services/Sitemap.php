@@ -80,7 +80,7 @@ class Sitemap extends Component
         // Fetching all Custom Section Metadata defined in Sprout SEO
         $customSectionMetadata = (new Query())
             ->select('id')
-            ->from('{{%sproutseo_metadata_sections}}')
+            ->from('{{%sproutseo_sitemaps}}')
             ->where('enabled = 1')
             ->andWhere('uri is not null and isCustom = 1')
             ->count();
@@ -121,7 +121,7 @@ class Sitemap extends Component
 
         $query = (new Query())
             ->select('*')
-            ->from('{{%sproutseo_metadata_sections}}')
+            ->from('{{%sproutseo_sitemaps}}')
             ->where('enabled = 1 and urlEnabledSectionId is not null')
             ->andWhere('siteId = :siteId', [':siteId' => $siteId]);
 
@@ -237,7 +237,7 @@ class Sitemap extends Component
         // Fetch all Custom Section Metadata defined in Sprout SEO
         $customSectionMetadata = (new Query())
             ->select('uri, priority, changeFrequency, dateUpdated')
-            ->from('{{%sproutseo_metadata_sections}}')
+            ->from('{{%sproutseo_sitemaps}}')
             ->where('enabled = 1')
             ->andWhere('uri is not null and isCustom = 1')
             ->all();
@@ -275,7 +275,7 @@ class Sitemap extends Component
 
         $enabledSitemaps = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_metadata_sections}}'])
+            ->from(['{{%sproutseo_sitemaps}}'])
             ->where('enabled = 1 and urlEnabledSectionId is not null')
             ->all();
 
@@ -327,7 +327,7 @@ class Sitemap extends Component
         // Fetching all Custom Section Metadata defined in Sprout SEO
         $customSectionMetadata = (new Query())
             ->select('uri, priority, changeFrequency, dateUpdated')
-            ->from(['{{%sproutseo_metadata_sections}}'])
+            ->from(['{{%sproutseo_sitemaps}}'])
             ->where('enabled = 1')
             ->andWhere('uri is not null and isCustom = 1')
             ->all();

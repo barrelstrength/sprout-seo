@@ -9,7 +9,7 @@ namespace barrelstrength\sproutseo\records;
 
 use craft\db\ActiveRecord;
 
-class SectionMetadata extends ActiveRecord
+class Sitemaps extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -18,14 +18,14 @@ class SectionMetadata extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%sproutseo_metadata_sections}}';
+        return '{{%sproutseo_sitemaps}}';
     }
 
     /**
      * Create a new instance of the current class. This allows us to
      * properly unit test our service layer.
      *
-     * @return SectionMetadata
+     * @return Sitemaps
      */
     public function create()
     {

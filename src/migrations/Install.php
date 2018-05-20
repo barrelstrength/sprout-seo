@@ -48,7 +48,7 @@ class Install extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%sproutseo_metadata_globals}}');
-        $this->dropTable('{{%sproutseo_metadata_sections}}');
+        $this->dropTable('{{%sproutseo_sitemaps}}');
         $this->dropTable('{{%sproutseo_redirects}}');
 
         $sproutFields = Craft::$app->plugins->getPlugin('sprout-fields');
@@ -82,7 +82,7 @@ class Install extends Migration
             'uid' => $this->uid(),
         ]);
 
-        $this->createTable('{{%sproutseo_metadata_sections}}', [
+        $this->createTable('{{%sproutseo_sitemaps}}', [
             'id' => $this->primaryKey(),
             'siteId' => $this->integer()->notNull(),
             'enabledForSite' => $this->boolean()->defaultValue(false),
@@ -118,7 +118,7 @@ class Install extends Migration
         $this->createIndex(null, '{{%sproutseo_metadata_globals}}', 'id, siteId', true);
         $this->createIndex(null, '{{%sproutseo_metadata_globals}}', ['siteId'], true);
         $this->createIndex(null, '{{%sproutseo_redirects}}', 'id');
-        $this->createIndex(null, '{{%sproutseo_metadata_sections}}', ['siteId'], false);
+        $this->createIndex(null, '{{%sproutseo_sitemaps}}', ['siteId'], false);
     }
 
     protected function addForeignKeys()
@@ -129,7 +129,7 @@ class Install extends Migration
             '{{%elements}}', 'id', 'CASCADE', null
         );
 
-        $this->addForeignKey(null, '{{%sproutseo_metadata_sections}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
+        $this->addForeignKey(null, '{{%sproutseo_sitemaps}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
         $this->addForeignKey(null, '{{%sproutseo_metadata_globals}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
     }
 

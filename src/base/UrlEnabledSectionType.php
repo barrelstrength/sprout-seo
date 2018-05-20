@@ -195,7 +195,7 @@ abstract class UrlEnabledSectionType
 
         $results = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_metadata_sections}}'])
+            ->from(['{{%sproutseo_sitemaps}}'])
             ->where(['type' => $type, 'siteId' => $siteId])
             ->all();
 

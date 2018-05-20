@@ -199,7 +199,7 @@ class SectionMetadata extends Component
     {
         $customSections = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_metadata_sections}}'])
+            ->from(['{{%sproutseo_sitemaps}}'])
             ->where('isCustom = 1')
             ->all();
 
@@ -215,7 +215,7 @@ class SectionMetadata extends Component
     {
         $results = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_metadata_sections}}'])
+            ->from(['{{%sproutseo_sitemaps}}'])
             ->order('name')
             ->all();
 
@@ -279,7 +279,7 @@ class SectionMetadata extends Component
         $urlEnabledSectionId = null;
         $query = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_metadata_sections}}']);
+            ->from(['{{%sproutseo_sitemaps}}']);
 
         if ($elementTable == 'sproutseo_section') {
             $query->where('handle=:handle', [':handle' => $handle]);
@@ -551,7 +551,7 @@ class SectionMetadata extends Component
         }
 
         $affectedRows = Craft::$app->getDb()->createCommand()
-            ->delete('{{%sproutseo_metadata_sections}}', [
+            ->delete('{{%sproutseo_sitemaps}}', [
                 'id' => $id
             ])
             ->execute();
