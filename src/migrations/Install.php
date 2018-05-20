@@ -85,13 +85,9 @@ class Install extends Migration
         $this->createTable('{{%sproutseo_sitemaps}}', [
             'id' => $this->primaryKey(),
             'siteId' => $this->integer()->notNull(),
-            'enabledForSite' => $this->boolean()->defaultValue(false),
             'urlEnabledSectionId' => $this->integer(),
-            'isCustom' => $this->boolean()->defaultValue(false),
             'enabled' => $this->boolean()->defaultValue(false),
             'type' => $this->string(),
-            'name' => $this->string(),
-            'handle' => $this->string(),
             'uri' => $this->string(),
             'priority' => $this->decimal(11, 1),
             'changeFrequency' => $this->string(),

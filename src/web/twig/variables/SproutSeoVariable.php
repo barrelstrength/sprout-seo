@@ -78,28 +78,6 @@ class SproutSeoVariable
     }
 
     /**
-     * Returns all templates
-     *
-     * @return mixed
-     */
-    public function getSectionMetadata()
-    {
-        return SproutSeo::$app->sectionMetadata->getSectionMetadata();
-    }
-
-    /**
-     * Returns a specific template if found
-     *
-     * @param int $id
-     *
-     * @return null|mixed
-     */
-    public function getSectionMetadataById($id)
-    {
-        return SproutSeo::$app->sectionMetadata->getSectionMetadataById($id);
-    }
-
-    /**
      * @param array|null $options
      *
      * @return array|string
@@ -108,30 +86,7 @@ class SproutSeoVariable
      */
     public function getSitemap(array $options = null)
     {
-        return SproutSeo::$app->sitemap->getSitemap($options);
-    }
-
-    /**
-     * Returns all URL-Enabled Sections Types
-     *
-     * @param null $siteId
-     *
-     * @return mixed
-     * @throws \craft\errors\SiteNotFoundException
-     */
-    public function getUrlEnabledSectionTypes($siteId = null)
-    {
-        return SproutSeo::$app->sectionMetadata->getUrlEnabledSectionTypes($siteId);
-    }
-
-    /**
-     * Returns all custom pages for sitemap settings
-     *
-     * @return array of Sections
-     */
-    public function getCustomSections()
-    {
-        return SproutSeo::$app->sectionMetadata->getCustomSections();
+        return SproutSeo::$app->xmlSitemap->getSitemap($options);
     }
 
     /**
@@ -999,7 +954,7 @@ class SproutSeoVariable
      */
     public function getTransforms()
     {
-        return SproutSeo::$app->sectionMetadata->getTransforms();
+        return SproutSeo::$app->sitemaps->getTransforms();
     }
 
     /**

@@ -32,9 +32,9 @@ class UrlEnabledSection extends Model
     public $type;
 
     /**
-     * @var Metadata $sectionMetadata
+     * @var SitemapSection $sitemapSection
      */
-    public $sectionMetadata;
+    public $sitemapSection;
 
     /**
      * The current locales URL Format for this URL-Enabled Section

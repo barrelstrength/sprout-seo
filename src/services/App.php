@@ -22,11 +22,6 @@ class App extends Component
     public $globalMetadata;
 
     /**
-     * @var SectionMetadata
-     */
-    public $sectionMetadata;
-
-    /**
      * @var ElementMetadata
      */
     public $elementMetadata;
@@ -37,14 +32,24 @@ class App extends Component
     public $schema;
 
     /**
-     * @var Sitemap
+     * @var Sitemaps
      */
-    public $sitemap;
+    public $sitemaps;
+
+    /**
+     * @var XmlSitemap
+     */
+    public $xmlSitemap;
 
     /**
      * @var Redirects
      */
     public $redirects;
+
+    /**
+     * @var UrlEnabledSections
+     */
+    public $urlEnabledSections;
 
     /**
      * @var Settings
@@ -55,11 +60,12 @@ class App extends Component
     {
         $this->optimize = new Optimize();
         $this->globalMetadata = new GlobalMetadata();
-        $this->sectionMetadata = new SectionMetadata();
         $this->elementMetadata = new ElementMetadata();
         $this->schema = new Schema();
-        $this->sitemap = new Sitemap();
+        $this->sitemaps = new Sitemaps();
+        $this->xmlSitemap = new XmlSitemap();
         $this->redirects = new Redirects();
+        $this->urlEnabledSections = new UrlEnabledSections();
         $this->settings = new Settings();
     }
 }

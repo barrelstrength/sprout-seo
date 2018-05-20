@@ -40,67 +40,7 @@ class Metadata extends Model
      * @var array
      */
     protected $twitterCardsMeta = [];
-
-    //SITEMAP
-    /**
-     * @var
-     */
-    public $id;
-    public $siteId;
-    public $enabledForSite;
-    public $sectionMetadataId;
-    public $isNew;
-
-    /**
-     * @var
-     */
-    public $default;
-
-    /**
-     * @var
-     */
-    public $name;
-
-    /**
-     * @var
-     */
-    public $handle;
-
-    /**
-     * @var
-     */
-    public $uri;
-
-    /**
-     * @var
-     */
-    public $priority;
-
-    /**
-     * @var
-     */
-    public $changeFrequency;
-
-    /**
-     * @var
-     */
-    public $urlEnabledSectionId;
-
-    /**
-     * @var
-     */
-    public $isCustom;
-
-    /**
-     * @var
-     */
-    public $type;
-
-    /**
-     * @var
-     */
-    public $enabled;
-
+    
     /**
      * @var
      */
@@ -509,9 +449,6 @@ class Metadata extends Model
                 break;
         }
 
-        // moved to getPrioritizedMetadataModel just one time called.
-        //SproutSeoOptimizeHelper::prepareAssetUrls($this);
-
         return $this;
     }
 
@@ -749,18 +686,6 @@ class Metadata extends Model
     }
 
     /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['name', 'handle'], 'required'],
-            ['uri', 'sectionUri', 'on' => 'customSection'],
-            [['uri'], 'required', 'on' => 'customSection', 'message' => 'Uri cannot be blank.'],
-        ];
-    }
-
-    /**
      *
      */
     public function getSchema()
@@ -790,27 +715,12 @@ class Metadata extends Model
         //return $schema->getSchema();
     }
 
-
-    /**
-     * Check is the url saved on custom sections are URI's
-     * This is the 'sectionUri' validator as declared in rules().
-     *
-     * @param $attribute
-     * @param $params
-     */
-    public function sectionUri($attribute, $params)
-    {
-        if (UrlHelper::isAbsoluteUrl($this->$attribute)) {
-            $this->addError($attribute, Craft::t('sprout-seo', 'Invalid URI'));
-        }
-    }
-
     /**
      * Updates "uri" to starts without a "/"
      */
     public function beforeValidate()
     {
-        $this->uri = SproutSeo::$app->sitemap->removeSlash($this->uri);
+        $this->uri = SproutSeo::$app->xmlSitemap->removeSlash($this->uri);
 
         return true;
     }

@@ -48,7 +48,7 @@ class ChangePermanentMethod extends ElementAction
         $response = false;
 
         // Call updateMethods service
-        $response = SproutSeo::$app->redirects->updateMethods($elementIds, SproutSeo_RedirectMethods::Permanent);
+        $response = SproutSeo::$app->redirects->updateRedirectMethod($elementIds, SproutSeo_RedirectMethods::Permanent);
 
         $message = SproutSeo::$app->redirects->getMethodUpdateResponse($response);
 

@@ -109,7 +109,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         Craft::$app->view->registerAssetBundle(BaseAsset::class);
 
         $html = Craft::$app->view->renderTemplate('sprout-base-seo/_includes/metadata-status-icons', [
-            'sectionMetadata' => $value
+            'sitemapSection' => $value
         ]);
 
         return $html;
@@ -199,7 +199,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
          *
          * @var UrlEnabledSectionType $urlEnabledSectionType
          */
-        $urlEnabledSectionType = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionTypeByElementType(get_class($element));
+        $urlEnabledSectionType = SproutSeo::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType(get_class($element));
 
         // Ensure our urlEnabledSectionType exists and we have a section with URLs
         if ($urlEnabledSectionType && count($urlEnabledSectionType->urlEnabledSections)) {
@@ -242,7 +242,6 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
             'assetsSourceExists' => $assetsSourceExists,
             'elementType' => $assetElement,
             'fieldId' => $fieldId,
-            'fieldContext' => 'field',
             'settings' => $settings,
             'prioritizedMetadata' => $prioritizedMetadata,
             'elementHandle' => $this->handle,

@@ -485,7 +485,7 @@ class SproutSeoOptimizeHelper
         }
 
         if ($appendTitleValue) {
-            // Add support for using {divider} and {siteName} in the Section Metadata 'Append Meta Title' setting
+            // Add support for using {divider} and {siteName} in the Sitemap 'Append Meta Title' setting
             $appendTitleValue = Craft::$app->view->renderObjectTemplate($appendTitleValue, [
                 'siteName' => Craft::$app->getInfo()->name,
                 'divider' => $seoDivider
@@ -578,9 +578,9 @@ class SproutSeoOptimizeHelper
     }
 
     /**
-     * Prepare the default field type settings for the Section Metadata context.
+     * Prepare the default field type settings for the Sitemap context.
      *
-     * Display all of our fields manually for the Section Metadatas
+     * Display all of our fields manually for the Sitemaps
      *
      * @return array
      */

@@ -25,13 +25,14 @@ class Redirects extends Component
     /**
      * Returns a Redirect by its ID.
      *
-     * @param int $redirectId
+     * @param          $redirectId
+     * @param int|null $siteId
      *
-     * @return Redirect|null
+     * @return \craft\base\ElementInterface|null
      */
-    public function getRedirectById($redirectId)
+    public function getRedirectById($redirectId, int $siteId = null)
     {
-        return Craft::$app->elements->getElementById($redirectId, Redirect::class);
+        return Craft::$app->elements->getElementById($redirectId, Redirect::class, $siteId);
     }
 
     /**
@@ -90,26 +91,6 @@ class Redirects extends Component
     }
 
     /**
-     * Update the current method in the record
-     *
-     * @param $ids
-     * @param $newMethod
-     *
-     * @return int
-     * @throws Exception
-     */
-    public function updateMethods($ids, $newMethod)
-    {
-        $response = Craft::$app->db->createCommand()->update(
-            '{{%sproutseo_redirects}}',
-            ['method' => $newMethod],
-            ['in', 'id', $ids]
-        )->execute();
-
-        return $response;
-    }
-
-    /**
      * Find a regex url using the preg_match php function and replace
      * capture groups if any using the preg_replace php function also check normal urls
      *
@@ -165,6 +146,45 @@ class Redirects extends Component
     }
 
     /**
+     * Update the current method in the record
+     *
+     * @param $ids
+     * @param $newMethod
+     *
+     * @return int
+     * @throws \yii\db\Exception
+     */
+    public function updateRedirectMethod($ids, $newMethod)
+    {
+        $response = Craft::$app->db->createCommand()->update(
+            '{{%sproutseo_redirects}}',
+            ['method' => $newMethod],
+            ['in', 'id', $ids]
+        )->execute();
+
+        return $response;
+    }
+
+    /**
+     * Get Method Update Response from elementaction
+     *
+     * @param bool
+     *
+     * @return string
+     */
+    public function getMethodUpdateResponse($status)
+    {
+        $response = null;
+        if ($status) {
+            $response = Craft::t('sprout-seo', 'Methods updated.');
+        } else {
+            $response = Craft::t('sprout-seo', 'Failed to update.');
+        }
+
+        return $response;
+    }
+
+    /**
      * Add Slash
      *
      * @param $url
@@ -185,25 +205,6 @@ class Redirects extends Component
         }
 
         return $url;
-    }
-
-    /**
-     * Get Method Update Response from elementaction
-     *
-     * @param bool
-     *
-     * @return string
-     */
-    public function getMethodUpdateResponse($status)
-    {
-        $response = null;
-        if ($status) {
-            $response = Craft::t('sprout-seo', 'Methods updated.');
-        } else {
-            $response = Craft::t('sprout-seo', 'Failed to update.');
-        }
-
-        return $response;
     }
 
     /**

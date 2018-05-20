@@ -86,15 +86,15 @@ class LivePreviewController extends Controller
 
         if (isset($post['id'])) {
             // It's a SproutSEO section
-            $sectionsRegistered = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionTypes();
-            $sectionMetadata = SproutSeo::$app->sectionMetadata->getSectionMetadataById($post['id']);
+            $sectionsRegistered = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps();
+            $sitemapSection = SproutSeo::$app->sitemaps->getSitemapSectionById($post['id']);
 
-            if (isset($sectionsRegistered[$sectionMetadata->type])) {
-                $sectionType = $sectionsRegistered[$sectionMetadata->type];
-                $uniqueKey = $sectionType->getId().'-'.$sectionMetadata->urlEnabledSectionId;
+            if (isset($sectionsRegistered[$sitemapSection->type])) {
+                $sectionType = $sectionsRegistered[$sitemapSection->type];
+                $uniqueKey = $sectionType->getId().'-'.$sitemapSection->urlEnabledSectionId;
                 $elementSection = $sectionType->urlEnabledSections[$uniqueKey];
                 // let's update the handle and the url
-                $metadata['uri'] = $elementSection->sectionMetadata->uri;
+                $metadata['uri'] = $elementSection->sitemapSection->uri;
             }
         }
 
@@ -106,7 +106,7 @@ class LivePreviewController extends Controller
         $this->getView()->getTwig()->disableStrictVariables();
         $this->getView()->registerAssetBundle(LivePreviewAsset::class);
 
-        $templatePath = Craft::getAlias('@barrelstrength/sproutseo/templates/');
+        $templatePath = Craft::getAlias('@sproutbase/app/seo/templates/');
         $originalTemplatesPath = Craft::$app->getView()->getTemplatesPath();
 
         Craft::$app->getView()->setTemplatesPath($templatePath);
@@ -273,7 +273,7 @@ class LivePreviewController extends Controller
         SproutSeo::$app->optimize->rawMetadata = true;
 
         if ($context) {
-            SproutSeo::$app->optimize->urlEnabledSection = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionsViaContext($context);
+            SproutSeo::$app->optimize->urlEnabledSection = SproutSeo::$app->sitemaps->getUrlEnabledSectionsViaContext($context);
         }
 
         $prioritizedMetadata = SproutSeo::$app->optimize->getPrioritizedMetadataModel($siteId);
@@ -281,7 +281,7 @@ class LivePreviewController extends Controller
         $this->getView()->getTwig()->disableStrictVariables();
         Craft::$app->getView()->registerAssetBundle(LivePreviewAsset::class);
 
-        $templatePath = Craft::getAlias('@barrelstrength/sproutseo/templates/');
+        $templatePath = Craft::getAlias('@sproutbase/app/seo/templates/');
         $originalTemplatesPath = Craft::$app->getView()->getTemplatesPath();
 
         Craft::$app->getView()->setTemplatesPath($templatePath);

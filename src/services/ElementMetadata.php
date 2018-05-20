@@ -48,7 +48,7 @@ class ElementMetadata extends Component
         }
 
         if ($hasElementMetadataField) {
-            $urlEnabledSectionType = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionTypeByElementType($elementType);
+            $urlEnabledSectionType = SproutSeo::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
 
             // We only need to save the current field layout. Some Elements, like Commerce_Products
             // also need to save the related Variant field layout which returns as an array
@@ -91,7 +91,7 @@ class ElementMetadata extends Component
 
         foreach ($elementTypes as $elementType) {
             //Get the URL-Enabled Section Type based using the Element Type
-            $urlEnabledSectionType = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionTypeByElementType($elementType);
+            $urlEnabledSectionType = SproutSeo::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
 
             if ($urlEnabledSectionType) {
                 foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {

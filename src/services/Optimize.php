@@ -9,6 +9,23 @@ namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutseo\events\RegisterSchemasEvent;
 
+use barrelstrength\sproutseo\schema\ContactPointSchema;
+use barrelstrength\sproutseo\schema\CreativeWorkSchema;
+use barrelstrength\sproutseo\schema\EventSchema;
+use barrelstrength\sproutseo\schema\GeoSchema;
+use barrelstrength\sproutseo\schema\ImageObjectSchema;
+use barrelstrength\sproutseo\schema\IntangibleSchema;
+use barrelstrength\sproutseo\schema\MainEntityOfPageSchema;
+use barrelstrength\sproutseo\schema\OrganizationSchema;
+use barrelstrength\sproutseo\schema\PersonSchema;
+use barrelstrength\sproutseo\schema\PlaceSchema;
+use barrelstrength\sproutseo\schema\PostalAddressSchema;
+use barrelstrength\sproutseo\schema\ProductSchema;
+use barrelstrength\sproutseo\schema\ThingSchema;
+use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
+use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
+use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
+use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\enums\MetadataLevels;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata as MetadataModel;
@@ -17,10 +34,6 @@ use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\models\UrlEnabledSection;
 use barrelstrength\sproutseo\SproutSeo;
-use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
-use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
-use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
-use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use DateTime;
 use Craft;
 use yii\base\Component;
@@ -87,8 +100,28 @@ class Optimize extends Component
      */
     public function getSchemas()
     {
+        $schemas = [
+            WebsiteIdentityOrganizationSchema::class,
+            WebsiteIdentityPersonSchema::class,
+            WebsiteIdentityWebsiteSchema::class,
+            WebsiteIdentityPlaceSchema::class,
+            ContactPointSchema::class,
+            ImageObjectSchema::class,
+            MainEntityOfPageSchema::class,
+            PostalAddressSchema::class,
+            GeoSchema::class,
+            ThingSchema::class,
+            CreativeWorkSchema::class,
+            EventSchema::class,
+            IntangibleSchema::class,
+            OrganizationSchema::class,
+            PersonSchema::class,
+            PlaceSchema::class,
+            ProductSchema::class
+        ];
+
         $event = new RegisterSchemasEvent([
-            'schemas' => []
+            'schemas' => $schemas
         ]);
 
         $this->trigger(Optimize::EVENT_REGISTER_SCHEMAS, $event);
@@ -171,7 +204,7 @@ class Optimize extends Component
         $this->siteId = $context['currentSite']->id ?? Craft::$app->getSites()->currentSite->id;
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($this->siteId);
-        $this->urlEnabledSection = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionsViaContext($context);
+        $this->urlEnabledSection = SproutSeo::$app->sitemaps->getUrlEnabledSectionsViaContext($context);
         $this->metadataField = $this->getMetadataFieldViaContext($context);
         $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($this->siteId);
 
@@ -442,8 +475,9 @@ class Optimize extends Component
      */
     public function renderMetadata($metadata)
     {
-        $sproutSeoPath = SproutSeo::$app->settings->getPluginPath();
-        Craft::$app->view->setTemplatesPath($sproutSeoPath);
+        $sproutSeoTemplatesPath = Craft::getAlias('@sproutbase/app/seo/');
+
+        Craft::$app->view->setTemplatesPath($sproutSeoTemplatesPath);
 
         $output = Craft::$app->view->renderTemplate('templates/_special/metadata', [
             'metadata' => $metadata
@@ -501,7 +535,7 @@ class Optimize extends Component
     {
         $response = [];
 
-        $registeredUrlEnabledSectionsTypes = SproutSeo::$app->sectionMetadata->getRegisteredUrlEnabledSectionsEvent();
+        $registeredUrlEnabledSectionsTypes = SproutSeo::$app->urlEnabledSections->getRegisteredUrlEnabledSectionsEvent();
 
         foreach ($registeredUrlEnabledSectionsTypes as $plugin => $urlEnabledSectionType) {
             // Let's get the optimized metadata model
@@ -535,7 +569,7 @@ class Optimize extends Component
      */
     public function getVariableIdNames()
     {
-        $registeredUrlEnabledSectionsTypes = SproutSeo::$app->sectionMetadata->getRegisteredUrlEnabledSectionsEvent();
+        $registeredUrlEnabledSectionsTypes = SproutSeo::$app->urlEnabledSections->getRegisteredUrlEnabledSectionsEvent();
 
         $variableTypes = [];
 

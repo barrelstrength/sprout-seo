@@ -32,6 +32,9 @@ class Settings extends Model
     public $groupSettings = [];
     public $multilingualGroups;
 
+    // @todo - do we still need this setting? Or should we rename to site nomenclature?
+    public $localeIdOverride;
+
     public function getSettingsNavItems()
     {
         return [

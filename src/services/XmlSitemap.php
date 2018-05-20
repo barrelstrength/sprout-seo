@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
+use barrelstrength\sproutseo\sectiontypes\NoSection;
 use barrelstrength\sproutseo\SproutSeo;
 use yii\base\Component;
 use craft\db\Query;
@@ -16,7 +17,7 @@ use DateTime;
 use craft\helpers\UrlHelper;
 use craft\helpers\Template as TemplateHelper;
 
-class Sitemap extends Component
+class XmlSitemap extends Component
 {
     /**
      * Prepares sitemaps for a sitemapindex
@@ -33,15 +34,15 @@ class Sitemap extends Component
 
         $totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
 
-        $urlEnabledSectionTypes = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionTypes($siteId);
+        $urlEnabledSectionTypes = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($siteId);
 
         foreach ($urlEnabledSectionTypes as $urlEnabledSectionType) {
             $urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
 
             foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {
-                $sectionMetadata = $urlEnabledSection->sectionMetadata;
+                $sitemapSection = $urlEnabledSection->sitemapSection;
 
-                if ($sectionMetadata->enabled) {
+                if ($sitemapSection->enabled) {
                     // Get Total Elements for this URL-Enabled Section
                     $query = $urlEnabledSectionType->getElementType()::find();
                     $query->{$urlEnabledSectionTypeId}($urlEnabledSection->id);
@@ -66,7 +67,7 @@ class Sitemap extends Component
                         // Build Sitemap Index URLs
                         for ($i = 1; $i <= $totalSitemaps; $i++) {
                             $elementTableName = $urlEnabledSectionType->getElementTableName();
-                            $sitemapHandle = strtolower($sectionMetadata->handle.'-'.$elementTableName);
+                            $sitemapHandle = strtolower($sitemapSection->handle.'-'.$elementTableName);
 
                             $sitemapIndexUrl = UrlHelper::siteUrl().$sitemapHandle.'-sitemap'.$i.'.xml';
 
@@ -77,15 +78,16 @@ class Sitemap extends Component
             }
         }
 
-        // Fetching all Custom Section Metadata defined in Sprout SEO
-        $customSectionMetadata = (new Query())
+        // Fetching all Custom Sitemap defined in Sprout SEO
+        $customSitemapSections = (new Query())
             ->select('id')
             ->from('{{%sproutseo_sitemaps}}')
             ->where('enabled = 1')
-            ->andWhere('uri is not null and isCustom = 1')
+            ->andWhere('type=:type', [':type' => NoSection::class])
+            ->andWhere('uri is not null')
             ->count();
 
-        if ($customSectionMetadata > 0) {
+        if ($customSitemapSections > 0) {
             $sitemapIndexItems[] = UrlHelper::siteUrl('custom-sections-sitemap.xml');
         }
 
@@ -156,7 +158,7 @@ class Sitemap extends Component
                     continue;
                 }
 
-                $urlEnabledSectionType = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
+                $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
 
                 $elements = [];
 
@@ -234,25 +236,26 @@ class Sitemap extends Component
     {
         $urls = [];
 
-        // Fetch all Custom Section Metadata defined in Sprout SEO
-        $customSectionMetadata = (new Query())
+        // Fetch all Custom Sitemap defined in Sprout SEO
+        $customSitemapSections = (new Query())
             ->select('uri, priority, changeFrequency, dateUpdated')
             ->from('{{%sproutseo_sitemaps}}')
             ->where('enabled = 1')
-            ->andWhere('uri is not null and isCustom = 1')
+            ->andWhere('type=:type', [':type' => NoSection::class])
+            ->andWhere('uri is not null')
             ->all();
 
-        foreach ($customSectionMetadata as $customSection) {
-            $customSection['url'] = null;
+        foreach ($customSitemapSections as $customSitemapSection) {
+            $customSitemapSection['url'] = null;
             // Adding each custom location indexed by its URL
-            if (!UrlHelper::isAbsoluteUrl($customSection['uri'])) {
-                $customSection['url'] = UrlHelper::siteUrl($customSection['uri']);
+            if (!UrlHelper::isAbsoluteUrl($customSitemapSection['uri'])) {
+                $customSitemapSection['url'] = UrlHelper::siteUrl($customSitemapSection['uri']);
             }
 
-            $modified = new DateTime($customSection['dateUpdated']);
-            $customSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
+            $modified = new DateTime($customSitemapSection['dateUpdated']);
+            $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
             // @todo - parseEnvironmentString was removed
-            $urls[$customSection['uri']] = $customSection;
+            $urls[$customSitemapSection['uri']] = $customSitemapSection;
         }
 
         $urls = $this->getLocalizedSitemapStructure($urls);
@@ -283,7 +286,7 @@ class Sitemap extends Component
         foreach ($enabledSitemaps as $key => $sitemapSettings) {
             // Fetching all enabled locales
             foreach (Craft::$app->getSites()->getAllSites() as $site) {
-                $urlEnabledSectionType = SproutSeo::$app->sectionMetadata->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
+                $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByType($sitemapSettings['type']);
 
                 $elements = [];
 
@@ -296,7 +299,6 @@ class Sitemap extends Component
                     $elementQuery->{$urlEnabledSectionTypeId} = $sitemapSettings['urlEnabledSectionId'];
 
                     $elementQuery->limit = null;
-                    $elementQuery->enabledForSite = true;
                     $elementQuery->siteId = $site->id;
 
                     $elements = $elementQuery->all();
@@ -324,20 +326,21 @@ class Sitemap extends Component
             }
         }
 
-        // Fetching all Custom Section Metadata defined in Sprout SEO
-        $customSectionMetadata = (new Query())
+        // Fetching all Custom Sitemap defined in Sprout SEO
+        $customSitemapSections = (new Query())
             ->select('uri, priority, changeFrequency, dateUpdated')
             ->from(['{{%sproutseo_sitemaps}}'])
             ->where('enabled = 1')
-            ->andWhere('uri is not null and isCustom = 1')
+            ->andWhere('type=:type', [':type' => NoSection::class])
+            ->andWhere('uri is not null')
             ->all();
 
-        foreach ($customSectionMetadata as $customSection) {
+        foreach ($customSitemapSections as $customSitemapSection) {
             // Adding each custom location indexed by its URL
-            $modified = new DateTime($customSection['dateUpdated']);
-            $customSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
+            $modified = new DateTime($customSitemapSection['dateUpdated']);
+            $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
             // @todo - parseEnvironmentString was removed
-            $urls[$customSection['uri']] = $customSection;
+            $urls[$customSitemapSection['uri']] = $customSitemapSection;
         }
 
         $urls = $this->getLocalizedSitemapStructure($urls);
@@ -345,7 +348,7 @@ class Sitemap extends Component
         // Rendering the template and passing in received options
         $path = Craft::$app->view->getTemplatesPath();
 
-        Craft::$app->view->setTemplatesPath(Craft::getAlias('@barrelstrength/sproutseo/templates/'));
+        Craft::$app->view->setTemplatesPath(Craft::getAlias('@sproutbase/app/seo/templates/'));
 
         $source = Craft::$app->view->renderTemplate('_special/sitemap', [
             'elements' => $urls,

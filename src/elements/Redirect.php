@@ -119,7 +119,8 @@ class Redirect extends Element
      */
     public function getCpEditUrl()
     {
-        return UrlHelper::cpurl('sprout-seo/redirects/'.$this->id);
+        $site = Craft::$app->sites->getSiteById($this->siteId);
+        return UrlHelper::cpUrl('sprout-seo/redirects/'.$site->handle.'/edit/'.$this->id);
     }
 
     /**
@@ -342,6 +343,42 @@ class Redirect extends Element
         $record->save(false);
 
         parent::afterSave($isNew);
+    }
+
+    /**
+     * @todo - review this logic for the Redirect use case.
+     *
+     * @inheritdoc
+     */
+    public function getSupportedSites(): array
+    {
+//        $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+//        $enabledSitemapSites = $seoSettings->siteSettings;
+//        $enabledSitemapGroups = $seoSettings->groupSettings;
+
+//        $siteSettings = [];
+//
+//        if ($seoSettings->enableMultilingualSitemaps)
+//        {
+//            $siteGroupSettings = array_filter($enabledSitemapGroups);
+//        }
+//        else
+//        {
+//            $siteSettings = array_filter($enabledSitemapSites);
+//        }
+
+        $editableSites = Craft::$app->sites->getEditableSites();
+
+        $sites = [];
+
+        foreach ($editableSites as $site) {
+            $sites[] = [
+                'siteId' => $site->id,
+                'enabledByDefault' => $site->hasUrls
+            ];
+        }
+
+        return $sites;
     }
 
     /**

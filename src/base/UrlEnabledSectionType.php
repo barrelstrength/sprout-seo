@@ -8,6 +8,8 @@
 namespace barrelstrength\sproutseo\base;
 
 use barrelstrength\sproutseo\models\Metadata;
+use barrelstrength\sproutseo\models\SitemapSection;
+use barrelstrength\sproutseo\SproutSeo;
 use craft\db\Query;
 use Craft;
 
@@ -34,6 +36,11 @@ abstract class UrlEnabledSectionType
      */
     public $typeIdContext;
 
+    public function getType()
+    {
+        return get_class($this);
+    }
+
     /**
      * Get a unique ID for this URL-Enabled Section Type
      *
@@ -41,7 +48,7 @@ abstract class UrlEnabledSectionType
      *
      * @return mixed
      */
-    final public function getId()
+    public function getId()
     {
         return $this->getElementTableName();
     }
@@ -148,67 +155,6 @@ abstract class UrlEnabledSectionType
      * @return mixed
      */
     abstract public function getAllUrlEnabledSections();
-
-    /**
-     * Get all Section Metadata Sections related to this URL-Enabled Section Type
-     *
-     * Order the results by URL-Enabled Section ID: type-id
-     * Example: entries-5, categories-12
-     * 
-     * @param null $siteId
-     *
-     * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     */
-    public function getAllSectionMetadataSections($siteId = null)
-    {
-        $type = $this->getElementTableName();
-        $allSectionMetadataSections = $this->getSectionMetadataByType($type, $siteId);
-
-        $sectionMetadataSections = [];
-
-        foreach ($allSectionMetadataSections as $sectionMetadataSection) {
-            $urlEnabledSectionUniqueKey = $this->getId().'-'.$sectionMetadataSection['urlEnabledSectionId'];
-
-            $sectionMetadataSections[$urlEnabledSectionUniqueKey] = $sectionMetadataSection;
-        }
-
-        return $sectionMetadataSections;
-    }
-
-    /**
-     * Get all the URL-Enabled Sections of a particular type that we have stored data for in the Sections section
-     *
-     * @param $type
-     *
-     * @param $siteId
-     *
-     * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     */
-    public function getSectionMetadataByType($type, $siteId = null)
-    {
-        if (is_null($siteId)) {
-            $site = Craft::$app->getSites()->getPrimarySite();
-            $siteId = $site->id;
-        }
-
-        $results = (new Query())
-            ->select('*')
-            ->from(['{{%sproutseo_sitemaps}}'])
-            ->where(['type' => $type, 'siteId' => $siteId])
-            ->all();
-
-        $metadatas = [];
-
-        if ($results) {
-            foreach ($results as $result) {
-                $metadatas[] = new Metadata($result);
-            }
-        }
-
-        return $metadatas;
-    }
 
     /**
      * Disable support for resaving elements when a field layout for this

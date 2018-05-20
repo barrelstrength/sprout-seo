@@ -47,7 +47,7 @@ class ChangeTemporaryMethod extends ElementAction
         $response = false;
 
         // Call updateMethods service
-        $response = SproutSeo::$app->redirects->updateMethods($elementIds, SproutSeo_RedirectMethods::Temporary);
+        $response = SproutSeo::$app->redirects->updateRedirectMethod($elementIds, SproutSeo_RedirectMethods::Temporary);
 
         $message = SproutSeo::$app->redirects->getMethodUpdateResponse($response);
 

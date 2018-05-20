@@ -9,7 +9,7 @@ namespace barrelstrength\sproutseo\records;
 
 use craft\db\ActiveRecord;
 
-class Sitemaps extends ActiveRecord
+class SitemapSection extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -25,7 +25,7 @@ class Sitemaps extends ActiveRecord
      * Create a new instance of the current class. This allows us to
      * properly unit test our service layer.
      *
-     * @return Sitemaps
+     * @return SitemapSection
      */
     public function create()
     {
