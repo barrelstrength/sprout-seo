@@ -10,11 +10,12 @@ namespace barrelstrength\sproutseo\sectiontypes;
 use barrelstrength\sproutseo\base\UrlEnabledSectionType;
 
 use Craft;
+use craft\commerce\elements\Product;
 
 /**
- * Class CommerceProductUrlEnabledSectionType
+ * Class CommerceProduct
  */
-class CommerceProductUrlEnabledSectionType extends UrlEnabledSectionType
+class CommerceProduct extends UrlEnabledSectionType
 {
     /**
      * @return string
@@ -79,7 +80,7 @@ class CommerceProductUrlEnabledSectionType extends UrlEnabledSectionType
      */
     public function getElementType()
     {
-        return 'Commerce_Product';
+        return Product::class;
     }
 
     /**
@@ -155,7 +156,7 @@ class CommerceProductUrlEnabledSectionType extends UrlEnabledSectionType
             $criteria->limit = null;
 
             Craft::$app->tasks->createTask('ResaveElements', Craft::t('sprout-seo', 'Re-saving Commerce Products and metadata.'), [
-                'elementType' => 'Commerce_Product',
+                'elementType' => Product::class,
                 'criteria' => $criteria->getAttributes()
             ]);
         }

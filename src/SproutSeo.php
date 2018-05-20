@@ -28,9 +28,9 @@ use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
-use barrelstrength\sproutseo\sectiontypes\CategoryUrlEnabledSectionType;
-use barrelstrength\sproutseo\sectiontypes\CommerceProductUrlEnabledSectionType;
-use barrelstrength\sproutseo\sectiontypes\EntryUrlEnabledSectionType;
+use barrelstrength\sproutseo\sectiontypes\Category;
+use barrelstrength\sproutseo\sectiontypes\CommerceProduct;
+use barrelstrength\sproutseo\sectiontypes\Entry;
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\services\App;
@@ -111,13 +111,13 @@ class SproutSeo extends Plugin
         });
 
         Event::on(SectionMetadata::class, SectionMetadata::EVENT_REGISTER_URL_ENABLED_SECTION_TYPES, function(RegisterUrlEnabledSectionTypesEvent $event) {
-            $event->urlEnabledSectionTypes[] = new EntryUrlEnabledSectionType();
-            $event->urlEnabledSectionTypes[] = new CategoryUrlEnabledSectionType();
+            $event->urlEnabledSectionTypes[] = new Entry();
+            $event->urlEnabledSectionTypes[] = new Category();
 
             //$craftCommercePlugin = Craft::$app->plugins->getPlugin('commerce');
             // let's way until official release of the Craft Commerce
             if (false) {
-                $event->urlEnabledSectionTypes[] = new CommerceProductUrlEnabledSectionType();
+                $event->urlEnabledSectionTypes[] = new CommerceProduct();
             }
         });
 

@@ -9,12 +9,12 @@ namespace barrelstrength\sproutseo\sectiontypes;
 
 use barrelstrength\sproutseo\base\UrlEnabledSectionType;
 
-use craft\elements\Entry;
+use craft\elements\Entry as EntryElement;
 use craft\models\Section;
 use craft\queue\jobs\ResaveElements;
 use Craft;
 
-class EntryUrlEnabledSectionType extends UrlEnabledSectionType
+class Entry extends UrlEnabledSectionType
 {
     /**
      * @return string
@@ -75,7 +75,7 @@ class EntryUrlEnabledSectionType extends UrlEnabledSectionType
      */
     public function getElementType()
     {
-        return Entry::class;
+        return EntryElement::class;
     }
 
     /**
@@ -138,7 +138,7 @@ class EntryUrlEnabledSectionType extends UrlEnabledSectionType
             if ($primarySite) {
                 Craft::$app->getQueue()->push(new ResaveElements([
                     'description' => Craft::t('sprout-seo', 'Re-saving Entries and metadata'),
-                    'elementType' => Entry::class,
+                    'elementType' => EntryElement::class,
                     'criteria' => [
                         'siteId' => $primarySite,
                         'sectionId' => $elementGroupId,
