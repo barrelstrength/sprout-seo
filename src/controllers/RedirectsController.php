@@ -55,7 +55,7 @@ class RedirectsController extends Controller
             }
         }
 
-        $variables['continueEditingUrl'] = 'sprout-seo/redirects/{id}';
+        $variables['continueEditingUrl'] = 'sprout-base-seo/redirects/{id}';
 
         $variables['crumbs'] = [
             [
@@ -64,7 +64,7 @@ class RedirectsController extends Controller
             ]
         ];
 
-        return $this->renderTemplate('sprout-seo/redirects/_edit', $variables);
+        return $this->renderTemplate('sprout-base-seo/redirects/_edit', $variables);
     }
 
     /**

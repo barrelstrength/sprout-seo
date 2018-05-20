@@ -33,7 +33,7 @@ class SetStatus extends ElementAction
      */
     public function getTriggerHtml()
     {
-        return Craft::$app->view->renderTemplate('sprout-seo/_components/elementactions/setstatus');
+        return Craft::$app->view->renderTemplate('sprout-base-seo/_components/elementactions/setstatus');
     }
 
     /**

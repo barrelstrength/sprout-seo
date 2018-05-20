@@ -109,7 +109,7 @@ class SectionMetadataController extends Controller
 //            throw new NotFoundHttpException('Invalid site handle: '.$siteHandle);
 //        }
 
-        return $this->renderTemplate('sprout-seo/sections', [
+        return $this->renderTemplate('sprout-base-seo/sections', [
             'currentSite' => $currentSite,
             'firstSiteInGroup' => $firstSiteInGroup,
             'enabledSiteIds' => $enabledSiteIds,
@@ -273,7 +273,7 @@ class SectionMetadataController extends Controller
 
         $revisionLabel = $site->name.' - Current';
 
-        return $this->renderTemplate('sprout-seo/sections/_edit', [
+        return $this->renderTemplate('sprout-base-seo/sections/_edit', [
             'sectionMetadataId' => $sectionMetadataId,
             'sectionMetadata' => $sectionMetadata,
             'metaImageElements' => $metaImageElements,

@@ -90,7 +90,7 @@ class GlobalMetadataController extends Controller
 
 
         // Render the template!
-        return $this->renderTemplate('sprout-seo/globals/'.$globalHandle, [
+        return $this->renderTemplate('sprout-base-seo/globals/'.$globalHandle, [
             'globals' => $globals,
             'globalHandle' => $globalHandle
         ]);

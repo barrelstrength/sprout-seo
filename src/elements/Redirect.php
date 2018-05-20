@@ -287,7 +287,7 @@ class Redirect extends Element
     {
         $methodOptions = SproutSeo::$app->redirects->getMethods();
         // get template
-        $html = Craft::$app->view->renderTemplate('sprout-seo/redirects/_editor', [
+        $html = Craft::$app->view->renderTemplate('sprout-base-seo/redirects/_editor', [
             'redirect' => $this,
             'methodOptions' => $methodOptions
         ]);

@@ -108,7 +108,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
     {
         Craft::$app->view->registerAssetBundle(BaseAsset::class);
 
-        $html = Craft::$app->view->renderTemplate('sprout-seo/_includes/metadata-status-icons', [
+        $html = Craft::$app->view->renderTemplate('sprout-base-seo/_includes/metadata-status-icons', [
             'sectionMetadata' => $value
         ]);
 
@@ -122,7 +122,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/settings', [
+        return Craft::$app->view->renderTemplate('sprout-base-seo/_components/fields/elementmetadata/settings', [
             'settings' => $this->getAttributes()
         ]);
     }
@@ -230,7 +230,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         // @todo - Refactor
         //         Can we simplify? This is a ton of variables.
         //         What are the ogImageElements, twitterImageElements, etc being used for?
-        return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/input', [
+        return Craft::$app->view->renderTemplate('sprout-base-seo/_components/fields/elementmetadata/input', [
             'name' => $name,
             'namespaceInputName' => $namespaceInputName,
             'namespaceInputId' => $namespaceInputId,
