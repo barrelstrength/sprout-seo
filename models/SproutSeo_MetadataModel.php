@@ -278,15 +278,7 @@ class SproutSeo_MetadataModel extends BaseModel
 	{
 		if (isset($overrideInfo['elementId']))
 		{
-			$locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
-			$elementMetadata = sproutSeo()->elementMetadata->getElementMetadataByElementId($overrideInfo['elementId'], $locale);
-
-			// Default to the current URL, if no overrides exist
-			$elementMetadata->canonical  = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
-			$elementMetadata->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
-			$elementMetadata->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
-
-			return $elementMetadata->getAttributes();
+		    return $this->getElementMetadataAttributesByElementId($overrideInfo['elementId']);
 		}
 
 		return array();
@@ -301,6 +293,13 @@ class SproutSeo_MetadataModel extends BaseModel
 	 */
 	protected function prepareCodeMetadata($overrideInfo)
 	{
+	    // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
+        // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
+        if (isset($overrideInfo['elementId']))
+        {
+            return $this->getElementMetadataAttributesByElementId($overrideInfo['elementId']);
+        }
+
 		if (!empty($overrideInfo))
 		{
 			return $overrideInfo;
@@ -308,6 +307,24 @@ class SproutSeo_MetadataModel extends BaseModel
 
 		return array();
 	}
+
+    /**
+     * @param $elementId
+     *
+     * @return array
+     */
+	protected function getElementMetadataAttributesByElementId($elementId)
+    {
+        $locale          = (defined('CRAFT_LOCALE') ? CRAFT_LOCALE : craft()->locale->getId());
+        $elementMetadata = sproutSeo()->elementMetadata->getElementMetadataByElementId($elementId, $locale);
+
+        // Default to the current URL, if no overrides exist
+        $elementMetadata->canonical  = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
+        $elementMetadata->ogUrl      = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
+        $elementMetadata->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
+
+        return $elementMetadata->getAttributes();
+    }
 
 	/**
 	 * @return array
