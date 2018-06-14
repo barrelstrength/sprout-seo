@@ -163,6 +163,7 @@ class Optimize extends Component
      */
     public function getSchemaByUniqueKey($uniqueKey, $default = null)
     {
+        $this->getSchemas();
         return array_key_exists($uniqueKey, $this->schemas) ? $this->schemas[$uniqueKey] : $default;
     }
 
@@ -449,7 +450,6 @@ class Optimize extends Component
 
         if ($this->prioritizedMetadataModel) {
             $schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
-
             if ($schemaUniqueKey && isset($this->urlEnabledSection->element)) {
                 $schema = $this->getSchemaByUniqueKey($schemaUniqueKey);
                 $schema->attributes = $this->prioritizedMetadataModel->getAttributes();

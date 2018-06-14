@@ -605,9 +605,8 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      */
     protected function processMainEntity($attributes, $settings)
     {
-        if (!isset($attributes['schemaOverrideTypeId'])) {
-            $attributes['schemaOverrideTypeId'] = null;
-        }
+        $attributes['schemaTypeId'] = $settings['schemaTypeId'];
+        $attributes['schemaOverrideTypeId'] = $settings['schemaOverrideTypeId'];
 
         return $attributes;
     }
