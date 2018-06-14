@@ -54,6 +54,8 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
     public $showGeo;
     public $showRobots;
     public $editCanonical;
+    public $schemaOverrideTypeId;
+    public $schemaTypeId;
 
     /**
      * @return string
@@ -199,7 +201,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
          *
          * @var UrlEnabledSectionType $urlEnabledSectionType
          */
-        $urlEnabledSectionType = SproutSeo::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType(get_class($element));
+        $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType(get_class($element));
 
         // Ensure our urlEnabledSectionType exists and we have a section with URLs
         if ($urlEnabledSectionType && count($urlEnabledSectionType->urlEnabledSections)) {

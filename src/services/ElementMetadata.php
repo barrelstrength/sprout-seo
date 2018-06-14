@@ -91,7 +91,7 @@ class ElementMetadata extends Component
 
         foreach ($elementTypes as $elementType) {
             //Get the URL-Enabled Section Type based using the Element Type
-            $urlEnabledSectionType = SproutSeo::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
+            $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType($elementType);
 
             if ($urlEnabledSectionType) {
                 foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {

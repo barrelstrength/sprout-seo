@@ -127,7 +127,8 @@ class Optimize extends Component
         $this->trigger(Optimize::EVENT_REGISTER_SCHEMAS, $event);
 
         foreach ($event->schemas as $schema) {
-            $this->schemas[$schema->getUniqueKey()] = $schema;
+            $model = new $schema;
+            $this->schemas[$model->getUniqueKey()] = $model;
         }
 
         return $this->schemas;

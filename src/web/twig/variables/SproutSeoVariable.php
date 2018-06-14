@@ -803,7 +803,7 @@ class SproutSeoVariable
             /**
              * @var Schema $map
              */
-            return stripos($map->getUniqueKey(), 'craft-sproutseo') !== false;
+            return stripos($map->getUniqueKey(), 'barrelstrength-sproutseo-schema') !== false;
         });
 
         // Get a filtered list of of any custom schema
@@ -811,7 +811,7 @@ class SproutSeoVariable
             /**
              * @var Schema $map
              */
-            return stripos($map->getUniqueKey(), 'craft-sproutseo') === false;
+            return stripos($map->getUniqueKey(), 'barrelstrength-sproutseo-schema') === false;
         });
 
         // Build our options
