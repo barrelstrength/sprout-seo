@@ -83,7 +83,7 @@ class Redirect extends Element
      */
     public static function isLocalized(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -343,42 +343,6 @@ class Redirect extends Element
         $record->save(false);
 
         parent::afterSave($isNew);
-    }
-
-    /**
-     * @todo - review this logic for the Redirect use case.
-     *
-     * @inheritdoc
-     */
-    public function getSupportedSites(): array
-    {
-//        $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-//        $enabledSitemapSites = $seoSettings->siteSettings;
-//        $enabledSitemapGroups = $seoSettings->groupSettings;
-
-//        $siteSettings = [];
-//
-//        if ($seoSettings->enableMultilingualSitemaps)
-//        {
-//            $siteGroupSettings = array_filter($enabledSitemapGroups);
-//        }
-//        else
-//        {
-//            $siteSettings = array_filter($enabledSitemapSites);
-//        }
-
-        $editableSites = Craft::$app->sites->getEditableSites();
-
-        $sites = [];
-
-        foreach ($editableSites as $site) {
-            $sites[] = [
-                'siteId' => $site->id,
-                'enabledByDefault' => $site->hasUrls
-            ];
-        }
-
-        return $sites;
     }
 
     /**
