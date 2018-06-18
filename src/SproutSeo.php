@@ -9,6 +9,7 @@ namespace barrelstrength\sproutseo;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutseo\events\RegisterSchemasEvent;
 use barrelstrength\sproutseo\events\RegisterUrlEnabledSectionTypesEvent;
 use barrelstrength\sproutseo\sectiontypes\Category;
@@ -96,8 +97,7 @@ class SproutSeo extends Plugin
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = ElementMetadata::class;
-        }
-        );
+        });
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $variable = $event->sender;
