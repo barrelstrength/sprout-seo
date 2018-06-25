@@ -2,10 +2,11 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutseo\fields\ElementMetadata;
 use craft\db\Migration;
 use craft\db\Query;
-use Craft;
+use barrelstrength\sproutseo\sectiontypes\Entry;
+use barrelstrength\sproutseo\sectiontypes\Category;
+use barrelstrength\sproutseo\sectiontypes\CommerceProduct;
 
 /**
  * m180625_000000_sections_to_sitemap migration.
@@ -50,11 +51,25 @@ class m180625_000000_sections_to_sitemap extends Migration
             ->all();
 
         foreach ($sections as $section) {
+            $newType = null;
+
+            switch ($section['type']) {
+                case 'entries':
+                    $newType = Entry::class;
+                    break;
+                case 'categories':
+                    $newType = Category::class;
+                    break;
+                case 'commerce_products':
+                    $newType = CommerceProduct::class;
+                    break;
+            }
+
             $sitemapData = [
                 'siteId' => $primarySiteId,
                 'urlEnabledSectionId' => $section['urlEnabledSectionId'],
-                'enabled' => $section['urlEnabledSectionId'],
-                'type' => $section['type'],
+                'enabled' => $section['enabled'],
+                'type' => $newType ?? $section['type'],
                 'uri' => $section['uri'],
                 'priority' => $section['priority'],
                 'changeFrequency' => $section['changeFrequency'],
