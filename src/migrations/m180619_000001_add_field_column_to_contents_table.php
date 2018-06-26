@@ -31,7 +31,7 @@ class m180619_000001_add_field_column_to_contents_table extends Migration
         // Let's add
         foreach ($fields as $field) {
             foreach ($metadataElements as $metadataElement) {
-                $element = Craft::$app->getElements()->getElementById($metadataElement['id']);
+                $element = Craft::$app->getElements()->getElementById($metadataElement['elementId']);
                 if ($element){
                     $contentTable = $element->getContentTable();
                     $columnPrefix = $element->getFieldColumnPrefix();
