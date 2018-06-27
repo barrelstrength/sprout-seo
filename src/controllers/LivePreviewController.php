@@ -27,9 +27,6 @@ class LivePreviewController extends Controller
 
         $post = $post['sproutseo']['metadata'];
 
-        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-        $settings = $plugin->getSettings();
-
         if (is_array($post['optimizedImage'])) {
             $image = $post['optimizedImage'][0];
             $metadata['optimizedImage'] = $image;
