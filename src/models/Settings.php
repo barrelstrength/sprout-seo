@@ -17,7 +17,6 @@ class Settings extends Model
     public $appendTitleValue = false;
     public $displayFieldHandles = false;
     public $enableCustomSections = false;
-    public $enableMetaDetailsFields = false;
     public $enableMetadataRendering = true;
     public $toggleMetadataVariable = false;
     public $metadataVariable = 'metadata';

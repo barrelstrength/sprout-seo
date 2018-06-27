@@ -46,7 +46,7 @@ class LivePreviewController extends Controller
         $metadata['twitterDescription'] = $post['optimizedDescription'];
 
         // Meta details validation
-        if ($settings['enableMetaDetailsFields'] && isset($post['enableMetaDetailsOpenGraph']) && $post['enableMetaDetailsOpenGraph']) {
+        if (isset($post['enableMetaDetailsOpenGraph']) && $post['enableMetaDetailsOpenGraph']) {
             if (is_array($post['ogImage'])) {
                 $image = $post['ogImage'][0];
                 $metadata['ogImage'] = $image;
@@ -65,7 +65,7 @@ class LivePreviewController extends Controller
             }
         }
 
-        if ($settings['enableMetaDetailsFields'] && isset($post['enableMetaDetailsTwitterCard']) && $post['enableMetaDetailsTwitterCard']) {
+        if (isset($post['enableMetaDetailsTwitterCard']) && $post['enableMetaDetailsTwitterCard']) {
             if (is_array($post['twitterImage'])) {
                 $image = $post['twitterImage'][0];
                 $metadata['twitterImage'] = $image;

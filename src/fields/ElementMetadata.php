@@ -56,6 +56,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
     public $editCanonical;
     public $schemaOverrideTypeId;
     public $schemaTypeId;
+    public $enableMetaDetailsFields;
 
     /**
      * @return string
