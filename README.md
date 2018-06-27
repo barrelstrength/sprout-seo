@@ -1,38 +1,24 @@
-Here here, Sprout SEO!
+# Sprout SEO
 
-Here are some online resources you might find useful:
+Content-focused SEO.
 
+- **Search Metadata** - Give content editors detailed control over search metadata
+- **Social Sharing** - Customize metadata targeting social media platforms like Facebook, Twitter, and more/ 
+- **Structured Data** - Enhance your content to display in the Knowledge Graph and as Rich Cards
+- **Sitemaps** - Generate comprehensive, multi-lingual XML sitemaps
+- **Redirects** - Manage redirects and monitor 404s
 
-Sprout SEO Docs
-------------------------------------------------------------
-Code examples, tags, common questions:
-http://sprout.barrelstrengthdesign.com/craft-plugins/seo
+See the Sprout SEO documentation to learn more about Sprout SEO.
 
+## Documentation
 
-Sprout SEO Updates
-------------------------------------------------------------
-http://sprout.barrelstrengthdesign.com/craft-plugins/seo/updates
+See the [Sprout Website](https://sprout.barrelstrengthdesign.com/docs/seo) for documentation, guides, and additional resources. 
 
+## Support
 
-Sprout SEO Translations
-------------------------------------------------------------
-A default translation file is provided on GitHub and can be modified
-as needed for your language requirements.
-https://github.com/BarrelStrength/Sprout-Plugin-Translations
+- [Send a Support Ticket](https://sprout.barrelstrengthdesign.com/docs/support/support.html).
+- [Create an issue](https://github.com/barrelstrength/craft-sprout-forms/issues) on Github.
 
-
-Sprout SEO Support
-------------------------------------------------------------
-
-Via Craft Stack Exchange: Tag your questions with `plugin-sproutseo`:
-https://craftcms.stackexchange.com/
-
-Via Email:
-Send us a note at: sprout@barrelstrengthdesign.com
-
-
-Sprout SEO License Terms
-------------------------------------------------------------
-Use of Sprout SEO is subject to the license agreement available here:
-http://sprout.barrelstrengthdesign.com/license
-
+<a href="https://sprout.barrelstrengthdesign.com" target="_blank">
+  <img src="https://s3.amazonaws.com/sprout.barrelstrengthdesign.com-assets/content/plugins/sprout-icon.svg" width="72" align="right">
+</a>
