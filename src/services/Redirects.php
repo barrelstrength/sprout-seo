@@ -282,13 +282,15 @@ class Redirects extends Component
         $redirect = new Redirect();
         $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
         $seoSettings = $plugin->getSettings();
+        $currentSite = Craft::$app->getSites()->getCurrentSite();
 
         $redirect->oldUrl = $url;
         $redirect->newUrl = '/';
         $redirect->method = RedirectMethods::PageNotFound;
         $redirect->regex = 0;
         $redirect->enabled = 0;
-        $redirect->count = 0;
+        $redirect->count = 1;
+        $redirect->siteId = $currentSite->id;
 
         if (!SproutSeo::$app->redirects->saveRedirect($redirect)) {
             $redirect = null;
