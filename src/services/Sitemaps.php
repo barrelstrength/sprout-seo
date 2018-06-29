@@ -344,7 +344,7 @@ class Sitemaps extends Component
     public function prepareUrlEnabledSectionTypesForSitemaps($siteId = null)
     {
         // Have we already prepared our URL-Enabled Sections?
-        if (count($this->urlEnabledSectionTypes)) {
+        if (!empty($this->urlEnabledSectionTypes)) {
             return null;
         }
 
