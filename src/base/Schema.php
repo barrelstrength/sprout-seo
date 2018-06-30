@@ -295,11 +295,18 @@ abstract class Schema
      * https://schema.org/Date
      * https://en.wikipedia.org/wiki/ISO_8601
      *
-     * @param $propertyName
-     * @param $dateTime
+     * @param string $propertyName
+     * @param string|\DateTime $date
      */
-    public function addDate($propertyName, $dateTime)
+    public function addDate($propertyName, $date)
     {
+        $dateTime = $date;
+
+        if (is_string($date))
+        {
+            $dateTime = new DateTime($date);
+        }
+
         $this->structuredData[$propertyName] = $dateTime->format('c');
     }
 
@@ -307,8 +314,8 @@ abstract class Schema
      * Add a URL to our Structured Data array.
      * If the property is not a valid URL, don't add it.
      *
-     * @param $propertyName
-     * @param $url
+     * @param string $propertyName
+     * @param string $url
      */
     public function addUrl($propertyName, $url)
     {
