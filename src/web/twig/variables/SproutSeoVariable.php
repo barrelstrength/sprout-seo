@@ -607,7 +607,7 @@ class SproutSeoVariable
 
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field')];
 
-        if ($handle == 'optimizedTitleField'){
+        if ($handle == 'optimizedTitleField') {
             $options['elementTitle'] = Craft::t('sprout-seo', 'Title');
         }
 

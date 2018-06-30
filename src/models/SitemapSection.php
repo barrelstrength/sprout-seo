@@ -63,15 +63,14 @@ class SitemapSection extends Model
     {
         return Craft::$app->sites->getSiteById($this->siteId);
     }
-    
+
     public function getUrlEnabledSection()
     {
         $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByType($this->type);
         $urlEnabledSections = $urlEnabledSectionType->urlEnabledSections;
 
         foreach ($urlEnabledSections as $key => $urlEnabledSection) {
-            if ($key === $this->type.'-'.$this->urlEnabledSectionId)
-            {
+            if ($key === $this->type.'-'.$this->urlEnabledSectionId) {
                 return $urlEnabledSection;
             }
         }

@@ -55,8 +55,7 @@ class Sitemaps extends Component
 
         $sitemapSections = [];
 
-        if ($customSections)
-        {
+        if ($customSections) {
             foreach ($customSections as $customSection) {
                 $sitemapSections[] = new SitemapSection($customSection);
             }
@@ -163,8 +162,7 @@ class Sitemaps extends Component
             ->where(['id' => $id])
             ->one();
 
-        if ($result)
-        {
+        if ($result) {
             return new SitemapSection($result);
         }
 

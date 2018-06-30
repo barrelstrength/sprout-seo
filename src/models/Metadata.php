@@ -40,7 +40,7 @@ class Metadata extends Model
      * @var array
      */
     protected $twitterCardsMeta = [];
-    
+
     /**
      * @var
      */

@@ -25,7 +25,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
 
         $settings = json_decode($plugin['settings'], true);
 
-        if (isset($settings['toggleLocaleOverride']) && $settings['toggleLocaleOverride']){
+        if (isset($settings['toggleLocaleOverride']) && $settings['toggleLocaleOverride']) {
             $groups = Craft::$app->getSites()->getAllGroups();
             $groupsArray = [];
             $settings['enableMultilingualSitemaps'] = "1";
@@ -33,7 +33,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
                 $groupsArray[$group->id] = $group->id;
             }
             $settings['groupSettings'] = $groupsArray;
-        }else{
+        } else {
             $sites = Craft::$app->getSites()->getAllSites();
             $sitesArray = [];
             $settings['enableMultilingualSitemaps'] = "";

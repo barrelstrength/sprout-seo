@@ -86,7 +86,7 @@ class SitemapsController extends Controller
             $currentSite = Craft::$app->getSites()->getPrimarySite();
             $firstSiteInGroup = $currentSite->id;
         }
-        
+
         $urlEnabledSectionTypes = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($currentSite->id);
 
         $customSections = SproutSeo::$app->sitemaps->getCustomSitemapSections($currentSite->id);
@@ -104,8 +104,8 @@ class SitemapsController extends Controller
     /**
      * Renders a Sitemap Edit Page
      *
-     * @param int|null       $sitemapSectionId
-     * @param string|null    $siteHandle
+     * @param int|null    $sitemapSectionId
+     * @param string|null $siteHandle
      *
      * @return Response
      * @throws ForbiddenHttpException
@@ -114,8 +114,7 @@ class SitemapsController extends Controller
      */
     public function actionSitemapEditTemplate(int $sitemapSectionId = null, string $siteHandle = null)
     {
-        if ($siteHandle === null)
-        {
+        if ($siteHandle === null) {
             throw new NotFoundHttpException('Unable to find site with handle: '.$siteHandle);
         }
 
@@ -128,12 +127,9 @@ class SitemapsController extends Controller
             throw new ForbiddenHttpException('User not permitted to edit content for this site.');
         }
 
-        if ($sitemapSectionId)
-        {
+        if ($sitemapSectionId) {
             $sitemapSection = SproutSeo::$app->sitemaps->getSitemapSectionById($sitemapSectionId);
-        }
-        else
-        {
+        } else {
             $sitemapSection = new SitemapSection();
             $sitemapSection->siteId = $currentSite->id;
             $sitemapSection->type = NoSection::class;

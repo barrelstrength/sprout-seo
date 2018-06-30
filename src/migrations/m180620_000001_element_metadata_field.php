@@ -54,10 +54,10 @@ class m180620_000001_element_metadata_field extends Migration
             foreach ($metadataElements as $metadataElement) {
                 $siteId = $siteIdsByLocale[$metadataElement['locale']] ?? $primarySiteId;
                 $element = Craft::$app->getElements()->getElementById($metadataElement['elementId'], null, $siteId);
-                if ($element){
+                if ($element) {
                     $metadataAsJson = $this->getMetadataAsJson($metadataElement);
 
-                    if (isset($element->{$fieldHandle})){
+                    if (isset($element->{$fieldHandle})) {
                         $element->{$fieldHandle} = $metadataAsJson;
                         Craft::$app->getElements()->saveElement($element);
                     }

@@ -109,6 +109,6 @@ class NoSection extends UrlEnabledSectionType
      */
     public function resaveElements($elementGroupId = null)
     {
-       return null;
+        return null;
     }
 }
