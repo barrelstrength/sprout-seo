@@ -48,6 +48,16 @@ abstract class UrlEnabledSectionType
     }
 
     /**
+     * Returns the namespace of this Url-Enabled Section Type class
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return get_class($this);
+    }
+
+    /**
      * This setting we'll help us determine if we should use the $locale to limit some queries
      * like the URL Format query.
      *
