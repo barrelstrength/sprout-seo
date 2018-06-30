@@ -291,7 +291,7 @@ class SproutSeoOptimizeHelper
         // If not, then process what we have to try to extract the URL
         if (0 !== mb_strpos($id, 'http')) {
             if (!is_numeric($id)) {
-                throw new Exception('Meta Image override value "'.$id.'" must be an	absolute url.');
+                throw new Exception('Meta Image override value "'.$id.'" must be an absolute url.');
             }
 
             /**
@@ -299,7 +299,7 @@ class SproutSeoOptimizeHelper
              */
             $asset = Craft::$app->elements->getElementById($id);
 
-            if ($asset === null) {
+            if ($asset !== null) {
                 $transform = SproutSeoOptimizeHelper::getSelectedTransform($transform);
 
                 $imageUrl = Craft::$app->getAssets()->getAssetUrl($asset, $transform);
