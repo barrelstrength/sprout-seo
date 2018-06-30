@@ -296,12 +296,10 @@ abstract class Schema
      * https://en.wikipedia.org/wiki/ISO_8601
      *
      * @param $propertyName
-     * @param $date
+     * @param $dateTime
      */
-    public function addDate($propertyName, $date)
+    public function addDate($propertyName, $dateTime)
     {
-        $dateTime = new DateTime($date);
-
         $this->structuredData[$propertyName] = $dateTime->format('c');
     }
 
