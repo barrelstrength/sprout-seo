@@ -12,6 +12,7 @@ use barrelstrength\sproutseo\models\SitemapSection;
 use barrelstrength\sproutseo\models\UrlEnabledSection;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
 use barrelstrength\sproutseo\SproutSeo;
+use barrelstrength\sproutseo\models\Settings as PluginSettings;
 use craft\errors\SiteNotFoundException;
 use yii\base\Component;
 use craft\db\Query;
@@ -230,7 +231,7 @@ class Sitemaps extends Component
         $sitemapSection->id = $sectionRecord->id;
 
         /**
-         * @var Settings $pluginSettings
+         * @var PluginSettings $pluginSettings
          */
         $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
@@ -365,6 +366,9 @@ class Sitemaps extends Component
             // if we have an existing Sitemap, use it, otherwise fallback to a new model
             $urlEnabledSections = [];
 
+            /**
+             * @var UrlEnabledSection $urlEnabledSection
+             */
             foreach ($allUrlEnabledSections as $urlEnabledSection) {
                 $uniqueKey = $urlEnabledSectionType->getId().'-'.$urlEnabledSection->id;
 

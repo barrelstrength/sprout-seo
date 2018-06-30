@@ -144,10 +144,8 @@ class SproutSeo extends Plugin
                     }
                 }
             }
-        }
-        );
+        });
     }
-
 
     public function getCpNavItem()
     {

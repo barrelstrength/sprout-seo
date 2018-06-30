@@ -23,37 +23,37 @@ class Globals extends Model
     public $siteId;
 
     /**
-     * @var string
+     * @var array
      */
     public $meta;
 
     /**
-     * @var string
+     * @var array
      */
     public $identity;
 
     /**
-     * @var string
+     * @var array
      */
     public $ownership;
 
     /**
-     * @var string
+     * @var array
      */
     public $contacts;
 
     /**
-     * @var string
+     * @var array
      */
     public $social;
 
     /**
-     * @var string
+     * @var array
      */
     public $robots;
 
     /**
-     * @var string
+     * @var array
      */
     public $settings;
 
@@ -80,10 +80,10 @@ class Globals extends Model
     /**
      * Factory to return schema of any type
      *
-     * @param        $target
+     * @param string $target
      * @param string $format
      *
-     * @return string
+     * @return array|string
      */
     public function getGlobalByKey($target, $format = 'array')
     {
@@ -95,7 +95,7 @@ class Globals extends Model
 
         $schema = $this->{$targetMethod}();
 
-        if ($format == 'json') {
+        if ($format === 'json') {
             return Json::encode($schema);
         }
 
@@ -118,7 +118,7 @@ class Globals extends Model
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     protected function getMeta()
     {
@@ -144,16 +144,19 @@ class Globals extends Model
     {
         $contacts = $this->{$this->globalKey};
 
+        if (!count($contacts)) {
+            return [];
+        }
+
         $contactPoints = [];
 
-        if (count($contacts)) {
-            foreach ($contacts as $contact) {
-                $contactPoints[] = [
-                    '@type' => 'ContactPoint',
-                    'contactType' => $contact['contactType'] ?? $contact[0],
-                    'telephone' => $contact['telephone'] ?? $contact[1]
-                ];
-            }
+        /** @noinspection ForeachSourceInspection */
+        foreach ($contacts as $contact) {
+            $contactPoints[] = [
+                '@type' => 'ContactPoint',
+                'contactType' => $contact['contactType'] ?? $contact[0],
+                'telephone' => $contact['telephone'] ?? $contact[1]
+            ];
         }
 
         return $contactPoints;
@@ -168,15 +171,18 @@ class Globals extends Model
     {
         $profiles = $this->{$this->globalKey};
 
+        if (!count($profiles)) {
+            return [];
+        }
+
         $profileLinks = [];
 
-        if (count($profiles)) {
-            foreach ($profiles as $profile) {
-                $profileLinks[] = [
-                    'profileName' => $profile['profileName'] ?? $profile[0],
-                    'url' => $profile['url'] ?? $profile[1]
-                ];
-            }
+        /** @noinspection ForeachSourceInspection */
+        foreach ($profiles as $profile) {
+            $profileLinks[] = [
+                'profileName' => $profile['profileName'] ?? $profile[0],
+                'url' => $profile['url'] ?? $profile[1]
+            ];
         }
 
         return $profileLinks;
@@ -219,9 +225,9 @@ class Globals extends Model
      */
     public function isLocalBusiness()
     {
-        $identity = $this->getGlobalByKey('identity');
+        $this->getGlobalByKey('identity');
 
-        if (isset($identity['organizationSubTypes'][0]) and $identity['organizationSubTypes'][0] == 'LocalBusiness') {
+        if (isset($this->identity['organizationSubTypes'][0]) && $this->identity['organizationSubTypes'][0] === 'LocalBusiness') {
             return true;
         }
 

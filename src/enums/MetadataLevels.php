@@ -14,12 +14,6 @@ abstract class MetadataLevels extends BaseEnum
 {
     // Constants
     // =========================================================================
-    /**
-     * Holds the reflected constants for the enum.
-     *
-     * @var array|null
-     */
-    private static $_constants = [];
 
     /**
      * Global Metadata

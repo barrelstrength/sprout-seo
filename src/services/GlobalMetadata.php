@@ -72,8 +72,8 @@ class GlobalMetadata extends Component
     /**
      * Save Global Metadata to database
      *
-     * @param $globalKeys
-     * @param $globals
+     * @param array $globalKeys
+     * @param Globals $globals
      *
      * @return bool
      * @throws \Throwable

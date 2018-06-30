@@ -17,7 +17,7 @@ use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutbase\SproutBase;
-use craft\helpers\ElementHelper;
+
 use craft\helpers\Template as TemplateHelper;
 use DateTime;
 use Craft;

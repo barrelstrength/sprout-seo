@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\models;
 
+use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
@@ -433,7 +434,7 @@ class Metadata extends Model
      * @return $this
      * @throws \Exception
      */
-    public function setMeta($type = MetadataLevels::GlobalMetadata, $overrideInfo = [])
+    public function setMeta($type = MetadataLevels::GlobalMetadata, array $overrideInfo = [])
     {
         switch ($type) {
             case MetadataLevels::GlobalMetadata:
@@ -459,9 +460,7 @@ class Metadata extends Model
      */
     protected function prepareGlobalMetadata($overrideInfo)
     {
-        $globals = $overrideInfo['globals'] ?? SproutSeo::$app->optimize->globals;
-
-        return $globals->meta;
+        return $overrideInfo['globals']->meta ?? SproutSeo::$app->optimize->globals->meta;
     }
 
     /**
@@ -479,6 +478,9 @@ class Metadata extends Model
             $element = $overrideInfo['contextElement'];
             $site = $element->getSite();
 
+            /**
+             * @var Metadata $elementMetadata
+             */
             $elementMetadata = $overrideInfo['metadataField'];
             $elementMetadata->ogLocale = $site->language;
 
@@ -715,6 +717,8 @@ class Metadata extends Model
 
     /**
      * Updates "uri" to starts without a "/"
+     *
+     * @return bool
      */
     public function beforeValidate()
     {

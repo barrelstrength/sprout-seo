@@ -12,6 +12,7 @@ use barrelstrength\sproutseo\enums\RedirectMethods;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\jobs\Delete404;
 use barrelstrength\sproutseo\records\Redirect as RedirectRecord;
+use barrelstrength\sproutseo\models\Settings;
 
 use Craft;
 use yii\base\Component;
@@ -234,9 +235,12 @@ class Redirects extends Component
      */
     public function getStructureId()
     {
-        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
+        /**
+         * @var Settings $pluginSettings
+         */
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
-        return $plugin->getSettings()->structureId;
+        return $pluginSettings->structureId;
     }
 
     /**

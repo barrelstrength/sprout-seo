@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link      https://sprout.barrelstrengthdesign.com/
  * @copyright Copyright (c) Barrel Strength Design LLC
@@ -90,6 +91,7 @@ class SproutSeoOptimizeHelper
 
         $robotsMetaValue = '';
 
+        /** @noinspection ForeachSourceInspection */
         foreach ($robots as $key => $value) {
             if ($value == '') {
                 continue;
@@ -254,6 +256,9 @@ class SproutSeoOptimizeHelper
                     throw new Exception('Meta Image override value "'.$model->optimizedImage.'" must be an	absolute url.');
                 }
 
+                /**
+                 * @var Asset $optimizedImage
+                 */
                 $optimizedImage = Craft::$app->elements->getElementById($model->optimizedImage);
 
                 if ($optimizedImage !== null && $optimizedImage->getUrl()) {
@@ -530,30 +535,35 @@ class SproutSeoOptimizeHelper
         // override fields whose blocks have been disabled
 
         if (!$model->enableMetaDetailsSearch) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($model['searchMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }
         }
 
         if (!$model->enableMetaDetailsOpenGraph) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($model['openGraphMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }
         }
 
         if (!$model->enableMetaDetailsTwitterCard) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($model['twitterCardsMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }
         }
 
         if (!$model->enableMetaDetailsGeo) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($model['geographicMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }
         }
 
         if (!$model->enableMetaDetailsRobots) {
+            /** @noinspection ForeachSourceInspection */
             foreach ($model['robotsMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }

@@ -35,6 +35,8 @@ use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\models\UrlEnabledSection;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\base\Schema;
+use barrelstrength\sproutseo\models\Settings;
+use craft\base\Field;
 use DateTime;
 use Craft;
 use yii\base\Component;
@@ -55,7 +57,7 @@ class Optimize extends Component
     /**
      * All instantiated Schema Types indexed by class
      *
-     * @var array
+     * @var Schema[]
      */
     protected $schemas = [];
 
@@ -143,6 +145,9 @@ class Optimize extends Component
         return $this->schemaTypes;
     }
 
+    /**
+     * @return Schema[]
+     */
     public function getSchemas()
     {
         $schemaTypes = $this->getSchemasTypes();
@@ -231,12 +236,16 @@ class Optimize extends Component
     public function getMetadata(&$context)
     {
         $output = null;
+
+        /**
+         * @var Settings $settings
+         */
         $settings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
         $this->siteId = $context['currentSite']->id ?? Craft::$app->getSites()->currentSite->id;
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($this->siteId);
         $this->urlEnabledSection = SproutSeo::$app->sitemaps->getUrlEnabledSectionsViaContext($context);
-        $this->metadataField = $this->getMetadataFieldViaContext($context);
+        $this->metadataField = $this->getMetadataField();
         $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($this->siteId);
 
         $metadata = [
@@ -265,17 +274,19 @@ class Optimize extends Component
     /**
      * Find any element with the getContent function and fetch the first ElementMetadata Field on the layout
      *
-     * @param $context
-     *
      * @return Metadata|null
      */
-    public function getMetadataFieldViaContext($context)
+    public function getMetadataField()
     {
         if ($this->urlEnabledSection->element !== null && $this->urlEnabledSection->element->id) {
             $element = $this->urlEnabledSection->element;
             $fields = $element->getFieldLayout()->getFields();
 
-            // Get our ElementMetadata Field
+            /**
+             * Get our ElementMetadata Field
+             *
+             * @var Field $field
+             */
             foreach ($fields as $field) {
                 if (get_class($field) == ElementMetadata::class) {
                     if (isset($element->{$field->handle})) {

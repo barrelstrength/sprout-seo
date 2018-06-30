@@ -7,11 +7,12 @@
 
 namespace barrelstrength\sproutseo\fields;
 
-use barrelstrength\sproutseo\base\UrlEnabledSectionType;
+
 use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutbase\app\seo\web\assets\base\BaseAsset;
+use craft\base\Element;
 use craft\base\Field;
 use Craft;
 use \crodas\TextRank\Config;
@@ -303,11 +304,11 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      * that were assumed based on the content attribute.
      *
      *
-     * @param ElementInterface $element
+     * @param Element $element
      *
      * @return void
      */
-    public function validateElementMetadata(ElementInterface $element)
+    public function validateElementMetadata(Element $element)
     {
         $isRequired = $this->required;
 
@@ -321,14 +322,14 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
                 if ($optimizedTitle === 'manually' && empty($this->values['optimizedTitle'])) {
                     $element->addError(
                         $this->handle,
-                        Craft::t('sprout-seo', "Meta Title field cannot be blank.")
+                        Craft::t('sprout-seo', 'Meta Title field cannot be blank.')
                     );
                 }
 
                 if ($optimizedDescription === 'manually' && empty($this->values['optimizedDescription'])) {
                     $element->addError(
                         $this->handle,
-                        Craft::t('sprout-seo', "Meta Description field cannot be blank.")
+                        Craft::t('sprout-seo', 'Meta Description field cannot be blank.')
                     );
                 }
             }
@@ -618,11 +619,10 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      * - Meta Details Blocks - enabled, partially enabled, disabled
      *
      * @param $attributes
-     * @param $settings
      *
      * @return mixed
      */
-    protected function processMetaDetails($attributes, $settings)
+    protected function processMetaDetails($attributes)
     {
         return $attributes;
     }
@@ -678,7 +678,6 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      */
     protected function getMetadataFieldValues($fields, $element)
     {
-        $siteId = $element->siteId;
         $settings = $this->getAttributes();
 
         // Get instance of our Element Metadata model if a call comes from a ResaveElements task
@@ -696,7 +695,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         }
 
         // Meta Details needs to go first
-        $attributes = $this->processMetaDetails($attributes, $settings);
+        $attributes = $this->processMetaDetails($attributes);
         $attributes = $this->processOptimizedTitle($attributes, $settings, $element);
         $attributes = $this->processOptimizedDescription($attributes, $settings, $element);
         $attributes = $this->processOptimizedKeywords($attributes, $settings, $element);

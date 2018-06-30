@@ -20,7 +20,7 @@ abstract class UrlEnabledSectionType
     /**
      * An array of URL-Enabled Sections for this URL-Enabled Section Type
      *
-     * @var array UrlEnabledSection $urlEnabledSections
+     * @var UrlEnabledSection[] $urlEnabledSections
      */
     public $urlEnabledSections;
 
@@ -177,7 +177,9 @@ abstract class UrlEnabledSectionType
     /**
      * Add support for triggering the ResaveElements task for this URL-Enabled Section
      *
+     * @param null $elementGroupId
+     *
      * @return mixed
      */
-    abstract public function resaveElements();
+    abstract public function resaveElements($elementGroupId = null);
 }

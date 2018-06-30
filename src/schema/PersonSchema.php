@@ -54,6 +54,9 @@ class PersonSchema extends ThingSchema
 
     public function addUserElementProperties()
     {
+        /**
+         * @var User $element
+         */
         $element = $this->element;
 
         $name = null;
@@ -62,7 +65,7 @@ class PersonSchema extends ThingSchema
             $name = $element->getFullName();
         }
 
-        if (isset($element->firstName) && isset($element->lastName)) {
+        if ($element->firstName !== null && $element->lastName !== null) {
             $this->addText('givenName', $element->firstName);
             $this->addText('familyName', $element->lastName);
 

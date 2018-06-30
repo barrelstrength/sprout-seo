@@ -18,7 +18,7 @@ class StatusValidator extends Validator
      */
     public function validateAttribute($object, $attribute)
     {
-        if (!in_array($object->$attribute, [RedirectStatuses::ON, RedirectStatuses::OFF])) {
+        if (!in_array($object->$attribute, [RedirectStatuses::ON, RedirectStatuses::OFF], true)) {
             $this->addError($object, $attribute, Craft::t('sprout-seo', 'The status must be either "ON" or "OFF".'));
         }
     }

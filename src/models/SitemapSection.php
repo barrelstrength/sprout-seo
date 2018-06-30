@@ -135,9 +135,8 @@ class SitemapSection extends Model
      * This is the 'sectionUri' validator as declared in rules().
      *
      * @param $attribute
-     * @param $params
      */
-    public function sectionUri($attribute, $params)
+    public function sectionUri($attribute)
     {
         if (UrlHelper::isAbsoluteUrl($this->$attribute)) {
             $this->addError($attribute, Craft::t('sprout-seo', 'Invalid URI'));

@@ -52,18 +52,6 @@ class SproutSeoVariable
     }
 
     /**
-     * Prepare an array of the optimized Meta
-     *
-     * @return array[][]
-     */
-    public function getOptimizedMeta()
-    {
-        $prioritizedMetadataModel = SproutSeo::$app->optimize->getOptimizedMeta();
-
-        return $prioritizedMetadataModel->getMetaTagData();
-    }
-
-    /**
      * @param array|null $options
      *
      * @return array|string
@@ -76,7 +64,7 @@ class SproutSeoVariable
     }
 
     /**
-     * @return mixed
+     * @return string
      * @throws \yii\base\Exception
      */
     public function getDivider()
@@ -106,14 +94,6 @@ class SproutSeoVariable
     public function getGlobalMetadata()
     {
         return SproutSeo::$app->globalMetadata->getGlobalMetadata();
-    }
-
-    /**
-     * @return \Twig_Markup
-     */
-    public function getKnowledgeGraphLinkedData()
-    {
-        return SproutSeo::$app->schema->getKnowledgeGraphLinkedData();
     }
 
     /**
@@ -764,28 +744,6 @@ class SproutSeoVariable
     }
 
     /**
-     * @return array
-     */
-    public function getLocaleOptions()
-    {
-        $locales = [
-            [
-                'value' => '',
-                'label' => Craft::t('sprout-seo', 'Select locale...')
-            ]
-        ];
-
-        foreach (Craft::$app->i18n->getAllLocales() as $locale) {
-            $locales[] = [
-                'value' => $locale->id,
-                'label' => $locale->name.' ('.$locale->id.')'
-            ];
-        }
-
-        return $locales;
-    }
-
-    /**
      * Returns registerSproutSeoSchemas hook
      *
      * @return array
@@ -805,7 +763,6 @@ class SproutSeoVariable
         $schemas = SproutSeo::$app->optimize->getSchemas();
 
         foreach ($schemas as $schemaClass => $schema) {
-            $schema = new $schemaClass();
             if ($schema->isUnlistedSchemaType()) {
                 unset($schemas[$schemaClass]);
             }
@@ -832,7 +789,11 @@ class SproutSeoVariable
             'optgroup' => Craft::t('sprout-seo', 'Default Types')
         ]];
 
+
         $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
+            /**
+             * @var Schema $schema
+             */
             return [
                 'label' => $schema->getName(),
                 'type' => $schema->getType(),
@@ -844,6 +805,9 @@ class SproutSeoVariable
             $schemaOptions[] = ['optgroup' => Craft::t('sprout-seo', 'Custom Types')];
 
             $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
+                /**
+                 * @var Schema $schema
+                 */
                 return [
                     'label' => $schema->getName(),
                     'type' => $schema->getType(),

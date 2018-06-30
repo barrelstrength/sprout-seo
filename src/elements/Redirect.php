@@ -149,23 +149,6 @@ class Redirect extends Element
     }
 
     /**
-     * Returns the attributes that can be sorted by in table views.
-     *
-     * @param string|null $source
-     *
-     * @return array
-     */
-    public function defineSortableAttributes($source = null)
-    {
-        return [
-            'oldUrl' => Craft::t('sprout-seo', 'Old Url'),
-            'newUrl' => Craft::t('sprout-seo', 'New Url'),
-            'method' => Craft::t('sprout-seo', 'Method'),
-            'count' => Craft::t('sprout-seo', 'Count')
-        ];
-    }
-
-    /**
      * @inheritdoc
      */
     protected static function defineSortOptions(): array
@@ -291,7 +274,7 @@ class Redirect extends Element
         ]);
 
         // Everything else
-        $html .= parent::getEditorHtml($this);
+        $html .= parent::getEditorHtml();
 
         return $html;
     }
@@ -331,12 +314,12 @@ class Redirect extends Element
             $record->id = $this->id;
         }
         // Route this through RedirectsService::saveRedirect() so the proper redirect events get fired.
+        $record->siteId = $this->siteId;
         $record->oldUrl = $this->oldUrl;
         $record->newUrl = $this->newUrl;
         $record->method = $this->method;
         $record->regex = $this->regex;
         $record->count = $this->count;
-        $record->siteId = $this->siteId;
 
         $record->save(false);
 
@@ -359,9 +342,8 @@ class Redirect extends Element
      * Add validation so a user can't save a 404 in "enabled" status
      *
      * @param $attribute
-     * @param $params
      */
-    public function validateMethod($attribute, $params)
+    public function validateMethod($attribute)
     {
         if ($this->enabled && $this->$attribute == RedirectMethods::PageNotFound) {
             $this->addError($attribute, 'Cannot enable a 404 Redirect. Update Redirect method.');
@@ -372,9 +354,8 @@ class Redirect extends Element
      * Add validation to unique oldUrl's
      *
      * @param $attribute
-     * @param $params
      */
-    public function uniqueUrl($attribute, $params)
+    public function uniqueUrl($attribute)
     {
         $redirect = SproutSeo::$app->redirects->findUrl($this->$attribute);
 

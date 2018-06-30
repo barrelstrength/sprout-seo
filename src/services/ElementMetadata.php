@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
-use barrelstrength\sproutseo\base\UrlEnabledSectionType;
+
 use craft\models\FieldLayout;
 use yii\base\Component;
 use craft\db\Query;
@@ -39,7 +39,7 @@ class ElementMetadata extends Component
          *
          * @var FieldLayout $fieldLayout
          */
-        $fieldLayout = $event->params['layout'];
+        $fieldLayout = $event->sender['layout'];
 
         $elementType = $fieldLayout->type;
         $fieldLayoutFields = $fieldLayout->getFields();

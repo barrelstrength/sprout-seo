@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
+use barrelstrength\sproutseo\models\Settings as PluginSettings;
 use yii\base\Component;
 
 use Craft;
@@ -16,7 +17,7 @@ class Settings extends Component
     public function getDescriptionLength()
     {
         /**
-         * @var Settings $pluginSettings
+         * @var PluginSettings $pluginSettings
          */
         $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
         $descriptionLength = $pluginSettings->maxMetaDescriptionLength;

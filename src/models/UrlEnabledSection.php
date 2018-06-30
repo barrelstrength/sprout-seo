@@ -51,6 +51,20 @@ class UrlEnabledSection extends Model
     public $element;
 
     /**
+     * Name of the Url Enabled Element Group
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * Handle of the Url Enabled Element Group
+     *
+     * @var string
+     */
+    public $handle;
+
+    /**
      * Get the URL format from the element via the Element Group integration
      *
      * @return false|null|string

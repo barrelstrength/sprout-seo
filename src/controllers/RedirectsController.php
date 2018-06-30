@@ -8,12 +8,13 @@
 namespace barrelstrength\sproutseo\controllers;
 
 use barrelstrength\sproutseo\elements\Redirect;
+use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
 
-use craft\web\Response;
+use yii\web\Response;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
@@ -53,11 +54,14 @@ class RedirectsController extends Controller
             throw new ForbiddenHttpException(Craft::t('sprout-seo', 'User not permitted to edit content for this site.'));
         }
 
-        $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        /**
+         * @var Settings $pluginSettings
+         */
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
         // Get enabled IDs. Remove any disabled IDS.
         // @todo - should we merge these settings with the Site Enabled/Disabled settings right here?
-        $enabledSiteIds = array_filter($seoSettings->siteSettings);
+        $enabledSiteIds = array_filter($pluginSettings->siteSettings);
 
         return $this->renderTemplate('sprout-base-seo/redirects', [
             'currentSite' => $currentSite,

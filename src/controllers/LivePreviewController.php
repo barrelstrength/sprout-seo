@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\controllers;
 
 use barrelstrength\sproutseo\SproutSeo;
+use craft\base\Field;
 use craft\web\Controller;
 
 use barrelstrength\sproutbase\app\seo\web\assets\livepreview\LivePreviewAsset;
@@ -145,6 +146,7 @@ class LivePreviewController extends Controller
         $fieldSettings = [];
         $siteId = $post['siteId'] ?? Craft::$app->getSites()->getPrimarySite()->id;
 
+        /** @noinspection ForeachSourceInspection */
         foreach ($post['fields'] as $key => $field) {
             if (isset($field['metadata'])) {
                 $post = $field['metadata'];
@@ -162,6 +164,9 @@ class LivePreviewController extends Controller
         }
 
         if (is_numeric($fieldSettings['optimizedTitleField'])) {
+            /**
+             * @var Field $titleField
+             */
             $titleField = Craft::$app->fields->getFieldById($fieldSettings['optimizedTitleField']);
 
             if ($titleField) {
@@ -180,6 +185,9 @@ class LivePreviewController extends Controller
 
         // lets update the description
         if (is_numeric($fieldSettings['optimizedDescriptionField'])) {
+            /**
+             * @var Field $descriptionField
+             */
             $descriptionField = Craft::$app->fields->getFieldById($fieldSettings['optimizedDescriptionField']);
             if ($descriptionField) {
                 $descriptionHandle = $descriptionField->handle;
@@ -198,6 +206,9 @@ class LivePreviewController extends Controller
 
         // lets update the image
         if (is_numeric($fieldSettings['optimizedImageField'])) {
+            /**
+             * @var Field $imageField
+             */
             $imageField = Craft::$app->fields->getFieldById($fieldSettings['optimizedImageField']);
 
             if ($imageField) {
@@ -212,10 +223,8 @@ class LivePreviewController extends Controller
             $metadata['optimizedImage'] = Craft::$app->getView()->renderObjectTemplate($fieldSettings['optimizedImageField'], $fields['fields']);
         }
         //manually
-        if (isset($post['optimizedImage'])) {
-            if (is_array($post['optimizedImage'])) {
-                $metadata['optimizedImage'] = $post['optimizedImage'][0];
-            }
+        if (isset($post['optimizedImage']) && is_array($post['optimizedImage'])) {
+            $metadata['optimizedImage'] = $post['optimizedImage'][0];
         }
 
         if ($metadata['optimizedImage']) {

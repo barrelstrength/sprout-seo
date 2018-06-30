@@ -42,7 +42,7 @@ abstract class BaseEnum
         }
 
         $keys = array_map(['Craft\StringHelper', 'toLowerCase'], array_keys($constants));
-        return in_array(StringHelper::toLowerCase($name), $keys);
+        return in_array(StringHelper::toLowerCase($name), $keys, false);
     }
 
     /**

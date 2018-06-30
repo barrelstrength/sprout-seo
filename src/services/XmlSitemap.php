@@ -49,7 +49,7 @@ class XmlSitemap extends Component
                     $query->{$urlEnabledSectionTypeId}($urlEnabledSection->id);
                     $query->siteId = $siteId;
 
-                    $totalElements = $query->total();
+                    $totalElements = $query->count();
 
                     // Is this a Singles Section?
                     $section = $urlEnabledSectionType->getById($urlEnabledSection->id);
