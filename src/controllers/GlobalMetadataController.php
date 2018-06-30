@@ -233,14 +233,14 @@ class GlobalMetadataController extends Controller
         $urlSetting = $postData['identity']['url'] ?? null;
         $siteUrl = SproutSeoOptimizeHelper::getGlobalMetadataSiteUrl($urlSetting);
 
-        $socialProfiles = $postData['social'] ?? $oldSocialProfiles;
+        $socialProfiles = $postData['social'] ?? $oldSocialProfiles ?? [];
         $twitterProfileName = SproutSeoOptimizeHelper::getTwitterProfileName($socialProfiles);
 
         $twitterCard = (isset($postData['settings']['defaultTwitterCard']) && $postData['settings']['defaultTwitterCard']) ? $postData['settings']['defaultTwitterCard'] : 'summary';
 
         $ogType = (isset($postData['settings']['defaultOgType']) && $postData['settings']['defaultOgType']) ? $postData['settings']['defaultOgType'] : 'website';
 
-        $robots = $postData['robots'] ?? $oldGlobals->robots;
+        $robots = $postData['robots'] ?? $oldGlobals->robots ?? [];
         $robotsMetaValue = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($robots);
 
         $facebookPage = SproutSeoOptimizeHelper::getFacebookPage($socialProfiles);
