@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutseo\fields\ElementMetadata;
+
 use craft\db\Migration;
 use craft\db\Query;
 use Craft;
@@ -14,6 +14,8 @@ class m180619_000001_add_field_column_to_contents_table extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

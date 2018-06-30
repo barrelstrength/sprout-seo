@@ -14,6 +14,10 @@ class m180620_000001_element_metadata_field extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @throws \Throwable
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \yii\base\Exception
      */
     public function safeUp()
     {
@@ -70,12 +74,14 @@ class m180620_000001_element_metadata_field extends Migration
 
     private function getMetadataAsJson($metadataElement)
     {
-        unset($metadataElement['id']);
-        unset($metadataElement['elementId']);
-        unset($metadataElement['locale']);
-        unset($metadataElement['dateCreated']);
-        unset($metadataElement['dateUpdated']);
-        unset($metadataElement['uid']);
+        unset(
+            $metadataElement['id'],
+            $metadataElement['elementId'],
+            $metadataElement['locale'],
+            $metadataElement['dateCreated'],
+            $metadataElement['dateUpdated'],
+            $metadataElement['uid']
+        );
 
         return json_encode($metadataElement);
     }

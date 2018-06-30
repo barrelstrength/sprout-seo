@@ -8,17 +8,26 @@
 namespace barrelstrength\sproutseo\elements\db;
 
 
+use barrelstrength\sproutseo\elements\Redirect;
+use craft\db\Connection;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
 
 
 use barrelstrength\sproutseo\SproutSeo;
 
+/**
+ * RedirectQuery represents a SELECT SQL statement for Redirect Elements in a way that is independent of DBMS.
+ *
+ * @method Redirect[]|array all($db = null)
+ * @method Redirect|array|null one($db = null)
+ * @method Redirect|array|null nth(int $n, Connection $db = null)
+ */
 class RedirectQuery extends ElementQuery
 {
-
     // General - Properties
     // =========================================================================
+
     public $oldUrl;
 
     public $newUrl;
@@ -30,14 +39,6 @@ class RedirectQuery extends ElementQuery
     public $count;
 
     public $status = null;
-
-    /**
-     * @inheritdoc
-     */
-    public function __set($name, $value)
-    {
-        parent::__set($name, $value);
-    }
 
     /**
      * @inheritdoc

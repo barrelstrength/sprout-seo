@@ -7,11 +7,10 @@
 
 namespace barrelstrength\sproutseo\base;
 
-use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutseo\models\SitemapSection;
-use barrelstrength\sproutseo\SproutSeo;
-use craft\db\Query;
-use Craft;
+use barrelstrength\sproutseo\models\UrlEnabledSection;
+use craft\base\Element;
+use craft\base\Model;
+
 
 /**
  * Class UrlEnabledSectionType
@@ -98,7 +97,7 @@ abstract class UrlEnabledSectionType
      *
      * @param $id
      *
-     * @return mixed
+     * @return Model
      */
     abstract public function getFieldLayoutSettingsObject($id);
 
@@ -127,14 +126,14 @@ abstract class UrlEnabledSectionType
     /**
      * Return the name of the Element Type managed by this URL-Enabled Section Type
      *
-     * @return mixed
+     * @return Element
      */
     abstract public function getElementType();
 
     /**
      * Return the name of the table that element-specific data is stored
      *
-     * @return mixed
+     * @return string
      */
     abstract public function getElementTableName();
 
@@ -145,14 +144,14 @@ abstract class UrlEnabledSectionType
      * @example An Entry is made available to a page as `entry`.
      *          A Category is made available to a page as `category`.
      *
-     * @return mixed
+     * @return string
      */
     abstract public function getMatchedElementVariable();
 
     /**
      * Return all the URL-Enabled Sections for this URL-Enabled Section Type
      *
-     * @return mixed
+     * @return UrlEnabledSection[]
      */
     abstract public function getAllUrlEnabledSections();
 

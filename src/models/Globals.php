@@ -12,23 +12,70 @@ use craft\helpers\Json;
 
 class Globals extends Model
 {
+    /**
+     * @var int
+     */
     public $id;
+
+    /**
+     * @var int
+     */
     public $siteId;
+
+    /**
+     * @var string
+     */
     public $meta;
+
+    /**
+     * @var string
+     */
     public $identity;
+
+    /**
+     * @var string
+     */
     public $ownership;
+
+    /**
+     * @var string
+     */
     public $contacts;
+
+    /**
+     * @var string
+     */
     public $social;
+
+    /**
+     * @var string
+     */
     public $robots;
+
+    /**
+     * @var string
+     */
     public $settings;
+
+    /**
+     * @var \DateTime
+     */
     public $dateCreated;
+
+    /**
+     * @var \DateTime
+     */
     public $dateUpdated;
+
+    /**
+     * @var int
+     */
     public $uid;
 
     /**
-     * @var null
+     * @var string
      */
-    public $globalKey = null;
+    public $globalKey;
 
     /**
      * Factory to return schema of any type
@@ -138,37 +185,31 @@ class Globals extends Model
     /**
      * Get the values associated with the Ownership column in the database
      *
-     * @return mixed
+     * @return array
      */
     protected function getOwnership()
     {
-        $ownership = $this->{$this->globalKey};
-
-        return $ownership;
+        return $this->{$this->globalKey};
     }
 
     /**
      * Get the values associated with the Robots column in the database
      *
-     * @return mixed
+     * @return array
      */
     protected function getRobots()
     {
-        $robots = $this->{$this->globalKey};
-
-        return $robots;
+        return $this->{$this->globalKey};
     }
 
     /**
      * Get the values associated with the Settings column in the database
      *
-     * @return mixed
+     * @return array
      */
     protected function getSettings()
     {
-        $settings = $this->{$this->globalKey};
-
-        return $settings;
+        return $this->{$this->globalKey};
     }
 
     /**

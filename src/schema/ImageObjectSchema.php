@@ -54,7 +54,7 @@ class ImageObjectSchema extends Schema
 
         $prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-        if (isset($prioritizedMetadataModel->ogTransform) && $prioritizedMetadataModel->ogTransform) {
+        if ($prioritizedMetadataModel->ogTransform !== null && $prioritizedMetadataModel->ogTransform) {
             if ($prioritizedMetadataModel->ogImage) {
                 $this->addUrl('url', $prioritizedMetadataModel->ogImage);
             }

@@ -13,6 +13,8 @@ class m180625_000001_address_table extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @throws \Throwable
      */
     public function safeUp()
     {
@@ -66,6 +68,9 @@ class m180625_000001_address_table extends Migration
         return true;
     }
 
+    /**
+     * @throws \Throwable
+     */
     protected function createAddressTable()
     {
         $migration = new SproutBaseFieldsInstall();

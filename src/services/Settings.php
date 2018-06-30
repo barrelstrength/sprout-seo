@@ -8,15 +8,18 @@
 namespace barrelstrength\sproutseo\services;
 
 use yii\base\Component;
-use craft\helpers\Json;
+
 use Craft;
 
 class Settings extends Component
 {
     public function getDescriptionLength()
     {
-        $settings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-        $descriptionLength = $settings->maxMetaDescriptionLength;
+        /**
+         * @var Settings $pluginSettings
+         */
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        $descriptionLength = $pluginSettings->maxMetaDescriptionLength;
         $descriptionLength = $descriptionLength > 160 ? $descriptionLength : 160;
 
         return $descriptionLength;

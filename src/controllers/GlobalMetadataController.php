@@ -81,13 +81,12 @@ class GlobalMetadataController extends Controller
             'robots',
         ];
 
-        if (!in_array($globalHandle, $navItems)) {
+        if (!in_array($globalHandle, $navItems, false)) {
             throw new NotFoundHttpException('Invalid global handle: '.$globalHandle);
         }
 
         $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site->id);
         $globals->siteId = $site->id;
-
 
         // Render the template!
         return $this->renderTemplate('sprout-base-seo/globals/'.$globalHandle, [
@@ -211,7 +210,6 @@ class GlobalMetadataController extends Controller
      */
     public function populateGlobalMetadata($postData)
     {
-        $settings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
         $site = Craft::$app->getSites()->currentSite;
         $info = Craft::$app->getInfo();
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
@@ -244,11 +242,6 @@ class GlobalMetadataController extends Controller
 
         $robots = $postData['robots'] ?? $oldGlobals->robots;
         $robotsMetaValue = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($robots);
-
-        if ($settings->localeIdOverride) {
-            //@todo
-            $localeId = $settings->localeIdOverride;
-        }
 
         $facebookPage = SproutSeoOptimizeHelper::getFacebookPage($socialProfiles);
 

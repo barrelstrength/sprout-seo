@@ -9,8 +9,10 @@ namespace barrelstrength\sproutseo\web\twig\variables;
 
 use barrelstrength\sproutseo\base\Schema;
 use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
+use craft\base\Field;
 use craft\elements\Asset;
 
 use DateTime;
@@ -35,22 +37,6 @@ class SproutSeoVariable
     public function __construct()
     {
         $this->plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->plugin->getName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getVersion()
-    {
-        return $this->plugin->getVersion();
     }
 
     /**
@@ -157,15 +143,26 @@ class SproutSeoVariable
     {
         $jsonLdFile = Craft::getAlias('@sproutseolib/jsonld/tree.jsonld');
         $tree = file_get_contents($jsonLdFile);
-        $json = json_decode($tree, true);
-        $jsonByName = [];
 
-        foreach ($json['children'] as $key => $value) {
+        /**
+         * @var array $json
+         */
+        $json = json_decode($tree, true);
+
+
+        /**
+         * @var array $children
+         */
+        $children = $json['children'];
+
+        foreach ($children as $key => $value) {
             if ($value['name'] === 'Organization') {
                 $json = $value['children'];
                 break;
             }
         }
+
+        $jsonByName = [];
 
         foreach ($json as $key => $value) {
             $jsonByName[$value['name']] = $value;
@@ -181,9 +178,7 @@ class SproutSeoVariable
      */
     public function getDate($string)
     {
-        $date = new DateTime($string['date'], new \DateTimeZone(Craft::$app->timezone));
-
-        return $date;
+        return new DateTime($string['date'], new \DateTimeZone(Craft::$app->getTimeZone()));
     }
 
     /**
@@ -290,8 +285,7 @@ class SproutSeoVariable
                     ],
                     [
                         'label' => Craft::t('sprout-seo', 'Instagram'),
-                        'value' => 'Instagram',
-                        'icon' => 'ABCD'
+                        'value' => 'Instagram'
                     ],
                     [
                         'label' => Craft::t('sprout-seo', 'YouTube'),
@@ -382,17 +376,19 @@ class SproutSeoVariable
     {
         $options = $this->getGlobalOptions($schemaType);
 
-        array_push($options, ['optgroup' => Craft::t('sprout-seo', 'Custom')]);
+        $options[] = [
+            'optgroup' => Craft::t('sprout-seo', 'Custom')
+        ];
 
         $schemas = $schemaGlobals->{$schemaType} != null ? $schemaGlobals->{$schemaType} : [];
 
         foreach ($schemas as $schema) {
             if (!$this->isCustomValue($schemaType, $schema[$handle])) {
-                array_push($options, ['label' => $schema[$handle], 'value' => $schema[$handle]]);
+                $options[] = ['label' => $schema[$handle], 'value' => $schema[$handle]];
             }
         }
 
-        array_push($options, ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom']);
+        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
 
         return $options;
     }
@@ -457,13 +453,13 @@ class SproutSeoVariable
             $priceRange = $schemaGlobals[$schemaType]['priceRange'];
         }
 
-        array_push($options, ['optgroup' => Craft::t('sprout-seo', 'Custom')]);
+        $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
 
         if (!array_key_exists($priceRange, ['$' => 0, '$$' => 1, '$$$' => 2, '$$$$' => 4]) && $priceRange != '') {
-            array_push($options, ['label' => $priceRange, 'value' => $priceRange]);
+            $options[] = ['label' => $priceRange, 'value' => $priceRange];
         }
 
-        array_push($options, ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom']);
+        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
 
         return $options;
     }
@@ -493,13 +489,13 @@ class SproutSeoVariable
         $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
         $gender = $schemaGlobals[$schemaType]['gender'];
 
-        array_push($options, ['optgroup' => Craft::t('sprout-seo', 'Custom')]);
+        $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
 
         if (!array_key_exists($gender, ['female' => 0, 'male' => 1]) && $gender != '') {
-            array_push($options, ['label' => $gender, 'value' => $gender]);
+            $options[] = ['label' => $gender, 'value' => $gender];
         }
 
-        array_push($options, ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom']);
+        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
 
         return $options;
     }
@@ -526,14 +522,14 @@ class SproutSeoVariable
         if (isset($schemaGlobals['settings']['appendTitleValue'])) {
             $appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
 
-            array_push($options, ['optgroup' => Craft::t('sprout-seo', 'Custom')]);
+            $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
 
             if (!array_key_exists($appendTitleValue, ['sitename' => 0]) && $appendTitleValue != '') {
-                array_push($options, ['label' => $appendTitleValue, 'value' => $appendTitleValue]);
+                $options[] = ['label' => $appendTitleValue, 'value' => $appendTitleValue];
             }
         }
 
-        array_push($options, ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom']);
+        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
 
         return $options;
     }
@@ -576,14 +572,14 @@ class SproutSeoVariable
         if (isset($schemaGlobals['settings']['seoDivider'])) {
             $seoDivider = $schemaGlobals['settings']['seoDivider'];
 
-            array_push($options, ['optgroup' => Craft::t('sprout-seo', 'Custom')]);
+            $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
 
             if (!array_key_exists($seoDivider, ['-' => 0, '•' => 1, '|' => 2, '/' => 3, ':' => 4]) && $seoDivider != '') {
-                array_push($options, ['label' => $seoDivider, 'value' => $seoDivider]);
+                $options[] = ['label' => $seoDivider, 'value' => $seoDivider];
             }
         }
 
-        array_push($options, ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom']);
+        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
 
         return $options;
     }
@@ -601,6 +597,10 @@ class SproutSeoVariable
     {
         $options = [];
         $fields = Craft::$app->fields->getAllFields();
+
+        /**
+         * @var Settings $pluginSettings
+         */
         $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
@@ -611,8 +611,11 @@ class SproutSeoVariable
             $options['elementTitle'] = Craft::t('sprout-seo', 'Title');
         }
 
+        /**
+         * @var Field $field
+         */
         foreach ($fields as $key => $field) {
-            if (get_class($field) == $type) {
+            if (get_class($field) === $type) {
                 $context = explode(':', $field->context);
                 $context = $context[0] ?? 'global';
 
@@ -651,11 +654,18 @@ class SproutSeoVariable
     {
         $options = [];
         $fields = Craft::$app->fields->getAllFields();
+
+        /**
+         * @var Settings $pluginSettings
+         */
         $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field')];
 
+        /**
+         * @var Field $field
+         */
         foreach ($fields as $key => $field) {
             if (get_class($field) == $type) {
                 $context = explode(':', $field->context);
@@ -766,10 +776,10 @@ class SproutSeoVariable
         ];
 
         foreach (Craft::$app->i18n->getAllLocales() as $locale) {
-            array_push($locales, [
+            $locales[] = [
                 'value' => $locale->id,
                 'label' => $locale->name.' ('.$locale->id.')'
-            ]);
+            ];
         }
 
         return $locales;
@@ -830,7 +840,7 @@ class SproutSeoVariable
         }, $defaultSchema));
 
         if (count($customSchema)) {
-            array_push($schemaOptions, ['optgroup' => Craft::t('sprout-seo', 'Custom Types')]);
+            $schemaOptions[] = ['optgroup' => Craft::t('sprout-seo', 'Custom Types')];
 
             $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
                 return [
@@ -893,20 +903,34 @@ class SproutSeoVariable
     private function getSchemaChildren($type)
     {
         $tree = SproutSeo::$app->schema->getVocabularies($type);
-        $children = [];
+
+        /**
+         * @var array $children
+         */
+        $children = $tree['children'] ?? [];
 
         // let's assume 3 levels
-        if (isset($tree['children'])) {
-            foreach ($tree['children'] as $key => $level1) {
+        if (count($children)) {
+            foreach ($children as $key => $level1) {
                 $children[$key] = [];
 
-                if (isset($level1['children'])) {
-                    foreach ($level1['children'] as $key2 => $level2) {
+                /**
+                 * @var array $level1children
+                 */
+                $level1children = $level1['children'] ?? [];
+
+                if (count($level1children)) {
+                    foreach ($level1children as $key2 => $level2) {
                         $children[$key][$key2] = [];
 
-                        if (isset($level2['children'])) {
-                            foreach ($level2['children'] as $key3 => $level3) {
-                                array_push($children[$key][$key2], $key3);
+                        /**
+                         * @var array $level2children
+                         */
+                        $level2children = $level2['children'] ?? [];
+
+                        if (count($level2children)) {
+                            foreach ($level2children as $key3 => $level3) {
+                                $children[$key][$key2][] = $key3;
                             }
                         }
                     }
@@ -920,7 +944,7 @@ class SproutSeoVariable
     /**
      * Prepare an array of the optimized Meta
      *
-     * @param $schemas
+     * @param array $schemas
      *
      * @return array[][]
      */

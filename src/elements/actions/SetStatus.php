@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\elements\actions;
 
+use barrelstrength\sproutseo\elements\Redirect;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
@@ -49,8 +50,9 @@ class SetStatus extends ElementAction
     }
 
     /**
-     * @inheritdoc
+     * @param Redirect|ElementQueryInterface $query
      *
+     * @return bool
      * @throws \yii\db\Exception
      */
     public function performAction(ElementQueryInterface $query): bool

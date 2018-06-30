@@ -22,6 +22,16 @@ class Redirect extends ElementImporter
     }
 
     /**
+     * @param $model
+     *
+     * @return null
+     */
+    public function getFieldLayoutId($model)
+    {
+        return null;
+    }
+
+    /**
      * @inheritdoc
      *
      * @throws \Throwable

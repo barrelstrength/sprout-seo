@@ -7,13 +7,13 @@
 
 namespace barrelstrength\sproutseo\controllers;
 
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
-use barrelstrength\sproutseo\models\Metadata;
+
+use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\models\SitemapSection;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\web\Controller;
-use craft\elements\Asset;
+
 use Craft;
 
 use yii\web\NotFoundHttpException;
@@ -37,13 +37,16 @@ class SitemapsController extends Controller
      */
     public function actionSitemapIndexTemplate(string $siteHandle = null): Response
     {
-        $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-        $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $seoSettings->enableMultilingualSitemaps;
+        /**
+         * @var Settings $pluginSettings
+         */
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $pluginSettings->enableMultilingualSitemaps;
 
         // Get enabled IDs. Remove any disabled IDS.
         // @todo - should we merge these settings with the Site Enabled/Disabled settings right here?
-        $enabledSiteIds = array_filter($seoSettings->siteSettings);
-        $enabledSiteGroupIds = array_filter($seoSettings->groupSettings);
+        $enabledSiteIds = array_filter($pluginSettings->siteSettings);
+        $enabledSiteGroupIds = array_filter($pluginSettings->groupSettings);
 
         if (!$enableMultilingualSitemaps && empty($enabledSiteIds)) {
             throw new NotFoundHttpException('No Sites are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site for your Sitemap.');
@@ -110,7 +113,6 @@ class SitemapsController extends Controller
      * @return Response
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
-     * @throws \craft\errors\SiteNotFoundException
      */
     public function actionSitemapEditTemplate(int $sitemapSectionId = null, string $siteHandle = null)
     {
@@ -149,8 +151,6 @@ class SitemapsController extends Controller
      *
      * @return null|Response
      * @throws \Throwable
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */

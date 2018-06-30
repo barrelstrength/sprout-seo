@@ -80,6 +80,11 @@ class UrlEnabledSection extends Model
         return $this->uriFormat;
     }
 
+    /**
+     * @param bool $matchAll
+     *
+     * @return bool
+     */
     public function hasElementMetadataField($matchAll = true)
     {
         $fieldLayoutObjects = $this->type->getFieldLayoutSettingsObject($this->id);

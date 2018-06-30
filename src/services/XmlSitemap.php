@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
+use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
 use barrelstrength\sproutseo\SproutSeo;
 use yii\base\Component;
@@ -109,11 +110,15 @@ class XmlSitemap extends Component
     public function getDynamicSitemapElements($sitemapHandle, $pageNumber, $siteId, $enableMultilingualSitemaps = false)
     {
         $urls = [];
+
+        /**
+         * @var Settings $seoSettings
+         */
         $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
         // Get the Seo Sites enabled on Sprout SEO
         $sitesIds = Craft::$app->getIsMultiSite() ? $seoSettings->siteSettings : Craft::$app->getSites()->getAllSiteIds();
         $totalElementsPerSitemap = $this->getTotalElementsPerSitemap();
-        // We could have sections with the same handle but diferent siteId we just need to check one and then
+        // We could have sections with the same handle but different siteId we just need to check one and then
         // check the siteId in the section table in the getLocalizedSitemapStructure function
         // We need to do it this way because the site could be enabled in the settings but disabled for the section
         $uniqueSitemapHandles = [];
@@ -148,8 +153,10 @@ class XmlSitemap extends Component
                 continue;
             }
             $uniqueSitemapHandles[$uniqueId] = 1;
-            // let's remove empty or disabled sites
+
+            // Remove empty or disabled sites
             $sitesIds = array_filter($sitesIds);
+
             foreach ($sitesIds as $siteId) {
                 $site = Craft::$app->getSites()->getSiteById((int)$siteId);
 
@@ -207,7 +214,7 @@ class XmlSitemap extends Component
     }
 
     /**
-     * @param $enabledSitemaps
+     * @param array $enabledSitemaps
      * @param $type
      * @param $handle
      * @param $siteId
@@ -374,7 +381,9 @@ class XmlSitemap extends Component
         // Defining the containing structure
         $structure = [];
 
-        // Looping through all entries indexed by id
+        /**
+         * Looping through all entries indexed by id
+         */
         foreach ($stack as $id => $locations) {
             if (is_string($id)) {
                 // Adding a custom location indexed by its URL

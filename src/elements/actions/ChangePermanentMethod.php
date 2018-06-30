@@ -7,9 +7,11 @@
 
 namespace barrelstrength\sproutseo\elements\actions;
 
+use barrelstrength\sproutseo\enums\RedirectMethods;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\ElementAction;
 use Craft;
+use craft\elements\db\ElementQueryInterface;
 
 class ChangePermanentMethod extends ElementAction
 {
@@ -24,31 +26,17 @@ class ChangePermanentMethod extends ElementAction
     }
 
     /**
-     * @inheritDoc IElementAction::isDestructive()
-     *
-     * @return bool
-     */
-    public function isDestructive()
-    {
-        return false;
-    }
-
-    /**
-     * @todo - ElementCriteriaModel doesn't exist any longer. Update for Craft 3: ElementQueryInterface
-     *
-     * @param ElementCriteriaModel $query
+     * @param ElementQueryInterface $query
      *
      * @return bool|int
      * @throws \yii\base\Exception
      */
-    public function performAction(ElementCriteriaModel $query)
+    public function performAction(ElementQueryInterface $query): bool
     {
         $elementIds = $query->ids();
 
-        $response = false;
-
         // Call updateMethods service
-        $response = SproutSeo::$app->redirects->updateRedirectMethod($elementIds, SproutSeo_RedirectMethods::Permanent);
+        $response = SproutSeo::$app->redirects->updateRedirectMethod($elementIds, RedirectMethods::Permanent);
 
         $message = SproutSeo::$app->redirects->getMethodUpdateResponse($response);
 

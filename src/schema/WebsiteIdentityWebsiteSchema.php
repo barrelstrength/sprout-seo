@@ -66,6 +66,9 @@ class WebsiteIdentityWebsiteSchema extends Schema
             // Determine if we have an Organization or Person Schema Type
             $schemaModel = $websiteIdentity[$identityType];
 
+            /**
+             * @var Schema $identitySchema
+             */
             $identitySchema = new $schemaModel();
 
             $identitySchema->globals = $this->globals;

@@ -69,12 +69,15 @@ class RedirectsController extends Controller
     /**
      * Edit a Redirect
      *
-     * @param int|null $redirectId The redirect's ID, if editing an existing redirect.
-     * @param Redirect|null $redirect The redirect send back by setRouteParams if any errors on saveRedirect
+     * @param int|null      $redirectId The redirect's ID, if editing an existing redirect.
+     * @param Redirect|null $redirect   The redirect send back by setRouteParams if any errors on saveRedirect
+     * @param string|null   $siteHandle
      *
      * @return \yii\web\Response
+     * @throws ForbiddenHttpException
      * @throws HttpException
      * @throws \ReflectionException
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function actionEditRedirect(int $redirectId = null, string $siteHandle = null, Redirect $redirect = null)
     {

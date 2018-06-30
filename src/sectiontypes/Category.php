@@ -57,9 +57,7 @@ class Category extends UrlEnabledSectionType
      */
     public function getFieldLayoutSettingsObject($id)
     {
-        $group = $this->getById($id);
-
-        return $group;
+        return $this->getById($id);
     }
 
     /**
@@ -117,7 +115,7 @@ class Category extends UrlEnabledSectionType
     }
 
     /**
-     * @param null $elementGroupId
+     * @param int|string|null $elementGroupId
      */
     public function resaveElements($elementGroupId = null)
     {

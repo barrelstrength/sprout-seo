@@ -170,7 +170,7 @@ class Optimize extends Component
     /**
      * Add values to the master $this->codeMetadata array
      *
-     * @param $meta
+     * @param array $meta
      */
     public function updateMeta($meta)
     {
@@ -242,7 +242,7 @@ class Optimize extends Component
      */
     public function getMetadataFieldViaContext($context)
     {
-        if (isset($this->urlEnabledSection->element) && $this->urlEnabledSection->element->id) {
+        if ($this->urlEnabledSection->element !== null && $this->urlEnabledSection->element->id) {
             $element = $this->urlEnabledSection->element;
             $fields = $element->getFieldLayout()->getFields();
 
@@ -292,9 +292,6 @@ class Optimize extends Component
 
         $prioritizedMetadataModel = new Metadata();
 
-        $schemaTypeId = null;
-        $schemaOverrideTypeId = null;
-
         foreach ($prioritizedMetadataLevels as $level => $model) {
             $metadataModel = new Metadata();
             $codeMetadata = $this->getCodeMetadata($level);
@@ -343,15 +340,15 @@ class Optimize extends Component
             $prioritizedMetadataModel->ogDateUpdated = null;
             $prioritizedMetadataModel->ogExpiryDate = null;
 
-            if (isset($this->urlEnabledSection->element->dateCreated) && $this->urlEnabledSection->element->dateCreated) {
+            if ($this->urlEnabledSection->element->dateCreated !== null && $this->urlEnabledSection->element->dateCreated) {
                 $prioritizedMetadataModel->ogDateCreated = $this->urlEnabledSection->element->dateCreated->format(DateTime::ISO8601);
             }
 
-            if (isset($this->urlEnabledSection->element->dateUpdated) && $this->urlEnabledSection->element->dateUpdated) {
+            if ($this->urlEnabledSection->element->dateUpdated !== null && $this->urlEnabledSection->element->dateUpdated) {
                 $prioritizedMetadataModel->ogDateUpdated = $this->urlEnabledSection->element->dateUpdated->format(DateTime::ISO8601);
             }
 
-            if (isset($this->urlEnabledSection->element->expiryDate) && $this->urlEnabledSection->element->expiryDate) {
+            if ($this->urlEnabledSection->element->expiryDate !== null && $this->urlEnabledSection->element->expiryDate) {
                 $prioritizedMetadataModel->ogExpiryDate = $this->urlEnabledSection->element->expiryDate->format(DateTime::ISO8601);
             }
         }
@@ -366,12 +363,12 @@ class Optimize extends Component
         SproutSeoOptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
 
         // Trim descriptions to maxMetaDescriptionLength or 160 characters
-        $descriptionLenght = SproutSeo::$app->settings->getDescriptionLength();
+        $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        $prioritizedMetadataModel->optimizedDescription = mb_substr($prioritizedMetadataModel->optimizedDescription, 0, $descriptionLenght);
-        $prioritizedMetadataModel->description = mb_substr($prioritizedMetadataModel->description, 0, $descriptionLenght);
-        $prioritizedMetadataModel->ogDescription = mb_substr($prioritizedMetadataModel->ogDescription, 0, $descriptionLenght);
-        $prioritizedMetadataModel->twitterDescription = mb_substr($prioritizedMetadataModel->twitterDescription, 0, $descriptionLenght);
+        $prioritizedMetadataModel->optimizedDescription = mb_substr($prioritizedMetadataModel->optimizedDescription, 0, $descriptionLength);
+        $prioritizedMetadataModel->description = mb_substr($prioritizedMetadataModel->description, 0, $descriptionLength);
+        $prioritizedMetadataModel->ogDescription = mb_substr($prioritizedMetadataModel->ogDescription, 0, $descriptionLength);
+        $prioritizedMetadataModel->twitterDescription = mb_substr($prioritizedMetadataModel->twitterDescription, 0, $descriptionLength);
 
         return $prioritizedMetadataModel;
     }
@@ -397,7 +394,7 @@ class Optimize extends Component
             $identitySchema->globals = $this->globals;
             $identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-            if (isset($this->urlEnabledSection->element)) {
+            if ($this->urlEnabledSection->element !== null) {
                 $identitySchema->element = $this->urlEnabledSection->element;
             }
 
@@ -412,7 +409,7 @@ class Optimize extends Component
             $websiteSchema->globals = $this->globals;
             $websiteSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-            if (isset($this->urlEnabledSection->element)) {
+            if ($this->urlEnabledSection->element !== null) {
                 $websiteSchema->element = $this->urlEnabledSection->element;
             }
 
@@ -429,7 +426,7 @@ class Optimize extends Component
             $placeSchema->globals = $this->globals;
             $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-            if (isset($this->urlEnabledSection->element)) {
+            if ($this->urlEnabledSection->element !== null) {
                 $placeSchema->element = $this->urlEnabledSection->element;
             }
 
@@ -450,7 +447,7 @@ class Optimize extends Component
 
         if ($this->prioritizedMetadataModel) {
             $schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
-            if ($schemaUniqueKey && isset($this->urlEnabledSection->element)) {
+            if ($schemaUniqueKey && $this->urlEnabledSection->element !== null) {
                 $schema = $this->getSchemaByUniqueKey($schemaUniqueKey);
                 $schema->attributes = $this->prioritizedMetadataModel->getAttributes();
                 $schema->addContext = true;
@@ -505,8 +502,8 @@ class Optimize extends Component
 
         switch ($type) {
             case MetadataLevels::ElementMetadata:
-                if (isset($this->urlEnabledSection->element)) {
-                    if (isset($this->urlEnabledSection->element->id)) {
+                if ($this->urlEnabledSection->element !== null) {
+                    if ($this->urlEnabledSection->element->id !== null) {
                         $response = [
                             'metadataField' => $this->metadataField,
                             'contextElement' => $this->urlEnabledSection->element
@@ -576,7 +573,7 @@ class Optimize extends Component
 
         foreach ($registeredUrlEnabledSectionsTypes as $urlEnabledSectionType) {
             $idVariableName = $urlEnabledSectionType->getIdVariableName();
-            array_push($variableTypes, $idVariableName);
+            $variableTypes[] = $idVariableName;
         }
 
         return $variableTypes;

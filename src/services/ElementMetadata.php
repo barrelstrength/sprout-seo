@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutseo\services;
 
+use barrelstrength\sproutseo\base\UrlEnabledSectionType;
+use craft\models\FieldLayout;
 use yii\base\Component;
 use craft\db\Query;
 
@@ -31,24 +33,27 @@ class ElementMetadata extends Component
      */
     public function resaveElements(Event $event)
     {
-        // The Field Layout event identifies the Element Type that the layout is for:
-        // Category, Entry, Commerce_Product, etc.
+        /**
+         * The Field Layout event identifies the Element Type that the layout is for:
+         * Category, Entry, Commerce_Product, etc.
+         *
+         * @var FieldLayout $fieldLayout
+         */
         $fieldLayout = $event->params['layout'];
 
-        $elementGroupId = $fieldLayout->id;
         $elementType = $fieldLayout->type;
         $fieldLayoutFields = $fieldLayout->getFields();
         $hasElementMetadataField = false;
 
         foreach ($fieldLayoutFields as $field) {
-            if (get_class($field) == ElementMetadataField::class) {
+            if (get_class($field) === ElementMetadataField::class) {
                 $hasElementMetadataField = true;
                 break;
             }
         }
 
         if ($hasElementMetadataField) {
-            $urlEnabledSectionType = SproutSeo::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
+            $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType($elementType);
 
             // We only need to save the current field layout. Some Elements, like Commerce_Products
             // also need to save the related Variant field layout which returns as an array

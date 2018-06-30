@@ -32,6 +32,12 @@ class Delete404 extends BaseJob
         return Craft::t('sprout-seo', 'Deleting oldest 404 redirects');
     }
 
+    /**
+     * @param \craft\queue\QueueInterface|\yii\queue\Queue $queue
+     *
+     * @return bool
+     * @throws \Throwable
+     */
     public function execute($queue)
     {
         $params = [
@@ -50,8 +56,6 @@ class Delete404 extends BaseJob
             ->limit($this->totalToDelete)
             ->orderBy(['dateUpdated' => SORT_ASC])
             ->all();
-
-        $result = false;
 
         $totalSteps = count($redirects);
 

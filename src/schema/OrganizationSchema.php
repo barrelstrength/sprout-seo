@@ -32,13 +32,4 @@ class OrganizationSchema extends ThingSchema
     {
         return false;
     }
-
-    /**
-     * @return null|void
-     * @throws \Exception
-     */
-    public function addProperties()
-    {
-        parent::addProperties();
-    }
 }

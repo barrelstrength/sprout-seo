@@ -42,6 +42,8 @@ class Sitemaps extends Component
     /**
      * Returns all Custom Sitemap Sections
      *
+     * @param $siteId
+     *
      * @return array
      */
     public function getCustomSitemapSections($siteId)
@@ -227,11 +229,14 @@ class Sitemaps extends Component
         // update id on model (for new records)
         $sitemapSection->id = $sectionRecord->id;
 
-        $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        /**
+         * @var Settings $pluginSettings
+         */
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
         // Copy this site behavior to the whole group, for the Url-Enabled Sitemaps
         // Custom Sections will be allowed to be unique, even in Multi-Lingual Sitemaps
-        if ($seoSettings->enableMultilingualSitemaps && $sectionRecord->type !== NoSection::class) {
+        if ($pluginSettings->enableMultilingualSitemaps && $sectionRecord->type !== NoSection::class) {
             $site = Craft::$app->getSites()->getSiteById($sectionRecord->siteId);
             $groupSites = Craft::$app->getSites()->getSitesByGroupId($site->groupId);
             // all sections saved for this site
@@ -244,7 +249,7 @@ class Sitemaps extends Component
                         'type' => $rowBehavior->type
                     ]);
 
-                    if (is_null($sectionRecord)) {
+                    if ($sectionRecord === null) {
                         $sectionRecord = new SitemapSectionRecord();
                     }
 
@@ -272,7 +277,7 @@ class Sitemaps extends Component
             '' => Craft::t('sprout-seo', 'None')
         ];
 
-        array_push($options, ['optgroup' => Craft::t('sprout-seo', 'Default Transforms')]);
+        $options[] = ['optgroup' => Craft::t('sprout-seo', 'Default Transforms')];
 
         $options['sproutSeo-socialSquare'] = Craft::t('sprout-seo', 'Square – 400x400');
         $options['sproutSeo-ogRectangle'] = Craft::t('sprout-seo', 'Rectangle – 1200x630 – Open Graph');
@@ -281,7 +286,7 @@ class Sitemaps extends Component
         $transforms = Craft::$app->assetTransforms->getAllTransforms();
 
         if (count($transforms)) {
-            array_push($options, ['optgroup' => Craft::t('sprout-seo', 'Custom Transforms')]);
+            $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom Transforms')];
 
             foreach ($transforms as $transform) {
                 $options[$transform->handle] = $transform->name;
@@ -321,7 +326,7 @@ class Sitemaps extends Component
      *
      * @param null $siteId
      *
-     * @return mixed
+     * @return UrlEnabledSectionType[]
      * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionTypesForSitemaps($siteId = null)
@@ -349,7 +354,9 @@ class Sitemaps extends Component
         $registeredUrlEnabledSectionsTypes = SproutSeo::$app->urlEnabledSections->getRegisteredUrlEnabledSectionsEvent();
 
         foreach ($registeredUrlEnabledSectionsTypes as $urlEnabledSectionType) {
-
+            /**
+             * @var UrlEnabledSectionType $urlEnabledSectionType
+             */
             $urlEnabledSectionType = new $urlEnabledSectionType();
             $sitemapSections = SproutSeo::$app->sitemaps->getSitemapSections($urlEnabledSectionType, $siteId);
             $allUrlEnabledSections = $urlEnabledSectionType->getAllUrlEnabledSections();
@@ -358,9 +365,6 @@ class Sitemaps extends Component
             // if we have an existing Sitemap, use it, otherwise fallback to a new model
             $urlEnabledSections = [];
 
-            /**
-             * @var UrlEnabledSection $urlEnabledSection
-             */
             foreach ($allUrlEnabledSections as $urlEnabledSection) {
                 $uniqueKey = $urlEnabledSectionType->getId().'-'.$urlEnabledSection->id;
 
@@ -436,7 +440,8 @@ class Sitemaps extends Component
     /**
      * @param $type
      *
-     * @return array
+     * @return UrlEnabledSectionType|array
+     * @throws SiteNotFoundException
      */
     public function getUrlEnabledSectionTypeByType($type)
     {
@@ -458,7 +463,7 @@ class Sitemaps extends Component
      *
      * @param $elementType
      *
-     * @return array
+     * @return UrlEnabledSectionType|array
      * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionTypeByElementType($elementType)

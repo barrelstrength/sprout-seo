@@ -9,18 +9,13 @@ namespace barrelstrength\sproutseo;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
-use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutseo\events\RegisterSchemasEvent;
-use barrelstrength\sproutseo\events\RegisterUrlEnabledSectionTypesEvent;
-use barrelstrength\sproutseo\sectiontypes\Category;
-use barrelstrength\sproutseo\sectiontypes\CommerceProduct;
-use barrelstrength\sproutseo\sectiontypes\Entry;
+
+
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\services\App;
-use barrelstrength\sproutseo\services\Optimize;
-use barrelstrength\sproutseo\services\Sitemaps;
-use barrelstrength\sproutseo\services\UrlEnabledSections;
+
+
 use Craft;
 use craft\base\Plugin;
 use craft\services\Fields;
@@ -70,6 +65,11 @@ class SproutSeo extends Plugin
      */
     public $minVersionRequired = '3.4.2';
 
+    /**
+     * @inheritdoc
+     *
+     * @throws \yii\base\InvalidConfigException
+     */
     public function init()
     {
         parent::init();
@@ -82,6 +82,7 @@ class SproutSeo extends Plugin
 
         self::$app = $this->get('app');
 
+        /** @noinspection CascadingDirnameCallsInspection */
         Craft::setAlias('@sproutseolib', dirname(__DIR__, 2).'/sprout-seo/lib');
 
         // Add Twig Extensions
@@ -123,10 +124,12 @@ class SproutSeo extends Plugin
                     // check if the request url needs redirect
                     $redirect = SproutSeo::$app->redirects->getRedirect($url);
 
-                    $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-                    $seoSettings = $plugin->getSettings();
+                    /**
+                     * @var Settings $pluginSettings
+                     */
+                    $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
-                    if (!$redirect && $seoSettings->enable404RedirectLog) {
+                    if (!$redirect && $pluginSettings->enable404RedirectLog) {
                         // Save new 404 Redirect
                         $redirect = SproutSeo::$app->redirects->save404Redirect($url);
                     }

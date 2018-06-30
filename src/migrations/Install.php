@@ -28,7 +28,11 @@ class Install extends Migration
     // =========================================================================
 
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \Throwable
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \craft\errors\StructureNotFoundException
+     * @throws \yii\db\Exception
      */
     public function safeUp()
     {
@@ -43,7 +47,8 @@ class Install extends Migration
     }
 
     /**
-     * @inheritdoc
+     * @return bool|void
+     * @throws \Throwable
      */
     public function safeDown()
     {
@@ -132,6 +137,11 @@ class Install extends Migration
         $this->addForeignKey(null, '{{%sproutseo_metadata_globals}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
     }
 
+    /**
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \craft\errors\StructureNotFoundException
+     * @throws \yii\db\Exception
+     */
     protected function insertDefaultSettings()
     {
         $maxLevels = 1;
@@ -148,7 +158,7 @@ class Install extends Migration
         // Add our default plugin settings
         $settingsProperties = $settings->getAttributes();
 
-        $affectedRows = $this->db->createCommand()->update('{{%plugins}}', [
+        $this->db->createCommand()->update('{{%plugins}}', [
             'settings' => json_encode($settingsProperties)
         ],
             [
@@ -157,6 +167,9 @@ class Install extends Migration
         )->execute();
     }
 
+    /**
+     * @throws \Throwable
+     */
     protected function insertDefaultGlobalMetadata()
     {
         $siteId = Craft::$app->getSites()->currentSite->id;
@@ -170,6 +183,9 @@ class Install extends Migration
         ob_end_clean();
     }
 
+    /**
+     * @throws \Throwable
+     */
     protected function createAddressTable()
     {
         $migration = new SproutBaseFieldsInstall();

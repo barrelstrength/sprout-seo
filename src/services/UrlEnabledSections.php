@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
+use barrelstrength\sproutseo\base\UrlEnabledSectionType;
 use barrelstrength\sproutseo\events\RegisterUrlEnabledSectionTypesEvent;
 use barrelstrength\sproutseo\sectiontypes\Category;
 use barrelstrength\sproutseo\sectiontypes\Entry;
@@ -25,7 +26,7 @@ class UrlEnabledSections extends Component
     /**
      * Returns all registered Url-Enabled Section Types
      *
-     * @return array
+     * @return UrlEnabledSectionType[]
      */
     public function getRegisteredUrlEnabledSectionsEvent()
     {
@@ -46,6 +47,6 @@ class UrlEnabledSections extends Component
 
         $this->trigger(self::EVENT_REGISTER_URL_ENABLED_SECTION_TYPES, $event);
 
-        return $event->urlEnabledSectionTypes;;
+        return $event->urlEnabledSectionTypes;
     }
 }

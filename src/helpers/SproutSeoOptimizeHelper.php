@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\helpers;
 
 use barrelstrength\sproutseo\SproutSeo;
+use craft\elements\Asset;
 use craft\helpers\UrlHelper;
 use Craft;
 use yii\base\Exception;
@@ -73,13 +74,13 @@ class SproutSeoOptimizeHelper
     /**
      * Return a comma delimited string of robots meta settings
      *
-     * @param null $robots
+     * @param array|string|null $robots
      *
-     * @return null|string
+     * @return string|null
      */
     public static function prepareRobotsMetadataValue($robots = null)
     {
-        if (!isset($robots)) {
+        if ($robots === null) {
             return null;
         }
 
@@ -150,7 +151,7 @@ class SproutSeoOptimizeHelper
     {
         // If a code override for ogImageSecure is provided, make sure it's an absolute URL
         if (!empty($model->ogImageSecure)) {
-            if (mb_substr($model->ogImageSecure, 0, 5) !== 'https') {
+            if (0 !== mb_strpos($model->ogImageSecure, 'https')) {
                 throw new Exception('Open Graph Secure Image override value "'.$model->ogImageSecure.'" must be a secure, absolute url.');
             }
         }
@@ -166,14 +167,14 @@ class SproutSeoOptimizeHelper
 
             // If ogImage starts with "http", roll with it
             // If not, then process what we have to try to extract the URL
-            if (mb_substr($model->ogImage, 0, 4) !== 'http') {
+            if (0 !== mb_strpos($model->ogImage, 'http')) {
                 if (!is_numeric($model->ogImage)) {
                     throw new Exception('Open Graph Image override value "'.$model->ogImage.'" must be an absolute url.');
                 }
 
                 $ogImage = Craft::$app->assets->getAssetById($model->ogImage);
                 // Check all getUrl to validate getHasUrls()
-                if (isset($ogImage) && $ogImage->getUrl()) {
+                if ($ogImage !== null && $ogImage->getUrl()) {
                     $imageUrl = (string)$ogImage->getUrl();
 
                     if ($ogTransform) {
@@ -214,14 +215,14 @@ class SproutSeoOptimizeHelper
 
             // If twitterImage starts with "http", roll with it
             // If not, then process what we have to try to extract the URL
-            if (mb_substr($model->twitterImage, 0, 4) !== 'http') {
+            if (0 !== mb_strpos($model->twitterImage, 'http')) {
                 if (!is_numeric($model->twitterImage)) {
                     throw new Exception('Twitter Image override value "'.$model->twitterImage.'" must be an	absolute url.');
                 }
 
                 $twitterImage = Craft::$app->assets->getAssetById($model->twitterImage);
 
-                if (isset($twitterImage) && $twitterImage->getUrl()) {
+                if ($twitterImage !== null && $twitterImage->getUrl()) {
                     $imageUrl = (string)$twitterImage->getUrl();
 
                     if ($twitterTransform) {
@@ -248,14 +249,14 @@ class SproutSeoOptimizeHelper
         if (!empty($model->optimizedImage)) {
             // If twitterImage starts with "http", roll with it
             // If not, then process what we have to try to extract the URL
-            if (mb_substr($model->optimizedImage, 0, 4) !== 'http') {
+            if (0 !== mb_strpos($model->optimizedImage, 'http')) {
                 if (!is_numeric($model->optimizedImage)) {
                     throw new Exception('Meta Image override value "'.$model->optimizedImage.'" must be an	absolute url.');
                 }
 
                 $optimizedImage = Craft::$app->elements->getElementById($model->optimizedImage);
 
-                if (isset($optimizedImage) && $optimizedImage->getUrl()) {
+                if ($optimizedImage !== null && $optimizedImage->getUrl()) {
                     $imageUrl = (string)$optimizedImage->getUrl();
                     // check to se	e if Asset already has full Site Url in folder Url
                     if (strpos($imageUrl, 'http') !== false) {
@@ -288,24 +289,27 @@ class SproutSeoOptimizeHelper
         $url = null;
 
         // If not, then process what we have to try to extract the URL
-        if (mb_substr($id, 0, 4) !== 'http') {
+        if (0 !== mb_strpos($id, 'http')) {
             if (!is_numeric($id)) {
                 throw new Exception('Meta Image override value "'.$id.'" must be an	absolute url.');
             }
 
+            /**
+             * @var Asset $asset
+             */
             $asset = Craft::$app->elements->getElementById($id);
 
-            if (!empty($asset)) {
+            if ($asset === null) {
                 $transform = SproutSeoOptimizeHelper::getSelectedTransform($transform);
 
                 $imageUrl = Craft::$app->getAssets()->getAssetUrl($asset, $transform);
 
                 // check to see if Asset already has full Site Url in folder Url
                 if (strpos($imageUrl, 'http') !== false) {
-                    $url = $asset->url;
+                    $url = $asset->getUrl();
                 } else {
                     $protocol = Craft::$app->request->getIsSecureConnection() ? 'https' : 'http';
-                    $url = UrlHelper::urlWithProtocol($imageUrl, $protocol);
+                    $url = UrlHelper::urlWithScheme($imageUrl, $protocol);
                 }
             } else {
                 // If our selected asset was deleted, make sure it is null
@@ -364,9 +368,9 @@ class SproutSeoOptimizeHelper
      *
      * @return null|string
      */
-    public static function getTwitterProfileName($socialProfiles = [])
+    public static function getTwitterProfileName(array $socialProfiles = [])
     {
-        if (!isset($socialProfiles)) {
+        if ($socialProfiles === null) {
             return null;
         }
 
@@ -379,7 +383,7 @@ class SproutSeoOptimizeHelper
             // Support syntax for both POST data being saved and previous saved social settings
             if ($socialProfileNameFromPost === 'Twitter' or $socialProfileNameFromSettings === 'Twitter') {
                 $twitterUrlFromPost = isset($socialProfileNameFromPost) ? $profile[1] : null;
-                $twitterUrl = isset($socialProfileNameFromSettings) ? $profile['url'] : $twitterUrlFromPost;
+                $twitterUrl = $socialProfileNameFromSettings !== null ? $profile['url'] : $twitterUrlFromPost;
 
                 $twitterProfileName = '@'.mb_substr($twitterUrl, strrpos($twitterUrl, '/') + 1);
 
@@ -397,9 +401,9 @@ class SproutSeoOptimizeHelper
      *
      * @return null|string
      */
-    public static function getFacebookPage($socialProfiles = [])
+    public static function getFacebookPage(array $socialProfiles = [])
     {
-        if (!isset($socialProfiles)) {
+        if ($socialProfiles === null) {
             return null;
         }
 
@@ -412,7 +416,7 @@ class SproutSeoOptimizeHelper
             // Support syntax for both POST data being saved and previous saved social settings
             if ($socialProfileNameFromPost === 'Facebook' || $socialProfileNameFromSettings === 'Facebook') {
                 $facebookUrlFromPost = isset($socialProfileNameFromPost) ? $profile[1] : null;
-                $facebookUrl = isset($socialProfileNameFromSettings) ? $profile['url'] : $facebookUrlFromPost;
+                $facebookUrl = $socialProfileNameFromSettings !== null ? $profile['url'] : $facebookUrlFromPost;
 
                 break;
             }

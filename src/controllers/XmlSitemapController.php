@@ -7,17 +7,12 @@
 
 namespace barrelstrength\sproutseo\controllers;
 
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
-use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutseo\models\SitemapSection;
+
+use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\web\Controller;
-use craft\elements\Asset;
-use Craft;
 
-use yii\web\NotFoundHttpException;
-use yii\web\ForbiddenHttpException;
-use yii\web\Response;
+use Craft;
 
 
 /**
@@ -25,6 +20,9 @@ use yii\web\Response;
  */
 class XmlSitemapController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     public $allowAnonymous = ['renderXmlSitemap'];
 
     /**
@@ -39,16 +37,17 @@ class XmlSitemapController extends Controller
         // Get URL and remove .xml extension
         $url = Craft::$app->request->getFullPath();
 
+        /**
+         * @var Settings $settings
+         */
         $settings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
         $enableMultilingualSitemaps = false;
 
         $currentSite = Craft::$app->sites->getCurrentSite();
         $siteId = $currentSite->id;
 
-        if (Craft::$app->getIsMultiSite()) {
-            if ($settings->enableMultilingualSitemaps) {
-                $enableMultilingualSitemaps = true;
-            }
+        if (Craft::$app->getIsMultiSite() && $settings->enableMultilingualSitemaps) {
+            $enableMultilingualSitemaps = true;
         }
 
         $sitemapSlug = substr($url, 0, -4);

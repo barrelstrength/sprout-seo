@@ -13,27 +13,89 @@ use Craft;
 
 class Settings extends Model
 {
+    /**
+     * @var string
+     */
     public $pluginNameOverride = '';
+
+    /**
+     * @var bool
+     */
     public $appendTitleValue = false;
+
+    /**
+     * @var bool
+     */
     public $displayFieldHandles = false;
+
+    /**
+     * @var bool
+     */
     public $enableCustomSections = false;
+
+    /**
+     * @var bool
+     */
     public $enableMetadataRendering = true;
+
+    /**
+     * @var bool
+     */
     public $toggleMetadataVariable = false;
+
+    /**
+     * @var string
+     */
     public $metadataVariable = 'metadata';
+
+    /**
+     * @var string
+     */
     public $structureId = '';
+
+    /**
+     * @var bool
+     */
     public $enable404RedirectLog = false;
+
+    /**
+     * @var int
+     */
     public $totalElementsPerSitemap = 500;
+
+    /**
+     * @var bool
+     */
     public $enableDynamicSitemaps = true;
+
+    /**
+     * @var int
+     */
     public $total404Redirects = 500;
+
+    /**
+     * @var int
+     */
     public $maxMetaDescriptionLength = 160;
+
+    /**
+     * @var bool
+     */
     public $enableMultilingualSitemaps = false;
+
+    /**
+     * @var array
+     */
     public $siteSettings = [];
+
+    /**
+     * @var array
+     */
     public $groupSettings = [];
-    public $multilingualGroups;
 
-    // @todo - do we still need this setting? Or should we rename to site nomenclature?
-    public $localeIdOverride;
-
+    /**
+     * @return array
+     */
     public function getSettingsNavItems()
     {
         return [

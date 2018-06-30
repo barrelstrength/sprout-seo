@@ -20,39 +20,76 @@ use Craft;
  */
 class SitemapSection extends Model
 {
+    /**
+     * @var int
+     */
     public $id;
+
+    /**
+     * @var int
+     */
     public $siteId;
 
+    /**
+     * @var int
+     */
     public $urlEnabledSectionId;
+
+    /**
+     * @var string
+     */
     public $type;
+
+    /**
+     * @var string
+     */
     public $uri;
+
+    /**
+     * @var int
+     */
     public $changeFrequency;
+
+    /**
+     * @var string
+     */
     public $priority;
+
+    /**
+     * @var int
+     */
     public $enabled;
 
     // Attributes assigned from URL-Enabled Section integration
+    /**
+     * @var string
+     */
     public $name;
+
+    /**
+     * @var string
+     */
     public $handle;
 
 // @todo - do we need the following attributes or can we update things and remove them?
 
     /**
-     * @var
+     * @var bool
      */
     public $isNew;
 
     /**
-     * @var
+     * @var \DateTime
      */
     public $dateCreated;
 
     /**
-     * @var
+     * @var \DateTime
      */
     public $dateUpdated;
 
     /**
-     * @var
+     * @var int
      */
     public $uid;
 
@@ -64,6 +101,10 @@ class SitemapSection extends Model
         return Craft::$app->sites->getSiteById($this->siteId);
     }
 
+    /**
+     * @return UrlEnabledSection|null
+     * @throws \craft\errors\SiteNotFoundException
+     */
     public function getUrlEnabledSection()
     {
         $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByType($this->type);

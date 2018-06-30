@@ -66,10 +66,7 @@ class GlobalMetadata extends Component
             $results['meta']['twitterTransform'] = $results['settings']['twitterTransform'];
         }
 
-        $schema = new Globals($results);
-        //$schema->attributes = $results;
-
-        return $schema;
+        return new Globals($results);;
     }
 
     /**
@@ -110,7 +107,7 @@ class GlobalMetadata extends Component
             ob_end_clean();
         }
 
-        $result = Craft::$app->db->createCommand()->update('{{%sproutseo_metadata_globals}}',
+        Craft::$app->db->createCommand()->update('{{%sproutseo_metadata_globals}}',
             $values,
             'siteId=:siteId',
             [':siteId' => $globals->siteId]

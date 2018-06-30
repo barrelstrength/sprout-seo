@@ -28,14 +28,29 @@ use yii\base\Exception;
  */
 class Redirect extends Element
 {
+    /**
+     * @var string
+     */
     public $oldUrl;
 
+    /**
+     * @var string
+     */
     public $newUrl;
 
+    /**
+     * @var int
+     */
     public $method;
 
+    /**
+     * @var bool
+     */
     public $regex = false;
 
+    /**
+     * @var int
+     */
     public $count = 0;
 
     public $siteId;
@@ -51,16 +66,6 @@ class Redirect extends Element
     }
 
     /**
-     * Returns whether this element type has content.
-     *
-     * @return bool
-     */
-    public static function hasContent(): bool
-    {
-        return false;
-    }
-
-    /**
      * @inheritDoc IElementType::hasStatuses()
      *
      * @return bool
@@ -68,16 +73,6 @@ class Redirect extends Element
     public static function hasStatuses(): bool
     {
         return true;
-    }
-
-    /**
-     * Returns whether this element type has titles.
-     *
-     * @return bool
-     */
-    public static function hasTitles(): bool
-    {
-        return false;
     }
 
     /**
@@ -132,7 +127,7 @@ class Redirect extends Element
      */
     public static function find(): ElementQueryInterface
     {
-        return new RedirectQuery(get_called_class());
+        return new RedirectQuery(static::class);
     }
 
     /**

@@ -9,6 +9,18 @@ namespace barrelstrength\sproutseo\records;
 
 use craft\db\ActiveRecord;
 
+/**
+ * Class SitemapSection
+ *
+ * @property int id
+ * @property int siteId
+ * @property int urlEnabledSectionId
+ * @property string type
+ * @property string uri
+ * @property int priority
+ * @property string changeFrequency
+ * @property int enabled
+ */
 class SitemapSection extends ActiveRecord
 {
     /**

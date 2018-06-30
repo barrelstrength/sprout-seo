@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\elements\actions;
 
+use barrelstrength\sproutseo\enums\RedirectMethods;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
@@ -25,29 +26,17 @@ class ChangeTemporaryMethod extends ElementAction
     }
 
     /**
-     * @inheritDoc IElementAction::isDestructive()
-     *
-     * @return bool
-     */
-    public function isDestructive()
-    {
-        return false;
-    }
-
-    /**
      * @param ElementQueryInterface $query
      *
      * @return bool|int
      * @throws \yii\base\Exception
      */
-    public function performAction(ElementQueryInterface $query)
+    public function performAction(ElementQueryInterface $query): bool
     {
         $elementIds = $query->ids();
 
-        $response = false;
-
         // Call updateMethods service
-        $response = SproutSeo::$app->redirects->updateRedirectMethod($elementIds, SproutSeo_RedirectMethods::Temporary);
+        $response = SproutSeo::$app->redirects->updateRedirectMethod($elementIds, RedirectMethods::Temporary);
 
         $message = SproutSeo::$app->redirects->getMethodUpdateResponse($response);
 

@@ -12,7 +12,7 @@ use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use craft\helpers\UrlHelper;
 use barrelstrength\sproutseo\enums\MetadataLevels;
-use Craft;
+
 
 class Metadata extends Model
 {
@@ -42,91 +42,91 @@ class Metadata extends Model
     protected $twitterCardsMeta = [];
 
     /**
-     * @var
+     * @var string
      */
     public $appendTitleValue;
 
     /**
-     * @var
+     * @var int
      */
     public $schemaTypeId;
 
     /**
-     * @var
+     * @var int
      */
     public $schemaOverrideTypeId;
 
     /**
-     * @var
+     * @var string
      */
     public $ogTransform;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterTransform;
 
     //MetaTags
 
     /**
-     * @var
+     * @var string
      */
     public $optimizedTitle;
 
     /**
-     * @var
+     * @var string
      */
     public $optimizedDescription;
 
     /**
-     * @var
+     * @var int
      */
     public $optimizedImage;
 
     /**
-     * @var
+     * @var string
      */
     public $optimizedKeywords;
 
     /**
-     * @var
+     * @var bool
      */
     public $enableMetaDetailsSearch;
 
     /**
-     * @var
+     * @var bool
      */
     public $enableMetaDetailsOpenGraph;
 
     /**
-     * @var
+     * @var bool
      */
     public $enableMetaDetailsTwitterCard;
 
     /**
-     * @var
+     * @var bool
      */
     public $enableMetaDetailsGeo;
 
     /**
-     * @var
+     * @var bool
      */
     public $enableMetaDetailsRobots;
 
     //searchMeta
 
     /**
-     * @var
+     * @var string
      */
     public $title;
 
     /**
-     * @var
+     * @var string
      */
     public $description;
 
     /**
-     * @var
+     * @var string
      */
     public $keywords;
 
@@ -138,203 +138,203 @@ class Metadata extends Model
     public $robots;
 
     /**
-     * @var
+     * @var string
      */
     public $canonical;
 
     //geographicMeta
 
     /**
-     * @var
+     * @var string
      */
     public $region;
 
     /**
-     * @var
+     * @var string
      */
     public $placename;
 
     /**
-     * @var
+     * @var string
      */
     public $position;
 
     /**
-     * @var
+     * @var string
      */
     public $latitude;
 
     /**
-     * @var
+     * @var string
      */
     public $longitude;
 
     //openGraphMeta
 
     /**
-     * @var
+     * @var string
      */
     public $ogType;
 
     /**
-     * @var
+     * @var string
      */
     public $ogSiteName;
 
     /**
-     * @var
+     * @var string
      */
     public $ogAuthor;
 
     /**
-     * @var
+     * @var string
      */
     public $ogPublisher;
 
     /**
-     * @var
+     * @var string
      */
     public $ogUrl;
 
     /**
-     * @var
+     * @var string
      */
     public $ogTitle;
 
     /**
-     * @var
+     * @var string
      */
     public $ogDescription;
 
     /**
-     * @var
+     * @var string
      */
     public $ogImage;
 
     /**
-     * @var
+     * @var string
      */
     public $ogImageSecure;
 
     /**
-     * @var
+     * @var int
      */
     public $ogImageWidth;
 
     /**
-     * @var
+     * @var int
      */
     public $ogImageHeight;
 
     /**
-     * @var
+     * @var string
      */
     public $ogImageType;
 
     /**
-     * @var
+     * @var string
      */
     public $ogAudio;
 
     /**
-     * @var
+     * @var string
      */
     public $ogVideo;
 
     /**
-     * @var
+     * @var string
      */
     public $ogLocale;
 
     /**
-     * @var
+     * @var \DateTime
      */
     public $ogDateUpdated;
 
     /**
-     * @var
+     * @var \DateTime
      */
     public $ogDateCreated;
 
     /**
-     * @var
+     * @var \DateTime
      */
     public $ogExpiryDate;
 
     //twitterCardsMeta
 
     /**
-     * @var
+     * @var string
      */
     public $twitterCard;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterSite;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterCreator;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterUrl;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterTitle;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterDescription;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterImage;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterPlayer;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterPlayerStream;
 
     /**
-     * @var
+     * @var string
      */
     public $twitterPlayerStreamContentType;
 
     /**
-     * @var
+     * @var int
      */
     public $twitterPlayerWidth;
 
     /**
-     * @var
+     * @var int
      */
     public $twitterPlayerHeight;
 
     /**
-     * @var
+     * @var \DateTime
      */
     public $dateCreated;
 
     /**
-     * @var
+     * @var \DateTime
      */
     public $dateUpdated;
 
     /**
-     * @var
+     * @var int
      */
     public $uid;
 
@@ -617,9 +617,7 @@ class Metadata extends Model
      */
     public function getGooglePlusMetaTagData()
     {
-        $tagData = SproutSeoOptimizeHelper::getGooglePlusPage();
-
-        return $tagData;
+        return SproutSeoOptimizeHelper::getGooglePlusPage();
     }
 
     /**

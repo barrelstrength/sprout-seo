@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutseo\schema;
 
+use craft\elements\User;
+
 class PersonSchema extends ThingSchema
 {
     /**
@@ -39,10 +41,8 @@ class PersonSchema extends ThingSchema
      */
     public function addProperties()
     {
-        if (isset($this->element)) {
-            $elementType = $this->element->getElementType();
-
-            if ($elementType == 'User') {
+        if ($this->element !== null) {
+            if (get_class($this->element) === User::class) {
                 $this->addUserElementProperties();
             } else {
                 parent::addProperties();

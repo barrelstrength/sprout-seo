@@ -4,7 +4,7 @@ namespace barrelstrength\sproutseo\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use craft\helpers\MigrationHelper;
+
 
 /**
  * m180629_000000_redirects migration.
@@ -13,6 +13,8 @@ class m180629_000000_redirects extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

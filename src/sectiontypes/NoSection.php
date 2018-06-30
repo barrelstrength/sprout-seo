@@ -9,10 +9,6 @@ namespace barrelstrength\sproutseo\sectiontypes;
 
 use barrelstrength\sproutseo\base\UrlEnabledSectionType;
 
-use craft\elements\Entry as EntryElement;
-use craft\models\Section;
-use craft\queue\jobs\ResaveElements;
-use Craft;
 
 class NoSection extends UrlEnabledSectionType
 {

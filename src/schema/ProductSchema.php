@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\schema;
 
 use Craft;
+use craft\commerce\elements\Variant;
 
 class ProductSchema extends ThingSchema
 {
@@ -54,6 +55,7 @@ class ProductSchema extends ThingSchema
     {
         $identity = $this->globals['identity'];
         $element = $this->element;
+        $seller = null;
 
         $websiteIdentity = [
             'Person' => WebsiteIdentityPersonSchema::class,
@@ -74,6 +76,9 @@ class ProductSchema extends ThingSchema
             $seller = $identitySchema->getSchema();
         }
 
+        /**
+         * @var Variant $variant
+         */
         foreach ($element->variants as $variant) {
 
             $offers[$variant->id]['@type'] = 'Offer';

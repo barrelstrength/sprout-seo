@@ -62,9 +62,7 @@ class CommerceProduct extends UrlEnabledSectionType
      */
     public function getFieldLayoutSettingsObject($id)
     {
-        $productType = $this->getById($id);
-
-        return $productType;
+        return $this->getById($id);
     }
 
     /**

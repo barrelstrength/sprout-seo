@@ -16,8 +16,19 @@ use Craft;
 
 class LivePreviewController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     protected $allowAnonymous = true;
 
+    /**
+     * @return Response
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\ServerErrorHttpException
+     */
     public function actionSectionPreview(): Response
     {
         $this->requirePostRequest();
@@ -117,6 +128,14 @@ class LivePreviewController extends Controller
         return $rendered;
     }
 
+    /**
+     * @return Response
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\ServerErrorHttpException
+     */
     public function actionElementMetadataPreview()
     {
         $this->requirePostRequest();
@@ -150,7 +169,7 @@ class LivePreviewController extends Controller
                 $metadata['optimizedTitle'] = $fields[$titleHandle] ?? '';
             }
         }
-        // custom paterm
+        // custom pattern
         if (!is_numeric($fieldSettings['optimizedTitleField']) && $fieldSettings['optimizedTitleField'] != 'manually' && $fieldSettings['optimizedTitleField'] != 'elementTitle') {
             $metadata['optimizedTitle'] = Craft::$app->getView()->renderObjectTemplate($fieldSettings['optimizedTitleField'], $fields['fields']);
         }
@@ -159,7 +178,7 @@ class LivePreviewController extends Controller
             $metadata['optimizedTitle'] = $post['optimizedTitle'];
         }
 
-        // lets update the decription
+        // lets update the description
         if (is_numeric($fieldSettings['optimizedDescriptionField'])) {
             $descriptionField = Craft::$app->fields->getFieldById($fieldSettings['optimizedDescriptionField']);
             if ($descriptionField) {

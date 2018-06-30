@@ -41,11 +41,16 @@ class WebsiteIdentityOrganizationSchema extends Schema
         return true;
     }
 
-    // Does syntax user a generic `object` or do we need to assume
-    // we know specifically what the variable is called?
-    //
-    // Have some out of box helper methods like getFirst()
-    // Do we really need the @methodName syntax? or do we just write this in PHP?
+    /**
+     * Does syntax user a generic `object` or do we need to assume
+     * we know specifically what the variable is called?
+     *
+     * Have some out of box helper methods like getFirst()
+     * Do we really need the @methodName syntax? or do we just write this in PHP?
+     *
+     * @return null|void
+     * @throws \Exception
+     */
     public function addProperties()
     {
         $schema = $this->globals['identity'];

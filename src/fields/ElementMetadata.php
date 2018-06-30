@@ -77,7 +77,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function isEmpty($value): bool
+    public function isValueEmpty($value, ElementInterface $element): bool
     {
         return count($value) === 0;
     }
@@ -106,6 +106,10 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws Exception
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\InvalidConfigException
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
@@ -158,7 +162,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         $twitterImageElements = [];
 
         // Set up our asset fields
-        if (isset($value->optimizedImage)) {
+        if ($value->optimizedImage !== null) {
             // If validation fails, we need to make sure our asset is just an ID
             if (is_array($value->optimizedImage)) {
                 $value->optimizedImage = $value->optimizedImage[0];
@@ -168,12 +172,12 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
             $metaImageElements = [$asset];
         }
 
-        if (isset($value->ogImage)) {
+        if ($value->ogImage !== null) {
             $asset = Craft::$app->elements->getElementById($value->ogImage);
             $ogImageElements = [$asset];
         }
 
-        if (isset($value->twitterImage)) {
+        if ($value->twitterImage !== null) {
             $asset = Craft::$app->elements->getElementById($value->twitterImage);
             $twitterImageElements = [$asset];
         }
@@ -199,8 +203,6 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
          *
          * @todo - Refactor
          *         can delete this once we get SEO Preview button working dynamically?
-         *
-         * @var UrlEnabledSectionType $urlEnabledSectionType
          */
         $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType(get_class($element));
 
@@ -212,7 +214,8 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
             $type = $urlEnabledSectionType->getId();
             $urlEnabledSectionId = $element->{$urlEnabledSectionIdColumnName};
 
-            if (!isset($urlEnabledSectionType->urlEnabledSections[$type.'-'.$urlEnabledSectionId])) {
+            $urlEnabledSectionKey = $type.'-'.$urlEnabledSectionId;
+            if (!isset($urlEnabledSectionType->urlEnabledSections[$urlEnabledSectionKey])) {
                 return '<span class="error">'.
                     Craft::t('sprout-seo', 'This field requires a URL-Enabled Element Type.').
                     '</span>';
@@ -257,6 +260,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      * @param ElementInterface|null $element
      *
      * @return array|mixed
+     * @throws Exception
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -341,17 +345,6 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         // @todo implement this in Craft3
         SproutSeo::$app->elementMetadata->resaveElementsIfUsingElementMetadataField($this->id);
         parent::afterSave($isNew);
-    }
-
-    /**
-     * Save metadata to the sproutseo_metadata_elements table
-     *
-     * @param ElementInterface $element
-     * @param bool             $isNew
-     */
-    public function afterElementSave(ElementInterface $element, bool $isNew)
-    {
-        parent::afterElementSave($element, $isNew);
     }
 
     /**
@@ -553,7 +546,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
                     // the value comes from post data from elementmetada field
                     $image = $attributes['optimizedImage'][0];
                 } else if (isset($attributes['optimizedImage']) && $attributes['optimizedImage'] && is_numeric($attributes['optimizedImage'])) {
-                    // the value comes from resavaElement task - we store a numeric value on the table
+                    // the value comes from resaveElement task - we store a numeric value on the table
                     $image = $attributes['optimizedImage'];
                 }
 
@@ -580,7 +573,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
             // the value comes from post data from elementmetada field
             $attributes['ogImage'] = $attributes['ogImage'][0];
         } else if (isset($attributes['ogImage']) && $attributes['ogImage'] && is_numeric($attributes['ogImage'])) {
-            // the value comes from resavaElement task - we store a numeric value on the table
+            // the value comes from resaveElement task - we store a numeric value on the table
             $attributes['ogImage'] = $attributes['ogImage'];
         } else {
             $attributes['ogImage'] = $image;
@@ -589,7 +582,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         if (isset($attributes['twitterImage'][0]) && is_array($attributes['twitterImage'])) {
             $attributes['twitterImage'] = $attributes['twitterImage'][0];
         } else if (isset($attributes['twitterImage']) && $attributes['twitterImage'] && is_numeric($attributes['twitterImage'])) {
-            // the value comes from resavaElement task - we store a numeric value on the table
+            // the value comes from resaveElement task - we store a numeric value on the table
             $attributes['twitterImage'] = $attributes['twitterImage'];
         } else {
             $attributes['twitterImage'] = $image;
@@ -645,9 +638,12 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         $value = null;
 
         if (is_numeric($fieldId)) {
-            // Does the field exist on the element?
+            /**
+             * @var Field $field
+             */
             $field = Craft::$app->fields->getFieldById($fieldId);
 
+            // Does the field exist on the element?
             if ($field) {
                 if (isset($_POST['fields'][$field->handle])) {
                     if (get_class($field) === Assets::class) {
@@ -655,8 +651,8 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
                     } else {
                         $value = $_POST['fields'][$field->handle];
                     }
-                } //Resave elements
-                else {
+                } else {
+                    // Resave elements scenario
                     if (isset($element->{$field->handle})) {
                         $elementValue = $element->{$field->handle};
 
@@ -673,6 +669,13 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         return $value;
     }
 
+    /**
+     * @param $fields
+     * @param $element
+     *
+     * @return array
+     * @throws Exception
+     */
     protected function getMetadataFieldValues($fields, $element)
     {
         $siteId = $element->siteId;

@@ -13,6 +13,8 @@ class m180618_000001_globals_table extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

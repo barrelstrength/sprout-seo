@@ -32,13 +32,4 @@ class EventSchema extends ThingSchema
     {
         return false;
     }
-
-    /**
-     * @return array|null|void
-     * @throws \Exception
-     */
-    public function addProperties()
-    {
-        parent::addProperties();
-    }
 }

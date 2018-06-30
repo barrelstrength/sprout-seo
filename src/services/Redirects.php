@@ -28,10 +28,11 @@ class Redirects extends Component
      * @param          $redirectId
      * @param int|null $siteId
      *
-     * @return \craft\base\ElementInterface|null
+     * @return Redirect|null
      */
     public function getRedirectById($redirectId, int $siteId = null)
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return Craft::$app->elements->getElementById($redirectId, Redirect::class, $siteId);
     }
 
@@ -54,7 +55,7 @@ class Redirects extends Component
             $redirectRecord = RedirectRecord::findOne($redirect->id);
 
             if (!$redirectRecord) {
-                throw new \Exception(Craft::t('sprout-seo', 'No redirect exists with the ID “{id}”', ['id' => $redirect->id]));
+                throw new Exception(Craft::t('sprout-seo', 'No redirect exists with the ID “{id}”', ['id' => $redirect->id]));
             }
         }
 
@@ -103,22 +104,27 @@ class Redirects extends Component
         $redirects = Redirect::find()->all();
         $url = urldecode($url);
 
-        if ($redirects) {
-            foreach ($redirects as $redirect) {
-                if ($redirect->regex) {
-                    // Use backticks as delimiters as they are invalid characters for URLs
-                    $oldUrlPattern = '`'.$redirect->oldUrl.'`';
+        if (!$redirects) {
+            return null;
+        }
 
-                    if (preg_match($oldUrlPattern, $url)) {
-                        // Replace capture groups if any
-                        $redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
+        /**
+         * @var Redirect $redirect
+         */
+        foreach ($redirects as $redirect) {
+            if ($redirect->regex) {
+                // Use backticks as delimiters as they are invalid characters for URLs
+                $oldUrlPattern = '`'.$redirect->oldUrl.'`';
 
-                        return $redirect;
-                    }
-                } else {
-                    if ($redirect->oldUrl == $url) {
-                        return $redirect;
-                    }
+                if (preg_match($oldUrlPattern, $url)) {
+                    // Replace capture groups if any
+                    $redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
+
+                    return $redirect;
+                }
+            } else {
+                if ($redirect->oldUrl == $url) {
+                    return $redirect;
                 }
             }
         }

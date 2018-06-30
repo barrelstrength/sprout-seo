@@ -8,6 +8,9 @@
 namespace barrelstrength\sproutseo\schema;
 
 
+use barrelstrength\sproutseo\base\Schema;
+use craft\elements\Entry;
+
 class CreativeWorkSchema extends ThingSchema
 {
     /**
@@ -49,9 +52,7 @@ class CreativeWorkSchema extends ThingSchema
         $this->addDate('dateCreated', $this->element->dateCreated);
         $this->addDate('dateModified', $this->element->dateUpdated);
 
-        $elementType = $this->element->getElementType();
-
-        if ($elementType == 'Entry') {
+        if (get_class($this->element) === Entry::class) {
             $this->addEntryElementProperties();
         }
     }
@@ -87,6 +88,9 @@ class CreativeWorkSchema extends ThingSchema
             // Determine if we have an Organization or Person Schema Type
             $schemaModel = $websiteIdentity[$identityType];
 
+            /**
+             * @var Schema $identitySchema
+             */
             $identitySchema = new $schemaModel();
 
             $identitySchema->globals = $this->globals;

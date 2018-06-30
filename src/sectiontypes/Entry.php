@@ -118,7 +118,7 @@ class Entry extends UrlEnabledSectionType
     }
 
     /**
-     * @param null $elementGroupId
+     * @param int|string|null $elementGroupId
      */
     public function resaveElements($elementGroupId = null)
     {

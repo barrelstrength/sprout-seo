@@ -218,7 +218,7 @@ abstract class Schema
      */
     public function getSchemaOverrideType()
     {
-        if ((isset($this->prioritizedMetadataModel->schemaOverrideTypeId) && $this->prioritizedMetadataModel->schemaOverrideTypeId != null) &&
+        if ($this->prioritizedMetadataModel->schemaOverrideTypeId !== null && $this->prioritizedMetadataModel->schemaOverrideTypeId != null) &&
             ($this->prioritizedMetadataModel->schemaTypeId === $this->getUniqueKey())
         ) {
             $this->type = $this->prioritizedMetadataModel->schemaOverrideTypeId;
@@ -406,7 +406,7 @@ abstract class Schema
         } else {
             $image = Craft::$app->assets->getAssetById($imageId);
 
-            if (isset($image) && $image->getUrl()) {
+            if ($image !== null && $image->getUrl()) {
                 $transform = $this->globals->settings['ogTransform'];
 
                 $image = [
@@ -432,9 +432,9 @@ abstract class Schema
      * Add a list of URLs to our Structured Data array.
      * If the property is not an array of URLs, don't add it.
      *
-     * @param $urls
+     * @param array $urls
      */
-    public function addSameAs($urls)
+    public function addSameAs(array $urls = [])
     {
         if (count($urls)) {
             $sameAsList = [];
@@ -592,9 +592,9 @@ abstract class Schema
      * Returns a string converted to html entities
      * http://goo.gl/LPhtJ
      *
-     * @param  string $string Value to be encoded
+     * @param string $string Value to be encoded
      *
-     * @return mixed          Returns a string converted to html entities
+     * @return string Returns a string converted to html entities
      */
     public function encodeHtmlEntities($string)
     {

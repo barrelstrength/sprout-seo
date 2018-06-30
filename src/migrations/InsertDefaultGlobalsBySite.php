@@ -19,6 +19,9 @@ class InsertDefaultGlobalsBySite extends Migration
 
     /**
      * @inheritdoc
+     *
+     * @return bool|void
+     * @throws \yii\db\Exception
      */
     public function safeUp()
     {
@@ -34,7 +37,7 @@ class InsertDefaultGlobalsBySite extends Migration
             "appendTitleValue": ""}
         ';
 
-        $result = $this->db->createCommand()->insert($tableName, [
+        $this->db->createCommand()->insert($tableName, [
                 'siteId' => $this->siteId,
                 'identity' => null,
                 'ownership' => null,
