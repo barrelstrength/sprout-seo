@@ -66,7 +66,7 @@ class GlobalMetadata extends Component
             $results['meta']['twitterTransform'] = $results['settings']['twitterTransform'];
         }
 
-        return new Globals($results);;
+        return new Globals($results);
     }
 
     /**
