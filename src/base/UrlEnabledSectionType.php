@@ -35,11 +35,6 @@ abstract class UrlEnabledSectionType
      */
     public $typeIdContext;
 
-    public function getType()
-    {
-        return get_class($this);
-    }
-
     /**
      * Get a unique ID for this URL-Enabled Section Type
      *
