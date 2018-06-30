@@ -226,8 +226,8 @@ abstract class Schema
     /**
      * Add a property to our Structured Data array
      *
-     * @param $propertyName
-     * @param $attributes
+     * @param string $propertyName
+     * @param string|array $attributes
      */
     public function addProperty($propertyName, $attributes)
     {
@@ -237,7 +237,7 @@ abstract class Schema
     /**
      * Remove a property from our Structured Data array
      *
-     * @param $propertyName
+     * @param string $propertyName
      */
     public function removeProperty($propertyName)
     {
@@ -248,8 +248,8 @@ abstract class Schema
      * Add a string to our Structured Data array.
      * If the property is not a string, don't add it.
      *
-     * @param $propertyName
-     * @param $string
+     * @param string $propertyName
+     * @param string $string
      */
     public function addText($propertyName, $string)
     {
@@ -262,8 +262,8 @@ abstract class Schema
      * Add a boolean value to our Structured Data array.
      * If the property is not a boolean value, don't add it.
      *
-     * @param $propertyName
-     * @param $bool
+     * @param string $propertyName
+     * @param bool $bool
      */
     public function addBoolean($propertyName, $bool)
     {
@@ -276,8 +276,8 @@ abstract class Schema
      * Add a number to our Structured Data array.
      * If the property is not an integer or float, don't add it.
      *
-     * @param $propertyName
-     * @param $number
+     * @param string $propertyName
+     * @param int $number
      */
     public function addNumber($propertyName, $number)
     {
@@ -331,8 +331,8 @@ abstract class Schema
      * Add a telephone number to our Structured Data array.
      * If the property is not a string, don't add it.
      *
-     * @param $propertyName
-     * @param $phone
+     * @param string $propertyName
+     * @param string $phone
      */
     public function addTelephone($propertyName, $phone)
     {
@@ -350,8 +350,8 @@ abstract class Schema
      * Additionally, encode the email as HTML entities so it
      * doesn't appear in the output as plain text.
      *
-     * @param $propertyName
-     * @param $email
+     * @param string $propertyName
+     * @param string $email
      */
     public function addEmail($propertyName, $email)
     {
@@ -369,8 +369,8 @@ abstract class Schema
      * Add an image to our Structured Data array as a SproutSeo_ImageObjectSchema.
      * If the property is not a valid URL or Asset ID, don't add it.
      *
-     * @param      $propertyName
-     * @param null $imageId Accepts Image ID or URL
+     * @param string $propertyName
+     * @param int|null $imageId Accepts Image ID or URL
      *
      * @return null
      * @throws \Exception
@@ -390,9 +390,11 @@ abstract class Schema
                 'height' => $meta->ogImageHeight
             ];
         } else {
+
             $image = Craft::$app->assets->getAssetById($imageId);
 
             if ($image !== null && $image->getUrl()) {
+
                 $transform = $this->globals->settings['ogTransform'];
 
                 $image = [

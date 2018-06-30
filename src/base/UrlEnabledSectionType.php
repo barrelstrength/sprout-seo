@@ -97,13 +97,15 @@ abstract class UrlEnabledSectionType
     abstract public function getFieldLayoutSettingsObject($id);
 
     /**
-     * Return the name of the table that we get URL-Enabled Section info from. In most cases, this is the i18n table.
+     * Return the name of the table that we get URL-Enabled Section info from. In most cases, this is the sites table.
      *
      * @return string
      */
     abstract public function getTableName();
 
     /**
+     * Get the name of the database column that stores the ID for this URL Enabled Section
+     *
      * @return mixed
      */
     abstract public function getIdColumnName();
