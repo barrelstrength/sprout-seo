@@ -199,8 +199,8 @@ abstract class Schema
      */
     public function getSchemaOverrideType()
     {
-        if ($this->prioritizedMetadataModel->schemaOverrideTypeId !== null && $this->prioritizedMetadataModel->schemaOverrideTypeId != null) &&
-            ($this->prioritizedMetadataModel->schemaTypeId === $this->getUniqueKey())
+        if ($this->prioritizedMetadataModel->schemaOverrideTypeId !== null &&
+            $this->prioritizedMetadataModel->schemaTypeId === get_class($this)
         ) {
             $this->type = $this->prioritizedMetadataModel->schemaOverrideTypeId;
 
