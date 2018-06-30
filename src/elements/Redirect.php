@@ -38,6 +38,8 @@ class Redirect extends Element
 
     public $count = 0;
 
+    public $siteId;
+
     /**
      * Returns the element type name.
      *
@@ -339,6 +341,7 @@ class Redirect extends Element
         $record->method = $this->method;
         $record->regex = $this->regex;
         $record->count = $this->count;
+        $record->siteId = $this->siteId;
 
         $record->save(false);
 

@@ -68,7 +68,7 @@ class Redirects extends Component
         $transaction = $db->beginTransaction();
 
         try {
-            $response = Craft::$app->getElements()->saveElement($redirect, false);
+            $response = Craft::$app->getElements()->saveElement($redirect, false, false);
 
             if (!$response) {
                 $transaction->rollBack();

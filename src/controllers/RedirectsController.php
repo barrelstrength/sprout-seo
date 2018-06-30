@@ -33,16 +33,14 @@ class RedirectsController extends Controller
      */
     public function actionRedirectsIndexTemplate(string $siteHandle = null): Response
     {
-        if ($siteHandle === null)
-        {
+        if ($siteHandle === null) {
             $primarySite = Craft::$app->getSites()->getPrimarySite();
             $siteHandle = $primarySite->handle;
         }
 
         $currentSite = Craft::$app->getSites()->getSiteByHandle($siteHandle);
 
-        if (!$currentSite->hasUrls)
-        {
+        if (!$currentSite->hasUrls) {
             throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Unable to add redirect. {site} Site does not have URLs enabled.', [
                 'site' => $currentSite
             ]));
@@ -52,7 +50,7 @@ class RedirectsController extends Controller
 
         // Make sure the user has permission to edit that site
         if (!in_array($currentSite->id, $editableSiteIds, false)) {
-            throw new ForbiddenHttpException(Craft::t('sprout-seo','User not permitted to edit content for this site.'));
+            throw new ForbiddenHttpException(Craft::t('sprout-seo', 'User not permitted to edit content for this site.'));
         }
 
         $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
@@ -71,8 +69,8 @@ class RedirectsController extends Controller
     /**
      * Edit a Redirect
      *
-     * @param int|null      $redirectId The redirect's ID, if editing an existing redirect.
-     * @param Redirect|null $redirect   The redirect send back by setRouteParams if any errors on saveRedirect
+     * @param int|null $redirectId The redirect's ID, if editing an existing redirect.
+     * @param Redirect|null $redirect The redirect send back by setRouteParams if any errors on saveRedirect
      *
      * @return \yii\web\Response
      * @throws HttpException
@@ -80,16 +78,14 @@ class RedirectsController extends Controller
      */
     public function actionEditRedirect(int $redirectId = null, string $siteHandle = null, Redirect $redirect = null)
     {
-        if ($siteHandle === null)
-        {
+        if ($siteHandle === null) {
             $primarySite = Craft::$app->getSites()->getPrimarySite();
             $siteHandle = $primarySite->handle;
         }
 
         $currentSite = Craft::$app->getSites()->getSiteByHandle($siteHandle);
 
-        if (!$currentSite->hasUrls)
-        {
+        if (!$currentSite->hasUrls) {
             throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Unable to add redirect. {site} Site does not have URLs enabled.', [
                 'site' => $currentSite
             ]));
@@ -126,7 +122,8 @@ class RedirectsController extends Controller
             'redirect' => $redirect,
             'methodOptions' => $methodOptions,
             'crumbs' => $crumbs,
-            'continueEditingUrl' => $continueEditingUrl
+            'continueEditingUrl' => $continueEditingUrl,
+            'siteHandle' => $siteHandle
         ]);
     }
 
@@ -155,13 +152,20 @@ class RedirectsController extends Controller
             $redirect = new Redirect();
         }
 
+        $primarySiteId = Craft::$app->getSites()->getPrimarySite()->id;
+
         // Set the event attributes, defaulting to the existing values for
         // whatever is missing from the post data
-        $redirect->siteId = Craft::$app->getRequest()->getBodyParam('siteId');
+        $redirect->siteId = Craft::$app->getRequest()->getBodyParam('siteId') ?? $primarySiteId;
         $redirect->oldUrl = Craft::$app->getRequest()->getBodyParam('oldUrl', $redirect->oldUrl);
         $redirect->newUrl = Craft::$app->getRequest()->getBodyParam('newUrl');
         $redirect->method = Craft::$app->getRequest()->getBodyParam('method');
         $redirect->regex = Craft::$app->getRequest()->getBodyParam('regex');
+
+        if (!$redirect->regex) {
+            $redirect->regex = 0;
+        }
+
         $redirect->enabled = Craft::$app->getRequest()->getBodyParam('enabled');
 
         if (!SproutSeo::$app->redirects->saveRedirect($redirect)) {

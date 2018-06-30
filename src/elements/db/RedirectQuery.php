@@ -89,7 +89,8 @@ class RedirectQuery extends ElementQuery
             'sproutseo_redirects.newUrl',
             'sproutseo_redirects.method',
             'sproutseo_redirects.regex',
-            'sproutseo_redirects.count'
+            'sproutseo_redirects.count',
+            'sproutseo_redirects.siteId'
         ]);
 
         $this->query->orderBy = ['structureelements.lft' => SORT_DESC];
