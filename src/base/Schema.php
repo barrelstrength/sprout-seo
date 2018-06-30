@@ -178,11 +178,7 @@ abstract class Schema
 
         if ($this->addContext) {
             // Return the JSON-LD script tag and full context
-            // @todo - Refactor in Craft 3.0
-            //         clean up logic here once we can ditch PHP 5.3
-            $output = version_compare(PHP_VERSION, '5.4.0', '>=')
-                ? json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
-                : str_replace('\\/', '/', json_encode($schema));
+            $output = json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 
             $output = '
 <script type="application/ld+json">
