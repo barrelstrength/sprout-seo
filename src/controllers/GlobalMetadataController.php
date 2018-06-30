@@ -25,7 +25,7 @@ class GlobalMetadataController extends Controller
 {
 
     /**
-     * Edits a global metadata.
+     * Renders Global Metadata edit pages
      *
      * @param string       $globalHandle The global handle.
      * @param string|null  $siteHandle   The site handle, if specified.
@@ -39,6 +39,8 @@ class GlobalMetadataController extends Controller
      */
     public function actionEditGlobalMetadata(string $globalHandle, string $siteHandle = null, Globals $globals = null): Response
     {
+        $site = Craft::$app->getSites()->getPrimarySite();
+
         if (Craft::$app->getIsMultiSite()) {
             // Get the sites the user is allowed to edit
             $editableSiteIds = Craft::$app->getSites()->getEditableSiteIds();
@@ -64,12 +66,10 @@ class GlobalMetadataController extends Controller
                 if (in_array(Craft::$app->getSites()->currentSite->id, $editableSiteIds, false)) {
                     $site = Craft::$app->getSites()->currentSite;
                 } else {
-                    // Just use the first site they are allowed to edit
+                    // Use the first site they are allowed to edit
                     $site = Craft::$app->getSites()->getSiteById($editableSiteIds[0]);
                 }
             }
-        } else {
-            $site = Craft::$app->getSites()->getPrimarySite();
         }
 
         $navItems = [
@@ -81,12 +81,14 @@ class GlobalMetadataController extends Controller
             'robots',
         ];
 
-        if (!in_array($globalHandle, $navItems, false)) {
+        if (!in_array($globalHandle, $navItems, true)) {
             throw new NotFoundHttpException('Invalid global handle: '.$globalHandle);
         }
 
-        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site->id);
-        $globals->siteId = $site->id;
+        if ($globals === null)
+        {
+            $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site->id);
+        }
 
         // Render the template!
         return $this->renderTemplate('sprout-base-seo/globals/'.$globalHandle, [
