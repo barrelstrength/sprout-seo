@@ -30,17 +30,20 @@ use craft\base\Element;
 abstract class Schema
 {
     /**
+     * Defines whether to set the Schema's '@context' property
+     *
      * @var bool
      */
     public $addContext = false;
 
     /**
+     * Defines whether to set the Schema's 'mainEntityOfPage' property
      * @var bool
      */
     public $isMainEntity = false;
 
     /**
-     * We build our Structured Data array here using the addProperty methods
+     * The array of our Structured Data built using the addProperty methods
      * and can later convert this into JsonLD using the getJsonLd() method
      *
      * @var array
@@ -48,11 +51,15 @@ abstract class Schema
     public $structuredData = [];
 
     /**
+     * Defines our Schema's '@type' property
+     *
      * @var string
      */
     protected $type;
 
     /**
+     * The Global Metadata values available to use when building the Structured Data
+     *
      * @var Globals
      */
     public $globals;
@@ -65,7 +72,7 @@ abstract class Schema
     public $element;
 
     /**
-     * The result after we optimize data from Globals, URL-Enabled Sections, and Element Metadata
+     * The result after we optimize data from Globals and Element Metadata
      *
      * @var Metadata
      */
@@ -80,14 +87,6 @@ abstract class Schema
     }
 
     /**
-     * Set the Element to be processed by the Schema
-     */
-    public function setElement()
-    {
-        $this->element = SproutSeo::$app->optimize->matchedElementModel;
-    }
-
-    /**
      * The Schema context
      *
      * @return string
@@ -95,20 +94,6 @@ abstract class Schema
     final public function getContext()
     {
         return 'http://schema.org/';
-    }
-
-    /**
-     * Returns a key that uniquely identifies the schema map integration
-     *
-     * Example:
-     * class: Craft\\SproutSeo_ContactPointSchema
-     * unique key: craft-sproutseo-contactpointschema
-     *
-     * @return string
-     */
-    final public function getUniqueKey()
-    {
-        return str_replace('_', '-', ElementHelper::createSlug(get_class($this)));
     }
 
     /**

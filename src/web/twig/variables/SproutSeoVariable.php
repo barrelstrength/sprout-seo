@@ -804,11 +804,10 @@ class SproutSeoVariable
     {
         $schemas = SproutSeo::$app->optimize->getSchemas();
 
-        ksort($schemas);
-
-        foreach ($schemas as $schema) {
+        foreach ($schemas as $schemaClass => $schema) {
+            $schema = new $schemaClass();
             if ($schema->isUnlistedSchemaType()) {
-                unset($schemas[$schema->getUniqueKey()]);
+                unset($schemas[$schemaClass]);
             }
         }
 
@@ -817,7 +816,7 @@ class SproutSeoVariable
             /**
              * @var Schema $map
              */
-            return stripos($map->getUniqueKey(), 'barrelstrength-sproutseo-schema') !== false;
+            return stripos(get_class($map), 'barrelstrength\\sproutseo') !== false;
         });
 
         // Get a filtered list of of any custom schema
@@ -825,17 +824,19 @@ class SproutSeoVariable
             /**
              * @var Schema $map
              */
-            return stripos($map->getUniqueKey(), 'barrelstrength-sproutseo-schema') === false;
+            return stripos(get_class($map), 'barrelstrength\\sproutseo') === false;
         });
 
         // Build our options
-        $schemaOptions = ['' => Craft::t('sprout-seo', 'None'), ['optgroup' => Craft::t('sprout-seo', 'Default Types')]];
+        $schemaOptions = ['' => Craft::t('sprout-seo', 'None'), [
+            'optgroup' => Craft::t('sprout-seo', 'Default Types')
+        ]];
 
         $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
             return [
                 'label' => $schema->getName(),
                 'type' => $schema->getType(),
-                'value' => $schema->getUniqueKey()
+                'value' => get_class($schema)
             ];
         }, $defaultSchema));
 
@@ -846,7 +847,7 @@ class SproutSeoVariable
                 return [
                     'label' => $schema->getName(),
                     'type' => $schema->getType(),
-                    'value' => $schema->getUniqueKey(),
+                    'value' => get_class($schema),
                     'isCustom' => '1'
                 ];
             }, $customSchema));

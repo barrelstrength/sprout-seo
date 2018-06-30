@@ -34,6 +34,7 @@ use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\models\UrlEnabledSection;
 use barrelstrength\sproutseo\SproutSeo;
+use barrelstrength\sproutseo\base\Schema;
 use DateTime;
 use Craft;
 use yii\base\Component;
@@ -45,6 +46,15 @@ class Optimize extends Component
     public $rawMetadata = false;
 
     /**
+     * All registered Schema Types
+     *
+     * @var array
+     */
+    protected $schemaTypes = [];
+
+    /**
+     * All instantiated Schema Types indexed by class
+     *
      * @var array
      */
     protected $schemas = [];
@@ -98,7 +108,7 @@ class Optimize extends Component
     /**
      * @return array
      */
-    public function getSchemas()
+    public function getSchemasTypes()
     {
         $schemas = [
             WebsiteIdentityOrganizationSchema::class,
@@ -127,9 +137,28 @@ class Optimize extends Component
         $this->trigger(Optimize::EVENT_REGISTER_SCHEMAS, $event);
 
         foreach ($event->schemas as $schema) {
-            $model = new $schema;
-            $this->schemas[$model->getUniqueKey()] = $model;
+            $this->schemaTypes[] = $schema;
         }
+
+        return $this->schemaTypes;
+    }
+
+    public function getSchemas()
+    {
+        $schemaTypes = $this->getSchemasTypes();
+
+        foreach ($schemaTypes as $schemaClass) {
+            $schema = new $schemaClass();
+            $this->schemas[$schemaClass] = $schema;
+        }
+
+        uasort($this->schemas, function($a, $b) {
+            /**
+             * @var $a Schema
+             * @var $b Schema
+             */
+            return $a->getName() <=> $b->getName();
+        });
 
         return $this->schemas;
     }
