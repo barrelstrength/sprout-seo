@@ -114,7 +114,7 @@ class SitemapsController extends Controller
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      */
-    public function actionSitemapEditTemplate(int $sitemapSectionId = null, string $siteHandle = null)
+    public function actionSitemapEditTemplate(int $sitemapSectionId = null, string $siteHandle = null, SitemapSection $sitemapSection = null)
     {
         if ($siteHandle === null) {
             throw new NotFoundHttpException('Unable to find site with handle: '.$siteHandle);
@@ -129,12 +129,15 @@ class SitemapsController extends Controller
             throw new ForbiddenHttpException('User not permitted to edit content for this site.');
         }
 
-        if ($sitemapSectionId) {
-            $sitemapSection = SproutSeo::$app->sitemaps->getSitemapSectionById($sitemapSectionId);
-        } else {
-            $sitemapSection = new SitemapSection();
-            $sitemapSection->siteId = $currentSite->id;
-            $sitemapSection->type = NoSection::class;
+        if (!$sitemapSection)
+        {
+            if ($sitemapSectionId) {
+                $sitemapSection = SproutSeo::$app->sitemaps->getSitemapSectionById($sitemapSectionId);
+            } else {
+                $sitemapSection = new SitemapSection();
+                $sitemapSection->siteId = $currentSite->id;
+                $sitemapSection->type = NoSection::class;
+            }
         }
 
         $continueEditingUrl = 'sprout-seo/sitemaps/'.$currentSite->handle.'/edit/{id}';
@@ -157,12 +160,11 @@ class SitemapsController extends Controller
     public function actionSaveSitemapSection()
     {
         $this->requirePostRequest();
-        $this->requireAcceptsJson();
 
         $sitemapSection = new SitemapSection();
         $sitemapSection->id = Craft::$app->getRequest()->getBodyParam('id', null);
         $sitemapSection->siteId = Craft::$app->getRequest()->getBodyParam('siteId');
-        $sitemapSection->urlEnabledSectionId = Craft::$app->getRequest()->getBodyParam('urlEnabledSectionId');
+        $sitemapSection->urlEnabledSectionId = Craft::$app->getRequest()->getBodyParam('urlEnabledSectionId', null);
         $sitemapSection->uri = Craft::$app->getRequest()->getBodyParam('uri');
         $sitemapSection->type = Craft::$app->getRequest()->getBodyParam('type');
         $sitemapSection->priority = Craft::$app->getRequest()->getBodyParam('priority');

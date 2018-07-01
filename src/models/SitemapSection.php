@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\models;
 
+use barrelstrength\sproutfields\fields\Url;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use craft\helpers\UrlHelper;
@@ -126,7 +127,7 @@ class SitemapSection extends Model
     {
         return [
             [['uri'], 'sectionUri', 'on' => 'customSection'],
-            [['uri'], 'required', 'on' => 'customSection', 'message' => 'Uri cannot be blank.'],
+            [['uri'], 'required', 'on' => 'customSection', 'message' => 'URI cannot be blank.'],
         ];
     }
 
@@ -135,11 +136,15 @@ class SitemapSection extends Model
      * This is the 'sectionUri' validator as declared in rules().
      *
      * @param $attribute
+     *
+     * @throws \yii\base\Exception
      */
     public function sectionUri($attribute)
     {
         if (UrlHelper::isAbsoluteUrl($this->$attribute)) {
-            $this->addError($attribute, Craft::t('sprout-seo', 'Invalid URI'));
+            $this->addError($attribute, Craft::t('sprout-seo', 'Invalid URI. The URI should only include valid segments of your URL that come after the base domain. i.e. {siteUrl}URI', [
+                'siteUrl' => UrlHelper::siteUrl()
+            ]));
         }
     }
 }
