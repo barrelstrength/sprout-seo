@@ -120,6 +120,12 @@ class Settings extends Model
                 'selected' => 'sitemaps',
                 'template' => 'sprout-base-seo/settings/sitemaps'
             ],
+            'redirects' => [
+                'label' => Craft::t('sprout-seo', 'Redirects'),
+                'url' => 'sprout-seo/settings/redirects',
+                'selected' => 'redirects',
+                'template' => 'sprout-base-seo/settings/redirects'
+            ],
             'advanced' => [
                 'label' => Craft::t('sprout-seo', 'Advanced'),
                 'url' => 'sprout-seo/settings/advanced',
