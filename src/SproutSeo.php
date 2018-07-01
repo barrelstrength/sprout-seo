@@ -198,10 +198,10 @@ class SproutSeo extends Plugin
                 'template' => 'sprout-base-seo/globals/index'
             ],
 
-            'sprout-seo/globals/<siteHandle:.*>/<globalHandle:.*>' =>
+            'sprout-seo/globals/<selectedTabHandle:.*>/<siteHandle:.*>' =>
                 'sprout-seo/global-metadata/edit-global-metadata',
 
-            'sprout-seo/globals/<globalHandle:.*>' =>
+            'sprout-seo/globals/<selectedTabHandle:.*>' =>
                 'sprout-seo/global-metadata/edit-global-metadata',
 
             'sprout-seo/sitemaps' =>

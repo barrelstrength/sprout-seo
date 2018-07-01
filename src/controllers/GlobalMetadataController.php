@@ -27,7 +27,7 @@ class GlobalMetadataController extends Controller
     /**
      * Renders Global Metadata edit pages
      *
-     * @param string       $globalHandle The global handle.
+     * @param string       $selectedTabHandle The global handle.
      * @param string|null  $siteHandle   The site handle, if specified.
      * @param Globals|null $globals      The global set being edited, if there were any validation errors.
      *
@@ -37,7 +37,7 @@ class GlobalMetadataController extends Controller
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
-    public function actionEditGlobalMetadata(string $globalHandle, string $siteHandle = null, Globals $globals = null): Response
+    public function actionEditGlobalMetadata(string $selectedTabHandle, string $siteHandle = null, Globals $globals = null): Response
     {
         $site = Craft::$app->getSites()->getPrimarySite();
 
@@ -81,19 +81,23 @@ class GlobalMetadataController extends Controller
             'robots',
         ];
 
-        if (!in_array($globalHandle, $navItems, true)) {
-            throw new NotFoundHttpException('Invalid global handle: '.$globalHandle);
+        if (!in_array($selectedTabHandle, $navItems, true)) {
+            throw new NotFoundHttpException(Craft::t('sprout-seo', 'The Globals tab `{selectedTabHandle}` does not exist.', [
+                'selectedTabHandle' => $selectedTabHandle
+            ]));
         }
 
         if ($globals === null)
         {
             $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site->id);
+            $globals->siteId = $site->id;
         }
 
         // Render the template!
-        return $this->renderTemplate('sprout-base-seo/globals/'.$globalHandle, [
+        return $this->renderTemplate('sprout-base-seo/globals/'.$selectedTabHandle, [
             'globals' => $globals,
-            'globalHandle' => $globalHandle
+            'siteHandle' => $siteHandle,
+            'selectedTabHandle' => $selectedTabHandle
         ]);
     }
 
