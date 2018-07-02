@@ -165,7 +165,7 @@ class GlobalMetadataController extends Controller
     /**
      * Save the Verify Ownership Structured Data to the database
      *
-     * @return void|Response
+     * @return Response
      * @throws BadRequestHttpException
      * @throws \Throwable
      * @throws \yii\db\Exception
@@ -197,9 +197,11 @@ class GlobalMetadataController extends Controller
         if (!SproutSeo::$app->globalMetadata->saveGlobalMetadata([$globalKeys], $globals)) {
             Craft::$app->getSession()->setError(Craft::t('sprout-seo', 'Unable to save globals.'));
 
-            return Craft::$app->getUrlManager()->setRouteParams([
+            Craft::$app->getUrlManager()->setRouteParams([
                 'globals' => $globals
             ]);
+
+            return null;
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-seo', 'Globals saved.'));
