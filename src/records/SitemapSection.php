@@ -19,6 +19,7 @@ use craft\db\ActiveRecord;
  * @property string uri
  * @property int priority
  * @property string changeFrequency
+ * @property string uniqueKey
  * @property int enabled
  */
 class SitemapSection extends ActiveRecord

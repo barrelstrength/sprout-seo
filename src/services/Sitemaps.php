@@ -190,7 +190,8 @@ class Sitemaps extends Component
                 ]));
             }
         } else {
-            $sectionRecord = new SitemapSectionRecord;
+            $sectionRecord = new SitemapSectionRecord();
+            $sectionRecord->uniqueKey = $this->generateUniqueKey();
         }
 
         if ($sitemapSection->type === NoSection::class) {
@@ -270,6 +271,30 @@ class Sitemaps extends Component
         $sitemapSection->id = $sectionRecord->id;
 
         return true;
+    }
+
+    /**
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    public function generateUniqueKey()
+    {
+        $key = Craft::$app->getSecurity()->generateRandomString(12);
+
+        $result = (new Query())
+            ->select('uniqueKey')
+            ->from(['{{%sproutseo_sitemaps}}'])
+            ->where(['uniqueKey' => $key])
+            ->scalar();
+
+        // If we don't find a match, we have a unique key
+        if (!$result)
+        {
+            return $key;
+        }
+
+        // Try again until we have a unique key
+        $this->generateUniqueKey();
     }
 
     public function getTransforms()

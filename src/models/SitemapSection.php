@@ -72,6 +72,11 @@ class SitemapSection extends Model
      */
     public $handle;
 
+    /**
+     * @var string
+     */
+    public $uniqueKey;
+
 // @todo - do we need the following attributes or can we update things and remove them?
 
     /**
