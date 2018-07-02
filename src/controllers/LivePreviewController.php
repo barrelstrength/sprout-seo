@@ -99,9 +99,9 @@ class LivePreviewController extends Controller
             $sitemapSection = SproutSeo::$app->sitemaps->getSitemapSectionById($post['id']);
 
             if (isset($sectionsRegistered[$sitemapSection->type])) {
-                $sectionType = $sectionsRegistered[$sitemapSection->type];
-                $uniqueKey = $sectionType->getId().'-'.$sitemapSection->urlEnabledSectionId;
-                $elementSection = $sectionType->urlEnabledSections[$uniqueKey];
+                $urlEnabledSectionType = $sectionsRegistered[$sitemapSection->type];
+                $uniqueKey = $urlEnabledSectionType->getId().'-'.$sitemapSection->urlEnabledSectionId;
+                $elementSection = $urlEnabledSectionType->urlEnabledSections[$uniqueKey];
                 // let's update the handle and the url
                 $metadata['uri'] = $elementSection->sitemapSection->uri;
             }
