@@ -184,14 +184,14 @@ class Sitemaps extends Component
         $isNewSection = !$sitemapSection->id;
 
         if (!$isNewSection) {
-            if (null === ($sectionRecord = SitemapSectionRecord::findOne($sitemapSection->id))) {
+            if (null === ($sitemapSectionRecord = SitemapSectionRecord::findOne($sitemapSection->id))) {
                 throw new Exception(Craft::t('sprout-seo', 'Unable to find Sitemap with ID "{id}"', [
                     'id' => $sitemapSection->id
                 ]));
             }
         } else {
-            $sectionRecord = new SitemapSectionRecord();
-            $sectionRecord->uniqueKey = $this->generateUniqueKey();
+            $sitemapSectionRecord = new SitemapSectionRecord();
+            $sitemapSectionRecord->uniqueKey = $this->generateUniqueKey();
         }
 
         if ($sitemapSection->type === NoSection::class) {
@@ -208,28 +208,28 @@ class Sitemaps extends Component
             return false;
         }
 
-        $sectionRecord->id = $sitemapSection->id;
-        $sectionRecord->siteId = $sitemapSection->siteId;
-        $sectionRecord->urlEnabledSectionId = $sitemapSection->urlEnabledSectionId;
-        $sectionRecord->type = $sitemapSection->type;
-        $sectionRecord->uri = $sitemapSection->uri;
-        $sectionRecord->priority = $sitemapSection->priority;
-        $sectionRecord->changeFrequency = $sitemapSection->changeFrequency;
-        $sectionRecord->enabled = $sitemapSection->enabled ?? false;
+        $sitemapSectionRecord->id = $sitemapSection->id;
+        $sitemapSectionRecord->siteId = $sitemapSection->siteId;
+        $sitemapSectionRecord->urlEnabledSectionId = $sitemapSection->urlEnabledSectionId;
+        $sitemapSectionRecord->type = $sitemapSection->type;
+        $sitemapSectionRecord->uri = $sitemapSection->uri;
+        $sitemapSectionRecord->priority = $sitemapSection->priority;
+        $sitemapSectionRecord->changeFrequency = $sitemapSection->changeFrequency;
+        $sitemapSectionRecord->enabled = $sitemapSection->enabled ?? false;
 
         $transaction = Craft::$app->db->beginTransaction();
 
         try {
-            $sectionRecord->save(false);
+            $sitemapSectionRecord->save(false);
             $transaction->commit();
         } catch (\Throwable $e) {
-            $sitemapSection->addErrors($sectionRecord->getErrors());
+            $sitemapSection->addErrors($sitemapSectionRecord->getErrors());
             $transaction->rollBack();
             throw $e;
         }
 
         // update id on model (for new records)
-        $sitemapSection->id = $sectionRecord->id;
+        $sitemapSection->id = $sitemapSectionRecord->id;
 
         /**
          * @var PluginSettings $pluginSettings
@@ -238,37 +238,46 @@ class Sitemaps extends Component
 
         // Copy this site behavior to the whole group, for the Url-Enabled Sitemaps
         // Custom Sections will be allowed to be unique, even in Multi-Lingual Sitemaps
-        if ($pluginSettings->enableMultilingualSitemaps && $sectionRecord->type !== NoSection::class) {
-            $site = Craft::$app->getSites()->getSiteById($sectionRecord->siteId);
-            $groupSites = Craft::$app->getSites()->getSitesByGroupId($site->groupId);
+        if ($pluginSettings->enableMultilingualSitemaps && $sitemapSectionRecord->type !== NoSection::class) {
+            $site = Craft::$app->getSites()->getSiteById($sitemapSectionRecord->siteId);
+            $sitesInGroup = Craft::$app->getSites()->getSitesByGroupId($site->groupId);
+
+            $siteIds = [];
+            foreach ($sitesInGroup as $siteInGroup) {
+                $siteIds[] = $siteInGroup->id;
+            }
+
             // all sections saved for this site
-            $rowsBehavior = SitemapSectionRecord::findAll(['siteId' => $site->id]);
+            $sitemapSectionRecords = SitemapSectionRecord::find()
+                ->where(['in', 'siteId', $siteIds])
+                ->andWhere('urlEnabledSectionId= :urlEnabledSectionId', [
+                    ':urlEnabledSectionId' => $sitemapSectionRecord->urlEnabledSectionId
+                ])
+                ->indexBy('siteId')
+                ->all();
 
-            foreach ($rowsBehavior as $rowBehavior) {
-                foreach ($groupSites as $groupSite) {
-                    $sitemapSectionRecord = SitemapSectionRecord::findOne([
-                        'siteId' => $groupSite->id,
-                        'type' => $rowBehavior->type
-                    ]);
+            foreach ($sitesInGroup as $siteInGroup) {
 
-                    if ($sectionRecord === null) {
-                        $sectionRecord = new SitemapSectionRecord();
-                    }
-
-                    $sectionRecord->siteId = $groupSite->id;
-                    $sectionRecord->type = $rowBehavior->type;
-                    $sectionRecord->urlEnabledSectionId = $rowBehavior->urlEnabledSectionId;
-                    $sectionRecord->uri = $rowBehavior->uri;
-                    $sectionRecord->priority = $rowBehavior->priority;
-                    $sectionRecord->changeFrequency = $rowBehavior->changeFrequency;
-                    $sectionRecord->enabled = $rowBehavior->enabled;
-
-                    $sectionRecord->save();
+                if (isset($sitemapSectionRecords[$siteInGroup->id])) {
+                    $sitemapSectionRecord = $sitemapSectionRecords[$siteInGroup->id];
+                } else {
+                    $sitemapSectionRecord = new SitemapSectionRecord();
+                    $sitemapSectionRecord->uniqueKey = $this->generateUniqueKey();
                 }
+
+                $sitemapSectionRecord->siteId = $siteInGroup->id;
+                $sitemapSectionRecord->type = $sitemapSection->type;
+                $sitemapSectionRecord->urlEnabledSectionId = $sitemapSection->urlEnabledSectionId;
+                $sitemapSectionRecord->uri = $sitemapSection->uri;
+                $sitemapSectionRecord->priority = $sitemapSection->priority;
+                $sitemapSectionRecord->changeFrequency = $sitemapSection->changeFrequency;
+                $sitemapSectionRecord->enabled = $sitemapSection->enabled;
+
+                $sitemapSectionRecord->save();
             }
         }
 
-        $sitemapSection->id = $sectionRecord->id;
+        $sitemapSection->id = $sitemapSectionRecord->id;
 
         return true;
     }
@@ -288,8 +297,7 @@ class Sitemaps extends Component
             ->scalar();
 
         // If we don't find a match, we have a unique key
-        if (!$result)
-        {
+        if (!$result) {
             return $key;
         }
 
