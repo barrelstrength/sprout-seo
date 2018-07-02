@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\models;
 
-use barrelstrength\sproutseo\fields\ElementMetadata;
+
 use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;

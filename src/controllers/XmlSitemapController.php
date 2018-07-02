@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\controllers;
 
 
-use barrelstrength\sproutseo\models\Settings;
+
 use barrelstrength\sproutseo\SproutSeo;
 use craft\web\Controller;
 

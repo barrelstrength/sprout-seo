@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\models;
 
-use barrelstrength\sproutfields\fields\Url;
+
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use craft\helpers\UrlHelper;

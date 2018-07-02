@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
-use barrelstrength\sproutforms\models\EntryStatus;
+
 use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\models\SitemapSection;
@@ -16,11 +16,11 @@ use barrelstrength\sproutseo\sectiontypes\NoSection;
 use barrelstrength\sproutseo\SproutSeo;
 use yii\base\Component;
 use craft\db\Query;
-use yii\web\NotFoundHttpException;
+
 use Craft;
 use DateTime;
 use craft\helpers\UrlHelper;
-use craft\helpers\Template as TemplateHelper;
+
 
 class XmlSitemap extends Component
 {
