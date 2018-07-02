@@ -296,13 +296,12 @@ class Sitemaps extends Component
             ->where(['uniqueKey' => $key])
             ->scalar();
 
-        // If we don't find a match, we have a unique key
-        if (!$result) {
-            return $key;
+        if ($result) {
+            // Try again until we have a unique key
+            $this->generateUniqueKey();
         }
 
-        // Try again until we have a unique key
-        $this->generateUniqueKey();
+        return $key;
     }
 
     public function getTransforms()
@@ -435,12 +434,14 @@ class Sitemaps extends Component
 
             $this->urlEnabledSectionTypes[$urlEnabledSectionType->getId()] = $urlEnabledSectionType;
         }
+
+        return null;
     }
 
     /**
      * @param $context
      *
-     * @return mixed
+     * @return UrlEnabledSection|null
      * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionsViaContext($context)
@@ -472,6 +473,8 @@ class Sitemaps extends Component
                 }
             }
         }
+
+        return null;
     }
 
     /**

@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\models;
 
 use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
+use craft\base\Element;
 use craft\base\Model;
 use craft\helpers\UrlHelper;
 use barrelstrength\sproutseo\enums\MetadataLevels;
@@ -475,6 +476,10 @@ class Metadata extends Model
     protected function prepareElementMetadata($overrideInfo)
     {
         if (isset($overrideInfo['metadataField']) && isset($overrideInfo['contextElement'])) {
+
+            /**
+             * @var Element $element
+             */
             $element = $overrideInfo['contextElement'];
             $site = $element->getSite();
 

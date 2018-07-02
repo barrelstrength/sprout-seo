@@ -446,6 +446,7 @@ class SproutSeoOptimizeHelper
             return null;
         }
 
+        /** @noinspection ForeachSourceInspection */
         foreach ($globals['social'] as $key => $socialProfile) {
             if ($socialProfile['profileName'] === 'Google+') {
                 // Get our first Google+ URL and bail

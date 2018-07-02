@@ -18,7 +18,7 @@ class m180629_000000_redirects extends Migration
      */
     public function safeUp()
     {
-        $table = "{{%sproutseo_redirects}}";
+        $table = '{{%sproutseo_redirects}}';
         $isNew = false;
         $primarySite = (new Query())
             ->select(['id'])

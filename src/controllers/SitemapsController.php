@@ -107,8 +107,9 @@ class SitemapsController extends Controller
     /**
      * Renders a Sitemap Edit Page
      *
-     * @param int|null    $sitemapSectionId
-     * @param string|null $siteHandle
+     * @param int|null            $sitemapSectionId
+     * @param string|null         $siteHandle
+     * @param SitemapSection|null $sitemapSection
      *
      * @return Response
      * @throws ForbiddenHttpException
@@ -204,7 +205,7 @@ class SitemapsController extends Controller
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteSitemapById()
+    public function actionDeleteSitemapById() : Response
     {
         $this->requirePostRequest();
 
@@ -214,10 +215,10 @@ class SitemapsController extends Controller
 
         if (Craft::$app->request->getAcceptsJson()) {
             return $this->asJson([
-                'success' => $result >= 0 ? true : false
+                'success' => $result >= 0
             ]);
         }
 
-        $this->redirectToPostedUrl();
+        return $this->redirectToPostedUrl();
     }
 }

@@ -277,8 +277,8 @@ abstract class Schema
      * Add a number to our Structured Data array.
      * If the property is not an integer or float, don't add it.
      *
-     * @param string $propertyName
-     * @param int    $number
+     * @param string    $propertyName
+     * @param int|float $number
      */
     public function addNumber($propertyName, $number)
     {
@@ -414,6 +414,8 @@ abstract class Schema
 
             $this->structuredData[$propertyName] = $imageObjectSchema->getSchema();
         }
+
+        return null;
     }
 
     /**
@@ -467,14 +469,12 @@ abstract class Schema
      * @param $propertyName
      * @param $addressId
      *
-     * @return array|PostalAddressSchema
+     * @return null
      */
     public function addAddress($propertyName, $addressId)
     {
-        $address = [];
-
         if (!$addressId) {
-            return $address;
+            return null;
         }
 
         $addressModel = SproutBase::$app->addressField->getAddressById($addressId);
@@ -490,6 +490,8 @@ abstract class Schema
 
             $this->structuredData[$propertyName] = $address->getSchema();
         }
+
+        return null;
     }
 
     /**
@@ -500,14 +502,12 @@ abstract class Schema
      * @param $latitude
      * @param $longitude
      *
-     * @return array|GeoSchema
+     * @return null
      */
     public function addGeo($propertyName, $latitude, $longitude)
     {
-        $geo = [];
-
         if (!$latitude || !$longitude) {
-            return $geo;
+            return null;
         }
 
         $geo = new GeoSchema();
@@ -516,6 +516,8 @@ abstract class Schema
         $geo->longitude = $longitude;
 
         $this->structuredData[$propertyName] = $geo->getSchema();
+
+        return null;
     }
 
     /**

@@ -14,6 +14,7 @@ use barrelstrength\sproutseo\models\SitemapSection;
 use barrelstrength\sproutseo\sectiontypes\Entry;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
 use barrelstrength\sproutseo\SproutSeo;
+use craft\elements\db\ElementQuery;
 use yii\base\Component;
 use craft\db\Query;
 
@@ -48,7 +49,11 @@ class XmlSitemap extends Component
                 $sitemapSection = $urlEnabledSection->sitemapSection;
 
                 if ($sitemapSection->enabled) {
-                    // Get Total Elements for this URL-Enabled Section
+                    /**
+                     * Get Total Elements for this URL-Enabled Section
+                     *
+                     * @var ElementQuery $query
+                     */
                     $query = $urlEnabledSectionType->getElementType()::find();
                     $query->{$urlEnabledSectionTypeId}($urlEnabledSection->id);
                     $query->siteId = $siteId;
@@ -244,7 +249,7 @@ class XmlSitemap extends Component
      * @param $sitemapKey
      * @param $siteId
      *
-     * @return SitemapSection[]
+     * @return array
      */
     protected function getEnabledSitemapSections($sitemapKey, $siteId): array
     {
@@ -272,6 +277,8 @@ class XmlSitemap extends Component
 
     /**
      * Returns all Custom Section URLs
+     *
+     * @param $siteId
      *
      * @return array
      * @throws \yii\base\Exception
@@ -330,6 +337,7 @@ class XmlSitemap extends Component
                 $structure[] = $locations;
             } else {
                 // Looping through each element and adding it as primary and creating its alternates
+                /** @noinspection ForeachSourceInspection */
                 foreach ($locations as $index => $location) {
                     // Add secondary locations as alternatives to primary
                     if (count($locations) > 1) {

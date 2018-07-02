@@ -38,7 +38,7 @@ class ContactPointSchema extends Schema
     }
 
     /**
-     * @return array|null
+     * @inheritdoc
      */
     public function addProperties()
     {
@@ -50,5 +50,7 @@ class ContactPointSchema extends Schema
 
         $this->addText('contactType', $contact['contactType']);
         $this->addTelephone('telephone', $contact['telephone']);
+
+        return null;
     }
 }

@@ -44,7 +44,7 @@ class ThingSchema extends Schema
         $metadata = $this->prioritizedMetadataModel;
 
         if ($this->isMainEntity) {
-            $this->addMainEntityOfPage($this->getSchemaOverrideType());
+            $this->addMainEntityOfPage();
         }
 
         $this->addText('name', $metadata->optimizedTitle);

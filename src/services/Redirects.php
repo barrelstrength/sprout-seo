@@ -267,7 +267,7 @@ class Redirects extends Component
             SproutSeo::warning('404 - Page Not Found: '.json_encode($log));
 
             $redirect = $this->getRedirectById($redirectId);
-            $redirect->count += 1;
+            ++$redirect->count;
 
             $this->saveRedirect($redirect);
         } catch (\Exception $e) {

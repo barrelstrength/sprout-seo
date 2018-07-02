@@ -121,6 +121,7 @@ class UrlEnabledSection extends Model
         foreach ($fieldLayoutObjects as $fieldLayoutObject) {
             $fields = $fieldLayoutObject->getFieldLayout()->getFields();
 
+            /** @noinspection ForeachSourceInspection */
             foreach ($fields as $field) {
                 if (get_class($field) == ElementMetadata::class) {
                     $totalElementMetaFields++;

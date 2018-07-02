@@ -115,32 +115,36 @@ class SproutSeo extends Plugin
 
         // @todo - research craft()->isConsole() method was removed on craft3
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {
+
             $exception = $event->exception;
             $request = Craft::$app->getRequest();
-            if (get_class($exception) == NotFoundHttpException::class && $exception->statusCode == 404) {
-                if ($request->getIsSiteRequest() && !$request->getIsLivePreview()) {
-                    $url = $request->getUrl();
 
-                    // check if the request url needs redirect
-                    $redirect = SproutSeo::$app->redirects->getRedirect($url);
+            if (get_class($exception) == NotFoundHttpException::class &&
+                $exception->statusCode == 404 &&
+                $request->getIsSiteRequest() &&
+                !$request->getIsLivePreview()
+            ) {
+                $url = $request->getUrl();
 
-                    /**
-                     * @var Settings $pluginSettings
-                     */
-                    $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+                // check if the request url needs redirect
+                $redirect = SproutSeo::$app->redirects->getRedirect($url);
 
-                    if (!$redirect && $pluginSettings->enable404RedirectLog) {
-                        // Save new 404 Redirect
-                        $redirect = SproutSeo::$app->redirects->save404Redirect($url);
-                    }
+                /**
+                 * @var Settings $pluginSettings
+                 */
+                $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
-                    if ($redirect) {
-                        SproutSeo::$app->redirects->logRedirect($redirect->id);
-                        // Use != instead of !== as 404 can be both as integer or string
-                        if ($redirect->enabled && $redirect->method != 404) {
-                            Craft::$app->getResponse()->redirect($redirect->newUrl, $redirect->method);
-                            Craft::$app->end();
-                        }
+                if (!$redirect && $pluginSettings->enable404RedirectLog) {
+                    // Save new 404 Redirect
+                    $redirect = SproutSeo::$app->redirects->save404Redirect($url);
+                }
+
+                if ($redirect) {
+                    SproutSeo::$app->redirects->logRedirect($redirect->id);
+                    // Use != instead of !== as 404 can be both as integer or string
+                    if ($redirect->enabled && $redirect->method != 404) {
+                        Craft::$app->getResponse()->redirect($redirect->newUrl, $redirect->method);
+                        Craft::$app->end();
                     }
                 }
             }

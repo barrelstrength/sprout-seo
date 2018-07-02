@@ -28,7 +28,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
         if (isset($settings['toggleLocaleOverride']) && $settings['toggleLocaleOverride']) {
             $groups = Craft::$app->getSites()->getAllGroups();
             $groupsArray = [];
-            $settings['enableMultilingualSitemaps'] = "1";
+            $settings['enableMultilingualSitemaps'] = '1';
             foreach ($groups as $group) {
                 $groupsArray[$group->id] = $group->id;
             }

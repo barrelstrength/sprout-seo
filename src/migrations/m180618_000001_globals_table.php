@@ -18,7 +18,7 @@ class m180618_000001_globals_table extends Migration
      */
     public function safeUp()
     {
-        $table = "{{%sproutseo_metadata_globals}}";
+        $table = '{{%sproutseo_metadata_globals}}';
         $isNew = false;
         $primarySite = (new Query())
             ->select(['id'])

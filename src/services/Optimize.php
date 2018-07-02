@@ -275,6 +275,8 @@ class Optimize extends Component
     /**
      * Find any element with the getContent function and fetch the first ElementMetadata Field on the layout
      *
+     * @param Element|null $element
+     *
      * @return Metadata|null
      */
     public function getMetadataField(Element $element = null)
@@ -390,6 +392,8 @@ class Optimize extends Component
                 $prioritizedMetadataModel->ogDateUpdated = $this->urlEnabledSection->element->dateUpdated->format(DateTime::ISO8601);
             }
 
+            /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
+            /** @noinspection PhpUndefinedFieldInspection */
             if ($this->urlEnabledSection->element->expiryDate !== null && $this->urlEnabledSection->element->expiryDate) {
                 $prioritizedMetadataModel->ogExpiryDate = $this->urlEnabledSection->element->expiryDate->format(DateTime::ISO8601);
             }
@@ -544,13 +548,11 @@ class Optimize extends Component
 
         switch ($type) {
             case MetadataLevels::ElementMetadata:
-                if ($this->urlEnabledSection->element !== null) {
-                    if ($this->urlEnabledSection->element->id !== null) {
-                        $response = [
-                            'metadataField' => $this->metadataField,
-                            'contextElement' => $this->urlEnabledSection->element
-                        ];
-                    }
+                if ($this->urlEnabledSection->element !== null && $this->urlEnabledSection->element->id !== null) {
+                    $response = [
+                        'metadataField' => $this->metadataField,
+                        'contextElement' => $this->urlEnabledSection->element
+                    ];
                 }
                 break;
 
