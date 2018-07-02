@@ -26,81 +26,60 @@ class XmlSitemapController extends Controller
     public $allowAnonymous = ['renderXmlSitemap'];
 
     /**
-     * Generates the proper xml
+     * Generates an XML sitemapindex or sitemap
+     *
+     * @param null     $sitemapKey
+     * @param int|null $pageNumber
      *
      * @return \yii\web\Response
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
-     * @throws \yii\web\NotFoundHttpException
      */
-    public function actionRenderXmlSitemap()
+    public function actionRenderXmlSitemap($sitemapKey = null, int $pageNumber = null)
     {
-        // Get URL and remove .xml extension
-        $url = Craft::$app->request->getFullPath();
-
-        /**
-         * @var Settings $settings
-         */
-        $settings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-        $enableMultilingualSitemaps = false;
-
         $currentSite = Craft::$app->sites->getCurrentSite();
         $siteId = $currentSite->id;
-
-        if (Craft::$app->getIsMultiSite() && $settings->enableMultilingualSitemaps) {
-            $enableMultilingualSitemaps = true;
-        }
-
-        $sitemapSlug = substr($url, 0, -4);
-        $segments = explode('-', $sitemapSlug);
-        $sitemapSegment = array_pop($segments);
-
-        // Extract the page number, if we have one.
-        preg_match('/\d+/', $sitemapSegment, $match);
-        $pageNumber = $match[0] ?? null;
 
         // Prepare Sitemap Index content
         $sitemapIndexItems = [];
         $elements = [];
 
-        switch ($sitemapSlug) {
+        switch ($sitemapKey) {
             // Generate Sitemap Index
-            case 'sitemap':
+            case '':
                 $sitemapIndexItems = SproutSeo::$app->xmlSitemap->getSitemapIndex($siteId);
                 break;
 
             // Display Singles Sitemap
-            case 'singles-sitemap':
-                $elements = SproutSeo::$app->xmlSitemap->getDynamicSitemapElements('singles-sitemap', $pageNumber, $siteId, $enableMultilingualSitemaps);
+            case 'singles':
+                $elements = SproutSeo::$app->xmlSitemap->getDynamicSitemapElements('singles', $pageNumber, $siteId);
                 break;
 
             // Display Custom Section Sitemap
-            case 'custom-sections-sitemap':
-                $elements = SproutSeo::$app->xmlSitemap->getCustomSectionUrls();
+            case 'custom-pages':
+                $elements = SproutSeo::$app->xmlSitemap->getCustomSectionUrls($siteId);
                 break;
 
             default:
-                $sitemapHandle = $segments[1].':'.$segments[0];
-                $elements = SproutSeo::$app->xmlSitemap->getDynamicSitemapElements($sitemapHandle, $pageNumber, $siteId, $enableMultilingualSitemaps);
+                $elements = SproutSeo::$app->xmlSitemap->getDynamicSitemapElements($sitemapKey, $pageNumber, $siteId);
         }
 
-        header('Content-Type: text/xml');
+        $headers = Craft::$app->getResponse()->getHeaders();
+        $headers->set('Content-Type', 'text/xml');
 
         $templatePath = Craft::getAlias('@sproutbase/app/seo/templates/');
         Craft::$app->view->setTemplatesPath($templatePath);
 
-        // sitemap index by default
-        $template = '_special/sitemapindex';
-        $params = [
-            'sitemapIndexItems' => $sitemapIndexItems
-        ];
-
-        if ($sitemapSlug !== 'sitemap') {
-            $template = '_special/sitemap-dynamic';
-            $params = [
+        // Render a specific sitemap
+        if ($sitemapKey) {
+            return $this->renderTemplate('_components/sitemaps/sitemap', [
                 'elements' => $elements
-            ];
+            ]);
         }
 
-        return $this->renderTemplate($template, $params);
+        // Render the sitemapindex if we no specific sitemap is defined
+        return $this->renderTemplate('_components/sitemaps/sitemapindex', [
+            'sitemapIndexItems' => $sitemapIndexItems
+        ]);
     }
 }

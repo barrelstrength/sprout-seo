@@ -52,18 +52,6 @@ class SproutSeoVariable
     }
 
     /**
-     * @param array|null $options
-     *
-     * @return array|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     */
-    public function getSitemap(array $options = null)
-    {
-        return SproutSeo::$app->xmlSitemap->getSitemap($options);
-    }
-
-    /**
      * @return string
      * @throws \yii\base\Exception
      */

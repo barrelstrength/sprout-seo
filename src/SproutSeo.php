@@ -244,23 +244,30 @@ class SproutSeo extends Plugin
      * Match dynamic sitemap URLs
      *
      * Example matches include:
+     *
+     * Sitemap Index Page
      * - sitemap.xml
-     * - singles-sitemap.xml
-     * - custom-sections-sitemap.xml
-     * - blog-entries-sitemap1.xml
-     * - blog-entries-sitemap2.xml
+     *
+     * URL-Enabled Sections
+     * - sitemap-t6PLT5o43IFG-1.xml
+     * - sitemap-t6PLT5o43IFG-2.xml
+     *
+     * Special Groupings
+     * - sitemap-singles.xml
+     * - sitemap-custom-pages.xml
      *
      * @return array
      */
     private function getSiteUrlRules()
     {
-        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-        $seoSettings = $plugin->getSettings();
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
-        if (isset($seoSettings->enableDynamicSitemaps) && $seoSettings->enableDynamicSitemaps) {
+        if (isset($pluginSettings->enableDynamicSitemaps) && $pluginSettings->enableDynamicSitemaps) {
             return [
-                '<section:.*>?sitemap<pageId:\d+>?.xml' =>
-                    'sprout-seo/xml-sitemap/render-xml-sitemap'
+                'sitemap-<sitemapKey:.*>-<pageNumber:\d+>.xml' =>
+                    'sprout-seo/xml-sitemap/render-xml-sitemap',
+                'sitemap-?<sitemapKey:.*>.xml' =>
+                    'sprout-seo/xml-sitemap/render-xml-sitemap',
             ];
         }
 
