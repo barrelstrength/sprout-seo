@@ -8,21 +8,21 @@
 namespace barrelstrength\sproutseo\sectiontypes;
 
 use barrelstrength\sproutseo\base\UrlEnabledSectionType;
-
+use craft\commerce\elements\Product as ProductElement;
 use Craft;
-use craft\commerce\elements\Product;
+use craft\commerce\services\ProductTypes;
 
 /**
- * Class CommerceProduct
+ * Class Product
  */
-class CommerceProduct extends UrlEnabledSectionType
+class Product extends UrlEnabledSectionType
 {
     /**
      * @return string
      */
     public function getName()
     {
-        return 'Commerce Products';
+        return ProductElement::class;
     }
 
     /**
@@ -52,7 +52,9 @@ class CommerceProduct extends UrlEnabledSectionType
      */
     public function getById($id)
     {
-        return Craft::$app->commerce_productTypes->getProductTypeById($id);
+        $productTypes = new ProductTypes();
+
+        return $productTypes->getProductTypeById($id);
     }
 
     /**
@@ -78,7 +80,7 @@ class CommerceProduct extends UrlEnabledSectionType
      */
     public function getElementType()
     {
-        return Product::class;
+        return ProductElement::class;
     }
 
     /**
@@ -96,7 +98,9 @@ class CommerceProduct extends UrlEnabledSectionType
     {
         $urlEnabledSections = [];
 
-        $sections = Craft::$app->commerce_productTypes->getAllProductTypes();
+        $productTypes = new ProductTypes();
+
+        $sections = $productTypes->getAllProductTypes();
 
         foreach ($sections as $section) {
             if ($section->hasUrls) {
@@ -112,7 +116,7 @@ class CommerceProduct extends UrlEnabledSectionType
      */
     public function getTableName()
     {
-        return 'commerce_producttypes_i18n';
+        return 'commerce_producttypes_sites';
     }
 
     /**
@@ -139,24 +143,24 @@ class CommerceProduct extends UrlEnabledSectionType
             $elementGroupId = Craft::$app->request->getSegment(4);
         }
 
-        $criteria = Craft::$app->elements->getCriteria('Commerce_Product');
-        // @todo - call commerce service
         $productType = Craft::$app->categories->getGroupById($elementGroupId);
-        $locales = array_values($productType->getLocales());
+        $siteSettings = array_values($productType->getSiteSettings());
 
-        if ($locales) {
-            $primaryLocale = $locales[0];
+        if ($siteSettings) {
 
-            $criteria->locale = $primaryLocale->locale;
-            $criteria->productTypeId = $elementGroupId;
-            $criteria->status = null;
-            $criteria->localeEnabled = null;
-            $criteria->limit = null;
+//            $primaryLocale = $siteSettings[0];
 
-            Craft::$app->tasks->createTask('ResaveElements', Craft::t('sprout-seo', 'Re-saving Commerce Products and metadata.'), [
-                'elementType' => Product::class,
-                'criteria' => $criteria->getAttributes()
-            ]);
+//            $query = ProductElement::find();
+//            $query->siteId = $primaryLocale->locale;
+//            $query->productTypeId = $elementGroupId;
+//            $query->status = null;
+//            $query->localeEnabled = null;
+//            $query->limit = null;
+//
+//            Craft::$app->tasks->createTask('ResaveElements', Craft::t('sprout-seo', 'Re-saving Commerce Products and metadata.'), [
+//                'elementType' => Product::class,
+//                'criteria' => $criteria->getAttributes()
+//            ]);
         }
     }
 }

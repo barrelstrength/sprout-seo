@@ -6,7 +6,7 @@ use craft\db\Migration;
 use craft\db\Query;
 use barrelstrength\sproutseo\sectiontypes\Entry;
 use barrelstrength\sproutseo\sectiontypes\Category;
-use barrelstrength\sproutseo\sectiontypes\CommerceProduct;
+use barrelstrength\sproutseo\sectiontypes\Product;
 
 /**
  * m180625_000000_sections_to_sitemap migration.
@@ -61,7 +61,7 @@ class m180625_000000_sections_to_sitemap extends Migration
                     $newType = Category::class;
                     break;
                 case 'commerce_products':
-                    $newType = CommerceProduct::class;
+                    $newType = Product::class;
                     break;
             }
 

@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\schema;
 
 use Craft;
+use craft\commerce\elements\Product;
 use craft\commerce\elements\Variant;
 
 class ProductSchema extends ThingSchema
@@ -46,12 +47,12 @@ class ProductSchema extends ThingSchema
 
         $elementType = $this->element->getElementType();
 
-        if ($elementType == 'Commerce_Product') {
-            $this->addCommerceProductProperties();
+        if ($elementType == Product::class) {
+            $this->addProductProperties();
         }
     }
 
-    public function addCommerceProductProperties()
+    public function addProductProperties()
     {
         $identity = $this->globals['identity'];
         $element = $this->element;
