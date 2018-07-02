@@ -79,6 +79,14 @@ class Entry extends UrlEnabledSectionType
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getElementLiveStatus()
+    {
+        return EntryElement::STATUS_LIVE;
+    }
+
+    /**
      * @return string
      */
     public function getMatchedElementVariable()

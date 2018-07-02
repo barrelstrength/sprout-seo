@@ -156,6 +156,18 @@ abstract class UrlEnabledSectionType
     abstract public function getMatchedElementVariable();
 
     /**
+     * Returns the value to add to the database query to ensure that entries being received have a published status.
+     *
+     * @example An Entry requires a status of Entry::STATUS_LIVE to be published.
+     *
+     * @return null
+     */
+    public function getElementLiveStatus()
+    {
+        return Element::STATUS_ENABLED;
+    }
+
+    /**
      * Return all the URL-Enabled Sections for this URL-Enabled Section Type
      *
      * @return UrlEnabledSection[]
