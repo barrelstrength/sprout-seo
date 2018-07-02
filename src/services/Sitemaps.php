@@ -454,7 +454,7 @@ class Sitemaps extends Component
         $this->prepareUrlEnabledSectionTypesForSitemaps($currentSite->id);
 
         foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType) {
-            if ($urlEnabledSectionType->getId() == $type) {
+            if (get_class($urlEnabledSectionType) == $type) {
                 return $urlEnabledSectionType;
             }
         }
