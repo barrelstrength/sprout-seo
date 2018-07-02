@@ -36,6 +36,7 @@ use barrelstrength\sproutseo\models\UrlEnabledSection;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\base\Schema;
 use barrelstrength\sproutseo\models\Settings;
+use craft\base\Element;
 use craft\base\Field;
 use DateTime;
 use Craft;
@@ -245,7 +246,7 @@ class Optimize extends Component
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($this->siteId);
         $this->urlEnabledSection = SproutSeo::$app->sitemaps->getUrlEnabledSectionsViaContext($context);
-        $this->metadataField = $this->getMetadataField();
+        $this->metadataField = $this->getMetadataField($this->urlEnabledSection->element);
         $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($this->siteId);
 
         $metadata = [
@@ -276,23 +277,25 @@ class Optimize extends Component
      *
      * @return Metadata|null
      */
-    public function getMetadataField()
+    public function getMetadataField(Element $element = null)
     {
-        if ($this->urlEnabledSection->element !== null && $this->urlEnabledSection->element->id) {
-            $element = $this->urlEnabledSection->element;
-            $fields = $element->getFieldLayout()->getFields();
+        if (!$element)
+        {
+            return null;
+        }
 
-            /**
-             * Get our ElementMetadata Field
-             *
-             * @var Field $field
-             */
-            foreach ($fields as $field) {
-                if (get_class($field) == ElementMetadata::class) {
-                    if (isset($element->{$field->handle})) {
-                        $metadata = $element->{$field->handle};
-                        return new Metadata($metadata);
-                    }
+        $fields = $element->getFieldLayout()->getFields();
+
+        /**
+         * Get our ElementMetadata Field
+         *
+         * @var Field $field
+         */
+        foreach ($fields as $field) {
+            if (get_class($field) == ElementMetadata::class) {
+                if (isset($element->{$field->handle})) {
+                    $metadata = $element->{$field->handle};
+                    return new Metadata($metadata);
                 }
             }
         }
