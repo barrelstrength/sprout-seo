@@ -773,9 +773,11 @@ class SproutSeoVariable
         });
 
         // Build our options
-        $schemaOptions = ['' => Craft::t('sprout-seo', 'None'), [
-            'optgroup' => Craft::t('sprout-seo', 'Default Types')
-        ]];
+        $schemaOptions = [
+            '' => Craft::t('sprout-seo', 'None'), [
+                'optgroup' => Craft::t('sprout-seo', 'Default Types')
+            ]
+        ];
 
 
         $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {

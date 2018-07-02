@@ -28,8 +28,8 @@ class GlobalMetadataController extends Controller
      * Renders Global Metadata edit pages
      *
      * @param string       $selectedTabHandle The global handle.
-     * @param string|null  $siteHandle   The site handle, if specified.
-     * @param Globals|null $globals      The global set being edited, if there were any validation errors.
+     * @param string|null  $siteHandle        The site handle, if specified.
+     * @param Globals|null $globals           The global set being edited, if there were any validation errors.
      *
      * @return Response
      * @throws ForbiddenHttpException
@@ -87,8 +87,7 @@ class GlobalMetadataController extends Controller
             ]));
         }
 
-        if ($globals === null)
-        {
+        if ($globals === null) {
             $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site->id);
             $globals->siteId = $site->id;
         }

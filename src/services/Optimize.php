@@ -279,8 +279,7 @@ class Optimize extends Component
      */
     public function getMetadataField(Element $element = null)
     {
-        if (!$element)
-        {
+        if (!$element) {
             return null;
         }
 

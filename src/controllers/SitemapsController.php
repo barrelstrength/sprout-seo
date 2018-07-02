@@ -129,8 +129,7 @@ class SitemapsController extends Controller
             throw new ForbiddenHttpException('User not permitted to edit content for this site.');
         }
 
-        if (!$sitemapSection)
-        {
+        if (!$sitemapSection) {
             if ($sitemapSectionId) {
                 $sitemapSection = SproutSeo::$app->sitemaps->getSitemapSectionById($sitemapSectionId);
             } else {

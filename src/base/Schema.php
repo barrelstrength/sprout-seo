@@ -38,6 +38,7 @@ abstract class Schema
 
     /**
      * Defines whether to set the Schema's 'mainEntityOfPage' property
+     *
      * @var bool
      */
     public $isMainEntity = false;
@@ -226,7 +227,7 @@ abstract class Schema
     /**
      * Add a property to our Structured Data array
      *
-     * @param string $propertyName
+     * @param string       $propertyName
      * @param string|array $attributes
      */
     public function addProperty($propertyName, $attributes)
@@ -263,7 +264,7 @@ abstract class Schema
      * If the property is not a boolean value, don't add it.
      *
      * @param string $propertyName
-     * @param bool $bool
+     * @param bool   $bool
      */
     public function addBoolean($propertyName, $bool)
     {
@@ -277,7 +278,7 @@ abstract class Schema
      * If the property is not an integer or float, don't add it.
      *
      * @param string $propertyName
-     * @param int $number
+     * @param int    $number
      */
     public function addNumber($propertyName, $number)
     {
@@ -295,15 +296,14 @@ abstract class Schema
      * https://schema.org/Date
      * https://en.wikipedia.org/wiki/ISO_8601
      *
-     * @param string $propertyName
+     * @param string           $propertyName
      * @param string|\DateTime $date
      */
     public function addDate($propertyName, $date)
     {
         $dateTime = $date;
 
-        if (is_string($date))
-        {
+        if (is_string($date)) {
             $dateTime = new DateTime($date);
         }
 
@@ -369,7 +369,7 @@ abstract class Schema
      * Add an image to our Structured Data array as a SproutSeo_ImageObjectSchema.
      * If the property is not a valid URL or Asset ID, don't add it.
      *
-     * @param string $propertyName
+     * @param string   $propertyName
      * @param int|null $imageId Accepts Image ID or URL
      *
      * @return null
