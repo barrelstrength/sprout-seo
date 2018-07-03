@@ -681,16 +681,6 @@ class Metadata extends Model
     }
 
     /**
-     * @return string
-     */
-    public function getPreviewUrl()
-    {
-        $uri = $this->uri ?? '';
-
-        return UrlHelper::url($uri);
-    }
-
-    /**
      *
      */
     public function getSchema()

@@ -612,7 +612,6 @@ class SproutSeoOptimizeHelper
             'showTwitter' => true,
             'showGeo' => true,
             'showRobots' => true,
-            'displayPreview' => true,
             'editCanonical' => false
         ];
     }

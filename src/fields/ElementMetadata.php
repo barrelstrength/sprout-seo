@@ -47,7 +47,6 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
     public $optimizedDescriptionField;
     public $optimizedImageField;
     public $optimizedKeywordsField;
-    public $displayPreview;
     public $showMainEntity;
     public $showSearchMeta;
     public $showOpenGraph;
@@ -183,10 +182,6 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
             $twitterImageElements = [$asset];
         }
 
-        // Set assetsSourceExists
-        $sources = Craft::$app->assets->findFolders();
-        $assetsSourceExists = count($sources);
-
         $value['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($value->robots);
 
         // Cleanup the namespace around the $name handle
@@ -199,60 +194,18 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
 
         $settings = $this->getAttributes();
 
-        /**
-         * Get the prioritized metadata at this level so we can use it as placeholder text
-         *
-         * @todo - Refactor
-         *         can delete this once we get SEO Preview button working dynamically?
-         */
-        $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType(get_class($element));
-
-        // Ensure our urlEnabledSectionType exists and we have a section with URLs
-        if ($urlEnabledSectionType && count($urlEnabledSectionType->urlEnabledSections)) {
-            $urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
-
-            $urlEnabledSectionIdColumnName = $urlEnabledSectionType->getIdColumnName();
-            $type = $urlEnabledSectionType->getId();
-            $urlEnabledSectionId = $element->{$urlEnabledSectionIdColumnName};
-
-            $urlEnabledSectionKey = $type.'-'.$urlEnabledSectionId;
-            if (!isset($urlEnabledSectionType->urlEnabledSections[$urlEnabledSectionKey])) {
-                return '<span class="error">'.
-                    Craft::t('sprout-seo', 'This field requires a URL-Enabled Element Type.').
-                    '</span>';
-            }
-
-            $urlEnabledSection = $urlEnabledSectionType->urlEnabledSections[$type.'-'.$urlEnabledSectionId];
-
-            SproutSeo::$app->optimize->urlEnabledSection = $urlEnabledSection;
-            SproutSeo::$app->optimize->urlEnabledSection->element = $element;
-        }
-
-        SproutSeo::$app->optimize->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($element->siteId);
-
-        $prioritizedMetadata = SproutSeo::$app->optimize->getPrioritizedMetadataModel();
-
-        $assetElement = Asset::class;
-
-        // @todo - Refactor
-        //         Can we simplify? This is a ton of variables.
-        //         What are the ogImageElements, twitterImageElements, etc being used for?
         return Craft::$app->view->renderTemplate('sprout-base-seo/_components/fields/elementmetadata/input', [
+            'field' => $this,
             'name' => $name,
             'namespaceInputName' => $namespaceInputName,
             'namespaceInputId' => $namespaceInputId,
-            'pluginTemplate' => 'sproutseo',
             'values' => $value,
             'ogImageElements' => $ogImageElements,
             'twitterImageElements' => $twitterImageElements,
             'metaImageElements' => $metaImageElements,
-            'assetsSourceExists' => $assetsSourceExists,
-            'elementType' => $assetElement,
+            'assetElementClassName' => Asset::class,
             'fieldId' => $fieldId,
-            'settings' => $settings,
-            'prioritizedMetadata' => $prioritizedMetadata,
-            'elementHandle' => $this->handle,
-            'isRequired' => $this->required
+            'settings' => $settings
         ]);
     }
 
