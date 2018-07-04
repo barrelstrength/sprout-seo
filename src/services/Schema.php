@@ -77,9 +77,12 @@ class Schema extends Component
             IntangibleSchema::class,
             OrganizationSchema::class,
             PersonSchema::class,
-            PlaceSchema::class,
-            ProductSchema::class
+            PlaceSchema::class
         ];
+
+        if (Craft::$app->getPlugins()->getPlugin('commerce')) {
+            $schemas[] = ProductSchema::class;
+        }
 
         $event = new RegisterSchemasEvent([
             'schemas' => $schemas

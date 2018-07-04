@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\schema;
 
-use Craft;
+use craft\commerce\Plugin as Commerce;
 use craft\commerce\elements\Product;
 use craft\commerce\elements\Variant;
 
@@ -45,9 +45,7 @@ class ProductSchema extends ThingSchema
     {
         parent::addProperties();
 
-        $elementType = $this->element->getElementType();
-
-        if ($elementType == Product::class) {
+        if (get_class($this->element) === Product::class) {
             $this->addProductProperties();
         }
     }
@@ -55,6 +53,10 @@ class ProductSchema extends ThingSchema
     public function addProductProperties()
     {
         $identity = $this->globals['identity'];
+
+        /**
+         * @var Product $element
+         */
         $element = $this->element;
         $seller = null;
 
@@ -63,7 +65,7 @@ class ProductSchema extends ThingSchema
             'Organization' => WebsiteIdentityOrganizationSchema::class
         ];
 
-        $primaryCurrencyIso = Craft::$app->commerce_paymentCurrencies->getPrimaryPaymentCurrencyIso();
+        $primaryCurrencyIso = Commerce::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
 
         $offers = [];
         $identityType = $identity['@type'];
@@ -77,17 +79,14 @@ class ProductSchema extends ThingSchema
             $seller = $identitySchema->getSchema();
         }
 
-        /**
-         * @var Variant $variant
-         */
-        foreach ($element->variants as $variant) {
+        foreach ($element->getVariants() as $variant) {
 
             $offers[$variant->id]['@type'] = 'Offer';
             $offers[$variant->id]['sku'] = $variant->sku;
             $offers[$variant->id]['price'] = $variant->price;
             $offers[$variant->id]['priceCurrency'] = $primaryCurrencyIso;
 
-            if ($variant->unlimitedStock == 1 || $variant->stock > 0) {
+            if ($variant->hasUnlimitedStock == 1 || $variant->stock > 0) {
                 $availability = 'https://schema.org/InStock';
             } else {
                 $availability = 'https://schema.org/OutOfStock';
