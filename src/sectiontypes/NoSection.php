@@ -31,14 +31,6 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getIdVariableName()
-    {
-        return '';
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getIdColumnName()
     {
         return '';

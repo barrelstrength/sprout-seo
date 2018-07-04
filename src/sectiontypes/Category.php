@@ -27,14 +27,6 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getIdVariableName()
-    {
-        return 'categoryId';
-    }
-
-    /**
-     * @return string
-     */
     public function getIdColumnName()
     {
         return 'groupId';

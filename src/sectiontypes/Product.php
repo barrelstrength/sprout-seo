@@ -28,14 +28,6 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getIdVariableName()
-    {
-        return 'productId';
-    }
-
-    /**
-     * @return string
-     */
     public function getIdColumnName()
     {
         if ($this->typeIdContext == 'matchedElementCheck') {
