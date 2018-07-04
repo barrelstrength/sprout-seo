@@ -9,7 +9,7 @@ namespace barrelstrength\sproutseo\schema;
 
 use craft\commerce\Plugin as Commerce;
 use craft\commerce\elements\Product;
-use craft\commerce\elements\Variant;
+
 
 class ProductSchema extends ThingSchema
 {
@@ -50,6 +50,9 @@ class ProductSchema extends ThingSchema
         }
     }
 
+    /**
+     * @throws \yii\base\InvalidConfigException
+     */
     public function addProductProperties()
     {
         $identity = $this->globals['identity'];
@@ -74,6 +77,9 @@ class ProductSchema extends ThingSchema
             // Determine if we have an Organization or Person Schema Type
             $schemaModel = $websiteIdentity[$identityType];
 
+            /**
+             * @var WebsiteIdentityOrganizationSchema|WebsiteIdentityPersonSchema $identitySchema
+             */
             $identitySchema = new $schemaModel();
             $identitySchema->globals = $this->globals;
             $seller = $identitySchema->getSchema();

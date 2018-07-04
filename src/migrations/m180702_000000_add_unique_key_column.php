@@ -13,6 +13,10 @@ class m180702_000000_add_unique_key_column extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @return bool
+     * @throws \yii\base\Exception
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
+use barrelstrength\sproutseo\base\Schema as BaseSchema;
 use barrelstrength\sproutseo\events\RegisterSchemasEvent;
 use barrelstrength\sproutseo\schema\ContactPointSchema;
 use barrelstrength\sproutseo\schema\CreativeWorkSchema;
@@ -44,7 +45,7 @@ class Schema extends Component
     /**
      * All instantiated Schema Types indexed by class
      *
-     * @var Schema[]
+     * @var BaseSchema[]
      */
     protected $schemas = [];
 
@@ -98,7 +99,7 @@ class Schema extends Component
     }
 
     /**
-     * @return Schema[]
+     * @return BaseSchema[]
      */
     public function getSchemas()
     {
@@ -111,8 +112,8 @@ class Schema extends Component
 
         uasort($this->schemas, function($a, $b) {
             /**
-             * @var $a Schema
-             * @var $b Schema
+             * @var $a BaseSchema
+             * @var $b BaseSchema
              */
             return $a->getName() <=> $b->getName();
         });
@@ -161,7 +162,7 @@ class Schema extends Component
 
         $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
             /**
-             * @var Schema $schema
+             * @var BaseSchema $schema
              */
             return [
                 'label' => $schema->getName(),
@@ -175,7 +176,7 @@ class Schema extends Component
 
             $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
                 /**
-                 * @var Schema $schema
+                 * @var BaseSchema $schema
                  */
                 return [
                     'label' => $schema->getName(),

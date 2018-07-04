@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\web\twig\variables;
 
-use barrelstrength\sproutseo\base\Schema;
+
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;

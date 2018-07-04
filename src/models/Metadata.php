@@ -12,7 +12,7 @@ use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Element;
 use craft\base\Model;
-use craft\helpers\UrlHelper;
+
 use barrelstrength\sproutseo\enums\MetadataLevels;
 
 /**

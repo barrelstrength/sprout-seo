@@ -7,22 +7,18 @@
 
 namespace barrelstrength\sproutseo\services;
 
-
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\models\SitemapSection;
 use barrelstrength\sproutseo\sectiontypes\Entry;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
-use barrelstrength\sproutseo\sectiontypes\Product;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\elements\db\ElementQuery;
 use yii\base\Component;
 use craft\db\Query;
-
 use Craft;
 use DateTime;
 use craft\helpers\UrlHelper;
-
 
 class XmlSitemap extends Component
 {
