@@ -129,8 +129,13 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
+        $schemas = SproutSeo::$app->schema->getSchemaOptions();
+        $schemaSubtypes = SproutSeo::$app->schema->getSchemaSubtypes($schemas);
+
         return Craft::$app->view->renderTemplate('sprout-base-seo/_components/fields/elementmetadata/settings', [
-            'settings' => $this->getAttributes()
+            'settings' => $this->getAttributes(),
+            'schemas' => $schemas,
+            'schemaSubtypes' => $schemaSubtypes
         ]);
     }
 

@@ -7,21 +7,6 @@
 
 namespace barrelstrength\sproutseo\services;
 
-use barrelstrength\sproutseo\events\RegisterSchemasEvent;
-
-use barrelstrength\sproutseo\schema\ContactPointSchema;
-use barrelstrength\sproutseo\schema\CreativeWorkSchema;
-use barrelstrength\sproutseo\schema\EventSchema;
-use barrelstrength\sproutseo\schema\GeoSchema;
-use barrelstrength\sproutseo\schema\ImageObjectSchema;
-use barrelstrength\sproutseo\schema\IntangibleSchema;
-use barrelstrength\sproutseo\schema\MainEntityOfPageSchema;
-use barrelstrength\sproutseo\schema\OrganizationSchema;
-use barrelstrength\sproutseo\schema\PersonSchema;
-use barrelstrength\sproutseo\schema\PlaceSchema;
-use barrelstrength\sproutseo\schema\PostalAddressSchema;
-use barrelstrength\sproutseo\schema\ProductSchema;
-use barrelstrength\sproutseo\schema\ThingSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
@@ -34,7 +19,6 @@ use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\models\UrlEnabledSection;
 use barrelstrength\sproutseo\SproutSeo;
-use barrelstrength\sproutseo\base\Schema;
 use barrelstrength\sproutseo\models\Settings;
 use craft\base\Element;
 use craft\base\Field;
@@ -44,23 +28,10 @@ use yii\base\Component;
 
 class Optimize extends Component
 {
-    const EVENT_REGISTER_SCHEMAS = 'registerSchemasEvent';
-
+    /**
+     * @var bool
+     */
     public $rawMetadata = false;
-
-    /**
-     * All registered Schema Types
-     *
-     * @var array
-     */
-    protected $schemaTypes = [];
-
-    /**
-     * All instantiated Schema Types indexed by class
-     *
-     * @var Schema[]
-     */
-    protected $schemas = [];
 
     /**
      * Sprout SEO Globals data
@@ -107,100 +78,6 @@ class Optimize extends Component
      * @var
      */
     public $siteId;
-
-    /**
-     * @return array
-     */
-    public function getSchemasTypes()
-    {
-        $schemas = [
-            WebsiteIdentityOrganizationSchema::class,
-            WebsiteIdentityPersonSchema::class,
-            WebsiteIdentityWebsiteSchema::class,
-            WebsiteIdentityPlaceSchema::class,
-            ContactPointSchema::class,
-            ImageObjectSchema::class,
-            MainEntityOfPageSchema::class,
-            PostalAddressSchema::class,
-            GeoSchema::class,
-            ThingSchema::class,
-            CreativeWorkSchema::class,
-            EventSchema::class,
-            IntangibleSchema::class,
-            OrganizationSchema::class,
-            PersonSchema::class,
-            PlaceSchema::class,
-            ProductSchema::class
-        ];
-
-        $event = new RegisterSchemasEvent([
-            'schemas' => $schemas
-        ]);
-
-        $this->trigger(Optimize::EVENT_REGISTER_SCHEMAS, $event);
-
-        foreach ($event->schemas as $schema) {
-            $this->schemaTypes[] = $schema;
-        }
-
-        return $this->schemaTypes;
-    }
-
-    /**
-     * @return Schema[]
-     */
-    public function getSchemas()
-    {
-        $schemaTypes = $this->getSchemasTypes();
-
-        foreach ($schemaTypes as $schemaClass) {
-            $schema = new $schemaClass();
-            $this->schemas[$schemaClass] = $schema;
-        }
-
-        uasort($this->schemas, function($a, $b) {
-            /**
-             * @var $a Schema
-             * @var $b Schema
-             */
-            return $a->getName() <=> $b->getName();
-        });
-
-        return $this->schemas;
-    }
-
-    /**
-     * Returns a list of available schema maps for display in a Main Entity select field
-     *
-     * @return array
-     */
-    public function getSchemaOptions()
-    {
-        $options = [];
-
-        foreach ($this->schemas as $uniqueKey => $instance) {
-            $options[] = [
-                'value' => $uniqueKey,
-                'label' => $instance->getName()
-            ];
-        }
-
-        return $options;
-    }
-
-    /**
-     * Returns a schema map instance (based on $uniqueKey) or $default
-     *
-     * @param string $uniqueKey
-     * @param null   $default
-     *
-     * @return mixed|null
-     */
-    public function getSchemaByUniqueKey($uniqueKey, $default = null)
-    {
-        $this->getSchemas();
-        return array_key_exists($uniqueKey, $this->schemas) ? $this->schemas[$uniqueKey] : $default;
-    }
 
     /**
      * Add values to the master $this->codeMetadata array
@@ -498,7 +375,7 @@ class Optimize extends Component
         if ($this->prioritizedMetadataModel) {
             $schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
             if ($schemaUniqueKey && $this->urlEnabledSection->element !== null) {
-                $schema = $this->getSchemaByUniqueKey($schemaUniqueKey);
+                $schema = SproutSeo::$app->schema->getSchemaByUniqueKey($schemaUniqueKey);
                 $schema->attributes = $this->prioritizedMetadataModel->getAttributes();
                 $schema->addContext = true;
                 $schema->isMainEntity = true;
