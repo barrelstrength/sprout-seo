@@ -7,19 +7,15 @@
 
 namespace barrelstrength\sproutseo\controllers;
 
-
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\models\SitemapSection;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\web\Controller;
-
 use Craft;
-
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
-
 
 /**
  * Class SitemapsController
@@ -205,7 +201,7 @@ class SitemapsController extends Controller
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteSitemapById() : Response
+    public function actionDeleteSitemapById(): Response
     {
         $this->requirePostRequest();
 

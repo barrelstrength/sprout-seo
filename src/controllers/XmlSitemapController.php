@@ -36,29 +36,28 @@ class XmlSitemapController extends Controller
      */
     public function actionRenderXmlSitemap($sitemapKey = null, int $pageNumber = null)
     {
-        $currentSite = Craft::$app->sites->getCurrentSite();
-        $siteId = $currentSite->id;
+        $siteId = Craft::$app->sites->getCurrentSite()->id;
 
-        // Prepare Sitemap Index content
-        $sitemapIndexItems = [];
+        $sitemapIndexUrls = [];
         $elements = [];
 
         switch ($sitemapKey) {
             // Generate Sitemap Index
             case '':
-                $sitemapIndexItems = SproutSeo::$app->xmlSitemap->getSitemapIndex($siteId);
+                $sitemapIndexUrls = SproutSeo::$app->xmlSitemap->getSitemapIndex($siteId);
                 break;
 
-            // Display Singles Sitemap
+            // Prepare Singles Sitemap
             case 'singles':
                 $elements = SproutSeo::$app->xmlSitemap->getDynamicSitemapElements('singles', $pageNumber, $siteId);
                 break;
 
-            // Display Custom Section Sitemap
+            // Prepare Custom Pages Sitemap
             case 'custom-pages':
                 $elements = SproutSeo::$app->xmlSitemap->getCustomSectionUrls($siteId);
                 break;
 
+            // Prepare URL-Enabled Section Sitemap
             default:
                 $elements = SproutSeo::$app->xmlSitemap->getDynamicSitemapElements($sitemapKey, $pageNumber, $siteId);
         }
@@ -76,9 +75,9 @@ class XmlSitemapController extends Controller
             ]);
         }
 
-        // Render the sitemapindex if we no specific sitemap is defined
+        // Render the sitemapindex if no specific sitemap is defined
         return $this->renderTemplate('_components/sitemaps/sitemapindex', [
-            'sitemapIndexItems' => $sitemapIndexItems
+            'sitemapIndexUrls' => $sitemapIndexUrls
         ]);
     }
 }

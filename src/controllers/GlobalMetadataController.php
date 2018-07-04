@@ -12,7 +12,6 @@ use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutbase\SproutBase;
-
 use craft\web\Controller;
 use Craft;
 use craft\helpers\DateTimeHelper;
@@ -23,7 +22,6 @@ use yii\web\Response;
 
 class GlobalMetadataController extends Controller
 {
-
     /**
      * Renders Global Metadata edit pages
      *

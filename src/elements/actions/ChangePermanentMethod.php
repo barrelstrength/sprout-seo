@@ -35,7 +35,6 @@ class ChangePermanentMethod extends ElementAction
     {
         $elementIds = $query->ids();
 
-        // Call updateMethods service
         $response = SproutSeo::$app->redirects->updateRedirectMethod($elementIds, RedirectMethods::Permanent);
 
         $message = SproutSeo::$app->redirects->getMethodUpdateResponse($response);

@@ -11,7 +11,6 @@ use barrelstrength\sproutseo\models\UrlEnabledSection;
 use craft\base\Element;
 use craft\base\Model;
 
-
 /**
  * Class UrlEnabledSectionType
  */
