@@ -685,36 +685,6 @@ class Metadata extends Model
     }
 
     /**
-     *
-     */
-    public function getSchema()
-    {
-        //$schemaTypeId = $this->schemaTypeId;
-        //
-        //// Check for parent Section and Global values if the entry ones don't exist
-        //
-        //if ($schemaTypeId)
-        //{
-        //	$schema               = SproutSeo::$app->optimize->getSchemaByUniqueKey($schemaTypeId);
-        //	$schema->attributes   = $this->getAttributes();
-        //	$schema->addContext   = true;
-        //	$schema->isMainEntity = false;
-        //
-        //	$element = Craft::$app->elements->getElementById($this->elementId);
-        //
-        //	SproutSeo::$app->optimize->urlEnabledSection = '';
-        //	SproutSeo::$app->optimize->prioritizedMetadataModel = '';
-        //	SproutSeo::$app->optimize->codeMetadata = null;
-        //
-        //	$schema->globals                  = SproutSeo::$app->optimize->globals;
-        //	$schema->element                  = ;
-        //	//$schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
-        //}
-        //
-        //return $schema->getSchema();
-    }
-
-    /**
      * Updates "uri" to starts without a "/"
      *
      * @return bool

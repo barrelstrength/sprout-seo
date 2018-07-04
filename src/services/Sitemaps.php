@@ -28,17 +28,10 @@ class Sitemaps extends Component
      */
     public $urlEnabledSectionTypes;
 
-    public $sitemapSectionRecord;
-
     /**
      * @var SitemapSectionRecord
      */
     protected $sitemapsRecord;
-
-    public function init()
-    {
-        $this->sitemapSectionRecord = new SitemapSectionRecord();
-    }
 
     /**
      * Returns all Custom Sitemap Sections
@@ -66,28 +59,6 @@ class Sitemaps extends Component
 
         return $sitemapSections;
     }
-
-    /**
-     * Get all Sitemap from the database.
-     *
-     * @return array
-     */
-//    public function getAllSitemapSections()
-//    {
-//        $results = (new Query())
-//            ->select('*')
-//            ->from(['{{%sproutseo_sitemaps}}'])
-//            ->order('name')
-//            ->all();
-//
-//        $response = [];
-//
-//        foreach ($results as $key => $section) {
-//            array_push($response, new Metadata($section));
-//        }
-//
-//        return $response;
-//    }
 
     /**
      * Get all Sitemap Sections related to this URL-Enabled Section Type

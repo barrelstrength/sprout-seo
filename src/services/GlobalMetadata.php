@@ -115,34 +115,4 @@ class GlobalMetadata extends Component
 
         return true;
     }
-
-    /**
-     * @return \craft\db\Command
-     */
-    public function installDefaultGlobalMetadata()
-    {
-        $locale = Craft::$app->i18n->getLocaleById(Craft::$app->language);
-
-        $defaultSettings = '{
-            "seoDivider":"-",
-            "defaultOgType":"",
-            "ogTransform":"sproutSeo-socialSquare",
-            "twitterTransform":"sproutSeo-socialSquare",
-            "defaultTwitterCard":"summary",
-            "appendTitleValueOnHomepage":"",
-            "appendTitleValue": ""}
-        ';
-
-        $result = Craft::$app->db->createCommand()->insert('{{%sproutseo_metadata_globals}}', [
-            'locale' => $locale,
-            'identity' => null,
-            'ownership' => null,
-            'contacts' => null,
-            'social' => null,
-            'robots' => null,
-            'settings' => $defaultSettings
-        ]);
-
-        return $result;
-    }
 }
