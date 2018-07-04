@@ -32,6 +32,7 @@ class OptimizeHelper
             return UrlHelper::siteUrl();
         }
         // @todo - parseEnvironmentString was removed
+        // Consider matching the selected currentSite baseUrl and removing this setting from the Globals UI
         //return Craft::$app->config->parseEnvironmentString ($url);
         return UrlHelper::url($url);
     }
@@ -147,7 +148,7 @@ class OptimizeHelper
      *
      * @param Metadata $model
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function prepareAssetUrls(Metadata $model)
     {

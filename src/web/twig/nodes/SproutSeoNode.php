@@ -23,7 +23,7 @@ class SproutSeoNode extends \Twig_Node
         if ($action == 'optimize') {
             $compiler
                 ->addDebugInfo($this)
-                ->write('echo '.SproutSeo::class."::\$app->optimize->getMetadata(\$context);\n\n");
+                ->write('echo '.SproutSeo::class."::\$app->optimize->getMetadataViaContext(\$context);\n\n");
         }
     }
 }

@@ -40,8 +40,7 @@ class XmlSitemap extends Component
         $urlEnabledSectionTypes = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($siteId);
 
         foreach ($urlEnabledSectionTypes as $urlEnabledSectionType) {
-            $urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
-            $urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
+            $urlEnabledSectionTypeId = $urlEnabledSectionType->getElementIdColumnName();
 
             foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {
                 $sitemapSection = $urlEnabledSection->sitemapSection;
@@ -142,6 +141,7 @@ class XmlSitemap extends Component
 
             foreach ($currentSitemapSites as $site) {
 
+                $elementMetadataFieldHandle = null;
                 $elements = [];
 
                 if ($urlEnabledSectionType !== null) {
@@ -149,8 +149,7 @@ class XmlSitemap extends Component
                     $query = $urlEnabledSectionType->getElementType()::find();
 
                     // Example: $query->sectionId(123)
-                    $urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
-                    $urlEnabledSectionColumnName = $urlEnabledSectionType->getIdColumnName();
+                    $urlEnabledSectionColumnName = $urlEnabledSectionType->getElementIdColumnName();
                     $query->{$urlEnabledSectionColumnName}($sitemapSection->urlEnabledSectionId);
 
                     $query->offset($offset);
@@ -174,13 +173,17 @@ class XmlSitemap extends Component
                 // Add each Element with a URL to the Sitemap
                 foreach ($elements as $element) {
 
-                    // @todo - improve this, it loops through all fields in the layout each time
-                    $metadata = SproutSeo::$app->optimize->getMetadataField($element);
+                    if ($elementMetadataFieldHandle === null)
+                    {
+                        $elementMetadataFieldHandle = SproutSeo::$app->elementMetadata->getElementMetadataFieldHandle($element);
+                    }
 
-                    $robots = $metadata['robots'];
+                    $metadata = $element->{$elementMetadataFieldHandle};
+
+                    $robots = $metadata['robots'] ?? null;
                     $robots = OptimizeHelper::prepareRobotsMetadataForSettings($robots);
-                    $noIndex = $robots['noindex'];
-                    $noFollow = $robots['nofollow'];
+                    $noIndex = $robots['noindex'] ?? null;
+                    $noFollow = $robots['nofollow'] ?? null;
 
                     if ($noIndex == 1 OR $noFollow == 1) {
                         SproutSeo::info(Craft::t('sprout-seo', 'Element ID {elementId} not added to sitemap. Element Metadata field `noindex` or `nofollow` settings are enabled.', [
@@ -206,6 +209,9 @@ class XmlSitemap extends Component
                         'changeFrequency' => $sitemapSection['changeFrequency'],
                     ];
                 }
+
+                // Reset our field handle for the next set of elements
+                $elementMetadataFieldHandle = null;
             }
         }
 

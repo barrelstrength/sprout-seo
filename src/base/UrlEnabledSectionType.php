@@ -24,17 +24,6 @@ abstract class UrlEnabledSectionType
     public $urlEnabledSections;
 
     /**
-     * A silly variable because Craft Commerce inconsistently names productTypeId/typeId.
-     *
-     * Updating this setting allows us to target different typeId column values in different
-     * contexts such as when we are trying to match an element on page load and when we are
-     * trying to determine the URL-format.
-     *
-     * @var
-     */
-    public $typeIdContext;
-
-    /**
      * Get a unique ID for this URL-Enabled Section Type
      *
      * We use the element table name as the unique ID.
@@ -107,7 +96,16 @@ abstract class UrlEnabledSectionType
      *
      * @return mixed
      */
-    abstract public function getIdColumnName();
+    abstract public function getElementIdColumnName();
+
+    /**
+     * A silly variable because Craft Commerce inconsistently names productTypeId/typeId.
+     *
+     * Updating this setting allows us to target different typeId column values in different
+     * contexts such as when we are trying to match an element on page load and when we are
+     * trying to determine the URL-format.
+     */
+    abstract public function getUrlFormatIdColumnName();
 
     /**
      * By default, we assume the uriFormat setting is in a column of the same name
@@ -159,9 +157,11 @@ abstract class UrlEnabledSectionType
     /**
      * Return all the URL-Enabled Sections for this URL-Enabled Section Type
      *
+     * @param $siteId
+     *
      * @return UrlEnabledSection[]
      */
-    abstract public function getAllUrlEnabledSections();
+    abstract public function getAllUrlEnabledSections($siteId);
 
     /**
      * Disable support for resaving elements when a field layout for this

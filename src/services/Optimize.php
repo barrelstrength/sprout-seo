@@ -14,25 +14,21 @@ use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\enums\MetadataLevels;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata as MetadataModel;
-use barrelstrength\sproutseo\fields\ElementMetadata;
+
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutseo\models\UrlEnabledSection;
+
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Settings;
 use craft\base\Element;
-use craft\base\Field;
+
+use craft\models\Site;
 use DateTime;
 use Craft;
 use yii\base\Component;
 
 class Optimize extends Component
 {
-    /**
-     * @var bool
-     */
-    public $rawMetadata = false;
-
     /**
      * Sprout SEO Globals data
      *
@@ -41,21 +37,11 @@ class Optimize extends Component
     public $globals;
 
     /**
-     * The active Section integration with Section and Element info
+     * The first Element Metadata field Metadata from the context
      *
-     * $urlEnabledSection->element will have the element that matches
-     * the matchedElementVariable from the $context
-     *
-     * @var UrlEnabledSection $urlEnabledSection
+     * @var Metadata $elementMetadata
      */
-    public $urlEnabledSection;
-
-    /**
-     * The first element metadata field from the context
-     *
-     * @var ElementMetadata $metadataField
-     */
-    public $metadataField;
+    public $elementMetadata;
 
     /**
      * @var MetadataModel $prioritizedMetadataModel
@@ -63,24 +49,12 @@ class Optimize extends Component
     public $prioritizedMetadataModel;
 
     /**
-     * @var MetadataModel $codeMetadata
+     * @var MetadataModel $templateMetadata
      */
-    public $codeMetadata = [];
+    public $templateMetadata = [];
 
     /**
-     * @var
-     */
-    public $codeSection;
-
-    /**
-     * Current siteId
-     *
-     * @var
-     */
-    public $siteId;
-
-    /**
-     * Add values to the master $this->codeMetadata array
+     * Add values to the master $this->templateMetadata array
      *
      * @param array $meta
      */
@@ -88,15 +62,7 @@ class Optimize extends Component
     {
         if (count($meta)) {
             foreach ($meta as $key => $value) {
-                if ($key == 'section' || $key == 'default') {
-                    if ($key == 'default') {
-                        Craft::$app->deprecator->log('meta default key deprecated', 'craft.sproutseo.meta `default` key has been deprecated. Use `section` key instead: {% do craft.sproutseo.meta( section: "'.$value.'"") %}');
-                    }
-
-                    $this->codeSection = $value;
-                } else {
-                    $this->codeMetadata[$key] = $value;
-                }
+                $this->templateMetadata[$key] = $value;
             }
         }
     }
@@ -107,32 +73,52 @@ class Optimize extends Component
      * @param $context
      *
      * @return array|null|string
-     * @throws \Exception
+     * @throws \Twig_Error_Loader
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      * @throws \yii\web\ServerErrorHttpException
      */
-    public function getMetadata(&$context)
+    public function getMetadataViaContext(&$context)
     {
-        $output = null;
+        $site = $context['currentSite'] ?? Craft::$app->getSites()->currentSite;
 
+        $element = SproutSeo::$app->sitemaps->getElementViaContext($context);
+
+        $this->elementMetadata = SproutSeo::$app->elementMetadata->getElementMetadata($element);
+
+        return $this->getMetadata($element, $site);
+    }
+
+    /**
+     * @param      $element
+     * @param      $site
+     * @param bool $render
+     *
+     * @return array|null|string
+     * @throws \Twig_Error_Loader
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\web\ServerErrorHttpException
+     */
+    public function getMetadata(Element $element, $site, $render = true)
+    {
         /**
          * @var Settings $settings
          */
         $settings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-        $this->siteId = $context['currentSite']->id ?? Craft::$app->getSites()->currentSite->id;
 
-        $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($this->siteId);
-        $this->urlEnabledSection = SproutSeo::$app->sitemaps->getUrlEnabledSectionsViaContext($context);
-        $this->metadataField = $this->getMetadataField($this->urlEnabledSection->element);
-        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($this->siteId);
+        $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
+        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($element, $site);
+
+        $output = null;
 
         $metadata = [
             'globals' => $this->globals,
             'meta' => $this->prioritizedMetadataModel->getMetaTagData(),
-            'schema' => $this->getStructuredData()
+            'schema' => $this->getStructuredData($element)
         ];
 
-        if ($this->rawMetadata == true) {
+        if ($render === false) {
             return $metadata;
         }
 
@@ -150,110 +136,74 @@ class Optimize extends Component
     }
 
     /**
-     * Find any element with the getContent function and fetch the first ElementMetadata Field on the layout
-     *
-     * @param Element|null $element
-     *
-     * @return Metadata|null
-     */
-    public function getMetadataField(Element $element = null)
-    {
-        if (!$element) {
-            return null;
-        }
-
-        $fields = $element->getFieldLayout()->getFields();
-
-        /**
-         * Get our ElementMetadata Field
-         *
-         * @var Field $field
-         */
-        foreach ($fields as $field) {
-            if (get_class($field) == ElementMetadata::class) {
-                if (isset($element->{$field->handle})) {
-                    $metadata = $element->{$field->handle};
-                    return new Metadata($metadata);
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Prioritize our meta data
      * ------------------------------------------------------------
      *
      * Loop through and select the highest ranking value for each attribute in our Metadata
      *
-     * 1) Code Metadata
-     * 2) Element Metadata
-     * 3) Global Metadata
      * 4) Blank
+     * 3) Global Metadata
+     * 2) Element Metadata
+     * 1) Template Metadata
      *
-     * @param int siteId
+     * @param      $element
+     * @param Site $site
      *
-     * @return Metadata
-     * @throws \Exception
+     * @return Metadata|mixed
      * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\ServerErrorHttpException
      */
-    public function getPrioritizedMetadataModel($siteId = null)
+    public function getPrioritizedMetadataModel($element, $site = null)
     {
         $metaLevels = [
             MetadataLevels::GlobalMetadata,
             MetadataLevels::ElementMetadata,
-            MetadataLevels::CodeMetadata
+            MetadataLevels::TemplateMetadata
         ];
-
-        $this->globals = $this->globals ?? SproutSeo::$app->globalMetadata->getGlobalMetadata($siteId);
-
-        $prioritizedMetadataLevels = [];
-
-        foreach ($metaLevels as $key => $metaLevel) {
-            $prioritizedMetadataLevels[$metaLevel] = null;
-        }
 
         $prioritizedMetadataModel = new Metadata();
 
-        foreach ($prioritizedMetadataLevels as $level => $model) {
-            $metadataModel = new Metadata();
-            $codeMetadata = $this->getCodeMetadata($level);
+        foreach ($metaLevels as $level) {
 
-            // Assume our canonical URL is the current URL unless there is a codeOverride
-            if ($level == MetadataLevels::CodeMetadata) {
-                $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+            $overrideInfo = [];
+
+            switch ($level) {
+                case MetadataLevels::GlobalMetadata:
+                    {
+                        $overrideInfo = $this->globals->meta;
+                        break;
+                    }
+                case MetadataLevels::ElementMetadata:
+                    {
+                        $this->elementMetadata->ogLocale = $site->language;
+
+                        // Default to the current URL, if no overrides exist
+                        $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                        $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                        $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
+
+                        $overrideInfo = $this->elementMetadata->getAttributes();
+
+                        break;
+                    }
+                case MetadataLevels::TemplateMetadata:
+                    {
+                        $overrideInfo = $this->templateMetadata;
+
+                        // Assume our canonical URL is the current URL unless there is a codeOverride
+                        $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                        $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                        $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+
+                        break;
+                    }
             }
 
-            $metadataModel = $metadataModel->setMeta($level, $codeMetadata);
+            $metadataModel = new Metadata($overrideInfo);
+            $metadataModel->keywords = $metadataModel->optimizedKeywords ?? $metadataModel->keywords;
 
-            $prioritizedMetadataLevels[$level] = $metadataModel;
-            $metadataModel->keywords = null !== $metadataModel->optimizedKeywords ? $metadataModel->optimizedKeywords : $metadataModel->keywords;
-
-            foreach ($prioritizedMetadataModel->getAttributes() as $key => $value) {
-                // Test for a value on each of our models in their order of priority
-                if ($metadataModel->{$key}) {
-                    $prioritizedMetadataModel->{$key} = $metadataModel->{$key};
-                }
-                // Make sure our schema type and override are all or nothing
-                // if we find the $metadataModel doesn't have a value for schemaOverrideTypeId
-                // then we should make sure the $prioritizedMetadataModel also has a null value
-                // otherwise we still keep our lower level value
-                if ($key == 'schemaOverrideTypeId' &&
-                    $metadataModel->schemaTypeId != null &&
-                    $metadataModel->{$key} == null
-                ) {
-                    $prioritizedMetadataModel->{$key} = null;
-                }
-
-                // Make sure all our strings are trimmed
-                if (is_string($prioritizedMetadataModel->{$key})) {
-                    $prioritizedMetadataModel->{$key} = trim($prioritizedMetadataModel->{$key});
-                }
-            }
+            $prioritizedMetadataModel = $this->getPrioritizedValues($prioritizedMetadataModel, $metadataModel);
         }
 
         // Remove the ogAuthor value if we don't have an article
@@ -265,19 +215,19 @@ class Optimize extends Component
             $prioritizedMetadataModel->ogDateUpdated = null;
             $prioritizedMetadataModel->ogExpiryDate = null;
 
-            if ($this->urlEnabledSection->element->dateCreated !== null && $this->urlEnabledSection->element->dateCreated) {
-                $prioritizedMetadataModel->ogDateCreated = $this->urlEnabledSection->element->dateCreated->format(DateTime::ISO8601);
+            if ($element->dateCreated !== null && $element->dateCreated) {
+                $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
             }
 
-            if ($this->urlEnabledSection->element->dateUpdated !== null && $this->urlEnabledSection->element->dateUpdated) {
-                $prioritizedMetadataModel->ogDateUpdated = $this->urlEnabledSection->element->dateUpdated->format(DateTime::ISO8601);
+            if ($element->dateUpdated !== null && $element->dateUpdated) {
+                $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ISO8601);
             }
 
             /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
             /** @noinspection PhpUndefinedFieldInspection */
-            if ($this->urlEnabledSection->element->expiryDate !== null && $this->urlEnabledSection->element->expiryDate) {
+            if ($element->expiryDate !== null && $element->expiryDate) {
                 /** @noinspection PhpUndefinedFieldInspection */
-                $prioritizedMetadataModel->ogExpiryDate = $this->urlEnabledSection->element->expiryDate->format(DateTime::ISO8601);
+                $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ISO8601);
             }
         }
 
@@ -301,7 +251,7 @@ class Optimize extends Component
         return $prioritizedMetadataModel;
     }
 
-    public function getStructuredData()
+    public function getStructuredData($element)
     {
         $schema = [];
         $websiteIdentity = [
@@ -322,8 +272,8 @@ class Optimize extends Component
             $identitySchema->globals = $this->globals;
             $identitySchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-            if ($this->urlEnabledSection->element !== null) {
-                $identitySchema->element = $this->urlEnabledSection->element;
+            if ($element !== null) {
+                $identitySchema->element = $element;
             }
 
             $schema['websiteIdentity'] = $identitySchema;
@@ -337,8 +287,8 @@ class Optimize extends Component
             $websiteSchema->globals = $this->globals;
             $websiteSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-            if ($this->urlEnabledSection->element !== null) {
-                $websiteSchema->element = $this->urlEnabledSection->element;
+            if ($element !== null) {
+                $websiteSchema->element = $element;
             }
 
             $schema['website'] = $websiteSchema;
@@ -354,35 +304,37 @@ class Optimize extends Component
             $placeSchema->globals = $this->globals;
             $placeSchema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-            if ($this->urlEnabledSection->element !== null) {
-                $placeSchema->element = $this->urlEnabledSection->element;
+            if ($element !== null) {
+                $placeSchema->element = $element;
             }
 
             $schema['place'] = $placeSchema;
         }
 
-        $schema['mainEntity'] = $this->getMainEntityStructuredData();
+        $schema['mainEntity'] = $this->getMainEntityStructuredData($element);
 
         return $schema;
     }
 
     /**
-     * @return string
+     * @param Element $element
+     *
+     * @return mixed|null
      */
-    public function getMainEntityStructuredData()
+    public function getMainEntityStructuredData(Element $element)
     {
         $schema = null;
 
         if ($this->prioritizedMetadataModel) {
             $schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
-            if ($schemaUniqueKey && $this->urlEnabledSection->element !== null) {
+            if ($schemaUniqueKey && $element !== null) {
                 $schema = SproutSeo::$app->schema->getSchemaByUniqueKey($schemaUniqueKey);
                 $schema->attributes = $this->prioritizedMetadataModel->getAttributes();
                 $schema->addContext = true;
                 $schema->isMainEntity = true;
 
                 $schema->globals = $this->globals;
-                $schema->element = $this->urlEnabledSection->element;
+                $schema->element = $element;
                 $schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
             }
         }
@@ -415,34 +367,35 @@ class Optimize extends Component
     }
 
     /**
-     * Store our codeMetadata in a place so we can access when we need to
+     * @param $prioritizedMetadataModel
+     * @param $metadataModel
      *
-     * @todo - Rename method
-     *         This is named 'getCodeMetadata' but also handles overrides for Section and Element data.
-     *
-     * @param null $type
-     *
-     * @return array|Metadata
+     * @return mixed
      */
-    public function getCodeMetadata($type = null)
+    protected function getPrioritizedValues(Metadata $prioritizedMetadataModel, $metadataModel)
     {
-        $response = [];
+        foreach ($prioritizedMetadataModel->getAttributes() as $attribute => $value) {
+            // Test for a value on each of our models in their order of priority
+            if ($metadataModel->{$attribute}) {
+                $prioritizedMetadataModel->{$attribute} = $metadataModel->{$attribute};
+            }
+            // Make sure our schema type and override are all or nothing
+            // if we find the $metadataModel doesn't have a value for schemaOverrideTypeId
+            // then we should make sure the $prioritizedMetadataModel also has a null value
+            // otherwise we still keep our lower level value
+            if ($attribute === 'schemaOverrideTypeId' &&
+                $metadataModel->schemaTypeId != null &&
+                $metadataModel->{$attribute} == null
+            ) {
+                $prioritizedMetadataModel->{$attribute} = null;
+            }
 
-        switch ($type) {
-            case MetadataLevels::ElementMetadata:
-                if ($this->urlEnabledSection->element !== null && $this->urlEnabledSection->element->id !== null) {
-                    $response = [
-                        'metadataField' => $this->metadataField,
-                        'contextElement' => $this->urlEnabledSection->element
-                    ];
-                }
-                break;
-
-            case MetadataLevels::CodeMetadata:
-                $response = $this->codeMetadata;
-                break;
+            // Make sure all our strings are trimmed
+            if (is_string($prioritizedMetadataModel->{$attribute})) {
+                $prioritizedMetadataModel->{$attribute} = trim($prioritizedMetadataModel->{$attribute});
+            }
         }
 
-        return $response;
+        return $prioritizedMetadataModel;
     }
 }

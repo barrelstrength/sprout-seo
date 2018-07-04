@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\sectiontypes;
 
 use barrelstrength\sproutseo\base\UrlEnabledSectionType;
+use barrelstrength\sproutseo\models\UrlEnabledSection;
 use craft\commerce\elements\Product as ProductElement;
 use Craft;
 use craft\commerce\services\ProductTypes;
@@ -28,12 +29,16 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getIdColumnName()
+    public function getElementIdColumnName()
     {
-        if ($this->typeIdContext == 'matchedElementCheck') {
-            return 'typeId';
-        }
+        return 'typeId';
+    }
 
+    /**
+     * @return string
+     */
+    public function getUrlFormatIdColumnName()
+    {
         return 'productTypeId';
     }
 
@@ -84,9 +89,11 @@ class Product extends UrlEnabledSectionType
     }
 
     /**
-     * @return mixed
+     * @param $siteId
+     *
+     * @return UrlEnabledSection[]
      */
-    public function getAllUrlEnabledSections()
+    public function getAllUrlEnabledSections($siteId)
     {
         $urlEnabledSections = [];
 
@@ -98,9 +105,8 @@ class Product extends UrlEnabledSectionType
             $siteSettings = $section->getSiteSettings();
 
             foreach ($siteSettings as $siteSetting) {
-                if ($siteSetting->hasUrls) {
+                if ($siteId == $siteSetting->siteId && $siteSetting->hasUrls) {
                     $urlEnabledSections[] = $section;
-                    break;
                 }
             }
         }

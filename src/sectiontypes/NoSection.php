@@ -31,7 +31,15 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getIdColumnName()
+    public function getElementIdColumnName()
+    {
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlFormatIdColumnName()
     {
         return '';
     }
@@ -79,7 +87,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getAllUrlEnabledSections()
+    public function getAllUrlEnabledSections($siteId)
     {
         return [];
     }

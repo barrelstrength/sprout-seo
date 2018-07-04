@@ -14,6 +14,7 @@ use craft\base\Component;
 use craft\db\Query;
 use craft\helpers\Json;
 use Craft;
+use craft\models\Site;
 
 /**
  * Class SproutSeo_GlobalMetadataService
@@ -25,14 +26,16 @@ class GlobalMetadata extends Component
     /**
      * Get Global Metadata values
      *
-     * @param null $siteId
+     * @param Site|null $site
      *
      * @return Globals
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
-    public function getGlobalMetadata($siteId = null)
+    public function getGlobalMetadata($site = null)
     {
+        $siteId = $site->id ?? null;
+
         $query = (new Query())
             ->select('*')
             ->from(['{{%sproutseo_metadata_globals}}']);

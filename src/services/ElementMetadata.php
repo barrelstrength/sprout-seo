@@ -8,6 +8,9 @@
 namespace barrelstrength\sproutseo\services;
 
 
+use barrelstrength\sproutseo\models\Metadata;
+use craft\base\Element;
+use craft\base\Field;
 use craft\models\FieldLayout;
 use yii\base\Component;
 use craft\db\Query;
@@ -19,6 +22,56 @@ use yii\base\Event;
 
 class ElementMetadata extends Component
 {
+    /**
+     * Returns the metadata for an Element's Element Metadata as a Metadata model
+     *
+     * @param Element|null $element
+     *
+     * @return Metadata|null
+     */
+    public function getElementMetadata(Element $element = null)
+    {
+        $fieldHandle = $this->getElementMetadataFieldHandle($element);
+
+        if (isset($element->{$fieldHandle})) {
+            $metadata = $element->{$fieldHandle};
+            return new Metadata($metadata);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the Field handle of the first Element Metadata field found in an Element Field Layout
+     *
+     * @param Element|null $element
+     *
+     * @return null|string
+     */
+    public function getElementMetadataFieldHandle(Element $element = null)
+    {
+        if (!$element) {
+            return null;
+        }
+
+        $fields = $element->getFieldLayout()->getFields();
+
+        /**
+         * Get our ElementMetadata Field
+         *
+         * @var Field $field
+         */
+        foreach ($fields as $field) {
+            if (get_class($field) == ElementMetadataField::class) {
+                if (isset($element->{$field->handle})) {
+                    return $field->handle;
+                }
+            }
+        }
+
+        return null;
+    }
+
     /**
      * @todo - TEST CRAFT3
      * Re-save Elements after a field layout or Element Metadata field is updated

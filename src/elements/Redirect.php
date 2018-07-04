@@ -20,7 +20,7 @@ use craft\elements\actions\Delete;
 use craft\elements\actions\Edit;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
-use yii\base\ErrorHandler;
+
 use yii\base\Exception;
 
 /**
@@ -98,15 +98,12 @@ class Redirect extends Element
      *
      * @return string
      */
-    /** @noinspection PhpInconsistentReturnPointsInspection */
     public function __toString()
     {
-        try {
-            // @todo - For some reason the Title returns null possible Craft3 bug
-            return $this->oldUrl;
-        } catch (\Exception $e) {
-            ErrorHandler::convertExceptionToError($e);
+        if ($this->oldUrl) {
+            return (string)$this->oldUrl;
         }
+        return (string)$this->id ?: static::class;
     }
 
     /**
@@ -169,8 +166,7 @@ class Redirect extends Element
      *
      * @param string|null $context
      *
-     * @return array|false
-     * @throws \ReflectionException
+     * @return array
      */
     protected static function defineSources(string $context = null): array
     {
@@ -260,9 +256,8 @@ class Redirect extends Element
      * Returns the HTML for an editor HUD for the given element.
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws Exception
      * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
      */
     public function getEditorHtml(): string
     {

@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\sectiontypes;
 
 use barrelstrength\sproutseo\base\UrlEnabledSectionType;
-
+use barrelstrength\sproutseo\models\UrlEnabledSection;
 use craft\elements\Category as CategoryElement;
 use craft\models\CategoryGroup;
 use craft\queue\jobs\ResaveElements;
@@ -27,7 +27,15 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getIdColumnName()
+    public function getElementIdColumnName()
+    {
+        return 'groupId';
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlFormatIdColumnName()
     {
         return 'groupId';
     }
@@ -77,20 +85,22 @@ class Category extends UrlEnabledSectionType
     }
 
     /**
-     * @return array
+     * @param $siteId
+     *
+     * @return UrlEnabledSection[]
      */
-    public function getAllUrlEnabledSections()
+    public function getAllUrlEnabledSections($siteId)
     {
         $urlEnabledSections = [];
 
         $sections = Craft::$app->categories->getAllGroups();
+
         foreach ($sections as $section) {
             $siteSettings = $section->getSiteSettings();
-            // @todo - at least one site with url ?
+
             foreach ($siteSettings as $siteSetting) {
-                if ($siteSetting->hasUrls) {
+                if ($siteId == $siteSetting->siteId && $siteSetting->hasUrls) {
                     $urlEnabledSections[] = $section;
-                    break;
                 }
             }
         }

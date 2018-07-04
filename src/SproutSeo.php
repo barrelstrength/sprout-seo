@@ -14,8 +14,8 @@ use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\services\App;
 use barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable;
 use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
-use barrelstrength\sproutbase\services\Settings as SproutBaseSettings;
-use barrelstrength\sproutbase\events\BeforeSaveSettingsEvent;
+
+
 use Craft;
 use craft\base\Plugin;
 use craft\services\Fields;
@@ -99,14 +99,6 @@ class SproutSeo extends Plugin
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $variable = $event->sender;
             $variable->set('sproutSeo', SproutSeoVariable::class);
-        });
-
-        // Listen before Sprout SEO settings are saved
-        Event::on(SproutBaseSettings::class, SproutBaseSettings::EVENT_BEFORE_SAVE_SETTINGS, function(BeforeSaveSettingsEvent $event) {
-            if ($event->plugin->id == self::$pluginHandle) {
-                //Craft::dd($event->settings);
-                // @todo - copy default fields as urlEnabledSectionId and type
-            }
         });
 
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {

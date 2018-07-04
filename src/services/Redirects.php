@@ -134,10 +134,9 @@ class Redirects extends Component
     }
 
     /**
-     * Get methods
+     * Get Redirect methods
      *
      * @return array
-     * @throws \ReflectionException
      */
     public function getMethods()
     {

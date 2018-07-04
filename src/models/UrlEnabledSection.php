@@ -76,7 +76,7 @@ class UrlEnabledSection extends Model
 
         $urlEnabledSectionUrlFormatTableName = $this->type->getTableName();
         $urlEnabledSectionUrlFormatColumnName = $this->type->getUrlFormatColumnName();
-        $urlEnabledSectionIdColumnName = $this->type->getIdColumnName();
+        $urlEnabledSectionIdColumnName = $this->type->getUrlFormatIdColumnName();
 
         $query = (new Query())
             ->select($urlEnabledSectionUrlFormatColumnName)

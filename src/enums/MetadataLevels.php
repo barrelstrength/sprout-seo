@@ -34,10 +34,10 @@ abstract class MetadataLevels
     const ElementMetadata = 'element';
 
     /**
-     * UI Names: Code Metadata, Code Overrides, Template Overrides
-     * Internal Names: CodeMetadata, $codeMetadataModel
+     * UI Names: Template Metadata, Template Overrides, Code Overrides
+     * Internal Names: TemplateMetadata, $templateMetadataModel
      * Priority: 0, Highest Priority
      */
-    const CodeMetadata = 'code';
+    const TemplateMetadata = 'template';
 
 }

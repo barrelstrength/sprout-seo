@@ -10,10 +10,9 @@ namespace barrelstrength\sproutseo\models;
 
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
-use craft\base\Element;
+
 use craft\base\Model;
 
-use barrelstrength\sproutseo\enums\MetadataLevels;
 
 /**
  * Class Metadata
@@ -345,14 +344,7 @@ class Metadata extends Model
     public $uid;
 
     /**
-     * @todo - Refactor
-     *         - Can we remove isNew now and just test for ID?
-     *         - Do we need default still?
-     *         - Do we need url? Can we just test for URL format?
-     *         - Do we need isCustom still? Can we just test for urlEnabledSectionId?
-     *         - Clarify what 'type' is.
-     *         - Craft3 Notes: The values doesn't matter we need the associative arrays to use less code
-     *
+     * @inheritdoc
      */
     public function init()
     {
@@ -430,94 +422,6 @@ class Metadata extends Model
         $metaTagData['googlePlus'] = $this->getGooglePlusMetaTagData();
 
         return $metaTagData;
-    }
-
-    /**
-     * @param string $type
-     * @param array  $overrideInfo
-     *
-     * @return $this
-     * @throws \Exception
-     */
-    public function setMeta($type = MetadataLevels::GlobalMetadata, array $overrideInfo = [])
-    {
-        switch ($type) {
-            case MetadataLevels::GlobalMetadata:
-                $this->setAttributes($this->prepareGlobalMetadata($overrideInfo), false);
-                break;
-
-            case MetadataLevels::ElementMetadata:
-                $this->setAttributes($this->prepareElementMetadata($overrideInfo), false);
-                break;
-
-            case MetadataLevels::CodeMetadata:
-                $this->setAttributes($this->prepareCodeMetadata($overrideInfo), false);
-                break;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param $overrideInfo
-     *
-     * @return mixed
-     */
-    protected function prepareGlobalMetadata($overrideInfo)
-    {
-        return $overrideInfo['globals']->meta ?? SproutSeo::$app->optimize->globals->meta;
-    }
-
-    /**
-     * Get Element Metadata based on an Element ID
-     *
-     * @param $overrideInfo
-     *
-     * @return array
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
-     */
-    protected function prepareElementMetadata($overrideInfo)
-    {
-        if (isset($overrideInfo['metadataField']) && isset($overrideInfo['contextElement'])) {
-
-            /**
-             * @var Element $element
-             */
-            $element = $overrideInfo['contextElement'];
-            $site = $element->getSite();
-
-            /**
-             * @var Metadata $elementMetadata
-             */
-            $elementMetadata = $overrideInfo['metadataField'];
-            $elementMetadata->ogLocale = $site->language;
-
-            // Default to the current URL, if no overrides exist
-            $elementMetadata->canonical = OptimizeHelper::prepareCanonical($elementMetadata);
-            $elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($elementMetadata);
-            $elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($elementMetadata);
-
-            return $elementMetadata->getAttributes();
-        }
-
-        return [];
-    }
-
-    /**
-     * Process any Meta Tags provided in via the templates and create a SproutSeo_MetaTagsModel
-     *
-     * @param $overrideInfo
-     *
-     * @return array
-     */
-    protected function prepareCodeMetadata($overrideInfo)
-    {
-        if (!empty($overrideInfo)) {
-            return $overrideInfo;
-        }
-
-        return [];
     }
 
     /**

@@ -80,7 +80,6 @@ class RedirectsController extends Controller
      * @return \yii\web\Response
      * @throws ForbiddenHttpException
      * @throws HttpException
-     * @throws \ReflectionException
      * @throws \craft\errors\SiteNotFoundException
      */
     public function actionEditRedirect(int $redirectId = null, string $siteHandle = null, Redirect $redirect = null)

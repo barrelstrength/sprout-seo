@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\sectiontypes;
 
 use barrelstrength\sproutseo\base\UrlEnabledSectionType;
-
+use barrelstrength\sproutseo\models\UrlEnabledSection;
 use craft\elements\Entry as EntryElement;
 use craft\models\Section;
 use craft\queue\jobs\ResaveElements;
@@ -27,7 +27,15 @@ class Entry extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getIdColumnName()
+    public function getElementIdColumnName()
+    {
+        return 'sectionId';
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlFormatIdColumnName()
     {
         return 'sectionId';
     }
@@ -87,9 +95,11 @@ class Entry extends UrlEnabledSectionType
     }
 
     /**
-     * @return array
+     * @param $siteId
+     *
+     * @return UrlEnabledSection[]
      */
-    public function getAllUrlEnabledSections()
+    public function getAllUrlEnabledSections($siteId)
     {
         $urlEnabledSections = [];
 
@@ -99,9 +109,8 @@ class Entry extends UrlEnabledSectionType
             $siteSettings = $section->getSiteSettings();
 
             foreach ($siteSettings as $siteSetting) {
-                if ($siteSetting->hasUrls) {
+                if ($siteId == $siteSetting->siteId && $siteSetting->hasUrls) {
                     $urlEnabledSections[] = $section;
-                    break;
                 }
             }
         }

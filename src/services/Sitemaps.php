@@ -13,6 +13,7 @@ use barrelstrength\sproutseo\models\UrlEnabledSection;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Settings as PluginSettings;
+use craft\base\Element;
 use craft\errors\SiteNotFoundException;
 use yii\base\Component;
 use craft\db\Query;
@@ -363,7 +364,7 @@ class Sitemaps extends Component
              */
             $urlEnabledSectionType = new $urlEnabledSectionType();
             $sitemapSections = SproutSeo::$app->sitemaps->getSitemapSections($urlEnabledSectionType, $siteId);
-            $allUrlEnabledSections = $urlEnabledSectionType->getAllUrlEnabledSections();
+            $allUrlEnabledSections = $urlEnabledSectionType->getAllUrlEnabledSections($siteId);
 
             // Prepare a list of all URL-Enabled Sections for this URL-Enabled Section Type
             // if we have an existing Sitemap, use it, otherwise fallback to a new model
@@ -412,36 +413,20 @@ class Sitemaps extends Component
     /**
      * @param $context
      *
-     * @return UrlEnabledSection|null
-     * @throws \craft\errors\SiteNotFoundException
+     * @return Element|null
+     * @throws SiteNotFoundException
      */
-    public function getUrlEnabledSectionsViaContext($context)
+    public function getElementViaContext($context)
     {
         $currentSite = Craft::$app->sites->getCurrentSite();
 
         $this->prepareUrlEnabledSectionTypesForSitemaps($currentSite->id);
 
         foreach ($this->urlEnabledSectionTypes as $urlEnabledSectionType) {
-            $urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
-
             $matchedElementVariable = $urlEnabledSectionType->getMatchedElementVariable();
-            $urlEnabledSectionTypeIdColumn = $urlEnabledSectionType->getIdColumnName();
 
-            if (isset($context[$matchedElementVariable]->{$urlEnabledSectionTypeIdColumn})) {
-                // Add the current page load matchedElementVariable to our Element Group
-                $element = $context[$matchedElementVariable];
-                $type = $urlEnabledSectionType->getId();
-
-                $urlEnabledSectionTypeId = $element->{$urlEnabledSectionTypeIdColumn};
-
-                $uniqueKey = $type.'-'.$urlEnabledSectionTypeId;
-
-                if (isset($urlEnabledSectionType->urlEnabledSections[$uniqueKey])) {
-                    $urlEnabledSection = $urlEnabledSectionType->urlEnabledSections[$uniqueKey];
-                    $urlEnabledSection->element = $element;
-
-                    return $urlEnabledSection;
-                }
+            if (isset($context[$matchedElementVariable])) {
+                return $context[$matchedElementVariable];
             }
         }
 
