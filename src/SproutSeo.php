@@ -9,28 +9,24 @@ namespace barrelstrength\sproutseo;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
-
-
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\services\App;
-
-
+use barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable;
+use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
+use barrelstrength\sproutbase\services\Settings as SproutBaseSettings;
+use barrelstrength\sproutbase\events\BeforeSaveSettingsEvent;
 use Craft;
 use craft\base\Plugin;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
-use barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable;
-use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\ErrorHandler;
 use craft\events\ExceptionEvent;
-use yii\web\NotFoundHttpException;
 use craft\web\UrlManager;
+use yii\web\NotFoundHttpException;
 use yii\base\Event;
-use barrelstrength\sproutbase\services\Settings as SproutBaseSettings;
-use barrelstrength\sproutbase\events\BeforeSaveSettingsEvent;
 
 class SproutSeo extends Plugin
 {
@@ -113,14 +109,16 @@ class SproutSeo extends Plugin
             }
         });
 
-        // @todo - research craft()->isConsole() method was removed on craft3
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {
 
             $exception = $event->exception;
             $request = Craft::$app->getRequest();
 
-            if (get_class($exception) == NotFoundHttpException::class &&
-                $exception->statusCode == 404 &&
+            /**
+             * @var NotFoundHttpException $exception
+             */
+            if (get_class($exception) === NotFoundHttpException::class &&
+                $exception->statusCode === 404 &&
                 $request->getIsSiteRequest() &&
                 !$request->getIsLivePreview()
             ) {
@@ -129,12 +127,7 @@ class SproutSeo extends Plugin
                 // check if the request url needs redirect
                 $redirect = SproutSeo::$app->redirects->getRedirect($url);
 
-                /**
-                 * @var Settings $pluginSettings
-                 */
-                $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-
-                if (!$redirect && $pluginSettings->enable404RedirectLog) {
+                if (!$redirect && $this->getSettings()->enable404RedirectLog) {
                     // Save new 404 Redirect
                     $redirect = SproutSeo::$app->redirects->save404Redirect($url);
                 }
@@ -182,7 +175,9 @@ class SproutSeo extends Plugin
         ]);
     }
 
-
+    /**
+     * @return Settings
+     */
     protected function createSettingsModel()
     {
         return new Settings();
@@ -264,9 +259,7 @@ class SproutSeo extends Plugin
      */
     private function getSiteUrlRules()
     {
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-
-        if (isset($pluginSettings->enableDynamicSitemaps) && $pluginSettings->enableDynamicSitemaps) {
+        if ($this->getSettings()->enableDynamicSitemaps) {
             return [
                 'sitemap-<sitemapKey:.*>-<pageNumber:\d+>.xml' =>
                     'sprout-seo/xml-sitemap/render-xml-sitemap',
