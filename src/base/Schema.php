@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\base;
 
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\schema\ContactPointSchema;
 use barrelstrength\sproutseo\schema\GeoSchema;
 use barrelstrength\sproutseo\schema\ImageObjectSchema;
@@ -398,7 +398,7 @@ abstract class Schema
                 $transform = $this->globals->settings['ogTransform'];
 
                 $image = [
-                    'url' => SproutSeoOptimizeHelper::getAssetUrl($image->id, $transform),
+                    'url' => OptimizeHelper::getAssetUrl($image->id, $transform),
                     'width' => $image->getWidth(),
                     'height' => $image->getHeight()
                 ];

@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\migrations\InsertDefaultGlobalsBySite;
 use craft\base\Component;
@@ -55,7 +55,7 @@ class GlobalMetadata extends Component
         $results['settings'] = isset($results['settings']) ? Json::decode($results['settings']) : null;
 
         if (isset($results['identity']['url'])) {
-            $results['identity']['url'] = SproutSeoOptimizeHelper::getGlobalMetadataSiteUrl($results['identity']['url']);
+            $results['identity']['url'] = OptimizeHelper::getGlobalMetadataSiteUrl($results['identity']['url']);
         }
 
         if (isset($results['settings']['ogTransform'])) {

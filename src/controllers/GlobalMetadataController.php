@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\controllers;
 
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
@@ -238,19 +238,19 @@ class GlobalMetadataController extends Controller
         $siteName = $info->name;
 
         $urlSetting = $postData['identity']['url'] ?? null;
-        $siteUrl = SproutSeoOptimizeHelper::getGlobalMetadataSiteUrl($urlSetting);
+        $siteUrl = OptimizeHelper::getGlobalMetadataSiteUrl($urlSetting);
 
         $socialProfiles = $postData['social'] ?? $oldSocialProfiles ?? [];
-        $twitterProfileName = SproutSeoOptimizeHelper::getTwitterProfileName($socialProfiles);
+        $twitterProfileName = OptimizeHelper::getTwitterProfileName($socialProfiles);
 
         $twitterCard = (isset($postData['settings']['defaultTwitterCard']) && $postData['settings']['defaultTwitterCard']) ? $postData['settings']['defaultTwitterCard'] : 'summary';
 
         $ogType = (isset($postData['settings']['defaultOgType']) && $postData['settings']['defaultOgType']) ? $postData['settings']['defaultOgType'] : 'website';
 
         $robots = $postData['robots'] ?? $oldGlobals->robots ?? [];
-        $robotsMetaValue = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($robots);
+        $robotsMetaValue = OptimizeHelper::prepareRobotsMetadataValue($robots);
 
-        $facebookPage = SproutSeoOptimizeHelper::getFacebookPage($socialProfiles);
+        $facebookPage = OptimizeHelper::getFacebookPage($socialProfiles);
 
         if ($facebookPage) {
             $globalMetadata->ogPublisher = $facebookPage;

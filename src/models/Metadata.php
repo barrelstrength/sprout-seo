@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\models;
 
 
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Element;
 use craft\base\Model;
@@ -494,9 +494,9 @@ class Metadata extends Model
             $elementMetadata->ogLocale = $site->language;
 
             // Default to the current URL, if no overrides exist
-            $elementMetadata->canonical = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
-            $elementMetadata->ogUrl = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
-            $elementMetadata->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($elementMetadata);
+            $elementMetadata->canonical = OptimizeHelper::prepareCanonical($elementMetadata);
+            $elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($elementMetadata);
+            $elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($elementMetadata);
 
             return $elementMetadata->getAttributes();
         }
@@ -576,7 +576,7 @@ class Metadata extends Model
                 $value = $this[$key];
 
                 if ($key == 'position') {
-                    $value = SproutSeoOptimizeHelper::prepareGeoPosition($this);
+                    $value = OptimizeHelper::prepareGeoPosition($this);
                 }
 
                 $tagData[$this->getMetaTagName($key)] = $value;
@@ -628,7 +628,7 @@ class Metadata extends Model
      */
     public function getGooglePlusMetaTagData()
     {
-        return SproutSeoOptimizeHelper::getGooglePlusPage();
+        return OptimizeHelper::getGooglePlusPage();
     }
 
     /**

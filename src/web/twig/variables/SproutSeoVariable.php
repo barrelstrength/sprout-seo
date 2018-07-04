@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\web\twig\variables;
 
 use barrelstrength\sproutseo\base\Schema;
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
@@ -728,9 +728,9 @@ class SproutSeoVariable
     public function getGlobalRobots()
     {
         $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
-        $robots = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($globals->robots);
+        $robots = OptimizeHelper::prepareRobotsMetadataValue($globals->robots);
 
-        return SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($robots);
+        return OptimizeHelper::prepareRobotsMetadataForSettings($robots);
     }
 
     /**

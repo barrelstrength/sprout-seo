@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\services;
 
 
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\models\SitemapSection;
 use barrelstrength\sproutseo\sectiontypes\Entry;
@@ -179,7 +179,7 @@ class XmlSitemap extends Component
                     $metadata = SproutSeo::$app->optimize->getMetadataField($element);
 
                     $robots = $metadata['robots'];
-                    $robots = SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($robots);
+                    $robots = OptimizeHelper::prepareRobotsMetadataForSettings($robots);
                     $noIndex = $robots['noindex'];
                     $noFollow = $robots['nofollow'];
 

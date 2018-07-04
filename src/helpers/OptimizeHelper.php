@@ -16,7 +16,7 @@ use yii\base\Exception;
 use yii\web\ServerErrorHttpException;
 use barrelstrength\sproutseo\models\Metadata;
 
-class SproutSeoOptimizeHelper
+class OptimizeHelper
 {
     /**
      * Return the URL from our Globals settings if it exists. Otherwise return the Craft siteUrl value.
@@ -164,7 +164,7 @@ class SproutSeoOptimizeHelper
         // Modify our Assets to reference their URLs
         if (!empty($model->ogImage)) {
             if ($model->ogTransform) {
-                $ogTransform = SproutSeoOptimizeHelper::getSelectedTransform($model->ogTransform);
+                $ogTransform = OptimizeHelper::getSelectedTransform($model->ogTransform);
             }
 
             // If ogImage starts with "http", roll with it
@@ -212,7 +212,7 @@ class SproutSeoOptimizeHelper
 
         if (!empty($model->twitterImage)) {
             if ($model->twitterTransform) {
-                $twitterTransform = SproutSeoOptimizeHelper::getSelectedTransform($model->twitterTransform);
+                $twitterTransform = OptimizeHelper::getSelectedTransform($model->twitterTransform);
             }
 
             // If twitterImage starts with "http", roll with it
@@ -305,7 +305,7 @@ class SproutSeoOptimizeHelper
             $asset = Craft::$app->elements->getElementById($id);
 
             if ($asset !== null) {
-                $transform = SproutSeoOptimizeHelper::getSelectedTransform($transform);
+                $transform = OptimizeHelper::getSelectedTransform($transform);
 
                 $imageUrl = Craft::$app->getAssets()->getAssetUrl($asset, $transform);
 

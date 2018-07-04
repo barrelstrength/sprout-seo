@@ -30,7 +30,7 @@ use barrelstrength\sproutseo\enums\MetadataLevels;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata as MetadataModel;
 use barrelstrength\sproutseo\fields\ElementMetadata;
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\models\UrlEnabledSection;
 use barrelstrength\sproutseo\SproutSeo;
@@ -342,9 +342,9 @@ class Optimize extends Component
 
             // Assume our canonical URL is the current URL unless there is a codeOverride
             if ($level == MetadataLevels::CodeMetadata) {
-                $prioritizedMetadataModel->canonical = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                $prioritizedMetadataModel->ogUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                $prioritizedMetadataModel->twitterUrl = SproutSeoOptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
             }
 
             $metadataModel = $metadataModel->setMeta($level, $codeMetadata);
@@ -399,14 +399,14 @@ class Optimize extends Component
             }
         }
 
-        $prioritizedMetadataModel->title = SproutSeoOptimizeHelper::prepareAppendedTitleValue(
+        $prioritizedMetadataModel->title = OptimizeHelper::prepareAppendedTitleValue(
             $prioritizedMetadataModel
         );
 
-        $prioritizedMetadataModel->robots = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($prioritizedMetadataModel->robots);
+        $prioritizedMetadataModel->robots = OptimizeHelper::prepareRobotsMetadataValue($prioritizedMetadataModel->robots);
 
         // let's just prepare assets for final metadatamodel
-        SproutSeoOptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
+        OptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
 
         // Trim descriptions to maxMetaDescriptionLength or 160 characters
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();

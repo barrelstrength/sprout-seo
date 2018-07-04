@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\fields;
 
 
-use barrelstrength\sproutseo\helpers\SproutSeoOptimizeHelper;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutbase\app\seo\web\assets\base\BaseAsset;
@@ -180,7 +180,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
             $twitterImageElements = [$asset];
         }
 
-        $value['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataForSettings($value->robots);
+        $value['robots'] = OptimizeHelper::prepareRobotsMetadataForSettings($value->robots);
 
         // Cleanup the namespace around the $name handle
         $name = str_replace('fields[', "", $name);
@@ -639,7 +639,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         // Grab all the other Sprout SEO fields.
         if ($fields) {
             if (isset($fields['robots'])) {
-                $fields['robots'] = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
+                $fields['robots'] = OptimizeHelper::prepareRobotsMetadataValue($fields['robots']);
             }
 
             $attributes = array_merge($attributes, $fields);
@@ -655,7 +655,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
 
         $this->metadata->setAttributes($attributes, false);
 
-        $this->metadata = SproutSeoOptimizeHelper::updateOptimizedAndAdvancedMetaValues($this->metadata);
+        $this->metadata = OptimizeHelper::updateOptimizedAndAdvancedMetaValues($this->metadata);
 
         if (isset($attributes['canonical']) && $attributes['canonical']) {
             $this->metadata->canonical = $attributes['canonical'];
@@ -678,7 +678,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
             }
 
             if ($key === 'robots') {
-                $metadataModel->{$key} = SproutSeoOptimizeHelper::prepareRobotsMetadataValue($metadataModel->{$key});
+                $metadataModel->{$key} = OptimizeHelper::prepareRobotsMetadataValue($metadataModel->{$key});
             }
         }
 
