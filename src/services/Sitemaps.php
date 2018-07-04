@@ -254,6 +254,31 @@ class Sitemaps extends Component
     }
 
     /**
+     * Delete a Sitemap by ID
+     *
+     * @param null $id
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function deleteSitemapSectionById($id = null)
+    {
+        $sitemapSectionRecord = SitemapSectionRecord::findOne($id);
+
+        if (!$sitemapSectionRecord) {
+            return false;
+        }
+
+        $affectedRows = Craft::$app->getDb()->createCommand()
+            ->delete('{{%sproutseo_sitemaps}}', [
+                'id' => $id
+            ])
+            ->execute();
+
+        return (bool)$affectedRows;
+    }
+
+    /**
      * @return string
      * @throws \yii\base\Exception
      */
@@ -298,31 +323,6 @@ class Sitemaps extends Component
         }
 
         return $options;
-    }
-
-    /**
-     * Delete a Sitemap by ID
-     *
-     * @param null $id
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function deleteSitemapSectionById($id = null)
-    {
-        $sitemapSectionRecord = SitemapSectionRecord::findOne($id);
-
-        if (!$sitemapSectionRecord) {
-            return false;
-        }
-
-        $affectedRows = Craft::$app->getDb()->createCommand()
-            ->delete('{{%sproutseo_sitemaps}}', [
-                'id' => $id
-            ])
-            ->execute();
-
-        return (bool)$affectedRows;
     }
 
     /**
