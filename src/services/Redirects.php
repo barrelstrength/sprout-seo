@@ -141,7 +141,11 @@ class Redirects extends Component
      */
     public function getMethods()
     {
-        $methods = array_flip(RedirectMethods::getConstants());
+        $methods = [
+            RedirectMethods::Permanent,
+            RedirectMethods::Temporary,
+            RedirectMethods::PageNotFound
+        ];
         $newMethods = [];
 
         foreach ($methods as $key => $value) {

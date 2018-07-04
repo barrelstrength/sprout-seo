@@ -10,7 +10,7 @@ namespace barrelstrength\sproutseo\enums;
 /**
  * The Method class is an abstract class that defines the different statuses available in one Redirect.
  */
-abstract class RedirectStatuses extends BaseEnum
+abstract class RedirectStatuses
 {
     // Constants
     // =========================================================================

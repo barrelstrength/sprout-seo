@@ -10,7 +10,7 @@ namespace barrelstrength\sproutseo\enums;
 /**
  * Metadata Levels are used to establish which metadata gets priority
  */
-abstract class MetadataLevels extends BaseEnum
+abstract class MetadataLevels
 {
     // Constants
     // =========================================================================

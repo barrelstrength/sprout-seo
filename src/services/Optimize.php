@@ -324,7 +324,11 @@ class Optimize extends Component
      */
     public function getPrioritizedMetadataModel($siteId = null)
     {
-        $metaLevels = MetadataLevels::getConstants();
+        $metaLevels = [
+            MetadataLevels::GlobalMetadata,
+            MetadataLevels::ElementMetadata,
+            MetadataLevels::CodeMetadata
+        ];
 
         $this->globals = $this->globals ?? SproutSeo::$app->globalMetadata->getGlobalMetadata($siteId);
 
