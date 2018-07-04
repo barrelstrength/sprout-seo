@@ -22,7 +22,7 @@ class Product extends UrlEnabledSectionType
      */
     public function getName()
     {
-        return ProductElement::class;
+        return 'Products';
     }
 
     /**
@@ -103,8 +103,13 @@ class Product extends UrlEnabledSectionType
         $sections = $productTypes->getAllProductTypes();
 
         foreach ($sections as $section) {
-            if ($section->hasUrls) {
-                $urlEnabledSections[] = $section;
+            $siteSettings = $section->getSiteSettings();
+
+            foreach ($siteSettings as $siteSetting) {
+                if ($siteSetting->hasUrls) {
+                    $urlEnabledSections[] = $section;
+                    break;
+                }
             }
         }
 

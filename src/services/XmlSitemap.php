@@ -13,6 +13,7 @@ use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\models\SitemapSection;
 use barrelstrength\sproutseo\sectiontypes\Entry;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
+use barrelstrength\sproutseo\sectiontypes\Product;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\elements\db\ElementQuery;
 use yii\base\Component;
@@ -43,6 +44,7 @@ class XmlSitemap extends Component
         $urlEnabledSectionTypes = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($siteId);
 
         foreach ($urlEnabledSectionTypes as $urlEnabledSectionType) {
+            $urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
             $urlEnabledSectionTypeId = $urlEnabledSectionType->getIdColumnName();
 
             foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {
@@ -56,7 +58,7 @@ class XmlSitemap extends Component
                      */
                     $query = $urlEnabledSectionType->getElementType()::find();
                     $query->{$urlEnabledSectionTypeId}($urlEnabledSection->id);
-                    $query->siteId = $siteId;
+                    $query->siteId($siteId);
 
                     $totalElements = $query->count();
 
@@ -151,6 +153,7 @@ class XmlSitemap extends Component
                     $query = $urlEnabledSectionType->getElementType()::find();
 
                     // Example: $query->sectionId(123)
+                    $urlEnabledSectionType->typeIdContext = 'matchedElementCheck';
                     $urlEnabledSectionColumnName = $urlEnabledSectionType->getIdColumnName();
                     $query->{$urlEnabledSectionColumnName}($sitemapSection->urlEnabledSectionId);
 

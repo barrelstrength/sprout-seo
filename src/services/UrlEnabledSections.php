@@ -12,6 +12,7 @@ use barrelstrength\sproutseo\events\RegisterUrlEnabledSectionTypesEvent;
 use barrelstrength\sproutseo\sectiontypes\Category;
 use barrelstrength\sproutseo\sectiontypes\Entry;
 use barrelstrength\sproutseo\sectiontypes\NoSection;
+use barrelstrength\sproutseo\sectiontypes\Product;
 use Craft;
 use yii\base\Component;
 
@@ -37,10 +38,9 @@ class UrlEnabledSections extends Component
             NoSection::class
         ];
 
-        // @todo - Add Commerce Product support
-        // if (Craft::$app->getPlugins()->getPlugin('commerce')) {
-        //     $urlEnabledSectionTypes[] = Product::class;
-        // }
+         if (Craft::$app->getPlugins()->getPlugin('commerce')) {
+             $urlEnabledSectionTypes[] = Product::class;
+         }
 
         $event = new RegisterUrlEnabledSectionTypesEvent([
             'urlEnabledSectionTypes' => $urlEnabledSectionTypes
