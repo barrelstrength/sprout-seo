@@ -140,9 +140,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      *
      * @return string
      * @throws Exception
-     * @throws \Exception
      * @throws \Twig_Error_Loader
-     * @throws \yii\web\ServerErrorHttpException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {

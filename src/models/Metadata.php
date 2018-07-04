@@ -15,7 +15,11 @@ use craft\base\Model;
 use craft\helpers\UrlHelper;
 use barrelstrength\sproutseo\enums\MetadataLevels;
 
-
+/**
+ * Class Metadata
+ *
+ * @property string uri
+ */
 class Metadata extends Model
 {
     /**
