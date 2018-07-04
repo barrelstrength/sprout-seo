@@ -99,15 +99,6 @@ class Settings extends Model
     public function getSettingsNavItems()
     {
         return [
-            'overview' => [
-                'label' => Craft::t('sprout-seo', 'Overview'),
-                'url' => 'sprout-seo/settings/overview',
-                'selected' => 'overview',
-                'template' => 'sprout-base-seo/settings/overview'
-            ],
-            'settingsHeading' => [
-                'heading' => Craft::t('sprout-seo', 'Settings'),
-            ],
             'general' => [
                 'label' => Craft::t('sprout-seo', 'General'),
                 'url' => 'sprout-seo/settings/general',
@@ -131,30 +122,6 @@ class Settings extends Model
                 'url' => 'sprout-seo/settings/advanced',
                 'selected' => 'advanced',
                 'template' => 'sprout-base-seo/settings/advanced',
-            ],
-            'integrationsHeading' => [
-                'heading' => Craft::t('sprout-seo', 'Integrations'),
-            ],
-            'craftcommerce' => [
-                'label' => Craft::t('sprout-seo', 'Craft Commerce'),
-                'url' => 'sprout-seo/settings/craftcommerce',
-                'selected' => 'craftcommerce',
-                'template' => 'sprout-base-seo/_integrations/craftcommerce',
-                'settingsForm' => false
-            ],
-            'sproutemail' => [
-                'label' => Craft::t('sprout-seo', 'Sprout Email'),
-                'url' => 'sprout-seo/settings/sproutemail',
-                'selected' => 'sproutemail',
-                'template' => 'sprout-base-seo/_integrations/sproutemail',
-                'settingsForm' => false
-            ],
-            'sproutimport' => [
-                'label' => Craft::t('sprout-seo', 'Sprout Import'),
-                'url' => 'sprout-seo/settings/sproutimport',
-                'selected' => 'sproutimport',
-                'template' => 'sprout-base-seo/_integrations/sproutimport',
-                'settingsForm' => false
             ]
         ];
     }
