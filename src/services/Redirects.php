@@ -142,9 +142,9 @@ class Redirects extends Component
     public function getMethods()
     {
         $methods = [
-            RedirectMethods::Permanent,
-            RedirectMethods::Temporary,
-            RedirectMethods::PageNotFound
+            Craft::t('sprout-seo', 'Permanent') => RedirectMethods::Permanent,
+            Craft::t('sprout-seo', 'Temporary') => RedirectMethods::Temporary,
+            Craft::t('sprout-seo', 'Page Not Found') => RedirectMethods::PageNotFound
         ];
         $newMethods = [];
 
