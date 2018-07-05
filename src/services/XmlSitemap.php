@@ -310,7 +310,7 @@ class XmlSitemap extends Component
 
             $modified = new DateTime($customSitemapSection['dateUpdated']);
             $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
-            // @todo - parseEnvironmentString was removed
+
             $urls[$customSitemapSection['uri']] = $customSitemapSection;
         }
 
