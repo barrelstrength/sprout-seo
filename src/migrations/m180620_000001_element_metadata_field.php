@@ -78,6 +78,13 @@ class m180620_000001_element_metadata_field extends Migration
             $metadataElement['id'],
             $metadataElement['elementId'],
             $metadataElement['locale'],
+            $metadataElement['ogAudio'],
+            $metadataElement['ogVideo'],
+            $metadataElement['twitterPlayer'],
+            $metadataElement['twitterPlayerStream'],
+            $metadataElement['twitterPlayerStreamContentType'],
+            $metadataElement['twitterPlayerWidth'],
+            $metadataElement['twitterPlayerHeight'],
             $metadataElement['dateCreated'],
             $metadataElement['dateUpdated'],
             $metadataElement['uid']
