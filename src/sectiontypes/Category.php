@@ -117,36 +117,40 @@ class Category extends UrlEnabledSectionType
     }
 
     /**
-     * @param int|string|null $elementGroupId
+     * @inheritdoc
      */
     public function resaveElements($elementGroupId = null)
     {
         if (!$elementGroupId) {
-            // @todo - Craft Feature Request
-            // This data should be available from the SaveFieldLayout event, not relied on in the URL
-            $elementGroupId = Craft::$app->request->getSegment(3);
+            return false;
         }
 
         $category = Craft::$app->categories->getGroupById($elementGroupId);
         $siteSettings = $category->getSiteSettings();
 
-        if ($siteSettings) {
-            // let's take the first site
-            $primarySite = reset($siteSettings)->siteId ?? null;
-
-            if ($primarySite) {
-                Craft::$app->getQueue()->push(new ResaveElements([
-                    'description' => Craft::t('sprout-seo', 'Re-saving Categories and metadata.'),
-                    'elementType' => CategoryElement::class,
-                    'criteria' => [
-                        'siteId' => $primarySite,
-                        'sectionId' => $elementGroupId,
-                        'status' => null,
-                        'enabledForSite' => false,
-                        'limit' => null,
-                    ]
-                ]));
-            }
+        if (!$siteSettings) {
+            return false;
         }
+
+        // let's take the first site
+        $primarySite = reset($siteSettings)->siteId ?? null;
+
+        if (!$primarySite) {
+            return false;
+        }
+
+        Craft::$app->getQueue()->push(new ResaveElements([
+            'description' => Craft::t('sprout-seo', 'Re-saving Categories and metadata.'),
+            'elementType' => CategoryElement::class,
+            'criteria' => [
+                'siteId' => $primarySite,
+                'groupId' => $elementGroupId,
+                'status' => null,
+                'enabledForSite' => false,
+                'limit' => null,
+            ]
+        ]));
+
+        return true;
     }
 }

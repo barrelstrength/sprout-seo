@@ -11,14 +11,14 @@ namespace barrelstrength\sproutseo\services;
 use barrelstrength\sproutseo\models\Metadata;
 use craft\base\Element;
 use craft\base\Field;
-use craft\models\FieldLayout;
+use craft\events\FieldLayoutEvent;
+
 use yii\base\Component;
 use craft\db\Query;
 
 use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
 use barrelstrength\sproutseo\SproutSeo;
 
-use yii\base\Event;
 
 class ElementMetadata extends Component
 {
@@ -73,27 +73,23 @@ class ElementMetadata extends Component
     }
 
     /**
-     * @todo - TEST CRAFT3
      * Re-save Elements after a field layout or Element Metadata field is updated
      *
      * This is necessary when an Element Metadata field is added to a Field Layout
      * in a Section that Elements already exist, or if any changes are made to the
      * Element Metadata field type.
      *
-     * @param Event $event
+     * @param FieldLayoutEvent $event
      *
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function resaveElements(Event $event)
+    public function resaveElementsAfterFieldLayoutIsSaved(FieldLayoutEvent $event)
     {
         /**
          * The Field Layout event identifies the Element Type that the layout is for:
          * Category, Entry, Commerce_Product, etc.
-         *
-         * @var FieldLayout $fieldLayout
          */
-        $fieldLayout = $event->sender['layout'];
-
+        $fieldLayout = $event->layout;
         $elementType = $fieldLayout->type;
         $fieldLayoutFields = $fieldLayout->getFields();
         $hasElementMetadataField = false;
@@ -106,13 +102,9 @@ class ElementMetadata extends Component
         }
 
         if ($hasElementMetadataField) {
-            $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType($elementType);
-
-            // We only need to save the current field layout. Some Elements, like Commerce_Products
+            // Some Elements, like Commerce_Products
             // also need to save the related Variant field layout which returns as an array
-            if (!is_array($urlEnabledSectionType) && $urlEnabledSectionType->resaveElementsAfterFieldLayoutSaved()) {
-                $urlEnabledSectionType->resaveElements();
-            }
+            $this->resaveElementsByUrlEnabledSection($elementType, true);
         }
     }
 
@@ -148,20 +140,41 @@ class ElementMetadata extends Component
         $elementTypes = array_unique($elementTypes);
 
         foreach ($elementTypes as $elementType) {
-            //Get the URL-Enabled Section Type based using the Element Type
-            $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType($elementType);
+            $this->resaveElementsByUrlEnabledSection($elementType);
+        }
+    }
 
-            if ($urlEnabledSectionType) {
-                foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {
-                    if ($urlEnabledSection->hasElementMetadataField(false)) {
-                        // Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
-                        $elementGroupId = $urlEnabledSection->id;
+    /**
+     * Triggers a Resave Elements job for each Url-Enabled Section with an Element Metadata field
+     *
+     * @param      $elementType
+     * @param bool $afterFieldLayout
+     *
+     * @return bool
+     * @throws \craft\errors\SiteNotFoundException
+     */
+    protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false)
+    {
+        //Get the URL-Enabled Section Type based using the Element Type
+        $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType($elementType);
 
-                        //Resave Element on that URL-Enabled Section Type
-                        $urlEnabledSectionType->resaveElements($elementGroupId);
-                    }
+        if ($afterFieldLayout && !$urlEnabledSectionType->resaveElementsAfterFieldLayoutSaved())
+        {
+            return false;
+        }
+
+        if ($urlEnabledSectionType) {
+            foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {
+                if ($urlEnabledSection->hasElementMetadataField(false)) {
+                    // Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
+                    $elementGroupId = $urlEnabledSection->id;
+
+                    //Resave Element on that URL-Enabled Section Type
+                    $urlEnabledSectionType->resaveElements($elementGroupId);
                 }
             }
         }
+
+        return true;
     }
 }

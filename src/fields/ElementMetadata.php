@@ -149,7 +149,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $name = $this->name;
+        $name = $this->handle;
         $inputId = Craft::$app->view->formatInputId($name);
         $namespaceInputName = Craft::$app->view->namespaceInputName($inputId);
         $namespaceInputId = Craft::$app->view->namespaceInputId($inputId);
@@ -299,8 +299,8 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      */
     public function afterSave(bool $isNew)
     {
-        // @todo implement this in Craft3
         SproutSeo::$app->elementMetadata->resaveElementsIfUsingElementMetadataField($this->id);
+
         parent::afterSave($isNew);
     }
 

@@ -180,7 +180,7 @@ abstract class UrlEnabledSectionType
      *
      * @param null $elementGroupId
      *
-     * @return mixed
+     * @return bool
      */
     abstract public function resaveElements($elementGroupId = null);
 }

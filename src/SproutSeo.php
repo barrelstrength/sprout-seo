@@ -18,6 +18,7 @@ use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 
 use Craft;
 use craft\base\Plugin;
+use craft\events\FieldLayoutEvent;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -99,6 +100,10 @@ class SproutSeo extends Plugin
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $variable = $event->sender;
             $variable->set('sproutSeo', SproutSeoVariable::class);
+        });
+
+        Event::on(Fields::class, Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT, function(FieldLayoutEvent $event) {
+            SproutSeo::$app->elementMetadata->resaveElementsAfterFieldLayoutIsSaved($event);
         });
 
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {

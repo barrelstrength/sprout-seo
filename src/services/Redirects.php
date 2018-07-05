@@ -241,6 +241,7 @@ class Redirects extends Component
         /**
          * @var Settings $pluginSettings
          */
+        /** @noinspection OneTimeUseVariablesInspection */
         $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
         return $pluginSettings->structureId;

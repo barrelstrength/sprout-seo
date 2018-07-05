@@ -12,6 +12,7 @@ use barrelstrength\sproutseo\models\UrlEnabledSection;
 use craft\commerce\elements\Product as ProductElement;
 use Craft;
 use craft\commerce\services\ProductTypes;
+use craft\queue\jobs\ResaveElements;
 
 /**
  * Class Product
@@ -134,36 +135,40 @@ class Product extends UrlEnabledSectionType
     }
 
     /**
-     * @param null $elementGroupId
-     *
-     * @return mixed|void
+     * @inheritdoc
      */
     public function resaveElements($elementGroupId = null)
     {
         if (!$elementGroupId) {
-            // @todo - Craft Feature Request
-            // This data should be available from the SaveFieldLayout event, not relied on in the URL
-            $elementGroupId = Craft::$app->request->getSegment(4);
+            return false;
         }
 
-        $productType = Craft::$app->categories->getGroupById($elementGroupId);
+        $productTypes = new ProductTypes();
+        $productType = $productTypes->getProductTypeById($elementGroupId);
         $siteSettings = array_values($productType->getSiteSettings());
 
-        if ($siteSettings) {
-
-//            $primaryLocale = $siteSettings[0];
-
-//            $query = ProductElement::find();
-//            $query->siteId = $primaryLocale->locale;
-//            $query->productTypeId = $elementGroupId;
-//            $query->status = null;
-//            $query->localeEnabled = null;
-//            $query->limit = null;
-//
-//            Craft::$app->tasks->createTask('ResaveElements', Craft::t('sprout-seo', 'Re-saving Commerce Products and metadata.'), [
-//                'elementType' => Product::class,
-//                'criteria' => $criteria->getAttributes()
-//            ]);
+        if (!$siteSettings) {
+            return false;
         }
+        // let's take the first site
+        $primarySite = reset($siteSettings)->siteId ?? null;
+
+        if (!$primarySite) {
+            return false;
+        }
+
+        Craft::$app->getQueue()->push(new ResaveElements([
+            'description' => Craft::t('sprout-seo', 'Re-saving Products and metadata'),
+            'elementType' => ProductElement::class,
+            'criteria' => [
+                'siteId' => $primarySite,
+                'typeId' => $elementGroupId,
+                'status' => null,
+                'enabledForSite' => false,
+                'limit' => null,
+            ]
+        ]));
+
+        return true;
     }
 }
