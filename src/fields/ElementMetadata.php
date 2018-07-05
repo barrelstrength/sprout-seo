@@ -8,6 +8,11 @@
 namespace barrelstrength\sproutseo\fields;
 
 
+use barrelstrength\sproutbase\app\fields\web\assets\selectother\SelectOtherFieldAsset;
+use barrelstrength\sproutbase\app\seo\web\assets\schema\SchemaAsset;
+use barrelstrength\sproutbase\app\seo\web\assets\opengraph\OpenGraphAsset;
+use barrelstrength\sproutbase\app\seo\web\assets\tageditor\TagEditorAsset;
+use barrelstrength\sproutbase\app\seo\web\assets\twittercard\TwitterCardAsset;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Metadata;
@@ -132,6 +137,10 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         $schemas = SproutSeo::$app->schema->getSchemaOptions();
         $schemaSubtypes = SproutSeo::$app->schema->getSchemaSubtypes($schemas);
 
+        Craft::$app->getView()->registerAssetBundle(BaseAsset::class);
+        Craft::$app->getView()->registerAssetBundle(SchemaAsset::class);
+        Craft::$app->getView()->registerAssetBundle(SelectOtherFieldAsset::class);
+
         return Craft::$app->view->renderTemplate('sprout-base-seo/_components/fields/elementmetadata/settings', [
             'settings' => $this->getAttributes(),
             'schemas' => $schemas,
@@ -196,6 +205,12 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         $name = "sproutseo[metadata][$name]";
 
         $settings = $this->getAttributes();
+
+        Craft::$app->getView()->registerAssetBundle(BaseAsset::class);
+        Craft::$app->getView()->registerAssetBundle(OpenGraphAsset::class);
+        Craft::$app->getView()->registerAssetBundle(TwitterCardAsset::class);
+        Craft::$app->getView()->registerAssetBundle(TagEditorAsset::class);
+        Craft::$app->getView()->registerAssetBundle(SchemaAsset::class);
 
         return Craft::$app->view->renderTemplate('sprout-base-seo/_components/fields/elementmetadata/input', [
             'field' => $this,
