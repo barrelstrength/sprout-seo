@@ -391,7 +391,6 @@ class Metadata extends Model
 
         foreach ($this->searchMeta as $key => $value) {
             if ($this->{$key}) {
-                // @todo - parseEnvironmentString was removed
                 $value = $this->{$key};
                 $tagData[$key] = $value;
             }
@@ -457,7 +456,6 @@ class Metadata extends Model
 
         foreach ($this->openGraphMeta as $key => $value) {
             if ($this->{$key}) {
-                // @todo - parseEnvironmentString was removed
                 $value = $this->{$key};
                 $tagData[$this->getMetaTagName($key)] = $value;
             }
@@ -475,7 +473,6 @@ class Metadata extends Model
 
         foreach ($this->twitterCardsMeta as $key => $value) {
             if ($this->{$key}) {
-                // @todo - parseEnvironmentString was removed
                 $value = $this->{$key};
                 $tagData[$this->getMetaTagName($key)] = $value;
             }
