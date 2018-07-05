@@ -294,31 +294,6 @@ class Metadata extends Model
     public $twitterImage;
 
     /**
-     * @var string
-     */
-    public $twitterPlayer;
-
-    /**
-     * @var string
-     */
-    public $twitterPlayerStream;
-
-    /**
-     * @var string
-     */
-    public $twitterPlayerStreamContentType;
-
-    /**
-     * @var int
-     */
-    public $twitterPlayerWidth;
-
-    /**
-     * @var int
-     */
-    public $twitterPlayerHeight;
-
-    /**
      * @var \DateTime
      */
     public $dateCreated;
@@ -385,12 +360,7 @@ class Metadata extends Model
             'twitterUrl' => $this->twitterUrl,
             'twitterTitle' => $this->twitterTitle,
             'twitterDescription' => $this->twitterDescription,
-            'twitterImage' => $this->twitterImage,
-            'twitterPlayer' => $this->twitterPlayer,
-            'twitterPlayerStream' => $this->twitterPlayerStream,
-            'twitterPlayerStreamContentType' => $this->twitterPlayerStreamContentType,
-            'twitterPlayerWidth' => $this->twitterPlayerWidth,
-            'twitterPlayerHeight' => $this->twitterPlayerHeight,
+            'twitterImage' => $this->twitterImage
         ];
     }
 
@@ -563,12 +533,7 @@ class Metadata extends Model
             'twitterTitle' => 'twitter:title',
             'twitterDescription' => 'twitter:description',
             'twitterUrl' => 'twitter:url',
-            'twitterImage' => 'twitter:image',
-            'twitterPlayer' => 'twitter:player',
-            'twitterPlayerStream' => 'twitter:player:stream',
-            'twitterPlayerStreamContentType' => 'twitter:player:stream:content_type',
-            'twitterPlayerWidth' => 'twitter:player:width',
-            'twitterPlayerHeight' => 'twitter:player:height',
+            'twitterImage' => 'twitter:image'
         ];
 
         return $tagNames[$handle];
