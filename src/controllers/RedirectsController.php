@@ -26,47 +26,28 @@ use yii\web\HttpException;
 class RedirectsController extends Controller
 {
     /**
-     * @param string|null $siteHandle
+     * @param int|null $baseSiteId
      *
      * @return Response
      * @throws ForbiddenHttpException
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionRedirectsIndexTemplate(string $siteHandle = null): Response
+    public function actionRedirectsIndexTemplate(int $baseSiteId = null): Response
     {
-        if ($siteHandle === null) {
+        if ($baseSiteId === null) {
             $primarySite = Craft::$app->getSites()->getPrimarySite();
-            $siteHandle = $primarySite->handle;
+            $baseSite = SproutSeo::$app->redirects->getBaseSiteBySiteId($primarySite->id);
+            $baseSiteId = $baseSite['id'];
         }
 
-        $currentSite = Craft::$app->getSites()->getSiteByHandle($siteHandle);
+        $currentSite = SproutSeo::$app->redirects->getBaseSiteById($baseSiteId);
 
-        if (!$currentSite->hasUrls) {
-            throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Unable to add redirect. {site} Site does not have URLs enabled.', [
-                'site' => $currentSite
-            ]));
+        if (!$currentSite) {
+            throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Something went wrong'));
         }
-
-        $editableSiteIds = Craft::$app->getSites()->getEditableSiteIds();
-
-        // Make sure the user has permission to edit that site
-        if (!in_array($currentSite->id, $editableSiteIds, false)) {
-            throw new ForbiddenHttpException(Craft::t('sprout-seo', 'User not permitted to edit content for this site.'));
-        }
-
-        /**
-         * @var Settings $pluginSettings
-         */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
-
-        // Get enabled IDs. Remove any disabled IDS.
-        // @todo - should we merge these settings with the Site Enabled/Disabled settings right here?
-        $enabledSiteIds = array_filter($pluginSettings->siteSettings);
 
         return $this->renderTemplate('sprout-base-seo/redirects', [
-            'currentSite' => $currentSite,
-            'baseUrl' => rtrim(Craft::getAlias($currentSite->baseUrl), '/').'/',
-            'enabledSiteIds' => $enabledSiteIds
+            'currentSite' => $currentSite
         ]);
     }
 

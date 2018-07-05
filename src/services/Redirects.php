@@ -15,6 +15,7 @@ use barrelstrength\sproutseo\records\Redirect as RedirectRecord;
 use barrelstrength\sproutseo\models\Settings;
 
 use Craft;
+use craft\db\Query;
 use yii\base\Component;
 
 
@@ -331,5 +332,54 @@ class Redirects extends Component
         }
 
         return $redirect;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseSiteIds()
+    {
+        $baseUrlSites = (new Query())
+            ->select(['sproutseo_baseurl_sites.id id', 'sproutseo_baseurl_sites.siteId siteId', 'sproutseo_baseurls.baseUrl baseUrl'])
+            ->from(['{{%sproutseo_baseurl_sites}} sproutseo_baseurl_sites'])
+            ->where(['not', ['baseUrlId' => null]])
+            ->innerJoin("{{%sproutseo_baseurls}} sproutseo_baseurls", "[[sproutseo_baseurls.id]] = [[sproutseo_baseurl_sites.baseUrlId]]")
+            ->all();
+
+        return $baseUrlSites;
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getBaseSiteById($id)
+    {
+        $baseUrlSite = (new Query())
+            ->select(['sproutseo_baseurl_sites.id id', 'sproutseo_baseurl_sites.siteId siteId', 'sproutseo_baseurls.baseUrl baseUrl'])
+            ->from(['{{%sproutseo_baseurl_sites}} sproutseo_baseurl_sites'])
+            ->where(['not', ['baseUrlId' => null]])
+            ->andWhere(['sproutseo_baseurl_sites.id' => $id])
+            ->innerJoin("{{%sproutseo_baseurls}} sproutseo_baseurls", "[[sproutseo_baseurls.id]] = [[sproutseo_baseurl_sites.baseUrlId]]")
+            ->one();
+
+        return $baseUrlSite;
+    }
+
+    /**
+     * @param $siteId
+     * @return array
+     */
+    public function getBaseSiteBySiteId($siteId)
+    {
+        $baseUrlSite = (new Query())
+            ->select(['sproutseo_baseurl_sites.id id', 'sproutseo_baseurl_sites.siteId siteId', 'sproutseo_baseurls.baseUrl baseUrl'])
+            ->from(['{{%sproutseo_baseurl_sites}} sproutseo_baseurl_sites'])
+            ->where(['not', ['baseUrlId' => null]])
+            ->andWhere(['siteId' => $siteId])
+            ->innerJoin("{{%sproutseo_baseurls}} sproutseo_baseurls", "[[sproutseo_baseurls.id]] = [[sproutseo_baseurl_sites.baseUrlId]]")
+            ->one();
+
+        return $baseUrlSite;
     }
 }

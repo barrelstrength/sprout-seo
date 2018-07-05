@@ -838,8 +838,32 @@ class SproutSeoVariable
         return false;
     }
 
+    /**
+     * @return int
+     */
     public function getDescriptionLength()
     {
         return SproutSeo::$app->settings->getDescriptionLength();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBaseSiteIds()
+    {
+        $baseUrlSites = SproutSeo::$app->redirects->getBaseSiteIds();
+
+        return $baseUrlSites;
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getBaseSiteById($id)
+    {
+        $baseUrlSite = SproutSeo::$app->redirects->getBaseSiteById($id);
+
+        return $baseUrlSite;
     }
 }
