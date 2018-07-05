@@ -220,9 +220,6 @@ class GlobalMetadataController extends Controller
         $globalMetadata = new Metadata();
         $siteName = $info->name;
 
-        $urlSetting = $postData['identity']['url'] ?? null;
-        $siteUrl = OptimizeHelper::getGlobalMetadataSiteUrl($urlSetting);
-
         $socialProfiles = $postData['social'] ?? $oldSocialProfiles ?? [];
         $twitterProfileName = OptimizeHelper::getTwitterProfileName($socialProfiles);
 
@@ -254,7 +251,6 @@ class GlobalMetadataController extends Controller
             $globalMetadata->keywords = $identity['keywords'] ?? null;
 
             $globalMetadata->robots = $robotsMetaValue;
-            $globalMetadata->canonical = $siteUrl;
 
             // @todo - Add location info
             $globalMetadata->region = "";
@@ -265,7 +261,6 @@ class GlobalMetadataController extends Controller
 
             $globalMetadata->ogType = $ogType;
             $globalMetadata->ogSiteName = $siteName;
-            $globalMetadata->ogUrl = $siteUrl;
             $globalMetadata->ogTitle = $optimizedTitle;
             $globalMetadata->ogDescription = $optimizedDescription;
             $globalMetadata->ogImage = $optimizedImage;
@@ -276,7 +271,6 @@ class GlobalMetadataController extends Controller
             $globalMetadata->twitterCard = $twitterCard;
             $globalMetadata->twitterSite = $twitterProfileName;
             $globalMetadata->twitterCreator = $twitterProfileName;
-            $globalMetadata->twitterUrl = $siteUrl;
             $globalMetadata->twitterTitle = $optimizedTitle;
             $globalMetadata->twitterDescription = $optimizedDescription;
             $globalMetadata->twitterImage = $optimizedImage;

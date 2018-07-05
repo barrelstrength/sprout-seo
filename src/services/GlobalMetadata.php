@@ -64,7 +64,7 @@ class GlobalMetadata extends Component
         $results['settings'] = isset($results['settings']) ? Json::decode($results['settings']) : null;
 
         if (isset($results['identity']['url'])) {
-            $results['identity']['url'] = OptimizeHelper::getGlobalMetadataSiteUrl($results['identity']['url']);
+            $results['identity']['url'] = $currentSite->baseUrl;
         }
 
         if (isset($results['settings']['ogTransform'])) {

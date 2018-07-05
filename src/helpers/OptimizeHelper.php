@@ -19,25 +19,6 @@ use barrelstrength\sproutseo\models\Metadata;
 class OptimizeHelper
 {
     /**
-     * Return the URL from our Globals settings if it exists. Otherwise return the Craft siteUrl value.
-     *
-     * @param null $url
-     *
-     * @return string
-     * @throws Exception
-     */
-    public static function getGlobalMetadataSiteUrl($url = null)
-    {
-        if (!$url) {
-            return UrlHelper::siteUrl();
-        }
-        // @todo - parseEnvironmentString was removed
-        // Consider matching the selected currentSite baseUrl and removing this setting from the Globals UI
-        //return Craft::$app->config->parseEnvironmentString ($url);
-        return UrlHelper::url($url);
-    }
-
-    /**
      * Set the default canonical URL to be the current URL
      *
      * @param $metadataModel
