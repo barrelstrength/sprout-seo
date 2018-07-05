@@ -56,26 +56,25 @@ class RedirectsController extends Controller
      *
      * @param int|null      $redirectId The redirect's ID, if editing an existing redirect.
      * @param Redirect|null $redirect   The redirect send back by setRouteParams if any errors on saveRedirect
-     * @param string|null   $siteHandle
+     * @param int|null   $baseSiteId
      *
      * @return \yii\web\Response
      * @throws ForbiddenHttpException
      * @throws HttpException
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionEditRedirect(int $redirectId = null, string $siteHandle = null, Redirect $redirect = null)
+    public function actionEditRedirect($redirectId = null, int $baseSiteId = null, Redirect $redirect = null)
     {
-        if ($siteHandle === null) {
+        if ($baseSiteId === null) {
             $primarySite = Craft::$app->getSites()->getPrimarySite();
-            $siteHandle = $primarySite->handle;
+            $baseSite = SproutSeo::$app->redirects->getBaseSiteBySiteId($primarySite->id);
+            $baseSiteId = $baseSite['id'];
         }
 
-        $currentSite = Craft::$app->getSites()->getSiteByHandle($siteHandle);
+        $currentSite = SproutSeo::$app->redirects->getBaseSiteById($baseSiteId);
 
-        if (!$currentSite->hasUrls) {
-            throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Unable to add redirect. {site} Site does not have URLs enabled.', [
-                'site' => $currentSite
-            ]));
+        if (!$currentSite) {
+            throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Something went wrong'));
         }
 
         $methodOptions = SproutSeo::$app->redirects->getMethods();
@@ -84,18 +83,18 @@ class RedirectsController extends Controller
         if ($redirect === null) {
             if ($redirectId !== null) {
 
-                $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $currentSite->id);
+                $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $currentSite['siteId']);
 
                 if (!$redirect) {
                     throw new HttpException(404);
                 }
             } else {
                 $redirect = new Redirect();
-                $redirect->siteId = $currentSite->id;
+                $redirect->siteId = $currentSite['id'];
             }
         }
 
-        $continueEditingUrl = 'sprout-seo/redirects/'.$currentSite->handle.'/edit/{id}';
+        $continueEditingUrl = 'sprout-seo/redirects/edit/{id}/'.$currentSite['id'];
 
         $crumbs = [
             [
@@ -109,8 +108,7 @@ class RedirectsController extends Controller
             'redirect' => $redirect,
             'methodOptions' => $methodOptions,
             'crumbs' => $crumbs,
-            'continueEditingUrl' => $continueEditingUrl,
-            'siteHandle' => $siteHandle
+            'continueEditingUrl' => $continueEditingUrl
         ]);
     }
 

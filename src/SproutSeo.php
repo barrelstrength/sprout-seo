@@ -218,11 +218,11 @@ class SproutSeo extends Plugin
             'sprout-seo/redirects' =>
                 'sprout-seo/redirects/redirects-index-template',
 
-            'sprout-seo/redirects/<baseSiteId:.*>' =>
-                'sprout-seo/redirects/redirects-index-template',
-
             'sprout-seo/redirects/<baseSiteId:.*>/new' =>
                 'sprout-seo/redirects/edit-redirect',
+
+            'sprout-seo/redirects/<baseSiteId:.*>' =>
+                'sprout-seo/redirects/redirects-index-template',
 
             'sprout-seo/redirects/edit/<redirectId:\d+>/<baseSiteId:.*>' =>
                 'sprout-seo/redirects/edit-redirect',
