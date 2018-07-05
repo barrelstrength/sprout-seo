@@ -37,7 +37,7 @@ class GlobalMetadataController extends Controller
      */
     public function actionEditGlobalMetadata(string $selectedTabHandle, string $siteHandle = null, Globals $globals = null): Response
     {
-        $site = Craft::$app->getSites()->getPrimarySite();
+        $currentSite = Craft::$app->getSites()->getPrimarySite();
 
         if (Craft::$app->getIsMultiSite()) {
             // Get the sites the user is allowed to edit
@@ -49,51 +49,36 @@ class GlobalMetadataController extends Controller
 
             // Editing a specific site?
             if ($siteHandle !== null) {
-                $site = Craft::$app->getSites()->getSiteByHandle($siteHandle);
+                $currentSite = Craft::$app->getSites()->getSiteByHandle($siteHandle);
 
-                if (!$site) {
+                if (!$currentSite) {
                     throw new NotFoundHttpException('Invalid site handle: '.$siteHandle);
                 }
 
                 // Make sure the user has permission to edit that site
-                if (!in_array($site->id, $editableSiteIds, false)) {
+                if (!in_array($currentSite->id, $editableSiteIds, false)) {
                     throw new ForbiddenHttpException('User not permitted to edit content in this site');
                 }
             } else {
                 // Are they allowed to edit the current site?
-                if (in_array(Craft::$app->getSites()->currentSite->id, $editableSiteIds, false)) {
-                    $site = Craft::$app->getSites()->currentSite;
+                if (in_array($currentSite->id, $editableSiteIds, false)) {
+                    $currentSite = Craft::$app->getSites()->currentSite;
                 } else {
                     // Use the first site they are allowed to edit
-                    $site = Craft::$app->getSites()->getSiteById($editableSiteIds[0]);
+                    $currentSite = Craft::$app->getSites()->getSiteById($editableSiteIds[0]);
                 }
             }
         }
 
-        $navItems = [
-            'website-identity',
-            'contacts',
-            'social',
-            'verify-ownership',
-            'customization',
-            'robots',
-        ];
-
-        if (!in_array($selectedTabHandle, $navItems, true)) {
-            throw new NotFoundHttpException(Craft::t('sprout-seo', 'The Globals tab `{selectedTabHandle}` does not exist.', [
-                'selectedTabHandle' => $selectedTabHandle
-            ]));
-        }
-
         if ($globals === null) {
-            $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site->id);
-            $globals->siteId = $site->id;
+            $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite->id);
+            $globals->siteId = $currentSite->id;
         }
 
         // Render the template!
         return $this->renderTemplate('sprout-base-seo/globals/'.$selectedTabHandle, [
             'globals' => $globals,
-            'siteHandle' => $siteHandle,
+            'currentSite' => $currentSite,
             'selectedTabHandle' => $selectedTabHandle
         ]);
     }
