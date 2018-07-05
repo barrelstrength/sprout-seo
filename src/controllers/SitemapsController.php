@@ -39,10 +39,13 @@ class SitemapsController extends Controller
         $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
         $enableMultilingualSitemaps = Craft::$app->getIsMultiSite() && $pluginSettings->enableMultilingualSitemaps;
 
-        // Get enabled IDs. Remove any disabled IDS.
-        // @todo - should we merge these settings with the Site Enabled/Disabled settings right here?
+        // Get Enabled Site IDs. Remove any disabled IDS.
         $enabledSiteIds = array_filter($pluginSettings->siteSettings);
         $enabledSiteGroupIds = array_filter($pluginSettings->groupSettings);
+
+        // Get all Editable Sites for this user that also have editable Sitemaps
+        $editableSiteIds = Craft::$app->getSites()->getEditableSiteIds();
+        $editableSiteIds = array_intersect($enabledSiteIds, $editableSiteIds);
 
         if (!$enableMultilingualSitemaps && empty($enabledSiteIds)) {
             throw new NotFoundHttpException('No Sites are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site for your Sitemap.');
@@ -93,7 +96,7 @@ class SitemapsController extends Controller
         return $this->renderTemplate('sprout-base-seo/sitemaps', [
             'currentSite' => $currentSite,
             'firstSiteInGroup' => $firstSiteInGroup,
-            'enabledSiteIds' => $enabledSiteIds,
+            'editableSiteIds' => $editableSiteIds,
             'enableMultilingualSitemaps' => $enableMultilingualSitemaps,
             'urlEnabledSectionTypes' => $urlEnabledSectionTypes,
             'customSections' => $customSections
