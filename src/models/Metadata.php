@@ -239,16 +239,6 @@ class Metadata extends Model
     /**
      * @var string
      */
-    public $ogAudio;
-
-    /**
-     * @var string
-     */
-    public $ogVideo;
-
-    /**
-     * @var string
-     */
     public $ogLocale;
 
     /**
@@ -382,8 +372,6 @@ class Metadata extends Model
             'ogImageWidth' => $this->ogImageWidth,
             'ogImageHeight' => $this->ogImageHeight,
             'ogImageType' => $this->ogImageType,
-            'ogAudio' => $this->ogAudio,
-            'ogVideo' => $this->ogVideo,
             'ogLocale' => $this->ogLocale,
             'ogDateUpdated' => $this->ogDateUpdated,
             'ogDateCreated' => $this->ogDateCreated,
@@ -563,8 +551,6 @@ class Metadata extends Model
             'ogImageWidth' => 'og:image:width',
             'ogImageHeight' => 'og:image:height',
             'ogImageType' => 'og:image:type',
-            'ogAudio' => 'og:audio',
-            'ogVideo' => 'og:video',
             'ogLocale' => 'og:locale',
             'ogDateCreated' => 'article:published_time',
             'ogDateUpdated' => 'article:modified_time',
