@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
+
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\migrations\InsertDefaultGlobalsBySite;
 use craft\base\Component;
