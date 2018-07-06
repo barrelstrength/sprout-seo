@@ -37,13 +37,13 @@ class Install extends Migration
      */
     public function safeUp()
     {
+        $this->createBaseUrlTables();
         $this->createTables();
         $this->createIndexes();
         $this->addForeignKeys();
         $this->insertDefaultSettings();
         $this->insertDefaultGlobalMetadata();
         $this->createAddressTable();
-        $this->createBaseUrlTables();
 
         return true;
     }
@@ -57,6 +57,8 @@ class Install extends Migration
         $this->dropTable('{{%sproutseo_metadata_globals}}');
         $this->dropTable('{{%sproutseo_sitemaps}}');
         $this->dropTable('{{%sproutseo_redirects}}');
+        $this->dropTable('{{%sproutseo_baseurls}}');
+        $this->dropTable('{{%sproutseo_baseurl_sites}}');
 
         $sproutFields = Craft::$app->plugins->getPlugin('sprout-fields');
 
