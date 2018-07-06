@@ -113,7 +113,7 @@ class Redirect extends Element
      */
     public function getCpEditUrl()
     {
-        return UrlHelper::cpUrl('sprout-seo/redirects/'.$this->baseUrlSiteId.'/edit/'.$this->id);
+        return UrlHelper::cpUrl('sprout-seo/redirects/edit/'.$this->id.'/'.$this->baseUrlSiteId);
     }
 
     /**

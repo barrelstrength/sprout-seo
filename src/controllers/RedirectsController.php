@@ -84,11 +84,10 @@ class RedirectsController extends Controller
             if ($redirectId !== null) {
 
                 $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId);
-                $redirect->baseUrlSiteId = $currentSite['id'];
-
                 if (!$redirect) {
                     throw new HttpException(404);
                 }
+                $redirect->baseUrlSiteId = $currentSite['id'];
             } else {
                 $redirect = new Redirect();
                 $redirect->baseUrlSiteId = $currentSite['id'];
