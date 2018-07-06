@@ -61,7 +61,10 @@ class m180702_000001_add_baseurl_tables extends Migration
 
             $baseUrlId = $baseUrl['id'] ?? null;
 
-            $this->insert("{{%sproutseo_baseurl_sites}}", ['siteId' => $site['id'], 'baseUrlId' => $baseUrlId]);
+            $this->insert("{{%sproutseo_baseurl_sites}}", [
+                'siteId' => $site['id'],
+                'baseUrlId' => $baseUrlId
+            ]);
         }
 
         return true;
