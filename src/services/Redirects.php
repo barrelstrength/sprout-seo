@@ -28,14 +28,15 @@ class Redirects extends Component
      * Returns a Redirect by its ID.
      *
      * @param          $redirectId
-     * @param int|null $siteId
+     * @param int|null $baseSiteId
      *
      * @return Redirect|null
      */
-    public function getRedirectById($redirectId, int $siteId = null)
+    public function getRedirectById($redirectId, int $baseSiteId = null)
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return Craft::$app->elements->getElementById($redirectId, Redirect::class, $siteId);
+        $redirect = Redirect::find()->id($redirectId)->baseUrlSiteId($baseSiteId)->one();
+
+        return $redirect;
     }
 
     /**

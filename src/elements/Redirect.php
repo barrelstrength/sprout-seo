@@ -53,7 +53,7 @@ class Redirect extends Element
      */
     public $count = 0;
 
-    public $siteId;
+    public $baseUrlSiteId;
 
     /**
      * Returns the element type name.
@@ -113,8 +113,7 @@ class Redirect extends Element
      */
     public function getCpEditUrl()
     {
-        $site = Craft::$app->sites->getSiteById($this->siteId);
-        return UrlHelper::cpUrl('sprout-seo/redirects/'.$site->handle.'/edit/'.$this->id);
+        return UrlHelper::cpUrl('sprout-seo/redirects/'.$this->baseUrlSiteId.'/edit/'.$this->id);
     }
 
     /**
@@ -309,7 +308,7 @@ class Redirect extends Element
             $record->id = $this->id;
         }
         // Route this through RedirectsService::saveRedirect() so the proper redirect events get fired.
-        $record->siteId = $this->siteId;
+        $record->baseUrlSiteId = $this->baseUrlSiteId;
         $record->oldUrl = $this->oldUrl;
         $record->newUrl = $this->newUrl;
         $record->method = $this->method;
