@@ -299,6 +299,7 @@ class Redirects extends Component
         $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
         $seoSettings = $plugin->getSettings();
         $currentSite = Craft::$app->getSites()->getCurrentSite();
+        $baseSiteUrl = $this->getBaseSiteBySiteId($currentSite->id);
 
         $redirect->oldUrl = $url;
         $redirect->newUrl = '/';
@@ -306,7 +307,7 @@ class Redirects extends Component
         $redirect->regex = 0;
         $redirect->enabled = 0;
         $redirect->count = 1;
-        $redirect->siteId = $currentSite->id;
+        $redirect->baseUrlSiteId = $baseSiteUrl['id'];
 
         if (!SproutSeo::$app->redirects->saveRedirect($redirect)) {
             $redirect = null;
