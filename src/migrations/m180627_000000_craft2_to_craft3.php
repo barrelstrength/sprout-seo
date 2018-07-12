@@ -45,7 +45,40 @@ class m180627_000000_craft2_to_craft3 extends Migration
 
         $this->update('{{%plugins}}', ['settings' => json_encode($settings)], ['id' => $plugin['id']], [], false);
 
+        $globals = (new Query())
+            ->select(['id', 'meta'])
+            ->from(['{{%sproutseo_metadata_globals}}'])
+            ->one();
+
+        if ($globals){
+            if (isset($globals['meta'])){
+                $meta = json_decode($globals['meta'], true);
+                if ($meta){
+                    $metaAsJson = $this->getMetadataAsJson($meta);
+                    $this->update('{{%sproutseo_metadata_globals}}', ['meta' => $metaAsJson], ['id' => $globals['id']], [], false);
+                }
+            }
+        }
+
         return true;
+    }
+
+    private function getMetadataAsJson($meta)
+    {
+        unset(
+            $meta['ogAudio'],
+            $meta['ogVideo'],
+            $meta['twitterPlayer'],
+            $meta['twitterPlayerStream'],
+            $meta['twitterPlayerStreamContentType'],
+            $meta['twitterPlayerWidth'],
+            $meta['twitterPlayerHeight'],
+            $meta['dateCreated'],
+            $meta['dateUpdated'],
+            $meta['uid']
+        );
+
+        return json_encode($meta);
     }
 
     /**
