@@ -26,7 +26,7 @@
   },
   "require": {
     "craftcms/cms": "^3.0.0",
-    "barrelstrength/sprout-base": "^2.0.0",
+    "barrelstrength/sprout-base": "dev-develop",
     "crodas/text-rank": "dev-master",
     "crodas/languagedetector": "^0.1.0"
   },
