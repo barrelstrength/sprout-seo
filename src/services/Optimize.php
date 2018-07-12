@@ -176,14 +176,16 @@ class Optimize extends Component
                     }
                 case MetadataLevels::ElementMetadata:
                     {
-                        $this->elementMetadata->ogLocale = $site->language;
+                        if ($this->elementMetadata){
+                            $this->elementMetadata->ogLocale = $site->language;
 
-                        // Default to the current URL, if no overrides exist
-                        $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                        $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                        $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                            // Default to the current URL, if no overrides exist
+                            $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                            $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                            $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
 
-                        $overrideInfo = $this->elementMetadata->getAttributes();
+                            $overrideInfo = $this->elementMetadata->getAttributes();
+                        }
 
                         break;
                     }

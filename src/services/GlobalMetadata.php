@@ -63,7 +63,7 @@ class GlobalMetadata extends Component
         $results['robots'] = isset($results['robots']) ? Json::decode($results['robots']) : null;
         $results['settings'] = isset($results['settings']) ? Json::decode($results['settings']) : null;
 
-        if (isset($results['identity']['url'])) {
+        if (!isset($results['identity']['url'])) {
             $results['identity']['url'] = $currentSite->baseUrl;
         }
 
