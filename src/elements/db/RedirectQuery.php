@@ -38,7 +38,7 @@ class RedirectQuery extends ElementQuery
 
     public $count;
 
-    public $status = null;
+    public $status;
 
     public $baseUrlSiteId;
 

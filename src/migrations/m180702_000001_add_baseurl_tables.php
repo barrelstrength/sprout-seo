@@ -44,6 +44,7 @@ class m180702_000001_add_baseurl_tables extends Migration
 
         foreach ($sites as $site) {
             $url = isset($site['baseUrl']) ? Craft::getAlias($site['baseUrl']) : null;
+            $url = rtrim($url,"/");
 
             // Exclude sites with not URL
             if ($url){
