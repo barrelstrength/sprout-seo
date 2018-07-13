@@ -57,8 +57,8 @@ class Install extends Migration
         $this->dropTable('{{%sproutseo_metadata_globals}}');
         $this->dropTable('{{%sproutseo_sitemaps}}');
         $this->dropTable('{{%sproutseo_redirects}}');
-        $this->dropTable('{{%sproutseo_baseurls}}');
         $this->dropTable('{{%sproutseo_baseurl_sites}}');
+        $this->dropTable('{{%sproutseo_baseurls}}');
 
         $sproutFields = Craft::$app->plugins->getPlugin('sprout-fields');
 

@@ -98,26 +98,34 @@ class Redirects extends Component
      * Find a regex url using the preg_match php function and replace
      * capture groups if any using the preg_replace php function also check normal urls
      *
-     * @param string $url
-     *
+     * @param $absoluteUrl
+     * @param $uri
      * @return Redirect $redirect
+     * @throws \craft\errors\SiteNotFoundException
      */
-    public function findUrl($url)
+    public function findUrl($absoluteUrl)
     {
+        // $uri => /(*)
+        // $uri => /es/(*)
+        // $absoluteUrl => http://craft3b.test/(*)
+        // $absoluteUrl => http://craft3b.test/es/(*)
         $currentSite = Craft::$app->getSites()->getCurrentSite();
+        Craft::dd($currentSite);
+        // http://craft3b.test
+        // http://craft3b.test/es
+        // http://docs.craft3b.test
         $baseSiteUrl = Craft::getAlias($currentSite->baseUrl);
-
         $baseSiteUrl = rtrim($baseSiteUrl,"/");
-        $baseUrl = $this->getBaseUrl($baseSiteUrl);
-        $baseSiteUrl = $this->getBaseSiteByBaseAndSiteId($baseUrl['id'] ?? null, $currentSite->id);
+
+        $baseSiteId = $this->getBaseSiteBySiteId($currentSite->id)['id'] ?? null;
 
         if (!$baseSiteUrl){
             return null;
         }
 
-        $redirects = Redirect::find()->baseUrlSiteId($baseSiteUrl['id'])->all();
+        $redirects = Redirect::find()->baseUrlSiteId($baseSiteId)->all();
 
-        $url = urldecode($url);
+        $absoluteUrl = urldecode($absoluteUrl);
 
         if (!$redirects) {
             return null;
@@ -131,14 +139,14 @@ class Redirects extends Component
                 // Use backticks as delimiters as they are invalid characters for URLs
                 $oldUrlPattern = '`'.$redirect->oldUrl.'`';
 
-                if (preg_match($oldUrlPattern, $url)) {
+                if (preg_match($oldUrlPattern, $absoluteUrl)) {
                     // Replace capture groups if any
                     $redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
 
                     return $redirect;
                 }
             } else {
-                if ($redirect->oldUrl == $url) {
+                if ($baseSiteUrl.$redirect->oldUrl == $absoluteUrl) {
                     return $redirect;
                 }
             }
@@ -229,20 +237,6 @@ class Redirects extends Component
         }
 
         return $url;
-    }
-
-    /**
-     * Returns a redirect for a matching URL.
-     *
-     * Checks both Normal and Regex URLs
-     *
-     * @param $url
-     *
-     * @return mixed
-     */
-    public function getRedirect($url)
-    {
-        return SproutSeo::$app->redirects->findUrl($url);
     }
 
     /**
@@ -375,22 +369,6 @@ class Redirects extends Component
             ->where(['not', ['baseUrlId' => null]])
             ->andWhere(['sproutseo_baseurl_sites.id' => $id])
             ->innerJoin("{{%sproutseo_baseurls}} sproutseo_baseurls", "[[sproutseo_baseurls.id]] = [[sproutseo_baseurl_sites.baseUrlId]]")
-            ->one();
-
-        return $baseUrlSite;
-    }
-
-    /**
-     * @param $baseId
-     * @param $siteId
-     * @return array|null
-     */
-    public function getBaseSiteByBaseAndSiteId($baseId, $siteId)
-    {
-        $baseUrlSite = (new Query())
-            ->select(['*'])
-            ->from(['{{%sproutseo_baseurl_sites}} sproutseo_baseurl_sites'])
-            ->andWhere(['siteId' => $siteId, 'baseUrlId' => $baseId])
             ->one();
 
         return $baseUrlSite;

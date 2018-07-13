@@ -19,6 +19,7 @@ use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 use Craft;
 use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
+use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -119,10 +120,11 @@ class SproutSeo extends Plugin
                 $request->getIsSiteRequest() &&
                 !$request->getIsLivePreview()
             ) {
-                $url = $request->getUrl();
+                $uri = $request->getUrl();
+                $absoluteUrl = $request->getAbsoluteUrl();
 
                 // check if the request url needs redirect
-                $redirect = SproutSeo::$app->redirects->getRedirect($url);
+                $redirect = SproutSeo::$app->redirects->findUrl($absoluteUrl);
 
                 if (!$redirect && $this->getSettings()->enable404RedirectLog) {
                     // Save new 404 Redirect

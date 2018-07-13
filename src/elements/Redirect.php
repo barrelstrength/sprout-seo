@@ -80,7 +80,7 @@ class Redirect extends Element
      */
     public static function isLocalized(): bool
     {
-        return false;
+        return true;
     }
 
     /**
