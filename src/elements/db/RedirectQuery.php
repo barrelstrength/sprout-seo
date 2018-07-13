@@ -40,7 +40,7 @@ class RedirectQuery extends ElementQuery
 
     public $status;
 
-    public $baseUrlSiteId;
+    public $siteId;
 
     /**
      * @inheritdoc
@@ -67,6 +67,10 @@ class RedirectQuery extends ElementQuery
         parent::__construct($elementType, $config);
     }
 
+    /**
+     * @param false|int|int[]|null $id
+     * @return $this|ElementQuery
+     */
     public function id($id)
     {
         $this->id = $id;
@@ -74,13 +78,16 @@ class RedirectQuery extends ElementQuery
         return $this;
     }
 
-    public function baseUrlSiteId($baseUrlSiteId)
+    /**
+     * @param int $siteId
+     * @return $this|ElementQuery
+     */
+    public function siteId($siteId)
     {
-        $this->baseUrlSiteId = $baseUrlSiteId;
+        $this->siteId = $siteId;
 
         return $this;
     }
-
 
     // Protected Methods
     // =========================================================================
@@ -107,7 +114,7 @@ class RedirectQuery extends ElementQuery
             'sproutseo_redirects.method',
             'sproutseo_redirects.regex',
             'sproutseo_redirects.count',
-            'sproutseo_redirects.baseUrlSiteId'
+            'sproutseo_redirects.siteId'
         ]);
 
         $this->query->orderBy = ['structureelements.lft' => SORT_DESC];
@@ -130,9 +137,9 @@ class RedirectQuery extends ElementQuery
             );
         }
 
-        if ($this->baseUrlSiteId){
+        if ($this->siteId){
             $this->subQuery->andWhere(Db::parseParam(
-                'sproutseo_redirects.baseUrlSiteId', $this->baseUrlSiteId)
+                'sproutseo_redirects.siteId', $this->siteId)
             );
         }
 

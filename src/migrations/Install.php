@@ -13,7 +13,6 @@ use craft\db\Migration;
 use craft\models\Structure;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutbase\app\fields\migrations\Install as SproutBaseFieldsInstall;
-use barrelstrength\sproutseo\migrations\m180702_000001_add_baseurl_tables;
 
 class Install extends Migration
 {
@@ -37,7 +36,6 @@ class Install extends Migration
      */
     public function safeUp()
     {
-        $this->createBaseUrlTables();
         $this->createTables();
         $this->createIndexes();
         $this->addForeignKeys();
@@ -57,8 +55,6 @@ class Install extends Migration
         $this->dropTable('{{%sproutseo_metadata_globals}}');
         $this->dropTable('{{%sproutseo_sitemaps}}');
         $this->dropTable('{{%sproutseo_redirects}}');
-        $this->dropTable('{{%sproutseo_baseurl_sites}}');
-        $this->dropTable('{{%sproutseo_baseurls}}');
 
         $sproutFields = Craft::$app->plugins->getPlugin('sprout-fields');
 
@@ -108,7 +104,7 @@ class Install extends Migration
 
         $this->createTable('{{%sproutseo_redirects}}', [
             'id' => $this->primaryKey(),
-            'baseUrlSiteId' => $this->integer(),
+            'siteId' => $this->integer(),
             'oldUrl' => $this->string()->notNull(),
             'newUrl' => $this->string()->notNull(),
             'method' => $this->integer(),
@@ -126,7 +122,7 @@ class Install extends Migration
         $this->createIndex(null, '{{%sproutseo_metadata_globals}}', ['siteId'], true);
         $this->createIndex(null, '{{%sproutseo_redirects}}', 'id');
         $this->createIndex(null, '{{%sproutseo_sitemaps}}', ['siteId'], false);
-        $this->createIndex(null, '{{%sproutseo_redirects}}', 'id, baseUrlSiteId', true);
+        $this->createIndex(null, '{{%sproutseo_redirects}}', 'id, siteId', true);
     }
 
     protected function addForeignKeys()
@@ -137,7 +133,7 @@ class Install extends Migration
             '{{%elements}}', 'id', 'CASCADE', null
         );
 
-        $this->addForeignKey(null, '{{%sproutseo_redirects}}', ['baseUrlSiteId'], '{{%sproutseo_baseurl_sites}}', ['id'], 'CASCADE', 'CASCADE');
+        $this->addForeignKey(null, '{{%sproutseo_redirects}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
         $this->addForeignKey(null, '{{%sproutseo_sitemaps}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
         $this->addForeignKey(null, '{{%sproutseo_metadata_globals}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
     }
@@ -194,18 +190,6 @@ class Install extends Migration
     protected function createAddressTable()
     {
         $migration = new SproutBaseFieldsInstall();
-
-        ob_start();
-        $migration->up();
-        ob_end_clean();
-    }
-
-    /**
-     * @throws \Throwable
-     */
-    protected function createBaseUrlTables()
-    {
-        $migration = new m180702_000001_add_baseurl_tables();
 
         ob_start();
         $migration->up();

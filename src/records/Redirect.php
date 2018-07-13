@@ -16,7 +16,7 @@ use craft\records\Element;
  * SproutSeo - Redirect record
  *
  * @property int    $id
- * @property int    $baseUrlSiteId
+ * @property int    $siteId
  * @property string $oldUrl
  * @property string $newUrl
  * @property int    $method
