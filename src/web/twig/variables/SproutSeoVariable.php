@@ -455,7 +455,7 @@ class SproutSeoVariable
         ];
 
         $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
-        $gender = $schemaGlobals[$schemaType]['gender'];
+        $gender = $schemaGlobals[$schemaType]['gender'] ?? null;
 
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
 
