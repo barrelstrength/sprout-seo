@@ -82,9 +82,15 @@ class RedirectsController extends Controller
             if ($redirectId !== null) {
 
                 $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $siteId);
-                if (!$redirect) {
-                    throw new HttpException(404);
+                // @todo - test wrong urls - when should we return 404?
+                //if (!$redirect) {
+                //    throw new HttpException(404);
+                //}
+                if (!$redirect){
+                    $redirect = new Redirect();
+                    $redirect->id = $redirectId;
                 }
+
                 $redirect->siteId = $currentSite->id;
             } else {
                 $redirect = new Redirect();
@@ -122,14 +128,21 @@ class RedirectsController extends Controller
         $this->requirePostRequest();
 
         $redirectId = Craft::$app->getRequest()->getBodyParam('redirectId');
+        $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
         if ($redirectId) {
             $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId);
 
-            if (!$redirect) {
-                throw new Exception(Craft::t('sprout-seo', 'No redirect exists with the ID “{id}”', [
-                    'id' => $redirectId
-                ]));
+            // todo - figure out how throw 404 errors let's assume that the redirectId exists
+            //if (!$redirect) {
+            //    throw new Exception(Craft::t('sprout-seo', 'No redirect exists with the ID “{id}”', [
+            //        'id' => $redirectId
+            //    ]));
+            //}
+            if (!$redirect){
+
+                $redirect = new Redirect();
+                $redirect->id = $redirectId;
             }
         } else {
             $redirect = new Redirect();
@@ -139,7 +152,7 @@ class RedirectsController extends Controller
 
         // Set the event attributes, defaulting to the existing values for
         // whatever is missing from the post data
-        $redirect->siteId = Craft::$app->getRequest()->getBodyParam('siteId') ?? $defaultSiteId;
+        $redirect->siteId = $siteId ?? $defaultSiteId;
         $redirect->oldUrl = Craft::$app->getRequest()->getBodyParam('oldUrl', $redirect->oldUrl);
         $redirect->newUrl = Craft::$app->getRequest()->getBodyParam('newUrl');
         $redirect->method = Craft::$app->getRequest()->getBodyParam('method');

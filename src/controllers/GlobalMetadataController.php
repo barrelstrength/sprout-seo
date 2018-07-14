@@ -71,7 +71,7 @@ class GlobalMetadataController extends Controller
         }
 
         if ($globals === null) {
-            $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite->id);
+            $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite);
             $globals->siteId = $currentSite->id;
         }
 

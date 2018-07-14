@@ -34,9 +34,13 @@ class Redirects extends Component
      */
     public function getRedirectById($redirectId, int $siteId = null)
     {
-        $redirect = Redirect::find()->id($redirectId)->siteId($siteId)->one();
+        $redirect = Redirect::find()->id($redirectId);
 
-        return $redirect;
+        if ($siteId){
+            $redirect->siteId($siteId);
+        }
+
+        return $redirect->one();
     }
 
     /**
