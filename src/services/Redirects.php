@@ -28,13 +28,13 @@ class Redirects extends Component
      * Returns a Redirect by its ID.
      *
      * @param          $redirectId
-     * @param int|null $baseSiteId
+     * @param int|null $siteId
      *
      * @return Redirect|null
      */
-    public function getRedirectById($redirectId, int $baseSiteId = null)
+    public function getRedirectById($redirectId, int $siteId = null)
     {
-        $redirect = Redirect::find()->id($redirectId)->baseUrlSiteId($baseSiteId)->one();
+        $redirect = Redirect::find()->id($redirectId)->siteId($siteId)->one();
 
         return $redirect;
     }
@@ -110,7 +110,6 @@ class Redirects extends Component
         // $absoluteUrl => http://craft3b.test/(*)
         // $absoluteUrl => http://craft3b.test/es/(*)
         $currentSite = Craft::$app->getSites()->getCurrentSite();
-        Craft::dd($currentSite);
         // http://craft3b.test
         // http://craft3b.test/es
         // http://docs.craft3b.test
@@ -299,13 +298,12 @@ class Redirects extends Component
      * @throws \Exception
      * @throws \Throwable
      */
-    public function save404Redirect($url)
+    public function save404Redirect($url, $siteId = null)
     {
         $redirect = new Redirect();
         $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
         $seoSettings = $plugin->getSettings();
         $currentSite = Craft::$app->getSites()->getCurrentSite();
-        $baseSiteUrl = $this->getBaseSiteBySiteId($currentSite->id);
 
         $redirect->oldUrl = $url;
         $redirect->newUrl = '/';
@@ -313,7 +311,7 @@ class Redirects extends Component
         $redirect->regex = 0;
         $redirect->enabled = 0;
         $redirect->count = 1;
-        $redirect->baseUrlSiteId = $baseSiteUrl['id'];
+        $redirect->siteId = $siteId;
 
         if (!SproutSeo::$app->redirects->saveRedirect($redirect)) {
             $redirect = null;
@@ -340,69 +338,5 @@ class Redirects extends Component
         }
 
         return $redirect;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBaseSiteIds()
-    {
-        $baseUrlSites = (new Query())
-            ->select(['sproutseo_baseurl_sites.id id', 'sproutseo_baseurl_sites.siteId siteId', 'sproutseo_baseurls.baseUrl baseUrl'])
-            ->from(['{{%sproutseo_baseurl_sites}} sproutseo_baseurl_sites'])
-            ->where(['not', ['baseUrlId' => null]])
-            ->innerJoin("{{%sproutseo_baseurls}} sproutseo_baseurls", "[[sproutseo_baseurls.id]] = [[sproutseo_baseurl_sites.baseUrlId]]")
-            ->all();
-
-        return $baseUrlSites;
-    }
-
-    /**
-     * @param $id
-     * @return array
-     */
-    public function getBaseSiteById($id)
-    {
-        $baseUrlSite = (new Query())
-            ->select(['sproutseo_baseurl_sites.id id', 'sproutseo_baseurl_sites.siteId siteId', 'sproutseo_baseurls.baseUrl baseUrl'])
-            ->from(['{{%sproutseo_baseurl_sites}} sproutseo_baseurl_sites'])
-            ->where(['not', ['baseUrlId' => null]])
-            ->andWhere(['sproutseo_baseurl_sites.id' => $id])
-            ->innerJoin("{{%sproutseo_baseurls}} sproutseo_baseurls", "[[sproutseo_baseurls.id]] = [[sproutseo_baseurl_sites.baseUrlId]]")
-            ->one();
-
-        return $baseUrlSite;
-    }
-
-    /**
-     * @param $siteId
-     * @return array
-     */
-    public function getBaseSiteBySiteId($siteId)
-    {
-        $baseUrlSite = (new Query())
-            ->select(['sproutseo_baseurl_sites.id id', 'sproutseo_baseurl_sites.siteId siteId', 'sproutseo_baseurls.baseUrl baseUrl'])
-            ->from(['{{%sproutseo_baseurl_sites}} sproutseo_baseurl_sites'])
-            ->where(['not', ['baseUrlId' => null]])
-            ->andWhere(['siteId' => $siteId])
-            ->innerJoin("{{%sproutseo_baseurls}} sproutseo_baseurls", "[[sproutseo_baseurls.id]] = [[sproutseo_baseurl_sites.baseUrlId]]")
-            ->one();
-
-        return $baseUrlSite;
-    }
-
-    /**
-     * @param $url
-     * @return array|bool
-     */
-    public function getBaseUrl($url)
-    {
-        $baseUrl = (new Query())
-            ->select(['*'])
-            ->from(['{{%sproutseo_baseurls}}'])
-            ->where(['baseUrl'=> $url])
-            ->one();
-
-        return $baseUrl;
     }
 }

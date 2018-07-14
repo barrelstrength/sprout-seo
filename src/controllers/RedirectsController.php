@@ -26,21 +26,20 @@ use yii\web\HttpException;
 class RedirectsController extends Controller
 {
     /**
-     * @param int|null $baseSiteId
+     * @param int|null $siteId
      *
      * @return Response
      * @throws ForbiddenHttpException
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionRedirectsIndexTemplate(int $baseSiteId = null): Response
+    public function actionRedirectsIndexTemplate(int $siteId = null): Response
     {
-        if ($baseSiteId === null) {
+        if ($siteId === null) {
             $primarySite = Craft::$app->getSites()->getPrimarySite();
-            $baseSite = SproutSeo::$app->redirects->getBaseSiteBySiteId($primarySite->id);
-            $baseSiteId = $baseSite['id'];
+            $siteId = $primarySite->id;
         }
 
-        $currentSite = SproutSeo::$app->redirects->getBaseSiteById($baseSiteId);
+        $currentSite = Craft::$app->getSites()->getSiteById($siteId);
 
         if (!$currentSite) {
             throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Something went wrong'));
@@ -56,22 +55,21 @@ class RedirectsController extends Controller
      *
      * @param int|null      $redirectId The redirect's ID, if editing an existing redirect.
      * @param Redirect|null $redirect   The redirect send back by setRouteParams if any errors on saveRedirect
-     * @param int|null   $baseSiteId
+     * @param int|null   $siteId
      *
      * @return \yii\web\Response
      * @throws ForbiddenHttpException
      * @throws HttpException
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionEditRedirect($redirectId = null, int $baseSiteId = null, Redirect $redirect = null)
+    public function actionEditRedirect($redirectId = null, int $siteId = null, Redirect $redirect = null)
     {
-        if ($baseSiteId === null) {
+        if ($siteId === null) {
             $primarySite = Craft::$app->getSites()->getPrimarySite();
-            $baseSite = SproutSeo::$app->redirects->getBaseSiteBySiteId($primarySite->id);
-            $baseSiteId = $baseSite['id'];
+            $siteId = $primarySite->id;
         }
 
-        $currentSite = SproutSeo::$app->redirects->getBaseSiteById($baseSiteId);
+        $currentSite = Craft::$app->getSites()->getSiteById($siteId);
 
         if (!$currentSite) {
             throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Something went wrong'));
@@ -83,18 +81,18 @@ class RedirectsController extends Controller
         if ($redirect === null) {
             if ($redirectId !== null) {
 
-                $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId);
+                $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $siteId);
                 if (!$redirect) {
                     throw new HttpException(404);
                 }
-                $redirect->baseUrlSiteId = $currentSite['id'];
+                $redirect->siteId = $currentSite->id;
             } else {
                 $redirect = new Redirect();
-                $redirect->baseUrlSiteId = $currentSite['id'];
+                $redirect->siteId = $currentSite->id;
             }
         }
 
-        $continueEditingUrl = 'sprout-seo/redirects/edit/{id}/'.$currentSite['id'];
+        $continueEditingUrl = 'sprout-seo/redirects/edit/{id}/'.$currentSite->id;
 
         $crumbs = [
             [
@@ -137,13 +135,11 @@ class RedirectsController extends Controller
             $redirect = new Redirect();
         }
 
-        $primarySiteId = Craft::$app->getSites()->getPrimarySite()->id;
-        $baseSite = SproutSeo::$app->redirects->getBaseSiteBySiteId($primarySiteId);
-        $defaultBaseSiteId = $baseSite['id'];
+        $defaultSiteId = Craft::$app->getSites()->getPrimarySite()->id;
 
         // Set the event attributes, defaulting to the existing values for
         // whatever is missing from the post data
-        $redirect->baseUrlSiteId = Craft::$app->getRequest()->getBodyParam('baseSiteId') ?? $defaultBaseSiteId;
+        $redirect->siteId = Craft::$app->getRequest()->getBodyParam('siteId') ?? $defaultSiteId;
         $redirect->oldUrl = Craft::$app->getRequest()->getBodyParam('oldUrl', $redirect->oldUrl);
         $redirect->newUrl = Craft::$app->getRequest()->getBodyParam('newUrl');
         $redirect->method = Craft::$app->getRequest()->getBodyParam('method');

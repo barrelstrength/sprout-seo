@@ -220,13 +220,13 @@ class SproutSeo extends Plugin
             'sprout-seo/redirects' =>
                 'sprout-seo/redirects/redirects-index-template',
 
-            'sprout-seo/redirects/<baseSiteId:\d+>/new' =>
+            'sprout-seo/redirects/<siteId:\d+>/new' =>
                 'sprout-seo/redirects/edit-redirect',
 
-            'sprout-seo/redirects/<baseSiteId:\d+>' =>
+            'sprout-seo/redirects/<siteId:\d+>' =>
                 'sprout-seo/redirects/redirects-index-template',
 
-            'sprout-seo/redirects/edit/<redirectId:\d+>/<baseSiteId:\d+>' =>
+            'sprout-seo/redirects/edit/<redirectId:\d+>/<siteId:\d+>' =>
                 'sprout-seo/redirects/edit-redirect',
 
             'sprout-seo/settings' =>

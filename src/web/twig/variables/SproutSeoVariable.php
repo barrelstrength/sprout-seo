@@ -849,21 +849,10 @@ class SproutSeoVariable
     /**
      * @return mixed
      */
-    public function getBaseSiteIds()
+    public function getSiteIds()
     {
-        $baseUrlSites = SproutSeo::$app->redirects->getBaseSiteIds();
+        $sites = Craft::$app->getSites()->getAllSites();
 
-        return $baseUrlSites;
-    }
-
-    /**
-     * @param $id
-     * @return array
-     */
-    public function getBaseSiteById($id)
-    {
-        $baseUrlSite = SproutSeo::$app->redirects->getBaseSiteById($id);
-
-        return $baseUrlSite;
+        return $sites;
     }
 }

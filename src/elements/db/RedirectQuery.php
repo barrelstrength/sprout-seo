@@ -78,17 +78,6 @@ class RedirectQuery extends ElementQuery
         return $this;
     }
 
-    /**
-     * @param int $siteId
-     * @return $this|ElementQuery
-     */
-    public function siteId($siteId)
-    {
-        $this->siteId = $siteId;
-
-        return $this;
-    }
-
     // Protected Methods
     // =========================================================================
 
