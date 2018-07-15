@@ -260,8 +260,8 @@ class Optimize extends Component
             'Person' => WebsiteIdentityPersonSchema::class,
             'Organization' => WebsiteIdentityOrganizationSchema::class
         ];
-        //$output       = null;
-        $identityType = $this->globals->identity['@type'];
+
+        $identityType = $this->globals->identity['@type'] ?? null;
 
         // Website Identity Schema
         if (isset($websiteIdentity[$identityType])) {
@@ -282,7 +282,7 @@ class Optimize extends Component
         }
 
         // Website Identity Website
-        if ($this->globals->identity['name']) {
+        if (isset($this->globals->identity['name'])) {
             $websiteSchema = new WebsiteIdentityWebsiteSchema();
             $websiteSchema->addContext = true;
 
