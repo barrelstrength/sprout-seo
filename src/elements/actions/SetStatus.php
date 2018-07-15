@@ -74,7 +74,7 @@ class SetStatus extends ElementAction
         $elementIds = $query->ids();
 
         foreach ($elementIds as $key => $redirectId) {
-            $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId);
+            $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $query->siteId);
 
             if ($redirect->method == RedirectMethods::PageNotFound) {
                 $this->setMessage(Craft::t('sprout-seo', 'Unable to enable 404 method'));

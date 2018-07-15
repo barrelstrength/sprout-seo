@@ -16,6 +16,7 @@ use barrelstrength\sproutseo\models\Settings;
 
 use Craft;
 use craft\db\Query;
+use craft\models\Site;
 use yii\base\Component;
 
 
@@ -36,7 +37,7 @@ class Redirects extends Component
     {
         $redirect = Redirect::find()->id($redirectId);
 
-        if ($siteId){
+        if ($siteId) {
             $redirect->siteId($siteId);
         }
 
@@ -44,91 +45,25 @@ class Redirects extends Component
     }
 
     /**
-     * Saves a redirect.
-     *
-     * @param Redirect $redirect
-     *
-     * @return bool
-     * @throws Exception
-     * @throws \Exception
-     * @throws \Throwable
-     */
-    public function saveRedirect(Redirect $redirect)
-    {
-        $isNewRedirect = !$redirect->id;
-
-        // Event data
-        if (!$isNewRedirect) {
-            $redirectRecord = RedirectRecord::findOne($redirect->id);
-
-            if (!$redirectRecord) {
-                throw new Exception(Craft::t('sprout-seo', 'No redirect exists with the ID “{id}”', ['id' => $redirect->id]));
-            }
-        }
-
-        $redirect->validate();
-
-        if ($redirect->hasErrors()) {
-            return false;
-        }
-
-        $db = Craft::$app->getDb();
-        $transaction = $db->beginTransaction();
-
-        try {
-            $response = Craft::$app->getElements()->saveElement($redirect, false, false);
-
-            if (!$response) {
-                $transaction->rollBack();
-                return false;
-            }
-
-            if ($isNewRedirect) {
-                //Set the root structure
-                Craft::$app->structures->appendToRoot(SproutSeo::$app->redirects->getStructureId(), $redirect);
-            }
-
-            $transaction->commit();
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-
-            throw $e;
-        }
-
-        return true;
-    }
-
-    /**
      * Find a regex url using the preg_match php function and replace
      * capture groups if any using the preg_replace php function also check normal urls
      *
-     * @param $absoluteUrl
-     * @param $uri
-     * @return Redirect $redirect
-     * @throws \craft\errors\SiteNotFoundException
+     * Example: $absoluteUrl
+     *   https://website.com
+     *   https://website.com/es
+     *   https://es.website.com
+     *
+     * @param      $absoluteUrl
+     * @param Site $site
+     *
+     * @return Redirect|null
      */
-    public function findUrl($absoluteUrl)
+    public function findUrl($absoluteUrl, $site)
     {
-        // $uri => /(*)
-        // $uri => /es/(*)
-        // $absoluteUrl => http://craft3b.test/(*)
-        // $absoluteUrl => http://craft3b.test/es/(*)
-        $currentSite = Craft::$app->getSites()->getCurrentSite();
-        // http://craft3b.test
-        // http://craft3b.test/es
-        // http://docs.craft3b.test
-        $baseSiteUrl = Craft::getAlias($currentSite->baseUrl);
-        $baseSiteUrl = rtrim($baseSiteUrl,"/");
-
-        $baseSiteId = $this->getBaseSiteBySiteId($currentSite->id)['id'] ?? null;
-
-        if (!$baseSiteUrl){
-            return null;
-        }
-
-        $redirects = Redirect::find()->baseUrlSiteId($baseSiteId)->all();
-
         $absoluteUrl = urldecode($absoluteUrl);
+        $baseSiteUrl = Craft::getAlias($site->baseUrl);
+
+        $redirects = Redirect::find()->siteId($site->id)->all();
 
         if (!$redirects) {
             return null;
@@ -167,8 +102,8 @@ class Redirects extends Component
     {
         $methods = [
             Craft::t('sprout-seo', RedirectMethods::Permanent) => 'Permanent',
-            Craft::t('sprout-seo',RedirectMethods::Temporary ) => 'Temporary',
-            Craft::t('sprout-seo',  RedirectMethods::PageNotFound) => 'Page Not Found'
+            Craft::t('sprout-seo', RedirectMethods::Temporary) => 'Temporary',
+            Craft::t('sprout-seo', RedirectMethods::PageNotFound) => 'Page Not Found'
         ];
         $newMethods = [];
 
@@ -220,26 +155,21 @@ class Redirects extends Component
     }
 
     /**
-     * Add Slash
+     * Remove Slash from URI
      *
-     * @param $url
+     * @param string $uri
      *
-     * @return string
+     * @return array
      */
-    public function addSlash($url)
+    public function removeSlash($uri)
     {
         $slash = '/';
-        $external = false;
-        //Check if the url is external
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            $external = true;
+
+        if (isset($uri[0]) && $uri[0] == $slash) {
+            $uri = ltrim($uri, $slash);
         }
 
-        if ($url[0] != $slash && !$external) {
-            $url = $slash.$url;
-        }
-
-        return $url;
+        return $uri;
     }
 
     /**
@@ -284,7 +214,8 @@ class Redirects extends Component
             $redirect = $this->getRedirectById($redirectId);
             ++$redirect->count;
 
-            $this->saveRedirect($redirect);
+            Craft::$app->elements->saveElement($redirect, true, false);
+
         } catch (\Exception $e) {
             SproutSeo::error('Unable to log redirect: '.$e->getMessage());
         }
@@ -295,30 +226,43 @@ class Redirects extends Component
     /**
      * Save a 404 redirect and check total404Redirects setting
      *
-     * @param $url
+     * @param      $absoluteUrl
+     * @param Site $site
      *
      * @return Redirect|null
      * @throws Exception
-     * @throws \Exception
      * @throws \Throwable
      */
-    public function save404Redirect($url, $siteId = null)
+    public function save404Redirect($absoluteUrl, $site)
     {
         $redirect = new Redirect();
-        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-        $seoSettings = $plugin->getSettings();
-        $currentSite = Craft::$app->getSites()->getCurrentSite();
+        $seoSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
 
-        $redirect->oldUrl = $url;
+        $baseUrl = Craft::getAlias($site->baseUrl);
+
+        $baseUrlMatch = mb_substr($absoluteUrl, 0, strlen($baseUrl)) === $baseUrl;
+
+        if (!$baseUrlMatch) {
+            return null;
+        }
+
+        // Strip the base URL from our Absolute URL
+        // We need to do this because the Base URL can contain
+        // subfolders that are included in the path and we only
+        // want to store the path value that doesn't include
+        // the Base URL
+        $uri = substr($absoluteUrl, strlen($baseUrl));
+
+        $redirect->oldUrl = $uri;
         $redirect->newUrl = '/';
         $redirect->method = RedirectMethods::PageNotFound;
         $redirect->regex = 0;
         $redirect->enabled = 0;
         $redirect->count = 1;
-        $redirect->siteId = $siteId;
+        $redirect->siteId = $site->id;
 
-        if (!SproutSeo::$app->redirects->saveRedirect($redirect)) {
-            $redirect = null;
+        if (!Craft::$app->elements->saveElement($redirect, true, false)) {
+            return null;
         }
 
         // delete new one

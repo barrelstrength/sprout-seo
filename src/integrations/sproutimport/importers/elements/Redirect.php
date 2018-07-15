@@ -9,7 +9,7 @@ namespace Craft;
 
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use barrelstrength\sproutseo\elements\Redirect as RedirectElement;
-use barrelstrength\sproutseo\SproutSeo;
+use Craft;
 
 class Redirect extends ElementImporter
 {
@@ -39,6 +39,6 @@ class Redirect extends ElementImporter
      */
     public function save()
     {
-        return SproutSeo::$app->redirects->saveRedirect($this->model);
+        return Craft::$app->elements->saveElement($this->model, true, false);
     }
 }

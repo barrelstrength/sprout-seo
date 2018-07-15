@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\controllers;
 use barrelstrength\sproutseo\elements\Redirect;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
+use craft\base\Element;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
@@ -26,20 +27,20 @@ use yii\web\HttpException;
 class RedirectsController extends Controller
 {
     /**
-     * @param int|null $siteId
+     * @param string|null   $siteHandle
      *
      * @return Response
      * @throws ForbiddenHttpException
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionRedirectsIndexTemplate(int $siteId = null): Response
+    public function actionRedirectsIndexTemplate($siteHandle = null): Response
     {
-        if ($siteId === null) {
+        if ($siteHandle === null) {
             $primarySite = Craft::$app->getSites()->getPrimarySite();
-            $siteId = $primarySite->id;
+            $siteHandle = $primarySite->handle;
         }
 
-        $currentSite = Craft::$app->getSites()->getSiteById($siteId);
+        $currentSite = Craft::$app->getSites()->getSiteByHandle($siteHandle);
 
         if (!$currentSite) {
             throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Something went wrong'));
@@ -55,24 +56,24 @@ class RedirectsController extends Controller
      *
      * @param int|null      $redirectId The redirect's ID, if editing an existing redirect.
      * @param Redirect|null $redirect   The redirect send back by setRouteParams if any errors on saveRedirect
-     * @param int|null   $siteId
+     * @param string|null   $siteHandle
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws ForbiddenHttpException
-     * @throws HttpException
      * @throws \craft\errors\SiteNotFoundException
      */
-    public function actionEditRedirect($redirectId = null, int $siteId = null, Redirect $redirect = null)
+    public function actionEditRedirect($redirectId = null, $siteHandle = null, Redirect $redirect = null)
     {
-        if ($siteId === null) {
+        if ($siteHandle === null)
+        {
             $primarySite = Craft::$app->getSites()->getPrimarySite();
-            $siteId = $primarySite->id;
+            $siteHandle = $primarySite->handle;
         }
 
-        $currentSite = Craft::$app->getSites()->getSiteById($siteId);
+        $currentSite = Craft::$app->getSites()->getSiteByHandle($siteHandle);
 
         if (!$currentSite) {
-            throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Something went wrong'));
+            throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Unable to identify current site.'));
         }
 
         $methodOptions = SproutSeo::$app->redirects->getMethods();
@@ -81,7 +82,7 @@ class RedirectsController extends Controller
         if ($redirect === null) {
             if ($redirectId !== null) {
 
-                $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $siteId);
+                $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $currentSite->id);
                 // @todo - test wrong urls - when should we return 404?
                 //if (!$redirect) {
                 //    throw new HttpException(404);
@@ -98,7 +99,9 @@ class RedirectsController extends Controller
             }
         }
 
-        $continueEditingUrl = 'sprout-seo/redirects/edit/{id}/'.$currentSite->id;
+        $redirect->newUrl = $redirect->newUrl === '__home__' ? '' : $redirect->newUrl;
+
+        $continueEditingUrl = 'sprout-seo/redirects/edit/{id}/'.$currentSite->handle;
 
         $crumbs = [
             [
@@ -107,11 +110,20 @@ class RedirectsController extends Controller
             ]
         ];
 
+        $tabs = [
+            [
+                'label' => 'Redirect',
+                'url' => '#tab1',
+                'class' => null,
+            ]
+        ];
+
         return $this->renderTemplate('sprout-base-seo/redirects/_edit', [
             'currentSite' => $currentSite,
             'redirect' => $redirect,
             'methodOptions' => $methodOptions,
             'crumbs' => $crumbs,
+            'tabs' => $tabs,
             'continueEditingUrl' => $continueEditingUrl
         ]);
     }
@@ -150,12 +162,15 @@ class RedirectsController extends Controller
 
         $defaultSiteId = Craft::$app->getSites()->getPrimarySite()->id;
 
+        $oldUrl = Craft::$app->getRequest()->getRequiredBodyParam('oldUrl', $redirect->oldUrl);
+        $newUrl = Craft::$app->getRequest()->getBodyParam('newUrl');
+
         // Set the event attributes, defaulting to the existing values for
         // whatever is missing from the post data
         $redirect->siteId = $siteId ?? $defaultSiteId;
-        $redirect->oldUrl = Craft::$app->getRequest()->getBodyParam('oldUrl', $redirect->oldUrl);
-        $redirect->newUrl = Craft::$app->getRequest()->getBodyParam('newUrl');
-        $redirect->method = Craft::$app->getRequest()->getBodyParam('method');
+        $redirect->oldUrl = $oldUrl;
+        $redirect->newUrl = $newUrl;
+        $redirect->method = Craft::$app->getRequest()->getRequiredBodyParam('method');
         $redirect->regex = Craft::$app->getRequest()->getBodyParam('regex');
 
         if (!$redirect->regex) {
@@ -164,7 +179,7 @@ class RedirectsController extends Controller
 
         $redirect->enabled = Craft::$app->getRequest()->getBodyParam('enabled');
 
-        if (!SproutSeo::$app->redirects->saveRedirect($redirect)) {
+        if (!Craft::$app->elements->saveElement($redirect, true, false)) {
             Craft::$app->getSession()->setError(Craft::t('sprout-seo', 'Couldn’t save redirect.'));
 
             // Send the event back to the template

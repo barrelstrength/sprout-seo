@@ -120,22 +120,24 @@ class SproutSeo extends Plugin
                 $request->getIsSiteRequest() &&
                 !$request->getIsLivePreview()
             ) {
+                $currentSite = Craft::$app->getSites()->getCurrentSite();
+
                 $uri = $request->getUrl();
                 $absoluteUrl = $request->getAbsoluteUrl();
 
                 // check if the request url needs redirect
-                $redirect = SproutSeo::$app->redirects->findUrl($absoluteUrl);
+                $redirect = SproutSeo::$app->redirects->findUrl($absoluteUrl, $currentSite);
 
                 if (!$redirect && $this->getSettings()->enable404RedirectLog) {
                     // Save new 404 Redirect
-                    $redirect = SproutSeo::$app->redirects->save404Redirect($url);
+                    $redirect = SproutSeo::$app->redirects->save404Redirect($absoluteUrl, $currentSite);
                 }
 
                 if ($redirect) {
                     SproutSeo::$app->redirects->logRedirect($redirect->id);
                     // Use != instead of !== as 404 can be both as integer or string
                     if ($redirect->enabled && $redirect->method != 404) {
-                        Craft::$app->getResponse()->redirect($redirect->newUrl, $redirect->method);
+                        Craft::$app->getResponse()->redirect($redirect->getAbsoluteNewUrl(), $redirect->method);
                         Craft::$app->end();
                     }
                 }
@@ -214,20 +216,23 @@ class SproutSeo extends Plugin
             'sprout-seo/sitemaps/<siteHandle:.*>' =>
                 'sprout-seo/sitemaps/sitemap-index-template',
 
+            'sprout-seo/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
+                'sprout-seo/redirects/edit-redirect',
+
+            'sprout-seo/redirects/edit/<redirectId:\d+>' =>
+                'sprout-seo/redirects/edit-redirect',
+
+            'sprout-seo/redirects/new/<siteHandle:.*>' =>
+                'sprout-seo/redirects/edit-redirect',
+
             'sprout-seo/redirects/new' =>
                 'sprout-seo/redirects/edit-redirect',
 
+            'sprout-seo/redirects/<siteHandle:.*>' =>
+                'sprout-seo/redirects/redirects-index-template',
+
             'sprout-seo/redirects' =>
                 'sprout-seo/redirects/redirects-index-template',
-
-            'sprout-seo/redirects/<siteId:\d+>/new' =>
-                'sprout-seo/redirects/edit-redirect',
-
-            'sprout-seo/redirects/<siteId:\d+>' =>
-                'sprout-seo/redirects/redirects-index-template',
-
-            'sprout-seo/redirects/edit/<redirectId:\d+>/<siteId:\d+>' =>
-                'sprout-seo/redirects/edit-redirect',
 
             'sprout-seo/settings' =>
                 'sprout-base/settings/edit-settings',

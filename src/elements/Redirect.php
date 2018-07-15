@@ -22,6 +22,7 @@ use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 
 use yii\base\Exception;
+use yii\base\Model;
 
 /**
  * SproutSeo - Redirect element type
@@ -53,10 +54,12 @@ class Redirect extends Element
      */
     public $count = 0;
 
-    /**
-     * @var int
-     */
-    public $siteId;
+    public function init()
+    {
+        $this->setScenario(Model::SCENARIO_DEFAULT);
+
+        parent::init();
+    }
 
     /**
      * Returns the element type name.
@@ -112,11 +115,19 @@ class Redirect extends Element
     /**
      * Returns the element's CP edit URL.
      *
-     * @return string|false
+     * @return null|string
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\InvalidConfigException
      */
     public function getCpEditUrl()
     {
-        return UrlHelper::cpUrl('sprout-seo/redirects/edit/'.$this->id.'/'.$this->siteId);
+        $url = UrlHelper::cpUrl('sprout-seo/redirects/edit/'.$this->id);
+
+        if (Craft::$app->getIsMultiSite() && $this->siteId != Craft::$app->getSites()->getCurrentSite()->id) {
+            $url .= '/'.$this->getSite()->handle;
+        }
+
+        return $url;
     }
 
     /**
@@ -240,6 +251,10 @@ class Redirect extends Element
     protected function tableAttributeHtml(string $attribute): string
     {
         switch ($attribute) {
+            case 'newUrl':
+
+                return $this->newUrl === '__home__' ? '/' : $this->newUrl;
+
             case 'test':
                 // Send link for testing
                 $link = "<a href='{$this->oldUrl}' target='_blank' class='go'>Test</a>";
@@ -282,12 +297,19 @@ class Redirect extends Element
      */
     public function beforeValidate()
     {
-        if ($this->newUrl && $this->oldUrl) {
-            if (!$this->regex) {
-                $this->oldUrl = SproutSeo::$app->redirects->addSlash($this->oldUrl);
-            }
+        if ($this->oldUrl && !$this->regex) {
+            $this->oldUrl = SproutSeo::$app->redirects->removeSlash($this->oldUrl);
+        }
 
-            $this->newUrl = SproutSeo::$app->redirects->addSlash($this->newUrl);
+        if ($this->newUrl) {
+            $this->newUrl = SproutSeo::$app->redirects->removeSlash($this->newUrl);
+
+            // In case the value was a backslash: /
+            if (empty($this->newUrl)) {
+                $this->newUrl = '__home__';
+            }
+        } else {
+            $this->newUrl = '__home__';
         }
 
         return parent::beforeValidate();
@@ -310,8 +332,7 @@ class Redirect extends Element
             $record = new RedirectRecord();
             $record->id = $this->id;
         }
-        // Route this through RedirectsService::saveRedirect() so the proper redirect events get fired.
-        $record->siteId = $this->siteId;
+
         $record->oldUrl = $this->oldUrl;
         $record->newUrl = $this->newUrl;
         $record->method = $this->method;
@@ -319,6 +340,11 @@ class Redirect extends Element
         $record->count = $this->count;
 
         $record->save(false);
+
+        if ($isNew) {
+            //Set the root structure
+            Craft::$app->structures->appendToRoot(SproutSeo::$app->redirects->getStructureId(), $this);
+        }
 
         parent::afterSave($isNew);
     }
@@ -329,7 +355,7 @@ class Redirect extends Element
     public function rules()
     {
         return [
-            [['oldUrl', 'newUrl'], 'required'],
+            [['oldUrl'], 'required'],
             ['method', 'validateMethod'],
             ['oldUrl', 'uniqueUrl']
         ];
@@ -345,6 +371,16 @@ class Redirect extends Element
         if ($this->enabled && $this->$attribute == RedirectMethods::PageNotFound) {
             $this->addError($attribute, 'Cannot enable a 404 Redirect. Update Redirect method.');
         }
+    }
+
+    public function getAbsoluteNewUrl()
+    {
+        $baseUrl = Craft::getAlias($this->getSite()->baseUrl);
+
+        // @todo - remove ltrim after we updating saving to skip beginning slashes
+        $path = ltrim($this->newUrl, '/');
+
+        return $baseUrl.$path;
     }
 
     /**

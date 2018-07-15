@@ -40,8 +40,6 @@ class RedirectQuery extends ElementQuery
 
     public $status;
 
-    public $siteId;
-
     /**
      * @inheritdoc
      */
@@ -102,8 +100,7 @@ class RedirectQuery extends ElementQuery
             'sproutseo_redirects.newUrl',
             'sproutseo_redirects.method',
             'sproutseo_redirects.regex',
-            'sproutseo_redirects.count',
-            'sproutseo_redirects.siteId'
+            'sproutseo_redirects.count'
         ]);
 
         $this->query->orderBy = ['structureelements.lft' => SORT_DESC];
@@ -123,12 +120,6 @@ class RedirectQuery extends ElementQuery
         if ($this->newUrl) {
             $this->subQuery->andWhere(Db::parseParam(
                 'sproutseo_redirects.newUrl', $this->newUrl)
-            );
-        }
-
-        if ($this->siteId){
-            $this->subQuery->andWhere(Db::parseParam(
-                'sproutseo_redirects.siteId', $this->siteId)
             );
         }
 
