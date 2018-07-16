@@ -194,28 +194,31 @@ class SproutSeo extends Plugin
                 'template' => 'sprout-base-seo/index'
             ],
 
-            'sprout-seo/globals' => [
-                'template' => 'sprout-base-seo/globals/index'
-            ],
-
+            // Globals
             'sprout-seo/globals/<selectedTabHandle:.*>/<siteHandle:.*>' =>
                 'sprout-seo/global-metadata/edit-global-metadata',
 
             'sprout-seo/globals/<selectedTabHandle:.*>' =>
                 'sprout-seo/global-metadata/edit-global-metadata',
 
-            'sprout-seo/sitemaps' =>
-                'sprout-seo/sitemaps/sitemap-index-template',
+            'sprout-seo/globals' => [
+                'template' => 'sprout-base-seo/globals/index'
+            ],
 
-            'sprout-seo/sitemaps/<siteHandle:.*>/new' =>
+            // Sitemaps
+            'sprout-seo/sitemaps/edit/<sitemapSectionId:\d+>/<siteHandle:.*>' =>
                 'sprout-seo/sitemaps/sitemap-edit-template',
 
-            'sprout-seo/sitemaps/<siteHandle:.*>/edit/<sitemapSectionId:\d+>' =>
+            'sprout-seo/sitemaps/new/<siteHandle:.*>' =>
                 'sprout-seo/sitemaps/sitemap-edit-template',
 
             'sprout-seo/sitemaps/<siteHandle:.*>' =>
                 'sprout-seo/sitemaps/sitemap-index-template',
 
+            'sprout-seo/sitemaps' =>
+                'sprout-seo/sitemaps/sitemap-index-template',
+
+            // Redirects
             'sprout-seo/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
                 'sprout-seo/redirects/edit-redirect',
 
@@ -234,12 +237,12 @@ class SproutSeo extends Plugin
             'sprout-seo/redirects' =>
                 'sprout-seo/redirects/redirects-index-template',
 
-            'sprout-seo/settings' =>
-                'sprout-base/settings/edit-settings',
-
+            // Settings
             'sprout-seo/settings/<settingsSectionHandle:.*>' =>
                 'sprout-base/settings/edit-settings',
 
+            'sprout-seo/settings' =>
+                'sprout-base/settings/edit-settings',
         ];
     }
 
