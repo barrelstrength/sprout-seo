@@ -139,12 +139,21 @@ class SitemapsController extends Controller
             }
         }
 
-        $continueEditingUrl = 'sprout-seo/sitemaps/'.$currentSite->handle.'/edit/{id}';
+        $continueEditingUrl = 'sprout-seo/sitemaps/edit/{id}/'.$currentSite->handle;
+
+        $tabs = [
+            [
+                'label' => 'Custom Page',
+                'url' => '#tab1',
+                'class' => null,
+            ]
+        ];
 
         return $this->renderTemplate('sprout-base-seo/sitemaps/_edit', [
             'currentSite' => $currentSite,
             'sitemapSection' => $sitemapSection,
-            'continueEditingUrl' => $continueEditingUrl
+            'continueEditingUrl' => $continueEditingUrl,
+            'tabs' => $tabs
         ]);
     }
 
