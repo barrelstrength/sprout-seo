@@ -63,7 +63,9 @@ class Redirects extends Component
         $absoluteUrl = urldecode($absoluteUrl);
         $baseSiteUrl = Craft::getAlias($site->baseUrl);
 
-        $redirects = Redirect::find()->siteId($site->id)->all();
+        $redirects = Redirect::find()
+            ->siteId($site->id)
+            ->all();
 
         if (!$redirects) {
             return null;
@@ -77,9 +79,11 @@ class Redirects extends Component
                 // Use backticks as delimiters as they are invalid characters for URLs
                 $oldUrlPattern = '`'.$redirect->oldUrl.'`';
 
-                if (preg_match($oldUrlPattern, $absoluteUrl)) {
+                $currentPath = preg_replace('`^'.$baseSiteUrl.'`', '', $absoluteUrl);
+
+                if (preg_match($oldUrlPattern, $currentPath)) {
                     // Replace capture groups if any
-                    $redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
+                    $redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $currentPath);
 
                     return $redirect;
                 }
@@ -258,7 +262,7 @@ class Redirects extends Component
         $redirect->method = RedirectMethods::PageNotFound;
         $redirect->regex = 0;
         $redirect->enabled = 0;
-        $redirect->count = 1;
+        $redirect->count = 0;
         $redirect->siteId = $site->id;
 
         if (!Craft::$app->elements->saveElement($redirect, true, false)) {
