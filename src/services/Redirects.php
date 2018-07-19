@@ -84,11 +84,10 @@ class Redirects extends Component
                 if (preg_match($oldUrlPattern, $currentPath)) {
                     // Replace capture groups if any
                     $redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $currentPath);
-
                     return $redirect;
                 }
             } else {
-                if ($baseSiteUrl.$redirect->oldUrl == $absoluteUrl) {
+                if ($baseSiteUrl.$redirect->oldUrl === $absoluteUrl) {
                     return $redirect;
                 }
             }

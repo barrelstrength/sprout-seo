@@ -136,7 +136,7 @@ class SproutSeo extends Plugin
                 if ($redirect) {
                     SproutSeo::$app->redirects->logRedirect($redirect->id);
                     // Use != instead of !== as 404 can be both as integer or string
-                    if ($redirect->enabled && $redirect->method != 404) {
+                    if ($redirect->enabled && $redirect->method !== 404) {
                         Craft::$app->getResponse()->redirect($redirect->getAbsoluteNewUrl(), $redirect->method);
                         Craft::$app->end();
                     }
