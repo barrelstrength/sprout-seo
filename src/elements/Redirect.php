@@ -253,7 +253,7 @@ class Redirect extends Element
         switch ($attribute) {
             case 'newUrl':
 
-                return $this->newUrl === '__home__' ? '/' : $this->newUrl;
+                return $this->newUrl === null ? '/' : $this->newUrl;
 
             case 'test':
                 // no link for regex
@@ -309,10 +309,10 @@ class Redirect extends Element
 
             // In case the value was a backslash: /
             if (empty($this->newUrl)) {
-                $this->newUrl = '__home__';
+                $this->newUrl = null;
             }
         } else {
-            $this->newUrl = '__home__';
+            $this->newUrl = null;
         }
 
         return parent::beforeValidate();

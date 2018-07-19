@@ -99,7 +99,7 @@ class RedirectsController extends Controller
             }
         }
 
-        $redirect->newUrl = $redirect->newUrl === '__home__' ? '' : $redirect->newUrl;
+        $redirect->newUrl = $redirect->newUrl === null ? '' : $redirect->newUrl;
 
         $continueEditingUrl = 'sprout-seo/redirects/edit/{id}/'.$currentSite->handle;
 
