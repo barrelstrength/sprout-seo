@@ -105,7 +105,7 @@ class Install extends Migration
         $this->createTable('{{%sproutseo_redirects}}', [
             'id' => $this->primaryKey(),
             'oldUrl' => $this->string()->notNull(),
-            'newUrl' => $this->string()->notNull(),
+            'newUrl' => $this->string(),
             'method' => $this->integer(),
             'regex' => $this->boolean()->defaultValue(false),
             'count' => $this->integer()->defaultValue(0),
