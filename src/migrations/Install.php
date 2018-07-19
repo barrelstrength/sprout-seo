@@ -104,7 +104,6 @@ class Install extends Migration
 
         $this->createTable('{{%sproutseo_redirects}}', [
             'id' => $this->primaryKey(),
-            'siteId' => $this->integer(),
             'oldUrl' => $this->string()->notNull(),
             'newUrl' => $this->string()->notNull(),
             'method' => $this->integer(),
@@ -122,7 +121,6 @@ class Install extends Migration
         $this->createIndex(null, '{{%sproutseo_metadata_globals}}', ['siteId'], true);
         $this->createIndex(null, '{{%sproutseo_redirects}}', 'id');
         $this->createIndex(null, '{{%sproutseo_sitemaps}}', ['siteId'], false);
-        $this->createIndex(null, '{{%sproutseo_redirects}}', 'id, siteId', true);
     }
 
     protected function addForeignKeys()
@@ -133,7 +131,6 @@ class Install extends Migration
             '{{%elements}}', 'id', 'CASCADE', null
         );
 
-        $this->addForeignKey(null, '{{%sproutseo_redirects}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
         $this->addForeignKey(null, '{{%sproutseo_sitemaps}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
         $this->addForeignKey(null, '{{%sproutseo_metadata_globals}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
     }

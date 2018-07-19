@@ -256,12 +256,15 @@ class Redirect extends Element
                 return $this->newUrl === '__home__' ? '/' : $this->newUrl;
 
             case 'test':
-                // Send link for testing
-                $link = "<a href='{$this->oldUrl}' target='_blank' class='go'>Test</a>";
-
+                // no link for regex
                 if ($this->regex) {
-                    $link = ' - ';
+                    return ' - ';
                 }
+                // Send link for testing
+                $site = Craft::$app->getSites()->getSiteById($this->siteId);
+                $baseUrl = Craft::getAlias($site->baseUrl);
+                $oldUrl = $baseUrl.$this->oldUrl;
+                $link = "<a href='{$oldUrl}' target='_blank' class='go'>Test</a>";
 
                 return $link;
         }
