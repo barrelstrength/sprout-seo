@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\controllers;
 
+use barrelstrength\sproutbase\app\fields\helpers\AddressHelper;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
@@ -75,11 +76,31 @@ class GlobalMetadataController extends Controller
             $globals->siteId = $currentSite->id;
         }
 
+        $addressId = $globals->identity['addressId'] ?? null;
+
+        $addressInfoModel = SproutBase::$app->addressField->getAddressById($addressId);
+
+        $countryCode = $addressInfoModel->countryCode;
+
+        $addressHelper = new AddressHelper();
+        $addressHelper->setParams($countryCode, 'address', $addressInfoModel);
+
+        $addressFormat = "";
+        if ($addressId) {
+            $addressFormat = $addressHelper->getAddressWithFormat($addressInfoModel);
+        }
+
+        $countryInput = $addressHelper->countryInput();
+        $addressForm = $addressHelper->getAddressFormHtml();
+
         // Render the template!
         return $this->renderTemplate('sprout-base-seo/globals/'.$selectedTabHandle, [
             'globals' => $globals,
             'currentSite' => $currentSite,
-            'selectedTabHandle' => $selectedTabHandle
+            'selectedTabHandle' => $selectedTabHandle,
+            'addressFormat' => $addressFormat,
+            'countryInput'  => $countryInput,
+            'addressForm'   => $addressForm
         ]);
     }
 
