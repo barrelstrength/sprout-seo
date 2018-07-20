@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutseo\models;
 
+use barrelstrength\sproutbase\app\fields\models\Address;
+use barrelstrength\sproutbase\SproutBase;
 use craft\base\Model;
 use craft\helpers\Json;
 
@@ -77,6 +79,17 @@ class Globals extends Model
      */
     public $globalKey;
 
+    /**
+     * @var Address|null
+     */
+    public $addressModel = null;
+
+    public function init()
+    {
+        if (isset($this->identity['addressId']) && $this->addressModel === null) {
+            $this->addressModel = SproutBase::$app->addressField->getAddressById($this->identity['addressId']);
+        }
+    }
     /**
      * Factory to return schema of any type
      *

@@ -82,9 +82,19 @@ class Optimize extends Component
     {
         $site = $context['currentSite'] ?? Craft::$app->getSites()->currentSite;
 
-        $element = SproutSeo::$app->sitemaps->getElementViaContext($context);
+        $matchedElementVariables = SproutSeo::$app->urlEnabledSections->getMatchedElementVariables();
 
-        $this->elementMetadata = SproutSeo::$app->elementMetadata->getElementMetadata($element);
+        $element = null;
+        foreach ($matchedElementVariables as $matchedElementVariable) {
+            if (isset($context[$matchedElementVariable])) {
+                $element = $context[$matchedElementVariable];
+                break;
+            }
+        }
+
+        if ($element !== null) {
+            $this->elementMetadata = SproutSeo::$app->elementMetadata->getElementMetadata($element);
+        }
 
         return $this->getMetadata($element, $site);
     }
@@ -176,7 +186,7 @@ class Optimize extends Component
                     }
                 case MetadataLevels::ElementMetadata:
                     {
-                        if ($this->elementMetadata){
+                        if ($this->elementMetadata) {
                             $this->elementMetadata->ogLocale = $site->language;
 
                             // Default to the current URL, if no overrides exist

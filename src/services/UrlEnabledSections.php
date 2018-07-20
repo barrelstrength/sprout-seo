@@ -50,4 +50,30 @@ class UrlEnabledSections extends Component
 
         return $event->urlEnabledSectionTypes;
     }
+
+    public function getUrlEnabledSectionTypes()
+    {
+        $urlEnabledSectionTypes = $this->getRegisteredUrlEnabledSectionsEvent();
+
+        $urlEnabledSections = [];
+
+        foreach ($urlEnabledSectionTypes as $urlEnabledSectionType) {
+            $urlEnabledSections[] = new $urlEnabledSectionType();
+        }
+
+        return $urlEnabledSections;
+    }
+
+    public function getMatchedElementVariables()
+    {
+        $urlEnabledSections = $this->getUrlEnabledSectionTypes();
+
+        $matchedElementVariables = [];
+
+        foreach ($urlEnabledSections as $urlEnabledSection) {
+            $matchedElementVariables[] = $urlEnabledSection->getMatchedElementVariable();
+        }
+
+        return array_filter($matchedElementVariables);
+    }
 }

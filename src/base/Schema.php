@@ -471,11 +471,11 @@ abstract class Schema
      */
     public function addAddress($propertyName, $addressId)
     {
-        if (!$addressId) {
+        $addressModel = $this->globals->addressModel;
+
+        if (!$addressId || $addressModel === null) {
             return null;
         }
-
-        $addressModel = SproutBase::$app->addressField->getAddressById($addressId);
 
         $address = new PostalAddressSchema();
 
