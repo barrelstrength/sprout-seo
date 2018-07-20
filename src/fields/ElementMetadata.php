@@ -101,7 +101,9 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
         // If we have a value, we are probably loading a Draft or Invalid Entry so let's override any
         // of those values. We need to undo a few things about how the Draft data gets stored so
         // that it gets reprocessed properly
+
         if (is_array($value)) {
+            $value = $this->getMetadataFieldValues($value, $element);
             return json_encode($value);
         }
 
@@ -231,7 +233,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      * @param                       $value
      * @param ElementInterface|null $element
      *
-     * @return array|mixed
+     * @return array|mixed|null
      * @throws Exception
      */
     public function normalizeValue($value, ElementInterface $element = null)
@@ -255,7 +257,7 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
             unset($metadata['sproutSeoSettings']);
         }
 
-        $this->values = $this->getMetadataFieldValues($metadata, $element);
+        $this->values = $metadata;
 
         return $this->values;
     }
@@ -359,7 +361,6 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
 
             // Custom Value
             default:
-
                 $title = Craft::$app->view->renderObjectTemplate($optimizedTitleFieldSetting, $element);
 
                 break;
