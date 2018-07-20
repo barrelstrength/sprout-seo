@@ -47,7 +47,11 @@ class m180620_000001_element_metadata_field extends Migration
         }
 
         foreach ($fields as $field) {
-            $this->update('{{%fields}}', ['type' => ElementMetadata::class], ['id' => $field['id']], [], false);
+            $settings = json_decode($field['settings'], true);
+            unset($settings['displayPreview']);
+            $settingsAsJson = json_encode($settings);
+
+            $this->update('{{%fields}}', ['type' => ElementMetadata::class], ['id' => $field['id'], 'settings' => $settingsAsJson], [], false);
             $fieldHandle = $field['handle'];
 
             $metadataElements = (new Query())
@@ -85,6 +89,7 @@ class m180620_000001_element_metadata_field extends Migration
             $metadataElement['twitterPlayerStreamContentType'],
             $metadataElement['twitterPlayerWidth'],
             $metadataElement['twitterPlayerHeight'],
+            $metadataElement['displayPreview'],
             $metadataElement['dateCreated'],
             $metadataElement['dateUpdated'],
             $metadataElement['uid']
