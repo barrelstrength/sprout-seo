@@ -46,18 +46,18 @@ class m180620_000001_element_metadata_field extends Migration
             $siteIdsByLocale[$site['language']] = $site['id'];
         }
 
+        $metadataElements = (new Query())
+            ->select(['*'])
+            ->from(['{{%sproutseo_metadata_elements}}'])
+            ->all();
+
         foreach ($fields as $field) {
             $settings = json_decode($field['settings'], true);
             unset($settings['displayPreview']);
             $settingsAsJson = json_encode($settings);
 
-            $this->update('{{%fields}}', ['type' => ElementMetadata::class], ['id' => $field['id'], 'settings' => $settingsAsJson], [], false);
+            $this->update('{{%fields}}', ['type' => ElementMetadata::class,  'settings' => $settingsAsJson], ['id' => $field['id']], [], false);
             $fieldHandle = $field['handle'];
-
-            $metadataElements = (new Query())
-                ->select(['*'])
-                ->from(['{{%sproutseo_metadata_elements}}'])
-                ->all();
 
             foreach ($metadataElements as $metadataElement) {
                 $siteId = $siteIdsByLocale[$metadataElement['locale']] ?? $primarySiteId;
