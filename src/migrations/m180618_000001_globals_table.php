@@ -44,6 +44,7 @@ class m180618_000001_globals_table extends Migration
 
         if ($isNew) {
             $this->createIndex($this->db->getIndexName($table, 'id,siteId'), $table, 'id,siteId', true);
+            $this->createIndex(null, '{{%sproutseo_metadata_globals}}', ['siteId'], true);
             $this->addForeignKey($this->db->getForeignKeyName($table, 'siteId'), $table, 'siteId', '{{%sites}}', 'id', 'CASCADE', 'CASCADE');
         }
 
