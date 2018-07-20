@@ -60,6 +60,9 @@ class m180627_000000_craft2_to_craft3 extends Migration
             }
         }
 
+        // Small change in Redirects
+        $this->alterColumn('{{%sproutseo_redirects}}', 'newUrl', $this->string());
+
         return true;
     }
 
