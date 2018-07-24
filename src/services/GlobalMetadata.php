@@ -44,7 +44,7 @@ class GlobalMetadata extends Component
 
         $query = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_metadata_globals}}']);
+            ->from(['{{%sproutseo_globals}}']);
 
         if ($siteId) {
             $query->where(['siteId' => $siteId]);
@@ -101,7 +101,7 @@ class GlobalMetadata extends Component
         // new site?
         $results = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_metadata_globals}}'])
+            ->from(['{{%sproutseo_globals}}'])
             ->where(['siteId' => $globals->siteId])
             ->one();
 
@@ -116,7 +116,7 @@ class GlobalMetadata extends Component
             ob_end_clean();
         }
 
-        Craft::$app->db->createCommand()->update('{{%sproutseo_metadata_globals}}',
+        Craft::$app->db->createCommand()->update('{{%sproutseo_globals}}',
             $values,
             'siteId=:siteId',
             [':siteId' => $globals->siteId]

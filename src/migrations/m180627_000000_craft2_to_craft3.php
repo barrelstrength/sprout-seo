@@ -47,7 +47,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
 
         $globals = (new Query())
             ->select(['id', 'meta'])
-            ->from(['{{%sproutseo_metadata_globals}}'])
+            ->from(['{{%sproutseo_globals}}'])
             ->one();
 
         if ($globals){
@@ -55,7 +55,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
                 $meta = json_decode($globals['meta'], true);
                 if ($meta){
                     $metaAsJson = $this->getMetadataAsJson($meta);
-                    $this->update('{{%sproutseo_metadata_globals}}', ['meta' => $metaAsJson], ['id' => $globals['id']], [], false);
+                    $this->update('{{%sproutseo_globals}}', ['meta' => $metaAsJson], ['id' => $globals['id']], [], false);
                 }
             }
         }

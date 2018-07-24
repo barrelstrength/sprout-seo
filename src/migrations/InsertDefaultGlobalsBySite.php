@@ -25,7 +25,7 @@ class InsertDefaultGlobalsBySite extends Migration
      */
     public function safeUp()
     {
-        $tableName = '{{%sproutseo_metadata_globals}}';
+        $tableName = '{{%sproutseo_globals}}';
 
         $defaultSettings = '{
             "seoDivider":"-",

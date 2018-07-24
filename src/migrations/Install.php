@@ -52,7 +52,7 @@ class Install extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%sproutseo_metadata_globals}}');
+        $this->dropTable('{{%sproutseo_globals}}');
         $this->dropTable('{{%sproutseo_sitemaps}}');
         $this->dropTable('{{%sproutseo_redirects}}');
 
@@ -72,7 +72,7 @@ class Install extends Migration
 
     protected function createTables()
     {
-        $this->createTable('{{%sproutseo_metadata_globals}}', [
+        $this->createTable('{{%sproutseo_globals}}', [
             'id' => $this->primaryKey(),
             'siteId' => $this->integer()->notNull(),
             'meta' => $this->text(),
@@ -117,8 +117,8 @@ class Install extends Migration
 
     protected function createIndexes()
     {
-        $this->createIndex(null, '{{%sproutseo_metadata_globals}}', 'id, siteId', true);
-        $this->createIndex(null, '{{%sproutseo_metadata_globals}}', ['siteId'], true);
+        $this->createIndex(null, '{{%sproutseo_globals}}', 'id, siteId', true);
+        $this->createIndex(null, '{{%sproutseo_globals}}', ['siteId'], true);
         $this->createIndex(null, '{{%sproutseo_redirects}}', 'id');
         $this->createIndex(null, '{{%sproutseo_sitemaps}}', ['siteId'], false);
     }
@@ -132,7 +132,7 @@ class Install extends Migration
         );
 
         $this->addForeignKey(null, '{{%sproutseo_sitemaps}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
-        $this->addForeignKey(null, '{{%sproutseo_metadata_globals}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
+        $this->addForeignKey(null, '{{%sproutseo_globals}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
     }
 
     /**

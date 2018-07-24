@@ -53,14 +53,14 @@ class m180625_000001_address_table extends Migration
 
             $globals = (new Query())
                 ->select(['id', 'identity'])
-                ->from(['{{%sproutseo_metadata_globals}}'])
+                ->from(['{{%sproutseo_globals}}'])
                 ->one();
 
             if (isset($globals['identity']) && isset($globals['id'])) {
                 $identity = json_decode($globals['identity'], true);
                 if (isset($identity['addressId'])) {
                     $identity['addressId'] = $addressId;
-                    $this->update('{{%sproutseo_metadata_globals}}', ['identity' => json_encode($identity)], ['id' => $globals['id']], [], false);
+                    $this->update('{{%sproutseo_globals}}', ['identity' => json_encode($identity)], ['id' => $globals['id']], [], false);
                 }
             }
         }
