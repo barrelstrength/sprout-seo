@@ -16,7 +16,8 @@ use barrelstrength\sproutseo\schema\PostalAddressSchema;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
-use barrelstrength\sproutbase\SproutBase;
+
+use barrelstrength\sproutbase\app\fields\models\Phone as PhoneModel;
 use craft\helpers\Template as TemplateHelper;
 use DateTime;
 use Craft;
@@ -334,8 +335,9 @@ abstract class Schema
      */
     public function addTelephone($propertyName, $phone)
     {
-        if (is_string($phone) && $phone !== '') {
-            $this->structuredData[$propertyName] = $phone;
+        if (isset($phone['phone']) && isset($phone['country'])) {
+            $phoneModel = new PhoneModel($phone['phone'], $phone['country']);
+            $this->structuredData[$propertyName] = $phoneModel->international;
         } else {
             SproutSeo::info('Schema unable to add value. Value is not a valid Phone.');
         }
