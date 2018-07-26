@@ -281,7 +281,7 @@ class GlobalMetadataController extends Controller
             $globalMetadata->longitude = $postData['identity']['longitude'] ?? '';
 
             $globalMetadata->ogType = $ogType;
-            $globalMetadata->ogSiteName = $siteName;
+            $globalMetadata->ogSiteName = $identity['name'] ?? null;
             $globalMetadata->ogTitle = $optimizedTitle;
             $globalMetadata->ogDescription = $optimizedDescription;
             $globalMetadata->ogImage = $optimizedImage;
