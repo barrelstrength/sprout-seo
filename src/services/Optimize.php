@@ -243,7 +243,8 @@ class Optimize extends Component
         }
 
         $prioritizedMetadataModel->title = OptimizeHelper::prepareAppendedTitleValue(
-            $prioritizedMetadataModel
+            $prioritizedMetadataModel,
+            $this->globals
         );
 
         $prioritizedMetadataModel->robots = OptimizeHelper::prepareRobotsMetadataValue($prioritizedMetadataModel->robots);

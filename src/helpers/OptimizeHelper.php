@@ -442,6 +442,7 @@ class OptimizeHelper
 
     /**
      * @param $prioritizedMetadataModel
+     * @param $globals
      *
      * @return string
      *
@@ -450,9 +451,9 @@ class OptimizeHelper
      * @throws ServerErrorHttpException
      */
     public static function prepareAppendedTitleValue(
-        $prioritizedMetadataModel
+        $prioritizedMetadataModel,
+        $globals
     ) {
-        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
         $settings = $globals->settings;
 
         $globalAppendTitleValue = null;

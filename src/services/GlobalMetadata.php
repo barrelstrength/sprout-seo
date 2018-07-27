@@ -39,7 +39,7 @@ class GlobalMetadata extends Component
         if ($siteId) {
             $currentSite = Craft::$app->getSites()->getSiteById($siteId);
         } else {
-            $currentSite = Craft::$app->getSites()->getPrimarySite();
+            $currentSite = Craft::$app->getSites()->getCurrentSite();
         }
 
         $query = (new Query())
