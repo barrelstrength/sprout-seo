@@ -344,7 +344,7 @@ class OptimizeHelper
             return $defaultTransforms[$transformHandle];
         }
 
-        return $transformHandle;
+        return $transformHandle == '' ? null : $transformHandle;
     }
 
     /**

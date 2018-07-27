@@ -221,10 +221,10 @@ class GlobalMetadataController extends Controller
      */
     public function populateGlobalMetadata($postData)
     {
-        $info = Craft::$app->getInfo();
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
+        $site = Craft::$app->getSites()->getSiteById($siteId);
 
-        $oldGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($siteId);
+        $oldGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
         $oldIdentity = $oldGlobals->identity ?? null;
         $identity = $postData['identity'] ?? $oldIdentity;
         $oldSocialProfiles = $oldGlobals !== null ? $oldGlobals->social : [];
