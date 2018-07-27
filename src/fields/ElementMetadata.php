@@ -445,6 +445,10 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
                 break;
         }
 
+        if ($settings['showSearchMeta'] && isset($attributes['keywords']) && $attributes['keywords']){
+            $keywords = $attributes['keywords'];
+        }
+
         $attributes['optimizedKeywords'] = $keywords;
 
         return $attributes;
