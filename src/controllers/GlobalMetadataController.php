@@ -221,7 +221,6 @@ class GlobalMetadataController extends Controller
      */
     public function populateGlobalMetadata($postData)
     {
-        $site = Craft::$app->getSites()->currentSite;
         $info = Craft::$app->getInfo();
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
@@ -239,7 +238,6 @@ class GlobalMetadataController extends Controller
         }
 
         $globalMetadata = new Metadata();
-        $siteName = $info->name;
 
         $socialProfiles = $postData['social'] ?? $oldSocialProfiles ?? [];
         $twitterProfileName = OptimizeHelper::getTwitterProfileName($socialProfiles);
@@ -287,7 +285,7 @@ class GlobalMetadataController extends Controller
             $globalMetadata->ogImage = $optimizedImage;
             $globalMetadata->ogImage = $optimizedImage;
             $globalMetadata->ogTransform = $identity['ogTransform'] ?? null;
-            $globalMetadata->ogLocale = $site->language;
+            $globalMetadata->ogLocale = null;
 
             $globalMetadata->twitterCard = $twitterCard;
             $globalMetadata->twitterSite = $twitterProfileName;

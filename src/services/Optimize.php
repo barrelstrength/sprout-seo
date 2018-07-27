@@ -187,7 +187,6 @@ class Optimize extends Component
                 case MetadataLevels::ElementMetadata:
                     {
                         if ($this->elementMetadata) {
-                            $this->elementMetadata->ogLocale = $site->language;
 
                             // Default to the current URL, if no overrides exist
                             $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
@@ -259,6 +258,8 @@ class Optimize extends Component
         $prioritizedMetadataModel->description = mb_substr($prioritizedMetadataModel->description, 0, $descriptionLength);
         $prioritizedMetadataModel->ogDescription = mb_substr($prioritizedMetadataModel->ogDescription, 0, $descriptionLength);
         $prioritizedMetadataModel->twitterDescription = mb_substr($prioritizedMetadataModel->twitterDescription, 0, $descriptionLength);
+
+        $prioritizedMetadataModel->ogLocale = $site->language ?? null;
 
         return $prioritizedMetadataModel;
     }
