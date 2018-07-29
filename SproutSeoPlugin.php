@@ -38,7 +38,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '3.4.3';
+		return '3.5.0';
 	}
 
 	/**
@@ -70,7 +70,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getDocumentationUrl()
 	{
-		return 'http://sprout.barrelstrengthdesign.com/craft-plugins/seo/docs';
+		return 'https://sprout.barrelstrengthdesign.com/docs/seo';
 	}
 
 	/**
@@ -78,7 +78,7 @@ class SproutSeoPlugin extends BasePlugin
 	 */
 	public function getReleaseFeedUrl()
 	{
-		return 'https://sprout.barrelstrengthdesign.com/craft-plugins/seo/releases.json';
+		return 'https://raw.githubusercontent.com/barrelstrength/craft-sprout-seo/v3/releases.json';
 	}
 
 	/**
