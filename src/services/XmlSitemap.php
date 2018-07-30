@@ -141,6 +141,8 @@ class XmlSitemap extends Component
 
             foreach ($currentSitemapSites as $site) {
 
+                $globalMetadata = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
+
                 $elementMetadataFieldHandle = null;
                 $elements = [];
 
@@ -173,17 +175,21 @@ class XmlSitemap extends Component
                 // Add each Element with a URL to the Sitemap
                 foreach ($elements as $element) {
 
-                    if ($elementMetadataFieldHandle === null)
-                    {
+                    if ($elementMetadataFieldHandle === null) {
                         $elementMetadataFieldHandle = SproutSeo::$app->elementMetadata->getElementMetadataFieldHandle($element);
                     }
 
                     $metadata = $element->{$elementMetadataFieldHandle};
 
-                    $robots = $metadata['robots'] ?? null;
-                    $robots = OptimizeHelper::prepareRobotsMetadataForSettings($robots);
-                    $noIndex = $robots['noindex'] ?? null;
-                    $noFollow = $robots['nofollow'] ?? null;
+                    $robots = null;
+
+                    if (isset($metadata['enableMetaDetailsRobots']) && !empty($metadata['enableMetaDetailsRobots'])) {
+                        $robots = $metadata['robots'] ?? null;
+                        $robots = OptimizeHelper::prepareRobotsMetadataForSettings($robots);
+                    }
+
+                    $noIndex = $robots['noindex'] ?? $globalMetadata['robots']['noindex'] ?? null;
+                    $noFollow = $robots['nofollow'] ?? $globalMetadata['robots']['nofollow'] ?? null;
 
                     if ($noIndex == 1 OR $noFollow == 1) {
                         SproutSeo::info(Craft::t('sprout-seo', 'Element ID {elementId} not added to sitemap. Element Metadata field `noindex` or `nofollow` settings are enabled.', [
