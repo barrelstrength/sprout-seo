@@ -429,17 +429,17 @@ class Metadata extends Model
         $tagData = [];
 
         foreach ($this->geographicMeta as $key => $value) {
-            if ($key == 'latitude' or $key == 'longitude') {
+            if ($key === 'latitude' or $key === 'longitude') {
                 break;
             }
 
-            if ($this->{$key}) {
-                $value = $this[$key];
+            $value = $this->{$key};
 
-                if ($key == 'position') {
-                    $value = OptimizeHelper::prepareGeoPosition($this);
-                }
+            if ($key === 'position') {
+                $value = OptimizeHelper::prepareGeoPosition($this);
+            }
 
+            if ($value) {
                 $tagData[$this->getMetaTagName($key)] = $value;
             }
         }
