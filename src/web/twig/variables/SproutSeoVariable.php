@@ -472,7 +472,7 @@ class SproutSeoVariable
      * @return array
      * @throws \yii\base\Exception
      */
-    public function getAppendMetaTitleOptions()
+    public function getAppendMetaTitleOptions($currentSite = null)
     {
         $options = [
             [
@@ -485,7 +485,7 @@ class SproutSeoVariable
             ]
         ];
 
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
+        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite);
 
         if (isset($schemaGlobals['settings']['appendTitleValue'])) {
             $appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
