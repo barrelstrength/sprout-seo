@@ -244,7 +244,7 @@ class GlobalMetadataController extends Controller
 
         $twitterCard = (isset($postData['settings']['defaultTwitterCard']) && $postData['settings']['defaultTwitterCard']) ? $postData['settings']['defaultTwitterCard'] : 'summary';
 
-        $ogType = (isset($postData['settings']['defaultOgType']) && $postData['settings']['defaultOgType']) ? $postData['settings']['defaultOgType'] : 'website';
+        $ogType = (isset($postData['settings']['defaultOgType']) && $postData['settings']['defaultOgType']) ? $postData['settings']['defaultOgType'] : 'article';
 
         $robots = $postData['robots'] ?? $oldGlobals->robots ?? [];
         $robotsMetaValue = OptimizeHelper::prepareRobotsMetadataValue($robots);
