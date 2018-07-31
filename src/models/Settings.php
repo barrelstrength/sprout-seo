@@ -71,7 +71,7 @@ class Settings extends Model
     /**
      * @var int
      */
-    public $total404Redirects = 500;
+    public $total404Redirects = 250;
 
     /**
      * @var int
