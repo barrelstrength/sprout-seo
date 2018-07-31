@@ -15,11 +15,9 @@ use barrelstrength\sproutseo\services\App;
 use barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable;
 use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 
-
 use Craft;
 use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
-use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -27,6 +25,7 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\ErrorHandler;
 use craft\events\ExceptionEvent;
 use craft\web\UrlManager;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use yii\base\Event;
 
@@ -109,23 +108,30 @@ class SproutSeo extends Plugin
 
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {
 
-            $exception = $event->exception;
             $request = Craft::$app->getRequest();
 
-            /**
-             * @var NotFoundHttpException $exception
-             */
-            if (get_class($exception) === NotFoundHttpException::class &&
-                $exception->statusCode === 404 &&
-                $request->getIsSiteRequest() &&
-                !$request->getIsLivePreview()
-            ) {
-                $currentSite = Craft::$app->getSites()->getCurrentSite();
+            // Only handle front-end site requests that are not live preview
+            if (!$request->getIsSiteRequest() OR $request->getIsLivePreview()) {
+                return;
+            }
 
-                $uri = $request->getUrl();
+            $exception = $event->exception;
+
+            // Rendering Twig can generate a 404 also: i.e. {% exit 404 %}
+            if ($event->exception instanceof \Twig_Error_Runtime) {
+                // If this is a Twig Runtime error, use the previous exception
+                $exception = $exception->getPrevious();
+            }
+
+            /**
+             * @var HttpException $exception
+             */
+            if ($exception instanceof HttpException && $exception->statusCode === 404) {
+
+                $currentSite = Craft::$app->getSites()->getCurrentSite();
                 $absoluteUrl = $request->getAbsoluteUrl();
 
-                // check if the request url needs redirect
+                // Check if the requested URL needs to be redirected
                 $redirect = SproutSeo::$app->redirects->findUrl($absoluteUrl, $currentSite);
 
                 if (!$redirect && $this->getSettings()->enable404RedirectLog) {
@@ -135,8 +141,8 @@ class SproutSeo extends Plugin
 
                 if ($redirect) {
                     SproutSeo::$app->redirects->logRedirect($redirect->id);
-                    // Use != instead of !== as 404 can be both as integer or string
-                    if ($redirect->enabled && $redirect->method !== 404) {
+
+                    if ($redirect->enabled && (int)$redirect->method !== 404) {
                         Craft::$app->getResponse()->redirect($redirect->getAbsoluteNewUrl(), $redirect->method);
                         Craft::$app->end();
                     }
