@@ -255,10 +255,13 @@ class Redirects extends Component
 
         // delete new one
         if (isset($seoSettings['total404Redirects']) && $seoSettings['total404Redirects'] && $redirect) {
-            $count = Redirect::find()->where('method=:method and sproutseo_redirects.id!=:redirectId', [
-                ':method' => RedirectMethods::PageNotFound,
-                ':redirectId' => $redirect->id
-            ])
+
+            $count = Redirect::find()
+                ->where('method=:method and sproutseo_redirects.id != :redirectId', [
+                    ':method' => RedirectMethods::PageNotFound,
+                    ':redirectId' => $redirect->id
+                ])
+                ->anyStatus()
                 ->count();
 
             if ($count >= $seoSettings['total404Redirects']) {
@@ -267,6 +270,7 @@ class Redirects extends Component
                 $delete404 = new Delete404();
                 $delete404->totalToDelete = $totalToDelete <= 0 ? 1 : $totalToDelete + 1;
                 $delete404->redirectIdToExclude = $redirect->id ?? null;
+                $delete404->siteId = $site->id;
 
                 // Call the delete redirects job
                 Craft::$app->queue->push($delete404);

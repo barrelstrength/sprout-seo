@@ -19,6 +19,7 @@ use barrelstrength\sproutseo\enums\RedirectMethods;
  */
 class Delete404 extends BaseJob
 {
+    public $siteId;
     public $totalToDelete;
     public $redirectIdToExclude;
 
@@ -55,6 +56,8 @@ class Delete404 extends BaseJob
             ->where($condition, $params)
             ->limit($this->totalToDelete)
             ->orderBy(['dateUpdated' => SORT_ASC])
+            ->anyStatus()
+            ->siteId($this->siteId)
             ->all();
 
         $totalSteps = count($redirects);
