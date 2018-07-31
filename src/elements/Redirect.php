@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutseo\elements;
 
+use barrelstrength\sproutseo\elements\actions\ChangePermanentMethod;
+use barrelstrength\sproutseo\elements\actions\ChangeTemporaryMethod;
 use barrelstrength\sproutseo\enums\RedirectMethods;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\elements\db\RedirectQuery;
@@ -220,20 +222,31 @@ class Redirect extends Element
         $actions = [];
         // Set Status
         $actions[] = SetStatus::class;
-        // Delete
-        $actions[] = Craft::$app->getElements()->createAction([
-            'type' => Delete::class,
-            'confirmationMessage' => Craft::t('sprout-seo', 'Are you sure you want to delete the selected redirects?'),
-            'successMessage' => Craft::t('sprout-seo', 'Redirects deleted.'),
-        ]);
+
         // Edit
         $actions[] = Craft::$app->getElements()->createAction([
             'type' => Edit::class,
             'label' => Craft::t('sprout-seo', 'Edit Redirect'),
         ]);
 
-        //$changePermanentMethod = Craft::$app->elements->getAction('SproutSeo_ChangePermanentMethod');
-        //$changeTemporaryMethod = Craft::$app->elements->getAction('SproutSeo_ChangeTemporaryMethod');
+        // Change Permanent Method
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => ChangePermanentMethod::class,
+            'successMessage' => Craft::t('sprout-seo', 'Redirects updated.'),
+        ]);
+
+        // Change Temporary Method
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => ChangeTemporaryMethod::class,
+            'successMessage' => Craft::t('sprout-seo', 'Redirects updated.'),
+        ]);
+
+        // Delete
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => Delete::class,
+            'confirmationMessage' => Craft::t('sprout-seo', 'Are you sure you want to delete the selected redirects?'),
+            'successMessage' => Craft::t('sprout-seo', 'Redirects deleted.'),
+        ]);
 
         return $actions;
     }

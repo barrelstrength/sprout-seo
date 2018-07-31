@@ -149,9 +149,9 @@ class Redirects extends Component
     {
         $response = null;
         if ($status) {
-            $response = Craft::t('sprout-seo', 'Methods updated.');
+            $response = Craft::t('sprout-seo', 'Redirect method updated.');
         } else {
-            $response = Craft::t('sprout-seo', 'Failed to update.');
+            $response = Craft::t('sprout-seo', 'Unable to update Redirect method.');
         }
 
         return $response;
