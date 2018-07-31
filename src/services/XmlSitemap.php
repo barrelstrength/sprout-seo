@@ -212,7 +212,7 @@ class XmlSitemap extends Component
                         ]));
                         continue;
                     }
-                    
+
                     if ($element->getUrl() === null) {
                         SproutSeo::info(Craft::t('sprout-seo', 'Element ID {elementId} not added to sitemap. Element does not have a URL.', [
                             'elementId' => $element->id
@@ -333,6 +333,51 @@ class XmlSitemap extends Component
             $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
 
             $urls[$customSitemapSection['uri']] = $customSitemapSection;
+        }
+
+        $urls = $this->getLocalizedSitemapStructure($urls);
+
+        return $urls;
+    }
+
+    /**
+     * Process Custom Pages Sitemaps for Multi-Lingual Sitemaps that can have custom pages from multiple sections
+     * 
+     * @param $siteIds
+     * @param $sitesInGroup
+     *
+     * @return array
+     */
+    public function getCustomSectionUrlsForMultipleIds($siteIds, $sitesInGroup)
+    {
+        $urls = [];
+
+        $customSitemapSections = (new Query())
+            ->select('siteId, uri, priority, changeFrequency, dateUpdated')
+            ->from('{{%sproutseo_sitemaps}}')
+            ->where('enabled = 1')
+            ->andWhere(['siteId' => $siteIds])
+            ->andWhere('type=:type', [':type' => NoSection::class])
+            ->indexBy('siteId')
+            ->all();
+
+        foreach ($sitesInGroup as $siteInGroup) {
+            foreach ($customSitemapSections as $customSitemapSection) {
+                if ($siteInGroup->id !== $customSitemapSection['siteId']) {
+                    continue;
+                }
+
+                $customSitemapSection['url'] = null;
+                // Adding each custom location indexed by its URL
+
+                $url = Craft::getAlias($siteInGroup->baseUrl).$customSitemapSection['uri'];
+                $customSitemapSection['url'] = $url;
+
+                $modified = new DateTime($customSitemapSection['dateUpdated']);
+                $customSitemapSection['modified'] = $modified->format('Y-m-d\Th:m:s\Z');
+
+                $urls[$customSitemapSection['uri']] = $customSitemapSection;
+            }
         }
 
         $urls = $this->getLocalizedSitemapStructure($urls);

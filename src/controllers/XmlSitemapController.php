@@ -8,10 +8,12 @@
 namespace barrelstrength\sproutseo\controllers;
 
 
+use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\web\Controller;
 
 use Craft;
+use yii\web\HttpException;
 
 
 /**
@@ -37,6 +39,27 @@ class XmlSitemapController extends Controller
     public function actionRenderXmlSitemap($sitemapKey = null, int $pageNumber = null)
     {
         $siteId = Craft::$app->sites->getCurrentSite()->id;
+        $multiSiteSiteIds = [];
+
+        /**
+         * @var Settings $pluginSettings
+         */
+        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        $isMultilingualSitemap = $pluginSettings->enableMultilingualSitemaps;
+
+        if (Craft::$app->getIsMultiSite() && $isMultilingualSitemap) {
+            $sitesInGroup = SproutSeo::$app->xmlSitemap->getCurrentSitemapSites();
+            $firstSiteInGroup = $sitesInGroup[0];
+
+            // Only render sitemaps for the primary site in a group
+            if ($siteId !== $firstSiteInGroup->id) {
+                throw new HttpException(404);
+            }
+
+            foreach ($sitesInGroup as $siteInGroup) {
+                $multiSiteSiteIds[] = (int)$siteInGroup->id;
+            }
+        }
 
         $sitemapIndexUrls = [];
         $elements = [];
@@ -54,7 +77,12 @@ class XmlSitemapController extends Controller
 
             // Prepare Custom Pages Sitemap
             case 'custom-pages':
-                $elements = SproutSeo::$app->xmlSitemap->getCustomSectionUrls($siteId);
+                if (count($multiSiteSiteIds)) {
+                    $elements = SproutSeo::$app->xmlSitemap->getCustomSectionUrlsForMultipleIds($multiSiteSiteIds, $sitesInGroup);
+                } else {
+                    $elements = SproutSeo::$app->xmlSitemap->getCustomSectionUrls($siteId);
+                }
+
                 break;
 
             // Prepare URL-Enabled Section Sitemap

@@ -335,7 +335,6 @@ abstract class Schema
      */
     public function addTelephone($propertyName, $phone)
     {
-
         if (isset($phone['phone']) && isset($phone['country']) && !empty($phone['phone'])) {
             $phoneModel = new PhoneModel($phone['phone'], $phone['country']);
             $this->structuredData[$propertyName] = $phoneModel->international;

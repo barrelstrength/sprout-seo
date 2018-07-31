@@ -43,10 +43,6 @@ class SitemapsController extends Controller
         $enabledSiteIds = array_filter($pluginSettings->siteSettings);
         $enabledSiteGroupIds = array_filter($pluginSettings->groupSettings);
 
-        // Get all Editable Sites for this user that also have editable Sitemaps
-        $editableSiteIds = Craft::$app->getSites()->getEditableSiteIds();
-        $editableSiteIds = array_intersect($enabledSiteIds, $editableSiteIds);
-
         if (!$enableMultilingualSitemaps && empty($enabledSiteIds)) {
             throw new NotFoundHttpException('No Sites are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site for your Sitemap.');
         }
@@ -55,12 +51,30 @@ class SitemapsController extends Controller
             throw new NotFoundHttpException('No Site Groups are enabled for your Sitemap. Check your Craft Sites settings and Sprout SEO Sitemap Settings to enable a Site Group for your Sitemap.');
         }
 
+        // Get all Editable Sites for this user that also have editable Sitemaps
+        $editableSiteIds = Craft::$app->getSites()->getEditableSiteIds();
+
+        // For per-site sitemaps, only display the Sites enabled in the Sprout SEO settings
+        if ($enableMultilingualSitemaps === false) {
+            $editableSiteIds = array_intersect($enabledSiteIds, $editableSiteIds);
+        } else {
+            $siteIdsFromEditableGroups = [];
+
+            foreach ($enabledSiteGroupIds as $enabledSiteGroupId) {
+                $enabledSitesInGroup = Craft::$app->sites->getSitesByGroupId($enabledSiteGroupId);
+                foreach ($enabledSitesInGroup as $enabledSites) {
+                    $siteIdsFromEditableGroups[] = (int)$enabledSites->id;
+                }
+            }
+
+            $editableSiteIds = array_intersect($siteIdsFromEditableGroups, $editableSiteIds);
+        }
+
         $currentSite = null;
         $currentSiteGroup = null;
         $firstSiteInGroup = null;
 
         if (Craft::$app->getIsMultiSite()) {
-
             // Form Multi-Site we have to figure out which Site and Site Group matter
             if ($siteHandle !== null) {
 
