@@ -15,6 +15,7 @@ use Craft;
 use craft\base\Field;
 use craft\elements\Asset;
 
+use craft\models\Site;
 use DateTime;
 use craft\fields\PlainText;
 use craft\fields\Assets;
@@ -383,10 +384,13 @@ class SproutSeoVariable
     }
 
     /**
+     * @param Site $site
+     *
      * @return array
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
-    public function getPriceRangeOptions()
+    public function getPriceRangeOptions(Site $site)
     {
         $schemaType = 'identity';
 
@@ -413,7 +417,7 @@ class SproutSeoVariable
             ]
         ];
 
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
+        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
 
         $priceRange = null;
 
@@ -433,10 +437,13 @@ class SproutSeoVariable
     }
 
     /**
+     * @param Site $site
+     *
      * @return array
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
-    public function getGenderOptions()
+    public function getGenderOptions(Site $site)
     {
         $schemaType = 'identity';
         $options = [
@@ -454,7 +461,7 @@ class SproutSeoVariable
             ]
         ];
 
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
+        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
         $gender = $schemaGlobals[$schemaType]['gender'] ?? null;
 
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
@@ -469,10 +476,13 @@ class SproutSeoVariable
     }
 
     /**
+     * @param null $site
+     *
      * @return array
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
-    public function getAppendMetaTitleOptions($currentSite = null)
+    public function getAppendMetaTitleOptions($site = null)
     {
         $options = [
             [
@@ -485,7 +495,7 @@ class SproutSeoVariable
             ]
         ];
 
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite);
+        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
 
         if (isset($schemaGlobals['settings']['appendTitleValue'])) {
             $appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
@@ -506,7 +516,7 @@ class SproutSeoVariable
      * @return array
      * @throws \yii\base\Exception
      */
-    public function getSeoDividerOptions()
+    public function getSeoDividerOptions(Site $site)
     {
         $options = [
             [
@@ -535,7 +545,7 @@ class SproutSeoVariable
             ],
         ];
 
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
+        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
 
         if (isset($schemaGlobals['settings']['seoDivider'])) {
             $seoDivider = $schemaGlobals['settings']['seoDivider'];
