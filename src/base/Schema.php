@@ -151,6 +151,7 @@ abstract class Schema
     final public function getSchema()
     {
         $this->addProperties();
+        $this->getSchemaOverrideType();
 
         if (empty($this->structuredData)) {
             return null;
