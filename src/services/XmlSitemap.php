@@ -114,12 +114,13 @@ class XmlSitemap extends Component
     /**
      * Prepares urls for a dynamic sitemap
      *
-     * @param      $sitemapKey
-     * @param      $pageNumber
-     * @param      $siteId
+     * @param $sitemapKey
+     * @param $pageNumber
+     * @param $siteId
      *
      * @return array
      * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
      */
     public function getDynamicSitemapElements($sitemapKey, $pageNumber, $siteId)
     {

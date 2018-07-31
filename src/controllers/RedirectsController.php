@@ -15,6 +15,7 @@ use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
 
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
@@ -54,12 +55,13 @@ class RedirectsController extends Controller
     /**
      * Edit a Redirect
      *
-     * @param int|null      $redirectId The redirect's ID, if editing an existing redirect.
-     * @param Redirect|null $redirect   The redirect send back by setRouteParams if any errors on saveRedirect
-     * @param string|null   $siteHandle
+     * @param null          $redirectId
+     * @param null          $siteHandle
+     * @param Redirect|null $redirect
      *
      * @return Response
      * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
      * @throws \craft\errors\SiteNotFoundException
      */
     public function actionEditRedirect($redirectId = null, $siteHandle = null, Redirect $redirect = null)
@@ -83,10 +85,13 @@ class RedirectsController extends Controller
             if ($redirectId !== null) {
 
                 $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $currentSite->id);
-                // @todo - test wrong urls - when should we return 404?
-                //if (!$redirect) {
-                //    throw new HttpException(404);
-                //}
+
+                if (!$redirect) {
+                    throw new NotFoundHttpException(Craft::t('sprout-seo', 'Unable to find a Redirect with the given id: {id}', [
+                        'id' => $redirectId
+                    ]));
+                }
+
                 if (!$redirect){
                     $redirect = new Redirect();
                     $redirect->id = $redirectId;
