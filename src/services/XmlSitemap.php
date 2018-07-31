@@ -204,7 +204,7 @@ class XmlSitemap extends Component
 
                     $canonicalOverride = $metadata['canonical'] ?? null;
 
-                    if ($canonicalOverride !== null) {
+                    if (!empty($canonicalOverride)) {
                         SproutSeo::info(Craft::t('sprout-seo', 'Element ID {elementId} is using a canonical override and has not been included in the sitemap. Element URL: {elementUrl}. Canonical URL: {canonicalUrl}.', [
                             'elementId' => $element->id,
                             'elementUrl' => $element->getUrl(),
@@ -212,7 +212,7 @@ class XmlSitemap extends Component
                         ]));
                         continue;
                     }
-
+                    
                     if ($element->getUrl() === null) {
                         SproutSeo::info(Craft::t('sprout-seo', 'Element ID {elementId} not added to sitemap. Element does not have a URL.', [
                             'elementId' => $element->id
