@@ -180,13 +180,16 @@ class XmlSitemap extends Component
                         $elementMetadataFieldHandle = SproutSeo::$app->elementMetadata->getElementMetadataFieldHandle($element);
                     }
 
-                    $metadata = $element->{$elementMetadataFieldHandle};
-
                     $robots = null;
 
-                    if (isset($metadata['enableMetaDetailsRobots']) && !empty($metadata['enableMetaDetailsRobots'])) {
-                        $robots = $metadata['robots'] ?? null;
-                        $robots = OptimizeHelper::prepareRobotsMetadataForSettings($robots);
+                    // If we have an Element Metadata field, allow it to override robots
+                    if ($elementMetadataFieldHandle) {
+                        $metadata = $element->{$elementMetadataFieldHandle};
+
+                        if (isset($metadata['enableMetaDetailsRobots']) && !empty($metadata['enableMetaDetailsRobots'])) {
+                            $robots = $metadata['robots'] ?? null;
+                            $robots = OptimizeHelper::prepareRobotsMetadataForSettings($robots);
+                        }
                     }
 
                     $noIndex = $robots['noindex'] ?? $globalMetadata['robots']['noindex'] ?? null;
