@@ -140,7 +140,7 @@ class SproutSeo extends Plugin
                 }
 
                 if ($redirect) {
-                    SproutSeo::$app->redirects->logRedirect($redirect->id);
+                    SproutSeo::$app->redirects->logRedirect($redirect->id, $currentSite);
 
                     if ($redirect->enabled && (int)$redirect->method !== 404) {
                         Craft::$app->getResponse()->redirect($redirect->getAbsoluteNewUrl(), $redirect->method);

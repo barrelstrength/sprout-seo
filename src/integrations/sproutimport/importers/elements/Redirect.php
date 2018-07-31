@@ -39,6 +39,6 @@ class Redirect extends ElementImporter
      */
     public function save()
     {
-        return Craft::$app->elements->saveElement($this->model, true, false);
+        return Craft::$app->elements->saveElement($this->model, true);
     }
 }

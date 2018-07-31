@@ -26,26 +26,6 @@ use yii\base\Exception;
 class Redirects extends Component
 {
     /**
-     * Returns a Redirect by its ID.
-     *
-     * @param          $redirectId
-     * @param int|null $siteId
-     *
-     * @return Redirect|null
-     */
-    public function getRedirectById($redirectId, int $siteId = null)
-    {
-        $redirect = Redirect::find()
-            ->id($redirectId);
-
-        if ($siteId) {
-            $redirect->siteId($siteId);
-        }
-
-        return $redirect->one();
-    }
-
-    /**
      * Find a regex url using the preg_match php function and replace
      * capture groups if any using the preg_replace php function also check normal urls
      *
@@ -198,12 +178,13 @@ class Redirects extends Component
      * @todo - escape this log data when we output it
      *         https://stackoverflow.com/questions/13199095/escaping-variables
      *
-     * @param $redirectId int
+     * @param      $redirectId
+     * @param Site $currentSite
      *
      * @return bool
      * @throws \Throwable
      */
-    public function logRedirect($redirectId)
+    public function logRedirect($redirectId, Site $currentSite)
     {
         $log = [];
 
@@ -215,10 +196,13 @@ class Redirects extends Component
 
             SproutSeo::warning('404 - Page Not Found: '.json_encode($log));
 
-            $redirect = $this->getRedirectById($redirectId);
+            /**
+             * @var Redirect $redirect
+             */
+            $redirect = Craft::$app->getElements()->getElementById($redirectId, Redirect::class, $currentSite->id);
             ++$redirect->count;
 
-            Craft::$app->elements->saveElement($redirect, true, false);
+            Craft::$app->elements->saveElement($redirect, true);
 
         } catch (\Exception $e) {
             SproutSeo::error('Unable to log redirect: '.$e->getMessage());
@@ -265,7 +249,7 @@ class Redirects extends Component
         $redirect->count = 0;
         $redirect->siteId = $site->id;
 
-        if (!Craft::$app->elements->saveElement($redirect, true, false)) {
+        if (!Craft::$app->elements->saveElement($redirect, true)) {
             return null;
         }
 

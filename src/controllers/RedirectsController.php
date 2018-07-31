@@ -84,7 +84,7 @@ class RedirectsController extends Controller
         if ($redirect === null) {
             if ($redirectId !== null) {
 
-                $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId, $currentSite->id);
+                $redirect = Craft::$app->getElements()->getElementById($redirectId, Redirect::class, $currentSite->id);
 
                 if (!$redirect) {
                     throw new NotFoundHttpException(Craft::t('sprout-seo', 'Unable to find a Redirect with the given id: {id}', [
@@ -148,14 +148,14 @@ class RedirectsController extends Controller
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
         if ($redirectId) {
-            $redirect = SproutSeo::$app->redirects->getRedirectById($redirectId);
+            $redirect = Craft::$app->getElements()->getElementById($redirectId, Redirect::class, $siteId);
 
-            // todo - figure out how throw 404 errors let's assume that the redirectId exists
-            //if (!$redirect) {
-            //    throw new Exception(Craft::t('sprout-seo', 'No redirect exists with the ID “{id}”', [
-            //        'id' => $redirectId
-            //    ]));
-            //}
+            if (!$redirect) {
+                throw new Exception(Craft::t('sprout-seo', 'No redirect exists with the ID “{id}”', [
+                    'id' => $redirectId
+                ]));
+            }
+
             if (!$redirect){
 
                 $redirect = new Redirect();
@@ -184,7 +184,7 @@ class RedirectsController extends Controller
 
         $redirect->enabled = Craft::$app->getRequest()->getBodyParam('enabled');
 
-        if (!Craft::$app->elements->saveElement($redirect, true, false)) {
+        if (!Craft::$app->elements->saveElement($redirect, true)) {
             Craft::$app->getSession()->setError(Craft::t('sprout-seo', 'Couldn’t save redirect.'));
 
             // Send the event back to the template

@@ -115,6 +115,15 @@ class Redirect extends Element
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getSupportedSites(): array
+    {
+        // limit to just the one site this element is set to so that we don't propagate when saving
+        return [$this->siteId];
+    }
+
+    /**
      * Returns the element's CP edit URL.
      *
      * @return null|string
@@ -295,7 +304,7 @@ class Redirect extends Element
     public function getEditorHtml(): string
     {
         $methodOptions = SproutSeo::$app->redirects->getMethods();
-        // get template
+
         $html = Craft::$app->view->renderTemplate('sprout-base-seo/redirects/_editor', [
             'redirect' => $this,
             'methodOptions' => $methodOptions
