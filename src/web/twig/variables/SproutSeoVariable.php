@@ -520,10 +520,6 @@ class SproutSeoVariable
     {
         $options = [
             [
-                'label' => Craft::t('sprout-seo', 'None'),
-                'value' => ''
-            ],
-            [
                 'label' => '-',
                 'value' => '-'
             ],
