@@ -140,6 +140,9 @@ class OptimizeHelper
             }
         }
 
+        // If the siteUrl is https or the current request is https, use it.
+        $scheme = parse_url(UrlHelper::baseSiteUrl(), PHP_URL_SCHEME);
+
         $ogTransform = null;
         $twitterTransform = null;
 
@@ -165,8 +168,10 @@ class OptimizeHelper
                         $imageUrl = (string)$ogImage->getUrl($ogTransform);
                     }
                     // check to see if Asset already has full Site Url in folder Url
-                    if (strpos($imageUrl, 'http') !== false) {
+                    if (UrlHelper::isAbsoluteUrl($imageUrl)) {
                         $model->ogImage = $imageUrl;
+                    } elseif (UrlHelper::isProtocolRelativeUrl($imageUrl)) {
+                        $model->ogImage = $scheme.':'.$imageUrl;
                     } else {
                         $model->ogImage = UrlHelper::siteUrl($imageUrl);
                     }
@@ -212,9 +217,11 @@ class OptimizeHelper
                     if ($twitterTransform) {
                         $imageUrl = (string)$twitterImage->getUrl($twitterTransform);
                     }
-                    // check to se	e if Asset already has full Site Url in folder Url
-                    if (strpos($imageUrl, 'http') !== false) {
+                    // check to see if Asset already has full Site Url in folder Url
+                    if (UrlHelper::isAbsoluteUrl($imageUrl)) {
                         $model->twitterImage = $imageUrl;
+                    } elseif (UrlHelper::isProtocolRelativeUrl($imageUrl)) {
+                        $model->twitterImage = $scheme.':'.$imageUrl;
                     } else {
                         $model->twitterImage = UrlHelper::siteUrl($imageUrl);
                     }
@@ -246,8 +253,10 @@ class OptimizeHelper
                 if ($optimizedImage !== null && $optimizedImage->getUrl()) {
                     $imageUrl = (string)$optimizedImage->getUrl();
                     // check to se	e if Asset already has full Site Url in folder Url
-                    if (strpos($imageUrl, 'http') !== false) {
+                    if (UrlHelper::isAbsoluteUrl($imageUrl)) {
                         $model->optimizedImage = $optimizedImage->url;
+                    } elseif (UrlHelper::isProtocolRelativeUrl($imageUrl)) {
+                        $model->optimizedImage = $scheme.':'.$imageUrl;
                     } else {
                         $model->optimizedImage = UrlHelper::siteUrl($optimizedImage->url);
                     }
