@@ -49,7 +49,7 @@ class ContactPointSchema extends Schema
         }
 
         $this->addText('contactType', $contact['contactType']);
-        $this->addTelephone('telephone', $contact['telephone']);
+        $this->addText('telephone', $contact['telephone']);
 
         return null;
     }
