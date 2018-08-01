@@ -30,7 +30,7 @@ use craft\elements\Asset;
 use craft\fields\Assets;
 use craft\db\mysql\Schema;
 
-class ElementMetadata extends Field implements PreviewableFieldInterface
+class ElementMetadata extends Field
 {
     /**
      * The active metadata
@@ -118,16 +118,16 @@ class ElementMetadata extends Field implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\InvalidConfigException
      */
-    public function getTableAttributeHtml($value, ElementInterface $element): string
-    {
-        Craft::$app->view->registerAssetBundle(BaseAsset::class);
-
-        $html = Craft::$app->view->renderTemplate('sprout-base-seo/_includes/metadata-status-icons', [
-            'sitemapSection' => $value
-        ]);
-
-        return $html;
-    }
+//    public function getTableAttributeHtml($value, ElementInterface $element): string
+//    {
+//        Craft::$app->view->registerAssetBundle(BaseAsset::class);
+//
+//        $html = Craft::$app->view->renderTemplate('sprout-base-seo/_includes/metadata-status-icons', [
+//            'sitemapSection' => $value
+//        ]);
+//
+//        return $html;
+//    }
 
     /**
      * @return null|string
