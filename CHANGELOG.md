@@ -13,6 +13,7 @@
 ### Changed
 - Element Metadata is now stored in the Craft content table
 - Section Metadata has been removed in favor of page-specific Element Metadata and Template Metadata
+- Max Meta Description Length setting can now be managed in the Control Panel 
 - Structured Data Main Entity settings are now managed at the Metadata field level
 - Meta Details settings are now managed at the Metadata field level
 - OG Local now populates dynamically based on the Site locale setting
