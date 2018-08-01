@@ -68,7 +68,7 @@ class ElementMetadata extends Field
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-seo', 'Element Metadata');
+        return Craft::t('sprout-seo', 'Metadata (Sprout SEO)');
     }
 
     /**
