@@ -21,7 +21,7 @@ class Settings extends Component
          */
         $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
         $descriptionLength = $pluginSettings->maxMetaDescriptionLength;
-        $descriptionLength = $descriptionLength > 160 ? $descriptionLength : 160;
+        $descriptionLength = $descriptionLength ? $descriptionLength : 160;
 
         return $descriptionLength;
     }
