@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-seo",
   "description": "Content-focused SEO.",
-  "version": "4.0.0-beta.3",
+  "version": "4.0.0-beta.4",
   "type": "craft-plugin",
   "keywords": [
     "craft",
@@ -27,8 +27,7 @@
   "require": {
     "craftcms/cms": "^3.0.0",
     "barrelstrength/sprout-base": "^3.0.1",
-    "crodas/text-rank": "dev-master",
-    "crodas/languagedetector": "^0.1.0"
+    "php-science/textrank": "^1.0.4"
   },
   "autoload": {
     "psr-4": {

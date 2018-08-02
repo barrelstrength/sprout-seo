@@ -20,9 +20,12 @@ use barrelstrength\sproutbase\app\seo\web\assets\base\BaseAsset;
 use craft\base\Element;
 use craft\base\Field;
 use Craft;
-use \crodas\TextRank\Config;
-use \crodas\TextRank\TextRank;
-use \crodas\TextRank\Stopword;
+use PhpScience\TextRank\TextRankFacade;
+use PhpScience\TextRank\Tool\StopWords\English;
+use PhpScience\TextRank\Tool\StopWords\French;
+use PhpScience\TextRank\Tool\StopWords\Italian;
+use PhpScience\TextRank\Tool\StopWords\Norwegian;
+use PhpScience\TextRank\Tool\StopWords\Spanish;
 use yii\base\Exception;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
@@ -406,7 +409,7 @@ class ElementMetadata extends Field
      *
      * @return mixed
      */
-    protected function processOptimizedKeywords($attributes, $settings, $element)
+    protected function processOptimizedKeywords($attributes, $settings, Element $element)
     {
         $keywords = null;
 
@@ -427,14 +430,40 @@ class ElementMetadata extends Field
                 $keywords = null;
 
                 if ($bigKeywords) {
-                    try {
-                        $config = new Config;
-                        $config->addListener(new Stopword);
-                        $textRank = new TextRank($config);
 
-                        $textRankKeywords = $textRank->getKeywords($bigKeywords);
-                        $rankKeywords = array_keys($textRankKeywords);
-                        $fiveKeywords = array_slice($rankKeywords, 0, 5);
+                    $textRankApi = new TextRankFacade();
+
+                    $stopWordsMap = [
+                        'en' => English::class,
+                        'fr' => French::class,
+                        'de' => German::class,
+                        'it' => Italian::class,
+                        'nn' => Norwegian::class,
+                        'es' => Spanish::class
+                    ];
+
+                    $language = $element->getSite()->language;
+                    $languagePrefixArray = explode('-', $language);
+
+                    $stopWordsClass = $stopWordsMap['en'];
+
+                    if (count($languagePrefixArray) > 0)
+                    {
+                        $languagePrefix = $languagePrefixArray[0];
+
+                        if (isset($stopWordsMap[$languagePrefix]))
+                        {
+                            $stopWordsClass = $stopWordsMap[$languagePrefix];
+                        }
+                    }
+
+                    $stopWords = new $stopWordsClass();
+
+                    try {
+                        $textRankApi->setStopWords($stopWords);
+
+                        $rankedKeywords = $textRankApi->getOnlyKeyWords($bigKeywords);
+                        $fiveKeywords = array_keys(array_slice($rankedKeywords, 0, 5));
                         $keywords = implode(',', $fiveKeywords);
                     } catch (\RuntimeException $e) {
                         // Cannot detect the language of the text, maybe to short.
