@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0-beta.4 - 2018-08-02
+
+### Changed
+- Updated keyword generation to use php-science/textrank
+- Removed crodas/text-rank 
+
 ## 4.0.0-beta.3 - 2018-07-31
 
 ### Added
