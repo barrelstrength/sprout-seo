@@ -5,6 +5,7 @@
 ### Changed
 - Updated keyword generation to use php-science/textrank
 - Removed crodas/text-rank 
+- Added support for Stopwords in English, French, German, Italian, Norwegian, and Spanish
 
 ## 4.0.0-beta.3 - 2018-07-31
 
