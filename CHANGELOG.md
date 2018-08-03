@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0-beta.6 - 2018-08-03
+
+### Added
+- Added Metadata field support for non URL-enabled Elements
+
+### Fixed
+- Fixed behavior where an error could be thrown on non URL-Enabled pages 
+
 ## 4.0.0-beta.5 - 2018-08-03
 
 ### Fixed
