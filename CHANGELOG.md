@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.0.0-beta.5 - 2018-08-03
+
+### Fixed
+- Fixed bug in when rendering Sitemaps page when only one Site exists ([#94])
+
+[#94]: https://github.com/barrelstrength/craft-sprout-seo/issues/94
+
 ## 4.0.0-beta.4 - 2018-08-02
 
 ### Changed

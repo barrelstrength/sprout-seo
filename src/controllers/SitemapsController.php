@@ -100,7 +100,7 @@ class SitemapsController extends Controller
         } else {
             // For a single site, the primary site ID will do
             $currentSite = Craft::$app->getSites()->getPrimarySite();
-            $firstSiteInGroup = $currentSite->id;
+            $firstSiteInGroup = $currentSite;
         }
 
         $urlEnabledSectionTypes = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypesForSitemaps($currentSite->id);
