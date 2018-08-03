@@ -459,7 +459,7 @@ class Sitemaps extends Component
      *
      * @param $elementType
      *
-     * @return UrlEnabledSectionType|array
+     * @return UrlEnabledSectionType|null
      * @throws \craft\errors\SiteNotFoundException
      */
     public function getUrlEnabledSectionTypeByElementType($elementType)
@@ -474,6 +474,6 @@ class Sitemaps extends Component
             }
         }
 
-        return [];
+        return null;
     }
 }
