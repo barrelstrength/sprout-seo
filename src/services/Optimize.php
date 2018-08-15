@@ -110,7 +110,7 @@ class Optimize extends Component
      * @throws \yii\base\Exception
      * @throws \yii\web\ServerErrorHttpException
      */
-    public function getMetadata(Element $element, $site, $render = true)
+    public function getMetadata(Element $element = null, $site, $render = true)
     {
         /**
          * @var Settings $settings
@@ -202,6 +202,15 @@ class Optimize extends Component
                     {
                         $overrideInfo = $this->templateMetadata;
 
+                        // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
+                        // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
+                        // Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
+                        if (isset($overrideInfo['elementId']))
+                        {
+                            $elementOverride = Craft::$app->elements->getElementById($overrideInfo['elementId']);
+                            $overrideInfo = SproutSeo::$app->elementMetadata->getElementMetadata($elementOverride);
+                        }
+
                         // Assume our canonical URL is the current URL unless there is a codeOverride
                         $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
                         $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
@@ -226,19 +235,23 @@ class Optimize extends Component
             $prioritizedMetadataModel->ogDateUpdated = null;
             $prioritizedMetadataModel->ogExpiryDate = null;
 
-            if ($element->dateCreated !== null && $element->dateCreated) {
-                $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
-            }
+            // @todo - refactor
+            if ($element !== null)
+            {
+                if ($element->dateCreated !== null && $element->dateCreated) {
+                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
+                }
 
-            if ($element->dateUpdated !== null && $element->dateUpdated) {
-                $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ISO8601);
-            }
+                if ($element->dateUpdated !== null && $element->dateUpdated) {
+                    $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ISO8601);
+                }
 
-            /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
-            /** @noinspection PhpUndefinedFieldInspection */
-            if ($element->expiryDate !== null && $element->expiryDate) {
+                /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
                 /** @noinspection PhpUndefinedFieldInspection */
-                $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ISO8601);
+                if ($element->expiryDate !== null && $element->expiryDate) {
+                    /** @noinspection PhpUndefinedFieldInspection */
+                    $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ISO8601);
+                }
             }
         }
 
@@ -265,7 +278,7 @@ class Optimize extends Component
         return $prioritizedMetadataModel;
     }
 
-    public function getStructuredData($element)
+    public function getStructuredData($element = null)
     {
         $schema = [];
         $websiteIdentity = [
@@ -325,7 +338,10 @@ class Optimize extends Component
             $schema['place'] = $placeSchema;
         }
 
-        $schema['mainEntity'] = $this->getMainEntityStructuredData($element);
+        if ($element !== null)
+        {
+            $schema['mainEntity'] = $this->getMainEntityStructuredData($element);
+        }
 
         return $schema;
     }

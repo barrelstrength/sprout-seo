@@ -67,6 +67,11 @@ class Metadata extends Model
     public $ogTransform;
 
     /**
+     * @var int
+     */
+    public $elementId;
+
+    /**
      * @var string
      */
     public $twitterTransform;

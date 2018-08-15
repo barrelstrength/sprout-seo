@@ -1,10 +1,26 @@
 # Changelog
 
+## 4.0.0-beta.6 - 2018-08-03
+
+### Added
+- Added Metadata field support for non URL-enabled Elements
+
+### Fixed
+- Fixed behavior where an error could be thrown on non URL-Enabled pages 
+
+## 4.0.0-beta.5 - 2018-08-03
+
+### Fixed
+- Fixed bug in when rendering Sitemaps page when only one Site exists ([#94])
+
+[#94]: https://github.com/barrelstrength/craft-sprout-seo/issues/94
+
 ## 4.0.0-beta.4 - 2018-08-02
 
 ### Changed
 - Updated keyword generation to use php-science/textrank
 - Removed crodas/text-rank 
+- Added support for Stopwords in English, French, German, Italian, Norwegian, and Spanish
 
 ## 4.0.0-beta.3 - 2018-07-31
 
