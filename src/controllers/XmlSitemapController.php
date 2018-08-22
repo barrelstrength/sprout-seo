@@ -24,7 +24,7 @@ class XmlSitemapController extends Controller
     /**
      * @inheritdoc
      */
-    public $allowAnonymous = ['renderXmlSitemap'];
+    public $allowAnonymous = ['render-xml-sitemap'];
 
     /**
      * Generates an XML sitemapindex or sitemap
