@@ -22,6 +22,7 @@ use craft\base\Field;
 use Craft;
 use PhpScience\TextRank\TextRankFacade;
 use PhpScience\TextRank\Tool\StopWords\English;
+use PhpScience\TextRank\Tool\StopWords\German;
 use PhpScience\TextRank\Tool\StopWords\French;
 use PhpScience\TextRank\Tool\StopWords\Italian;
 use PhpScience\TextRank\Tool\StopWords\Norwegian;
