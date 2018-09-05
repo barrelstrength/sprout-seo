@@ -14,15 +14,12 @@ use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\elements\db\RedirectQuery;
 use barrelstrength\sproutseo\records\Redirect as RedirectRecord;
 use barrelstrength\sproutseo\elements\actions\SetStatus;
-
-
 use Craft;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
 use craft\elements\actions\Edit;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
-
 use yii\base\Exception;
 use yii\base\Model;
 
@@ -367,8 +364,9 @@ class Redirect extends Element
         $record->save(false);
 
         if ($isNew) {
+            $structureId = SproutSeo::$app->redirects->getStructureId();
             //Set the root structure
-            Craft::$app->structures->appendToRoot(SproutSeo::$app->redirects->getStructureId(), $this);
+            Craft::$app->structures->appendToRoot($structureId, $this);
         }
 
         parent::afterSave($isNew);
