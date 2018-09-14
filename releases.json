@@ -1,5 +1,13 @@
 [
   {
+     "version": "3.5.1",
+     "downloadUrl": "https://github.com/barrelstrength/craft-sprout-seo/archive/v3.5.1.zip",
+     "date": "2018-09-14T08:00:00+00:00",
+     "notes": [
+       "[Improved] Improved support for PHP 7.2"
+     ]
+  },
+  {
     "version": "3.5.0",
     "downloadUrl": "https://github.com/barrelstrength/craft-sprout-seo/archive/v3.5.0.zip",
     "date": "2018-07-28T08:00:00+00:00",
