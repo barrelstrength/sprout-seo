@@ -38,7 +38,7 @@ class SproutSeo_SectionMetadataService extends BaseApplicationComponent
 	public function prepareUrlEnabledSectionTypes()
 	{
 		// Have we already prepared our URL-Enabled Sections?
-		if (count($this->urlEnabledSectionTypes))
+		if ($this->urlEnabledSectionTypes)
 		{
 			return null;
 		}

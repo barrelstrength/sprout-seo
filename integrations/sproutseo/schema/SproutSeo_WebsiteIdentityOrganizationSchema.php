@@ -81,7 +81,7 @@ class SproutSeo_WebsiteIdentityOrganizationSchema extends SproutSeoBaseSchema
 			$this->addDate('foundingDate', $schema['foundingDate']['date']);
 		}
 
-		if (count($socialProfiles))
+		if ($socialProfiles)
 		{
 			$urls = sproutSeo()->elementMetadata->arrayColumn($socialProfiles, 'url');
 			$this->addSameAs($urls);

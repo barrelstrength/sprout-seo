@@ -456,20 +456,23 @@ abstract class SproutSeoBaseSchema
 	 */
 	public function addContactPoints($contacts = array())
 	{
-		if (count($contacts))
+		if (is_array($contacts))
 		{
-			$contactPoints = array();
-
-			foreach ($contacts as $contact)
+			if (count($contacts))
 			{
-				$schema = new SproutSeo_ContactPointSchema();
+				$contactPoints = array();
 
-				$schema->contact = $contact;
+				foreach ($contacts as $contact)
+				{
+					$schema = new SproutSeo_ContactPointSchema();
 
-				$contactPoints[] = $schema->getSchema();
+					$schema->contact = $contact;
+
+					$contactPoints[] = $schema->getSchema();
+				}
+
+				$this->structuredData['contactPoint'] = $contactPoints;
 			}
-
-			$this->structuredData['contactPoint'] = $contactPoints;
 		}
 	}
 

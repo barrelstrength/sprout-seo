@@ -57,7 +57,7 @@ class SproutSeo_WebsiteIdentityPlaceSchema extends SproutSeoBaseSchema
 			$this->addGeo('geo', $schema['latitude'], $schema['longitude']);
 		}
 
-		if (count($socialProfiles))
+		if ($socialProfiles)
 		{
 			$urls = sproutSeo()->elementMetadata->arrayColumn($socialProfiles, 'url');
 			$this->addSameAs($urls);

@@ -57,7 +57,7 @@ class SproutSeo_WebsiteIdentityPersonSchema extends SproutSeoBaseSchema
 
 		$this->addText('gender', $schema['gender']);
 
-		if (count($socialProfiles))
+		if ($socialProfiles)
 		{
 			$urls = sproutSeo()->elementMetadata->arrayColumn($socialProfiles, 'url');
 			$this->addSameAs($urls);
