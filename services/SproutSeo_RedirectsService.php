@@ -120,50 +120,47 @@ class SproutSeo_RedirectsService extends BaseApplicationComponent
 		return $response;
 	}
 
-	/**
-	 * Find a regex url using the preg_match php function and replace
-	 * capture groups if any using the preg_replace php function also check normal urls
-	 *
-	 * @param string $url
-	 *
-	 * @return SproutSeo_RedirectRecord $redirect
-	 */
-	public function findUrl($url)
-	{
-		$redirectRecords = SproutSeo_RedirectRecord::model()->structured()->findAll();
+    /**
+     * Find a regex url using the preg_match php function and replace
+     * capture groups if any using the preg_replace php function also check normal urls
+     *
+     * @param string $url
+     * @return SproutSeo_RedirectModel $redirect
+     */
+    public function findUrl($url)
+    {
+        $redirectRecords = SproutSeo_RedirectRecord::model()->structured()->findAll();
+        $url             = urldecode($url);
 
-		$redirects = SproutSeo_RedirectModel::populateModels($redirectRecords);
-		$url       = urldecode($url);
+        if ($redirectRecords)
+        {
+            foreach ($redirectRecords as $redirect)
+            {
+                if ($redirect->regex)
+                {
+                    // Use backticks as delimiters as they are invalid characters for URLs
+                    $oldUrlPattern = "`" . $redirect->oldUrl . "`";
 
-		if ($redirects)
-		{
-			foreach ($redirects as $redirect)
-			{
-				if ($redirect->regex)
-				{
-					// Use backticks as delimiters as they are invalid characters for URLs
-					$oldUrlPattern = "`" . $redirect->oldUrl . "`";
+                    if (preg_match($oldUrlPattern, $url))
+                    {
+                        // Replace capture groups if any
+                        $redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
 
-					if (preg_match($oldUrlPattern, $url))
-					{
-						// Replace capture groups if any
-						$redirect->newUrl = preg_replace($oldUrlPattern, $redirect->newUrl, $url);
+                        return new SproutSeo_RedirectModel($redirect->getAttributes());
+                    }
+                }
+                else
+                {
+                    if ($redirect->oldUrl == $url)
+                    {
+                        return new SproutSeo_RedirectModel($redirect->getAttributes());
+                    }
+                }
+            }
+        }
 
-						return $redirect;
-					}
-				}
-				else
-				{
-					if ($redirect->oldUrl == $url)
-					{
-						return $redirect;
-					}
-				}
-			}
-		}
-
-		return null;
-	}
+        return null;
+    }
 
 	/**
 	 * Save a 404 redirect and check total404Redirects setting
