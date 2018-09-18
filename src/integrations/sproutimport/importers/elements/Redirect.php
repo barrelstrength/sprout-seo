@@ -5,11 +5,10 @@
  * @license   http://sprout.barrelstrengthdesign.com/license
  */
 
-namespace Craft;
+namespace barrelstrength\sproutseo\integrations\sproutimport\importers\elements;
 
 use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use barrelstrength\sproutseo\elements\Redirect as RedirectElement;
-use Craft;
 
 class Redirect extends ElementImporter
 {
@@ -29,16 +28,5 @@ class Redirect extends ElementImporter
     public function getFieldLayoutId($model)
     {
         return null;
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @throws \Throwable
-     * @throws \yii\base\Exception
-     */
-    public function save()
-    {
-        return Craft::$app->elements->saveElement($this->model, true);
     }
 }
