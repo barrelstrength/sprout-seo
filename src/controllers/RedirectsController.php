@@ -142,7 +142,7 @@ class RedirectsController extends Controller
      * @throws Exception
      * @throws \Throwable
      */
-    public function actionSaveRedirect() : Response
+    public function actionSaveRedirect()
     {
         $this->requirePostRequest();
 
@@ -193,6 +193,8 @@ class RedirectsController extends Controller
             Craft::$app->getUrlManager()->setRouteParams([
                 'redirect' => $redirect
             ]);
+
+            return null;
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-seo', 'Redirect saved.'));
