@@ -248,7 +248,7 @@ class Optimize extends Component
 
                 /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
                 /** @noinspection PhpUndefinedFieldInspection */
-                if ($element->expiryDate !== null && $element->expiryDate) {
+                if (isset($element->expiryDate) && $element->expiryDate !== null && $element->expiryDate) {
                     /** @noinspection PhpUndefinedFieldInspection */
                     $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ISO8601);
                 }

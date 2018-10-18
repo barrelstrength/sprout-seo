@@ -7,9 +7,9 @@ use craft\db\Query;
 use barrelstrength\sproutbase\app\fields\migrations\Install as SproutBaseFieldsInstall;
 
 /**
- * m180625_000001_address_table migration.
+ * m180619_000011_address_table migration.
  */
-class m180625_000001_address_table extends Migration
+class m180619_000011_address_table extends Migration
 {
     /**
      * @inheritdoc
@@ -18,6 +18,23 @@ class m180625_000001_address_table extends Migration
      */
     public function safeUp()
     {
+        $plugin = (new Query())
+            ->select(['*'])
+            ->from(['{{%plugins}}'])
+            ->where(['handle' => 'sprout-seo'] )
+            ->one();
+
+        $migration = (new Query())
+            ->select(['*'])
+            ->from(['{{%migrations}}'])
+            ->where(['pluginId' => $plugin['id'], 'type' => 'plugin', 'name' => 'm180625_000001_address_table'])
+            ->one();
+
+        if ($migration){
+            // this migration was already executed by old name
+            return true;
+        }
+
         $this->createAddressTable();
 
         $addresses = (new Query())
@@ -85,7 +102,7 @@ class m180625_000001_address_table extends Migration
      */
     public function safeDown()
     {
-        echo "m180625_000001_address_table cannot be reverted.\n";
+        echo "m180619_000011_address_table cannot be reverted.\n";
         return false;
     }
 }

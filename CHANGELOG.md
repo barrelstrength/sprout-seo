@@ -1,20 +1,26 @@
 # Changelog
 
+## 4.0.0-beta.8 - 2018-10-18
+
+### Fixed
+- Fixed migration error related to the address table when migrating from Craft 2
+- Fixed bug on Categories element class where `expiryDate` was not validated
+
 ## 4.0.0-beta.7 - 2018-08-23
 
 ### Changed
-- Added maxMetaDescriptionLength to be a setting in the Control Panel [#50]
+- Added maxMetaDescriptionLength to be a setting in the Control Panel ([#50])
 - Updated Sprout Base requirement to v3.0.2
 
 ### Fixed
-- Fixed error where Sitemap was only accessible to logged in users [#99]
-- Fixed error when saving Elements on German language sites due to incorrect stopword class [#96] 
-- Fixed Globals Website Identity page "Your changes may not be saved" message even if you don't edit anything [#76]
+- Fixed error where Sitemap was only accessible to logged in users ([#99])
+- Fixed error when saving Elements on German language sites due to incorrect stopword class ([#96]) 
+- Fixed Globals Website Identity page "Your changes may not be saved" message even if you don't edit anything ([#76])
 
-[#50] https://github.com/barrelstrength/craft-sprout-seo/issues/50
-[#76] https://github.com/barrelstrength/craft-sprout-seo/issues/76
-[#96] https://github.com/barrelstrength/craft-sprout-seo/issues/96
-[#99] https://github.com/barrelstrength/craft-sprout-seo/issues/99
+[#50]: https://github.com/barrelstrength/craft-sprout-seo/issues/50
+[#76]: https://github.com/barrelstrength/craft-sprout-seo/issues/76
+[#96]: https://github.com/barrelstrength/craft-sprout-seo/issues/96
+[#99]: https://github.com/barrelstrength/craft-sprout-seo/issues/99
 
 ## 4.0.0-beta.6 - 2018-08-03
 
