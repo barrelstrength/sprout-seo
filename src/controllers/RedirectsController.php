@@ -107,6 +107,7 @@ class RedirectsController extends Controller
         $redirect->newUrl = $redirect->newUrl === null ? '' : $redirect->newUrl;
 
         $continueEditingUrl = 'sprout-seo/redirects/edit/{id}/'.$currentSite->handle;
+        $saveAsNewUrl = 'sprout-seo/redirects/new/'.$currentSite->handle;
 
         $crumbs = [
             [
@@ -129,7 +130,8 @@ class RedirectsController extends Controller
             'methodOptions' => $methodOptions,
             'crumbs' => $crumbs,
             'tabs' => $tabs,
-            'continueEditingUrl' => $continueEditingUrl
+            'continueEditingUrl' => $continueEditingUrl,
+            'saveAsNewUrl' => $saveAsNewUrl
         ]);
     }
 
