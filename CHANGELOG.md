@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0-beta.8 - 2018-10-18
+
+### Fixed
+- Fixed migration error related to the address table when migrating from Craft 2
+- Fixed bug on Categories element class where `expiryDate` was not validated
+
 ## 4.0.0-beta.7 - 2018-08-23
 
 ### Changed
