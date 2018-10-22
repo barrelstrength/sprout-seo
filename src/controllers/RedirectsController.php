@@ -107,6 +107,7 @@ class RedirectsController extends Controller
         $redirect->newUrl = $redirect->newUrl === null ? '' : $redirect->newUrl;
 
         $continueEditingUrl = 'sprout-seo/redirects/edit/{id}/'.$currentSite->handle;
+        $saveAsNewUrl = 'sprout-seo/redirects/new/'.$currentSite->handle;
 
         $crumbs = [
             [
@@ -129,7 +130,8 @@ class RedirectsController extends Controller
             'methodOptions' => $methodOptions,
             'crumbs' => $crumbs,
             'tabs' => $tabs,
-            'continueEditingUrl' => $continueEditingUrl
+            'continueEditingUrl' => $continueEditingUrl,
+            'saveAsNewUrl' => $saveAsNewUrl
         ]);
     }
 
@@ -140,7 +142,7 @@ class RedirectsController extends Controller
      * @throws Exception
      * @throws \Throwable
      */
-    public function actionSaveRedirect() : Response
+    public function actionSaveRedirect()
     {
         $this->requirePostRequest();
 
@@ -191,6 +193,8 @@ class RedirectsController extends Controller
             Craft::$app->getUrlManager()->setRouteParams([
                 'redirect' => $redirect
             ]);
+
+            return null;
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-seo', 'Redirect saved.'));

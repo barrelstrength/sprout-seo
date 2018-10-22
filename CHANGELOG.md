@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.0.0-beta.9 - 2018-10-22
+
+### Changed
+- Improved error message when accidentally adding a redirect that already exists [#106]
+- Updated Sprout Base requirement to v3.0.6
+
+### Fixed
+- Fixed bug in Redirect "Save and add another" behavior [#107]
+- Fixed bug in Craft 2 to Craft 3 migration of Globals metadata ([#102], [#113], [#115])
+
+[#102]: https://github.com/barrelstrength/craft-sprout-seo/issues/102
+[#106]: https://github.com/barrelstrength/craft-sprout-seo/issues/106
+[#107]: https://github.com/barrelstrength/craft-sprout-seo/issues/107
+[#113]: https://github.com/barrelstrength/craft-sprout-seo/issues/113
+[#115]: https://github.com/barrelstrength/craft-sprout-seo/issues/115
+
 ## 4.0.0-beta.8 - 2018-10-18
 
 ### Fixed
