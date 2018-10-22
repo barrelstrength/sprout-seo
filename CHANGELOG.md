@@ -4,7 +4,8 @@
 
 ### Changed
 - Improved error message when accidentally adding a redirect that already exists [#106]
-	
+- Updated Sprout Base requirement to v3.0.6
+
 ### Fixed
 - Fixed bug in Redirect "Save and add another" behavior [#107]
 - Fixed bug in Craft 2 to Craft 3 migration of Globals metadata ([#102], [#113], [#115])
