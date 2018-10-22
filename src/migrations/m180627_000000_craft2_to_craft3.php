@@ -69,6 +69,20 @@ class m180627_000000_craft2_to_craft3 extends Migration
     private function getMetadataAsJson($meta)
     {
         unset(
+            $meta['id'],
+            $meta['isNew'],
+            $meta['default'],
+            $meta['name'],
+            $meta['handle'],
+            $meta['hasUrls'],
+            $meta['uri'],
+            $meta['priority'],
+            $meta['changeFrequency'],
+            $meta['urlEnabledSectionId'],
+            $meta['isCustom'],
+            $meta['type'],
+            $meta['enabled'],
+            $meta['locale'],
             $meta['ogAudio'],
             $meta['ogVideo'],
             $meta['twitterPlayer'],
