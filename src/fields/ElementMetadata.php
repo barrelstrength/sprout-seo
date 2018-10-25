@@ -180,7 +180,7 @@ class ElementMetadata extends Field
         $twitterImageElements = [];
 
         // Set up our asset fields
-        if ($value->optimizedImage !== null) {
+        if ($value->optimizedImage) {
             // If validation fails, we need to make sure our asset is just an ID
             if (is_array($value->optimizedImage)) {
                 $value->optimizedImage = $value->optimizedImage[0];
@@ -190,12 +190,12 @@ class ElementMetadata extends Field
             $metaImageElements = [$asset];
         }
 
-        if ($value->ogImage !== null) {
+        if ($value->ogImage) {
             $asset = Craft::$app->elements->getElementById($value->ogImage);
             $ogImageElements = [$asset];
         }
 
-        if ($value->twitterImage !== null) {
+        if ($value->twitterImage) {
             $asset = Craft::$app->elements->getElementById($value->twitterImage);
             $twitterImageElements = [$asset];
         }
