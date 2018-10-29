@@ -245,10 +245,10 @@ class SproutSeo extends Plugin
 
             // Settings
             'sprout-seo/settings/<settingsSectionHandle:.*>' =>
-                'sprout-base/settings/edit-settings',
+                'sprout/settings/edit-settings',
 
             'sprout-seo/settings' =>
-                'sprout-base/settings/edit-settings',
+                'sprout/settings/edit-settings',
         ];
     }
 

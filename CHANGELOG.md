@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.0.0-beta.10 - 2018-10-27
+
+### Changed
+- Updated Sprout Base requirement to v3.0.10
+
+### Fixed
+- Fixed error when switching entry type while using Metadata Field. [#117]
+
+[#117]: https://github.com/barrelstrength/craft-sprout-seo/issues/117
+
 ## 4.0.0-beta.9 - 2018-10-22
 
 ### Changed
