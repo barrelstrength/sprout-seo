@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.11 - 2018-10-29
+
+### Changed
+- Updated Sprout Base requirement to v4.0.0
+
 ## 4.0.0-beta.10 - 2018-10-27
 
 ### Changed
