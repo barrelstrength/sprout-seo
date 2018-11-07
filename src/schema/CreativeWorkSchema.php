@@ -71,17 +71,6 @@ class CreativeWorkSchema extends ThingSchema
             $this->addDate('datePublished', $element->postDate);
         }
 
-        if (method_exists($element, 'getAuthor')) {
-            $person = new WebsiteIdentityPersonSchema();
-
-            $person->globals = $this->globals;
-            $person->element = $element->getAuthor();
-            $person->prioritizedMetadataModel = $this->prioritizedMetadataModel;
-
-            $this->addProperty('author', $person->getSchema());
-            $this->addProperty('creator', $person->getSchema());
-        }
-
         $identityType = $identity['@type'];
 
         if (isset($websiteIdentity[$identityType])) {
@@ -95,6 +84,10 @@ class CreativeWorkSchema extends ThingSchema
 
             $identitySchema->globals = $this->globals;
 
+            // Assume the Global Organization or Person is the Creator
+            // More specific implementations will require a Custom Schema Integration
+            $this->addProperty('author', $person->getSchema());
+            $this->addProperty('creator', $person->getSchema());
             $this->addProperty('publisher', $identitySchema->getSchema());
         }
     }
