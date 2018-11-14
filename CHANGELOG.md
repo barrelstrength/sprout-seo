@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.0-beta.12 - 2018-11-14
+
+### Changed
+- Updated Sitemap URL Pattern column to display an info modal when URL Patterns include Twig tags
+- Updated CreativeWork Schema integration to use Website Identity instead of Author for author and creator schema [#112] 
+- Updated Sprout Base requirement to v4.0.2
+
+[#112]: https://github.com/barrelstrength/craft-sprout-seo/issues/112
+
 ## 4.0.0-beta.11 - 2018-10-29
 
 ### Changed

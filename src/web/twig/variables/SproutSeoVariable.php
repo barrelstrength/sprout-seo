@@ -866,4 +866,22 @@ class SproutSeoVariable
 
         return $sites;
     }
+
+    /**
+     * @param null $uri
+     *
+     * @return bool
+     */
+    public function uriHasTags($uri = null)
+    {
+        if (strstr($uri, '{{')) {
+            return true;
+        }
+
+        if (strstr($uri, '{%')) {
+            return true;
+        }
+
+        return false;
+    }
 }
