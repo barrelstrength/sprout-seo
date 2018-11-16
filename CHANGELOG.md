@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.13 - 2018-11-16
+
+### Fixed
+- Fixed CreativeWork Schema integration to reference Website Identity for author and creator schema 
+
 ## 4.0.0-beta.12 - 2018-11-14
 
 ### Changed
