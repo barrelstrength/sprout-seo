@@ -86,8 +86,8 @@ class CreativeWorkSchema extends ThingSchema
 
             // Assume the Global Organization or Person is the Creator
             // More specific implementations will require a Custom Schema Integration
-            $this->addProperty('author', $person->getSchema());
-            $this->addProperty('creator', $person->getSchema());
+            $this->addProperty('author', $identitySchema->getSchema());
+            $this->addProperty('creator', $identitySchema->getSchema());
             $this->addProperty('publisher', $identitySchema->getSchema());
         }
     }
