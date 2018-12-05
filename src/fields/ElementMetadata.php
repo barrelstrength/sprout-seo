@@ -182,20 +182,19 @@ class ElementMetadata extends Field
         // Set up our asset fields
         if ($value->optimizedImage) {
             // If validation fails, we need to make sure our asset is just an ID
-            if (is_array($value->optimizedImage)) {
-                $value->optimizedImage = $value->optimizedImage[0];
-            }
-
+            $value->optimizedImage = $this->getImageId($value->optimizedImage);
             $asset = Craft::$app->elements->getElementById($value->optimizedImage);
             $metaImageElements = [$asset];
         }
 
         if ($value->ogImage) {
+            $value->ogImage = $this->getImageId($value->ogImage);
             $asset = Craft::$app->elements->getElementById($value->ogImage);
             $ogImageElements = [$asset];
         }
 
         if ($value->twitterImage) {
+            $value->twitterImage = $this->getImageId($value->twitterImage);
             $asset = Craft::$app->elements->getElementById($value->twitterImage);
             $twitterImageElements = [$asset];
         }
@@ -375,6 +374,27 @@ class ElementMetadata extends Field
         return $this->setMetaDetailsValues('title', $title, $attributes);
     }
 
+    /**
+     * @param $image
+     * @return mixed
+     */
+    private function getImageId($image)
+    {
+        $imageId = $image;
+
+        if (is_array($image)) {
+            $imageId = $image[0];
+        }
+
+        return $imageId;
+    }
+
+    /**
+     * @param $type
+     * @param $value
+     * @param $attributes
+     * @return mixed
+     */
     private function setMetaDetailsValues($type, $value, $attributes)
     {
         $ogKey = 'og'.ucfirst($type);
