@@ -156,20 +156,17 @@ class Globals extends Model
     protected function getContacts()
     {
         $contacts = $this->{$this->globalKey};
-
-        if (!count($contacts)) {
-            return [];
-        }
-
         $contactPoints = [];
 
-        /** @noinspection ForeachSourceInspection */
-        foreach ($contacts as $contact) {
-            $contactPoints[] = [
-                '@type' => 'ContactPoint',
-                'contactType' => $contact['contactType'] ?? $contact[0],
-                'telephone' => $contact['telephone'] ?? $contact[1]
-            ];
+        if (is_array($contacts)) {
+            /** @noinspection ForeachSourceInspection */
+            foreach ($contacts as $contact) {
+                $contactPoints[] = [
+                    '@type' => 'ContactPoint',
+                    'contactType' => $contact['contactType'] ?? $contact[0],
+                    'telephone' => $contact['telephone'] ?? $contact[1]
+                ];
+            }
         }
 
         return $contactPoints;
@@ -183,19 +180,16 @@ class Globals extends Model
     protected function getSocial()
     {
         $profiles = $this->{$this->globalKey};
-
-        if (!count($profiles)) {
-            return [];
-        }
-
         $profileLinks = [];
 
-        /** @noinspection ForeachSourceInspection */
-        foreach ($profiles as $profile) {
-            $profileLinks[] = [
-                'profileName' => $profile['profileName'] ?? $profile[0],
-                'url' => $profile['url'] ?? $profile[1]
-            ];
+        if (is_array($profiles)) {
+            /** @noinspection ForeachSourceInspection */
+            foreach ($profiles as $profile) {
+                $profileLinks[] = [
+                    'profileName' => $profile['profileName'] ?? $profile[0],
+                    'url' => $profile['url'] ?? $profile[1]
+                ];
+            }
         }
 
         return $profileLinks;
