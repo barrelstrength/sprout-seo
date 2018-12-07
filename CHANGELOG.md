@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.0.0-beta.14 - 2018-12-07
+
+### Fixed
+- Fixed bug where switching Entry Types using a Metadata field could throw an error [#123, #124]
+- Fixed bug where schema type can be null before an identity exists
+- Improved support for PHP 7.2 [#122]
+
+[#123]: https://github.com/barrelstrength/craft-sprout-seo/issues/122
+[#123]: https://github.com/barrelstrength/craft-sprout-seo/issues/123
+[#124]: https://github.com/barrelstrength/craft-sprout-seo/pull/124
+
 ## 4.0.0-beta.13 - 2018-11-16
 
 ### Fixed
