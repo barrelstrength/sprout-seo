@@ -104,8 +104,10 @@ class OptimizeHelper
 
         $robotsSettings = [];
 
-        foreach ($robotsArray as $key => $value) {
-            $robotsSettings[$value] = 1;
+        if(!empty($robotsArray)) {
+            foreach ($robotsArray as $key => $value) {
+                $robotsSettings[$value] = 1;
+            }
         }
 
         $robots = [
