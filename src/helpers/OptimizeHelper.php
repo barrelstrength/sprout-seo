@@ -92,18 +92,23 @@ class OptimizeHelper
     /**
      * Return an array of all robots settings set to their boolean value of on or off
      *
-     * @param $robotsString
+     * @param $robotsValues
      *
      * @return array
      */
-    public static function prepareRobotsMetadataForSettings($robotsString)
+    public static function prepareRobotsMetadataForSettings($robotsValues)
     {
-        $robotsArray = explode(',', $robotsString);
+        if (is_string($robotsValues)){
+            $robotsArray = explode(',', $robotsValues);
 
-        $robotsSettings = [];
+            $robotsSettings = [];
 
-        foreach ($robotsArray as $key => $value) {
-            $robotsSettings[$value] = 1;
+            foreach ($robotsArray as $key => $value) {
+                $robotsSettings[$value] = 1;
+            }
+        }else{
+            // Value from content table
+            $robotsSettings = $robotsValues;
         }
 
         $robots = [
@@ -116,7 +121,7 @@ class OptimizeHelper
         ];
 
         foreach ($robots as $key => $value) {
-            if (isset($robotsSettings[$key])) {
+            if (isset($robotsSettings[$key]) && $robotsSettings[$key]) {
                 $robots[$key] = 1;
             }
         }

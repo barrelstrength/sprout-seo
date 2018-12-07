@@ -71,7 +71,7 @@ class CreativeWorkSchema extends ThingSchema
             $this->addDate('datePublished', $element->postDate);
         }
 
-        $identityType = $identity['@type'];
+        $identityType = $identity['@type'] ?? null;
 
         if (isset($websiteIdentity[$identityType])) {
             // Determine if we have an Organization or Person Schema Type
