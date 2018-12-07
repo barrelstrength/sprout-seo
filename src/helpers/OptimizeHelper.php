@@ -96,9 +96,11 @@ class OptimizeHelper
      *
      * @return array
      */
-    public static function prepareRobotsMetadataForSettings($robotsString)
+    public static function prepareRobotsMetadataForSettings($robotsArray)
     {
-        $robotsArray = explode(',', $robotsString);
+        if(is_string($robotsArray)) {
+            $robotsArray = explode(',', $robotsArray);
+        }
 
         $robotsSettings = [];
 
