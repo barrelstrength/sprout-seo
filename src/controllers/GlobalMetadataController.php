@@ -13,6 +13,7 @@ use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutbase\SproutBase;
+use craft\helpers\Template;
 use craft\web\Controller;
 use Craft;
 use craft\helpers\DateTimeHelper;
@@ -33,6 +34,7 @@ class GlobalMetadataController extends Controller
      * @return Response
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
+     * @throws \Twig_Error_Loader
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
@@ -78,29 +80,27 @@ class GlobalMetadataController extends Controller
 
         $addressId = $globals->identity['addressId'] ?? null;
 
-        $addressInfoModel = SproutBase::$app->addressField->getAddressById($addressId);
+        $addressModel = SproutBase::$app->addressField->getAddressById($addressId);
 
-        $countryCode = $addressInfoModel->countryCode;
+        $countryCode = $addressModel->countryCode;
 
         $addressHelper = new AddressHelper();
-        $addressHelper->setParams($countryCode, 'address', $addressInfoModel);
+        $addressHelper->setNamespace('address');
+        $addressHelper->setCountryCode($countryCode);
+        $addressHelper->setAddressModel($addressModel);
 
-        $addressFormat = "";
-        if ($addressId) {
-            $addressFormat = $addressHelper->getAddressWithFormat($addressInfoModel);
-        }
-
-        $countryInput = $addressHelper->countryInput();
-        $addressForm = $addressHelper->getAddressFormHtml();
+        $addressDisplayHtml = $addressId ? $addressHelper->getAddressDisplayHtml($addressModel) : '';
+        $countryInputHtml = $addressHelper->getCountryInputHtml();
+        $addressFormHtml = $addressHelper->getAddressFormHtml();
 
         // Render the template!
         return $this->renderTemplate('sprout-base-seo/globals/'.$selectedTabHandle, [
             'globals' => $globals,
             'currentSite' => $currentSite,
             'selectedTabHandle' => $selectedTabHandle,
-            'addressFormat' => $addressFormat,
-            'countryInput'  => $countryInput,
-            'addressForm'   => $addressForm
+            'addressDisplayHtml' => Template::raw($addressDisplayHtml),
+            'countryInputHtml' => Template::raw($countryInputHtml),
+            'addressFormHtml' => Template::raw($addressFormHtml)
         ]);
     }
 
