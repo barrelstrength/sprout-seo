@@ -486,7 +486,7 @@ abstract class Schema
         if ($addressModel->id) {
             $address->addressCountry = $addressModel->countryCode;
             $address->addressLocality = $addressModel->locality;
-            $address->addressRegion = $addressModel->administrativeArea;
+            $address->addressRegion = $addressModel->administrativeAreaCode;
             $address->postalCode = $addressModel->postalCode;
             $address->streetAddress = $addressModel->address1.' '.$addressModel->address2;
 
