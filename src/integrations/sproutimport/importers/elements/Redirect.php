@@ -15,7 +15,7 @@ class Redirect extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function getModelName()
+    public function getModelName(): string
     {
         return RedirectElement::class;
     }
