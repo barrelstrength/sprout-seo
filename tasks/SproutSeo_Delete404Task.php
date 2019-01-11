@@ -59,7 +59,7 @@ class SproutSeo_Delete404Task extends BaseTask
         $query->limit = $this->_totalToDelete;
 		$query->order = "dateUpdated ASC";
 
-		$this->_redirectIds = $query->queryAll();;
+		$this->_redirectIds = $query->queryAll();
 
 		return count($this->_redirectIds);
 	}
