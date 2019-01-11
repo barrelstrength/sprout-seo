@@ -1,5 +1,13 @@
 [
   {
+    "version": "3.5.2",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-seo/archive/v3.5.2.zip",
+    "date": "2019-01-11T08:00:00+00:00",
+    "notes": [
+      "[Fixed] Optimized SproutSeo_Delete404 task"
+    ]
+  },
+  {
      "version": "3.5.1",
      "downloadUrl": "https://github.com/barrelstrength/craft-sprout-seo/archive/v3.5.1.zip",
      "date": "2018-09-14T08:00:00+00:00",
