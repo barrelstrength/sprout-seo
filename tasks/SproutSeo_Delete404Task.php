@@ -7,7 +7,7 @@ namespace Craft;
 class SproutSeo_Delete404Task extends BaseTask
 {
 	private $_totalToDelete;
-	private $_redirectModels;
+	private $_redirectIds;
 	private $_redirectIdToExclude;
 
 	/**
@@ -45,26 +45,23 @@ class SproutSeo_Delete404Task extends BaseTask
 		$settings             = $this->getSettings();
 		$this->_totalToDelete = $settings->totalToDelete;
 		$this->_redirectIdToExclude = $settings->redirectIdToExclude;
-		$params = array(
-			':method' => SproutSeo_RedirectMethods::PageNotFound
-		);
 
-		$criteria = new \CDbCriteria;
-		$criteria->condition = 'method = :method';
+        $query = craft()->db->createCommand()
+            ->select('id')
+            ->from('{{sproutseo_redirects}}')
+            ->where(array('method' => SproutSeo_RedirectMethods::PageNotFound));
 
 		if ($this->_redirectIdToExclude)
 		{
-			$criteria->condition .=' and id != :redirectId';
-			$params[':redirectId'] =  $this->_redirectIdToExclude;
+            $query->andWhere('id != :redirectId', array(':redirectId' => $this->_redirectIdToExclude));
 		}
 
-		$criteria->limit  = $this->_totalToDelete;
-		$criteria->order  = "dateUpdated ASC";
-		$criteria->params = $params;
+        $query->limit = $this->_totalToDelete;
+		$query->order = "dateUpdated ASC";
 
-		$this->_redirectModels = SproutSeo_RedirectRecord::model()->findAll($criteria);
+		$this->_redirectIds = $query->queryAll();;
 
-		return count($this->_redirectModels);
+		return count($this->_redirectIds);
 	}
 
 	/**
@@ -76,12 +73,12 @@ class SproutSeo_Delete404Task extends BaseTask
 	 */
 	public function runStep($step)
 	{
-		$model    = $this->_redirectModels[$step];
+		$modelId    = isset($this->_redirectIds[$step]['id']) ? $this->_redirectIds[$step]['id'] : null;
 		$response = false;
 
-		if ($model)
+		if ($modelId)
 		{
-			$response = craft()->elements->deleteElementById($model->id);
+			$response = craft()->elements->deleteElementById($modelId);
 		}
 
 		if (!$response)
