@@ -7,11 +7,11 @@
 
 namespace barrelstrength\sproutseo\jobs;
 
+use craft\db\Query;
 use craft\queue\BaseJob;
 use Craft;
 
 use barrelstrength\sproutseo\SproutSeo;
-use barrelstrength\sproutseo\elements\Redirect;
 use barrelstrength\sproutseo\enums\RedirectMethods;
 
 /**
@@ -41,24 +41,19 @@ class Delete404 extends BaseJob
      */
     public function execute($queue)
     {
-        $params = [
-            ':method' => RedirectMethods::PageNotFound
-        ];
-
-        $condition = 'method = :method';
+        $query = (new Query())
+            ->select(['id'])
+            ->from(['{{%sproutseo_redirects}}'])
+            ->where(['method' =>  RedirectMethods::PageNotFound]);
 
         if ($this->redirectIdToExclude) {
-            $condition .= ' and sproutseo_redirects.id != :redirectId';
-            $params[':redirectId'] = $this->redirectIdToExclude;
+            $query->andWhere('id != :redirectId', [':redirectId' => $this->redirectIdToExclude]);
         }
 
-        $redirects = Redirect::find()
-            ->where($condition, $params)
-            ->limit($this->totalToDelete)
-            ->orderBy(['dateUpdated' => SORT_ASC])
-            ->anyStatus()
-            ->siteId($this->siteId)
-            ->all();
+        $query->limit = $this->totalToDelete;
+        $query->orderBy = ['dateUpdated' => SORT_ASC];
+
+        $redirects = $query->all();
 
         $totalSteps = count($redirects);
 
@@ -66,10 +61,10 @@ class Delete404 extends BaseJob
             $step = $key + 1;
             $this->setProgress($queue, $step / $totalSteps);
 
-            $response = Craft::$app->elements->deleteElementById($redirect->id);
+            $response = Craft::$app->elements->deleteElementById($redirect['id']);
 
             if (!$response) {
-                SproutSeo::error('SproutSeo has failed to delete the 404 redirect Id:'.$redirect->id);
+                SproutSeo::error('SproutSeo has failed to delete the 404 redirect Id:'.$redirect['id']);
             }
         }
 
