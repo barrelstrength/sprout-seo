@@ -83,7 +83,7 @@ class SproutSeo_Delete404Task extends BaseTask
 
 		if (!$response)
 		{
-			SproutSeoPlugin::log('SproutSeo has failed to delete the 404 redirect Id:'.$model->id, LogLevel::Error);
+			SproutSeoPlugin::log('SproutSeo has failed to delete the 404 redirect Id:'.$modelId, LogLevel::Error);
 		}
 
 		return true;
