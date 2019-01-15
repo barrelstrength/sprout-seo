@@ -1,5 +1,13 @@
 [
   {
+    "version": "3.5.3",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-seo/archive/v3.5.3.zip",
+    "date": "2019-01-15T08:00:00+00:00",
+    "notes": [
+      "[Fixed] [Fixed] Fixed an error where the model id for the SproutSeo_Delete404 task may not exist"
+    ]
+  },
+  {
     "version": "3.5.2",
     "downloadUrl": "https://github.com/barrelstrength/craft-sprout-seo/archive/v3.5.2.zip",
     "date": "2019-01-11T08:00:00+00:00",
