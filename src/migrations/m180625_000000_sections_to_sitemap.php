@@ -19,24 +19,31 @@ class m180625_000000_sections_to_sitemap extends Migration
     public function safeUp()
     {
         $table = '{{%sproutseo_sitemaps}}';
+        $sitemapsTableExists = $this->getDb()->tableExists($table);
 
-        $this->createTable($table, [
-            'id' => $this->primaryKey(),
-            'siteId' => $this->integer()->notNull(),
-            'urlEnabledSectionId' => $this->integer(),
-            'enabled' => $this->boolean()->defaultValue(false),
-            'type' => $this->string(),
-            'uri' => $this->string(),
-            'priority' => $this->decimal(11, 1),
-            'changeFrequency' => $this->string(),
-            'dateCreated' => $this->dateTime()->notNull(),
-            'dateUpdated' => $this->dateTime()->notNull(),
-            'uid' => $this->uid(),
-        ]);
+        if (!$sitemapsTableExists) {
+            $this->createTable($table, [
+                'id' => $this->primaryKey(),
+                'siteId' => $this->integer()->notNull(),
+                'urlEnabledSectionId' => $this->integer(),
+                'enabled' => $this->boolean()->defaultValue(false),
+                'type' => $this->string(),
+                'uri' => $this->string(),
+                'priority' => $this->decimal(11, 1),
+                'changeFrequency' => $this->string(),
+                'dateCreated' => $this->dateTime()->notNull(),
+                'dateUpdated' => $this->dateTime()->notNull(),
+                'uid' => $this->uid(),
+            ]);
 
-        $this->createIndex(null, $table, ['siteId'], false);
-        $this->addForeignKey(null, $table, ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
+            $this->createIndex(null, $table, ['siteId'], false);
+            $this->addForeignKey(null, $table, ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
+        }
 
+        if (!$this->db->columnExists($table, 'uri')) {
+            $this->addColumn($table, 'uri', $this->string()->after('type'));
+        }
+        
         $primarySite = (new Query())
             ->select(['id'])
             ->from(['{{%sites}}'])
@@ -70,7 +77,7 @@ class m180625_000000_sections_to_sitemap extends Migration
                 'urlEnabledSectionId' => $section['urlEnabledSectionId'],
                 'enabled' => $section['enabled'],
                 'type' => $newType ?? $section['type'],
-                'uri' => $section['uri'],
+                'uri' => $section['uri'] ?? null,
                 'priority' => $section['priority'],
                 'changeFrequency' => $section['changeFrequency'],
             ];
