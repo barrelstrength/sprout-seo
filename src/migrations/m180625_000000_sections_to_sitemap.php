@@ -19,9 +19,9 @@ class m180625_000000_sections_to_sitemap extends Migration
     public function safeUp()
     {
         $table = '{{%sproutseo_sitemaps}}';
-        $isSiteMapsTableExist = $this->getDb()->tableExists($table);
+        $sitemapsTableExists = $this->getDb()->tableExists($table);
 
-        if (!$isSiteMapsTableExist) {
+        if (!$sitemapsTableExists) {
             $this->createTable($table, [
                 'id' => $this->primaryKey(),
                 'siteId' => $this->integer()->notNull(),
@@ -43,8 +43,7 @@ class m180625_000000_sections_to_sitemap extends Migration
         if (!$this->db->columnExists($table, 'uri')) {
             $this->addColumn($table, 'uri', $this->string()->after('type'));
         }
-
-
+        
         $primarySite = (new Query())
             ->select(['id'])
             ->from(['{{%sites}}'])
