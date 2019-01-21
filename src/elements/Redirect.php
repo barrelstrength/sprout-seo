@@ -15,6 +15,7 @@ use barrelstrength\sproutseo\elements\db\RedirectQuery;
 use barrelstrength\sproutseo\records\Redirect as RedirectRecord;
 use barrelstrength\sproutseo\elements\actions\SetStatus;
 use Craft;
+use craft\db\Query;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
 use craft\elements\actions\Edit;
@@ -302,7 +303,7 @@ class Redirect extends Element
     {
         $methodOptions = SproutSeo::$app->redirects->getMethods();
 
-        $html = Craft::$app->view->renderTemplate('sprout-base-seo/redirects/_editor', [
+        $html = Craft::$app->view->renderTemplate('sprout-seo/redirects/_editor', [
             'redirect' => $this,
             'methodOptions' => $methodOptions
         ]);
@@ -311,6 +312,17 @@ class Redirect extends Element
         $html .= parent::getEditorHtml();
 
         return $html;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave(bool $isNew): bool
+    {
+        // Set the structure ID for Element::attributes() and afterSave()
+        $this->structureId = SproutSeo::$app->redirects->getStructureId();
+
+        return parent::beforeSave($isNew);
     }
 
     /**
@@ -363,9 +375,8 @@ class Redirect extends Element
 
         $record->save(false);
 
+        $structureId = SproutSeo::$app->redirects->getStructureId();
         if ($isNew) {
-            $structureId = SproutSeo::$app->redirects->getStructureId();
-            //Set the root structure
             Craft::$app->structures->appendToRoot($structureId, $this);
         }
 

@@ -94,7 +94,7 @@ class GlobalMetadataController extends Controller
         $addressFormHtml = $addressHelper->getAddressFormHtml();
 
         // Render the template!
-        return $this->renderTemplate('sprout-base-seo/globals/'.$selectedTabHandle, [
+        return $this->renderTemplate('sprout-seo/globals/'.$selectedTabHandle, [
             'globals' => $globals,
             'currentSite' => $currentSite,
             'selectedTabHandle' => $selectedTabHandle,

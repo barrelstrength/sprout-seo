@@ -1,0 +1,44 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: "Old URL"|t('sprout-base'),
+    instructions: "The relative path of the old location. The Base URL will be appended for you."|t('sprout-base'),
+    id: 'oldUrl',
+    name: 'oldUrl',
+    value: redirect.oldUrl,
+    errors: redirect.getErrors('oldUrl'),
+    first: true,
+    autofocus: true,
+    required: true
+}) }}
+
+{{ forms.textField({
+    label: "New URL"|t('sprout-base'),
+    instructions: "The relative path of the new location. Leave blank to redirect to the home page of this site. The Base URL will be appended for you."|t('sprout-base'),
+    id: 'newUrl',
+    name: 'newUrl',
+    value: redirect.newUrl,
+    errors: redirect.getErrors('newUrl'),
+    placeholder: "/"|t('sprout-base')
+}) }}
+
+{{ forms.selectField({
+    label: 'Method'|t('sprout-base'),
+    id: 'method',
+    name: 'method',
+    value: (redirect.method != "" ? redirect.method : '302'),
+    options: methodOptions,
+    errors: redirect.getErrors('method'),
+    required: true
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Evaluate regular expressions"|t('sprout-base'),
+    instructions: "Enable this setting to indicate that a regular expression is used in a redirect."|t('sprout-base'),
+    id: 'regex',
+    name: 'regex',
+    class: 'sproutseo',
+    on: redirect.regex,
+    onLabel: "On"|t('sprout-base'),
+    offLabel: "Off"|t('sprout-base')
+}) }}

@@ -43,7 +43,7 @@ class RedirectsController extends Controller
             throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Something went wrong'));
         }
 
-        return $this->renderTemplate('sprout-base-seo/redirects', [
+        return $this->renderTemplate('sprout-seo/redirects', [
             'currentSite' => $currentSite
         ]);
     }
@@ -120,7 +120,7 @@ class RedirectsController extends Controller
             ]
         ];
 
-        return $this->renderTemplate('sprout-base-seo/redirects/_edit', [
+        return $this->renderTemplate('sprout-seo/redirects/_edit', [
             'currentSite' => $currentSite,
             'redirect' => $redirect,
             'methodOptions' => $methodOptions,

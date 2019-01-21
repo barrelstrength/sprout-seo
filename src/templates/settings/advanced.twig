@@ -1,0 +1,34 @@
+{% import "_includes/forms" as forms %}
+
+{% set settings = craft.sproutSeo.getSettings() %}
+
+{{ forms.lightswitchField({
+    label: "Automatically render metadata"|t,
+    instructions: "Sprout SEO prepares and outputs all of your metadata in your template. If you'd like to manage this output manually, you can disable this setting and enable the 'Enable custom metadata variable' setting below."|t,
+    name: 'enableMetadataRendering',
+    on: (settings.enableMetadataRendering is empty ? false : true),
+    onLabel: "Enable"|t
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Enable custom metadata variable"|t,
+    instructions: "Make a global `metadata` variable available to all of your templates. The `metadata` variable will contain page-specific Prioritized Metadata and Structured Data, and all of your Globals. Ensure the {% sproutseo 'optimize' %} tag is in your template to generate the `metadata` variable. If you plan to handle the `metadata` variable on your own, you may also want to disable the 'Automatically render metadata' setting above, to ensure you don't output your metadata twice."|t,
+    name: 'toggleMetadataVariable',
+    toggle: 'settings-enablemetadatavariable',
+    on: settings.toggleMetadataVariable,
+    onLabel: "Enable"|t
+}) }}
+
+<div id="settings-enablemetadatavariable"
+     class="{% if not settings.toggleMetadataVariable %} hidden {% endif %}">
+
+    {{ forms.textField({
+        label: "Custom metadata variable name"|t,
+        instructions: "Give your global `metadata` variable a name. You will use this variable name to access your metadata in your templates."|t,
+        name: 'metadataVariable',
+        placeholder: 'metadata',
+        value: settings.metadataVariable,
+        errors: ''
+    }) }}
+
+</div>
