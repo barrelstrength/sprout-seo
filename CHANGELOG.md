@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.16 - 2019-01-23
+
+## Changed
+- Updates version number to ensure Craft Plugin Store recognizes this release
+
 ## 4.0.0-beta.15 - 2019-01-23
 
 ## Changed
