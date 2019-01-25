@@ -384,7 +384,7 @@ class Optimize extends Component
      */
     public function renderMetadata($metadata)
     {
-        $sproutSeoTemplatesPath = Craft::getAlias('@sproutbase/app/seo/');
+        $sproutSeoTemplatesPath = Craft::getAlias('@sproutseo/');
 
         Craft::$app->view->setTemplatesPath($sproutSeoTemplatesPath);
 

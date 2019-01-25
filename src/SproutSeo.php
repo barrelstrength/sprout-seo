@@ -79,6 +79,8 @@ class SproutSeo extends Plugin
 
         self::$app = $this->get('app');
 
+        Craft::setAlias('@sproutseo', $this->getBasePath());
+
         /** @noinspection CascadingDirnameCallsInspection */
         Craft::setAlias('@sproutseolib', dirname(__DIR__, 2).'/sprout-seo/lib');
 

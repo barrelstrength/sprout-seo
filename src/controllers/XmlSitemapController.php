@@ -93,7 +93,7 @@ class XmlSitemapController extends Controller
         $headers = Craft::$app->getResponse()->getHeaders();
         $headers->set('Content-Type', 'application/xml');
 
-        $templatePath = Craft::getAlias('@sproutbase/app/seo/templates/');
+        $templatePath = Craft::getAlias('@sproutseo/templates/');
         Craft::$app->view->setTemplatesPath($templatePath);
 
         // Render a specific sitemap
