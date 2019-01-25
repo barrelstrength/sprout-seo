@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.0.0-beta.17 - 2019-01-25
+
+### Added
+- Added initial support for Craft 3.1
+
+### Changed
+- Added support for siteId when running Delete 404 redirect job
+- Updated Craft CMS requirement to v3.1.0
+- Updated Sprout Base requirement to v4.0.5
+
+## Fixed 
+- Fixed some asset bundle namespaces
+
 ## 4.0.0-beta.16 - 2019-01-23
 
 ## Changed
