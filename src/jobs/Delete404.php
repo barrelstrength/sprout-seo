@@ -42,16 +42,18 @@ class Delete404 extends BaseJob
     public function execute($queue)
     {
         $query = (new Query())
-            ->select(['id'])
-            ->from(['{{%sproutseo_redirects}}'])
-            ->where(['method' =>  RedirectMethods::PageNotFound]);
+            ->select(['redirects.id'])
+            ->from(['{{%sproutseo_redirects}} redirects'])
+            ->where(['method' =>  RedirectMethods::PageNotFound, 'elements_sites.siteId' => $this->siteId])
+            ->innerJoin('{{%elements}} elements', '[[redirects.id]] = [[elements.id]]')
+            ->innerJoin('{{%elements_sites}} elements_sites', '[[elements_sites.elementId]] = [[elements.id]]');
 
         if ($this->redirectIdToExclude) {
-            $query->andWhere('id != :redirectId', [':redirectId' => $this->redirectIdToExclude]);
+            $query->andWhere('redirects.id != :redirectId', [':redirectId' => $this->redirectIdToExclude]);
         }
 
         $query->limit = $this->totalToDelete;
-        $query->orderBy = ['dateUpdated' => SORT_ASC];
+        $query->orderBy = ['redirects.dateUpdated' => SORT_ASC];
 
         $redirects = $query->all();
 
