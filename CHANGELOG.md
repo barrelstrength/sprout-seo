@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.0.0-beta.16 - 2019-01-23
+
+## Changed
+- Updates version number to ensure Craft Plugin Store recognizes this release
+
+## 4.0.0-beta.15 - 2019-01-23
+
+## Changed
+- Improved performance of Delete 404 job [#130]
+- Updated ElementImporter method signature to match base
+- Updated Address Field to include updates from Sprout Base
+- Improved support for Craft 2 to Craft 3 migration
+- Added several assets back to repo that were previously stored in Sprout Base
+- Updated barrelstrength/sprout-base to require v4.0.4
+
+## Fixed
+- Fixed issue where custom metadata variable was not available in templates [#128]
+
+[#128]: https://github.com/barrelstrength/craft-sprout-seo/issues/128
+[#130]: https://github.com/barrelstrength/craft-sprout-seo/issues/130
+
 ## 4.0.0-beta.14 - 2018-12-07
 
 ### Fixed
