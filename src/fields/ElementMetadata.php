@@ -9,14 +9,14 @@ namespace barrelstrength\sproutseo\fields;
 
 
 use barrelstrength\sproutbase\app\fields\web\assets\selectother\SelectOtherFieldAsset;
-use barrelstrength\sproutbase\app\seo\web\assets\schema\SchemaAsset;
-use barrelstrength\sproutbase\app\seo\web\assets\opengraph\OpenGraphAsset;
-use barrelstrength\sproutbase\app\seo\web\assets\tageditor\TagEditorAsset;
-use barrelstrength\sproutbase\app\seo\web\assets\twittercard\TwitterCardAsset;
+use barrelstrength\sproutseo\web\assets\schema\SchemaAsset;
+use barrelstrength\sproutseo\web\assets\opengraph\OpenGraphAsset;
+use barrelstrength\sproutseo\web\assets\tageditor\TagEditorAsset;
+use barrelstrength\sproutseo\web\assets\twittercard\TwitterCardAsset;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutbase\app\seo\web\assets\base\BaseAsset;
+use barrelstrength\sproutseo\web\assets\base\BaseAsset;
 use craft\base\Element;
 use craft\base\Field;
 use Craft;
