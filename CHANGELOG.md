@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.18 - 2019-01-25
+
+### Fixed 
+- Fixed syntax error in CHANGELOG.md
+
 ## 4.0.0-beta.17 - 2019-01-25
 
 ### Added
@@ -21,7 +26,7 @@
 ## 4.0.0-beta.15 - 2019-01-23
 
 ### Changed
-- Improved performance of Delete 404 job [#130]
+- Improved performance of Delete 404 job ([#130])
 - Updated ElementImporter method signature to match base
 - Updated Address Field to include updates from Sprout Base
 - Improved support for Craft 2 to Craft 3 migration
@@ -29,7 +34,7 @@
 - Updated barrelstrength/sprout-base to require v4.0.4
 
 ### Fixed
-- Fixed issue where custom metadata variable was not available in templates [#128]
+- Fixed issue where custom metadata variable was not available in templates ([#128])
 
 [#128]: https://github.com/barrelstrength/craft-sprout-seo/issues/128
 [#130]: https://github.com/barrelstrength/craft-sprout-seo/issues/130
@@ -37,9 +42,9 @@
 ## 4.0.0-beta.14 - 2018-12-07
 
 ### Fixed
-- Fixed bug where switching Entry Types using a Metadata field could throw an error [#123, #124]
+- Fixed bug where switching Entry Types using a Metadata field could throw an error ([#123], [#124])
 - Fixed bug where schema type can be null before an identity exists
-- Improved support for PHP 7.2 [#122]
+- Improved support for PHP 7.2 ([#122])
 
 [#123]: https://github.com/barrelstrength/craft-sprout-seo/issues/122
 [#123]: https://github.com/barrelstrength/craft-sprout-seo/issues/123
