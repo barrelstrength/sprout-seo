@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.19 - 2019-01-25
+
+### Fixed 
+- Fixed template path error 
+
 ## 4.0.0-beta.18 - 2019-01-25
 
 ### Fixed 
