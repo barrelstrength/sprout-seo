@@ -94,8 +94,10 @@ class SetStatus extends ElementAction
             Craft::$app->db->createCommand()->update(
                 '{{%elements_sites}}',
                 ['enabled' => $enable],
-                ['and', ['in', 'elementId', $elementIds], 'siteId = :siteId'],
-                [':siteId' => $query->siteId]
+                [
+                    'elementId' => $elementIds,
+                    'siteId' => $query->siteId,
+                ]
             )->execute();
         }
 

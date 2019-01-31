@@ -118,8 +118,7 @@ class GlobalMetadata extends Component
 
         Craft::$app->db->createCommand()->update('{{%sproutseo_globals}}',
             $values,
-            'siteId=:siteId',
-            [':siteId' => $globals->siteId]
+            ['siteId' => $globals->siteId]
         )->execute();
 
         return true;

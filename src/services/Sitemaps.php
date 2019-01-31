@@ -46,8 +46,10 @@ class Sitemaps extends Component
         $customSections = (new Query())
             ->select('*')
             ->from(['{{%sproutseo_sitemaps}}'])
-            ->where('siteId=:siteId', [':siteId' => $siteId])
-            ->andWhere('type=:type', [':type' => NoSection::class])
+            ->where([
+                'siteId' => $siteId,
+                'type' => NoSection::class,
+            ])
             ->all();
 
         $sitemapSections = [];
@@ -221,9 +223,9 @@ class Sitemaps extends Component
 
             // all sections saved for this site
             $sitemapSectionRecords = SitemapSectionRecord::find()
-                ->where(['in', 'siteId', $siteIds])
-                ->andWhere('urlEnabledSectionId= :urlEnabledSectionId', [
-                    ':urlEnabledSectionId' => $sitemapSectionRecord->urlEnabledSectionId
+                ->where([
+                    'siteId' => $siteIds,
+                    'urlEnabledSectionId' => $sitemapSectionRecord->urlEnabledSectionId,
                 ])
                 ->indexBy('siteId')
                 ->all();

@@ -99,9 +99,11 @@ class XmlSitemap extends Component
         $customSitemapSections = (new Query())
             ->select('id')
             ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = 1')
-            ->andWhere('type=:type', [':type' => NoSection::class])
-            ->andWhere('uri is not null')
+            ->where([
+                'enabled' => true,
+                'type' => NoSection::class,
+            ])
+            ->andWhere(['not', ['uri' => null]])
             ->count();
 
         if ($customSitemapSections > 0) {
@@ -282,13 +284,16 @@ class XmlSitemap extends Component
         $query = (new Query())
             ->select('*')
             ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = 1 and urlEnabledSectionId is not null')
-            ->andWhere('siteId = :siteId', [':siteId' => $siteId]);
+            ->where([
+                'enabled' => true,
+                'siteId' => $siteId,
+            ])
+            ->andWhere(['not', ['urlEnabledSectionId' => null]]);
 
         if ($sitemapKey == 'singles') {
-            $query->andWhere('type = :type', [':type' => Entry::class]);
+            $query->andWhere(['type' => Entry::class]);
         } else {
-            $query->andWhere('uniqueKey = :uniqueKey', [':uniqueKey' => $sitemapKey]);
+            $query->andWhere(['uniqueKey' => $sitemapKey]);
         }
 
         $results = $query->all();
@@ -317,9 +322,11 @@ class XmlSitemap extends Component
         $customSitemapSections = (new Query())
             ->select('uri, priority, changeFrequency, dateUpdated')
             ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = 1')
-            ->andWhere('siteId = :siteId', [':siteId' => $siteId])
-            ->andWhere('type=:type', [':type' => NoSection::class])
+            ->where([
+                'enabled' => true,
+                'siteId' => $siteId,
+                'type' => NoSection::class,
+            ])
             ->all();
 
         foreach ($customSitemapSections as $customSitemapSection) {
@@ -355,9 +362,11 @@ class XmlSitemap extends Component
         $customSitemapSections = (new Query())
             ->select('siteId, uri, priority, changeFrequency, dateUpdated')
             ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = 1')
-            ->andWhere(['siteId' => $siteIds])
-            ->andWhere('type=:type', [':type' => NoSection::class])
+            ->where([
+                'enabled' => true,
+                'siteId' => $siteIds,
+                'type' => NoSection::class,
+            ])
             ->indexBy('siteId')
             ->all();
 
