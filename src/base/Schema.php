@@ -447,7 +447,7 @@ abstract class Schema
      */
     public function addContactPoints($contacts)
     {
-        if (count($contacts)) {
+        if ($contacts) {
             $contactPoints = [];
 
             $contactPointSchema = new ContactPointSchema();

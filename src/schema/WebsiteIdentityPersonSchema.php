@@ -64,9 +64,11 @@ class WebsiteIdentityPersonSchema extends Schema
 
         $this->addText('gender', $schema['gender']);
 
-        if (count($socialProfiles)) {
-            $urls = array_column($socialProfiles, 'url');
-            $this->addSameAs($urls);
+        if (is_array($socialProfiles)) {
+            if (count($socialProfiles)) {
+                $urls = array_column($socialProfiles, 'url');
+                $this->addSameAs($urls);
+            }
         }
     }
 }

@@ -99,9 +99,9 @@ class XmlSitemap extends Component
         $customSitemapSections = (new Query())
             ->select('id')
             ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = 1')
+            ->where(['enabled' => true])
             ->andWhere('type=:type', [':type' => NoSection::class])
-            ->andWhere('uri is not null')
+            ->andWhere(['not', ['uri' => null]])
             ->count();
 
         if ($customSitemapSections > 0) {
@@ -282,13 +282,13 @@ class XmlSitemap extends Component
         $query = (new Query())
             ->select('*')
             ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = 1 and urlEnabledSectionId is not null')
-            ->andWhere('siteId = :siteId', [':siteId' => $siteId]);
+            ->where('enabled = true and [[urlEnabledSectionId]] is not null')
+            ->andWhere('[[siteId]] = :siteId', [':siteId' => $siteId]);
 
         if ($sitemapKey == 'singles') {
             $query->andWhere('type = :type', [':type' => Entry::class]);
         } else {
-            $query->andWhere('uniqueKey = :uniqueKey', [':uniqueKey' => $sitemapKey]);
+            $query->andWhere('[[uniqueKey]] = :uniqueKey', [':uniqueKey' => $sitemapKey]);
         }
 
         $results = $query->all();
@@ -315,10 +315,10 @@ class XmlSitemap extends Component
 
         // Fetch all Custom Sitemap defined in Sprout SEO
         $customSitemapSections = (new Query())
-            ->select('uri, priority, changeFrequency, dateUpdated')
+            ->select('uri, priority, [[changeFrequency]], [[dateUpdated]]')
             ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = 1')
-            ->andWhere('siteId = :siteId', [':siteId' => $siteId])
+            ->where(['enabled' => true])
+            ->andWhere('[[siteId]] = :siteId', [':siteId' => $siteId])
             ->andWhere('type=:type', [':type' => NoSection::class])
             ->all();
 
@@ -353,12 +353,12 @@ class XmlSitemap extends Component
         $urls = [];
 
         $customSitemapSections = (new Query())
-            ->select('siteId, uri, priority, changeFrequency, dateUpdated')
+            ->select('[[siteId]], uri, priority, [[changeFrequency]], [[dateUpdated]]')
             ->from('{{%sproutseo_sitemaps}}')
-            ->where('enabled = 1')
-            ->andWhere(['siteId' => $siteIds])
+            ->where(['enabled' => true])
+            ->andWhere(['[[siteId]]' => $siteIds])
             ->andWhere('type=:type', [':type' => NoSection::class])
-            ->indexBy('siteId')
+            ->indexBy('[[siteId]]')
             ->all();
 
         foreach ($sitesInGroup as $siteInGroup) {
