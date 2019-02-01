@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.20 - 2019-02-01
+
+### Improved 
+- Improved support for PostgreSQL
+
 ## 4.0.0-beta.19 - 2019-01-25
 
 ### Fixed 
