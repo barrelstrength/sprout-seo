@@ -1,0 +1,24 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.lightswitchField({
+    label: "Log 404 Redirects"|t('sprout-seo'),
+    instructions: "Log 'Page Not Found' errors as 404 Redirects. 404 Redirects will appear on the Redirects tab as a disabled 404 Redirect Element and can be updated to 301 or 302 Redirects."|t('sprout-seo'),
+    name: 'enable404RedirectLog',
+    toggle: 'settings-total-404redirects',
+    on: settings.enable404RedirectLog ? true : false,
+    onLabel: "Enable"|t('sprout-seo')
+}) }}
+
+<div id="settings-total-404redirects"
+     class="{% if not settings.enable404RedirectLog %} hidden {% endif %}">
+    {{ forms.textField({
+        label: "404 Redirect Limit"|t('sprout-seo'),
+        instructions: "The total number of 404 Redirects that will be stored in the database per-site. When the limit is reached, the least recently updated 404 Redirects will be deleted from the Redirects stored for that site."|t('sprout-seo'),
+        name: 'total404Redirects',
+        size:'10',
+        value: settings.total404Redirects,
+        errors: ''
+    }) }}
+</div>
+
+{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\general\\GeneralAsset") %}

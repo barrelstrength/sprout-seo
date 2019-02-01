@@ -9,14 +9,14 @@ namespace barrelstrength\sproutseo\fields;
 
 
 use barrelstrength\sproutbase\app\fields\web\assets\selectother\SelectOtherFieldAsset;
-use barrelstrength\sproutbase\app\seo\web\assets\schema\SchemaAsset;
-use barrelstrength\sproutbase\app\seo\web\assets\opengraph\OpenGraphAsset;
-use barrelstrength\sproutbase\app\seo\web\assets\tageditor\TagEditorAsset;
-use barrelstrength\sproutbase\app\seo\web\assets\twittercard\TwitterCardAsset;
+use barrelstrength\sproutseo\web\assets\schema\SchemaAsset;
+use barrelstrength\sproutseo\web\assets\opengraph\OpenGraphAsset;
+use barrelstrength\sproutseo\web\assets\tageditor\TagEditorAsset;
+use barrelstrength\sproutseo\web\assets\twittercard\TwitterCardAsset;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutbase\app\seo\web\assets\base\BaseAsset;
+use barrelstrength\sproutseo\web\assets\base\BaseAsset;
 use craft\base\Element;
 use craft\base\Field;
 use Craft;
@@ -126,7 +126,7 @@ class ElementMetadata extends Field
 //    {
 //        Craft::$app->view->registerAssetBundle(BaseAsset::class);
 //
-//        $html = Craft::$app->view->renderTemplate('sprout-base-seo/_includes/metadata-status-icons', [
+//        $html = Craft::$app->view->renderTemplate('sprout-seo/_includes/metadata-status-icons', [
 //            'sitemapSection' => $value
 //        ]);
 //
@@ -147,7 +147,7 @@ class ElementMetadata extends Field
         Craft::$app->getView()->registerAssetBundle(SchemaAsset::class);
         Craft::$app->getView()->registerAssetBundle(SelectOtherFieldAsset::class);
 
-        return Craft::$app->view->renderTemplate('sprout-base-seo/_components/fields/elementmetadata/settings', [
+        return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/settings', [
             'settings' => $this->getAttributes(),
             'schemas' => $schemas,
             'schemaSubtypes' => $schemaSubtypes
@@ -217,7 +217,7 @@ class ElementMetadata extends Field
         Craft::$app->getView()->registerAssetBundle(TagEditorAsset::class);
         Craft::$app->getView()->registerAssetBundle(SchemaAsset::class);
 
-        return Craft::$app->view->renderTemplate('sprout-base-seo/_components/fields/elementmetadata/input', [
+        return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/input', [
             'field' => $this,
             'name' => $name,
             'namespaceInputName' => $namespaceInputName,

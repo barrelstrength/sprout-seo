@@ -117,9 +117,9 @@ class ElementMetadata extends Component
     {
         //Get all layoutIds where this field is used from craft_fieldlayoutfields.layoutId
         $fieldLayoutIds = (new Query())
-            ->select('layoutId')
+            ->select('[[layoutId]]')
             ->from(['{{%fieldlayoutfields}}'])
-            ->where(['fieldId' => $fieldId])
+            ->where(['[[fieldId]]' => $fieldId])
             ->all();
 
         $fieldLayoutIds = array_column($fieldLayoutIds, 'layoutId');

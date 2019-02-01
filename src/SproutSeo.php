@@ -55,7 +55,7 @@ class SproutSeo extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '4.0.1';
+    public $schemaVersion = '4.0.2';
 
     /**
      * @var string
@@ -78,6 +78,8 @@ class SproutSeo extends Plugin
         ]);
 
         self::$app = $this->get('app');
+
+        Craft::setAlias('@sproutseo', $this->getBasePath());
 
         /** @noinspection CascadingDirnameCallsInspection */
         Craft::setAlias('@sproutseolib', dirname(__DIR__, 2).'/sprout-seo/lib');
@@ -197,7 +199,7 @@ class SproutSeo extends Plugin
     {
         return [
             'sprout-seo' => [
-                'template' => 'sprout-base-seo/index'
+                'template' => 'sprout-seo/index'
             ],
 
             // Globals
@@ -208,7 +210,7 @@ class SproutSeo extends Plugin
                 'sprout-seo/global-metadata/edit-global-metadata',
 
             'sprout-seo/globals' => [
-                'template' => 'sprout-base-seo/globals/index'
+                'template' => 'sprout-seo/globals/index'
             ],
 
             // Sitemaps

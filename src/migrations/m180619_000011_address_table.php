@@ -56,7 +56,7 @@ class m180619_000011_address_table extends Migration
                 'siteId' => $primarySiteId,
                 'fieldId' => null,
                 'countryCode' => $address['countryCode'],
-                'administrativeArea' => $address['administrativeArea'],
+                'administrativeAreaCode' => $address['administrativeArea'],
                 'locality' => $address['locality'],
                 'dependentLocality' => $address['dependentLocality'],
                 'postalCode' => $address['postalCode'],

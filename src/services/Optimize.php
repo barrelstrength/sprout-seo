@@ -96,13 +96,14 @@ class Optimize extends Component
             $this->elementMetadata = SproutSeo::$app->elementMetadata->getElementMetadata($element);
         }
 
-        return $this->getMetadata($element, $site);
+        return $this->getMetadata($element, $site, true, $context);
     }
 
     /**
      * @param      $element
      * @param      $site
      * @param bool $render
+     * @param bool $context
      *
      * @return array|null|string
      * @throws \Twig_Error_Loader
@@ -110,7 +111,7 @@ class Optimize extends Component
      * @throws \yii\base\Exception
      * @throws \yii\web\ServerErrorHttpException
      */
-    public function getMetadata(Element $element = null, $site, $render = true)
+    public function getMetadata(Element $element = null, $site, $render = true, &$context = null)
     {
         /**
          * @var Settings $settings
@@ -138,7 +139,7 @@ class Optimize extends Component
         }
 
         // Add metadata variable to Twig context
-        if ($settings->metadataVariable) {
+        if ($settings->toggleMetadataVariable && $context) {
             $context[$settings->metadataVariable] = $metadata;
         }
 
@@ -383,7 +384,7 @@ class Optimize extends Component
      */
     public function renderMetadata($metadata)
     {
-        $sproutSeoTemplatesPath = Craft::getAlias('@sproutbase/app/seo/');
+        $sproutSeoTemplatesPath = Craft::getAlias('@sproutseo/');
 
         Craft::$app->view->setTemplatesPath($sproutSeoTemplatesPath);
 

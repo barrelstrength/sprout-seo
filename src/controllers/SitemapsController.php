@@ -107,7 +107,7 @@ class SitemapsController extends Controller
 
         $customSections = SproutSeo::$app->sitemaps->getCustomSitemapSections($currentSite->id);
 
-        return $this->renderTemplate('sprout-base-seo/sitemaps', [
+        return $this->renderTemplate('sprout-seo/sitemaps', [
             'currentSite' => $currentSite,
             'firstSiteInGroup' => $firstSiteInGroup,
             'editableSiteIds' => $editableSiteIds,
@@ -163,7 +163,7 @@ class SitemapsController extends Controller
             ]
         ];
 
-        return $this->renderTemplate('sprout-base-seo/sitemaps/_edit', [
+        return $this->renderTemplate('sprout-seo/sitemaps/_edit', [
             'currentSite' => $currentSite,
             'sitemapSection' => $sitemapSection,
             'continueEditingUrl' => $continueEditingUrl,

@@ -2,10 +2,12 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
+use barrelstrength\sproutseo\SproutSeo;
 use craft\db\Migration;
 use craft\db\Query;
 
 use Craft;
+use craft\services\Plugins;
 
 /**
  * m180627_000000_craft2_to_craft3 migration.
@@ -17,13 +19,9 @@ class m180627_000000_craft2_to_craft3 extends Migration
      */
     public function safeUp()
     {
-        $plugin = (new Query())
-            ->select(['id', 'settings'])
-            ->from(['{{%plugins}}'])
-            ->where(['handle' => 'sprout-seo'])
-            ->one();
+        $plugin = SproutSeo::getInstance();
 
-        $settings = json_decode($plugin['settings'], true);
+        $settings = $plugin->getSettings()->getAttributes();
 
         if (isset($settings['toggleLocaleOverride']) && $settings['toggleLocaleOverride']) {
             $groups = Craft::$app->getSites()->getAllGroups();
@@ -43,7 +41,9 @@ class m180627_000000_craft2_to_craft3 extends Migration
             $settings['siteSettings'] = $sitesArray;
         }
 
-        $this->update('{{%plugins}}', ['settings' => json_encode($settings)], ['id' => $plugin['id']], [], false);
+        $pluginHandle = 'sprout-seo';
+        $projectConfig = Craft::$app->getProjectConfig();
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings', $settings);
 
         $globals = (new Query())
             ->select(['id', 'meta'])

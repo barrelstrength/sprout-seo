@@ -7,11 +7,11 @@
 
 namespace barrelstrength\sproutseo\jobs;
 
+use craft\db\Query;
 use craft\queue\BaseJob;
 use Craft;
 
 use barrelstrength\sproutseo\SproutSeo;
-use barrelstrength\sproutseo\elements\Redirect;
 use barrelstrength\sproutseo\enums\RedirectMethods;
 
 /**
@@ -41,24 +41,21 @@ class Delete404 extends BaseJob
      */
     public function execute($queue)
     {
-        $params = [
-            ':method' => RedirectMethods::PageNotFound
-        ];
-
-        $condition = 'method = :method';
+        $query = (new Query())
+            ->select(['redirects.id'])
+            ->from(['{{%sproutseo_redirects}} redirects'])
+            ->where(['method' =>  RedirectMethods::PageNotFound, 'elements_sites.siteId' => $this->siteId])
+            ->innerJoin('{{%elements}} elements', '[[redirects.id]] = [[elements.id]]')
+            ->innerJoin('{{%elements_sites}} elements_sites', '[[elements_sites.elementId]] = [[elements.id]]');
 
         if ($this->redirectIdToExclude) {
-            $condition .= ' and sproutseo_redirects.id != :redirectId';
-            $params[':redirectId'] = $this->redirectIdToExclude;
+            $query->andWhere('redirects.id != :redirectId', [':redirectId' => $this->redirectIdToExclude]);
         }
 
-        $redirects = Redirect::find()
-            ->where($condition, $params)
-            ->limit($this->totalToDelete)
-            ->orderBy(['dateUpdated' => SORT_ASC])
-            ->anyStatus()
-            ->siteId($this->siteId)
-            ->all();
+        $query->limit = $this->totalToDelete;
+        $query->orderBy = ['redirects.dateUpdated' => SORT_ASC];
+
+        $redirects = $query->all();
 
         $totalSteps = count($redirects);
 
@@ -66,10 +63,10 @@ class Delete404 extends BaseJob
             $step = $key + 1;
             $this->setProgress($queue, $step / $totalSteps);
 
-            $response = Craft::$app->elements->deleteElementById($redirect->id);
+            $response = Craft::$app->elements->deleteElementById($redirect['id']);
 
             if (!$response) {
-                SproutSeo::error('SproutSeo has failed to delete the 404 redirect Id:'.$redirect->id);
+                SproutSeo::error('SproutSeo has failed to delete the 404 redirect Id:'.$redirect['id']);
             }
         }
 

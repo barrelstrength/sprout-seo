@@ -102,7 +102,7 @@ class GlobalMetadata extends Component
         $results = (new Query())
             ->select('*')
             ->from(['{{%sproutseo_globals}}'])
-            ->where(['siteId' => $globals->siteId])
+            ->where(['[[siteId]]' => $globals->siteId])
             ->one();
 
         if (!$results) {
@@ -118,7 +118,7 @@ class GlobalMetadata extends Component
 
         Craft::$app->db->createCommand()->update('{{%sproutseo_globals}}',
             $values,
-            'siteId=:siteId',
+            '[[siteId]]=:siteId',
             [':siteId' => $globals->siteId]
         )->execute();
 

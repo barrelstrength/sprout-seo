@@ -13,6 +13,7 @@ use craft\db\Migration;
 use craft\models\Structure;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutbase\app\fields\migrations\Install as SproutBaseFieldsInstall;
+use craft\services\Plugins;
 
 class Install extends Migration
 {
@@ -138,7 +139,10 @@ class Install extends Migration
     /**
      * @throws \craft\errors\SiteNotFoundException
      * @throws \craft\errors\StructureNotFoundException
-     * @throws \yii\db\Exception
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\NotSupportedException
+     * @throws \yii\web\ServerErrorHttpException
      */
     protected function insertDefaultSettings()
     {
@@ -154,15 +158,9 @@ class Install extends Migration
         $settings->siteSettings[$site->id] = $site->id;
 
         // Add our default plugin settings
-        $settingsProperties = $settings->getAttributes();
-
-        $this->db->createCommand()->update('{{%plugins}}', [
-            'settings' => json_encode($settingsProperties)
-        ],
-            [
-                'handle' => 'sprout-seo'
-            ]
-        )->execute();
+        $pluginHandle = 'sprout-seo';
+        $projectConfig = Craft::$app->getProjectConfig();
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings', $settings->toArray());
     }
 
     /**

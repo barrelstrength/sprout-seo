@@ -1,0 +1,70 @@
+{% import "_includes/forms" as forms %}
+{% import "sprout-seo/_includes/sproutseo" as sprout %}
+
+{% set transformOptions = craft.sproutSeo.getTransforms() %}
+
+<div class="sproutseo-box-twitter">
+    <div class="sproutseo-fields" id="twitter-card">
+
+        {% set twitterCardOptions = {
+            '' : 'Select Twitter Card Type...'|t,
+            'summary' : 'Summary Card'|t,
+            'summary_large_image' : 'Summary Card with Large Image'|t,
+        } %}
+
+        {{ forms.selectField({
+            label: 'Twitter Card Type'|t,
+            instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
+            name: field.handle~'[metadata][twitterCard]',
+            options: twitterCardOptions,
+            value: values.twitterCard ?? 'summary',
+            errors: "",
+            required: false
+        }) }}
+
+        {{ forms.textField({
+            label: "Title"|t,
+            name: field.handle~"[metadata][twitterTitle]",
+            instructions: 'The Title of your content which will appear in Twitter Card metadata.'|t,
+            value: values.twitterTitle
+        }) }}
+
+        {{ forms.textareaField({
+            label: "Description"|t,
+            name: field.handle~"[metadata][twitterDescription]",
+            instructions: 'A description of your content which will appear in Twitter Card metadata.'|t,
+            value: values.twitterDescription
+        }) }}
+
+        {{ forms.field({
+            label: 'Image'|t,
+            instructions: 'An image that represents your content that will display in Twitter Card metadata.'|t,
+        }, forms.elementSelect({
+            elements: twitterImageElements,
+            sourceElementId: [values.twitterImage],
+            elementType: assetElementClassName,
+            sources: '*',
+            id: 'metaDetailsTwitterImage',
+            name: field.handle~'[metadata][twitterImage]',
+            jsClass: 'Craft.AssetSelectInput',
+            addButtonLabel: 'Select Image'|t,
+            limit: 1,
+            criteria: {kind: ['image'], siteId : null}
+        })) }}
+
+        {{ forms.textField({
+            label: "Creator"|t,
+            instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
+            name: field.handle~'[metadata][twitterCreator]',
+            value: values.twitterCreator,
+            errors: "",
+            required: false,
+            placeholder: '@ContentAuthor'
+        }) }}
+
+    </div>
+</div>
+
+{% js %}
+    new Craft.SproutSeoTwitterCard();
+{% endjs %}

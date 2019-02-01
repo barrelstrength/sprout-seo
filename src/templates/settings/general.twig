@@ -1,0 +1,32 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: "Plugin Name"|t('sprout-seo'),
+    instructions: "Intuitive, human-readable plugin name for the end user."|t('sprout-seo'),
+    id: 'pluginNameOverride',
+    name: 'pluginNameOverride',
+    value: settings.pluginNameOverride,
+    autofocus: true,
+    first: true,
+    errors: ''
+}) }}
+
+{{ forms.textField({
+    label: "Meta Description Length"|t('sprout-seo'),
+    instructions: "The maximum number of characters to allow for Meta Description fields."|t('sprout-seo'),
+    name: 'maxMetaDescriptionLength',
+    placeholder: '160',
+    size:'10',
+    value: settings.maxMetaDescriptionLength,
+    errors: ''
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Display Field Handles"|t,
+    instructions: "Enable this setting to display field handle next to the field name in your Element Metadata field settings."|t,
+    name: 'displayFieldHandles',
+    on: settings.displayFieldHandles ? true : false,
+    onLabel: "Enable"|t
+}) }}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\general\\GeneralAsset") %}

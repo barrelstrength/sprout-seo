@@ -8,19 +8,15 @@
 namespace barrelstrength\sproutseo\controllers;
 
 use barrelstrength\sproutseo\elements\Redirect;
-use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
-use craft\base\Element;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use Craft;
-
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
-use yii\web\HttpException;
 
 /**
  * Redirects controller
@@ -47,7 +43,7 @@ class RedirectsController extends Controller
             throw new ForbiddenHttpException(Craft::t('sprout-seo', 'Something went wrong'));
         }
 
-        return $this->renderTemplate('sprout-base-seo/redirects', [
+        return $this->renderTemplate('sprout-seo/redirects', [
             'currentSite' => $currentSite
         ]);
     }
@@ -124,7 +120,7 @@ class RedirectsController extends Controller
             ]
         ];
 
-        return $this->renderTemplate('sprout-base-seo/redirects/_edit', [
+        return $this->renderTemplate('sprout-seo/redirects/_edit', [
             'currentSite' => $currentSite,
             'redirect' => $redirect,
             'methodOptions' => $methodOptions,

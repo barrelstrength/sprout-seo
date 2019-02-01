@@ -1,0 +1,29 @@
+{% extends "sprout-seo/_layouts/general" %}
+{% import "_includes/forms" as forms %}
+{% import "sprout-seo/_includes/sproutseo" as sprout %}
+
+{% set settings = craft.sproutSeo.getSettings() %}
+{% set values = { robots : craft.sproutSeo.getGlobalRobots(globals.siteId) } %}
+
+{% block content %}
+
+    <form method="post" accept-charset="UTF-8" data-saveshortcut>
+        {{ csrfInput() }}
+        <input type="hidden" name="action"
+               value="sprout-seo/global-metadata/save-global-metadata">
+        <input type="hidden" name="globalKeys" value="meta,robots">
+        <input type="hidden" name="siteId" value="{{ globals.siteId }}">
+
+        {% set robotsContext = 'globals' %}
+        {% set robotsNamespace = 'sproutseo[globals][robots]' %}
+        {% include "sprout-seo/_components/fields/elementmetadata/blocks/robots" %}
+
+        <hr>
+
+        <div class="buttons">
+            <input type="submit" class="btn submit" value="Save"/>
+        </div>
+
+    </form>
+
+{% endblock %}
