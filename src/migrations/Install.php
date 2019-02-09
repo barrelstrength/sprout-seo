@@ -12,7 +12,7 @@ use Craft;
 use craft\db\Migration;
 use craft\models\Structure;
 use barrelstrength\sproutseo\models\Settings;
-use barrelstrength\sproutbase\app\fields\migrations\Install as SproutBaseFieldsInstall;
+use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use craft\services\Plugins;
 
 class Install extends Migration

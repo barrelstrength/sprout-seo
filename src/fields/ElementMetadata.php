@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\fields;
 
 
-use barrelstrength\sproutbase\app\fields\web\assets\selectother\SelectOtherFieldAsset;
+use barrelstrength\sproutbasefields\web\assets\selectother\SelectOtherFieldAsset;
 use barrelstrength\sproutseo\web\assets\schema\SchemaAsset;
 use barrelstrength\sproutseo\web\assets\opengraph\OpenGraphAsset;
 use barrelstrength\sproutseo\web\assets\tageditor\TagEditorAsset;

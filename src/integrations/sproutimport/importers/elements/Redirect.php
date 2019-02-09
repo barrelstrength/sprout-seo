@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\integrations\sproutimport\importers\elements;
 
-use barrelstrength\sproutbase\app\import\base\ElementImporter;
+use barrelstrength\sproutbaseimport\base\ElementImporter;
 use barrelstrength\sproutseo\elements\Redirect as RedirectElement;
 
 class Redirect extends ElementImporter

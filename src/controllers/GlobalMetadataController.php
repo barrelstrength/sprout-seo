@@ -7,7 +7,8 @@
 
 namespace barrelstrength\sproutseo\controllers;
 
-use barrelstrength\sproutbase\app\fields\helpers\AddressHelper;
+use barrelstrength\sproutbasefields\helpers\AddressHelper;
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
@@ -80,7 +81,7 @@ class GlobalMetadataController extends Controller
 
         $addressId = $globals->identity['addressId'] ?? null;
 
-        $addressModel = SproutBase::$app->addressField->getAddressById($addressId);
+        $addressModel = SproutBaseFields::$app->addressField->getAddressById($addressId);
 
         $countryCode = $addressModel->countryCode;
 
@@ -122,7 +123,7 @@ class GlobalMetadataController extends Controller
         $globalKeys = Craft::$app->getRequest()->getBodyParam('globalKeys');
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
-        $addressInfoId = SproutBase::$app->addressField->saveAddressByPost();
+        $addressInfoId = SproutBaseFields::$app->addressField->saveAddressByPost();
 
         if ($addressInfoId) {
             $postData['identity']['addressId'] = $addressInfoId;
