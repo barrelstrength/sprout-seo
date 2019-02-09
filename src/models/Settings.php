@@ -11,6 +11,10 @@ namespace barrelstrength\sproutseo\models;
 use craft\base\Model;
 use Craft;
 
+/**
+ *
+ * @property array $settingsNavItems
+ */
 class Settings extends Model
 {
     /**

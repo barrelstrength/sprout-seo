@@ -17,6 +17,13 @@ use craft\base\Model;
 /**
  * Class Metadata
  *
+ * @property null   $googlePlusMetaTagData
+ * @property array  $searchMetaTagData
+ * @property array  $robotsMetaTagData
+ * @property array  $twitterCardMetaTagData
+ * @property array  $geographicMetaTagData
+ * @property array  $metaTagData
+ * @property array  $openGraphMetaTagData
  * @property string uri
  */
 class Metadata extends Model

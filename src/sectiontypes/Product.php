@@ -22,7 +22,7 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Products';
     }
@@ -30,7 +30,7 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementIdColumnName()
+    public function getElementIdColumnName(): string
     {
         return 'typeId';
     }
@@ -38,7 +38,7 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getUrlFormatIdColumnName()
+    public function getUrlFormatIdColumnName(): string
     {
         return 'productTypeId';
     }
@@ -68,7 +68,7 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementTableName()
+    public function getElementTableName(): string
     {
         return 'commerce_products';
     }
@@ -76,7 +76,7 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementType()
+    public function getElementType(): string
     {
         return ProductElement::class;
     }
@@ -84,7 +84,7 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getMatchedElementVariable()
+    public function getMatchedElementVariable(): string
     {
         return 'product';
     }
@@ -94,7 +94,7 @@ class Product extends UrlEnabledSectionType
      *
      * @return UrlEnabledSection[]
      */
-    public function getAllUrlEnabledSections($siteId)
+    public function getAllUrlEnabledSections($siteId): array
     {
         $urlEnabledSections = [];
 
@@ -118,7 +118,7 @@ class Product extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return 'commerce_producttypes_sites';
     }
@@ -129,7 +129,7 @@ class Product extends UrlEnabledSectionType
      *
      * @return bool
      */
-    public function resaveElementsAfterFieldLayoutSaved()
+    public function resaveElementsAfterFieldLayoutSaved(): bool
     {
         return false;
     }
@@ -137,7 +137,7 @@ class Product extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function resaveElements($elementGroupId = null)
+    public function resaveElements($elementGroupId = null): bool
     {
         if (!$elementGroupId) {
             return false;

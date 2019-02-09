@@ -40,7 +40,7 @@ abstract class UrlEnabledSectionType
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return get_class($this);
     }
@@ -51,7 +51,7 @@ abstract class UrlEnabledSectionType
      *
      * @return bool
      */
-    public function isLocalized()
+    public function isLocalized(): bool
     {
         return true;
     }
@@ -63,7 +63,7 @@ abstract class UrlEnabledSectionType
      *
      * @return mixed
      */
-    abstract public function getName();
+    abstract public function getName(): string;
 
     /**
      * Allow an integration to define how to get its specific URL-Enabled Section by ID
@@ -89,14 +89,14 @@ abstract class UrlEnabledSectionType
      *
      * @return string
      */
-    abstract public function getTableName();
+    abstract public function getTableName(): string;
 
     /**
      * Get the name of the database column that stores the ID for this URL Enabled Section
      *
-     * @return mixed
+     * @return string
      */
-    abstract public function getElementIdColumnName();
+    abstract public function getElementIdColumnName(): string;
 
     /**
      * A silly variable because Craft Commerce inconsistently names productTypeId/typeId.
@@ -104,15 +104,17 @@ abstract class UrlEnabledSectionType
      * Updating this setting allows us to target different typeId column values in different
      * contexts such as when we are trying to match an element on page load and when we are
      * trying to determine the URL-format.
+     *
+     * @return string
      */
-    abstract public function getUrlFormatIdColumnName();
+    abstract public function getUrlFormatIdColumnName(): string;
 
     /**
      * By default, we assume the uriFormat setting is in a column of the same name
      *
      * @return string
      */
-    public function getUrlFormatColumnName()
+    public function getUrlFormatColumnName(): string
     {
         return 'uriFormat';
     }
@@ -120,16 +122,16 @@ abstract class UrlEnabledSectionType
     /**
      * Return the name of the Element Type managed by this URL-Enabled Section Type
      *
-     * @return Element
+     * @return string
      */
-    abstract public function getElementType();
+    abstract public function getElementType(): string;
 
     /**
      * Return the name of the table that element-specific data is stored
      *
      * @return string
      */
-    abstract public function getElementTableName();
+    abstract public function getElementTableName(): string;
 
     /**
      * Return the variable name that is used by the Element for this URL-Enabled section
@@ -140,7 +142,7 @@ abstract class UrlEnabledSectionType
      *
      * @return string
      */
-    abstract public function getMatchedElementVariable();
+    abstract public function getMatchedElementVariable(): string;
 
     /**
      * Returns the value to add to the database query to ensure that entries being received have a published status.
@@ -161,7 +163,7 @@ abstract class UrlEnabledSectionType
      *
      * @return UrlEnabledSection[]
      */
-    abstract public function getAllUrlEnabledSections($siteId);
+    abstract public function getAllUrlEnabledSections($siteId): array;
 
     /**
      * Disable support for resaving elements when a field layout for this
@@ -170,7 +172,7 @@ abstract class UrlEnabledSectionType
      *
      * @return bool
      */
-    public function resaveElementsAfterFieldLayoutSaved()
+    public function resaveElementsAfterFieldLayoutSaved(): bool
     {
         return true;
     }
@@ -182,5 +184,5 @@ abstract class UrlEnabledSectionType
      *
      * @return bool
      */
-    abstract public function resaveElements($elementGroupId = null);
+    abstract public function resaveElements($elementGroupId = null): bool;
 }

@@ -27,9 +27,14 @@ use craft\web\ErrorHandler;
 use craft\events\ExceptionEvent;
 use craft\web\UrlManager;
 use yii\web\HttpException;
-use yii\web\NotFoundHttpException;
 use yii\base\Event;
 
+/**
+ *
+ * @property mixed $cpNavItem
+ * @property array $cpUrlRules
+ * @property array $siteUrlRules
+ */
 class SproutSeo extends Plugin
 {
     use BaseSproutTrait;

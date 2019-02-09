@@ -22,6 +22,10 @@ use barrelstrength\sproutseo\records\SitemapSection as SitemapSectionRecord;
 use yii\db\Exception;
 
 
+/**
+ *
+ * @property array $transforms
+ */
 class Sitemaps extends Component
 {
     /**

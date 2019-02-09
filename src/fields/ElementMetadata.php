@@ -29,11 +29,16 @@ use PhpScience\TextRank\Tool\StopWords\Norwegian;
 use PhpScience\TextRank\Tool\StopWords\Spanish;
 use yii\base\Exception;
 use craft\base\ElementInterface;
-use craft\base\PreviewableFieldInterface;
 use craft\elements\Asset;
 use craft\fields\Assets;
 use craft\db\mysql\Schema;
 
+/**
+ *
+ * @property array       $elementValidationRules
+ * @property string      $contentColumnType
+ * @property null|string $settingsHtml
+ */
 class ElementMetadata extends Field
 {
     /**

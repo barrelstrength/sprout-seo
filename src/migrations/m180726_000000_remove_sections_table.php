@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutseo\elements\Redirect;
 use craft\db\Migration;
 
 /**

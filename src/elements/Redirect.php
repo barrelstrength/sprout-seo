@@ -15,7 +15,6 @@ use barrelstrength\sproutseo\elements\db\RedirectQuery;
 use barrelstrength\sproutseo\records\Redirect as RedirectRecord;
 use barrelstrength\sproutseo\elements\actions\SetStatus;
 use Craft;
-use craft\db\Query;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
 use craft\elements\actions\Edit;
@@ -26,6 +25,8 @@ use yii\base\Model;
 
 /**
  * SproutSeo - Redirect element type
+ *
+ * @property string $absoluteNewUrl
  */
 class Redirect extends Element
 {

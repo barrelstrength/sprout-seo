@@ -19,7 +19,7 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Categories';
     }
@@ -27,7 +27,7 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementIdColumnName()
+    public function getElementIdColumnName(): string
     {
         return 'groupId';
     }
@@ -35,7 +35,7 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getUrlFormatIdColumnName()
+    public function getUrlFormatIdColumnName(): string
     {
         return 'groupId';
     }
@@ -63,7 +63,7 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementTableName()
+    public function getElementTableName(): string
     {
         return 'categories';
     }
@@ -71,7 +71,7 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementType()
+    public function getElementType(): string
     {
         return CategoryElement::class;
     }
@@ -79,7 +79,7 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getMatchedElementVariable()
+    public function getMatchedElementVariable(): string
     {
         return 'category';
     }
@@ -89,7 +89,7 @@ class Category extends UrlEnabledSectionType
      *
      * @return UrlEnabledSection[]
      */
-    public function getAllUrlEnabledSections($siteId)
+    public function getAllUrlEnabledSections($siteId): array
     {
         $urlEnabledSections = [];
 
@@ -111,7 +111,7 @@ class Category extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return 'categorygroups_sites';
     }
@@ -119,7 +119,7 @@ class Category extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function resaveElements($elementGroupId = null)
+    public function resaveElements($elementGroupId = null): bool
     {
         if (!$elementGroupId) {
             return false;

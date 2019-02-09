@@ -8,11 +8,14 @@
 namespace barrelstrength\sproutseo\models;
 
 use barrelstrength\sproutbasefields\models\Address;
-use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use craft\base\Model;
 use craft\helpers\Json;
 
+/**
+ *
+ * @property null|string $websiteIdentityType
+ */
 class Globals extends Model
 {
     /**
