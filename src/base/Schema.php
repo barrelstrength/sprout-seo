@@ -17,7 +17,7 @@ use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
 
-use barrelstrength\sproutbase\app\fields\models\Phone as PhoneModel;
+use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use craft\helpers\Template as TemplateHelper;
 use DateTime;
 use Craft;
