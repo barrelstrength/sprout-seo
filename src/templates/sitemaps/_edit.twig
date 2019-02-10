@@ -59,8 +59,8 @@
 {% block content %}
 
     {{ forms.textField({
-        label: "URI"|t('sprout-base'),
-        instructions: "The relative path of the Custom Page. The Base URL will be appended for you."|t('sprout-base'),
+        label: "URI"|tt('sprout-seo'),
+        instructions: "The relative path of the Custom Page. The Base URL will be appended for you."|tt('sprout-seo'),
         id: "uri",
         required: true,
         name: 'uri',
@@ -128,11 +128,11 @@
 
     <div class="meta read-only">
         <div class="data">
-            <div class="heading">{{ "Site"|t('sprout-base') }}</div>
+            <div class="heading">{{ "Site"|tt('sprout-seo') }}</div>
             <div class="value">{{ currentSite.name }}</div>
         </div>
         <div class="data">
-            <div class="heading">{{ "Base URL"|t('sprout-base') }}</div>
+            <div class="heading">{{ "Base URL"|tt('sprout-seo') }}</div>
             <div class="value">{{ currentSite.baseUrl }}</div>
         </div>
     </div>
