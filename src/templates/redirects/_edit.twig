@@ -27,7 +27,7 @@
                 {% if redirect.id is not null %}
                     <hr>
                     <ul>
-                        <li><a class="formsubmit error" data-action="sprout-seo/redirects/delete-redirect" data-confirm="{{ 'Are you sure you want to delete this redirect?'|t('sprout-seo') }}" data-redirect="{{ cpUrl('sprout-seo/redirects/' ~ currentSite.handle)|hash }}">{{ "Delete"|tt('sprout-seo') }}</a></li>
+                        <li><a class="formsubmit error" data-action="sprout-seo/redirects/delete-redirect" data-confirm="{{ 'Are you sure you want to delete this redirect?'|t('sprout-seo') }}" data-redirect="{{ cpUrl('sprout-seo/redirects/' ~ currentSite.handle)|hash }}">{{ "Delete"|t('sprout-seo') }}</a></li>
                     </ul>
                 {% endif %}
             </ul>
@@ -71,16 +71,16 @@
 
     <div class="meta read-only">
         <div class="data">
-            <div class="heading">{{ "Site"|tt('sprout-seo') }}</div>
+            <div class="heading">{{ "Site"|t('sprout-seo') }}</div>
             <div class="value">{{ redirect.getSite().name }}</div>
         </div>
         <div class="data">
-            <div class="heading">{{ "Base URL"|tt('sprout-seo') }}</div>
+            <div class="heading">{{ "Base URL"|t('sprout-seo') }}</div>
             <div class="value">{{ redirect.getSite().baseUrl }}</div>
         </div>
         {% if redirect.id %}
             <div class="data">
-                <div class="heading">{{ "Count <span class='info'>The total number of times a redirect has been used.</span>"|tt('sprout-seo')|raw }}</div>
+                <div class="heading">{{ "Count <span class='info'>The total number of times a redirect has been used.</span>"|t('sprout-seo')|raw }}</div>
                 <div class="value">{{ redirect.count }}</div>
             </div>
         {% endif %}
@@ -90,20 +90,20 @@
 
     <div class="meta">
 
-        <h2>{{ "Regular Expressions"|tt('sprout-seo') }}</h2>
+        <h2>{{ "Regular Expressions"|t('sprout-seo') }}</h2>
 
-        <p>{{ "Redirect multiple URLs with a similar pattern by selecting the 'Evaluate regular expressions' option."|tt('sprout-seo') }}</p>
+        <p>{{ "Redirect multiple URLs with a similar pattern by selecting the 'Evaluate regular expressions' option."|t('sprout-seo') }}</p>
 
-        <p><strong>{{ "Old URL - Regular Expressions"|tt('sprout-seo') }}</strong></p>
+        <p><strong>{{ "Old URL - Regular Expressions"|t('sprout-seo') }}</strong></p>
         <ul>
-            <li>{{ "old-location/(.*)"|tt('sprout-seo') }}</li>
-            <li>{{ "old-location/(\\d{4})/(\\d{2})"|tt('sprout-seo') }}</li>
+            <li>{{ "old-location/(.*)"|t('sprout-seo') }}</li>
+            <li>{{ "old-location/(\\d{4})/(\\d{2})"|t('sprout-seo') }}</li>
         </ul>
 
-        <p><strong>{{ "New URL - Capture Groups"|tt('sprout-seo') }}</strong></p>
+        <p><strong>{{ "New URL - Capture Groups"|t('sprout-seo') }}</strong></p>
         <ul>
-            <li><em>{{ "new-location/$1"|tt('sprout-seo') }}</em></li>
-            <li><em>{{ "new-location/$1/$2"|tt('sprout-seo') }}</em></li>
+            <li><em>{{ "new-location/$1"|t('sprout-seo') }}</em></li>
+            <li><em>{{ "new-location/$1/$2"|t('sprout-seo') }}</em></li>
         </ul>
 
     </div>

@@ -1,8 +1,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-    label: "Old URL"|tt('sprout-seo'),
-    instructions: "The relative path of the old location. The Base URL will be appended for you."|tt('sprout-seo'),
+    label: "Old URL"|t('sprout-seo'),
+    instructions: "The relative path of the old location. The Base URL will be appended for you."|t('sprout-seo'),
     id: 'oldUrl',
     name: 'oldUrl',
     value: redirect.oldUrl,
@@ -13,17 +13,17 @@
 }) }}
 
 {{ forms.textField({
-    label: "New URL"|tt('sprout-seo'),
-    instructions: "The relative path of the new location. Leave blank to redirect to the home page of this site. The Base URL will be appended for you."|tt('sprout-seo'),
+    label: "New URL"|t('sprout-seo'),
+    instructions: "The relative path of the new location. Leave blank to redirect to the home page of this site. The Base URL will be appended for you."|t('sprout-seo'),
     id: 'newUrl',
     name: 'newUrl',
     value: redirect.newUrl,
     errors: redirect.getErrors('newUrl'),
-    placeholder: "/"|tt('sprout-seo')
+    placeholder: "/"|t('sprout-seo')
 }) }}
 
 {{ forms.selectField({
-    label: 'Method'|tt('sprout-seo'),
+    label: 'Method'|t('sprout-seo'),
     id: 'method',
     name: 'method',
     value: (redirect.method != "" ? redirect.method : '302'),
@@ -33,12 +33,12 @@
 }) }}
 
 {{ forms.lightswitchField({
-    label: "Evaluate regular expressions"|tt('sprout-seo'),
-    instructions: "Enable this setting to indicate that a regular expression is used in a redirect."|tt('sprout-seo'),
+    label: "Evaluate regular expressions"|t('sprout-seo'),
+    instructions: "Enable this setting to indicate that a regular expression is used in a redirect."|t('sprout-seo'),
     id: 'regex',
     name: 'regex',
     class: 'sproutseo',
     on: redirect.regex,
-    onLabel: "On"|tt('sprout-seo'),
-    offLabel: "Off"|tt('sprout-seo')
+    onLabel: "On"|t('sprout-seo'),
+    offLabel: "Off"|t('sprout-seo')
 }) }}
