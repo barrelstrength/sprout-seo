@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0-beta.21 - 2019-02-13
+
+### Changed
+- Added tag editor library (and other resources previously managed in Sprout Base)
+- Updated settings to implement SproutSettingsInterface
+- Updated barrelstrength/sprout-base requirement to v4.0.6
+- Added barrelstrength/sprout-base-fields requirement v1.0.0
+
 ## 4.0.0-beta.20 - 2019-02-01
 
 ### Improved 
