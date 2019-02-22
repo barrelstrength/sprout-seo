@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.0.0-beta.23 - 2019-02-22
+
+### Changed
+- Added improved validation so new Redirects will now replace existing 404 Redirects ([#131])
+
+### Fixed
+- Added support for redirecting to Absolute URLs ([#140])
+
+[#131]: https://github.com/barrelstrength/craft-sprout-seo/issues/131
+[#140]: https://github.com/barrelstrength/craft-sprout-seo/issues/140
+
 ## 4.0.0-beta.22 - 2019-02-14
 
 ### Fixed
