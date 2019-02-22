@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.24 - 2019-02-22
+
+### Changed
+- Added improved validation so new Redirects will now delete and replace existing 404 Redirects ([#131])
+
 ## 4.0.0-beta.23 - 2019-02-22
 
 ### Changed
