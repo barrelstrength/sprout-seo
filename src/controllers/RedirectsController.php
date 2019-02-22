@@ -142,7 +142,6 @@ class RedirectsController extends Controller
     public function actionSaveRedirect()
     {
         $this->requirePostRequest();
-        $isNew = false;
 
         $redirectId = Craft::$app->getRequest()->getBodyParam('redirectId');
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
@@ -164,7 +163,6 @@ class RedirectsController extends Controller
         } else {
             // Check if oldUrl exists on 404
             $redirect = new Redirect();
-            $isNew = true;
         }
 
         $defaultSiteId = Craft::$app->getSites()->getPrimarySite()->id;
@@ -173,14 +171,14 @@ class RedirectsController extends Controller
         $newUrl = Craft::$app->getRequest()->getBodyParam('newUrl');
         $method = Craft::$app->getRequest()->getRequiredBodyParam('method');
 
-        if ($method != RedirectMethods::PageNotFound && $isNew){
+        if ($method != RedirectMethods::PageNotFound){
             $redirect404 = Redirect::find()
                 ->siteId($siteId)
                 ->where(['oldUrl' => $oldUrl, 'method' => RedirectMethods::PageNotFound])
                 ->one();
 
             if ($redirect404){
-                $redirect =  $redirect404;
+                Craft::$app->elements->deleteElementById($redirect404->id);
             }
         }
 
