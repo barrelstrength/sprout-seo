@@ -20,7 +20,7 @@
             {% if enableMultilingualSitemaps and currentSite.id != firstSiteInGroup.id %}
                 <div class="buttons right">
                     <a class="btn submit icon"
-                       href="{{ url('sprout-seo/sitemaps') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit {group} Sitemap"|t('sprout-base', {
+                       href="{{ url('sprout-seo/sitemaps') ~ '/' ~ firstSiteInGroup.handle }}">{{ "Edit {group} Sitemap"|t('sprout-seo', {
                             group: siteGroup.name
                         }) }}</a>
                 </div>
@@ -80,14 +80,14 @@
 
     {% else %}
         {% set boxBody %}
-            <p>{{ "Multi-lingual sitemaps have a single sitemap edit page for all URL-Enabled Sites in a Site Group. Edit the <a href='{url}'>{group} Sitemap</a> to manage the multi-lingual sitemap for all sites in the site group."|t('sprout-base', {
+            <p>{{ "Multi-lingual sitemaps have a single sitemap edit page for all URL-Enabled Sites in a Site Group. Edit the <a href='{url}'>{group} Sitemap</a> to manage the multi-lingual sitemap for all sites in the site group."|t('sprout-seo', {
                     group: siteGroup.name,
                     url: url('sprout-seo/sitemaps') ~ '/' ~ firstSiteInGroup.handle
                 })|raw }}</p>
         {% endset %}
 
         {{ sprout.mediaBox({
-            heading: "{group} Multi-lingual Sitemap"|t('sprout-base', {
+            heading: "{group} Multi-lingual Sitemap"|t('sprout-seo', {
                 group: siteGroup.name
             }),
             body: boxBody,
@@ -127,7 +127,7 @@
                     <tr data-rowid="{{ customSectionId }}"
                         data-id="{{ customSection.id }}"
                         data-type="{{ customSection.type }}"
-                        data-name="{{ "Custom Page"|t('sprout-base') }}">
+                        data-name="{{ "Custom Page"|t('sprout-seo') }}">
 
                         {% block customSectionTableRow %}{% endblock %}
 

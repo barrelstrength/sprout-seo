@@ -459,10 +459,9 @@ class OptimizeHelper
      * @param $globals
      *
      * @return string
-     *
-     * @throws \RuntimeException
      * @throws Exception
-     * @throws ServerErrorHttpException
+     * @throws \Throwable
+     * @throws \yii\base\InvalidConfigException
      */
     public static function prepareAppendedTitleValue(
         $prioritizedMetadataModel,
@@ -480,7 +479,7 @@ class OptimizeHelper
 
             switch ($globalAppendTitleValue) {
                 case 'sitename':
-                    $globalAppendTitleValue = Craft::$app->getInfo()->name;
+                    $globalAppendTitleValue = Craft::$app->getSystemName();
                     break;
             }
         }
@@ -494,7 +493,7 @@ class OptimizeHelper
         if ($appendTitleValue) {
             // Add support for using {divider} and {siteName} in the Sitemap 'Append Meta Title' setting
             $appendTitleValue = Craft::$app->view->renderObjectTemplate($appendTitleValue, [
-                'siteName' => Craft::$app->getInfo()->name,
+                'siteName' => Craft::$app->getSystemName(),
                 'divider' => $seoDivider
             ]);
 

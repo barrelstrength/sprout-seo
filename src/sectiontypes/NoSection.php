@@ -15,7 +15,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return 'No Section';
     }
@@ -31,7 +31,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getElementIdColumnName()
+    public function getElementIdColumnName(): string
     {
         return '';
     }
@@ -39,7 +39,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getUrlFormatIdColumnName()
+    public function getUrlFormatIdColumnName(): string
     {
         return '';
     }
@@ -63,7 +63,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getElementTableName()
+    public function getElementTableName(): string
     {
         return '';
     }
@@ -71,7 +71,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getElementType()
+    public function getElementType(): string
     {
         return null;
     }
@@ -79,7 +79,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getMatchedElementVariable()
+    public function getMatchedElementVariable(): string
     {
         return '';
     }
@@ -87,7 +87,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getAllUrlEnabledSections($siteId)
+    public function getAllUrlEnabledSections($siteId): array
     {
         return [];
     }
@@ -95,7 +95,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return '';
     }
@@ -103,7 +103,7 @@ class NoSection extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function resaveElements($elementGroupId = null)
+    public function resaveElements($elementGroupId = null): bool
     {
         return true;
     }

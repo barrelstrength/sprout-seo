@@ -7,14 +7,14 @@
 
 namespace barrelstrength\sproutseo\web\assets\globals;
 
-use barrelstrength\sproutbase\app\fields\web\assets\address\AddressFieldAsset;
+use barrelstrength\sproutbasefields\web\assets\address\AddressFieldAsset;
 use barrelstrength\sproutseo\web\assets\base\BaseAsset;
 use barrelstrength\sproutseo\web\assets\tageditor\TagEditorAsset;
 use craft\web\AssetBundle;
 use craft\web\assets\datepickeri18n\DatepickerI18nAsset;
 use craft\web\assets\timepicker\TimepickerAsset;
 use yii\web\JqueryAsset;
-use barrelstrength\sproutbase\app\fields\web\assets\selectother\SelectOtherFieldAsset;
+use barrelstrength\sproutbasefields\web\assets\selectother\SelectOtherFieldAsset;
 
 class GlobalsAsset extends AssetBundle
 {

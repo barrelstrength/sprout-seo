@@ -31,6 +31,11 @@ use yii\base\Component;
 use craft\helpers\Json;
 use Craft;
 
+/**
+ *
+ * @property array $schemasTypes
+ * @property array $schemaOptions
+ */
 class Schema extends Component
 {
     const EVENT_REGISTER_SCHEMAS = 'registerSchemasEvent';

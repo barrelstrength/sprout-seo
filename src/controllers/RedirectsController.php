@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\controllers;
 
 use barrelstrength\sproutseo\elements\Redirect;
+use barrelstrength\sproutseo\enums\RedirectMethods;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
@@ -141,6 +142,7 @@ class RedirectsController extends Controller
     public function actionSaveRedirect()
     {
         $this->requirePostRequest();
+        $isNew = false;
 
         $redirectId = Craft::$app->getRequest()->getBodyParam('redirectId');
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
@@ -160,20 +162,34 @@ class RedirectsController extends Controller
                 $redirect->id = $redirectId;
             }
         } else {
+            // Check if oldUrl exists on 404
             $redirect = new Redirect();
+            $isNew = true;
         }
 
         $defaultSiteId = Craft::$app->getSites()->getPrimarySite()->id;
-
+        $siteId = $siteId ?? $defaultSiteId;
         $oldUrl = Craft::$app->getRequest()->getRequiredBodyParam('oldUrl', $redirect->oldUrl);
         $newUrl = Craft::$app->getRequest()->getBodyParam('newUrl');
+        $method = Craft::$app->getRequest()->getRequiredBodyParam('method');
+
+        if ($method != RedirectMethods::PageNotFound && $isNew){
+            $redirect404 = Redirect::find()
+                ->siteId($siteId)
+                ->where(['oldUrl' => $oldUrl, 'method' => RedirectMethods::PageNotFound])
+                ->one();
+
+            if ($redirect404){
+                $redirect =  $redirect404;
+            }
+        }
 
         // Set the event attributes, defaulting to the existing values for
         // whatever is missing from the post data
-        $redirect->siteId = $siteId ?? $defaultSiteId;
+        $redirect->siteId = $siteId;
         $redirect->oldUrl = $oldUrl;
         $redirect->newUrl = $newUrl;
-        $redirect->method = Craft::$app->getRequest()->getRequiredBodyParam('method');
+        $redirect->method = $method;
         $redirect->regex = Craft::$app->getRequest()->getBodyParam('regex');
 
         if (!$redirect->regex) {

@@ -16,6 +16,11 @@ use barrelstrength\sproutseo\sectiontypes\Product;
 use Craft;
 use yii\base\Component;
 
+/**
+ *
+ * @property mixed                                                  $matchedElementVariables
+ * @property \barrelstrength\sproutseo\base\UrlEnabledSectionType[] $registeredUrlEnabledSectionsEvent
+ */
 class UrlEnabledSections extends Component
 {
     const EVENT_REGISTER_URL_ENABLED_SECTION_TYPES = 'registerUrlEnabledSectionTypesEvent';

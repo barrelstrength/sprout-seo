@@ -20,6 +20,10 @@ use Craft;
 use DateTime;
 use craft\helpers\UrlHelper;
 
+/**
+ *
+ * @property \craft\models\Site[]|array $currentSitemapSites
+ */
 class XmlSitemap extends Component
 {
     /**

@@ -16,7 +16,7 @@ class TagEditorAsset extends AssetBundle
      */
     public function init()
     {
-        $this->sourcePath = '@sproutbaselib';
+        $this->sourcePath = '@sproutseolib';
 
         $this->css = [
             'jquery.tag-editor/css/jquery.tag-editor.css'

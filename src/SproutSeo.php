@@ -9,6 +9,7 @@ namespace barrelstrength\sproutseo;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
+use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\services\App;
@@ -18,6 +19,7 @@ use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 use Craft;
 use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
+use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -26,9 +28,14 @@ use craft\web\ErrorHandler;
 use craft\events\ExceptionEvent;
 use craft\web\UrlManager;
 use yii\web\HttpException;
-use yii\web\NotFoundHttpException;
 use yii\base\Event;
 
+/**
+ *
+ * @property mixed $cpNavItem
+ * @property array $cpUrlRules
+ * @property array $siteUrlRules
+ */
 class SproutSeo extends Plugin
 {
     use BaseSproutTrait;
@@ -72,6 +79,7 @@ class SproutSeo extends Plugin
         parent::init();
 
         SproutBaseHelper::registerModule();
+        SproutBaseFieldsHelper::registerModule();
 
         $this->setComponents([
             'app' => App::class
@@ -82,7 +90,7 @@ class SproutSeo extends Plugin
         Craft::setAlias('@sproutseo', $this->getBasePath());
 
         /** @noinspection CascadingDirnameCallsInspection */
-        Craft::setAlias('@sproutseolib', dirname(__DIR__, 2).'/sprout-seo/lib');
+        Craft::setAlias('@sproutseolib', dirname(__DIR__, 1).'/lib');
 
         // Add Twig Extensions
         Craft::$app->view->registerTwigExtension(new SproutSeoTwigExtension());
@@ -145,7 +153,11 @@ class SproutSeo extends Plugin
                     SproutSeo::$app->redirects->logRedirect($redirect->id, $currentSite);
 
                     if ($redirect->enabled && (int)$redirect->method !== 404) {
-                        Craft::$app->getResponse()->redirect($redirect->getAbsoluteNewUrl(), $redirect->method);
+                        if (UrlHelper::isAbsoluteUrl($redirect->newUrl)){
+                            Craft::$app->getResponse()->redirect($redirect->newUrl, $redirect->method);
+                        }else{
+                            Craft::$app->getResponse()->redirect($redirect->getAbsoluteNewUrl(), $redirect->method);
+                        }
                         Craft::$app->end();
                     }
                 }

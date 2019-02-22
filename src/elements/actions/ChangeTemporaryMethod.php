@@ -15,6 +15,8 @@ use craft\elements\db\ElementQueryInterface;
 
 /**
  * @todo - refactor and clean up
+ *
+ * @property string $triggerLabel
  */
 class ChangeTemporaryMethod extends ElementAction
 {
