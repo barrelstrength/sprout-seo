@@ -19,6 +19,7 @@ use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 use Craft;
 use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
+use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -152,7 +153,11 @@ class SproutSeo extends Plugin
                     SproutSeo::$app->redirects->logRedirect($redirect->id, $currentSite);
 
                     if ($redirect->enabled && (int)$redirect->method !== 404) {
-                        Craft::$app->getResponse()->redirect($redirect->getAbsoluteNewUrl(), $redirect->method);
+                        if (UrlHelper::isAbsoluteUrl($redirect->newUrl)){
+                            Craft::$app->getResponse()->redirect($redirect->newUrl, $redirect->method);
+                        }else{
+                            Craft::$app->getResponse()->redirect($redirect->getAbsoluteNewUrl(), $redirect->method);
+                        }
                         Craft::$app->end();
                     }
                 }
