@@ -117,7 +117,6 @@ class SproutSeo extends Plugin
         });
 
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {
-
             $request = Craft::$app->getRequest();
 
             // Only handle front-end site requests that are not live preview
@@ -139,7 +138,8 @@ class SproutSeo extends Plugin
             if ($exception instanceof HttpException && $exception->statusCode === 404) {
 
                 $currentSite = Craft::$app->getSites()->getCurrentSite();
-                $absoluteUrl = $request->getAbsoluteUrl();
+                $path = $request->getPathInfo();
+                $absoluteUrl = UrlHelper::url($path);
 
                 // Check if the requested URL needs to be redirected
                 $redirect = SproutSeo::$app->redirects->findUrl($absoluteUrl, $currentSite);
