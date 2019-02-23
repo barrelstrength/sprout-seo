@@ -273,8 +273,8 @@ class Redirect extends Element
     {
         switch ($attribute) {
             case 'newUrl':
-
-                return $this->newUrl === null ? '/' : $this->newUrl;
+                $newUrl = $this->newUrl ?? '/';
+                return "<span class='sproutseo-elementindex-wrap'>{$newUrl}</span>";
 
             case 'test':
                 // no link for regex
