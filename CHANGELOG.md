@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.26 - 2019-02-23
+
+### Fixed
+- Updates schema version to ensure latest migrations are triggered
+
 ## 4.0.0-beta.25 - 2019-02-23
 
 ### Changed
