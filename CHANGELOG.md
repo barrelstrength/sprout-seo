@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.0.0-beta.25 - 2019-02-23
+
+### Changed
+- Improved display for Redirect Element Index page when displaying long URLs
+
+### Fixed 
+- Updated to use declarative query conditions and improve support for Postgres ([#138])
+- Added migration to clean up initial slashes that are no longer necessary in Old URL and New URL fields
+- Fixed bug where a deleted Redirect did not redirect to index page properly
+
+[#138]: https://github.com/barrelstrength/craft-sprout-seo/pull/138
+
 ## 4.0.0-beta.24 - 2019-02-22
 
 ### Changed
