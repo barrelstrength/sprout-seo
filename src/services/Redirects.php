@@ -260,10 +260,8 @@ class Redirects extends Component
         if (isset($seoSettings['total404Redirects']) && $seoSettings['total404Redirects'] && $redirect) {
 
             $count = Redirect::find()
-                ->where('method=:method and sproutseo_redirects.id != :redirectId', [
-                    ':method' => RedirectMethods::PageNotFound,
-                    ':redirectId' => $redirect->id
-                ])
+                ->where(['method' => RedirectMethods::PageNotFound])
+                ->andWhere(['not', ['sproutseo_redirects.id' => $redirect->id]])
                 ->anyStatus()
                 ->count();
 

@@ -49,7 +49,7 @@ class Delete404 extends BaseJob
             ->innerJoin('{{%elements_sites}} elements_sites', '[[elements_sites.elementId]] = [[elements.id]]');
 
         if ($this->redirectIdToExclude) {
-            $query->andWhere('redirects.id != :redirectId', [':redirectId' => $this->redirectIdToExclude]);
+            $query->andWhere(['not', ['redirects.id' => $this->redirectIdToExclude]]);
         }
 
         $query->limit = $this->totalToDelete;
