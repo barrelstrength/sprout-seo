@@ -80,9 +80,11 @@ class WebsiteIdentityWebsiteSchema extends Schema
             $this->addProperty('creator', $identitySchema->getSchema());
         }
 
-        if (count($socialProfiles)) {
-            $urls = array_column($socialProfiles, 'url');
-            $this->addSameAs($urls);
+        if (is_array($socialProfiles)) {
+            if (count($socialProfiles)) {
+                $urls = array_column($socialProfiles, 'url');
+                $this->addSameAs($urls);
+            }
         }
     }
 }

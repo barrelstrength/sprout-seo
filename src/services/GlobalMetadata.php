@@ -102,7 +102,7 @@ class GlobalMetadata extends Component
         $results = (new Query())
             ->select('*')
             ->from(['{{%sproutseo_globals}}'])
-            ->where(['siteId' => $globals->siteId])
+            ->where(['[[siteId]]' => $globals->siteId])
             ->one();
 
         if (!$results) {

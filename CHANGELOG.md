@@ -1,5 +1,39 @@
 # Changelog
 
+## 4.0.0-beta.24 - 2019-02-22
+
+### Changed
+- Added improved validation so new Redirects will now delete and replace existing 404 Redirects ([#131])
+
+## 4.0.0-beta.23 - 2019-02-22
+
+### Changed
+- Added improved validation so new Redirects will now replace existing 404 Redirects ([#131])
+
+### Fixed
+- Added support for redirecting to Absolute URLs ([#140])
+
+[#131]: https://github.com/barrelstrength/craft-sprout-seo/issues/131
+[#140]: https://github.com/barrelstrength/craft-sprout-seo/issues/140
+
+## 4.0.0-beta.22 - 2019-02-14
+
+### Fixed
+- Added barrelstrength/sprout-base-import requirement v1.0.0
+
+## 4.0.0-beta.21 - 2019-02-13
+
+### Changed
+- Added tag editor library (and other resources previously managed in Sprout Base)
+- Updated settings to implement SproutSettingsInterface
+- Updated barrelstrength/sprout-base requirement to v4.0.6
+- Added barrelstrength/sprout-base-fields requirement v1.0.0
+
+## 4.0.0-beta.20 - 2019-02-01
+
+### Improved 
+- Improved support for PostgreSQL
+
 ## 4.0.0-beta.19 - 2019-01-25
 
 ### Fixed 

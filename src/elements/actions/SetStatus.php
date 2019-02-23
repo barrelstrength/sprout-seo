@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutseo\elements\actions;
 
 use barrelstrength\sproutseo\elements\Redirect;
-use barrelstrength\sproutseo\SproutSeo;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
 use barrelstrength\sproutseo\enums\RedirectStatuses;
@@ -17,6 +16,10 @@ use barrelstrength\sproutseo\validators\StatusValidator;
 
 use Craft;
 
+/**
+ *
+ * @property mixed $triggerHtml
+ */
 class SetStatus extends ElementAction
 {
     // Public Methods
@@ -74,6 +77,7 @@ class SetStatus extends ElementAction
         $elementIds = $query->ids();
 
         foreach ($elementIds as $key => $redirectId) {
+            /** @var Redirect $redirect */
             $redirect = Craft::$app->getElements()->getElementById($redirectId, Redirect::class, $query->siteId);
 
             if ((int)$redirect->method === RedirectMethods::PageNotFound) {

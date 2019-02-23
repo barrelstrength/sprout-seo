@@ -16,6 +16,8 @@ use Craft;
 
 /**
  * Class UrlEnabledSection
+ *
+ * @property null|string|false $urlFormat
  */
 class UrlEnabledSection extends Model
 {

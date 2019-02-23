@@ -19,7 +19,7 @@ class Entry extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Sections';
     }
@@ -27,7 +27,7 @@ class Entry extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementIdColumnName()
+    public function getElementIdColumnName(): string
     {
         return 'sectionId';
     }
@@ -35,7 +35,7 @@ class Entry extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getUrlFormatIdColumnName()
+    public function getUrlFormatIdColumnName(): string
     {
         return 'sectionId';
     }
@@ -65,7 +65,7 @@ class Entry extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementTableName()
+    public function getElementTableName(): string
     {
         return 'entries';
     }
@@ -73,7 +73,7 @@ class Entry extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getElementType()
+    public function getElementType(): string
     {
         return EntryElement::class;
     }
@@ -89,7 +89,7 @@ class Entry extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getMatchedElementVariable()
+    public function getMatchedElementVariable(): string
     {
         return 'entry';
     }
@@ -99,7 +99,7 @@ class Entry extends UrlEnabledSectionType
      *
      * @return UrlEnabledSection[]
      */
-    public function getAllUrlEnabledSections($siteId)
+    public function getAllUrlEnabledSections($siteId): array
     {
         $urlEnabledSections = [];
 
@@ -121,7 +121,7 @@ class Entry extends UrlEnabledSectionType
     /**
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return 'sections_sites';
     }
@@ -129,7 +129,7 @@ class Entry extends UrlEnabledSectionType
     /**
      * @inheritdoc
      */
-    public function resaveElements($elementGroupId = null)
+    public function resaveElements($elementGroupId = null): bool
     {
         if (!$elementGroupId) {
             return false;

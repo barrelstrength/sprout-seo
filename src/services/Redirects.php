@@ -11,11 +11,9 @@ use barrelstrength\sproutseo\elements\Redirect;
 use barrelstrength\sproutseo\enums\RedirectMethods;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\jobs\Delete404;
-use barrelstrength\sproutseo\records\Redirect as RedirectRecord;
 use barrelstrength\sproutseo\models\Settings;
 
 use Craft;
-use craft\db\Query;
 use craft\models\Site;
 use yii\base\Component;
 
@@ -23,6 +21,11 @@ use yii\base\Component;
 use yii\base\Exception;
 
 
+/**
+ *
+ * @property array $methods
+ * @property int   $structureId
+ */
 class Redirects extends Component
 {
     /**

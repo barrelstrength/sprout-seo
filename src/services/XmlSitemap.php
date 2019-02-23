@@ -20,6 +20,10 @@ use Craft;
 use DateTime;
 use craft\helpers\UrlHelper;
 
+/**
+ *
+ * @property \craft\models\Site[]|array $currentSitemapSites
+ */
 class XmlSitemap extends Component
 {
     /**
@@ -320,7 +324,7 @@ class XmlSitemap extends Component
 
         // Fetch all Custom Sitemap defined in Sprout SEO
         $customSitemapSections = (new Query())
-            ->select('uri, priority, changeFrequency, dateUpdated')
+            ->select('uri, priority, [[changeFrequency]], [[dateUpdated]]')
             ->from('{{%sproutseo_sitemaps}}')
             ->where([
                 'enabled' => true,
@@ -360,7 +364,7 @@ class XmlSitemap extends Component
         $urls = [];
 
         $customSitemapSections = (new Query())
-            ->select('siteId, uri, priority, changeFrequency, dateUpdated')
+            ->select('[[siteId]], uri, priority, [[changeFrequency]], [[dateUpdated]]')
             ->from('{{%sproutseo_sitemaps}}')
             ->where([
                 'enabled' => true,

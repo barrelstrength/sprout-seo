@@ -40,6 +40,7 @@ class XmlSitemapController extends Controller
     {
         $siteId = Craft::$app->sites->getCurrentSite()->id;
         $multiSiteSiteIds = [];
+        $sitesInGroup = [];
 
         /**
          * @var Settings $pluginSettings

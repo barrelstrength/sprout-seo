@@ -602,9 +602,6 @@ class SproutSeoVariable
 
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Add Custom Field')];
         $options['manually'] = Craft::t('sprout-seo', 'Display Editable Field');
-
-        $options['manually'] = Craft::t('sprout-seo', 'Display Editable Field');
-
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Define Custom Pattern')];
 
         if (!isset($options[$settings[$handle]]) && $settings[$handle] != 'manually') {

@@ -22,6 +22,10 @@ use barrelstrength\sproutseo\records\SitemapSection as SitemapSectionRecord;
 use yii\db\Exception;
 
 
+/**
+ *
+ * @property array $transforms
+ */
 class Sitemaps extends Component
 {
     /**
@@ -110,7 +114,7 @@ class Sitemaps extends Component
         $results = (new Query())
             ->select('*')
             ->from(['{{%sproutseo_sitemaps}}'])
-            ->where(['type' => $type, 'siteId' => $siteId])
+            ->where(['type' => $type, '[[siteId]]' => $siteId])
             ->all();
 
         $sitemapSections = [];
@@ -182,7 +186,9 @@ class Sitemaps extends Component
             return false;
         }
 
-        $sitemapSectionRecord->id = $sitemapSection->id;
+        if ($sitemapSection->id){
+            $sitemapSectionRecord->id = $sitemapSection->id;
+        }
         $sitemapSectionRecord->siteId = $sitemapSection->siteId;
         $sitemapSectionRecord->urlEnabledSectionId = $sitemapSection->urlEnabledSectionId;
         $sitemapSectionRecord->type = $sitemapSection->type;
@@ -290,9 +296,9 @@ class Sitemaps extends Component
         $key = Craft::$app->getSecurity()->generateRandomString(12);
 
         $result = (new Query())
-            ->select('uniqueKey')
+            ->select('[[uniqueKey]]')
             ->from(['{{%sproutseo_sitemaps}}'])
-            ->where(['uniqueKey' => $key])
+            ->where(['[[uniqueKey]]' => $key])
             ->scalar();
 
         if ($result) {

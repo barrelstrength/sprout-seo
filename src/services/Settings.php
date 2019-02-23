@@ -12,6 +12,10 @@ use yii\base\Component;
 
 use Craft;
 
+/**
+ *
+ * @property int $descriptionLength
+ */
 class Settings extends Component
 {
     public function getDescriptionLength()

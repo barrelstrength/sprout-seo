@@ -8,10 +8,15 @@
 namespace barrelstrength\sproutseo\models;
 
 
+use barrelstrength\sproutbase\base\SproutSettingsInterface;
 use craft\base\Model;
 use Craft;
 
-class Settings extends Model
+/**
+ *
+ * @property array $settingsNavItems
+ */
+class Settings extends Model implements SproutSettingsInterface
 {
     /**
      * @var string
@@ -94,9 +99,9 @@ class Settings extends Model
     public $groupSettings = [];
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function getSettingsNavItems()
+    public function getSettingsNavItems(): array
     {
         return [
             'general' => [
