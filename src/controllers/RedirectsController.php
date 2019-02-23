@@ -224,11 +224,13 @@ class RedirectsController extends Controller
 
         $redirectId = Craft::$app->getRequest()->getRequiredBodyParam('redirectId');
 
-        if (Craft::$app->elements->deleteElementById($redirectId)) {
-            Craft::$app->getSession()->setNotice(Craft::t('sprout-seo', 'Redirect deleted.'));
-            $this->redirectToPostedUrl();
-        } else {
+        if (!Craft::$app->elements->deleteElementById($redirectId)) {
             Craft::$app->getSession()->setError(Craft::t('sprout-seo', 'Couldn’t delete redirect.'));
+            return null;
         }
+
+        Craft::$app->getSession()->setNotice(Craft::t('sprout-seo', 'Redirect deleted.'));
+
+        return $this->redirectToPostedUrl();
     }
 }
