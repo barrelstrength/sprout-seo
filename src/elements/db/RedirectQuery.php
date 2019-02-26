@@ -84,10 +84,6 @@ class RedirectQuery extends ElementQuery
      */
     protected function beforePrepare(): bool
     {
-        /*
-         *@todo - for some reason the reorder is not working on the element index page
-         * the prevId values is not sent by post (check categories behavior)
-        */
         if ($this->structureId === null) {
             $this->structureId = SproutSeo::$app->redirects->getStructureId();
         }
@@ -102,8 +98,6 @@ class RedirectQuery extends ElementQuery
             'sproutseo_redirects.regex',
             'sproutseo_redirects.count'
         ]);
-
-        $this->query->orderBy = ['structureelements.lft' => SORT_DESC];
 
         if ($this->id) {
             $this->subQuery->andWhere(Db::parseParam(
