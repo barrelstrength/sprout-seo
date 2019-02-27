@@ -56,16 +56,6 @@ class Install extends Migration
         $this->dropTable('{{%sproutseo_globals}}');
         $this->dropTable('{{%sproutseo_sitemaps}}');
         $this->dropTable('{{%sproutseo_redirects}}');
-
-        $sproutFields = Craft::$app->plugins->getPlugin('sprout-fields');
-
-        if (!$sproutFields) {
-            $migration = new SproutBaseFieldsInstall();
-
-            ob_start();
-            $migration->down();
-            ob_end_clean();
-        }
     }
 
     // Protected Methods
