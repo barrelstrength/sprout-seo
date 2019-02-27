@@ -32,26 +32,6 @@ class App extends Component
     public $schema;
 
     /**
-     * @var Sitemaps
-     */
-    public $sitemaps;
-
-    /**
-     * @var XmlSitemap
-     */
-    public $xmlSitemap;
-
-    /**
-     * @var Redirects
-     */
-    public $redirects;
-
-    /**
-     * @var UrlEnabledSections
-     */
-    public $urlEnabledSections;
-
-    /**
      * @var Settings
      */
     public $settings;
@@ -62,10 +42,6 @@ class App extends Component
         $this->globalMetadata = new GlobalMetadata();
         $this->elementMetadata = new ElementMetadata();
         $this->schema = new Schema();
-        $this->sitemaps = new Sitemaps();
-        $this->xmlSitemap = new XmlSitemap();
-        $this->redirects = new Redirects();
-        $this->urlEnabledSections = new UrlEnabledSections();
         $this->settings = new Settings();
     }
 }

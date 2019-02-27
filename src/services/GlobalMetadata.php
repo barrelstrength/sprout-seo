@@ -123,4 +123,32 @@ class GlobalMetadata extends Component
 
         return true;
     }
+
+    /**
+     * @return array
+     */
+    public function getTransforms()
+    {
+        $options = [
+            '' => Craft::t('sprout-seo', 'None')
+        ];
+
+        $options[] = ['optgroup' => Craft::t('sprout-seo', 'Default Transforms')];
+
+        $options['sproutSeo-socialSquare'] = Craft::t('sprout-seo', 'Square – 400x400');
+        $options['sproutSeo-ogRectangle'] = Craft::t('sprout-seo', 'Rectangle – 1200x630 – Open Graph');
+        $options['sproutSeo-twitterRectangle'] = Craft::t('sprout-seo', 'Rectangle – 1024x512 – Twitter Card');
+
+        $transforms = Craft::$app->assetTransforms->getAllTransforms();
+
+        if (count($transforms)) {
+            $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom Transforms')];
+
+            foreach ($transforms as $transform) {
+                $options[$transform->handle] = $transform->name;
+            }
+        }
+
+        return $options;
+    }
 }

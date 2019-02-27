@@ -797,7 +797,7 @@ class SproutSeoVariable
      */
     public function getTransforms()
     {
-        return SproutSeo::$app->sitemaps->getTransforms();
+        return SproutSeo::$app->globalMetadata->getTransforms();
     }
 
     /**

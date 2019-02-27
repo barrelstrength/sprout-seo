@@ -5,8 +5,6 @@ Content-focused SEO.
 - **Search Metadata** - Give content editors detailed control over search metadata
 - **Social Sharing** - Customize metadata targeting social media platforms like Facebook, Twitter, and more/ 
 - **Structured Data** - Enhance your content to display in the Knowledge Graph and as Rich Cards
-- **Sitemaps** - Generate comprehensive, multi-lingual XML sitemaps
-- **Redirects** - Manage redirects and monitor 404s
 
 See the Sprout SEO documentation to learn more about Sprout SEO.
 

@@ -155,6 +155,8 @@ class ElementMetadata extends Component
      */
     protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false)
     {
+        //@todo - discuss with ben
+        return false;
         //Get the URL-Enabled Section Type based using the Element Type
         $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType($elementType);
 

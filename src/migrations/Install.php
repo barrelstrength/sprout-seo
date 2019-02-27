@@ -54,8 +54,6 @@ class Install extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%sproutseo_globals}}');
-        $this->dropTable('{{%sproutseo_sitemaps}}');
-        $this->dropTable('{{%sproutseo_redirects}}');
     }
 
     // Protected Methods
@@ -77,58 +75,21 @@ class Install extends Migration
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
-
-        $this->createTable('{{%sproutseo_sitemaps}}', [
-            'id' => $this->primaryKey(),
-            'siteId' => $this->integer()->notNull(),
-            'uniqueKey' => $this->string(),
-            'urlEnabledSectionId' => $this->integer(),
-            'enabled' => $this->boolean()->defaultValue(false),
-            'type' => $this->string(),
-            'uri' => $this->string(),
-            'priority' => $this->decimal(11, 1),
-            'changeFrequency' => $this->string(),
-            'dateCreated' => $this->dateTime()->notNull(),
-            'dateUpdated' => $this->dateTime()->notNull(),
-            'uid' => $this->uid(),
-        ]);
-
-        $this->createTable('{{%sproutseo_redirects}}', [
-            'id' => $this->primaryKey(),
-            'oldUrl' => $this->string()->notNull(),
-            'newUrl' => $this->string(),
-            'method' => $this->integer(),
-            'regex' => $this->boolean()->defaultValue(false),
-            'count' => $this->integer()->defaultValue(0),
-            'dateCreated' => $this->dateTime()->notNull(),
-            'dateUpdated' => $this->dateTime()->notNull(),
-            'uid' => $this->uid(),
-        ]);
     }
 
     protected function createIndexes()
     {
         $this->createIndex(null, '{{%sproutseo_globals}}', 'id, siteId', true);
         $this->createIndex(null, '{{%sproutseo_globals}}', ['siteId'], true);
-        $this->createIndex(null, '{{%sproutseo_redirects}}', 'id');
-        $this->createIndex(null, '{{%sproutseo_sitemaps}}', ['siteId'], false);
     }
 
     protected function addForeignKeys()
     {
-        $this->addForeignKey(
-            null,
-            '{{%sproutseo_redirects}}', 'id',
-            '{{%elements}}', 'id', 'CASCADE', null
-        );
-
-        $this->addForeignKey(null, '{{%sproutseo_sitemaps}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
         $this->addForeignKey(null, '{{%sproutseo_globals}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
     }
 
     /**
      * @throws \craft\errors\SiteNotFoundException
-     * @throws \craft\errors\StructureNotFoundException
      * @throws \yii\base\ErrorException
      * @throws \yii\base\Exception
      * @throws \yii\base\NotSupportedException
@@ -136,13 +97,7 @@ class Install extends Migration
      */
     protected function insertDefaultSettings()
     {
-        $maxLevels = 1;
-        $structure = new Structure();
-        $structure->maxLevels = $maxLevels;
         $settings = new Settings();
-
-        Craft::$app->structures->saveStructure($structure);
-        $settings->structureId = $structure->id;
         // default site id for sections
         $site = Craft::$app->getSites()->getPrimarySite();
         $settings->siteSettings[$site->id] = $site->id;
