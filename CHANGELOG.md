@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.0.0-beta.28 - 2019-02-26
+
+### Changed
+- Updated craftcms/cms requirement to v3.1.15
+- Added barrelstrength/sprout-base-fields requirement v1.0.1
+
+### Fixed
+- Fixed display issues when reordering by Structure ([#132]) 
+
+[#132]: https://github.com/barrelstrength/craft-sprout-seo/issues/132
+
 ## 4.0.0-beta.27 - 2019-02-23
 
 ### Fixed
