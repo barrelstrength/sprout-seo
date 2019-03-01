@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\services;
 
 
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
 use craft\base\Element;
 use craft\base\Field;
@@ -35,6 +36,15 @@ class ElementMetadata extends Component
 
         if (isset($element->{$fieldHandle})) {
             $metadata = $element->{$fieldHandle};
+
+            // Support Live Preview (where image IDs still need to be converted from arrays)
+            if (isset($metadata['ogImage'])) {
+                $metadata['ogImage'] = OptimizeHelper::getImageId($metadata['ogImage']);
+            }
+            if (isset($metadata['twitterImage'])) {
+                $metadata['twitterImage'] = OptimizeHelper::getImageId($metadata['twitterImage']);
+            }
+
             return new Metadata($metadata);
         }
 
