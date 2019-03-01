@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.0-beta.29 - 2019-03-01
+
+### Fixed 
+- Fixed bug where meta images could block Live Preview
+
 ## 4.0.0-beta.28 - 2019-02-26
 
 ### Changed
