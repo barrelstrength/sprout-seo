@@ -279,6 +279,21 @@ class OptimizeHelper
     }
 
     /**
+     * @param $image
+     * @return mixed
+     */
+    public static function getImageId($image)
+    {
+        $imageId = $image;
+
+        if (is_array($image)) {
+            $imageId = $image[0];
+        }
+
+        return $imageId;
+    }
+
+    /**
      * @param      $id
      * @param null $transform
      *

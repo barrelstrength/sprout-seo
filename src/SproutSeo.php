@@ -19,10 +19,12 @@ use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 use Craft;
 use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\ErrorHandler;
 use craft\events\ExceptionEvent;
@@ -94,6 +96,10 @@ class SproutSeo extends Plugin
 
         // Add Twig Extensions
         Craft::$app->view->registerTwigExtension(new SproutSeoTwigExtension());
+
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+            $event->permissions['Sprout SEO'] = $this->getUserPermissions();
+        });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
@@ -208,5 +214,17 @@ class SproutSeo extends Plugin
         }
 
         return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserPermissions(): array
+    {
+        return [
+            'sproutSeo-editGlobals' => [
+                'label' => Craft::t('sprout-reports', 'Edit Data Sources')
+            ]
+        ];
     }
 }
