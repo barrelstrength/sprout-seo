@@ -19,9 +19,13 @@ use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 use Craft;
 use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
+
+use craft\events\RegisterUserPermissionsEvent;
+use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use yii\base\Event;
@@ -65,6 +69,20 @@ class SproutSeo extends Plugin
      */
     public $minVersionRequired = '3.4.2';
 
+    const EDITION_LITE = 'lite';
+    const EDITION_PRO = 'pro';
+
+    /**
+     * @inheritdoc
+     */
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
+    }
+
     /**
      * @inheritdoc
      *
@@ -99,13 +117,16 @@ class SproutSeo extends Plugin
             $event->rules = array_merge($event->rules, $this->getSiteUrlRules());
         });
 
-        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = ElementMetadata::class;
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+            $event->permissions['Sprout SEO'] = $this->getUserPermissions();
         });
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
-            $variable = $event->sender;
-            $variable->set('sproutSeo', SproutSeoVariable::class);
+            $event->sender->set('sproutSeo', SproutSeoVariable::class);
+        });
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = ElementMetadata::class;
         });
 
         Event::on(Fields::class, Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT, function(FieldLayoutEvent $event) {
@@ -204,5 +225,17 @@ class SproutSeo extends Plugin
         }
 
         return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserPermissions(): array
+    {
+        return [
+            'sproutSeo-editGlobals' => [
+                'label' => Craft::t('sprout-reports', 'Edit Data Sources')
+            ]
+        ];
     }
 }
