@@ -71,6 +71,20 @@ class SproutSeo extends Plugin
      */
     public $minVersionRequired = '3.4.2';
 
+    const EDITION_LITE = 'lite';
+    const EDITION_PRO = 'pro';
+
+    /**
+     * @inheritdoc
+     */
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
+    }
+
     /**
      * @inheritdoc
      *
@@ -97,10 +111,6 @@ class SproutSeo extends Plugin
         // Add Twig Extensions
         Craft::$app->view->registerTwigExtension(new SproutSeoTwigExtension());
 
-        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-            $event->permissions['Sprout SEO'] = $this->getUserPermissions();
-        });
-
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
         });
@@ -109,13 +119,16 @@ class SproutSeo extends Plugin
             $event->rules = array_merge($event->rules, $this->getSiteUrlRules());
         });
 
-        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = ElementMetadata::class;
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+            $event->permissions['Sprout SEO'] = $this->getUserPermissions();
         });
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
-            $variable = $event->sender;
-            $variable->set('sproutSeo', SproutSeoVariable::class);
+            $event->sender->set('sproutSeo', SproutSeoVariable::class);
+        });
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = ElementMetadata::class;
         });
 
         Event::on(Fields::class, Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT, function(FieldLayoutEvent $event) {
