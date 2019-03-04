@@ -19,6 +19,7 @@ use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 use Craft;
 use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
+
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
@@ -26,10 +27,7 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
-use craft\web\ErrorHandler;
-use craft\events\ExceptionEvent;
 use craft\web\UrlManager;
-use yii\web\HttpException;
 use yii\base\Event;
 
 /**
@@ -64,7 +62,7 @@ class SproutSeo extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '4.0.3';
+    public $schemaVersion = '4.0.4';
 
     /**
      * @var string

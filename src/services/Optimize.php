@@ -14,6 +14,7 @@ use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\enums\MetadataLevels;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata as MetadataModel;
+use craft\base\ElementInterface;
 
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
@@ -26,6 +27,7 @@ use craft\models\Site;
 use DateTime;
 use Craft;
 use yii\base\Component;
+use yii\base\InvalidConfigException;
 
 class Optimize extends Component
 {
@@ -54,6 +56,11 @@ class Optimize extends Component
     public $templateMetadata = [];
 
     /**
+     * @var ElementInterface
+     */
+    public static $matchedElement;
+
+    /**
      * Add values to the master $this->templateMetadata array
      *
      * @param array $meta
@@ -80,23 +87,63 @@ class Optimize extends Component
      */
     public function getMetadataViaContext(&$context)
     {
-        $site = $context['currentSite'] ?? Craft::$app->getSites()->currentSite;
-
-        $matchedElementVariables = SproutSeo::$app->urlEnabledSections->getMatchedElementVariables();
-
-        $element = null;
-        foreach ($matchedElementVariables as $matchedElementVariable) {
-            if (isset($context[$matchedElementVariable])) {
-                $element = $context[$matchedElementVariable];
-                break;
-            }
-        }
+        $uri = $this->getUri();
+        $site = $this->getMatchedSite();
+        $this->setMatchedElement($uri, $site->id);
+        /** @var Element $element */
+        $element = self::$matchedElement;
 
         if ($element !== null) {
             $this->elementMetadata = SproutSeo::$app->elementMetadata->getElementMetadata($element);
         }
 
         return $this->getMetadata($element, $site, true, $context);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUri()
+    {
+        $request = Craft::$app->getRequest();
+        $uri = '/';
+        if (!$request->getIsConsoleRequest()) {
+            try {
+                $uri = $request->getPathInfo();
+            } catch (InvalidConfigException $e) {
+                Craft::error($e->getMessage(), __METHOD__);
+            }
+        }
+
+        return $uri;
+    }
+
+    /**
+     * @return Site
+     */
+    public function getMatchedSite(): Site
+    {
+        $site = Craft::$app->getSites()->currentSite
+            ?? Craft::$app->getSites()->primarySite;
+
+        return $site;
+    }
+
+    /**
+     * Set the element that matches the $uri
+     *
+     * @param string   $uri
+     * @param int|null $siteId
+     */
+    public function setMatchedElement(string $uri, int $siteId = null)
+    {
+        self::$matchedElement = null;
+        $uri = trim($uri, '/');
+        /** @var Element $element */
+        $element = Craft::$app->getElements()->getElementByUri($uri, $siteId, false);
+        if ($element && ($element->uri !== null)) {
+            self::$matchedElement = $element;
+        }
     }
 
     /**
