@@ -13,13 +13,10 @@ use barrelstrength\sproutseo\models\Metadata;
 use craft\base\Element;
 use craft\base\Field;
 use craft\events\FieldLayoutEvent;
-
+use barrelstrength\sproutbaseuris\SproutBaseUris;
 use yii\base\Component;
 use craft\db\Query;
-
 use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
-use barrelstrength\sproutseo\SproutSeo;
-
 
 class ElementMetadata extends Component
 {
@@ -161,15 +158,10 @@ class ElementMetadata extends Component
      * @param bool $afterFieldLayout
      *
      * @return bool
-     * @throws \craft\errors\SiteNotFoundException
      */
     protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false)
     {
-        //@todo - discuss with ben
-        return false;
-        //Get the URL-Enabled Section Type based using the Element Type
-        /*
-        $urlEnabledSectionType = SproutSeo::$app->sitemaps->getUrlEnabledSectionTypeByElementType($elementType);
+        $urlEnabledSectionType = SproutBaseUris::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
 
         if ($urlEnabledSectionType === null)
         {
@@ -194,6 +186,5 @@ class ElementMetadata extends Component
         }
 
         return true;
-        */
     }
 }
