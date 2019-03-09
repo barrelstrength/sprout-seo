@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo;
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
+use barrelstrength\sproutbaseuris\SproutBaseUrisHelper;
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\services\App;
@@ -94,6 +95,7 @@ class SproutSeo extends Plugin
 
         SproutBaseHelper::registerModule();
         SproutBaseFieldsHelper::registerModule();
+        SproutBaseUrisHelper::registerModule();
 
         $this->setComponents([
             'app' => App::class
