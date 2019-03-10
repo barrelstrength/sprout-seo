@@ -10,6 +10,8 @@ namespace barrelstrength\sproutseo;
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
+use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
+use barrelstrength\sproutbaseredirects\SproutBaseRedirectsHelper;
 use barrelstrength\sproutbaseuris\SproutBaseUrisHelper;
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings;
@@ -22,7 +24,6 @@ use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
 
 use craft\events\RegisterUserPermissionsEvent;
-use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -30,6 +31,8 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use yii\base\Event;
+use craft\web\ErrorHandler;
+use craft\events\ExceptionEvent;
 
 /**
  *
@@ -96,6 +99,7 @@ class SproutSeo extends Plugin
         SproutBaseHelper::registerModule();
         SproutBaseFieldsHelper::registerModule();
         SproutBaseUrisHelper::registerModule();
+        SproutBaseRedirectsHelper::registerModule();
 
         $this->setComponents([
             'app' => App::class
@@ -134,6 +138,10 @@ class SproutSeo extends Plugin
         Event::on(Fields::class, Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT, function(FieldLayoutEvent $event) {
             SproutSeo::$app->elementMetadata->resaveElementsAfterFieldLayoutIsSaved($event);
         });
+
+        Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {
+            SproutBaseRedirects::$app->redirects->handleRedirectsOnException($event, $this->handle);
+        });
     }
 
     public function getCpNavItem()
@@ -150,6 +158,10 @@ class SproutSeo extends Plugin
                 'globals' => [
                     'label' => Craft::t('sprout-seo', 'Globals'),
                     'url' => 'sprout-seo/globals'
+                ],
+                'redirects' => [
+                    'label' => Craft::t('sprout-seo', 'Redirects'),
+                    'url' => 'sprout-base-redirects/redirects'
                 ],
                 'settings' => [
                     'label' => Craft::t('sprout-seo', 'Settings'),
@@ -187,6 +199,25 @@ class SproutSeo extends Plugin
             'sprout-seo/globals' => [
                 'template' => 'sprout-seo/globals/index'
             ],
+
+            // Redirects
+            'sprout-base-redirects/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
+                'sprout-base-redirects/redirects/edit-redirect',
+
+            'sprout-base-redirects/redirects/edit/<redirectId:\d+>' =>
+                'sprout-base-redirects/redirects/edit-redirect',
+
+            'sprout-base-redirects/redirects/new/<siteHandle:.*>' =>
+                'sprout-base-redirects/redirects/edit-redirect',
+
+            'sprout-base-redirects/redirects/new' =>
+                'sprout-base-redirects/redirects/edit-redirect',
+
+            'sprout-base-redirects/redirects/<siteHandle:.*>' =>
+                'sprout-base-redirects/redirects/redirects-index-template',
+
+            'sprout-base-redirects/redirects' =>
+                'sprout-base-redirects/redirects/redirects-index-template',
 
             // Settings
             'sprout-seo/settings/<settingsSectionHandle:.*>' =>
