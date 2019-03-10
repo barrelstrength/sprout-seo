@@ -30,7 +30,7 @@
     "barrelstrength/sprout-base-fields": "^1.0.1",
     "barrelstrength/sprout-base-import": "^1.0.0",
     "php-science/textrank": "^1.0.4",
-    "barrelstrength/sprout-base-uris": "^1.0.0",
+    "barrelstrength/sprout-base-sitemaps": "^1.0.0",
     "barrelstrength/sprout-base-redirects": "^1.0.0"
   },
   "autoload": {

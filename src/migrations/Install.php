@@ -10,10 +10,11 @@ namespace barrelstrength\sproutseo\migrations;
 use Craft;
 
 use craft\db\Migration;
-use craft\models\Structure;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use craft\services\Plugins;
+use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirectsInstall;
+use barrelstrength\sproutbasesitemaps\migrations\Install as SproutBaseSitemapsInstall;
 
 class Install extends Migration
 {
@@ -75,6 +76,16 @@ class Install extends Migration
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
+
+        $migration = new SproutBaseRedirectsInstall();
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+
+        $migration = new SproutBaseSitemapsInstall();
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
     }
 
     protected function createIndexes()

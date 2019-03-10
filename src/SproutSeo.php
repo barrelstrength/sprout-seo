@@ -163,6 +163,10 @@ class SproutSeo extends Plugin
                     'label' => Craft::t('sprout-seo', 'Redirects'),
                     'url' => 'sprout-base-redirects/redirects'
                 ],
+                'sitemaps' => [
+                    'label' => Craft::t('sprout-seo', 'Sitemaps'),
+                    'url' => 'sprout-base-sitemaps/sitemaps'
+                ],
                 'settings' => [
                     'label' => Craft::t('sprout-seo', 'Settings'),
                     'url' => 'sprout-seo/settings'
@@ -199,6 +203,19 @@ class SproutSeo extends Plugin
             'sprout-seo/globals' => [
                 'template' => 'sprout-seo/globals/index'
             ],
+
+            // Sitemaps
+            'sprout-base-sitemaps/sitemaps/edit/<sitemapSectionId:\d+>/<siteHandle:.*>' =>
+                'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
+
+            'sprout-base-sitemaps/sitemaps/new/<siteHandle:.*>' =>
+                'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
+
+            'sprout-base-sitemaps/sitemaps/<siteHandle:.*>' =>
+                'sprout-base-sitemaps/sitemaps/sitemap-index-template',
+
+            'sprout-base-sitemaps/sitemaps' =>
+                'sprout-sitemaps/sitemaps/sitemap-index-template',
 
             // Redirects
             'sprout-base-redirects/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
@@ -251,9 +268,9 @@ class SproutSeo extends Plugin
         if ($this->getSettings()->enableDynamicSitemaps) {
             return [
                 'sitemap-<sitemapKey:.*>-<pageNumber:\d+>.xml' =>
-                    'sprout-seo/xml-sitemap/render-xml-sitemap',
+                    'sprout-base-seo/xml-sitemap/render-xml-sitemap',
                 'sitemap-?<sitemapKey:.*>.xml' =>
-                    'sprout-seo/xml-sitemap/render-xml-sitemap',
+                    'sprout-base-seo/xml-sitemap/render-xml-sitemap',
             ];
         }
 
