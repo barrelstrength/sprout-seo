@@ -27,7 +27,7 @@
   "require": {
     "craftcms/cms": "^3.1.15",
     "barrelstrength/sprout-base": "^4.0.6",
-    "barrelstrength/sprout-base-fields": "^1.0.1",
+    "barrelstrength/sprout-base-fields": "^1.0.3",
     "barrelstrength/sprout-base-import": "^1.0.0",
     "php-science/textrank": "^1.0.4"
   },
