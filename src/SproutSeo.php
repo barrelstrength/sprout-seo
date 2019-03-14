@@ -12,6 +12,7 @@ use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirectsHelper;
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemapsHelper;
 use barrelstrength\sproutbaseuris\SproutBaseUrisHelper;
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings;
@@ -98,8 +99,9 @@ class SproutSeo extends Plugin
 
         SproutBaseHelper::registerModule();
         SproutBaseFieldsHelper::registerModule();
-        SproutBaseUrisHelper::registerModule();
         SproutBaseRedirectsHelper::registerModule();
+        SproutBaseSitemapsHelper::registerModule();
+        SproutBaseUrisHelper::registerModule();
 
         $this->setComponents([
             'app' => App::class
@@ -215,7 +217,7 @@ class SproutSeo extends Plugin
                 'sprout-base-sitemaps/sitemaps/sitemap-index-template',
 
             'sprout-seo/sitemaps' =>
-                'sprout-sitemaps/sitemaps/sitemap-index-template',
+                'sprout-base-sitemaps/sitemaps/sitemap-index-template',
 
             // Redirects
             'sprout-seo/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
@@ -268,9 +270,9 @@ class SproutSeo extends Plugin
         if ($this->getSettings()->enableDynamicSitemaps) {
             return [
                 'sitemap-<sitemapKey:.*>-<pageNumber:\d+>.xml' =>
-                    'sprout-base-seo/xml-sitemap/render-xml-sitemap',
+                    'sprout-base-sitemaps/xml-sitemap/render-xml-sitemap',
                 'sitemap-?<sitemapKey:.*>.xml' =>
-                    'sprout-base-seo/xml-sitemap/render-xml-sitemap',
+                    'sprout-base-sitemaps/xml-sitemap/render-xml-sitemap',
             ];
         }
 

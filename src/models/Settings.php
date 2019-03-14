@@ -116,6 +116,12 @@ class Settings extends Model implements SproutSettingsInterface
                 'selected' => 'redirects',
                 'template' => 'sprout-seo/settings/redirects'
             ],
+            'sitemaps' => [
+                'label' => Craft::t('sprout-seo', 'Sitemaps'),
+                'url' => 'sprout-seo/settings/sitemaps',
+                'selected' => 'sitemaps',
+                'template' => 'sprout-base-sitemaps/settings/sitemaps'
+            ],
             'advanced' => [
                 'label' => Craft::t('sprout-seo', 'Advanced'),
                 'url' => 'sprout-seo/settings/advanced',
