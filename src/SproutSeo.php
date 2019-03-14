@@ -161,11 +161,11 @@ class SproutSeo extends Plugin
                 ],
                 'redirects' => [
                     'label' => Craft::t('sprout-seo', 'Redirects'),
-                    'url' => 'sprout-base-redirects/redirects'
+                    'url' => 'sprout-seo/redirects'
                 ],
                 'sitemaps' => [
                     'label' => Craft::t('sprout-seo', 'Sitemaps'),
-                    'url' => 'sprout-base-sitemaps/sitemaps'
+                    'url' => 'sprout-seo/sitemaps'
                 ],
                 'settings' => [
                     'label' => Craft::t('sprout-seo', 'Settings'),
@@ -205,35 +205,35 @@ class SproutSeo extends Plugin
             ],
 
             // Sitemaps
-            'sprout-base-sitemaps/sitemaps/edit/<sitemapSectionId:\d+>/<siteHandle:.*>' =>
+            'sprout-seo/sitemaps/edit/<sitemapSectionId:\d+>/<siteHandle:.*>' =>
                 'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
 
-            'sprout-base-sitemaps/sitemaps/new/<siteHandle:.*>' =>
+            'sprout-seo/sitemaps/new/<siteHandle:.*>' =>
                 'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
 
-            'sprout-base-sitemaps/sitemaps/<siteHandle:.*>' =>
+            'sprout-seo/sitemaps/<siteHandle:.*>' =>
                 'sprout-base-sitemaps/sitemaps/sitemap-index-template',
 
-            'sprout-base-sitemaps/sitemaps' =>
+            'sprout-seo/sitemaps' =>
                 'sprout-sitemaps/sitemaps/sitemap-index-template',
 
             // Redirects
-            'sprout-base-redirects/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
+            'sprout-seo/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
                 'sprout-base-redirects/redirects/edit-redirect',
 
-            'sprout-base-redirects/redirects/edit/<redirectId:\d+>' =>
+            'sprout-seo/redirects/edit/<redirectId:\d+>' =>
                 'sprout-base-redirects/redirects/edit-redirect',
 
-            'sprout-base-redirects/redirects/new/<siteHandle:.*>' =>
+            'sprout-seo/redirects/new/<siteHandle:.*>' =>
                 'sprout-base-redirects/redirects/edit-redirect',
 
-            'sprout-base-redirects/redirects/new' =>
+            'sprout-seo/redirects/new' =>
                 'sprout-base-redirects/redirects/edit-redirect',
 
-            'sprout-base-redirects/redirects/<siteHandle:.*>' =>
+            'sprout-seo/redirects/<siteHandle:.*>' =>
                 'sprout-base-redirects/redirects/redirects-index-template',
 
-            'sprout-base-redirects/redirects' =>
+            'sprout-seo/redirects' =>
                 'sprout-base-redirects/redirects/redirects-index-template',
 
             // Settings
