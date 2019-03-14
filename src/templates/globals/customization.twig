@@ -20,40 +20,40 @@
         {% set dividerOptions = craft.sproutSeo.getSeoDividerOptions(currentSite) %}
 
         {{ forms.field({
-            label: 'Select the character that will be used between Title segments'|t ~ sprout.infoIcon({
-                label: "Character"|t,
+            label: 'Select the character that will be used between Title segments'|t('sprout-seo') ~ sprout.infoIcon({
+                label: "Character"|t('sprout-seo'),
                 search: true,
                 priority: 'globals'
             }),
-            instructions: "This character will be used in between your title segments, i.e. Blog Post Title – {sitename}"|t({ 'sitename': siteName }),
+            instructions: "This character will be used in between your title segments, i.e. Blog Post Title – {sitename}"|t('sprout-seo', { 'sitename': siteName }),
             first: true,
         }, sproutFields.selectOther({
             name: 'sproutseo[globals][settings][seoDivider]',
             options: dividerOptions ,
             value: settings.seoDivider is defined ? settings.seoDivider : '-',
-            otherPlaceholderText: 'Custom Divider'|t
+            otherPlaceholderText: 'Custom Divider'|t('sprout-seo')
         })) }}
 
         {% set titleOptions = craft.sproutSeo.getAppendMetaTitleOptions(currentSite) %}
 
         {{ forms.field({
-            label: 'Append value to all Meta Titles'|t ~ sprout.infoIcon({
-                label: "Append value"|t,
+            label: 'Append value to all Meta Titles'|t('sprout-seo') ~ sprout.infoIcon({
+                label: "Append value"|t('sprout-seo'),
                 search: true,
                 priority: 'globals'
             }),
-            instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. Article Title - {sitename}"|t({ 'sitename': siteName }),
+            instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. Article Title - {sitename}"|t('sprout-seo', { 'sitename': siteName }),
             first: true,
         }, sproutFields.selectOther({
             name: 'sproutseo[globals][settings][appendTitleValue]',
             options: titleOptions ,
             value: settings.appendTitleValue is defined ? settings.appendTitleValue : null,
-            otherPlaceholderText: 'Custom Value'|t
+            otherPlaceholderText: 'Custom Value'|t('sprout-seo')
         })) }}
 
         {{ forms.lightswitchField({
-            label: "Display Append Meta Title Value on Homepage"|t,
-            instructions: "Enable this setting to display the Append Meta Title value for your Homepage."|t,
+            label: "Display Append Meta Title Value on Homepage"|t('sprout-seo'),
+            instructions: "Enable this setting to display the Append Meta Title value for your Homepage."|t('sprout-seo'),
             name: 'sproutseo[globals][settings][appendTitleValueOnHomepage]',
             on: settings.appendTitleValueOnHomepage is defined ? settings.appendTitleValueOnHomepage : null,
             onLabel: "Enable"|t
@@ -62,19 +62,18 @@
         <hr>
 
         {% set ogTypesOptions = {
-            '' : 'Select Open Graph Type...'|t,
-            'article' : 'Article'|t,
-            'website' : 'Website'|t,
+            '' : 'Select Open Graph Type...'|t('sprout-seo'),
+            'article' : 'Article'|t('sprout-seo'),
+            'website' : 'Website'|t('sprout-seo'),
         } %}
 
         {{ forms.selectField({
-            label: 'Default Open Graph Type'|t ~ sprout.infoIcon({
-                label: "Type"|t,
+            label: 'Default Open Graph Type'|t('sprout-seo') ~ sprout.infoIcon({
+                label: "Type"|t('sprout-seo'),
                 openGraph: true,
                 priority: 'globals'
             }),
-            instructions: 'Select your default Open Graph Type for individual entries using the Sprout SEO Optimize field. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type"
-    target="_blank">How Open Graph Stories work.</a>'|t,
+            instructions: 'Select your default Open Graph Type for individual entries using the Sprout SEO Optimize field. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type" target="_blank">How Open Graph Stories work.</a>'|t('sprout-seo'),
             name: 'sproutseo[globals][settings][defaultOgType]',
             options: ogTypesOptions,
             value: settings.defaultOgType ?? 'article',
@@ -83,18 +82,18 @@
         }) }}
 
         {% set twitterCardOptions = {
-            '' : 'Select Twitter Card Type...'|t,
-            'summary' : 'Summary Card'|t,
-            'summary_large_image' : 'Summary Card with Large Image'|t
+            '' : 'Select Twitter Card Type...'|t('sprout-seo'),
+            'summary' : 'Summary Card'|t('sprout-seo'),
+            'summary_large_image' : 'Summary Card with Large Image'|t('sprout-seo')
         } %}
 
         {{ forms.selectField({
-            label: 'Default Twitter Card Type'|t ~ sprout.infoIcon({
-                label: "Type"|t,
+            label: 'Default Twitter Card Type'|t('sprout-seo') ~ sprout.infoIcon({
+                label: "Type"|t('sprout-seo'),
                 twitterCard: true,
                 priority: 'globals'
             }),
-            instructions: 'Select your default Twitter Card Type for individual entries using the Sprout SEO Optimize field.. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
+            instructions: 'Select your default Twitter Card Type for individual entries using the Sprout SEO Optimize field.. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t('sprout-seo'),
             name: 'sproutseo[globals][settings][defaultTwitterCard]',
             options: twitterCardOptions,
             value: settings.defaultTwitterCard ?? 'summary',
@@ -103,12 +102,12 @@
         }) }}
 
         {{ forms.selectField({
-            label: 'Default Open Graph Image Transform'|t ~ sprout.infoIcon({
-                label: "Type"|t,
+            label: 'Default Open Graph Image Transform'|t('sprout-seo') ~ sprout.infoIcon({
+                label: "Type"|t('sprout-seo'),
                 openGraph: true,
                 priority: 'globals'
             }),
-            instructions: 'Select Image Transforms for the facebook image. Use images that are at least 1200 x 630 pixels for the best display on high resolution devices. Images larger than 600px by 315px will display as large images. The minimum image size is 200px by 200px pixels. Images can be up to 8MB in size.'|t,
+            instructions: 'Select Image Transforms for the facebook image. Use images that are at least 1200 x 630 pixels for the best display on high resolution devices. Images larger than 600px by 315px will display as large images. The minimum image size is 200px by 200px pixels. Images can be up to 8MB in size.'|t('sprout-seo'),
             name: 'sproutseo[globals][settings][ogTransform]',
             options: transformOptions,
             value: settings.ogTransform ?? 'sproutSeo-socialSquare',
@@ -117,12 +116,12 @@
         }) }}
 
         {{ forms.selectField({
-            label: 'Default Twitter Card Image Transform'|t ~ sprout.infoIcon({
-                label: "Type"|t,
+            label: 'Default Twitter Card Image Transform'|t('sprout-seo') ~ sprout.infoIcon({
+                label: "Type"|t('sprout-seo'),
                 twitterCard: true,
                 priority: 'globals'
             }),
-            instructions: 'Select Image Transforms for the Twitter Card image. Summary Card image is square and must be a minimum of 120px by 120px. Summary Card with Large Image should be at least 280px in width, and at least 150px in height. Images must be less than 1MB in size.'|t,
+            instructions: 'Select Image Transforms for the Twitter Card image. Summary Card image is square and must be a minimum of 120px by 120px. Summary Card with Large Image should be at least 280px in width, and at least 150px in height. Images must be less than 1MB in size.'|t('sprout-seo'),
             name: 'sproutseo[globals][settings][twitterTransform]',
             options: transformOptions,
             value: settings.twitterTransform ?? 'sproutSeo-socialSquare',
