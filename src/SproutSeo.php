@@ -39,6 +39,7 @@ use craft\events\ExceptionEvent;
  *
  * @property mixed $cpNavItem
  * @property array $cpUrlRules
+ * @property array $userPermissions
  * @property array $siteUrlRules
  */
 class SproutSeo extends Plugin
@@ -149,38 +150,48 @@ class SproutSeo extends Plugin
     public function getCpNavItem()
     {
         $parent = parent::getCpNavItem();
+        $settings = $this->getSettings();
 
         // Allow user to override plugin name in sidebar
         if ($this->getSettings()->pluginNameOverride) {
             $parent['label'] = $this->getSettings()->pluginNameOverride;
         }
 
-        return array_merge($parent, [
-            'subnav' => [
-                'globals' => [
-                    'label' => Craft::t('sprout-seo', 'Globals'),
-                    'url' => 'sprout-seo/globals'
-                ],
-                'redirects' => [
-                    'label' => Craft::t('sprout-seo', 'Redirects'),
-                    'url' => 'sprout-seo/redirects'
-                ],
-                'sitemaps' => [
-                    'label' => Craft::t('sprout-seo', 'Sitemaps'),
-                    'url' => 'sprout-seo/sitemaps'
-                ],
-                'settings' => [
-                    'label' => Craft::t('sprout-seo', 'Settings'),
-                    'url' => 'sprout-seo/settings'
-                ],
-            ]
-        ]);
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editGlobals') &&  $settings->enableGlobals) {
+            $parent['subnav']['globals'] = [
+                'label' => Craft::t('sprout-seo', 'Globals'),
+                'url' => 'sprout-seo/globals'
+            ];
+        }
+
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') &&  $settings->enableRedirects) {
+            $parent['subnav']['redirects'] = [
+                'label' => Craft::t('sprout-seo', 'Redirects'),
+                'url' => 'sprout-seo/redirects'
+            ];
+        }
+
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') &&  $settings->enableSitemaps) {
+            $parent['subnav']['sitemaps'] = [
+                'label' => Craft::t('sprout-seo', 'Sitemaps'),
+                'url' => 'sprout-seo/sitemaps'
+            ];
+        }
+
+        if (Craft::$app->getUser()->getIsAdmin()) {
+            $parent['subnav']['settings'] = [
+                'label' => Craft::t('sprout-seo', 'Settings'),
+                'url' => 'sprout-seo/settings'
+            ];
+        }
+
+        return $parent;
     }
 
     /**
      * @return Settings
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): Settings
     {
         return new Settings();
     }
@@ -188,7 +199,7 @@ class SproutSeo extends Plugin
     /**
      * @return array
      */
-    private function getCpUrlRules()
+    private function getCpUrlRules(): array
     {
         return [
             'sprout-seo' => [
@@ -198,10 +209,8 @@ class SproutSeo extends Plugin
             // Globals
             'sprout-seo/globals/<selectedTabHandle:.*>/<siteHandle:.*>' =>
                 'sprout-seo/global-metadata/edit-global-metadata',
-
             'sprout-seo/globals/<selectedTabHandle:.*>' =>
                 'sprout-seo/global-metadata/edit-global-metadata',
-
             'sprout-seo/globals' => [
                 'template' => 'sprout-seo/globals/index'
             ],
@@ -209,32 +218,24 @@ class SproutSeo extends Plugin
             // Sitemaps
             'sprout-seo/sitemaps/edit/<sitemapSectionId:\d+>/<siteHandle:.*>' =>
                 'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
-
             'sprout-seo/sitemaps/new/<siteHandle:.*>' =>
                 'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
-
             'sprout-seo/sitemaps/<siteHandle:.*>' =>
                 'sprout-base-sitemaps/sitemaps/sitemap-index-template',
-
             'sprout-seo/sitemaps' =>
                 'sprout-base-sitemaps/sitemaps/sitemap-index-template',
 
             // Redirects
             'sprout-seo/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
                 'sprout-base-redirects/redirects/edit-redirect',
-
             'sprout-seo/redirects/edit/<redirectId:\d+>' =>
                 'sprout-base-redirects/redirects/edit-redirect',
-
             'sprout-seo/redirects/new/<siteHandle:.*>' =>
                 'sprout-base-redirects/redirects/edit-redirect',
-
             'sprout-seo/redirects/new' =>
                 'sprout-base-redirects/redirects/edit-redirect',
-
             'sprout-seo/redirects/<siteHandle:.*>' =>
                 'sprout-base-redirects/redirects/redirects-index-template',
-
             'sprout-seo/redirects' =>
                 'sprout-base-redirects/redirects/redirects-index-template',
 
@@ -265,7 +266,7 @@ class SproutSeo extends Plugin
      *
      * @return array
      */
-    private function getSiteUrlRules()
+    private function getSiteUrlRules(): array
     {
         if ($this->getSettings()->enableDynamicSitemaps) {
             return [
@@ -286,8 +287,14 @@ class SproutSeo extends Plugin
     {
         return [
             'sproutSeo-editGlobals' => [
-                'label' => Craft::t('sprout-reports', 'Edit Data Sources')
-            ]
+                'label' => Craft::t('sprout-seo', 'Edit Globals')
+            ],
+            'sproutSeo-editRedirects' => [
+                'label' => Craft::t('sprout-seo', 'Edit Redirects')
+            ],
+            'sproutSeo-editSitemaps' => [
+                'label' => Craft::t('sprout-seo', 'Edit Sitemaps')
+            ],
         ];
     }
 }

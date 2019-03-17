@@ -9,6 +9,7 @@ namespace barrelstrength\sproutseo\models;
 
 
 use barrelstrength\sproutbase\base\SproutSettingsInterface;
+use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use Craft;
 
@@ -22,6 +23,21 @@ class Settings extends Model implements SproutSettingsInterface
      * @var string
      */
     public $pluginNameOverride = '';
+
+    /**
+     * @var bool
+     */
+    public $enableGlobals = true;
+
+    /**
+     * @var bool
+     */
+    public $enableRedirects = true;
+
+    /**
+     * @var bool
+     */
+    public $enableSitemaps = true;
 
     /**
      * @var bool
@@ -103,31 +119,40 @@ class Settings extends Model implements SproutSettingsInterface
      */
     public function getSettingsNavItems(): array
     {
-        return [
-            'general' => [
-                'label' => Craft::t('sprout-seo', 'General'),
-                'url' => 'sprout-seo/settings/general',
-                'selected' => 'general',
-                'template' => 'sprout-seo/settings/general'
-            ],
-            'redirects' => [
+        $settings = SproutSeo::getInstance()->getSettings();
+
+        $navItems['general'] = [
+            'label' => Craft::t('sprout-seo', 'General'),
+            'url' => 'sprout-seo/settings/general',
+            'selected' => 'general',
+            'template' => 'sprout-seo/settings/general'
+        ];
+
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') &&  $settings->enableRedirects) {
+            $navItems['redirects'] = [
                 'label' => Craft::t('sprout-seo', 'Redirects'),
                 'url' => 'sprout-seo/settings/redirects',
                 'selected' => 'redirects',
                 'template' => 'sprout-seo/settings/redirects'
-            ],
-            'sitemaps' => [
+            ];
+        }
+
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') &&  $settings->enableSitemaps) {
+            $navItems['sitemaps'] = [
                 'label' => Craft::t('sprout-seo', 'Sitemaps'),
                 'url' => 'sprout-seo/settings/sitemaps',
                 'selected' => 'sitemaps',
                 'template' => 'sprout-base-sitemaps/settings/sitemaps'
-            ],
-            'advanced' => [
-                'label' => Craft::t('sprout-seo', 'Advanced'),
-                'url' => 'sprout-seo/settings/advanced',
-                'selected' => 'advanced',
-                'template' => 'sprout-seo/settings/advanced',
-            ]
+            ];
+        }
+
+        $navItems['advanced'] = [
+            'label' => Craft::t('sprout-seo', 'Advanced'),
+            'url' => 'sprout-seo/settings/advanced',
+            'selected' => 'advanced',
+            'template' => 'sprout-seo/settings/advanced',
         ];
+
+        return $navItems;
     }
 }

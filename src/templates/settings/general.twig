@@ -6,10 +6,71 @@
     id: 'pluginNameOverride',
     name: 'pluginNameOverride',
     value: settings.pluginNameOverride,
+    placeholder: 'Sprout SEO',
     autofocus: true,
     first: true,
     errors: ''
 }) }}
+
+{% set advancedInput %}
+    <table class="data" style="width: auto;">
+        <thead>
+        <tr>
+            <th scope="col">{{ "Feature"|t('sprout-seo') }}</th>
+            <th scope="col">{{ "Enabled?"|t('sprout-seo') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <label for="enableGlobals">{{ "Enable Globals"|t('sprout-seo') }}</label>
+            </td>
+            <td class="centeralign">
+                <div>
+                    {{ forms.lightswitch({
+                        name: 'enableGlobals',
+                        on: settings.enableGlobals
+                    }) }}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="enableRedirects">{{ "Enable Redirects"|t('sprout-seo') }}</label>
+            </td>
+            <td class="centeralign">
+                <div>
+                    {{ forms.lightswitch({
+                        name: 'enableRedirects',
+                        on: settings.enableRedirects
+                    }) }}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="enableSitemaps">{{ "Enable Sitemaps"|t('sprout-seo') }}</label>
+            </td>
+            <td class="centeralign">
+                <div>
+                    {{ forms.lightswitch({
+                        name: 'enableSitemaps',
+                        on: settings.enableSitemaps
+                    }) }}
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endset %}
+
+{{ forms.field({
+    label: "Choose which features to enable"|t('sprout-seo'),
+    instructions: "Disabled items will be removed from the sidebar navigation and no longer accessible in the Control Panel."|t('sprout-seo')
+}, advancedInput) }}
+
+<hr>
 
 {{ forms.textField({
     label: "Meta Description Length"|t('sprout-seo'),
