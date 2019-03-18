@@ -1,10 +1,20 @@
 # Changelog
 
-## 4.0.0-beta.30 - 2019-03-18
+## 4.0.0-beta.31 - 2019-03-18
 
 ### Changed
 - Updated settings to require Admin permission to edit
 - Updated barrelstrength/sprout-base requirement v4.0.7
+
+## 4.0.0-beta.30 - 2019-03-13
+
+### Changed
+- Updated barrelstrength/sprout-base-fields requirement v1.0.3
+
+### Fixed
+- Fixed bug where Administrative Area Input was not populated correctly ([#85][#85fields])
+
+[#85fields]: https://github.com/barrelstrength/craft-sprout-fields/issues/85
 
 ## 4.0.0-beta.29 - 2019-03-01
 
