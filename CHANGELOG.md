@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0-beta.30 - 2019-03-18
+
+### Changed
+- Updated settings to require Admin permission to edit
+- Updated barrelstrength/sprout-base requirement v4.0.7
+
 ## 4.0.0-beta.29 - 2019-03-01
 
 ### Fixed 

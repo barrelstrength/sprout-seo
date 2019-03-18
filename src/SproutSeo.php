@@ -68,26 +68,12 @@ class SproutSeo extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '4.0.4';
+    public $schemaVersion = '4.0.5';
 
     /**
      * @var string
      */
     public $minVersionRequired = '3.4.2';
-
-    const EDITION_LITE = 'lite';
-    const EDITION_PRO = 'pro';
-
-    /**
-     * @inheritdoc
-     */
-    public static function editions(): array
-    {
-        return [
-            self::EDITION_LITE,
-            self::EDITION_PRO,
-        ];
-    }
 
     /**
      * @inheritdoc
