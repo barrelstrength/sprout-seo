@@ -27,19 +27,19 @@ class m190227_000000_sproutseo_editions extends Migration
         $types = [
             0 => [
                 'oldType' => 'barrelstrength\sproutseo\sectiontypes\Entry',
-                'newType' => 'barrelstrength\sproutsitemaps\sectiontypes\Entry'
+                'newType' => 'barrelstrength\sproutbaseuris\sectiontypes\Entry'
             ],
             1 => [
                 'oldType' => 'barrelstrength\sproutseo\sectiontypes\Category',
-                'newType' => 'barrelstrength\sproutsitemaps\sectiontypes\Category'
+                'newType' => 'barrelstrength\sproutbaseuris\sectiontypes\Category'
             ],
             2 => [
                 'oldType' => 'barrelstrength\sproutseo\sectiontypes\NoSection',
-                'newType' => 'barrelstrength\sproutsitemaps\sectiontypes\NoSection'
+                'newType' => 'barrelstrength\sproutbaseuris\sectiontypes\NoSection'
             ],
             3 => [
                 'oldType' => 'barrelstrength\sproutseo\sectiontypes\Product',
-                'newType' => 'barrelstrength\sproutsitemaps\sectiontypes\Product'
+                'newType' => 'barrelstrength\sproutbaseuris\sectiontypes\Product'
             ],
         ];
 
@@ -55,7 +55,7 @@ class m190227_000000_sproutseo_editions extends Migration
         $types = [
             0 => [
                 'oldType' => 'barrelstrength\sproutseo\elements\Redirect',
-                'newType' => 'barrelstrength\sproutredirects\elements\Redirect'
+                'newType' => 'barrelstrength\sproutbaseredirects\elements\Redirect'
             ]
         ];
 
