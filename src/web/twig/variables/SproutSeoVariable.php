@@ -143,8 +143,9 @@ class SproutSeoVariable
      * @param $string
      *
      * @return DateTime
+     * @throws \Exception
      */
-    public function getDate($string)
+    public function getDate($string): DateTime
     {
         return new DateTime($string['date'], new \DateTimeZone(Craft::$app->getTimeZone()));
     }
