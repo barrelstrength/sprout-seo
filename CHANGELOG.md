@@ -1,12 +1,21 @@
 # Changelog
 
+## 4.0.0-beta.35 - 2019-03-19
+
+### Changed
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.0.7
+
+### Fixed
+- Fixed bug where Sitemap settings did not update properly
+- Fixed typo in changelog headers
+
 ## 4.0.0-beta.34 - 2019-03-19
 
 ### Changed
 - Updated barrelstrength/sprout-base-redirects requirement v1.0.6
 - Updated barrelstrength/sprout-base-sitemaps requirement v1.0.6
 
-## Fixed
+### Fixed
 - Fixed issue where saving a Redirect via the button would redirect to Dashboard
 - Fixed issue where settings assets were not loaded in the right order
 
@@ -16,7 +25,7 @@
 - Updated barrelstrength/sprout-base-redirects requirement v1.0.5
 - Updated barrelstrength/sprout-base-sitemaps requirement v1.0.5
 
-## Fixed
+### Fixed
 - Fixed issue where Redirect New URL could return null
 - Fixed issue where cpEditUrl was set incorrectly
 
