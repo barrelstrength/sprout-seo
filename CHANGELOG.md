@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.0.0-beta.33 - 2019-03-18
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement v1.0.5
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.0.5
+
+## Fixed
+- Fixed issue where Redirect New URL could return null
+- Fixed issue where cpEditUrl was set incorrectly
+
 ## 4.0.0-beta.32 - 2019-03-18
 
 ### Changed
