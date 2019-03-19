@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.0-beta.32 - 2019-03-18
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement v1.0.4
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.0.4
+
+### Fixed
+- Fixed settings compatibility across plugins
+
 ## 4.0.0-beta.31 - 2019-03-18
 
 ### Changed
