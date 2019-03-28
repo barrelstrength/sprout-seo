@@ -46,10 +46,13 @@ class m180620_000001_element_metadata_field extends Migration
             $siteIdsByLocale[$site['language']] = $site['id'];
         }
 
-        $metadataElements = (new Query())
-            ->select(['*'])
-            ->from(['{{%sproutseo_metadata_elements}}'])
-            ->all();
+        $metadataElements = [];
+        if ($this->db->tableExists('{{%sproutseo_metadata_elements}}')){
+            $metadataElements = (new Query())
+                ->select(['*'])
+                ->from(['{{%sproutseo_metadata_elements}}'])
+                ->all();
+        }
 
         foreach ($fields as $field) {
             $settings = json_decode($field['settings'], true);

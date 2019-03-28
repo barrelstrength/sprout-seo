@@ -4,9 +4,9 @@ namespace barrelstrength\sproutseo\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutseo\sectiontypes\Entry;
-use barrelstrength\sproutseo\sectiontypes\Category;
-use barrelstrength\sproutseo\sectiontypes\Product;
+use barrelstrength\sproutbaseuris\sectiontypes\Entry;
+use barrelstrength\sproutbaseuris\sectiontypes\Category;
+use barrelstrength\sproutbaseuris\sectiontypes\Product;
 
 /**
  * m180625_000000_sections_to_sitemap migration.
@@ -19,6 +19,7 @@ class m180625_000000_sections_to_sitemap extends Migration
     public function safeUp()
     {
         $table = '{{%sproutseo_sitemaps}}';
+
         $sitemapsTableExists = $this->getDb()->tableExists($table);
 
         if (!$sitemapsTableExists) {
@@ -52,10 +53,13 @@ class m180625_000000_sections_to_sitemap extends Migration
 
         $primarySiteId = $primarySite['id'];
 
-        $sections = (new Query())
-            ->select(['*'])
-            ->from(['{{%sproutseo_metadata_sections}}'])
-            ->all();
+        $sections = [];
+        if ($this->db->tableExists('{{%sproutseo_metadata_sections}}')){
+            $sections = (new Query())
+                ->select(['*'])
+                ->from(['{{%sproutseo_metadata_sections}}'])
+                ->all();
+        }
 
         foreach ($sections as $section) {
             $newType = null;

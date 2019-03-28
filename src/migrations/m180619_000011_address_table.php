@@ -30,12 +30,12 @@ class m180619_000011_address_table extends Migration
             ->where(['pluginId' => $plugin['id'], 'type' => 'plugin', 'name' => 'm180625_000001_address_table'])
             ->one();
 
-        if ($migration){
-            // this migration was already executed by old name
+        $this->createAddressTable();
+
+        if ($migration || !$this->db->tableExists('{{%sproutseo_addresses}}')){
+            // this migration was already executed by old name or sproutseo_addresses does not exists
             return true;
         }
-
-        $this->createAddressTable();
 
         $addresses = (new Query())
             ->select(['*'])

@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\db\Query;
 use craft\db\Migration;
@@ -32,7 +33,7 @@ class m180702_000000_add_unique_key_column extends Migration
             ->all();
 
         foreach ($sitemaps as $sitemap) {
-            $uniqueKey = SproutSeo::$app->sitemaps->generateUniqueKey();
+            $uniqueKey = SproutBaseSitemaps::$app->sitemaps->generateUniqueKey();
             $this->update($table, ['uniqueKey' => $uniqueKey], ['id' => $sitemap['id']], [], false);
         }
 
