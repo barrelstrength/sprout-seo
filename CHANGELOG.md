@@ -9,6 +9,7 @@
 
 ### Fixed
 - Fixed issue where Redirect Base URLs did not check `.env` variables ([#147])
+- Fixed namespaces on migration classes
 
 [#147]: https://github.com/barrelstrength/craft-sprout-seo/issues/147 
 
