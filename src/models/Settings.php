@@ -52,11 +52,6 @@ class Settings extends Model implements SproutSettingsInterface
     /**
      * @var bool
      */
-    public $enableCustomSections = false;
-
-    /**
-     * @var bool
-     */
     public $enableMetadataRendering = true;
 
     /**
@@ -70,49 +65,9 @@ class Settings extends Model implements SproutSettingsInterface
     public $metadataVariable = 'metadata';
 
     /**
-     * @var string
-     */
-    public $structureId = '';
-
-    /**
-     * @var bool
-     */
-    public $enable404RedirectLog = false;
-
-    /**
-     * @var int
-     */
-    public $totalElementsPerSitemap = 500;
-
-    /**
-     * @var bool
-     */
-    public $enableDynamicSitemaps = true;
-
-    /**
-     * @var int
-     */
-    public $total404Redirects = 250;
-
-    /**
      * @var int
      */
     public $maxMetaDescriptionLength = 160;
-
-    /**
-     * @var bool
-     */
-    public $enableMultilingualSitemaps = false;
-
-    /**
-     * @var array
-     */
-    public $siteSettings = [];
-
-    /**
-     * @var array
-     */
-    public $groupSettings = [];
 
     /**
      * @inheritdoc
