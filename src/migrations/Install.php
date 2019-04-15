@@ -10,9 +10,7 @@ namespace barrelstrength\sproutseo\migrations;
 use Craft;
 
 use craft\db\Migration;
-use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
-use craft\services\Plugins;
 use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirectsInstall;
 use barrelstrength\sproutbasesitemaps\migrations\Install as SproutBaseSitemapsInstall;
 

@@ -12,6 +12,7 @@ use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirectsHelper;
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemapsHelper;
 use barrelstrength\sproutbaseuris\SproutBaseUrisHelper;
 use barrelstrength\sproutseo\fields\ElementMetadata;
@@ -68,7 +69,7 @@ class SproutSeo extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '4.0.5';
+    public $schemaVersion = '4.0.6';
 
     /**
      * @var string
@@ -129,7 +130,7 @@ class SproutSeo extends Plugin
         });
 
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {
-            SproutBaseRedirects::$app->redirects->handleRedirectsOnException($event, $this->handle);
+            SproutBaseRedirects::$app->redirects->handleRedirectsOnException($event);
         });
     }
 
@@ -254,7 +255,8 @@ class SproutSeo extends Plugin
      */
     private function getSiteUrlRules(): array
     {
-        if ($this->getSettings()->enableDynamicSitemaps) {
+        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+        if ($settings->enableDynamicSitemaps) {
             return [
                 'sitemap-<sitemapKey:.*>-<pageNumber:\d+>.xml' =>
                     'sprout-base-sitemaps/xml-sitemap/render-xml-sitemap',
