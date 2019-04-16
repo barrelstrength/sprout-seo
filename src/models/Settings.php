@@ -88,7 +88,7 @@ class Settings extends Model implements SproutSettingsInterface
                 'label' => Craft::t('sprout-seo', 'Redirects'),
                 'url' => 'sprout-seo/settings/redirects',
                 'selected' => 'redirects',
-                'template' => 'sprout-seo/settings/redirects'
+                'template' => 'sprout-base-redirects/settings/redirects'
             ];
         }
 
