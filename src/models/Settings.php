@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\models;
 
 use barrelstrength\sproutbase\base\SproutSettingsInterface;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
+use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use Craft;
@@ -97,11 +98,13 @@ class Settings extends Model implements SproutSettingsInterface
         }
 
         if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') &&  $settings->enableSitemaps) {
+            $sitemapSettings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
             $navItems['sitemaps'] = [
                 'label' => Craft::t('sprout-seo', 'Sitemaps'),
                 'url' => 'sprout-seo/settings/sitemaps',
                 'selected' => 'sitemaps',
-                'template' => 'sprout-base-sitemaps/settings/sitemaps'
+                'template' => 'sprout-base-sitemaps/settings/sitemaps',
+                'settingsModel' => $sitemapSettings
             ];
         }
 
