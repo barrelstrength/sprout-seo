@@ -9,9 +9,11 @@ namespace barrelstrength\sproutseo\models;
 
 
 use barrelstrength\sproutbase\base\SproutSettingsInterface;
+use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use Craft;
+use barrelstrength\sproutredirects\models\Settings as RedirectsSettings;
 
 /**
  *
@@ -84,11 +86,13 @@ class Settings extends Model implements SproutSettingsInterface
         ];
 
         if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') &&  $settings->enableRedirects) {
+            $redirectSettings = SproutBaseRedirects::$app->redirects->getRedirectsSettings();
             $navItems['redirects'] = [
                 'label' => Craft::t('sprout-seo', 'Redirects'),
                 'url' => 'sprout-seo/settings/redirects',
                 'selected' => 'redirects',
-                'template' => 'sprout-base-redirects/settings/redirects'
+                'template' => 'sprout-base-redirects/settings/redirects',
+                'settingsModel' => $redirectSettings
             ];
         }
 
