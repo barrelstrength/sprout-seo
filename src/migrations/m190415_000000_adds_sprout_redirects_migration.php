@@ -29,7 +29,7 @@ class m190415_000000_adds_sprout_redirects_migration extends Migration
             ->select(['*'])
             ->from(['{{%sprout_settings}}'])
             ->where(['model' => SproutRedirectsSettings::class])
-            ->row();
+            ->one();
 
         $defaultSettings = json_decode($settingsRow['settings'], true);
         $defaultStructureId = $defaultSettings['structureId'] ?? null;
