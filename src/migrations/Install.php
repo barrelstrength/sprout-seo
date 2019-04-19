@@ -49,6 +49,11 @@ class Install extends Migration
 
     protected function createTables()
     {
+        $migration = new SproutBaseInstall();
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+
         $globalsTable = '{{%sproutseo_globals}}';
 
         if (!$this->db->tableExists($globalsTable)) {
@@ -77,11 +82,6 @@ class Install extends Migration
         ob_end_clean();
 
         $migration = new SproutBaseSitemapsInstall();
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
-
-        $migration = new SproutBaseInstall();
         ob_start();
         $migration->safeUp();
         ob_end_clean();
