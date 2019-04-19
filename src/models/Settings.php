@@ -87,24 +87,20 @@ class Settings extends Model implements SproutSettingsInterface
         ];
 
         if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') &&  $settings->enableRedirects) {
-            $redirectSettings = SproutBaseRedirects::$app->redirects->getRedirectsSettings();
             $navItems['redirects'] = [
                 'label' => Craft::t('sprout-seo', 'Redirects'),
                 'url' => 'sprout-seo/settings/redirects',
                 'selected' => 'redirects',
-                'template' => 'sprout-base-redirects/settings/redirects',
-                'settingsModel' => $redirectSettings
+                'template' => 'sprout-base-redirects/settings/redirects'
             ];
         }
 
         if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') &&  $settings->enableSitemaps) {
-            $sitemapSettings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
             $navItems['sitemaps'] = [
                 'label' => Craft::t('sprout-seo', 'Sitemaps'),
                 'url' => 'sprout-seo/settings/sitemaps',
                 'selected' => 'sitemaps',
-                'template' => 'sprout-base-sitemaps/settings/sitemaps',
-                'settingsModel' => $sitemapSettings
+                'template' => 'sprout-base-sitemaps/settings/sitemaps'
             ];
         }
 

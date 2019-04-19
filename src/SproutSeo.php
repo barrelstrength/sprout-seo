@@ -20,6 +20,8 @@ use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\services\App;
 use barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable;
 use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
+use barrelstrength\sproutbaseredirects\models\Settings as RedirectsSettingsModel;
+use barrelstrength\sproutbasesitemaps\models\Settings as SitemapsSettingsModel;
 
 use Craft;
 use craft\base\Plugin;
@@ -226,8 +228,22 @@ class SproutSeo extends Plugin
             '<pluginHandle:sprout-seo>/redirects' =>
                 'sprout-base-redirects/redirects/redirects-index-template',
 
+            'sprout-seo/settings/redirects' => [
+                'route' => 'sprout/settings/edit-settings',
+                'params' => [
+                    'sproutBaseSettingsType' => RedirectsSettingsModel::class
+                ]
+            ],
+
+            'sprout-seo/settings/sitemaps' => [
+                'route' => 'sprout/settings/edit-settings',
+                'params' => [
+                    'sproutBaseSettingsType' => SitemapsSettingsModel::class
+                ]
+            ],
+
             // Settings
-            'sprout-seo/settings/<settingsSectionHandle:.*>' =>
+            '<pluginHandle:sprout-seo>/settings/<settingsSectionHandle:.*>' =>
                 'sprout/settings/edit-settings',
 
             'sprout-seo/settings' =>
