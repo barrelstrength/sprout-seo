@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.0.0-beta.37 - 2019-04-20
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement v1.0.8
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.0.9
+- Updated barrelstrength/sprout-base requirement v5.0.0
+
+### Fixed
+- Improved Postgres support
+- Fixed javascript error on Internet Explorer ([#150])
+- Fixed error when loading Redirects index page ([#152])
+
+[#150]: https://github.com/barrelstrength/craft-sprout-seo/issues/150
+[#152]: https://github.com/barrelstrength/craft-sprout-seo/issues/152
+
 ## 4.0.0-beta.36 - 2019-03-23
 
 ### Changed
