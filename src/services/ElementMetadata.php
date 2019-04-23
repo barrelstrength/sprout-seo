@@ -183,8 +183,6 @@ class ElementMetadata extends Component
                     if ($urlEnabledSection->hasFieldLayoutId($fieldLayout->id)) {
                         // Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
                         $elementGroupId = $urlEnabledSection->id;
-
-                        //Resave Element on that URL-Enabled Section Type
                         $urlEnabledSectionType->resaveElements($elementGroupId);
 
                         break;
@@ -192,10 +190,7 @@ class ElementMetadata extends Component
                 }else{
                     // Check and confirm Element Metadata field is the same as the Field Layout
                     if ($urlEnabledSection->hasElementMetadataField(false)) {
-                        // Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
                         $elementGroupId = $urlEnabledSection->id;
-
-                        //Resave Element on that URL-Enabled Section Type
                         $urlEnabledSectionType->resaveElements($elementGroupId);
                     }
                 }
