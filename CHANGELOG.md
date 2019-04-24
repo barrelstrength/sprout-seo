@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.0.0-beta.38 - 2019-04-24
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement v1.0.9
+- Updated barrelstrength/sprout-base-uris requirement v1.0.4
+
+### Fixed
+- Improved logic for which Elements get re-saved after saving a Field Layout ([#134])
+- Fixed bug where Redirect order was not determined by Structure order ([#146])
+
+[#134]: https://github.com/barrelstrength/craft-sprout-seo/issues/134
+[#146]: https://github.com/barrelstrength/craft-sprout-seo/issues/146
+
 ## 4.0.0-beta.37 - 2019-04-20
 
 ### Changed
