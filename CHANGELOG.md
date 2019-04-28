@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.0-beta.39 - 2019-04-28
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement v1.0.10
+
+### Fixed
+- Fixed migration but where settings may not exist
+- Improved Postgres support
+
 ## 4.0.0-beta.38 - 2019-04-24
 
 ### Changed
