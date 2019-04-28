@@ -71,11 +71,11 @@ class m190415_000001_adds_sprout_sitemaps_migration extends Migration
             !empty($sproutSeoSettings['siteSettings'])) {
 
             $settings->pluginNameOverride = $sproutSeoSettings['pluginNameOverride'];
-            $settings->enableCustomSections = $sproutSeoSettings['enableCustomSections'];
-            $settings->enableDynamicSitemaps = $sproutSeoSettings['enableDynamicSitemaps'];
-            $settings->enableMultilingualSitemaps = $sproutSeoSettings['enableMultilingualSitemaps'];
-            $settings->totalElementsPerSitemap = $sproutSeoSettings['totalElementsPerSitemap'];
-            $settings->siteSettings = $sproutSeoSettings['siteSettings'];
+            $settings->enableCustomSections = $sproutSeoSettings['enableCustomSections'] ?? null;
+            $settings->enableDynamicSitemaps = $sproutSeoSettings['enableDynamicSitemaps'] ?? null;
+            $settings->enableMultilingualSitemaps = $sproutSeoSettings['enableMultilingualSitemaps'] ?? null;
+            $settings->totalElementsPerSitemap = $sproutSeoSettings['totalElementsPerSitemap'] ?? null;
+            $settings->siteSettings = $sproutSeoSettings['siteSettings'] ?? null;
             return $settings;
         }
 
