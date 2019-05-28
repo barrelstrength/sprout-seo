@@ -19,6 +19,7 @@ use barrelstrength\sproutseo\SproutSeo;
 
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use craft\helpers\Template as TemplateHelper;
+use craft\helpers\UrlHelper;
 use DateTime;
 use Craft;
 use craft\base\Element;
@@ -383,7 +384,9 @@ abstract class Schema
             return null;
         }
 
-        if (!filter_var($imageId, FILTER_VALIDATE_URL) === false) {
+        $image = [];
+
+        if (UrlHelper::isFullUrl($imageId)) {
             $meta = $this->prioritizedMetadataModel;
 
             $image = [
@@ -391,18 +394,18 @@ abstract class Schema
                 'width' => $meta->ogImageWidth,
                 'height' => $meta->ogImageHeight
             ];
-        } else {
+        } else if(is_numeric($imageId)) {
 
-            $image = Craft::$app->assets->getAssetById($imageId);
+            $imageAsset = Craft::$app->assets->getAssetById($imageId);
 
-            if ($image !== null && $image->getUrl()) {
+            if ($imageAsset !== null && $imageAsset->getUrl()) {
 
                 $transform = $this->globals->settings['ogTransform'];
 
                 $image = [
-                    'url' => OptimizeHelper::getAssetUrl($image->id, $transform),
-                    'width' => $image->getWidth(),
-                    'height' => $image->getHeight()
+                    'url' => OptimizeHelper::getAssetUrl($imageAsset->id, $transform),
+                    'width' => $imageAsset->getWidth(),
+                    'height' => $imageAsset->getHeight()
                 ];
             } else {
                 return null;
