@@ -609,7 +609,12 @@ class SproutSeoVariable
             $options[$settings[$handle]] = $settings[$handle];
         }
 
-        $options['custom'] = Craft::t('sprout-seo', 'Add Custom Format');
+        $needPro = $this->getIsPro() ? '' : '(Pro)';
+        $options[] = [
+            'value' => 'custom',
+            'label' => Craft::t('sprout-seo', 'Add Custom Format {needPro}', ['needPro' => $needPro]),
+            'disabled' => !$this->getIsPro()
+        ];
 
         return $options;
     }
@@ -881,6 +886,19 @@ class SproutSeoVariable
             return true;
         }
 
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsPro()
+    {
+        $plugin = SproutSeo::getInstance();
+
+        if ($plugin->is(SproutSeo::EDITION_PRO)){
+            return true;
+        }
         return false;
     }
 
