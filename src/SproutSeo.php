@@ -309,14 +309,16 @@ class SproutSeo extends Plugin
      */
     private function getSiteUrlRules(): array
     {
-        $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
-        if ($settings->enableDynamicSitemaps) {
-            return [
-                'sitemap-<sitemapKey:.*>-<pageNumber:\d+>.xml' =>
-                    'sprout-base-sitemaps/xml-sitemap/render-xml-sitemap',
-                'sitemap-?<sitemapKey:.*>.xml' =>
-                    'sprout-base-sitemaps/xml-sitemap/render-xml-sitemap',
-            ];
+        if ($this->is(self::EDITION_PRO)){
+            $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+            if ($settings->enableDynamicSitemaps) {
+                return [
+                    'sitemap-<sitemapKey:.*>-<pageNumber:\d+>.xml' =>
+                        'sprout-base-sitemaps/xml-sitemap/render-xml-sitemap',
+                    'sitemap-?<sitemapKey:.*>.xml' =>
+                        'sprout-base-sitemaps/xml-sitemap/render-xml-sitemap',
+                ];
+            }
         }
 
         return [];
