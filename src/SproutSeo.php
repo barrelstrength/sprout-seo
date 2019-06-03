@@ -146,7 +146,9 @@ class SproutSeo extends Plugin
         });
 
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {
-            SproutBaseRedirects::$app->redirects->handleRedirectsOnException($event);
+            if ($this->is(self::EDITION_PRO)){
+                SproutBaseRedirects::$app->redirects->handleRedirectsOnException($event);
+            }
         });
     }
 
@@ -285,14 +287,6 @@ class SproutSeo extends Plugin
         }
 
         return $rules;
-        /*
-        'sprout-seo/sitemaps/<siteHandle:.*>' => [
-        'route' => 'sprout/settings/advertise',
-        'params' => [
-            'template' => 'sprout-seo/advertise/sitemap',
-            'title' => 'Buy Sprout SEO'
-        ]
-        ],*/
     }
 
     /**
