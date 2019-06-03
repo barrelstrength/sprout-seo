@@ -78,6 +78,20 @@ class SproutSeo extends Plugin
      */
     public $minVersionRequired = '3.4.2';
 
+    const EDITION_LITE = 'lite';
+    const EDITION_PRO = 'pro';
+
+    /**
+     * @inheritdoc
+     */
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
+    }
+
     /**
      * @inheritdoc
      *
@@ -190,7 +204,7 @@ class SproutSeo extends Plugin
      */
     private function getCpUrlRules(): array
     {
-        return [
+        $rules = [
             'sprout-seo' => [
                 'template' => 'sprout-seo/index'
             ],
@@ -203,45 +217,6 @@ class SproutSeo extends Plugin
             'sprout-seo/globals' => [
                 'template' => 'sprout-seo/globals/index'
             ],
-
-            // Sitemaps
-            '<pluginHandle:sprout-seo>/sitemaps/edit/<sitemapSectionId:\d+>/<siteHandle:.*>' =>
-                'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
-            '<pluginHandle:sprout-seo>/sitemaps/new/<siteHandle:.*>' =>
-                'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
-            '<pluginHandle:sprout-seo>/sitemaps/<siteHandle:.*>' =>
-                'sprout-base-sitemaps/sitemaps/sitemap-index-template',
-            '<pluginHandle:sprout-seo>/sitemaps' =>
-                'sprout-base-sitemaps/sitemaps/sitemap-index-template',
-
-            // Redirects
-            '<pluginHandle:sprout-seo>/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
-                'sprout-base-redirects/redirects/edit-redirect-template',
-            '<pluginHandle:sprout-seo>/redirects/edit/<redirectId:\d+>' =>
-                'sprout-base-redirects/redirects/edit-redirect-template',
-            '<pluginHandle:sprout-seo>/redirects/new/<siteHandle:.*>' =>
-                'sprout-base-redirects/redirects/edit-redirect-template',
-            '<pluginHandle:sprout-seo>/redirects/new' =>
-                'sprout-base-redirects/redirects/edit-redirect-template',
-            '<pluginHandle:sprout-seo>/redirects/<siteHandle:.*>' =>
-                'sprout-base-redirects/redirects/redirects-index-template',
-            '<pluginHandle:sprout-seo>/redirects' =>
-                'sprout-base-redirects/redirects/redirects-index-template',
-
-            'sprout-seo/settings/redirects' => [
-                'route' => 'sprout/settings/edit-settings',
-                'params' => [
-                    'sproutBaseSettingsType' => RedirectsSettingsModel::class
-                ]
-            ],
-
-            'sprout-seo/settings/sitemaps' => [
-                'route' => 'sprout/settings/edit-settings',
-                'params' => [
-                    'sproutBaseSettingsType' => SitemapsSettingsModel::class
-                ]
-            ],
-
             // Settings
             '<pluginHandle:sprout-seo>/settings/<settingsSectionHandle:.*>' =>
                 'sprout/settings/edit-settings',
@@ -249,6 +224,75 @@ class SproutSeo extends Plugin
             'sprout-seo/settings' =>
                 'sprout/settings/edit-settings',
         ];
+
+        if ($this->is(self::EDITION_PRO)){
+            $rules = array_merge($rules,[
+                // Sitemaps
+                '<pluginHandle:sprout-seo>/sitemaps/edit/<sitemapSectionId:\d+>/<siteHandle:.*>' =>
+                    'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
+                '<pluginHandle:sprout-seo>/sitemaps/new/<siteHandle:.*>' =>
+                    'sprout-base-sitemaps/sitemaps/sitemap-edit-template',
+                '<pluginHandle:sprout-seo>/sitemaps/<siteHandle:.*>' =>
+                    'sprout-base-sitemaps/sitemaps/sitemap-index-template',
+                '<pluginHandle:sprout-seo>/sitemaps' =>
+                    'sprout-base-sitemaps/sitemaps/sitemap-index-template',
+
+                // Redirects
+                '<pluginHandle:sprout-seo>/redirects/edit/<redirectId:\d+>/<siteHandle:.*>' =>
+                    'sprout-base-redirects/redirects/edit-redirect-template',
+                '<pluginHandle:sprout-seo>/redirects/edit/<redirectId:\d+>' =>
+                    'sprout-base-redirects/redirects/edit-redirect-template',
+                '<pluginHandle:sprout-seo>/redirects/new/<siteHandle:.*>' =>
+                    'sprout-base-redirects/redirects/edit-redirect-template',
+                '<pluginHandle:sprout-seo>/redirects/new' =>
+                    'sprout-base-redirects/redirects/edit-redirect-template',
+                '<pluginHandle:sprout-seo>/redirects/<siteHandle:.*>' =>
+                    'sprout-base-redirects/redirects/redirects-index-template',
+                '<pluginHandle:sprout-seo>/redirects' =>
+                    'sprout-base-redirects/redirects/redirects-index-template',
+
+                'sprout-seo/settings/redirects' => [
+                    'route' => 'sprout/settings/edit-settings',
+                    'params' => [
+                        'sproutBaseSettingsType' => RedirectsSettingsModel::class
+                    ]
+                ],
+
+                'sprout-seo/settings/sitemaps' => [
+                    'route' => 'sprout/settings/edit-settings',
+                    'params' => [
+                        'sproutBaseSettingsType' => SitemapsSettingsModel::class
+                    ]
+                ],
+            ]);
+        }else {
+            $rules = array_merge($rules, [
+                'sprout-seo/sitemaps<siteHandle:.*>' => [
+                    'route' => 'sprout/settings/advertise',
+                    'params' => [
+                        'template' => 'sprout-seo/advertise/sitemap',
+                        'title' => 'Buy Sprout SEO - Sitemaps'
+                    ]
+                ],
+                'sprout-seo/redirects<siteHandle:.*>' => [
+                    'route' => 'sprout/settings/advertise',
+                    'params' => [
+                        'template' => 'sprout-seo/advertise/redirects',
+                        'title' => 'Buy Sprout SEO - Redirects'
+                    ]
+                ]
+            ]);
+        }
+
+        return $rules;
+        /*
+        'sprout-seo/sitemaps/<siteHandle:.*>' => [
+        'route' => 'sprout/settings/advertise',
+        'params' => [
+            'template' => 'sprout-seo/advertise/sitemap',
+            'title' => 'Buy Sprout SEO'
+        ]
+        ],*/
     }
 
     /**
