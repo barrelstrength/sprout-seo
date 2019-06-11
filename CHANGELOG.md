@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.0.0 - 2019-06-11
+
+### Changed
+- Updated barrelstrength/sprout-base-fields requirement v1.0.7
+
+### Fixed
+- Fixed display issue with SEO badge on field labels
+- Fixed bug retrieving meta image in some scenarios ([#156])
+
+[#156]: https://github.com/barrelstrength/craft-sprout-seo/issues/156
+
 ## 4.0.0-beta.39 - 2019-04-28
 
 ### Changed
