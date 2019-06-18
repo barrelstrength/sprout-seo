@@ -220,7 +220,7 @@
                 structured: true,
                 priority: 'globals'
             }),
-            instructions: 'The latitude of your address. <a class="query-button" href="#">' ~ "Find and add coordinates"|t('sprout-seo') ~ '</a> to dynamically add GPS coordinates for your address from the Google Maps API.'|t('sprout-seo'),
+            instructions: 'The latitude of your address.'|t('sprout-seo'),
             name: 'sproutseo[globals][identity][latitude]',
             value: websiteIdentity['latitude'] is defined ? websiteIdentity.latitude : null,
             errors: ''
@@ -233,7 +233,7 @@
                 structured: true,
                 priority: 'globals'
             }),
-            instructions: 'The longitude of your address. <a class="query-button" href="#">' ~ "Find and add coordinates"|t('sprout-seo') ~ '</a> to dynamically add GPS coordinates for your address from the Google Maps API.'|t('sprout-seo'),
+            instructions: 'The longitude of your address.'|t('sprout-seo'),
             name: 'sproutseo[globals][identity][longitude]',
             value: websiteIdentity['longitude'] is defined ? websiteIdentity.longitude : null,
             errors: ''
