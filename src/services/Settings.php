@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutseo\models\Settings as PluginSettings;
+use craft\db\Query;
 use yii\base\Component;
 
 use Craft;
@@ -28,5 +29,19 @@ class Settings extends Component
         $descriptionLength = $descriptionLength ? $descriptionLength : 160;
 
         return $descriptionLength;
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getTotalElementMetadataFields()
+    {
+        $totalFields = (new Query())
+            ->select(['id'])
+            ->from(['{{%fields}}'])
+            ->where(['type' => 'barrelstrength\sproutseo\fields\ElementMetadata'])
+            ->count();
+
+        return $totalFields;
     }
 }
