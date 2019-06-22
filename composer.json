@@ -21,7 +21,7 @@
     "email": "sprout@barrelstrengthdesign.com",
     "issues": "https://github.com/barrelstrength/sprout-seo/issues?state=open",
     "source": "https://github.com/barrelstrength/sprout-seo",
-    "docs": "https://sprout.barrelstrengthdesign.com/craft-plugins/seo/docs",
+    "docs": "https://sprout.barrelstrengthdesign.com/docs/seo",
     "rss": "https://github.com/barrelstrength/sprout-seo/commits/v2.atom"
   },
   "require": {
@@ -43,10 +43,7 @@
     "name": "Sprout SEO",
     "handle": "sprout-seo",
     "developer": "Barrel Strength",
-    "developerUrl": "https://barrelstrengthdesign.com",
-    "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/seo",
-    "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-seo/master/CHANGELOG.md",
-    "downloadUrl": "https://github.com/BarrelStrength/sprout-seo/archive/master.zip",
+    "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/seo",
     "class": "barrelstrength\\sproutseo\\SproutSeo"
   }
 }
