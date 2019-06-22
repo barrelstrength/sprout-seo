@@ -270,18 +270,10 @@ class SproutSeo extends Plugin
         }else {
             $rules = array_merge($rules, [
                 'sprout-seo/sitemaps<siteHandle:.*>' => [
-                    'route' => 'sprout/settings/advertise',
-                    'params' => [
-                        'template' => 'sprout-seo/advertise/sitemap',
-                        'title' => 'Buy Sprout SEO - Sitemaps'
-                    ]
+                    'template' => 'sprout-seo/upgrade/sitemaps',
                 ],
                 'sprout-seo/redirects<siteHandle:.*>' => [
-                    'route' => 'sprout/settings/advertise',
-                    'params' => [
-                        'template' => 'sprout-seo/advertise/redirects',
-                        'title' => 'Buy Sprout SEO - Redirects'
-                    ]
+                    'template' => 'sprout-seo/upgrade/redirects',
                 ]
             ]);
         }
