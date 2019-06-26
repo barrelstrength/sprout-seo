@@ -7,16 +7,22 @@
 
 namespace barrelstrength\sproutseo\controllers;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasefields\helpers\AddressHelper;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\Template;
 use craft\web\Controller;
 use Craft;
 use craft\helpers\DateTimeHelper;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
@@ -34,9 +40,11 @@ class GlobalMetadataController extends Controller
      * @return Response
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
-     * @throws \Twig_Error_Loader
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
     public function actionEditGlobalMetadata(string $selectedTabHandle, string $siteHandle = null, Globals $globals = null): Response
     {
@@ -62,14 +70,11 @@ class GlobalMetadataController extends Controller
                 if (!in_array($currentSite->id, $editableSiteIds, false)) {
                     throw new ForbiddenHttpException('User not permitted to edit content in this site');
                 }
+            } else if (in_array($currentSite->id, $editableSiteIds, false)) {
+                $currentSite = Craft::$app->getSites()->currentSite;
             } else {
-                // Are they allowed to edit the current site?
-                if (in_array($currentSite->id, $editableSiteIds, false)) {
-                    $currentSite = Craft::$app->getSites()->currentSite;
-                } else {
-                    // Use the first site they are allowed to edit
-                    $currentSite = Craft::$app->getSites()->getSiteById($editableSiteIds[0]);
-                }
+                // Use the first site they are allowed to edit
+                $currentSite = Craft::$app->getSites()->getSiteById($editableSiteIds[0]);
             }
         }
 
@@ -93,6 +98,8 @@ class GlobalMetadataController extends Controller
         $countryInputHtml = $addressHelper->getCountryInputHtml();
         $addressFormHtml = $addressHelper->getAddressFormHtml();
 
+        $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+
         // Render the template!
         return $this->renderTemplate('sprout-seo/globals/'.$selectedTabHandle, [
             'globals' => $globals,
@@ -100,7 +107,8 @@ class GlobalMetadataController extends Controller
             'selectedTabHandle' => $selectedTabHandle,
             'addressDisplayHtml' => Template::raw($addressDisplayHtml),
             'countryInputHtml' => Template::raw($countryInputHtml),
-            'addressFormHtml' => Template::raw($addressFormHtml)
+            'addressFormHtml' => Template::raw($addressFormHtml),
+            'isPro' => $isPro
         ]);
     }
 
@@ -110,7 +118,7 @@ class GlobalMetadataController extends Controller
      * @return null|Response
      * @throws BadRequestHttpException
      * @throws \Throwable
-     * @throws \yii\base\Exception
+     * @throws Exception
      * @throws \yii\db\Exception
      * @throws \yii\web\ServerErrorHttpException
      */
@@ -216,7 +224,7 @@ class GlobalMetadataController extends Controller
      * @param $postData
      *
      * @return Metadata
-     * @throws \yii\base\Exception
+     * @throws Exception
      * @throws \yii\web\ServerErrorHttpException
      */
     public function populateGlobalMetadata($postData)

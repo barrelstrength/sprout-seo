@@ -77,7 +77,11 @@ class Settings extends Model implements SproutSettingsInterface
      */
     public function getSettingsNavItems(): array
     {
-        $settings = SproutSeo::getInstance()->getSettings();
+        /** @var SproutSeo $plugin */
+        $plugin = SproutSeo::getInstance();
+        $settings = $plugin->getSettings();
+
+        $isPro = $plugin->is(SproutSeo::EDITION_PRO);
 
         $navItems['general'] = [
             'label' => Craft::t('sprout-seo', 'General'),
@@ -86,7 +90,7 @@ class Settings extends Model implements SproutSettingsInterface
             'template' => 'sprout-seo/settings/general'
         ];
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') &&  $settings->enableRedirects) {
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') &&  $settings->enableRedirects && $isPro) {
             $navItems['redirects'] = [
                 'label' => Craft::t('sprout-seo', 'Redirects'),
                 'url' => 'sprout-seo/settings/redirects',
@@ -95,7 +99,7 @@ class Settings extends Model implements SproutSettingsInterface
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') &&  $settings->enableSitemaps) {
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') &&  $settings->enableSitemaps && $isPro) {
             $navItems['sitemaps'] = [
                 'label' => Craft::t('sprout-seo', 'Sitemaps'),
                 'url' => 'sprout-seo/settings/sitemaps',
@@ -110,6 +114,16 @@ class Settings extends Model implements SproutSettingsInterface
             'selected' => 'advanced',
             'template' => 'sprout-seo/settings/advanced',
         ];
+
+        if (!$isPro) {
+            $navItems['upgrade'] = [
+                'label' => Craft::t('sprout-seo', 'Upgrade to PRO'),
+                'url' => 'sprout-seo/settings/upgrade',
+                'selected' => 'upgrade',
+                'template' => 'sprout-seo/settings/upgrade'
+            ];
+        }
+
 
         return $navItems;
     }
