@@ -46,7 +46,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings', $settings);
 
         $globals = (new Query())
-            ->select(['id', 'meta'])
+            ->select(['id', 'meta', 'identity'])
             ->from(['{{%sproutseo_globals}}'])
             ->one();
 
@@ -58,12 +58,30 @@ class m180627_000000_craft2_to_craft3 extends Migration
                     $this->update('{{%sproutseo_globals}}', ['meta' => $metaAsJson], ['id' => $globals['id']], [], false);
                 }
             }
+
+            if (isset($globals['identity'])){
+                $identity = json_decode($globals['identity'], true);
+
+                if ($identity){
+                    $identityAsJson = $this->getIdentityAsJson($identity);
+                    $this->update('{{%sproutseo_globals}}', ['identity' => $identityAsJson], ['id' => $globals['id']], [], false);
+                }
+            }
         }
 
         // Small change in Redirects
         $this->alterColumn('{{%sproutseo_redirects}}', 'newUrl', $this->string());
 
         return true;
+    }
+
+    private function getIdentityAsJson($identity)
+    {
+        unset(
+            $identity['url']
+        );
+
+        return json_encode($identity);
     }
 
     private function getMetadataAsJson($meta)
