@@ -286,6 +286,24 @@ class ElementMetadata extends Field
     /**
      * @inheritdoc
      */
+    public function rules()
+    {
+        $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+        $metadataFieldCount = SproutSeo::$app->settings->getMetadataFieldCount();
+        $theFirstMetadataField = !$this->id && $metadataFieldCount === 0;
+        $theOneMetadataField = $this->id && $metadataFieldCount === 1;
+
+        if (!$isPro && !($theFirstMetadataField || $theOneMetadataField))
+        {
+            $this->addError('optimizedTitleField', Craft::t('sprout-forms', 'Upgrade to Sprout SEO PRO to manage multiple Metadata fields.'));
+        }
+
+        return parent::rules();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getElementValidationRules(): array
     {
         $rules[] = 'validateElementMetadata';
