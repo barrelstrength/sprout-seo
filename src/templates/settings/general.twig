@@ -1,5 +1,7 @@
 {% import "_includes/forms" as forms %}
 
+{% set isPro = plugin.is('pro') %}
+
 {{ forms.textField({
     label: "Plugin Name"|t('sprout-seo'),
     instructions: "Intuitive, human-readable plugin name for the end user."|t('sprout-seo'),
@@ -36,26 +38,28 @@
         </tr>
         <tr>
             <td>
-                <label for="enableRedirects">{{ "Enable Redirects"|t('sprout-seo') }}</label>
+                <label for="enableRedirects">{{ "Enable Redirects"|t('sprout-seo') }}{% if not isPro %} <span class="sprout-pro">PRO</span>{% endif %}</label>
             </td>
             <td class="centeralign">
                 <div>
                     {{ forms.lightswitch({
                         name: 'enableRedirects',
-                        on: settings.enableRedirects
+                        on: not isPro ? false : settings.enableRedirects,
+                        disabled: not isPro
                     }) }}
                 </div>
             </td>
         </tr>
         <tr>
             <td>
-                <label for="enableSitemaps">{{ "Enable Sitemaps"|t('sprout-seo') }}</label>
+                <label for="enableSitemaps">{{ "Enable Sitemaps"|t('sprout-seo') }}{% if not isPro %} <span class="sprout-pro">PRO</span>{% endif %}</label>
             </td>
             <td class="centeralign">
                 <div>
                     {{ forms.lightswitch({
                         name: 'enableSitemaps',
-                        on: settings.enableSitemaps
+                        on: not isPro ? false : settings.enableSitemaps,
+                        disabled: not isPro
                     }) }}
                 </div>
             </td>
@@ -90,4 +94,5 @@
     onLabel: "Enable"|t
 }) }}
 
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
 {% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\general\\GeneralAsset") %}

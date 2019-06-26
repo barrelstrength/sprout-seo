@@ -872,26 +872,6 @@ class SproutSeoVariable
     /**
      * @return bool
      */
-    public function getCanCreateNewField()
-    {
-        $plugin = SproutSeo::getInstance();
-
-        if ($plugin->is(SproutSeo::EDITION_PRO)){
-            return true;
-        }
-
-        $total = SproutSeo::$app->settings->getTotalElementMetadataFields();
-
-        if ($total == 0){
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
     public function getIsPro()
     {
         $plugin = SproutSeo::getInstance();

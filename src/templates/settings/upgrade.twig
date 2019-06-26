@@ -1,0 +1,25 @@
+{% import 'sprout-base/_includes/sproutcp' as sprout %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\landing\\LandingAsset") %}
+
+{% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutseo/web/assets/base/dist', true) -%}
+{% set pluginStoreLink = currentUser.admin ? cpUrl('plugin-store/sprout-seo') : 'https://plugins.craftcms.com/sprout-seo' %}
+
+<div class="sprout-landing">
+
+    {{ sprout.featureHeader({
+        heading: "Smart, content-driven SEO"|t('sprout-seo'),
+        message: " Sprout SEO [pro] opens the door to fine-grained control of your SEO strategy and workflows. Customize multiple Metadata fields, manage redirects, and generate sitemaps."|t('sprout-seo'),
+        primaryButtonText: "Upgrade Now"|t('sprout-seo'),
+        primaryButtonLink: pluginStoreLink,
+        secondaryButtonText: "Learn More"|t('sprout-seo'),
+        secondaryButtonLink: "https://sprout.barrelstrengthdesign.com/docs/seo"
+    }) }}
+
+    {{ sprout.featureImage({
+        imageUrl: assetUrl ~ '/images/sproutseo-feature.png',
+        altText: 'Content-focused SEO for Craft CMS'|t('sprout-seo')
+    }) }}
+
+</div>

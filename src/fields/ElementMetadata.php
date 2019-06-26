@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\fields;
 
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasefields\web\assets\selectother\SelectOtherFieldAsset;
 use barrelstrength\sproutseo\web\assets\schema\SchemaAsset;
 use barrelstrength\sproutseo\web\assets\opengraph\OpenGraphAsset;
@@ -27,11 +28,16 @@ use PhpScience\TextRank\Tool\StopWords\French;
 use PhpScience\TextRank\Tool\StopWords\Italian;
 use PhpScience\TextRank\Tool\StopWords\Norwegian;
 use PhpScience\TextRank\Tool\StopWords\Spanish;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig_Error_Loader;
 use yii\base\Exception;
 use craft\base\ElementInterface;
 use craft\elements\Asset;
 use craft\fields\Assets;
 use craft\db\mysql\Schema;
+use yii\base\InvalidConfigException;
 
 /**
  *
@@ -103,6 +109,7 @@ class ElementMetadata extends Field
      * @param ElementInterface|null $element
      *
      * @return array|mixed|null|string
+     * @throws Exception
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
@@ -124,8 +131,8 @@ class ElementMetadata extends Field
      * @inheritdoc
      *
      * @throws Exception
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\InvalidConfigException
+     * @throws Twig_Error_Loader
+     * @throws InvalidConfigException
      */
 //    public function getTableAttributeHtml($value, ElementInterface $element): string
 //    {
@@ -139,9 +146,11 @@ class ElementMetadata extends Field
 //    }
 
     /**
-     * @return null|string
-     * @throws Exception
-     * @throws \Twig_Error_Loader
+     * @return string|null
+     * @throws InvalidConfigException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -152,10 +161,14 @@ class ElementMetadata extends Field
         Craft::$app->getView()->registerAssetBundle(SchemaAsset::class);
         Craft::$app->getView()->registerAssetBundle(SelectOtherFieldAsset::class);
 
+        $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+
         return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/settings', [
+            'fieldId' => $this->id,
             'settings' => $this->getAttributes(),
             'schemas' => $schemas,
-            'schemaSubtypes' => $schemaSubtypes
+            'schemaSubtypes' => $schemaSubtypes,
+            'isPro' => $isPro
         ]);
     }
 
@@ -165,7 +178,7 @@ class ElementMetadata extends Field
      *
      * @return string
      * @throws Exception
-     * @throws \Twig_Error_Loader
+     * @throws Twig_Error_Loader
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {

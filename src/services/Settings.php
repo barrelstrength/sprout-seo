@@ -12,6 +12,7 @@ use craft\db\Query;
 use yii\base\Component;
 
 use Craft;
+use barrelstrength\sproutseo\fields\ElementMetadata;
 
 /**
  *
@@ -34,12 +35,12 @@ class Settings extends Component
     /**
      * @return int|string
      */
-    public function getTotalElementMetadataFields()
+    public function getMetadataFieldCount()
     {
         $totalFields = (new Query())
             ->select(['id'])
             ->from(['{{%fields}}'])
-            ->where(['type' => 'barrelstrength\sproutseo\fields\ElementMetadata'])
+            ->where(['type' => ElementMetadata::class])
             ->count();
 
         return $totalFields;

@@ -1,4 +1,7 @@
 {% extends "sprout-seo/_layouts/base" %}
+{% import 'sprout-base/_includes/sproutcp' as sprout %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
 
 {% if title is not defined %}
     {% set title = "Global Metadata"|t %}
@@ -30,6 +33,17 @@
 } %}
 
 {% set docTitle = navItems[selectedTabHandle].title~' - '~title %}
+
+{% block actionButton %}
+    {% if not isPro %}
+        <div class="buttons">
+            {{ sprout.upgradeToProButton({
+                url: cpUrl('sprout-seo/upgrade'),
+                title: "Upgrade to Sprout SEO to manage Unlimited Custom Metadata Mappings, Redirects, and XML Sitemaps."|t('sprout-seo')
+            }) }}
+        </div>
+    {% endif %}
+{% endblock %}
 
 {% block sidebar %}
     <nav>
