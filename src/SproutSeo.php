@@ -239,12 +239,6 @@ class SproutSeo extends Plugin
             'sprout-seo/globals' => [
                 'template' => 'sprout-seo/globals/index'
             ],
-
-            // Settings
-            '<pluginHandle:sprout-seo>/settings/<settingsSectionHandle:.*>' =>
-                'sprout/settings/edit-settings',
-            'sprout-seo/settings' =>
-                'sprout/settings/edit-settings',
         ];
 
         if ($this->is(self::EDITION_PRO)) {
@@ -285,9 +279,18 @@ class SproutSeo extends Plugin
                     'params' => [
                         'sproutBaseSettingsType' => SitemapsSettingsModel::class
                     ]
-                ],
+                ]
             ]);
         }
+
+        // Make sure our general settings come last in the rules
+        $rules = array_merge($rules, [
+            // Settings
+            '<pluginHandle:sprout-seo>/settings/<settingsSectionHandle:.*>' =>
+                'sprout/settings/edit-settings',
+            'sprout-seo/settings' =>
+                'sprout/settings/edit-settings',
+        ]);
 
         return $rules;
     }
