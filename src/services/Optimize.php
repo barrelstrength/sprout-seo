@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
@@ -248,6 +249,13 @@ class Optimize extends Component
                     }
                 case MetadataLevels::TemplateMetadata:
                     {
+                        $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+
+                        // Only allow Template Overrides if using Pro Edition
+                        if (!$isPro) {
+                            break;
+                        }
+
                         $overrideInfo = $this->templateMetadata;
 
                         // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
