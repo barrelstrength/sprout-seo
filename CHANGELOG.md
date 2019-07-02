@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.1.0 - 2019-07-02
+
+### Added
+- Added support for free, Sprout SEO Lite Edition
+ 
+### Changed
+- Updated barrelstrength/sprout-base requirement v5.0.5
+
+### Fixed
+- Fixed `Unable to set Metadata::url` error on migration from Craft 2 ([#164])
+- Removed find coordinates address helper ([#162])
+
+[#162]: https://github.com/barrelstrength/craft-sprout-seo/issues/162
+[#164]: https://github.com/barrelstrength/craft-sprout-seo/issues/164
+
 ## 4.0.0 - 2019-06-11
 
 ### Changed
