@@ -1,20 +1,14 @@
 # Changelog
 
-## 4.1.1 - 2019-07-09
-
-### Added
-- Added support for Craft 3.2 allowAnonymous updates
-
-### Changed
-- Updated craftcms/cms requirement to v3.2.0
-- Updated barrelstrength/sprout-base-fields requirement to 1.0.8
-
-## 4.1.0 - 2019-07-02
+## 4.1.0 - 2019-07-09
 
 ### Added
 - Added support for free, Sprout SEO Lite Edition
+- Added support for Craft 3.2 allowAnonymous updates
  
 ### Changed
+- Updated craftcms/cms requirement to v3.2.0
+- Updated barrelstrength/sprout-base-fields requirement to 1.0.8
 - Updated barrelstrength/sprout-base requirement v5.0.5
 
 ### Fixed
