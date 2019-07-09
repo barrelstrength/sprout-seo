@@ -124,7 +124,6 @@ class Settings extends Model implements SproutSettingsInterface
             ];
         }
 
-
         return $navItems;
     }
 }
