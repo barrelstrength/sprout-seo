@@ -28,9 +28,11 @@ use barrelstrength\sproutbaseredirects\models\Settings as RedirectsSettingsModel
 use barrelstrength\sproutbasesitemaps\models\Settings as SitemapsSettingsModel;
 
 use Craft;
+use craft\base\Element;
 use craft\base\Plugin;
 use craft\events\FieldLayoutEvent;
 
+use craft\events\RegisterPreviewTargetsEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
@@ -132,6 +134,7 @@ class SproutSeo extends Plugin
         });
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $event->rules['sprout-seo-live-preview'] = 'sprout-seo/seo-preview/preview';
             $event->rules = array_merge($event->rules, $this->getSiteUrlRules());
         });
 
@@ -155,6 +158,22 @@ class SproutSeo extends Plugin
             if ($this->is(self::EDITION_PRO)) {
                 SproutBaseRedirects::$app->redirects->handleRedirectsOnException($event);
             }
+        });
+
+        Event::on(Element::class, Element::EVENT_REGISTER_PREVIEW_TARGETS, static function(RegisterPreviewTargetsEvent $event) {
+            /** @var Element $element */
+            $element = $event->sender;
+
+            $event->previewTargets[] = [
+                'label' => 'SEO Preview',
+                'url' => UrlHelper::siteUrl('sprout-seo-live-preview', [
+                    'elementId' => $element->id,
+                    'siteId' => $element->siteId,
+                ]),
+            ];
+
+            // Protect the preview target from public access:
+            Craft::$app->getSession()->authorize('customAuthorizationKey:' . $element->id);
         });
     }
 
