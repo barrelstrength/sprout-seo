@@ -612,7 +612,9 @@ class SproutSeoVariable
         $needPro = $this->getIsPro() ? '' : '(Pro)';
         $options[] = [
             'value' => 'custom',
-            'label' => Craft::t('sprout-seo', 'Add Custom Format {needPro}', ['needPro' => $needPro]),
+            'label' => Craft::t('sprout-seo', 'Add Custom Format {needPro}', [
+                'needPro' => $needPro
+            ]),
             'disabled' => !$this->getIsPro()
         ];
 
