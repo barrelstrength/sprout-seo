@@ -295,7 +295,7 @@ class ElementMetadata extends Field
 
         if (!$isPro && !($theFirstMetadataField || $theOneMetadataField))
         {
-            $this->addError('optimizedTitleField', Craft::t('sprout-forms', 'Upgrade to Sprout SEO PRO to manage multiple Metadata fields.'));
+            $this->addError('optimizedTitleField', Craft::t('sprout-seo', 'Upgrade to Sprout SEO PRO to manage multiple Metadata fields.'));
         }
 
         return parent::rules();
