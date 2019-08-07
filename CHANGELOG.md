@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.1.2 - 2019-08-07
+
+## Fixed
+- Fixed message category bug ([#170])
+
+[#170]: https://github.com/barrelstrength/craft-sprout-seo/issues/170
+
 ## 4.1.1 - 2019-07-14
 
 ### Changed
