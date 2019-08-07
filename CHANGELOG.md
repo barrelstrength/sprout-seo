@@ -1,5 +1,6 @@
 # Changelog
 
+
 ## 4.2.0 - 2019-08-06
 
 ### Added
@@ -14,9 +15,14 @@
 - Fixed bug where 404 Redirect cleanup job was not working
 - Fixed redirect behavior after deleting Redirect from edit page
 
+## 4.1.3 - 2019-08-07
+
+### Fixed
+- Fixed CHANGELOG syntax
+
 ## 4.1.2 - 2019-08-07
 
-## Fixed
+### Fixed
 - Fixed message category bug ([#170])
 
 [#170]: https://github.com/barrelstrength/craft-sprout-seo/issues/170
