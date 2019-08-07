@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.2.0 - 2019-08-06
+
+### Added
+- Added hard delete support for Redirect Elements
+- Added logging for Redirects that fail to save
+
+### Changed
+- Updated 'All Redirects' Element index listing to only show 301 and 302 Redirects, and exclude 404 Redirects
+- Updated barrelstrength/sprout-base-redirects requirement v1.1.0
+
+### Fixed
+- Fixed bug where 404 Redirect cleanup job was not working
+- Fixed redirect behavior after deleting Redirect from edit page
+
 ## 4.1.1 - 2019-07-14
 
 ### Changed
