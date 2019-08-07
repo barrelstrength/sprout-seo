@@ -1,8 +1,13 @@
 # Changelog
 
+## 4.1.3 - 2019-08-07
+
+### Fixed
+- Fixed CHANGELOG syntax
+
 ## 4.1.2 - 2019-08-07
 
-## Fixed
+### Fixed
 - Fixed message category bug ([#170])
 
 [#170]: https://github.com/barrelstrength/craft-sprout-seo/issues/170
