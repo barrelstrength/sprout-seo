@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.2.1 - 2019-08-14
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement v1.1.2
+
+### Fixed
+- Fixed bug where Redirects could be assigned incorrect structureId during migration
+- Fixed bug where migration could fail if sproutseo_globals table already exists
+- Fixed js console warning when Craft is only configured with a single Site
+- Fixed bug where incorrect return type hint was used
 
 ## 4.2.0 - 2019-08-06
 
