@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.2.2 - 2019-08-16
+
+### Changed
+- Updated barrelstrength/sprout-base requirement v5.0.7
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.1.0
+
 ## 4.2.1 - 2019-08-14
 
 ### Changed
