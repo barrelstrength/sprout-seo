@@ -295,7 +295,7 @@ class Optimize extends Component
             if ($element !== null)
             {
                 if ($element->dateCreated !== null && $element->dateCreated) {
-                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
+                    $prioritizedMetadataModel->ogDateCreated = $element->postDate->format(DateTime::ISO8601);
                 }
 
                 if ($element->dateUpdated !== null && $element->dateUpdated) {
