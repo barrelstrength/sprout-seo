@@ -73,6 +73,17 @@ class Settings extends Model implements SproutSettingsInterface
     public $maxMetaDescriptionLength = 160;
 
     /**
+     * @deprecated
+     *
+     * This field is required on the Sprout SEO Settings model
+     * for the migration m190415_000000_adds_sprout_redirects_migration
+     * so that the structureId setting gets properly migrated.
+     *
+     * General usage of this setting has moved to the SproutBaseRedirects Settings model.
+     */
+    public $structureId;
+
+    /**
      * @inheritdoc
      */
     public function getSettingsNavItems(): array
