@@ -283,7 +283,7 @@ class Optimize extends Component
         }
 
         // Remove the ogAuthor value if we don't have an article
-        if ($prioritizedMetadataModel->ogType != 'article') {
+        if ($prioritizedMetadataModel->ogType !== 'article') {
             $prioritizedMetadataModel->ogAuthor = null;
             $prioritizedMetadataModel->ogPublisher = null;
         } else {
