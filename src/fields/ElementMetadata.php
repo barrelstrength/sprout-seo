@@ -167,6 +167,7 @@ class ElementMetadata extends Field
             'fieldId' => $this->id,
             'settings' => $this->getAttributes(),
             'schemas' => $schemas,
+            'field' => $this,
             'schemaSubtypes' => $schemaSubtypes,
             'isPro' => $isPro
         ]);
@@ -289,7 +290,8 @@ class ElementMetadata extends Field
     public function rules()
     {
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
-        $metadataFieldCount = SproutSeo::$app->settings->getMetadataFieldCount();
+        $metadataFieldCount = (int) SproutSeo::$app->settings->getMetadataFieldCount();
+
         $theFirstMetadataField = !$this->id && $metadataFieldCount === 0;
         $theOneMetadataField = $this->id && $metadataFieldCount === 1;
 
