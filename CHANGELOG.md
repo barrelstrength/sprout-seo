@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.2.3 - 2019-09-23
+
+### Changed
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.1.1
+
+### Fixed
+- Updated `published_time` to use postDate instead of dateCreated ([#169])
+- Fixed bug where user may be unable to create new SEO Metadata field using Free Edition ([#172])
+- Fixed error for multilingual setups when no groups are activated ([#1pullrequest])
+
+[#169]: https://github.com/barrelstrength/craft-sprout-seo/issues/169 
+[#172]: https://github.com/barrelstrength/craft-sprout-seo/issues/172
+[#1pullrequest]: https://github.com/barrelstrength/craft-sprout-base-sitemaps/pull/1/files
+
 ## 4.2.2 - 2019-08-16
 
 ### Changed
