@@ -2,14 +2,14 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutbaseredirects\migrations\m191109_000000_add_redirect_tracking_columns;
+use barrelstrength\sproutbaseredirects\migrations\m191109_000001_update_field_regex_to_matchStrategy;
 use craft\db\Migration;
 use Throwable;
 
 /**
- * m191109_000000_add_redirect_tracking_columns_sproutseo migration.
+ * m191109_000001_update_field_regex_to_matchStrategy_sproutseo migration.
  */
-class m191109_000000_add_redirect_tracking_columns_sproutseo extends Migration
+class m191109_000001_update_field_regex_to_matchStrategy_sproutseo extends Migration
 {
     /**
      * @inheritdoc
@@ -19,7 +19,7 @@ class m191109_000000_add_redirect_tracking_columns_sproutseo extends Migration
      */
     public function safeUp(): bool
     {
-        $migration = new m191109_000000_add_redirect_tracking_columns();
+        $migration = new m191109_000001_update_field_regex_to_matchStrategy();
 
         ob_start();
         $migration->safeUp();
@@ -33,7 +33,7 @@ class m191109_000000_add_redirect_tracking_columns_sproutseo extends Migration
      */
     public function safeDown(): bool
     {
-        echo "m191109_000000_add_redirect_tracking_columns_sproutseo cannot be reverted.\n";
+        echo "m191109_000001_update_field_regex_to_matchStrategy_sproutseo cannot be reverted.\n";
         return false;
     }
 }
