@@ -1,5 +1,36 @@
 # Changelog
 
+## 4.2.4 - 2019-11-18
+
+> {tip} This release is a recommended upgrade. Updates include improvements to the redirect workflow including how query strings are handled, managing excluded URLs from tracking, performance improvements around finding and cleaning up 404 Redirects, and several bug fixes include a potential security issue.
+
+### Added
+- Added 'Redirect Match Strategy' setting to control how query strings are handled when matching incoming redirects ([#6sproutredirects], [#16sproutredirects])
+- Added 'Query String Strategy' setting to control if a query string is appended or removed when redirecting to a new URL ([#6sproutredirects], [#16sproutredirects])
+- Added 'Clean Up Probability' setting to control the frequency that 404 Redirect cleanup tasks are triggered
+- Added Last Remote IP Address, Last Referrer, Last User Agent, and Date Last Used fields to Redirect Elements ([#7sproutredirects], [#10sproutredirects])
+- Added 'Track Remote IP' setting to enable/disable whether IP Address is stored in the database
+- Added 'Excluded URL Patterns' setting to filter URL patterns you don't wish to log as 404 Redirects
+- Added 'Add to Excluded URLs' Element Action to quickly add one or more 404 Redirects to the 'Excluded URL Patterns' setting
+
+### Changed
+- Improved performance when finding a match for an incoming URL
+- Added the Redirect 'Data Last Used' field as default table attribute on the Element Index page ([#7sproutredirects])
+- Updated Redirect 'RegEx' field to be named 'Match Strategy' with the strategies `Exact Match` and `Regular Expression`
+- Improved validation when saving New URLs to avoid an edge case
+- Updated barrelstrength/sprout-base-redirects requirement to v1.2.0
+- Updated barrelstrength/sprout-base requirement to v5.0.8
+
+### Fixed
+- Fixed open redirect vulnerability (thanks to Liam Stein) ([#176])
+- Fixes bug where 404s could be matched before active redirects when matching regex URL patterns
+
+[#6sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/6
+[#7sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/7
+[#10sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/10
+[#16sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/16
+[#176]: https://github.com/barrelstrength/craft-sprout-seo/issues/176
+
 ## 4.2.3 - 2019-09-23
 
 ### Changed
