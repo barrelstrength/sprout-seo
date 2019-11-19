@@ -24,11 +24,16 @@ use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Settings;
 use craft\base\Element;
 
+use craft\errors\SiteNotFoundException;
 use craft\models\Site;
 use DateTime;
 use Craft;
+use Throwable;
+use Twig_Error_Loader;
 use yii\base\Component;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\web\ServerErrorHttpException;
 
 class Optimize extends Component
 {
@@ -81,10 +86,10 @@ class Optimize extends Component
      * @param $context
      *
      * @return array|null|string
-     * @throws \Twig_Error_Loader
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws Twig_Error_Loader
+     * @throws SiteNotFoundException
+     * @throws Exception
+     * @throws ServerErrorHttpException
      */
     public function getMetadataViaContext(&$context)
     {
@@ -154,10 +159,10 @@ class Optimize extends Component
      * @param bool $context
      *
      * @return array|null|string
-     * @throws \Twig_Error_Loader
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws Twig_Error_Loader
+     * @throws SiteNotFoundException
+     * @throws Exception
+     * @throws ServerErrorHttpException
      */
     public function getMetadata(Element $element = null, $site, $render = true, &$context = null)
     {
@@ -209,9 +214,9 @@ class Optimize extends Component
      * @param Site $site
      *
      * @return Metadata|mixed
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
      */
     public function getPrioritizedMetadataModel($element, $site = null)
     {
@@ -440,8 +445,8 @@ class Optimize extends Component
      * @param $metadata
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws Twig_Error_Loader
+     * @throws Exception
      */
     public function renderMetadata($metadata)
     {
