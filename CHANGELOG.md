@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.2.5 - 2019-11-22
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement to v1.2.1
+
+### Fixed
+- Fixed support for database prefixes when finding URLs [#18][#18-base-redirects]
+
+[#18-base-redirects] https://github.com/barrelstrength/craft-sprout-redirects/issues/18
+
 ## 4.2.4 - 2019-11-18
 
 > {tip} This release is a recommended upgrade. Updates include improvements to the redirect workflow including how query strings are handled, managing excluded URLs from tracking, performance improvements around finding and cleaning up 404 Redirects, and several bug fixes include a potential security issue.
