@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.2.6 - 2019-11-22
+
+### Fixed
+- Fixed bug where database migrations did not get triggered
+
 ## 4.2.5 - 2019-11-22
 
 ### Changed
