@@ -45,12 +45,14 @@ use craft\web\UrlManager;
 use yii\base\Event;
 use craft\web\ErrorHandler;
 use craft\events\ExceptionEvent;
+use yii\base\InvalidConfigException;
 
 /**
  *
  * @property mixed $cpNavItem
  * @property array $cpUrlRules
  * @property array $userPermissions
+ * @property null  $upgradeUrl
  * @property array $siteUrlRules
  */
 class SproutSeo extends Plugin
@@ -60,7 +62,7 @@ class SproutSeo extends Plugin
     /**
      * Enable use of SproutSeo::$app-> in place of Craft::$app->
      *
-     * @var \barrelstrength\sproutseo\services\App
+     * @var App
      */
     public static $app;
 
@@ -103,7 +105,7 @@ class SproutSeo extends Plugin
     /**
      * @inheritdoc
      *
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function init()
     {
