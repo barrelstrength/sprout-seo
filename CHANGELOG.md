@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.2.7 - 2019-12-10
+
+### Changed
+- Added method heading in Redirect sources sidebar 
+- Updated barrelstrength/sprout-base-redirects requirement to v1.2.2
+
+## Fixed
+- Added missing columns to Install migration [#19]
+- Fixed `dateLastUsed` column type
+- Fixed database prefix errors [#1][1pull-sproutbase-redirects]
+
+[#19]: https://github.com/barrelstrength/craft-sprout-redirects/issues/19
+[1pull-sproutbase-redirects]: https://github.com/barrelstrength/craft-sprout-base-redirects/pull/1
+
 ## 4.2.6 - 2019-11-22
 
 ### Fixed

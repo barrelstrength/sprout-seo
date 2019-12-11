@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-seo",
   "description": "Content-focused SEO.",
-  "version": "4.2.6",
+  "version": "4.2.7",
   "type": "craft-plugin",
   "keywords": [
     "craft",
@@ -29,7 +29,7 @@
     "barrelstrength/sprout-base": "^5.0.8",
     "barrelstrength/sprout-base-fields": "^1.0.9",
     "barrelstrength/sprout-base-import": "^1.0.5",
-    "barrelstrength/sprout-base-redirects": "^1.2.1",
+    "barrelstrength/sprout-base-redirects": "^1.2.2",
     "barrelstrength/sprout-base-sitemaps": "^1.1.1",
     "barrelstrength/sprout-base-uris": "^1.0.4",
     "php-science/textrank": "^1.0.4"
