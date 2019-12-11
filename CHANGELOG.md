@@ -1,18 +1,18 @@
 # Changelog
 
-## 4.2.7 - 2019-12-10
+## 4.2.7.1 - 2019-12-10
 
 ### Changed
 - Added method heading in Redirect sources sidebar 
 - Updated barrelstrength/sprout-base-redirects requirement to v1.2.2
 
-## Fixed
+### Fixed
 - Added missing columns to Install migration [#19]
 - Fixed `dateLastUsed` column type
-- Fixed database prefix errors [#1][1pull-sproutbase-redirects]
+- Fixed database prefix errors [#1][1pull-sprout-base-redirects]
 
 [#19]: https://github.com/barrelstrength/craft-sprout-redirects/issues/19
-[1pull-sproutbase-redirects]: https://github.com/barrelstrength/craft-sprout-base-redirects/pull/1
+[1pull-sprout-base-redirects]: https://github.com/barrelstrength/craft-sprout-base-redirects/pull/1
 
 ## 4.2.6 - 2019-11-22
 
@@ -25,19 +25,19 @@
 - Updated barrelstrength/sprout-base-redirects requirement to v1.2.1
 
 ### Fixed
-- Fixed support for database prefixes when finding URLs [#18][#18-base-redirects]
+- Fixed support for database prefixes when finding URLs [#18][18-sprout-base-redirects]
 
-[#18-base-redirects] https://github.com/barrelstrength/craft-sprout-redirects/issues/18
+[18-sprout-base-redirects] https://github.com/barrelstrength/craft-sprout-redirects/issues/18
 
 ## 4.2.4 - 2019-11-18
 
 > {tip} This release is a recommended upgrade. Updates include improvements to the redirect workflow including how query strings are handled, managing excluded URLs from tracking, performance improvements around finding and cleaning up 404 Redirects, and several bug fixes include a potential security issue.
 
 ### Added
-- Added 'Redirect Match Strategy' setting to control how query strings are handled when matching incoming redirects ([#6sproutredirects], [#16sproutredirects])
-- Added 'Query String Strategy' setting to control if a query string is appended or removed when redirecting to a new URL ([#6sproutredirects], [#16sproutredirects])
+- Added 'Redirect Match Strategy' setting to control how query strings are handled when matching incoming redirects ([#6][6-sprout-redirects], [#16][16-sprout-redirects])
+- Added 'Query String Strategy' setting to control if a query string is appended or removed when redirecting to a new URL ([#6][6-sprout-redirects], [#16][16-sprout-redirects])
 - Added 'Clean Up Probability' setting to control the frequency that 404 Redirect cleanup tasks are triggered
-- Added Last Remote IP Address, Last Referrer, Last User Agent, and Date Last Used fields to Redirect Elements ([#7sproutredirects], [#10sproutredirects])
+- Added Last Remote IP Address, Last Referrer, Last User Agent, and Date Last Used fields to Redirect Elements ([#7][7-sprout-redirects], [#10][10-sprout-redirects])
 - Added 'Track Remote IP' setting to enable/disable whether IP Address is stored in the database
 - Added 'Excluded URL Patterns' setting to filter URL patterns you don't wish to log as 404 Redirects
 - Added 'Add to Excluded URLs' Element Action to quickly add one or more 404 Redirects to the 'Excluded URL Patterns' setting
@@ -54,10 +54,10 @@
 - Fixed open redirect vulnerability (thanks to Liam Stein) ([#176])
 - Fixes bug where 404s could be matched before active redirects when matching regex URL patterns
 
-[#6sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/6
-[#7sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/7
-[#10sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/10
-[#16sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/16
+[6-sprout-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/6
+[7-sprout-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/7
+[10-sprout-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/10
+[16-sprout-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/16
 [#176]: https://github.com/barrelstrength/craft-sprout-seo/issues/176
 
 ## 4.2.3 - 2019-09-23
@@ -68,11 +68,11 @@
 ### Fixed
 - Updated `published_time` to use postDate instead of dateCreated ([#169])
 - Fixed bug where user may be unable to create new SEO Metadata field using Free Edition ([#172])
-- Fixed error for multilingual setups when no groups are activated ([#1pullrequest])
+- Fixed error for multilingual setups when no groups are activated ([#1][1-pull-sprout-base-sitemaps])
 
 [#169]: https://github.com/barrelstrength/craft-sprout-seo/issues/169 
 [#172]: https://github.com/barrelstrength/craft-sprout-seo/issues/172
-[#1pullrequest]: https://github.com/barrelstrength/craft-sprout-base-sitemaps/pull/1/files
+[1-pull-sprout-base-sitemaps]: https://github.com/barrelstrength/craft-sprout-base-sitemaps/pull/1/files
 
 ## 4.2.2 - 2019-08-16
 
@@ -254,9 +254,9 @@
 - Updated barrelstrength/sprout-base-fields requirement v1.0.3
 
 ### Fixed
-- Fixed bug where Administrative Area Input was not populated correctly ([#85][#85fields])
+- Fixed bug where Administrative Area Input was not populated correctly ([#85][85-sprout-fields])
 
-[#85fields]: https://github.com/barrelstrength/craft-sprout-fields/issues/85
+[85-sprout-fields]: https://github.com/barrelstrength/craft-sprout-fields/issues/85
 
 ## 4.0.0-beta.29 - 2019-03-01
 

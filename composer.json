@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-seo",
   "description": "Content-focused SEO.",
-  "version": "4.2.7",
+  "version": "4.2.7.1",
   "type": "craft-plugin",
   "keywords": [
     "craft",
