@@ -8,12 +8,13 @@
 namespace barrelstrength\sproutseo\controllers;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbasefields\helpers\AddressHelper;
+use barrelstrength\sproutbasefields\services\AddressFormatter;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
+use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use craft\errors\SiteNotFoundException;
 use craft\helpers\Template;
 use craft\web\Controller;
@@ -89,14 +90,14 @@ class GlobalMetadataController extends Controller
 
         $countryCode = $addressModel->countryCode;
 
-        $addressHelper = new AddressHelper();
-        $addressHelper->setNamespace('address');
-        $addressHelper->setCountryCode($countryCode);
-        $addressHelper->setAddressModel($addressModel);
+        $addressFormatter = new AddressFormatter();
+        $addressFormatter->setNamespace('address');
+        $addressFormatter->setCountryCode($countryCode);
+        $addressFormatter->setAddressModel($addressModel);
 
-        $addressDisplayHtml = $addressId ? $addressHelper->getAddressDisplayHtml($addressModel) : '';
-        $countryInputHtml = $addressHelper->getCountryInputHtml();
-        $addressFormHtml = $addressHelper->getAddressFormHtml();
+        $addressDisplayHtml = $addressId ? $addressFormatter->getAddressDisplayHtml($addressModel) : '';
+        $countryInputHtml = $addressFormatter->getCountryInputHtml();
+        $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
 
@@ -130,10 +131,10 @@ class GlobalMetadataController extends Controller
         $globalKeys = Craft::$app->getRequest()->getBodyParam('globalKeys');
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
-        $addressInfoId = SproutBaseFields::$app->addressField->saveAddressByPost();
+        $addressId = SproutBaseFields::$app->addressField->saveAddressByPost();
 
-        if ($addressInfoId) {
-            $postData['identity']['addressId'] = $addressInfoId;
+        if ($addressId) {
+            $postData['identity']['addressId'] = $addressId;
         }
 
         $globalKeys = explode(',', $globalKeys);
