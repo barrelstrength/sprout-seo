@@ -22,23 +22,18 @@
             init: function() {
                 // select the dropdown to target
                 this.$select = $('#fields-open-graph select');
-                // console.log(this.$select);
 
                 // grab the value from the dropdown
                 this.$selectValue = $(this.$select).val();
-                // console.log(this.$selectValue);
 
                 // define the appendage to concatenate
                 this.$appendage = '#fields-';
-                // console.log(this.$appendage);
 
                 // concatenate the current div for later use
                 this.$currentDiv = this.$appendage + this.$selectValue;
-                // console.log(this.$currentDiv);
 
                 // remove the hidden class from current div
                 $(this.$currentDiv).removeClass('hidden');
-                // console.log('remove class hidden from this.$currentDiv');
 
                 // LISTEN UP DRONES!!!
                 this.addListener(this.$select, 'change', 'onChange');
