@@ -174,31 +174,14 @@
         }) }}
 
         {% set addressInput %}
-            <div class="sproutaddressinfo-box"
-                    {% if websiteIdentity.addressId is defined %}
-                        data-addressid='{{ websiteIdentity.addressId }}'
-                    {% endif %}
-                    data-defaultcountrycode='US'
-            >
-                <div class='address-add-button hidden'>
-                    <a class='btn add icon dashed sprout-address-edit'
-                       href='#'>{{ "Add Address"|t('sprout-seo') }}</a>
-                </div>
-                <div class='address-edit-buttons hidden'>
-                    <a class='small btn right icon sprout-address-edit clear-button'
-                       href='#'>{{ "Clear"|t('sprout-seo') }}</a>
-                    <a class='small btn right icon sprout-address-edit update-button'
-                       href='#'>{{ "Edit"|t('sprout-seo') }}</a>
-                </div>
-                <div class='address-format hidden'>
-                      {{ addressDisplayHtml }}
-                </div>
-                <div class='sproutfields-address-formfields hidden'>
-                    <input type="hidden" name="address[delete]" />
-                    {{ countryInputHtml }}
-                    {{ addressFormHtml }}
-                </div>
-            </div>
+            {% include "sprout-base-fields/_components/fields/formfields/address/input" with {
+                showAddressOnInitialLoad: addressDisplayHtml is not empty ? true : false,
+                formFieldHtmlActionUrl: 'sprout-seo/global-metadata/get-address-form-fields-html',
+                addressJson: addressJson,
+                addressDisplayHtml: addressDisplayHtml,
+                countryInputHtml: countryInputHtml,
+                addressFormHtml: addressFormHtml
+            } %}
         {% endset %}
 
         {{ forms.field({
@@ -510,10 +493,7 @@
     }
     });
 
-        new Craft.SproutBase.AddressBox($('.sproutaddressinfo-box'), {
-            source: 'websiteIdentity',
-            namespace: 'address'
-        })
+
     });
 
 {% endjs %}
