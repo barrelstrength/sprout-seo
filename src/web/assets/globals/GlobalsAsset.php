@@ -30,7 +30,6 @@ class GlobalsAsset extends AssetBundle
             DatepickerI18nAsset::class,
             TimepickerAsset::class,
             BaseAsset::class,
-            AddressFieldAsset::class,
             TagEditorAsset::class,
             SelectOtherFieldAsset::class
         ];
