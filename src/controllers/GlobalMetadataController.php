@@ -8,6 +8,8 @@
 namespace barrelstrength\sproutseo\controllers;
 
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbasefields\models\Address;
+use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use barrelstrength\sproutbasefields\services\AddressFormatter;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
@@ -16,10 +18,12 @@ use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
 use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use craft\errors\SiteNotFoundException;
+use craft\helpers\Json;
 use craft\helpers\Template;
 use craft\web\Controller;
 use Craft;
 use craft\helpers\DateTimeHelper;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -28,6 +32,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
+use yii\web\ServerErrorHttpException;
 
 class GlobalMetadataController extends Controller
 {
@@ -84,22 +89,29 @@ class GlobalMetadataController extends Controller
             $globals->siteId = $currentSite->id;
         }
 
-        $addressId = $globals->identity['addressId'] ?? null;
+        $address = $globals->identity['address'] ?? null;
+        $addressDisplayHtml = '';
+        $countryInputHtml = '';
+        $addressFormHtml = '';
 
-        $addressModel = SproutBaseFields::$app->addressField->getAddressById($addressId);
-
-        $countryCode = $addressModel->countryCode;
-
+        $addressModel = new Address();
         $addressFormatter = new AddressFormatter();
-        $addressFormatter->setNamespace('address');
-        $addressFormatter->setCountryCode($countryCode);
-        $addressFormatter->setAddressModel($addressModel);
 
-        $addressDisplayHtml = $addressId ? $addressFormatter->getAddressDisplayHtml($addressModel) : '';
+        if ($address) {
+            $addressModel->setAttributes($address, false);
+
+            $addressFormatter->setCountryCode($addressModel->countryCode);
+            $addressFormatter->setAddressModel($addressModel);
+
+            $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel);
+        }
+
         $countryInputHtml = $addressFormatter->getCountryInputHtml();
         $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+
+        $addressJson = $address ? Json::encode($address) : null;
 
         // Render the template!
         return $this->renderTemplate('sprout-seo/globals/'.$selectedTabHandle, [
@@ -109,6 +121,7 @@ class GlobalMetadataController extends Controller
             'addressDisplayHtml' => Template::raw($addressDisplayHtml),
             'countryInputHtml' => Template::raw($countryInputHtml),
             'addressFormHtml' => Template::raw($addressFormHtml),
+            'addressJson' => $addressJson,
             'isPro' => $isPro
         ]);
     }
@@ -118,10 +131,10 @@ class GlobalMetadataController extends Controller
      *
      * @return null|Response
      * @throws BadRequestHttpException
-     * @throws \Throwable
+     * @throws Throwable
      * @throws Exception
      * @throws \yii\db\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws ServerErrorHttpException
      */
     public function actionSaveGlobalMetadata()
     {
@@ -131,10 +144,14 @@ class GlobalMetadataController extends Controller
         $globalKeys = Craft::$app->getRequest()->getBodyParam('globalKeys');
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
-        $addressId = SproutBaseFields::$app->addressField->saveAddressByPost();
+        $address = Craft::$app->getRequest()->getBodyParam('address');
 
-        if ($addressId) {
-            $postData['identity']['addressId'] = $addressId;
+        if ($address) {
+            if (isset($address['delete']) && $address['delete']) {
+                $postData['identity']['address'] = null;
+            } else {
+                $postData['identity']['address'] = $address;
+            }
         }
 
         $globalKeys = explode(',', $globalKeys);
@@ -179,7 +196,7 @@ class GlobalMetadataController extends Controller
      *
      * @return Response
      * @throws BadRequestHttpException
-     * @throws \Throwable
+     * @throws Throwable
      * @throws \yii\db\Exception
      */
     public function actionSaveVerifyOwnership()
@@ -226,7 +243,7 @@ class GlobalMetadataController extends Controller
      *
      * @return Metadata
      * @throws Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws ServerErrorHttpException
      */
     public function populateGlobalMetadata($postData)
     {
@@ -306,5 +323,45 @@ class GlobalMetadataController extends Controller
         }
 
         return $globalMetadata;
+    }
+
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     * @throws \Exception
+     */
+    public function actionGetAddressFormFieldsHtml(): Response
+    {
+        $this->requireAcceptsJson();
+        $this->requirePostRequest();
+
+        $addressFormatter = SproutBaseFields::$app->addressFormatter;
+
+        $addressArray = Craft::$app->getRequest()->getBodyParam('addressJson');
+
+        $address = new AddressModel();
+
+        if ($addressArray) {
+            // @todo - this won't populate correctly
+            $address->siteId = $addressArray['siteId'] ?? null;
+
+            $address->countryCode = $addressArray['countryCode'] ?? $address->countryCode;
+            $address->administrativeAreaCode = $addressArray['administrativeAreaCode'] ?? null;
+            $address->locality = $addressArray['locality'] ?? null;
+            $address->dependentLocality = $addressArray['dependentLocality'] ?? null;
+            $address->postalCode = $addressArray['postalCode'] ?? null;
+            $address->sortingCode = $addressArray['sortingCode'] ?? null;
+            $address->address1 = $addressArray['address1'] ?? null;
+            $address->address2 = $addressArray['address2'] ?? null;
+
+            // Mark this address for deletion. This is processed in the saveAddress method
+//        $deleteAddress = (bool)$value['delete'];
+        }
+
+        $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($address);
+
+        return $this->asJson([
+            'html' => $addressDisplayHtml
+        ]);
     }
 }
