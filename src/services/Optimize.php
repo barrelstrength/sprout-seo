@@ -391,7 +391,7 @@ class Optimize extends Component
         $identity = $this->globals->identity;
 
         // Website Identity Place
-        if (isset($identity['addressId']) && $identity['addressId']) {
+        if (isset($identity['address']) && $identity['address']) {
             $placeSchema = new WebsiteIdentityPlaceSchema();
             $placeSchema->addContext = true;
 

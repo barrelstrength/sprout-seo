@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\base;
 
+use barrelstrength\sproutbasefields\models\Address;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\schema\ContactPointSchema;
 use barrelstrength\sproutseo\schema\GeoSchema;
@@ -472,21 +473,20 @@ abstract class Schema
      * If the address ID is not found in our Globals, don't add it.
      *
      * @param $propertyName
-     * @param $addressId
      *
      * @return null
      */
-    public function addAddress($propertyName, $addressId)
+    public function addAddress($propertyName)
     {
         $addressModel = $this->globals->addressModel;
 
-        if (!$addressId || $addressModel === null) {
+        if ($addressModel === null) {
             return null;
         }
 
         $address = new PostalAddressSchema();
 
-        if ($addressModel->id) {
+        if ($addressModel instanceof Address) {
             $address->addressCountry = $addressModel->countryCode;
             $address->addressLocality = $addressModel->locality;
             $address->addressRegion = $addressModel->administrativeAreaCode;

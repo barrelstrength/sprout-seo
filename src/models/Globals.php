@@ -90,8 +90,10 @@ class Globals extends Model
 
     public function init()
     {
-        if (isset($this->identity['addressId']) && $this->addressModel === null) {
-            $this->addressModel = SproutBaseFields::$app->addressField->getAddressById($this->identity['addressId']);
+        if (isset($this->identity['address']) && $this->addressModel === null) {
+            $addressModel = new Address();
+            $addressModel->setAttributes($this->identity['address'], false);
+            $this->addressModel = $addressModel;
         }
     }
     /**
