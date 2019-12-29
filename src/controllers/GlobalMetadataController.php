@@ -342,20 +342,10 @@ class GlobalMetadataController extends Controller
         $address = new AddressModel();
 
         if ($addressArray) {
+            $address->setAttributes($addressArray, false);
+
             // @todo - this won't populate correctly
             $address->siteId = $addressArray['siteId'] ?? null;
-
-            $address->countryCode = $addressArray['countryCode'] ?? $address->countryCode;
-            $address->administrativeAreaCode = $addressArray['administrativeAreaCode'] ?? null;
-            $address->locality = $addressArray['locality'] ?? null;
-            $address->dependentLocality = $addressArray['dependentLocality'] ?? null;
-            $address->postalCode = $addressArray['postalCode'] ?? null;
-            $address->sortingCode = $addressArray['sortingCode'] ?? null;
-            $address->address1 = $addressArray['address1'] ?? null;
-            $address->address2 = $addressArray['address2'] ?? null;
-
-            // Mark this address for deletion. This is processed in the saveAddress method
-//        $deleteAddress = (bool)$value['delete'];
         }
 
         $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($address);
