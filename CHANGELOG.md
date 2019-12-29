@@ -1,5 +1,41 @@
 # Changelog
 
+## UNRELEASED
+
+### Updated
+- Updated how Website Identity address to be stored as `identity.address`
+- Updated Website Identity Address to not use `sproutfields_addresses` table
+- Updated address to use `sprout-base-fields/_components/fields/formfields/address/input`
+- Updated `barrelstrength\sproutfields\fields\Address::hasContentColumn` to return false. Addresses are now stored only in the `sproutfields_adddresses` table.
+- Added `barrelstrength\sproutbasefields\models\Address::getCountryCode()`
+- Updated `barrelstrength\sproutbasefields\services\Address::deleteAddressById()` to require address ID
+- Improved fallbacks for Address Field's default country and language
+- Moved methods from `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\Address`
+- Updated `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\AddressFormatter`
+- Added property `barrelstrength\sproutbasefields\events\OnSaveAddressEvent::$address`
+- Deprecated property `barrelstrength\sproutbasefields\events\OnSaveAddressEvent::$model`
+- Renamed `barrelstrength\sproutbasefields\services\Address::getAddress()` => `getAddressFromElement()`
+- Renamed data attribute `addressid` => `address-id`
+- Renamed data attribute `defaultcountrycode` => `default-country-code`
+- Renamed data attribute `showcountrydropdown` => `show-country-dropdown`
+- Updated and standardized shared logic, validation, and response for fields Email, Phone, and Url 
+- Updated dynamic email validation to exclude check for unique email setting
+- Updated `barrelstrength/sprout-base-fields` to v1.2.0
+- Updated `commerceguys/addressing` to v1.0.6
+- Updated `giggsey/libphonenumber-for-php` to v8.11.1
+
+### Fixed
+- Fixed display issue with Gibraltar addresses
+- Fixed bug where Address input fields did not display in edit modal after Address was cleared
+
+### Removed
+- Removed `identity.addressId`
+- Removed Address asset bundle from GlobalsAsset, it is included in the Address template
+- Removed `barrelstrength\sproutfields\fields\Address::serializeValue()`
+- Removed `barrelstrength\sproutbasefields\helpers\AddressHelper`
+- Removed `barrelstrength\sproutbasefields\controllers\actionDeleteAddress()`
+- Removed `commerceguys/intl`
+
 ## 4.2.8 - 2019-12-18
 
 ### Changed
