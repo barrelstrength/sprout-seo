@@ -340,8 +340,10 @@ abstract class Schema
     public function addTelephone($propertyName, $phone)
     {
         if (isset($phone['phone']) && isset($phone['country']) && !empty($phone['phone'])) {
-            $phoneModel = new PhoneModel($phone['phone'], $phone['country']);
-            $this->structuredData[$propertyName] = $phoneModel->international;
+            $phoneModel = new PhoneModel();
+            $phoneModel->country = $phone['country'];
+            $phoneModel->phone = $phone['phone'];
+            $this->structuredData[$propertyName] = $phoneModel->getInternational();
         } else {
             SproutSeo::info('Schema unable to add value. Value is not a valid Phone.');
         }
