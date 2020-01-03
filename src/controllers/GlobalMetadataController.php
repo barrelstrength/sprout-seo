@@ -91,8 +91,6 @@ class GlobalMetadataController extends Controller
 
         $address = $globals->identity['address'] ?? null;
         $addressDisplayHtml = '';
-        $countryInputHtml = '';
-        $addressFormHtml = '';
 
         $addressModel = new Address();
         $addressFormatter = new AddressFormatter();
