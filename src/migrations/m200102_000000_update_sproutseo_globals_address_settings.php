@@ -39,26 +39,31 @@ class m200102_000000_update_sproutseo_globals_address_settings extends Migration
             ->all();
 
         // Loop through our identities and update them all with the migrated addresses
-        $identities = (new Query())
+        $globalSettings = (new Query())
             ->select(['id', 'siteId', 'identity'])
             ->from([$sproutSeoGlobalsTable])
             ->all();
 
         $settingsTableRowIds = [];
-        foreach ($identities as $identity) {
-            $addressData = $globalMetadataAddresses['address-fields-migration-sprout-seo-v4.2.9-siteId:'.$identity['siteId']];
+        foreach ($globalSettings as $settings) {
+            $addressData = $globalMetadataAddresses['address-fields-migration-sprout-seo-v4.2.9-siteId:'.$settings['siteId']] ?? null;
+            if ($addressData === null) {
+                continue;
+            }
+
             $settingsTableRowIds[] = $addressData['id'];
 
             $address = Json::decode($addressData['settings']);
             unset($address['siteId']);
 
+            $identity = Json::decode($settings['identity']);
             $identity['address'] = $address;
             unset($identity['addressId']);
 
             $this->update($sproutSeoGlobalsTable, [
                 'identity' => Json::encode($identity)
             ], [
-                'id' => $identity['id']
+                'id' => $settings['id']
             ], [], false);
         }
 
