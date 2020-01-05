@@ -167,7 +167,9 @@
             name: 'sproutseo[globals][identity][telephone]',
             value: websiteIdentity['telephone']['phone'] is defined ? websiteIdentity.telephone.phone : null,
             errors: '',
-            limitToSingleCountry: false,
+            field: {
+                limitToSingleCountry: false
+            },
             country: websiteIdentity['telephone']['country'] is defined ? websiteIdentity.telephone.country : 'US',
             countryId: 'phoneCountry',
             namespaceCountryId: 'phoneCountry'
