@@ -16,7 +16,6 @@ use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
-use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use craft\errors\SiteNotFoundException;
 use craft\helpers\Json;
 use craft\helpers\Template;
@@ -148,6 +147,11 @@ class GlobalMetadataController extends Controller
             if (isset($address['delete']) && $address['delete']) {
                 $postData['identity']['address'] = null;
             } else {
+                unset(
+                    $address['id'],
+                    $address['fieldId'],
+                    $address['delete']
+                );
                 $postData['identity']['address'] = $address;
             }
         }
