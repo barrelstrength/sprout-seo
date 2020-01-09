@@ -59,7 +59,7 @@ class m200102_000000_update_sproutseo_globals_address_settings extends Migration
                 $address['siteId'],
                 $address['elementId'],
                 $address['fieldId'],
-                $address['delete'],
+                $address['delete']
             );
 
             $identity = Json::decode($settings['identity']);
