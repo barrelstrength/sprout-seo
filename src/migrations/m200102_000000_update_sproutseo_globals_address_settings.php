@@ -6,7 +6,7 @@ use barrelstrength\sproutbasefields\migrations\m200102_000000_update_sproutseo_g
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\Json;
-use yii\base\NotSupportedException;
+use yii\db\Exception;
 
 /**
  * This migration works alongside the migration of the same name in Sprout Base Fields
@@ -16,7 +16,7 @@ class m200102_000000_update_sproutseo_globals_address_settings extends Migration
 {
     /**
      * @return bool
-     * @throws NotSupportedException
+     * @throws Exception
      */
     public function safeUp(): bool
     {
@@ -46,6 +46,7 @@ class m200102_000000_update_sproutseo_globals_address_settings extends Migration
 
         $settingsTableRowIds = [];
         foreach ($globalSettings as $settings) {
+
             $addressData = $globalMetadataAddresses['address-fields-migration-sprout-seo-v4.2.9-siteId:'.$settings['siteId']] ?? null;
             if ($addressData === null) {
                 continue;
