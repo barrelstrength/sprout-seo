@@ -3,6 +3,8 @@
 ## UNRELEASED
 
 ### Updated
+- Updated Title Character setting to use autosuggest field
+- Updated Append Title Value setting to use autosuggest field
 - Updated how Website Identity address to be stored as `identity.address`
 - Updated Website Identity Address to not use `sproutfields_addresses` table
 - Updated address to use `sprout-base-fields/_components/fields/formfields/address/input`
