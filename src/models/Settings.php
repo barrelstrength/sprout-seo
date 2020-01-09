@@ -45,7 +45,7 @@ class Settings extends Model implements SproutSettingsInterface
     /**
      * @var bool
      */
-    public $appendTitleValue = false;
+    public $appendTitleValue;
 
     /**
      * @var bool

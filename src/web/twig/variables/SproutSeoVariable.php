@@ -8,16 +8,22 @@
 namespace barrelstrength\sproutseo\web\twig\variables;
 
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
+use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\base\Model;
 use craft\elements\Asset;
 
+use craft\errors\SiteNotFoundException;
 use craft\models\Site;
 use DateTime;
 use craft\fields\PlainText;
 use craft\fields\Assets;
+use DateTimeZone;
+use yii\base\Exception;
 
 /**
  * Class SproutSeoVariable
@@ -53,7 +59,7 @@ class SproutSeoVariable
 
     /**
      * @return string
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getDivider()
     {
@@ -68,7 +74,7 @@ class SproutSeoVariable
     }
 
     /**
-     * @return \craft\base\Model|null
+     * @return Model|null
      */
     public function getSettings()
     {
@@ -76,8 +82,8 @@ class SproutSeoVariable
     }
 
     /**
-     * @return \barrelstrength\sproutseo\models\Globals
-     * @throws \yii\base\Exception
+     * @return Globals
+     * @throws Exception
      */
     public function getGlobalMetadata()
     {
@@ -95,7 +101,7 @@ class SproutSeoVariable
     /**
      * @param $id
      *
-     * @return \craft\base\ElementInterface|null
+     * @return ElementInterface|null
      */
     public function getElementById($id)
     {
@@ -147,7 +153,7 @@ class SproutSeoVariable
      */
     public function getDate($string): DateTime
     {
-        return new DateTime($string['date'], new \DateTimeZone(Craft::$app->getTimeZone()));
+        return new DateTime($string['date'], new DateTimeZone(Craft::$app->getTimeZone()));
     }
 
     /**
@@ -387,8 +393,8 @@ class SproutSeoVariable
      * @param Site $site
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
     public function getPriceRangeOptions(Site $site)
     {
@@ -440,8 +446,8 @@ class SproutSeoVariable
      * @param Site $site
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
     public function getGenderOptions(Site $site)
     {
@@ -468,89 +474,6 @@ class SproutSeoVariable
 
         if (!array_key_exists($gender, ['female' => 0, 'male' => 1]) && $gender != '') {
             $options[] = ['label' => $gender, 'value' => $gender];
-        }
-
-        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
-
-        return $options;
-    }
-
-    /**
-     * @param null $site
-     *
-     * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     */
-    public function getAppendMetaTitleOptions($site = null)
-    {
-        $options = [
-            [
-                'label' => Craft::t('sprout-seo', 'None'),
-                'value' => ''
-            ],
-            [
-                'label' => Craft::t('sprout-seo', 'Site Name'),
-                'value' => 'sitename'
-            ]
-        ];
-
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-
-        if (isset($schemaGlobals['settings']['appendTitleValue'])) {
-            $appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
-
-            $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
-
-            if (!array_key_exists($appendTitleValue, ['sitename' => 0]) && $appendTitleValue != '') {
-                $options[] = ['label' => $appendTitleValue, 'value' => $appendTitleValue];
-            }
-        }
-
-        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
-
-        return $options;
-    }
-
-    /**
-     * @return array
-     * @throws \yii\base\Exception
-     */
-    public function getSeoDividerOptions(Site $site)
-    {
-        $options = [
-            [
-                'label' => '-',
-                'value' => '-'
-            ],
-            [
-                'label' => '•',
-                'value' => '•'
-            ],
-            [
-                'label' => '|',
-                'value' => '|'
-            ],
-            [
-                'label' => '/',
-                'value' => '/'
-            ],
-            [
-                'label' => ':',
-                'value' => ':'
-            ],
-        ];
-
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-
-        if (isset($schemaGlobals['settings']['seoDivider'])) {
-            $seoDivider = $schemaGlobals['settings']['seoDivider'];
-
-            $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
-
-            if (!array_key_exists($seoDivider, ['-' => 0, '•' => 1, '|' => 2, '/' => 3, ':' => 4]) && $seoDivider != '') {
-                $options[] = ['label' => $seoDivider, 'value' => $seoDivider];
-            }
         }
 
         $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
@@ -735,8 +658,8 @@ class SproutSeoVariable
      * @param $siteId
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
     public function getGlobalRobots($siteId)
     {
@@ -762,7 +685,7 @@ class SproutSeoVariable
      * Returns global contacts
      *
      * @return array
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getContacts()
     {
@@ -782,7 +705,7 @@ class SproutSeoVariable
      * Returns global social profiles
      *
      * @return array
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSocialProfiles()
     {
@@ -878,7 +801,7 @@ class SproutSeoVariable
     {
         $plugin = SproutSeo::getInstance();
 
-        if ($plugin->is(SproutSeo::EDITION_PRO)){
+        if ($plugin->is(SproutSeo::EDITION_PRO)) {
             return true;
         }
         return false;
