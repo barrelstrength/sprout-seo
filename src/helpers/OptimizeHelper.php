@@ -492,6 +492,7 @@ class OptimizeHelper
         if ($appendTitleValueOnHomepage || Craft::$app->request->getPathInfo()) {
             $globalAppendTitleValue = $settings['appendTitleValue'];
 
+            // @todo - update this switch statement to use renderString and process globals like {siteName}
             switch ($globalAppendTitleValue) {
                 case 'sitename':
                     $globalAppendTitleValue = Craft::$app->getSystemName();
