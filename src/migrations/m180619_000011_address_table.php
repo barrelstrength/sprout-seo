@@ -65,7 +65,7 @@ class m180619_000011_address_table extends Migration
                 'address2' => $address['address2'],
             ];
 
-            $this->insert('{{%sproutfields_addresses}}', $addressData);
+            $this->insert('{{%sprout_addresses}}', $addressData);
             $addressId = $this->db->getLastInsertID();
 
             $globals = (new Query())
