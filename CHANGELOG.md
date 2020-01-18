@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.2.11 - 2020-01-18
+
+### Changed
+- Updated `barrelstrength/sprout-base-sitemaps` requirement v1.1.3
+
+### Fixed
+- Fixed minutes value in XML Sitemap output
+
 ## 4.2.10 - 2020-01-16
 
 ### Updated
