@@ -426,77 +426,12 @@
 
 {% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\seo\\SproutSeoAsset") %}
 
-{% js %}
-
-    var items = {{ organizationItems|json_encode|raw }};
-    var websiteIdentity = {{ websiteIdentity|json_encode|raw }};
-
-    $(document).ready(function() {
+{% js on ready %}
     Craft.SproutFields.initFields($("#content"));
 
-    $('#keywords-field input').tagEditor({
-    animateDelete: 20
+    new SproutSeoWebsiteIdentity({
+        items: {{ organizationItems|json_encode|raw }},
+        websiteIdentity: {{ websiteIdentity|json_encode|raw }}
     });
-
-    // check if we need load depending dropdowns
-    if (websiteIdentity)
-    {
-    if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[0])
-    {
-    $('#first').val(websiteIdentity.organizationSubTypes[0]).change();
-    }
-    if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[1])
-    {
-    $('#second').val(websiteIdentity.organizationSubTypes[1]).change();
-    }
-    if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[2])
-    {
-    $('#third').val(websiteIdentity.organizationSubTypes[2]).change();
-    }
-    }
-
-    $( "#identityType" ).change(function() {
-    if(this.value === 'Person')
-    {
-    $( ".person-info" ).removeClass('hidden');
-    $( ".organization-info" ).addClass('hidden');
-    }
-    else
-    {
-    $( ".person-info" ).addClass('hidden');
-    $( ".organization-info" ).removeClass('hidden');
-    }
-
-    if(this.value === 'Organization')
-    {
-    $( ".organization-info" ).removeClass('hidden');
-    $( ".person-info" ).addClass('hidden');
-
-    if ($( "#first" ).val() == 'LocalBusiness')
-    {
-    $( "#localbusiness" ).removeClass('hidden');
-    }
-    }
-    else
-    {
-    $( ".organization-info" ).addClass('hidden');
-    $( ".person-info" ).removeClass('hidden');
-    }
-    });
-
-    $( "#first" ).change(function() {
-    if(this.value === 'LocalBusiness')
-    {
-    $( "#localbusiness" ).removeClass('hidden');
-    }
-    else
-    {
-    $( "#localbusiness" ).addClass('hidden');
-    }
-    });
-
-
-    });
-
 {% endjs %}
 
