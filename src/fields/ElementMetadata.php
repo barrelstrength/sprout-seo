@@ -285,9 +285,9 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @inheritdoc
+     * @return array
      */
-    public function rules()
+    public function defineRules(): array
     {
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
         $metadataFieldCount = (int) SproutSeo::$app->settings->getMetadataFieldCount();
@@ -300,7 +300,7 @@ class ElementMetadata extends Field
             $this->addError('optimizedTitleField', Craft::t('sprout-seo', 'Upgrade to Sprout SEO PRO to manage multiple Metadata fields.'));
         }
 
-        return parent::rules();
+        return parent::defineRules();
     }
 
     /**
