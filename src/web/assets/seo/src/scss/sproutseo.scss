@@ -33,18 +33,14 @@
 ------------------------------------------------------------ */
 .sproutseo-status-pass svg path {
     fill: #27AE60;
-/ / enabled green
-    /*color: #29323d; // home icon dark grey*/
 }
 
 .sproutseo-status-partial svg path {
     fill: #F2842D;
-/ / orange
 }
 
 .sproutseo-status-missing svg path {
     fill: #CCCCCC;
-/ / grey
 }
 
 /* Adjust styles for IPreviewable Fieldtype Display in Element Index columns */

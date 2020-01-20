@@ -7,20 +7,17 @@
 
 namespace barrelstrength\sproutseo\fields;
 
-
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasefields\web\assets\selectother\SelectOtherFieldAsset;
-use barrelstrength\sproutseo\web\assets\schema\SchemaAsset;
-use barrelstrength\sproutseo\web\assets\opengraph\OpenGraphAsset;
+use barrelstrength\sproutseo\web\assets\seo\SproutSeoAsset;
 use barrelstrength\sproutseo\web\assets\tageditor\TagEditorAsset;
-use barrelstrength\sproutseo\web\assets\twittercard\TwitterCardAsset;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutseo\web\assets\base\BaseAsset;
 use craft\base\Element;
 use craft\base\Field;
 use Craft;
+use craft\errors\SiteNotFoundException;
 use PhpScience\TextRank\TextRankFacade;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\StopWords\German;
@@ -28,6 +25,8 @@ use PhpScience\TextRank\Tool\StopWords\French;
 use PhpScience\TextRank\Tool\StopWords\Italian;
 use PhpScience\TextRank\Tool\StopWords\Norwegian;
 use PhpScience\TextRank\Tool\StopWords\Spanish;
+use RuntimeException;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -68,15 +67,15 @@ class ElementMetadata extends Field
     public $optimizedImageField;
     public $optimizedKeywordsField;
     public $showMainEntity;
-    public $showSearchMeta;
-    public $showOpenGraph;
-    public $showTwitter;
-    public $showGeo;
-    public $showRobots;
-    public $editCanonical;
+    public $showSearchMeta = false;
+    public $showOpenGraph = false;
+    public $showTwitter = false;
+    public $showGeo = false;
+    public $showRobots = false;
+    public $editCanonical = false;
     public $schemaOverrideTypeId;
     public $schemaTypeId;
-    public $enableMetaDetailsFields;
+    public $enableMetaDetailsFields = false;
 
     /**
      * @return string
@@ -136,7 +135,7 @@ class ElementMetadata extends Field
      */
 //    public function getTableAttributeHtml($value, ElementInterface $element): string
 //    {
-//        Craft::$app->view->registerAssetBundle(BaseAsset::class);
+//        Craft::$app->view->registerAssetBundle(SproutSeoAsset::class);
 //
 //        $html = Craft::$app->view->renderTemplate('sprout-seo/_includes/metadata-status-icons', [
 //            'sitemapSection' => $value
@@ -147,6 +146,7 @@ class ElementMetadata extends Field
 
     /**
      * @return string|null
+     * @throws Exception
      * @throws InvalidConfigException
      * @throws LoaderError
      * @throws RuntimeError
@@ -157,8 +157,7 @@ class ElementMetadata extends Field
         $schemas = SproutSeo::$app->schema->getSchemaOptions();
         $schemaSubtypes = SproutSeo::$app->schema->getSchemaSubtypes($schemas);
 
-        Craft::$app->getView()->registerAssetBundle(BaseAsset::class);
-        Craft::$app->getView()->registerAssetBundle(SchemaAsset::class);
+        Craft::$app->getView()->registerAssetBundle(SproutSeoAsset::class);
         Craft::$app->getView()->registerAssetBundle(SelectOtherFieldAsset::class);
 
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
@@ -179,7 +178,10 @@ class ElementMetadata extends Field
      *
      * @return string
      * @throws Exception
-     * @throws Twig_Error_Loader
+     * @throws InvalidConfigException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -230,11 +232,8 @@ class ElementMetadata extends Field
 
         $settings = $this->getAttributes();
 
-        Craft::$app->getView()->registerAssetBundle(BaseAsset::class);
-        Craft::$app->getView()->registerAssetBundle(OpenGraphAsset::class);
-        Craft::$app->getView()->registerAssetBundle(TwitterCardAsset::class);
+        Craft::$app->getView()->registerAssetBundle(SproutSeoAsset::class);
         Craft::$app->getView()->registerAssetBundle(TagEditorAsset::class);
-        Craft::$app->getView()->registerAssetBundle(SchemaAsset::class);
 
         return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/input', [
             'field' => $this,
@@ -353,7 +352,7 @@ class ElementMetadata extends Field
     /**
      * @param bool $isNew
      *
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function afterSave(bool $isNew)
     {
@@ -368,9 +367,8 @@ class ElementMetadata extends Field
      * @param $element
      *
      * @return mixed
-     *
-     * @throws \RuntimeException
      * @throws Exception
+     * @throws Throwable
      */
     protected function processOptimizedTitle($attributes, $settings, $element)
     {
@@ -447,11 +445,12 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @param $attributes
-     * @param $settings
-     * @param $element
+     * @param         $attributes
+     * @param         $settings
+     * @param Element $element
      *
      * @return mixed
+     * @throws InvalidConfigException
      */
     protected function processOptimizedKeywords($attributes, $settings, Element $element)
     {
@@ -509,7 +508,7 @@ class ElementMetadata extends Field
                         $rankedKeywords = $textRankApi->getOnlyKeyWords($bigKeywords);
                         $fiveKeywords = array_keys(array_slice($rankedKeywords, 0, 5));
                         $keywords = implode(',', $fiveKeywords);
-                    } catch (\RuntimeException $e) {
+                    } catch (RuntimeException $e) {
                         // Cannot detect the language of the text, maybe to short.
                         $keywords = null;
                     }
@@ -534,6 +533,7 @@ class ElementMetadata extends Field
      *
      * @return mixed
      * @throws Exception
+     * @throws Throwable
      */
     protected function processOptimizedDescription($attributes, $settings, $element)
     {
@@ -579,6 +579,7 @@ class ElementMetadata extends Field
      *
      * @return mixed
      * @throws Exception
+     * @throws Throwable
      */
     protected function processOptimizedFeatureImage($attributes, $settings, $element)
     {
@@ -724,6 +725,8 @@ class ElementMetadata extends Field
      *
      * @return array
      * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
      */
     protected function getMetadataFieldValues($fields, $element)
     {

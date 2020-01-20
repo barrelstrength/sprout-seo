@@ -18,7 +18,7 @@
             instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type" target="_blank">How Open Graph Stories work.</a>'|t,
             name: field.handle~'[metadata][ogType]',
             options: ogTypesOptions,
-            value: values.ogType,
+            value: values.ogType ?? 'article',
             errors: "",
             required: false
         }) }}
@@ -56,11 +56,6 @@
     </div>
 
 </div>
-
-{% js %}
-    new Craft.SproutSeoOpenGraph();
-{% endjs %}
-
 
 
 

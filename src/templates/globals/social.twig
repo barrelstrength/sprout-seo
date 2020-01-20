@@ -3,7 +3,7 @@
 {% import "sprout-base-fields/_includes/forms" as sproutFields %}
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\globals\\GlobalsAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\seo\\SproutSeoAsset") %}
 
 {% set socialProfileOptions = craft.sproutSeo.getFinalOptions('social', 'profileName', globals) %}
 
