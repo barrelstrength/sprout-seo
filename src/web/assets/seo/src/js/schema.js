@@ -1,103 +1,133 @@
-/*
- * @link      https://sprout.barrelstrengthdesign.com/
- * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- */
+class SproutSeoWebsiteIdentitySettings {
 
-'use strict';
+  constructor(props) {
+    this.items = props.items;
+    this.mainEntityValues = props.mainEntityValues;
 
-$(document).ready(function() {
+    this.initLegacyCode();
+    this.initOtherLegacyCode();
+  }
+
+  initLegacyCode() {
+    let self = this;
 
     // Default option
-    var option = '';
+    let option = '';
 
     // Method to clear dropdowns down to a given level
-    var clearDropDown = function(arrayObj, startIndex) {
-        $.each(arrayObj, function(index, value) {
-            if (index >= startIndex) {
-                $(value).html(option);
-            }
-        });
+    let clearDropDown = function(arrayObj, startIndex) {
+      $.each(arrayObj, function(index, value) {
+        if (index >= startIndex) {
+          $(value).html(option);
+        }
+      });
     };
 
     // Method to disable dropdowns down to a given level
-    var disableDropDown = function(arrayObj, startIndex) {
-        $.each(arrayObj, function(index, value) {
-            if (index >= startIndex) {
-                $(value).closest('div.organizationinfo-dropdown').addClass('hidden');
-            }
-        });
+    let disableDropDown = function(arrayObj, startIndex) {
+      $.each(arrayObj, function(index, value) {
+        if (index >= startIndex) {
+          $(value).closest('div.organizationinfo-dropdown').addClass('hidden');
+        }
+      });
     };
 
     // Method to enable dropdowns down to a given level
-    var enableDropDown = function(element) {
-        element.closest('div.organizationinfo-dropdown').removeClass('hidden');
+    let enableDropDown = function(element) {
+      element.closest('div.organizationinfo-dropdown').removeClass('hidden');
     };
 
     // Method to generate and append options
-    var generateOptions = function(element, children) {
-        var options, name = '';
+    let generateOptions = function(element, children) {
+      let options, name = '';
 
-        $.each(children, function(index, value) {
-            // insert space before capital letters
-            name = index.replace(/([A-Z][^A-Z\b])/g, ' $1').trim();
-            options += '<option value="' + index + '">' + name + '</option>';
+      $.each(children, function(index, value) {
+        // insert space before capital letters
+        name = index.replace(/([A-Z][^A-Z\b])/g, ' $1').trim();
+        options += '<option value="' + index + '">' + name + '</option>';
 
-            // let's foreach the children
-            if (value) {
-                $.each(value, function(key, level3) {
-                    name = "&nbsp;&nbsp;&nbsp;" + key.replace(/([A-Z][^A-Z\b])/g, ' $1').trim();
-                    options += '<option value="' + key + '">' + name + '</option>';
-                });
-            }
+        // let's foreach the children
+        if (value) {
+          $.each(value, function(key, level3) {
+            name = "&nbsp;&nbsp;&nbsp;" + key.replace(/([A-Z][^A-Z\b])/g, ' $1').trim();
+            options += '<option value="' + key + '">' + name + '</option>';
+          });
+        }
 
-        });
+      });
 
-        element.append(options);
+      element.append(options);
     };
 
     // Select each of the dropdowns
-    var firstDropDown = $('.mainentity-firstdropdown select');
-    var secondDropDown = $('.mainentity-seconddropdown select');
+    let firstDropDown = $('.mainentity-firstdropdown select');
+    let secondDropDown = $('.mainentity-seconddropdown select');
 
     // Hold selected option
-    var firstSelection = '';
-    var secondSelection = '';
+    let firstSelection = '';
+    let secondSelection = '';
 
     // Hold selection
-    var selection = '';
+    let selection = '';
 
     // Selection handler for first level dropdown
     firstDropDown.on('change', function() {
 
-        // Get selected option
-        firstSelection = firstDropDown.val();
+      // Get selected option
+      firstSelection = firstDropDown.val();
 
-        // Clear all dropdowns down to the hierarchy
-        clearDropDown($(".organization-info :input"), 1);
+      // Clear all dropdowns down to the hierarchy
+      clearDropDown($(".organization-info :input"), 1);
 
-        // Disable all dropdowns down to the hierarchy
-        disableDropDown($(".organization-info :input"), 1);
+      // Disable all dropdowns down to the hierarchy
+      disableDropDown($(".organization-info :input"), 1);
 
-        // Check current selection
-        if (typeof items[firstSelection] === 'undefined' || firstSelection === '' || items[firstSelection].length <= 0) {
-            return;
-        }
+      // Check current selection
+      if (typeof self.items[firstSelection] === 'undefined' || firstSelection === '' || self.items[firstSelection].length <= 0) {
+        return;
+      }
 
-        if (items[firstSelection]) {
-            // Enable second level DropDown
-            enableDropDown(secondDropDown);
+      if (self.items[firstSelection]) {
+        // Enable second level DropDown
+        enableDropDown(secondDropDown);
 
-            // Generate and append options
-            generateOptions(secondDropDown, items[firstSelection]);
-        }
+        // Generate and append options
+        generateOptions(secondDropDown, self.items[firstSelection]);
+      }
 
     });
 
     // Selection handler for second level dropdown
     secondDropDown.on('change', function() {
-        var lastValue = secondDropDown.val();
-        // Final work goes here
+      let lastValue = secondDropDown.val();
+      // Final work goes here
+    });
+  }
+
+  initOtherLegacyCode() {
+    let self = this;
+    let mainEntityValues = self.mainEntityValues;
+
+    //Main entity dropdowns
+    $('.mainentity-firstdropdown select').change(function() {
+      if (this.value === 'barrelstrength-sproutseo-schema-personschema') {
+        $('.mainentity-seconddropdown select').addClass('hidden');
+      } else {
+        $('.mainentity-seconddropdown select').removeClass('hidden');
+      }
     });
 
-});
+    // check if we need load depending dropdowns
+    if (mainEntityValues) {
+      if (mainEntityValues.hasOwnProperty('schemaTypeId') && mainEntityValues.schemaTypeId) {
+        $('.mainentity-firstdropdown select').val(mainEntityValues.schemaTypeId).change();
+      }
+      if (mainEntityValues.hasOwnProperty('schemaOverrideTypeId') && mainEntityValues.schemaOverrideTypeId) {
+        $('.mainentity-seconddropdown select').val(mainEntityValues.schemaOverrideTypeId).change();
+      }
+    }
+
+  }
+}
+
+window.SproutSeoWebsiteIdentitySettings = SproutSeoWebsiteIdentitySettings;

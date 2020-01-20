@@ -3,6 +3,10 @@ class SproutSeoWebsiteIdentity {
         this.items = props.items;
         this.websiteIdentity = props.websiteIdentity;
 
+        this.firstDropdownId = props.firstDropdownId;
+        this.secondDropdownId = props.secondDropdownId;
+        this.thirdDropdownId = props.thirdDropdownId;
+
         this.initWebsiteIdentityField();
         this.moreWebsiteIdentityStuff();
         this.initKeywordsField();
@@ -11,49 +15,10 @@ class SproutSeoWebsiteIdentity {
     initWebsiteIdentityField() {
         let self = this;
 
-        // Default option
-        let option = '<option value="" selected="selected"></option>';
-
-        // Method to clear dropdowns down to a given level
-        let clearDropDown = function(arrayObj, startIndex) {
-            $.each(arrayObj, function(index, value) {
-                if (index >= startIndex) {
-                    $(value).html(option);
-                }
-            });
-        };
-
-        // Method to disable dropdowns down to a given level
-        let disableDropDown = function(arrayObj, startIndex) {
-            $.each(arrayObj, function(index, value) {
-                if (index >= startIndex) {
-                    $(value).closest('div.organizationinfo-dropdown').addClass('hidden');
-                }
-            });
-        };
-
-        // Method to enable dropdowns down to a given level
-        let enableDropDown = function(element) {
-            element.closest('div.organizationinfo-dropdown').removeClass('hidden');
-        };
-
-        // Method to generate and append options
-        let generateOptions = function(element, children) {
-            let options, name = '';
-
-            for (let i = 0; i < children.length; i++) {
-                // insert space before capital letters
-                name = children[i].name.replace(/([A-Z][^A-Z\b])/g, ' $1').trim();
-
-                options += '<option value="' + children[i].name + '">' + name + '</option>';
-            }
-            element.append(options);
-        };
-
         // Select each of the dropdowns
-        let firstDropDown = $('#first');
-        let secondDropDown = $('#second');
-        let thirdDropDown = $('#third');
+        let firstDropDown = $(this.firstDropdownId);
+        let secondDropDown = $(this.secondDropdownId);
+        let thirdDropDown = $(this.thirdDropdownId);
 
         // Hold selected option
         let firstSelection = '';
@@ -70,10 +35,10 @@ class SproutSeoWebsiteIdentity {
             firstSelection = firstDropDown.val();
 
             // Clear all dropdowns down to the hierarchy
-            clearDropDown($("#organization :input"), 1);
+            self.clearDropDown($("#organization :input"), 1);
 
             // Disable all dropdowns down to the hierarchy
-            disableDropDown($("#organization :input"), 1);
+            self.disableDropDown($("#organization :input"), 1);
 
             // Check current selection
             if (firstSelection === '') {
@@ -82,10 +47,10 @@ class SproutSeoWebsiteIdentity {
 
             if (self.items[firstSelection].hasOwnProperty('children')) {
                 // Enable second level DropDown
-                enableDropDown(secondDropDown);
+                self.enableDropDown(secondDropDown);
 
                 // Generate and append options
-                generateOptions(secondDropDown, self.items[firstSelection]['children']);
+                self.generateOptions(secondDropDown, self.items[firstSelection]['children']);
             }
 
         });
@@ -97,10 +62,10 @@ class SproutSeoWebsiteIdentity {
             secondSelection = secondDropDown.val();
 
             // Clear all dropdowns down to the hierarchy
-            clearDropDown($("#organization :input"), 2);
+            self.clearDropDown($("#organization :input"), 2);
 
             // Disable all dropdowns down to the hierarchy
-            disableDropDown($("#organization :input"), 2);
+            self.disableDropDown($("#organization :input"), 2);
 
             // Check current selection
             if (secondSelection === '') {
@@ -114,10 +79,10 @@ class SproutSeoWebsiteIdentity {
                 if (children[i].name === secondSelection) {
                     if (children[i].hasOwnProperty('children')) {
                         // Enable third level DropDown
-                        enableDropDown(thirdDropDown);
+                        self.enableDropDown(thirdDropDown);
 
                         // Generate and append options
-                        generateOptions(thirdDropDown, children[i]['children']);
+                        self.generateOptions(thirdDropDown, children[i]['children']);
                     }
 
                     break;
@@ -201,6 +166,51 @@ class SproutSeoWebsiteIdentity {
             animateDelete: 20
         });
     }
+
+    // Clear dropdowns down to a given level
+    clearDropDown(arrayObj, startIndex) {
+
+        // Default option passed to html() on Globals page
+        let option = '<option value="" selected="selected"></option>';
+
+        // From Metadata Field settings page:
+        // var option = '';
+
+        $.each(arrayObj, function(index, value) {
+            if (index >= startIndex) {
+                $(value).html(option);
+            }
+        });
+    };
+
+    // Disable dropdowns down to a given level
+    disableDropDown(arrayObj, startIndex) {
+        $.each(arrayObj, function(index, value) {
+            if (index >= startIndex) {
+                $(value).closest('div.organizationinfo-dropdown').addClass('hidden');
+            }
+        });
+    };
+
+    // Enable dropdowns down to a given level
+    enableDropDown(element) {
+        element.closest('div.organizationinfo-dropdown').removeClass('hidden');
+    };
+
+    // Generate and append options
+    generateOptions(element, children) {
+        let options = '';
+        let name = '';
+
+        for (let i = 0; i < children.length; i++) {
+            // insert space before capital letters
+            name = children[i].name.replace(/([A-Z][^A-Z\b])/g, ' $1').trim();
+
+            options += '<option value="' + children[i].name + '">' + name + '</option>';
+        }
+
+        element.append(options);
+    };
 }
 
 window.SproutSeoWebsiteIdentity = SproutSeoWebsiteIdentity;

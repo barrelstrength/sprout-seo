@@ -226,32 +226,13 @@
         disabled: not isPro
     }) }}
 
-    {% js %}
-        var items = {{ schemaSubtypes|json_encode|raw }};
-        var entryValues = {{ mainEntityValues|json_encode|raw }};
+    {% js on ready %}
 
-        $(document).ready(function() {
         Craft.SproutFields.initFields($("#content"));
 
-        //Main entity dropdowns
-        $('.mainentity-firstdropdown select').change(function() {
-        if(this.value === 'barrelstrength-sproutseo-schema-personschema'){
-        $('.mainentity-seconddropdown select').addClass('hidden');
-        }else{
-        $('.mainentity-seconddropdown select').removeClass('hidden');
-        }
-        });
-
-        // check if we need load depending dropdowns
-        if (entryValues){
-        if (entryValues.hasOwnProperty('schemaTypeId') && entryValues.schemaTypeId){
-        $('.mainentity-firstdropdown select').val(entryValues.schemaTypeId).change();
-        }
-        if (entryValues.hasOwnProperty('schemaOverrideTypeId') && entryValues.schemaOverrideTypeId){
-        $('.mainentity-seconddropdown select').val(entryValues.schemaOverrideTypeId).change();
-        }
-        }
-
+        new SproutSeoWebsiteIdentitySettings({
+        items: {{ schemaSubtypes|json_encode|raw }},
+        mainEntityValues: {{ mainEntityValues|json_encode|raw }}
         });
 
     {% endjs %}

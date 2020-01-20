@@ -258,7 +258,7 @@
 
                     <div class="identitytype-dropdown organizationinfo-dropdown">
                         {{ forms.selectField({
-                            id: 'first',
+                            id: 'main-entity-first-dropdown',
                             role: 'listbox',
                             name: 'sproutseo[globals][identity][organizationSubTypes][0]',
                             options: websiteIdentityOptions,
@@ -270,7 +270,7 @@
 
                     <div class="identitytype-dropdown organizationinfo-dropdown hidden">
                         {{ forms.selectField({
-                            id: 'second',
+                            id: 'main-entity-second-dropdown',
                             role: 'listbox',
                             name: 'sproutseo[globals][identity][organizationSubTypes][1]',
                             options: {'':''},
@@ -282,7 +282,7 @@
 
                     <div class="identitytype-dropdown organizationinfo-dropdown hidden">
                         {{ forms.selectField({
-                            id: 'third',
+                            id: 'main-entity-third-dropdown',
                             role: 'listbox',
                             name: 'sproutseo[globals][identity][organizationSubTypes][2]',
                             options: {'':''},
@@ -429,9 +429,15 @@
 {% js on ready %}
     Craft.SproutFields.initFields($("#content"));
 
+    console.log({{ organizationItems|json_encode|raw }});
+    console.log({{ websiteIdentity|json_encode|raw }});
+
     new SproutSeoWebsiteIdentity({
         items: {{ organizationItems|json_encode|raw }},
-        websiteIdentity: {{ websiteIdentity|json_encode|raw }}
+        websiteIdentity: {{ websiteIdentity|json_encode|raw }},
+        firstDropdownId: '#main-entity-first-dropdown',
+        secondDropdownId: '#main-entity-second-dropdown',
+        thirdDropdownId: '#main-entity-third-dropdown',
     });
 {% endjs %}
 
