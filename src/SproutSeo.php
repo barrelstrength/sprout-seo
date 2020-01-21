@@ -154,7 +154,7 @@ class SproutSeo extends Plugin
         });
 
         Event::on(ErrorHandler::class, ErrorHandler::EVENT_BEFORE_HANDLE_EXCEPTION, function(ExceptionEvent $event) {
-            if ($this->is(self::EDITION_PRO)) {
+            if ($this->is(self::EDITION_PRO) && $settings->enableRedirects) {
                 SproutBaseRedirects::$app->redirects->handleRedirectsOnException($event);
             }
         });
