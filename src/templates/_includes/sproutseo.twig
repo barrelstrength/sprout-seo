@@ -12,26 +12,26 @@
 
     <span class="info sproutseo-info">
         <div class="sprout-info-body sproutseo-metalevel-hud">
-            <h6>{{ "Metadata Used For"|t }}</h6>
+            <h6>{{ "Metadata Used In"|t('sprout-seo') }}</h6>
             {% if search %}<span class="sproutseo-icon icon-search">
                 {{ svg('@sproutbaseicons/search.svg') }}
-                </span> {{ "Search"|t }}<br>{% endif %}
+                </span> {{ "Search"|t('sprout-seo') }}<br>{% endif %}
             {% if structured %}<span class="sproutseo-icon icon-puzzle">
                 {{ svg('@sproutbaseicons/puzzle-piece.svg') }}
-                </span> {{ "Structured Data"|t }}<br>{% endif %}
+                </span> {{ "Structured Data"|t('sprout-seo') }}<br>{% endif %}
 
             {% if openGraph %}<span class="sproutseo-icon icon-facebook">
                 {{ svg('@sproutbaseicons/facebook-f.svg') }}
-                </span> {{ "Open Graph"|t }}<br>{% endif %}
+                </span> {{ "Open Graph"|t('sprout-seo') }}<br>{% endif %}
             {% if twitterCard %}<span class="sproutseo-icon icon-twitter">
                 {{ svg('@sproutbaseicons/twitter.svg') }}
-                </span> {{ "Twitter Card"|t }}<br>{% endif %}
+                </span> {{ "Twitter Card"|t('sprout-seo') }}<br>{% endif %}
             {% if geo %}<span class="sproutseo-icon icon-location">
                 {{ svg('@sproutbaseicons/map-marker-alt.svg') }}
-                </span> {{ "Geo"|t }}<br>{% endif %}
+                </span> {{ "Geo"|t('sprout-seo') }}<br>{% endif %}
             {% if robots %}<span class="sproutseo-icon icon-robots">
                 {{ svg('@sproutbaseicons/search-minus.svg') }}
-                </span> {{ "Robots"|t }}<br>{% endif %}
+                </span> {{ "Robots"|t('sprout-seo') }}<br>{% endif %}
 
             {% if message %}<p><i>{{ message }}</i></p>{% endif %}
         </div>
