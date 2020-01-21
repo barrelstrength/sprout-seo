@@ -9,7 +9,6 @@ class SproutSeoWebsiteIdentity {
 
         this.initWebsiteIdentityField();
         this.moreWebsiteIdentityStuff();
-        this.initKeywordsField();
     }
 
     initWebsiteIdentityField() {
@@ -161,12 +160,6 @@ class SproutSeoWebsiteIdentity {
         });
     }
 
-    initKeywordsField() {
-        $('#keywords-field input').tagEditor({
-            animateDelete: 20
-        });
-    }
-
     // Clear dropdowns down to a given level
     clearDropDown(arrayObj, startIndex) {
 
@@ -214,4 +207,3 @@ class SproutSeoWebsiteIdentity {
 }
 
 window.SproutSeoWebsiteIdentity = SproutSeoWebsiteIdentity;
-

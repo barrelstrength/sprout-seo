@@ -337,7 +337,6 @@
         </div>
 
     {% endif %}
-
 </div>
 
 {% css %}
@@ -346,10 +345,6 @@ feel like they are part of the natural flow of fields #}
     {% if fieldId is defined %}
         #{{ fieldId }} > .heading:first-of-type { display: none; }
     {% endif %}
-
-    {#{% if fieldId is defined and not displayMetadataField %}#}
-        {##{{ fieldId }} { display: none; }#}
-    {#{% endif %}#}
 {% endcss %}
 
 {% js %}

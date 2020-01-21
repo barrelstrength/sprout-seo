@@ -429,9 +429,6 @@
 {% js on ready %}
     Craft.SproutFields.initFields($("#content"));
 
-    console.log({{ organizationItems|json_encode|raw }});
-    console.log({{ websiteIdentity|json_encode|raw }});
-
     new SproutSeoWebsiteIdentity({
         items: {{ organizationItems|json_encode|raw }},
         websiteIdentity: {{ websiteIdentity|json_encode|raw }},
