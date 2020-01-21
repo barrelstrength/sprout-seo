@@ -2,8 +2,8 @@
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
 <div class="sproutseo-box-geo">
-    {% set name = (namespaceInputName is not defined) ? 'address' : namespaceInputName %}
 
+    {% set name = (namespaceInputName is not defined) ? 'address' : namespaceInputName %}
     {% set addressBox = (namespaceInputId is not defined) ? 'sproutaddressinfo-box' : 'sproutaddressinfo-box-' ~ namespaceInputId %}
 
     {{ forms.textField({

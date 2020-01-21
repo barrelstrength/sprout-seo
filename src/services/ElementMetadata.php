@@ -15,9 +15,13 @@ use craft\base\Field;
 use craft\events\FieldLayoutEvent;
 use barrelstrength\sproutbaseuris\SproutBaseUris;
 use craft\models\FieldLayout;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use yii\base\Component;
 use craft\db\Query;
+use Craft;
 use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
+use yii\helpers\ArrayHelper;
 
 class ElementMetadata extends Component
 {
@@ -155,25 +159,23 @@ class ElementMetadata extends Component
     /**
      * Triggers a Resave Elements job for each Url-Enabled Section with an Element Metadata field
      *
-     * @param      $elementType
-     * @param bool $afterFieldLayout
+     * @param                  $elementType
+     * @param bool             $afterFieldLayout
      * @param FieldLayout|null $fieldLayout
      *
      * @return bool
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\ExitException
      */
-    protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false,  FieldLayout $fieldLayout = null)
+    protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false, FieldLayout $fieldLayout = null)
     {
         $urlEnabledSectionType = SproutBaseUris::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
 
-        if ($urlEnabledSectionType === null)
-        {
+        if ($urlEnabledSectionType === null) {
             return false;
         }
 
-        if ($afterFieldLayout && !$urlEnabledSectionType->resaveElementsAfterFieldLayoutSaved())
-        {
+        if ($afterFieldLayout && !$urlEnabledSectionType->resaveElementsAfterFieldLayoutSaved()) {
             return false;
         }
 
@@ -187,7 +189,7 @@ class ElementMetadata extends Component
 
                         break;
                     }
-                }else{
+                } else {
                     // Check and confirm Element Metadata field is the same as the Field Layout
                     if ($urlEnabledSection->hasElementMetadataField(false)) {
                         $elementGroupId = $urlEnabledSection->id;
@@ -198,5 +200,128 @@ class ElementMetadata extends Component
         }
 
         return true;
+    }
+
+    public function getSeoBadgeInfo($settings): array
+    {
+        $targetSettings = [
+            [
+                'type' => 'optimizedTitleField',
+                'value' => $settings['optimizedTitleField'],
+                'badgeClass' => 'sproutseo-metatitle-info',
+            ], [
+                'type' => 'optimizedDescriptionField',
+                'value' => $settings['optimizedDescriptionField'],
+                'badgeClass' => 'sproutseo-metadescription-info',
+            ], [
+                'type' => 'optimizedImageField',
+                'value' => $settings['optimizedImageField'],
+                'badgeClass' => 'sproutseo-metaimage-info',
+            ]
+        ];
+
+        $seoFieldHandles = [];
+        foreach ($targetSettings as $targetSetting) {
+
+            $handles = $this->getFieldHandles($targetSetting['value']);
+
+            if (is_iterable($handles)) {
+                foreach ($handles as $handle) {
+                    if (isset($seoFieldHandles[$handle])) {
+                        continue;
+                    }
+                    $seoFieldHandles[$handle] = [
+                        'type' => $targetSetting['type'],
+                        'handle' => $handle,
+                        'badgeClass' => $targetSetting['badgeClass']
+                    ];
+                }
+            } else {
+                if (isset($seoFieldHandles[$handles])) {
+                    continue;
+                }
+                $seoFieldHandles[$handles] = [
+                    'type' => $targetSetting['type'],
+                    'handle' => $handles,
+                    'badgeClass' => $targetSetting['badgeClass']
+                ];
+            }
+        }
+
+        return $seoFieldHandles;
+    }
+
+    public function getFieldHandles($targetFieldSetting)
+    {
+        $targetField = $targetFieldSetting ?? null;
+
+        if (!$targetField) {
+            return [];
+        }
+
+        // Return the handle of the selected field and make into an array
+        $existingFieldHandle = [$this->getExistingFieldHandle($targetField)];
+
+        // Parse a custom setting and return an array or empty array
+        $customSettingFieldHandles = $this->getCustomSettingFieldHandles($targetField);
+
+        $fieldHandles = array_filter(array_merge($existingFieldHandle, $customSettingFieldHandles));
+
+        if (count($fieldHandles) <= 0) {
+            if ($targetField === 'elementTitle') {
+                return 'title';
+            }
+
+            // resolve 'manually' settings to specific default field ids...
+
+            return $targetField;
+        }
+
+        return $fieldHandles;
+    }
+
+    public function getExistingFieldHandle($fieldId)
+    {
+        // A number represents a specific image field selected
+        if (!preg_match('/^\\d+$/', $fieldId)) {
+            return '';
+        }
+
+        /** @var Field $optimizedImageFieldModel */
+        $optimizedImageFieldModel = Craft::$app->fields->getFieldById($fieldId);
+
+        return $optimizedImageFieldModel ? $optimizedImageFieldModel->handle : '';
+    }
+
+    /**
+     * Parses a custom Element Metadata field setting and returns tags used as an array of names
+     *
+     * @param $value
+     *
+     * @return array
+     */
+    public function getCustomSettingFieldHandles($value): array
+    {
+        // If there are no dynamic tags, just return the template
+        if (strpos($value, '{') === false) {
+            return [];
+        }
+
+        /**
+         *  {           - our pattern starts with an open bracket
+         *  <space>?    - zero or one space
+         *  (object\.)? - zero or one characters that spell "object."
+         *  (?<handles> - begin capture pattern and name it 'handles'
+         *  [a-zA-Z_]*  - any number of characters in Craft field handles
+         *  )           - end capture pattern named 'handles'
+         */
+        preg_match_all('/{ ?(object\.)?(?<handles>[a-zA-Z_]*)/', $value, $matches);
+
+        if (count($matches['handles'])) {
+            // Remove empty array items and make sure we only return each value once
+            return array_filter(array_unique($matches['handles']));
+        }
+
+        return [];
     }
 }

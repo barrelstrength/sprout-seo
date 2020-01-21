@@ -624,35 +624,6 @@ class SproutSeoVariable
     }
 
     /**
-     * @param $value
-     *
-     * @return array|null
-     */
-    public function getCustomSettingFieldHandles($value)
-    {
-        // If there are no dynamic tags, just return the template
-        if (strpos($value, '{') === false) {
-            return null;
-        }
-
-        /**
-         *  {           - our pattern starts with an open bracket
-         *  <space>?    - zero or one space
-         *  (object\.)? - zero or one characters that spell "object."
-         *  (?<handles> - begin capture pattern and name it 'handles'
-         *  [a-zA-Z_]*  - any number of characters in Craft field handles
-         *  )           - end capture pattern named 'handles'
-         */
-        preg_match_all('/{ ?(object\.)?(?<handles>[a-zA-Z_]*)/', $value, $matches);
-
-        if (count($matches['handles'])) {
-            return array_unique($matches['handles']);
-        }
-
-        return null;
-    }
-
-    /**
      * Returns all plain fields available given a type
      *
      * @param $siteId

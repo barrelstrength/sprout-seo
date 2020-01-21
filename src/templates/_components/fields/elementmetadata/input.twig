@@ -1,6 +1,8 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
+{% set sproutApp = craft.app.getModule('sprout-seo').app %}
+
 {% set pluginSettings   = craft.sproutSeo.getSettings() %}
 
 {% set displayMetadataField = false %}
@@ -347,214 +349,14 @@ feel like they are part of the natural flow of fields #}
     {% endif %}
 {% endcss %}
 
-{% js %}
-
-{#    $( document ).ready(function() {#}
-
-{#    function getCustomizationSettings(customKey)#}
-{#    {#}
-{#        var name = '{{ field.handle|raw }}';#}
-{#        return $("input[name='fields["+name+"][metadata]["+customKey+"]']");#}
-{#    }#}
-
-{#    // Checking active class#}
-{#    var fields = ["Search","OpenGraph","Geo","Robots","TwitterCard"];#}
-
-{#    for (var i = 0; i < fields.length; i++)#}
-{#    {#}
-{#        var customKey = "enableMetaDetails"+fields[i];#}
-{#        var customizationSettings = getCustomizationSettings(customKey);#}
-{#        if(customizationSettings.val()==1)#}
-{#        {#}
-{#            $("#btn-"+fields[i]).addClass("active");#}
-{#            // Optimize Field Settings#}
-{#            $("#fields-btn-"+fields[i]).addClass("active");#}
-{#        }#}
-{#    }#}
-
-{#    function appendSeoBadge(targetLabelId, seoButton)#}
-{#    {#}
-{#        if ($(targetLabelId).find('.sproutseo-info').length === 0)#}
-{#        {#}
-{#            $(targetLabelId).append(seoButton).removeClass('hidden');#}
-{#        }#}
-{#    }#}
-
-{#    {% if settings.optimizedKeywordsField == 'manually' %}#}
-{#        $('#fields-sproutseo-optimizedkeywords-field input').tagEditor({#}
-{#            animateDelete: 20#}
-{#        });#}
-{#    {% endif %}#}
-
-{#    $('#fields-sproutseo-searchKeywords-field input').tagEditor({#}
-{#        animateDelete: 20#}
-{#    });#}
-
-{#    {% if settings.optimizedTitleField == 'elementTitle' %}#}
-
-{#        var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();#}
-{#        var metaTitleLabelId = '#title-label';#}
-{#        appendSeoBadge(metaTitleLabelId, metaTitleSeoButton);#}
-{#        Craft.initUiElements($(metaTitleLabelId));#}
-
-{#        var metaTitleInput = $('#title');#}
-{#        metaTitleInput.addClass('nicetext');#}
-{#        metaTitleInput.data('show-chars-left', true);#}
-{#        metaTitleInput.attr('maxlength', 60);#}
-{#        new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });#}
-
-{#    {% endif %}#}
-
-{#    {% if settings.optimizedTitleField matches '/^\\d+$/' %}#}
-{#        {% set optimizedTitleFieldModel = craft.app.fields.getFieldById(settings.optimizedTitleField) %}#}
-{#        {% if optimizedTitleFieldModel %}#}
-
-{#            var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();#}
-{#            var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';#}
-
-{#            appendSeoBadge(metaTitleLabelId, metaTitleSeoButton);#}
-{#            Craft.initUiElements($(metaTitleLabelId));#}
-{#            var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');#}
-{#            metaTitleInput.attr('maxlength', 60);#}
-{#            new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });#}
-
-{#        {% endif %}#}
-{#    {% endif %}#}
-
-{#    {% set optimizedTitleFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedTitleField) %}#}
-
-{#    {% if optimizedTitleFieldHandles %}#}
-{#        var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();#}
-
-{#        {% for titleFieldHandle in optimizedTitleFieldHandles %}#}
-
-{#            {% if titleFieldHandle == 'title' %}#}
-
-{#                var metaTitleLabelId = '#title-label';#}
-{#                appendSeoBadge(metaTitleLabelId, metaTitleSeoButton);#}
-
-{#                Craft.initUiElements($(metaTitleLabelId));#}
-
-{#                var metaTitleInput = $('#title-field input');#}
-{#                metaTitleInput.attr('maxlength', 60);#}
-{#                new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });#}
-
-{#            {% else %}#}
-{#                {% set optimizedTitleFieldModel = craft.app.fields.getFieldByHandle(titleFieldHandle) %}#}
-{#                {% if optimizedTitleFieldModel %}#}
-
-{#                    var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';#}
-
-{#                    appendSeoBadge(metaTitleLabelId, metaTitleSeoButton);#}
-{#                    Craft.initUiElements($(metaTitleLabelId));#}
-
-{#                    var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');#}
-{#                    metaTitleInput.attr('maxlength', 60);#}
-{#                    new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });#}
-
-{#                {% endif %}#}
-{#            {% endif %}#}
-{#        {% endfor %}#}
-{#    {% endif %}#}
-
-{#    {% if settings.optimizedDescriptionField matches '/^\\d+$/' %}#}
-{#        {% set optimizedDescriptionFieldModel = craft.app.fields.getFieldById(settings.optimizedDescriptionField) %}#}
-{#        {% if optimizedDescriptionFieldModel %}#}
-
-{#            var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();#}
-{#            var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';#}
-{#            appendSeoBadge(metaDescriptionLabelId, metaDescriptionSeoButton);#}
-{#            Craft.initUiElements($(metaDescriptionLabelId));#}
-
-{#            var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');#}
-{#            metaDescriptionInput.attr('maxlength', {{ maxDescriptionLength }});#}
-
-{#            #}{# @todo - Can we improve this?#}
-{#            This triggers a double-instantiating console error #}
-{#            new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });#}
-
-{#        {% endif %}#}
-{#    {% endif %}#}
-
-{#    {% set optimizedDescriptionFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedDescriptionField) %}#}
-
-{#    {% if optimizedDescriptionFieldHandles %}#}
-{#        {% for descriptionFieldHandle in optimizedDescriptionFieldHandles %}#}
-
-{#            var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();#}
-
-{#            {% if descriptionFieldHandle == 'title' %}#}
-
-{#                var metaDescriptionLabelId = '#title-label';#}
-{#                appendSeoBadge(metaDescriptionLabelId, metaDescriptionSeoButton);#}
-{#                Craft.initUiElements($(metaDescriptionLabelId));#}
-
-{#            {% else %}#}
-
-{#                {% set optimizedDescriptionFieldModel = craft.app.fields.getFieldByHandle(descriptionFieldHandle) %}#}
-{#                {% if optimizedDescriptionFieldModel %}#}
-
-{#                    var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';#}
-{#                    appendSeoBadge(metaDescriptionLabelId, metaDescriptionSeoButton);#}
-{#                    Craft.initUiElements($(metaDescriptionLabelId));#}
-
-{#                    var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');#}
-{#                    metaDescriptionInput.attr('maxlength', {{ maxDescriptionLength }});#}
-
-{#                    #}{# @todo - Can we improve this?#}
-{#                    This triggers a double-instantiating console error #}
-{#                    new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });#}
-
-{#                {% endif %}#}
-
-{#            {% endif %}#}
-{#        {% endfor %}#}
-{#    {% endif %}#}
-
-{#    {% set optimizedImageFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedImageField) %}#}
-
-{#    {% if optimizedImageFieldHandles %}#}
-{#        {% for imageFieldHandle in optimizedImageFieldHandles %}#}
-
-{#            var metaImageSeoButton = $('div.sproutseo-metaimage-info').html();#}
-
-{#            {% set optimizedImageFieldModel = craft.app.fields.getFieldByHandle(imageFieldHandle) %}#}
-{#            {% if optimizedImageFieldModel %}#}
-
-{#                var metaImageLabelId = '#fields-{{ optimizedImageFieldModel.handle }}-label';#}
-{#                appendSeoBadge(metaImageLabelId, metaImageSeoButton);#}
-{#                Craft.initUiElements($(metaImageLabelId));#}
-
-{#                var metaImageInput = $('#fields-{{ optimizedImageFieldModel.handle }}-field input');#}
-{#                metaImageInput.attr('maxlength', 160);#}
-
-{#                #}{# @todo - Can we improve this?#}
-{#                This triggers a double-instantiating console error #}
-{#                new Garnish.NiceText(metaImageInput, { showCharsLeft: true });#}
-
-
-{#            {% endif %}#}
-{#        {% endfor %}#}
-{#    {% endif %}#}
-
-{#    {% if settings.optimizedImageField matches '/^\\d+$/' %}#}
-{#        {% set optimizedImageFieldModel = craft.app.fields.getFieldById(settings.optimizedImageField) %}#}
-{#        {% if optimizedImageFieldModel %}#}
-
-{#            var metaImageSeoButton = $('div.sproutseo-metaimage-info').html();#}
-{#            var metaImageLabelId = '#fields-{{ optimizedImageFieldModel.handle }}-label';#}
-{#            appendSeoBadge(metaImageLabelId, metaImageSeoButton);#}
-
-{#            Craft.initUiElements($(metaImageLabelId));#}
-
-{#        {% endif %}#}
-{#    {% endif %}#}
-
-{% endjs %}
-
 {% js on ready %}
+
+    {% set seoBadgeInfo = sproutApp.elementMetadata.getSeoBadgeInfo(settings) %}
+
     new SproutSeoMetadataField({
-        fieldHandle: '{{ field.handle }}'
+        fieldHandle: '{{ field.handle }}',
+        seoBadgeInfo: {{ seoBadgeInfo|json_encode|raw }},
+        maxDescriptionLength: '{{ maxDescriptionLength }}'
     });
 
     new MetaDetailsToggle({
@@ -566,4 +368,15 @@ feel like they are part of the natural flow of fields #}
         fieldHandle: '{{ field.handle }}',
         selectFieldId: '#fields-twitter-card select'
     });
+
+    new SproutSeoKeywordsField({
+        keywordsFieldId: '#fields-sproutseo-searchKeywords-field'
+    });
+
+    {% if settings.optimizedKeywordsField == 'manually' %}
+        new SproutSeoKeywordsField({
+        keywordsFieldId: '#fields-sproutseo-optimizedkeywords-field'
+        });
+    {% endif %}
+
 {% endjs %}
