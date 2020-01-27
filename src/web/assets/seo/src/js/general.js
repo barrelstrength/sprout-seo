@@ -13,37 +13,48 @@ class SproutSeoMetadataField {
   initMetadataFieldButtons() {
     let self = this;
 
-    // Checking active class
-    let fields = ['Search', 'OpenGraph', 'Geo', 'Robots', 'TwitterCard'];
+    let metaDetailsTabsId = 'fields-' + this.fieldHandle + '-meta-details-tabs';
+    this.metaDetailsTabs = document.querySelectorAll('#'+metaDetailsTabsId+' div.btn');
 
-    for (let fieldName of fields) {
-      let customKey = "enableMetaDetails" + fieldName;
-      let $customizationSettings = self.getCustomizationSettings(customKey);
+    let metaDetailsBodyContainerId = 'fields-' + this.fieldHandle + '-meta-details-body';
+    this.metaDetailsBodyContainers = document.querySelectorAll('#'+metaDetailsBodyContainerId+' div.matrixblock');
 
-      // console.log($customizationSettings.val());
-      if ($customizationSettings.val() === '1') {
-        $('#btn-' + fieldName).addClass('active');
-        $('#fields-btn-' + fieldName).addClass('active');
-      }
+    for (let seoTab of this.metaDetailsTabs) {
+      seoTab.addEventListener('click', function(event) {
+        let $tab = $(event.target);
+
+        // If we don't have a div we are clicking on the svg or i tag within the div
+        // so reassign what we clicked on to the parent div
+        if (!$tab.is('div')) {
+          $tab = $tab.closest('div.btn');
+        }
+
+        // Do nothing if the active element is clicked
+        let $selectedTab = $('#fields-projectsMetadata-meta-details-tabs .active');
+        if ($tab.is($selectedTab)) {
+          return true;
+        }
+
+        let tabName = $tab.attr('data-type');
+        let tabBodyClass = '#fields-' + self.fieldHandle + '-meta-details-body .fields-' + tabName;
+        let targetBodyContainer = document.querySelector(tabBodyClass);
+
+        for (let metaTab of self.metaDetailsTabs) {
+          metaTab.classList.remove('active');
+        }
+
+        for (let tabBody of self.metaDetailsBodyContainers) {
+          tabBody.style.display = 'none';
+        }
+
+        $(targetBodyContainer).show();
+        $tab.addClass('active');
+      });
     }
 
-    let metaDetailsTabsId = 'fields-' + this.fieldHandle + '-meta-details-tabs';
-    let metaDetailsTabsContainer = document.getElementById(metaDetailsTabsId);
-
-    metaDetailsTabsContainer.addEventListener('click', function(event) {
-      let tab = event.target;
-      let tabName = tab.getAttribute('data-type');
-      let tabBodyClass = '#fields-' + self.fieldHandle + '-meta-details-body .fields-' + tabName;
-      let targetBodyContainer = document.querySelector(tabBodyClass);
-
-      if (tab.classList.contains('active')) {
-        targetBodyContainer.style.display = 'none';
-        tab.classList.remove('active');
-      } else {
-        targetBodyContainer.style.display = 'block';
-        tab.classList.add('active');
-      }
-    });
+    // Display the first tab and block when first loaded
+    $(this.metaDetailsBodyContainers[0]).show();
+    this.metaDetailsTabs[0].classList.add('active');
   }
 
   addSeoBadgesToUi() {

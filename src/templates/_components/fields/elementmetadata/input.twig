@@ -11,7 +11,7 @@
 {# Prepare our SEO badge info icons #}
 <div class="sproutseo-metatitle-info hidden">
     {{- sprout.infoIcon({
-        label: "Meta Title"|t,
+        label: "Meta Title"|t('sprout-seo'),
         search: true,
         openGraph: true,
         twitterCard: true,
@@ -21,7 +21,7 @@
 
 <div class="sproutseo-metadescription-info hidden">
     {{- sprout.infoIcon({
-        label: "Meta Description"|t,
+        label: "Meta Description"|t('sprout-seo'),
         search: true,
         openGraph: true,
         twitterCard: true,
@@ -31,7 +31,7 @@
 
 <div class="sproutseo-metaimage-info hidden">
     {{- sprout.infoIcon({
-        label: "Meta Image"|t,
+        label: "Meta Image"|t('sprout-seo'),
         search: true,
         openGraph: true,
         twitterCard: true,
@@ -67,13 +67,13 @@
             {% set displayMetadataField = true %}
 
             {{ forms.textField({
-                label: 'Meta Title'|t ~ sprout.infoIcon({
-                    label: "Meta Title"|t,
+                label: 'Meta Title'|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Meta Title"|t('sprout-seo'),
                     search: true,
                     openGraph: true,
                     twitterCard: true
                 }),
-                instructions: "The Title of your content which will appear in search results and social sharing."|t,
+                instructions: "The Title of your content which will appear in search results and social sharing."|t('sprout-seo'),
                 name: field.handle~'[metadata][optimizedTitle]',
                 id: 'sproutseo-optimizedtitle',
                 maxlength: 60,
@@ -92,13 +92,13 @@
             {% set displayMetadataField = true %}
 
             {{ forms.textareaField({
-                label: 'Meta Description'|t ~ sprout.infoIcon({
-                    label: "Meta Description"|t,
+                label: 'Meta Description'|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Meta Description"|t('sprout-seo'),
                     search: true,
                     openGraph: true,
                     twitterCard: true
                 }),
-                instructions: "A description of your content which will appear in search results and social sharing."|t,
+                instructions: "A description of your content which will appear in search results and social sharing."|t('sprout-seo'),
                 name: field.handle~'[metadata][optimizedDescription]',
                 maxlength: maxDescriptionLength,
                 showCharsLeft: true,
@@ -113,12 +113,12 @@
             {% set displayMetadataField = true %}
 
             {{ forms.field({
-                label: 'Meta Image'|t ~ sprout.infoIcon({
-                    label: "Meta Image"|t,
+                label: 'Meta Image'|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Meta Image"|t('sprout-seo'),
                     openGraph: true,
                     twitterCard: true
                 }),
-                instructions: 'A featured image that represents your content that will display in social sharing.'|t,
+                instructions: 'A featured image that represents your content that will display in social sharing.'|t('sprout-seo'),
                 id: 'sproutseo-optimizedimage',
             }, forms.elementSelect({
                 elements: metaImageElements,
@@ -128,7 +128,7 @@
                 id: 'optimizedImage',
                 name: field.handle~'[metadata][optimizedImage]',
                 jsClass: 'Craft.AssetSelectInput',
-                addButtonLabel: 'Select Image'|t,
+                addButtonLabel: 'Select Image'|t('sprout-seo'),
                 limit: 1,
                 criteria: {kind: ['image'], siteId : null}
             })) }}
@@ -140,14 +140,14 @@
             {% set displayMetadataField = true %}
 
             {{ forms.textField({
-                label: "Canonical URL"|t ~ sprout.infoIcon({
-                    label: "Canonical URL"|t,
+                label: "Canonical URL"|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Canonical URL"|t('sprout-seo'),
                     search: true,
                     structured: true,
                     openGraph: true,
                     twitterCard: true
                 }),
-                instructions: "The Canonical URL of your webpage"|t,
+                instructions: "The Canonical URL of your webpage"|t('sprout-seo'),
                 id: 'sproutseo-canonical',
                 name: field.handle~'[metadata][canonical]',
                 value: values.canonical
@@ -162,11 +162,11 @@
             {% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
 
             {{ forms.textField({
-                label: "Meta Keywords"|t ~ sprout.infoIcon({
-                    label: "Meta Keywords"|t,
+                label: "Meta Keywords"|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Meta Keywords"|t('sprout-seo'),
                     search: true
                 }),
-                instructions: "The primary keywords or phrases that describe your website."|t,
+                instructions: "The primary keywords or phrases that describe your website."|t('sprout-seo'),
                 id: 'sproutseo-optimizedkeywords',
                 name: field.handle~'[metadata][optimizedKeywords]',
                 value: values.optimizedKeywords
@@ -227,112 +227,51 @@
             {% endset %}
 
             {{ forms.field({
-                label: 'Meta Details'|t,
-                instructions: 'Fine-tune your metadata to your specific SEO needs.'|t,
+                label: 'Meta Details'|t('sprout-seo'),
+                instructions: 'Fine-tune your metadata to your specific SEO needs. Meta Details values will take priority when displaying metadata for this page.'|t('sprout-seo'),
                 id: 'sproutseo-advancedcustomizationfields',
             }, advancedSeoButtons) }}
         {% endif %}
 
         <div id="{{ field.handle }}-meta-details-body" class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
 
-            <div class="blocks">
+            <div class="matrixblock fields-Search"
+                    {% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
+            >
 
-                <div class="matrixblock fields-Search"
-                        {% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
-                >
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/input" %}
 
-                    <div class="titlebar">
-                        <div class="blocktype">
-                            <i class="sproutseo-icon icon-search">
-                                {{ svg('@sproutbaseicons/search.svg') }}
-                            </i> {{ "Search Meta"|t }} {{ sprout.infoIcon({
-                                label: "Search Meta"|t,
-                                search: true,
-                                message: 'All fields in this block take priority for the Search metadata at this priority level.'|t
-                            }) }}</div>
-                    </div>
+            </div>
 
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/input" %}
+            <div class="matrixblock fields-OpenGraph"
+                    {% if values.enableMetaDetailsOpenGraph == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
+            >
 
-                </div>
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/open-graph" %}
 
-                <div class="matrixblock fields-OpenGraph"
-                        {% if values.enableMetaDetailsOpenGraph == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
-                >
+            </div>
 
-                    <div class="titlebar">
-                        <div class="blocktype"><i
-                                    class="sproutseo-icon icon-facebook">
-                                {{ svg('@sproutbaseicons/facebook-f.svg') }}
-                            </i> {{ "Open Graph"|t }} {{ sprout.infoIcon({
-                                label: "Open Graph"|t,
-                                openGraph: true,
-                                message: 'All fields in this block take priority for the Open Graph metadata at this priority level.'|t
-                            }) }}
-                        </div>
-                    </div>
+            <div class="matrixblock fields-TwitterCard"
+                    {% if values.enableMetaDetailsTwitterCard == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
+            >
 
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/open-graph" %}
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/twitter-card" %}
 
-                </div>
+            </div>
+            <div class="matrixblock fields-Geo"
+                    {% if values.enableMetaDetailsGeo == 0 or not settings.showGeo %} style="display:none;" {% endif %}
+            >
 
-                <div class="matrixblock fields-TwitterCard"
-                        {% if values.enableMetaDetailsTwitterCard == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
-                >
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/geo" %}
 
-                    <div class="titlebar">
-                        <div class="blocktype"><i
-                                    class="sproutseo-icon icon-twitter">
-                                {{ svg('@sproutbaseicons/twitter.svg') }}
-                            </i> {{ "Twitter Card"|t }} {{ sprout.infoIcon({
-                                label: "Twitter Card"|t,
-                                twitterCard: true,
-                                message: 'All fields in this block take priority for the Twitter Card metadata at this priority level.'|t
-                            }) }}</div>
-                    </div>
+            </div>
 
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/twitter-card" %}
+            <div class="matrixblock fields-Robots"
+                    {% if values.enableMetaDetailsRobots == 0 or not settings.showRobots %} style="display:none;" {% endif %}
+            >
 
-                </div>
-                <div class="matrixblock fields-Geo"
-                        {% if values.enableMetaDetailsGeo == 0 or not settings.showGeo %} style="display:none;" {% endif %}
-                >
-
-                    <div class="titlebar">
-                        <div class="blocktype"><i
-                                    class="sproutseo-icon icon-location">
-                                {{ svg('@sproutbaseicons/map-marker-alt.svg') }}
-                            </i> {{ "Geo"|t }} {{ sprout.infoIcon({
-                                label: "Geo"|t,
-                                geo: true,
-                                message: 'All fields in this block take priority for the Geographic metadata at this priority level.'|t
-                            }) }}</div>
-                        <div class="preview"></div>
-                    </div>
-
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/geo" %}
-
-                </div>
-
-                <div class="matrixblock fields-Robots"
-                        {% if values.enableMetaDetailsRobots == 0 or not settings.showRobots %} style="display:none;" {% endif %}
-                >
-
-                    <div class="titlebar">
-                        <div class="blocktype"><i
-                                    class="sproutseo-icon icon-robots">
-                                {{ svg('@sproutbaseicons/search-minus.svg') }}
-                            </i> {{ "Robots"|t }} {{ sprout.infoIcon({
-                                label: "Robots"|t,
-                                robots: true,
-                                message: 'All fields in this block take priority for the Robots metadata at this priority level.'|t
-                            }) }}</div>
-                    </div>
-
-                    {% set robotsNamespace = field.handle ~ '[metadata][robots]' %}
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/robots" %}
-
-                </div>
+                {% set robotsNamespace = field.handle ~ '[metadata][robots]' %}
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/robots" %}
 
             </div>
 
