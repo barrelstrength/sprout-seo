@@ -1,3 +1,9 @@
+/*
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
+
 /**
  * Helper class to toggle groups of sub-fields on Open Graph and Twitter Card Meta Details tabs
  * Initialize the class and identify the target select field to watch. When the select field is
