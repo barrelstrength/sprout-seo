@@ -42,7 +42,7 @@ class OptimizeHelper
      *
      * @param $model
      *
-     * @return string
+     * @return string|null
      */
     public static function prepareGeoPosition($model): string
     {
@@ -72,7 +72,6 @@ class OptimizeHelper
 
         $robotsMetaValue = '';
 
-        /** @noinspection ForeachSourceInspection */
         foreach ($robots as $key => $value) {
             if ($value == '') {
                 continue;
@@ -449,7 +448,6 @@ class OptimizeHelper
             return null;
         }
 
-        /** @noinspection ForeachSourceInspection */
         foreach ($globals['social'] as $key => $socialProfile) {
             if ($socialProfile['profileName'] === 'Google+') {
                 // Get our first Google+ URL and bail
@@ -485,10 +483,8 @@ class OptimizeHelper
             $globalAppendTitleValue = $settings['appendTitleValue'];
 
             // @todo - update this switch statement to use renderString and process globals like {siteName}
-            switch ($globalAppendTitleValue) {
-                case 'sitename':
-                    $globalAppendTitleValue = Craft::$app->getSystemName();
-                    break;
+            if ($globalAppendTitleValue === 'sitename') {
+                $globalAppendTitleValue = Craft::$app->getSystemName();
             }
         }
 
@@ -540,35 +536,30 @@ class OptimizeHelper
         // override fields whose blocks have been disabled
 
         if (!$model->enableMetaDetailsSearch) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($model['searchMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }
         }
 
         if (!$model->enableMetaDetailsOpenGraph) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($model['openGraphMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }
         }
 
         if (!$model->enableMetaDetailsTwitterCard) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($model['twitterCardsMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }
         }
 
         if (!$model->enableMetaDetailsGeo) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($model['geographicMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }
         }
 
         if (!$model->enableMetaDetailsRobots) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($model['robotsMeta'] as $attribute => $value) {
                 $model->{$attribute} = null;
             }

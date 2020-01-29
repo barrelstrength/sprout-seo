@@ -22,10 +22,10 @@ class Settings extends Component
 {
     public function getDescriptionLength(): int
     {
-        /**
-         * @var PluginSettings $pluginSettings
-         */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        /** @var \barrelstrength\sproutseo\SproutSeo $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
+        /** @var PluginSettings $pluginSettings */
+        $pluginSettings = $plugin->getSettings();
         $descriptionLength = $pluginSettings->maxMetaDescriptionLength;
         $descriptionLength = $descriptionLength ?: 160;
 

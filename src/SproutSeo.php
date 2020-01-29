@@ -119,7 +119,7 @@ class SproutSeo extends Plugin
         Craft::setAlias('@sproutseo', $this->getBasePath());
 
         /** @noinspection CascadingDirnameCallsInspection */
-        Craft::setAlias('@sproutseolib', dirname(__DIR__, 1).'/lib');
+        Craft::setAlias('@sproutseolib', dirname(__DIR__).'/lib');
 
         // Add Twig Extensions
         Craft::$app->view->registerTwigExtension(new SproutSeoTwigExtension());

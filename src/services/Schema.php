@@ -252,7 +252,7 @@ class Schema extends Component
      *
      * @return array
      */
-    public function getVocabularies($path = null)
+    public function getVocabularies($path = null): array
     {
         $jsonLdTreePath = Craft::getAlias('@sproutseolib/jsonld/tree.jsonld');
 
@@ -262,9 +262,9 @@ class Schema extends Component
 
         if ($path) {
             return $this->getArrayByPath($this->vocabularies, $path);
-        } else {
-            return $this->vocabularies;
         }
+
+        return $this->vocabularies;
     }
 
     /**

@@ -33,7 +33,7 @@ class ElementMetadata extends Component
     {
         $fieldHandle = $this->getElementMetadataFieldHandle($element);
 
-        if (isset($element->{$fieldHandle})) {
+        if ($element && isset($element->{$fieldHandle})) {
             $metadata = $element->{$fieldHandle};
 
             // Support Live Preview (where image IDs still need to be converted from arrays)
@@ -63,7 +63,9 @@ class ElementMetadata extends Component
             return null;
         }
 
-        $fields = $element->getFieldLayout()->getFields();
+        /** @var FieldLayout $fieldLayout */
+        $fieldLayout = $element->getFieldLayout();
+        $fields = $fieldLayout->getFields();
 
         /**
          * Get our ElementMetadata Field

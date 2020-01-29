@@ -77,7 +77,7 @@ class SproutSeoVariable
      */
     public function getSettings()
     {
-        return Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        return $this->plugin->getSettings();
     }
 
     /**
@@ -493,7 +493,7 @@ class SproutSeoVariable
         /**
          * @var Settings $pluginSettings
          */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        $pluginSettings = $this->plugin->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
 
@@ -508,9 +508,6 @@ class SproutSeoVariable
          */
         foreach ($fields as $key => $field) {
             if (get_class($field) === $type) {
-                $context = explode(':', $field->context);
-                $context = $context[0] ?? 'global';
-
                 if ($pluginSettings->displayFieldHandles) {
                     $options[$field->id] = $field->name.' – {'.$field->handle.'}';
                 } else {
@@ -554,19 +551,14 @@ class SproutSeoVariable
         /**
          * @var Settings $pluginSettings
          */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        $pluginSettings = $this->plugin->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field')];
 
-        /**
-         * @var Field $field
-         */
+        /** @var Field $field */
         foreach ($fields as $key => $field) {
             if (get_class($field) == $type) {
-                $context = explode(':', $field->context);
-                $context = $context[0] ?? 'global';
-
                 if ($pluginSettings->displayFieldHandles) {
                     $options[$field->id] = $field->name.' – {'.$field->handle.'}';
                 } else {
@@ -751,20 +743,11 @@ class SproutSeoVariable
     }
 
     /**
-     * @return mixed
-     */
-    public function getSiteIds()
-    {
-        $sites = Craft::$app->getSites()->getAllSites();
-
-        return $sites;
-    }
-
-    /**
      * @return bool
      */
     public function getIsPro(): bool
     {
+        /** @var SproutSeo $plugin */
         $plugin = SproutSeo::getInstance();
 
         if ($plugin->is(SproutSeo::EDITION_PRO)) {
@@ -781,11 +764,11 @@ class SproutSeoVariable
      */
     public function uriHasTags($uri = null): bool
     {
-        if (strstr($uri, '{{')) {
+        if (strpos($uri, '{{') !== false) {
             return true;
         }
 
-        if (strstr($uri, '{%')) {
+        if (strpos($uri, '{%') !== false) {
             return true;
         }
 

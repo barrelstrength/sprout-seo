@@ -43,7 +43,7 @@ class m180625_000000_sections_to_sitemap extends Migration
                 'uid' => $this->uid(),
             ]);
 
-            $this->createIndex(null, $table, ['siteId'], false);
+            $this->createIndex(null, $table, ['siteId']);
             $this->addForeignKey(null, $table, ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
         }
 

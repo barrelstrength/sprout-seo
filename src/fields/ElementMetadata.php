@@ -33,7 +33,6 @@ use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use Twig_Error_Loader;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
@@ -175,24 +174,6 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @inheritdoc
-     *
-     * @throws Exception
-     * @throws Twig_Error_Loader
-     * @throws InvalidConfigException
-     */
-//    public function getTableAttributeHtml($value, ElementInterface $element): string
-//    {
-//        Craft::$app->view->registerAssetBundle(SproutSeoAsset::class);
-//
-//        $html = Craft::$app->view->renderTemplate('sprout-seo/_includes/metadata-status-icons', [
-//            'sitemapSection' => $value
-//        ]);
-//
-//        return $html;
-//    }
-
-    /**
      * @return string|null
      * @throws Exception
      * @throws InvalidConfigException
@@ -271,7 +252,7 @@ class ElementMetadata extends Field
         $value['robots'] = OptimizeHelper::prepareRobotsMetadataForSettings($value->robots);
 
         // Cleanup the namespace around the $name handle
-        $name = str_replace('fields[', "", $name);
+        $name = str_replace('fields[', '', $name);
         $name = rtrim($name, ']');
 
         $fieldId = 'fields-'.$name.'-field';

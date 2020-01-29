@@ -59,7 +59,7 @@ class WebsiteIdentityPlaceSchema extends Schema
             $this->addAddress('address');
         }
 
-        if ((isset($schema['latitude']) && $schema['latitude']) && (isset($schema['longitude']) && $schema['longitude'])) {
+        if (isset($schema['latitude'], $schema['longitude']) && $schema['latitude'] && $schema['longitude']) {
             $this->addGeo('geo', $schema['latitude'], $schema['longitude']);
         }
 

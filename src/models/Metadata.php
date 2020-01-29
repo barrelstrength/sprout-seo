@@ -8,8 +8,8 @@
 namespace barrelstrength\sproutseo\models;
 
 
+use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
-use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 
 
@@ -409,7 +409,7 @@ class Metadata extends Model
      */
     public function beforeValidate(): bool
     {
-        $this->uri = SproutSeo::$app->xmlSitemap->removeSlash($this->uri);
+        $this->uri = SproutBaseRedirects::$app->redirects->removeSlash($this->uri);
 
         return true;
     }

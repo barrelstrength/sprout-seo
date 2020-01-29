@@ -145,11 +145,7 @@ class Globals extends Model
     {
         $this->getGlobalByKey('identity');
 
-        if (isset($this->identity['organizationSubTypes'][0]) && $this->identity['organizationSubTypes'][0] === 'LocalBusiness') {
-            return true;
-        }
-
-        return false;
+        return isset($this->identity['organizationSubTypes'][0]) && $this->identity['organizationSubTypes'][0] === 'LocalBusiness';
     }
 
     /**

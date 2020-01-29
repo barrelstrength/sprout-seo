@@ -187,10 +187,10 @@ abstract class Schema
 </script>';
 
             return TemplateHelper::raw($output);
-        } else {
-            // If context has already been established, just return the data
-            return $schema;
         }
+
+        // If context has already been established, just return the data
+        return $schema;
     }
 
     /**
@@ -336,7 +336,7 @@ abstract class Schema
      */
     public function addTelephone($propertyName, $phone)
     {
-        if (isset($phone['phone']) && isset($phone['country']) && !empty($phone['phone'])) {
+        if (isset($phone['phone'], $phone['country']) && !empty($phone['phone'])) {
             $phoneModel = new PhoneModel();
             $phoneModel->country = $phone['country'];
             $phoneModel->phone = $phone['phone'];

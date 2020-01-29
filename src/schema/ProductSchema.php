@@ -68,7 +68,9 @@ class ProductSchema extends ThingSchema
             'Organization' => WebsiteIdentityOrganizationSchema::class
         ];
 
-        $primaryCurrencyIso = Commerce::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
+        /** @var Commerce $commerce */
+        $commerce = Commerce::getInstance();
+        $primaryCurrencyIso = $commerce->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
 
         $offers = [];
         $identityType = $identity['@type'];

@@ -27,9 +27,10 @@ class m180627_000000_craft2_to_craft3 extends Migration
      */
     public function safeUp(): bool
     {
+        /** @var SproutSeo $plugin */
         $plugin = SproutSeo::getInstance();
-
-        $settings = $plugin->getSettings()->getAttributes();
+        $pluginSettings = $plugin->getSettings();
+        $settings = $pluginSettings->getAttributes();
 
         if (isset($settings['toggleLocaleOverride']) && $settings['toggleLocaleOverride']) {
             $groups = Craft::$app->getSites()->getAllGroups();
@@ -42,7 +43,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
         } else {
             $sites = Craft::$app->getSites()->getAllSites();
             $sitesArray = [];
-            $settings['enableMultilingualSitemaps'] = "";
+            $settings['enableMultilingualSitemaps'] = '';
             foreach ($sites as $site) {
                 $sitesArray[$site->id] = $site->id;
             }

@@ -148,7 +148,7 @@ class Optimize extends Component
         self::$matchedElement = null;
         $uri = trim($uri, '/');
         /** @var Element $element */
-        $element = Craft::$app->getElements()->getElementByUri($uri, $siteId, false);
+        $element = Craft::$app->getElements()->getElementByUri($uri, $siteId);
         if ($element && ($element->uri !== null)) {
             self::$matchedElement = $element;
         }
@@ -169,12 +169,12 @@ class Optimize extends Component
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function getMetadata(Element $element, $site, $render = true, &$context = null)
+    public function getMetadata(Element $element = null, $site = null, $render = true, &$context = null)
     {
-        /**
-         * @var Settings $settings
-         */
-        $settings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        /** @var SproutSeo $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
         $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($element, $site);
@@ -272,6 +272,7 @@ class Optimize extends Component
                     // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
                     // Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
                     if (isset($overrideInfo['elementId'])) {
+                        /** @var \craft\base\Element $elementOverride */
                         $elementOverride = Craft::$app->elements->getElementById($overrideInfo['elementId']);
                         $overrideInfo = SproutSeo::$app->elementMetadata->getElementMetadata($elementOverride);
                     }
@@ -304,21 +305,21 @@ class Optimize extends Component
             if ($element !== null) {
                 if (isset($element->postDate)) {
                     if ($element->postDate !== null && $element->postDate) {
-                        $prioritizedMetadataModel->ogDateCreated = $element->postDate->format(DateTime::ISO8601);
+                        $prioritizedMetadataModel->ogDateCreated = $element->postDate->format(DateTime::ATOM);
                     }
                 } else if ($element->dateCreated !== null && $element->dateCreated) {
-                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
+                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ATOM);
                 }
 
                 if ($element->dateUpdated !== null && $element->dateUpdated) {
-                    $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ISO8601);
+                    $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ATOM);
                 }
 
                 /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
                 /** @noinspection PhpUndefinedFieldInspection */
                 if (isset($element->expiryDate) && $element->expiryDate !== null && $element->expiryDate) {
                     /** @noinspection PhpUndefinedFieldInspection */
-                    $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ISO8601);
+                    $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ATOM);
                 }
             }
         }

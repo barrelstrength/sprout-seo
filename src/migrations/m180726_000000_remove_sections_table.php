@@ -19,7 +19,7 @@ class m180726_000000_remove_sections_table extends Migration
      */
     public function safeUp(): bool
     {
-        $table = "{{%sproutseo_metadata_sections}}";
+        $table = '{{%sproutseo_metadata_sections}}';
 
         $this->dropTableIfExists($table);
 

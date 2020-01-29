@@ -78,7 +78,7 @@ class m180619_000011_address_table extends Migration
                 ->from(['{{%sproutseo_globals}}'])
                 ->one();
 
-            if (isset($globals['identity']) && isset($globals['id'])) {
+            if (isset($globals['identity'], $globals['id'])) {
                 $identity = json_decode($globals['identity'], true);
                 if (isset($identity['addressId'])) {
                     $identity['addressId'] = $addressId;
