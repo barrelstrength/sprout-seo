@@ -224,9 +224,6 @@ abstract class Schema
         return null;
     }
 
-    // Helper Methods
-    // =========================================================================
-
     /**
      * Add a property to our Structured Data array
      *

@@ -102,6 +102,40 @@ class ElementMetadata extends Field
     }
 
     /**
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return array|mixed|null
+     * @throws Exception
+     */
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        $metadata = [];
+
+        // when is resaving on all sites comes into array
+        if (is_array($value)) {
+            $metadata = $value;
+        }
+        // When is a post request the metadata values comes into the metadata key
+        if (isset($value['metadata'])) {
+            $metadata = $value['metadata'];
+        }
+        // On the resave element task the $value comes from the content table as json
+        if (is_string($value)) {
+            $metadata = json_decode($value, true);
+        }
+
+        if (isset($metadata['sproutSeoSettings'])) {
+            // removes json value from livepreview
+            unset($metadata['sproutSeoSettings']);
+        }
+
+        $this->values = $metadata;
+
+        return $this->values;
+    }
+
+    /**
      * SerializeValue renamed from Craft2 - prepValue
      *
      * @param                       $value
@@ -248,39 +282,6 @@ class ElementMetadata extends Field
             'fieldId' => $fieldId,
             'settings' => $settings
         ]);
-    }
-
-    /**
-     * @param                       $value
-     * @param ElementInterface|null $element
-     *
-     * @return array|mixed|null
-     * @throws Exception
-     */
-    public function normalizeValue($value, ElementInterface $element = null)
-    {
-        $metadata = [];
-        // when is resaving on all sites comes into array
-        if (is_array($value)) {
-            $metadata = $value;
-        }
-        // When is a post request the metadata values comes into the metadata key
-        if (isset($value['metadata'])) {
-            $metadata = $value['metadata'];
-        }
-        // On the resave element task the $value comes from the content table as json
-        if (is_string($value)) {
-            $metadata = json_decode($value, true);
-        }
-
-        if (isset($metadata['sproutSeoSettings'])) {
-            // removes json value from livepreview
-            unset($metadata['sproutSeoSettings']);
-        }
-
-        $this->values = $metadata;
-
-        return $this->values;
     }
 
     /**

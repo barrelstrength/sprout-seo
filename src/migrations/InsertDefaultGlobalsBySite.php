@@ -6,16 +6,10 @@ use craft\db\Migration;
 
 class InsertDefaultGlobalsBySite extends Migration
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var int|null The Site Id
      */
     public $siteId;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc

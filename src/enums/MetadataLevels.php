@@ -12,9 +12,6 @@ namespace barrelstrength\sproutseo\enums;
  */
 abstract class MetadataLevels
 {
-    // Constants
-    // =========================================================================
-
     /**
      * Global Metadata
      *

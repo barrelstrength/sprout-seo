@@ -17,16 +17,10 @@ use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 
 class Install extends Migration
 {
-    // Public Properties
-    // =========================================================================
-
     /**
      * @var string The database driver to use
      */
     public $driver;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @return bool
@@ -43,9 +37,6 @@ class Install extends Migration
 
         return true;
     }
-
-    // Protected Methods
-    // =========================================================================
 
     protected function createTables()
     {

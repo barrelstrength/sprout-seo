@@ -11,8 +11,5 @@ use yii\base\Event;
 
 class RegisterSchemasEvent extends Event
 {
-    // Properties
-    // =========================================================================
-
     public $schemas = [];
 }
