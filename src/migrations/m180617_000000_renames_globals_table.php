@@ -19,7 +19,7 @@ class m180617_000000_renames_globals_table extends Migration
         $oldTable = '{{%sproutseo_metadata_globals}}';
         $newTable = '{{%sproutseo_globals}}';
 
-        if ($this->db->tableExists($oldTable) && !$this->db->tableExists($newTable)){
+        if ($this->db->tableExists($oldTable) && !$this->db->tableExists($newTable)) {
             $this->renameTable($oldTable, $newTable);
         }
 
@@ -32,6 +32,7 @@ class m180617_000000_renames_globals_table extends Migration
     public function safeDown()
     {
         echo "m180617_000000_renames_globals_table cannot be reverted.\n";
+
         return false;
     }
 }

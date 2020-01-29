@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use craft\db\Migration;
 use barrelstrength\sproutbasefields\migrations\m190313_000000_add_administrativeareacode_column;
+use craft\db\Migration;
 
 /**
  * m190313_000000_rename_administrative_area_code_column_sproutseo migration.
@@ -30,6 +30,7 @@ class m190313_000000_rename_administrative_area_code_column_sproutseo extends Mi
     public function safeDown(): bool
     {
         echo "m190313_000000_rename_administrative_area_code_column_sproutseo cannot be reverted.\n";
+
         return false;
     }
 }

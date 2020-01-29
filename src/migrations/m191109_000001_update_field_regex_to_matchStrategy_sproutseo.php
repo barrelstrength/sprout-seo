@@ -34,6 +34,7 @@ class m191109_000001_update_field_regex_to_matchStrategy_sproutseo extends Migra
     public function safeDown(): bool
     {
         echo "m191109_000001_update_field_regex_to_matchStrategy_sproutseo cannot be reverted.\n";
+
         return false;
     }
 }

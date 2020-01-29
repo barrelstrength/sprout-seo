@@ -87,6 +87,7 @@ class m200102_000000_update_sproutseo_globals_address_settings extends Migration
     public function safeDown(): bool
     {
         echo "m200102_000000_update_sproutseo_globals_address_settings cannot be reverted.\n";
+
         return false;
     }
 }

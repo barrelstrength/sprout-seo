@@ -3,10 +3,9 @@
 namespace barrelstrength\sproutseo\migrations;
 
 use barrelstrength\sproutseo\SproutSeo;
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-
-use Craft;
 use craft\services\Plugins;
 
 /**
@@ -43,26 +42,26 @@ class m180627_000000_craft2_to_craft3 extends Migration
 
         $pluginHandle = 'sprout-seo';
         $projectConfig = Craft::$app->getProjectConfig();
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings', $settings);
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings);
 
         $globals = (new Query())
             ->select(['id', 'meta', 'identity'])
             ->from(['{{%sproutseo_globals}}'])
             ->one();
 
-        if ($globals){
-            if (isset($globals['meta'])){
+        if ($globals) {
+            if (isset($globals['meta'])) {
                 $meta = json_decode($globals['meta'], true);
-                if ($meta){
+                if ($meta) {
                     $metaAsJson = $this->getMetadataAsJson($meta);
                     $this->update('{{%sproutseo_globals}}', ['meta' => $metaAsJson], ['id' => $globals['id']], [], false);
                 }
             }
 
-            if (isset($globals['identity'])){
+            if (isset($globals['identity'])) {
                 $identity = json_decode($globals['identity'], true);
 
-                if ($identity){
+                if ($identity) {
                     $identityAsJson = $this->getIdentityAsJson($identity);
                     $this->update('{{%sproutseo_globals}}', ['identity' => $identityAsJson], ['id' => $globals['id']], [], false);
                 }
@@ -73,6 +72,16 @@ class m180627_000000_craft2_to_craft3 extends Migration
         $this->alterColumn('{{%sproutseo_redirects}}', 'newUrl', $this->string());
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown()
+    {
+        echo "m180627_000000_craft2_to_craft3 cannot be reverted.\n";
+
+        return false;
     }
 
     private function getIdentityAsJson($identity)
@@ -114,14 +123,5 @@ class m180627_000000_craft2_to_craft3 extends Migration
         );
 
         return json_encode($meta);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown()
-    {
-        echo "m180627_000000_craft2_to_craft3 cannot be reverted.\n";
-        return false;
     }
 }

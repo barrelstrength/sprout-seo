@@ -9,12 +9,9 @@ namespace barrelstrength\sproutseo\models;
 
 
 use barrelstrength\sproutbase\base\SproutSettingsInterface;
-use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
-use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutseo\SproutSeo;
-use craft\base\Model;
 use Craft;
-use barrelstrength\sproutredirects\models\Settings as RedirectsSettings;
+use craft\base\Model;
 
 /**
  *
@@ -101,7 +98,7 @@ class Settings extends Model implements SproutSettingsInterface
             'template' => 'sprout-seo/settings/general'
         ];
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') &&  $settings->enableRedirects && $isPro) {
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') && $settings->enableRedirects && $isPro) {
             $navItems['redirects'] = [
                 'label' => Craft::t('sprout-seo', 'Redirects'),
                 'url' => 'sprout-seo/settings/redirects',
@@ -110,7 +107,7 @@ class Settings extends Model implements SproutSettingsInterface
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') &&  $settings->enableSitemaps && $isPro) {
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') && $settings->enableSitemaps && $isPro) {
             $navItems['sitemaps'] = [
                 'label' => Craft::t('sprout-seo', 'Sitemaps'),
                 'url' => 'sprout-seo/settings/sitemaps',

@@ -8,20 +8,17 @@
 namespace barrelstrength\sproutseo\services;
 
 
+use barrelstrength\sproutbaseuris\SproutBaseUris;
+use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
+use Craft;
 use craft\base\Element;
 use craft\base\Field;
-use craft\events\FieldLayoutEvent;
-use barrelstrength\sproutbaseuris\SproutBaseUris;
-use craft\models\FieldLayout;
-use RecursiveArrayIterator;
-use RecursiveIteratorIterator;
-use yii\base\Component;
 use craft\db\Query;
-use Craft;
-use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
-use yii\helpers\ArrayHelper;
+use craft\events\FieldLayoutEvent;
+use craft\models\FieldLayout;
+use yii\base\Component;
 
 class ElementMetadata extends Component
 {
@@ -156,52 +153,6 @@ class ElementMetadata extends Component
         }
     }
 
-    /**
-     * Triggers a Resave Elements job for each Url-Enabled Section with an Element Metadata field
-     *
-     * @param                  $elementType
-     * @param bool             $afterFieldLayout
-     * @param FieldLayout|null $fieldLayout
-     *
-     * @return bool
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\ExitException
-     */
-    protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false, FieldLayout $fieldLayout = null)
-    {
-        $urlEnabledSectionType = SproutBaseUris::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
-
-        if ($urlEnabledSectionType === null) {
-            return false;
-        }
-
-        if ($afterFieldLayout && !$urlEnabledSectionType->resaveElementsAfterFieldLayoutSaved()) {
-            return false;
-        }
-
-        if ($urlEnabledSectionType) {
-            foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {
-                if ($afterFieldLayout && !is_null($fieldLayout)) {
-                    if ($urlEnabledSection->hasFieldLayoutId($fieldLayout->id)) {
-                        // Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
-                        $elementGroupId = $urlEnabledSection->id;
-                        $urlEnabledSectionType->resaveElements($elementGroupId);
-
-                        break;
-                    }
-                } else {
-                    // Check and confirm Element Metadata field is the same as the Field Layout
-                    if ($urlEnabledSection->hasElementMetadataField(false)) {
-                        $elementGroupId = $urlEnabledSection->id;
-                        $urlEnabledSectionType->resaveElements($elementGroupId);
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
     public function getSeoBadgeInfo($settings): array
     {
         $targetSettings = [
@@ -323,5 +274,51 @@ class ElementMetadata extends Component
         }
 
         return [];
+    }
+
+    /**
+     * Triggers a Resave Elements job for each Url-Enabled Section with an Element Metadata field
+     *
+     * @param                  $elementType
+     * @param bool             $afterFieldLayout
+     * @param FieldLayout|null $fieldLayout
+     *
+     * @return bool
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\ExitException
+     */
+    protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false, FieldLayout $fieldLayout = null)
+    {
+        $urlEnabledSectionType = SproutBaseUris::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
+
+        if ($urlEnabledSectionType === null) {
+            return false;
+        }
+
+        if ($afterFieldLayout && !$urlEnabledSectionType->resaveElementsAfterFieldLayoutSaved()) {
+            return false;
+        }
+
+        if ($urlEnabledSectionType) {
+            foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {
+                if ($afterFieldLayout && !is_null($fieldLayout)) {
+                    if ($urlEnabledSection->hasFieldLayoutId($fieldLayout->id)) {
+                        // Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
+                        $elementGroupId = $urlEnabledSection->id;
+                        $urlEnabledSectionType->resaveElements($elementGroupId);
+
+                        break;
+                    }
+                } else {
+                    // Check and confirm Element Metadata field is the same as the Field Layout
+                    if ($urlEnabledSection->hasElementMetadataField(false)) {
+                        $elementGroupId = $urlEnabledSection->id;
+                        $urlEnabledSectionType->resaveElements($elementGroupId);
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

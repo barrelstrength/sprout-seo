@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutseo\models;
 
 use barrelstrength\sproutbasefields\models\Address;
-use barrelstrength\sproutbasefields\SproutBaseFields;
 use craft\base\Model;
 use craft\helpers\Json;
 
@@ -96,6 +95,7 @@ class Globals extends Model
             $this->addressModel = $addressModel;
         }
     }
+
     /**
      * Factory to return schema of any type
      *
@@ -134,6 +134,22 @@ class Globals extends Model
         }
 
         return $identityType;
+    }
+
+    /**
+     * Determine if the selected Website Identity Schema Type is a Local Business
+     *
+     * @return null|string
+     */
+    public function isLocalBusiness()
+    {
+        $this->getGlobalByKey('identity');
+
+        if (isset($this->identity['organizationSubTypes'][0]) && $this->identity['organizationSubTypes'][0] === 'LocalBusiness') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -229,21 +245,5 @@ class Globals extends Model
     protected function getSettings()
     {
         return $this->{$this->globalKey};
-    }
-
-    /**
-     * Determine if the selected Website Identity Schema Type is a Local Business
-     *
-     * @return null|string
-     */
-    public function isLocalBusiness()
-    {
-        $this->getGlobalByKey('identity');
-
-        if (isset($this->identity['organizationSubTypes'][0]) && $this->identity['organizationSubTypes'][0] === 'LocalBusiness') {
-            return true;
-        }
-
-        return false;
     }
 }

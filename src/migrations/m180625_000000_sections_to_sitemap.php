@@ -2,11 +2,11 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
+use barrelstrength\sproutbaseuris\sectiontypes\Category;
+use barrelstrength\sproutbaseuris\sectiontypes\Entry;
+use barrelstrength\sproutbaseuris\sectiontypes\Product;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutbaseuris\sectiontypes\Entry;
-use barrelstrength\sproutbaseuris\sectiontypes\Category;
-use barrelstrength\sproutbaseuris\sectiontypes\Product;
 
 /**
  * m180625_000000_sections_to_sitemap migration.
@@ -44,7 +44,7 @@ class m180625_000000_sections_to_sitemap extends Migration
         if (!$this->db->columnExists($table, 'uri')) {
             $this->addColumn($table, 'uri', $this->string()->after('type'));
         }
-        
+
         $primarySite = (new Query())
             ->select(['id'])
             ->from(['{{%sites}}'])
@@ -54,7 +54,7 @@ class m180625_000000_sections_to_sitemap extends Migration
         $primarySiteId = $primarySite['id'];
 
         $sections = [];
-        if ($this->db->tableExists('{{%sproutseo_metadata_sections}}')){
+        if ($this->db->tableExists('{{%sproutseo_metadata_sections}}')) {
             $sections = (new Query())
                 ->select(['*'])
                 ->from(['{{%sproutseo_metadata_sections}}'])
@@ -98,6 +98,7 @@ class m180625_000000_sections_to_sitemap extends Migration
     public function safeDown()
     {
         echo "m180625_000000_sections_to_sitemap cannot be reverted.\n";
+
         return false;
     }
 }

@@ -24,7 +24,8 @@ class m180719_000000_redirect_elements_types extends Migration
 
         foreach ($types as $type) {
             $this->update('{{%elements}}', [
-                'type' => $type['newType']], ['type' => $type['oldType']], [], false);
+                'type' => $type['newType']
+            ], ['type' => $type['oldType']], [], false);
         }
 
         return true;
@@ -36,6 +37,7 @@ class m180719_000000_redirect_elements_types extends Migration
     public function safeDown()
     {
         echo "m180719_000000_redirect_elements_types cannot be reverted.\n";
+
         return false;
     }
 }

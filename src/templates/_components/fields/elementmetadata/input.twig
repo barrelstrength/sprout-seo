@@ -42,24 +42,24 @@
 <div>
     <div class="sproutseo-box-optimized">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsSearch]' }}"
-               value="{{ values.enableMetaDetailsSearch }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsSearch]' }}"
+            value="{{ values.enableMetaDetailsSearch }}">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsOpenGraph]' }}"
-               value="{{ values.enableMetaDetailsOpenGraph }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsOpenGraph]' }}"
+            value="{{ values.enableMetaDetailsOpenGraph }}">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsTwitterCard]' }}"
-               value="{{ values.enableMetaDetailsTwitterCard }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsTwitterCard]' }}"
+            value="{{ values.enableMetaDetailsTwitterCard }}">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsGeo]' }}"
-               value="{{ values.enableMetaDetailsGeo }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsGeo]' }}"
+            value="{{ values.enableMetaDetailsGeo }}">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsRobots]' }}"
-               value="{{ values.enableMetaDetailsRobots }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsRobots]' }}"
+            value="{{ values.enableMetaDetailsRobots }}">
         {% if settings is defined %}
             <input type="hidden" class="field"
-                   name="{{ field.handle~'[metadata][sproutSeoSettings]' }}"
-                   value="{{ settings|json_encode }}">
+                name="{{ field.handle~'[metadata][sproutSeoSettings]' }}"
+                value="{{ settings|json_encode }}">
         {% endif %}
 
         {% if settings.optimizedTitleField == 'manually' %}
@@ -193,7 +193,7 @@
 
                         {% if settings.showOpenGraph %}
                             <div class="btn" id="btn-OpenGraph"
-                                 data-type="OpenGraph">
+                                data-type="OpenGraph">
                                 <i class="sproutseo-icon icon-facebook">
                                     {{ svg('@sproutbaseicons/facebook-f.svg') }}
                                 </i> {{ "Open Graph"|t('sprout-seo') }}</div>
@@ -201,7 +201,7 @@
 
                         {% if settings.showTwitter %}
                             <div class="btn" id="btn-TwitterCard"
-                                 data-type="TwitterCard">
+                                data-type="TwitterCard">
                                 <i class="sproutseo-icon icon-twitter">
                                     {{ svg('@sproutbaseicons/twitter.svg') }}
                                 </i> {{ "Twitter Card"|t('sprout-seo') }}</div>
@@ -236,7 +236,7 @@
         <div id="{{ field.handle }}-meta-details-body" class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
 
             <div class="matrixblock fields-Search"
-                    {% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
+                {% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
             >
 
                 {% include "sprout-seo/_components/fields/elementmetadata/blocks/input" %}
@@ -244,7 +244,7 @@
             </div>
 
             <div class="matrixblock fields-OpenGraph"
-                    {% if values.enableMetaDetailsOpenGraph == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
+                {% if values.enableMetaDetailsOpenGraph == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
             >
 
                 {% include "sprout-seo/_components/fields/elementmetadata/blocks/open-graph" %}
@@ -252,14 +252,14 @@
             </div>
 
             <div class="matrixblock fields-TwitterCard"
-                    {% if values.enableMetaDetailsTwitterCard == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
+                {% if values.enableMetaDetailsTwitterCard == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
             >
 
                 {% include "sprout-seo/_components/fields/elementmetadata/blocks/twitter-card" %}
 
             </div>
             <div class="matrixblock fields-Geo"
-                    {% if values.enableMetaDetailsGeo == 0 or not settings.showGeo %} style="display:none;" {% endif %}
+                {% if values.enableMetaDetailsGeo == 0 or not settings.showGeo %} style="display:none;" {% endif %}
             >
 
                 {% include "sprout-seo/_components/fields/elementmetadata/blocks/geo" %}
@@ -267,7 +267,7 @@
             </div>
 
             <div class="matrixblock fields-Robots"
-                    {% if values.enableMetaDetailsRobots == 0 or not settings.showRobots %} style="display:none;" {% endif %}
+                {% if values.enableMetaDetailsRobots == 0 or not settings.showRobots %} style="display:none;" {% endif %}
             >
 
                 {% set robotsNamespace = field.handle ~ '[metadata][robots]' %}
@@ -293,23 +293,23 @@ feel like they are part of the natural flow of fields #}
     {% set seoBadgeInfo = sproutApp.elementMetadata.getSeoBadgeInfo(settings) %}
 
     new SproutSeoMetadataField({
-        fieldHandle: '{{ field.handle }}',
-        seoBadgeInfo: {{ seoBadgeInfo|json_encode|raw }},
-        maxDescriptionLength: '{{ maxDescriptionLength }}'
+    fieldHandle: '{{ field.handle }}',
+    seoBadgeInfo: {{ seoBadgeInfo|json_encode|raw }},
+    maxDescriptionLength: '{{ maxDescriptionLength }}'
     });
 
     new MetaDetailsToggle({
-        fieldHandle: '{{ field.handle }}',
-        selectFieldId: '#fields-open-graph select'
+    fieldHandle: '{{ field.handle }}',
+    selectFieldId: '#fields-open-graph select'
     });
 
     new MetaDetailsToggle({
-        fieldHandle: '{{ field.handle }}',
-        selectFieldId: '#fields-twitter-card select'
+    fieldHandle: '{{ field.handle }}',
+    selectFieldId: '#fields-twitter-card select'
     });
 
     new SproutSeoKeywordsField({
-        keywordsFieldId: '#fields-sproutseo-searchKeywords-field'
+    keywordsFieldId: '#fields-sproutseo-searchKeywords-field'
     });
 
     {% if settings.optimizedKeywordsField == 'manually' %}

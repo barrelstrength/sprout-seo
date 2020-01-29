@@ -3,9 +3,8 @@
 namespace barrelstrength\sproutseo\migrations;
 
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use barrelstrength\sproutseo\SproutSeo;
-use craft\db\Query;
 use craft\db\Migration;
+use craft\db\Query;
 
 /**
  * m180702_000000_add_unique_key_column migration.

@@ -9,19 +9,23 @@ namespace barrelstrength\sproutseo\fields;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasefields\web\assets\selectother\SelectOtherFieldAsset;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\models\Metadata;
+use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\web\assets\seo\SproutSeoAsset;
 use barrelstrength\sproutseo\web\assets\tageditor\TagEditorAsset;
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
-use barrelstrength\sproutseo\SproutSeo;
-use barrelstrength\sproutseo\models\Metadata;
-use craft\base\Element;
-use craft\base\Field;
 use Craft;
+use craft\base\Element;
+use craft\base\ElementInterface;
+use craft\base\Field;
+use craft\db\mysql\Schema;
+use craft\elements\Asset;
 use craft\errors\SiteNotFoundException;
+use craft\fields\Assets;
 use PhpScience\TextRank\TextRankFacade;
 use PhpScience\TextRank\Tool\StopWords\English;
-use PhpScience\TextRank\Tool\StopWords\German;
 use PhpScience\TextRank\Tool\StopWords\French;
+use PhpScience\TextRank\Tool\StopWords\German;
 use PhpScience\TextRank\Tool\StopWords\Italian;
 use PhpScience\TextRank\Tool\StopWords\Norwegian;
 use PhpScience\TextRank\Tool\StopWords\Spanish;
@@ -32,10 +36,6 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig_Error_Loader;
 use yii\base\Exception;
-use craft\base\ElementInterface;
-use craft\elements\Asset;
-use craft\fields\Assets;
-use craft\db\mysql\Schema;
 use yii\base\InvalidConfigException;
 
 /**
@@ -63,18 +63,31 @@ class ElementMetadata extends Field
     public $values;
 
     public $optimizedTitleField;
+
     public $optimizedDescriptionField;
+
     public $optimizedImageField;
+
     public $optimizedKeywordsField;
+
     public $showMainEntity;
+
     public $showSearchMeta = false;
+
     public $showOpenGraph = false;
+
     public $showTwitter = false;
+
     public $showGeo = false;
+
     public $showRobots = false;
+
     public $editCanonical = false;
+
     public $schemaOverrideTypeId;
+
     public $schemaTypeId;
+
     public $enableMetaDetailsFields = false;
 
     /**
@@ -153,6 +166,7 @@ class ElementMetadata extends Field
 
         if (is_array($value)) {
             $value = $this->getMetadataFieldValues($value, $element);
+
             return json_encode($value);
         }
 
@@ -290,13 +304,12 @@ class ElementMetadata extends Field
     public function defineRules(): array
     {
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
-        $metadataFieldCount = (int) SproutSeo::$app->settings->getMetadataFieldCount();
+        $metadataFieldCount = (int)SproutSeo::$app->settings->getMetadataFieldCount();
 
         $theFirstMetadataField = !$this->id && $metadataFieldCount === 0;
         $theOneMetadataField = $this->id && $metadataFieldCount === 1;
 
-        if (!$isPro && !($theFirstMetadataField || $theOneMetadataField))
-        {
+        if (!$isPro && !($theFirstMetadataField || $theOneMetadataField)) {
             $this->addError('optimizedTitleField', Craft::t('sprout-seo', 'Upgrade to Sprout SEO PRO to manage multiple Metadata fields.'));
         }
 
@@ -412,40 +425,6 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @param $type
-     * @param $value
-     * @param $attributes
-     * @return mixed
-     */
-    private function setMetaDetailsValues($type, $value, $attributes)
-    {
-        $ogKey = 'og'.ucfirst($type);
-        $twitterKey = 'twitter'.ucfirst($type);
-        $ogValue = $attributes[$ogKey] ?? null;
-        $twitterValue = $attributes[$twitterKey] ?? null;
-        $searchValue = $attributes[$type] ?? null;
-
-        // Default values
-        $attributes[$type] = $value;
-        $attributes[$ogKey] = $value;
-        $attributes[$twitterKey] = $value;
-
-        if (isset($attributes['enableMetaDetailsSearch']) && $attributes['enableMetaDetailsSearch'] && $searchValue) {
-            $attributes[$type] = $searchValue;
-        }
-
-        if (isset($attributes['enableMetaDetailsOpenGraph']) && $attributes['enableMetaDetailsOpenGraph'] && $ogValue) {
-            $attributes[$ogKey] = $ogValue;
-        }
-
-        if (isset($attributes['enableMetaDetailsTwitterCard']) && $attributes['enableMetaDetailsTwitterCard'] && $twitterValue) {
-            $attributes[$twitterKey] = $twitterValue;
-        }
-
-        return $attributes;
-    }
-
-    /**
      * @param         $attributes
      * @param         $settings
      * @param Element $element
@@ -491,12 +470,10 @@ class ElementMetadata extends Field
 
                     $stopWordsClass = $stopWordsMap['en'];
 
-                    if (count($languagePrefixArray) > 0)
-                    {
+                    if (count($languagePrefixArray) > 0) {
                         $languagePrefix = $languagePrefixArray[0];
 
-                        if (isset($stopWordsMap[$languagePrefix]))
-                        {
+                        if (isset($stopWordsMap[$languagePrefix])) {
                             $stopWordsClass = $stopWordsMap[$languagePrefix];
                         }
                     }
@@ -518,7 +495,7 @@ class ElementMetadata extends Field
                 break;
         }
 
-        if ($settings['showSearchMeta'] && isset($attributes['keywords']) && $attributes['keywords']){
+        if ($settings['showSearchMeta'] && isset($attributes['keywords']) && $attributes['keywords']) {
             $keywords = $attributes['keywords'];
         }
 
@@ -679,48 +656,6 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @param $fieldId
-     * @param $element
-     *
-     * @return null
-     */
-    private function getSelectedFieldForOptimizedMetadata($fieldId, $element)
-    {
-        $value = null;
-
-        if (is_numeric($fieldId)) {
-            /**
-             * @var Field $field
-             */
-            $field = Craft::$app->fields->getFieldById($fieldId);
-
-            // Does the field exist on the element?
-            if ($field) {
-                if (isset($_POST['fields'][$field->handle])) {
-                    if (get_class($field) === Assets::class) {
-                        $value = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
-                    } else {
-                        $value = $_POST['fields'][$field->handle];
-                    }
-                } else {
-                    // Resave elements scenario
-                    if (isset($element->{$field->handle})) {
-                        $elementValue = $element->{$field->handle};
-
-                        if (get_class($field) === Assets::class) {
-                            $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
-                        } else {
-                            $value = $elementValue;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $value;
-    }
-
-    /**
      * @param $fields
      * @param $element
      *
@@ -785,5 +720,82 @@ class ElementMetadata extends Field
         }
 
         return $metadataModel;
+    }
+
+    /**
+     * @param $type
+     * @param $value
+     * @param $attributes
+     *
+     * @return mixed
+     */
+    private function setMetaDetailsValues($type, $value, $attributes)
+    {
+        $ogKey = 'og'.ucfirst($type);
+        $twitterKey = 'twitter'.ucfirst($type);
+        $ogValue = $attributes[$ogKey] ?? null;
+        $twitterValue = $attributes[$twitterKey] ?? null;
+        $searchValue = $attributes[$type] ?? null;
+
+        // Default values
+        $attributes[$type] = $value;
+        $attributes[$ogKey] = $value;
+        $attributes[$twitterKey] = $value;
+
+        if (isset($attributes['enableMetaDetailsSearch']) && $attributes['enableMetaDetailsSearch'] && $searchValue) {
+            $attributes[$type] = $searchValue;
+        }
+
+        if (isset($attributes['enableMetaDetailsOpenGraph']) && $attributes['enableMetaDetailsOpenGraph'] && $ogValue) {
+            $attributes[$ogKey] = $ogValue;
+        }
+
+        if (isset($attributes['enableMetaDetailsTwitterCard']) && $attributes['enableMetaDetailsTwitterCard'] && $twitterValue) {
+            $attributes[$twitterKey] = $twitterValue;
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * @param $fieldId
+     * @param $element
+     *
+     * @return null
+     */
+    private function getSelectedFieldForOptimizedMetadata($fieldId, $element)
+    {
+        $value = null;
+
+        if (is_numeric($fieldId)) {
+            /**
+             * @var Field $field
+             */
+            $field = Craft::$app->fields->getFieldById($fieldId);
+
+            // Does the field exist on the element?
+            if ($field) {
+                if (isset($_POST['fields'][$field->handle])) {
+                    if (get_class($field) === Assets::class) {
+                        $value = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
+                    } else {
+                        $value = $_POST['fields'][$field->handle];
+                    }
+                } else {
+                    // Resave elements scenario
+                    if (isset($element->{$field->handle})) {
+                        $elementValue = $element->{$field->handle};
+
+                        if (get_class($field) === Assets::class) {
+                            $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
+                        } else {
+                            $value = $elementValue;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $value;
     }
 }

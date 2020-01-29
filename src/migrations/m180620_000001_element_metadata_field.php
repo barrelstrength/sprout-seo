@@ -3,9 +3,9 @@
 namespace barrelstrength\sproutseo\migrations;
 
 use barrelstrength\sproutseo\fields\ElementMetadata;
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use Craft;
 
 /**
  * m180620_000001_element_metadata_field migration.
@@ -47,7 +47,7 @@ class m180620_000001_element_metadata_field extends Migration
         }
 
         $metadataElements = [];
-        if ($this->db->tableExists('{{%sproutseo_metadata_elements}}')){
+        if ($this->db->tableExists('{{%sproutseo_metadata_elements}}')) {
             $metadataElements = (new Query())
                 ->select(['*'])
                 ->from(['{{%sproutseo_metadata_elements}}'])
@@ -59,7 +59,7 @@ class m180620_000001_element_metadata_field extends Migration
             unset($settings['displayPreview']);
             $settingsAsJson = json_encode($settings);
 
-            $this->update('{{%fields}}', ['type' => ElementMetadata::class,  'settings' => $settingsAsJson], ['id' => $field['id']], [], false);
+            $this->update('{{%fields}}', ['type' => ElementMetadata::class, 'settings' => $settingsAsJson], ['id' => $field['id']], [], false);
             $fieldHandle = $field['handle'];
 
             foreach ($metadataElements as $metadataElement) {
@@ -77,6 +77,16 @@ class m180620_000001_element_metadata_field extends Migration
         }
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown()
+    {
+        echo "m180620_000001_element_metadata_field cannot be reverted.\n";
+
+        return false;
     }
 
     private function getMetadataAsJson($metadataElement)
@@ -99,14 +109,5 @@ class m180620_000001_element_metadata_field extends Migration
         );
 
         return json_encode($metadataElement);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown()
-    {
-        echo "m180620_000001_element_metadata_field cannot be reverted.\n";
-        return false;
     }
 }

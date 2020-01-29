@@ -64,6 +64,7 @@ class m180618_000001_globals_table extends Migration
     public function safeDown()
     {
         echo "m180618_000001_globals_table cannot be reverted.\n";
+
         return false;
     }
 }

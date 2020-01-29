@@ -12,9 +12,13 @@ use barrelstrength\sproutseo\base\Schema;
 class PostalAddressSchema extends Schema
 {
     public $addressCountry;
+
     public $addressLocality;
+
     public $addressRegion;
+
     public $postalCode;
+
     public $streetAddress;
 
     /**

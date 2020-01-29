@@ -3,9 +3,9 @@
 namespace barrelstrength\sproutseo\migrations;
 
 
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use Craft;
 
 /**
  * m180619_000001_add_field_column_to_contents_table migration.
@@ -19,7 +19,7 @@ class m180619_000001_add_field_column_to_contents_table extends Migration
      */
     public function safeUp()
     {
-        if ($this->db->tableExists('{{%sproutseo_metadata_elements}}')){
+        if ($this->db->tableExists('{{%sproutseo_metadata_elements}}')) {
             $metadataElements = (new Query())
                 ->select(['*'])
                 ->from(['{{%sproutseo_metadata_elements}}'])
@@ -56,6 +56,7 @@ class m180619_000001_add_field_column_to_contents_table extends Migration
     public function safeDown()
     {
         echo "m180619_000001_add_field_column_to_contents_table cannot be reverted.\n";
+
         return false;
     }
 }

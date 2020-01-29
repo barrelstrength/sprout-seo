@@ -8,22 +8,21 @@
 namespace barrelstrength\sproutseo\base;
 
 use barrelstrength\sproutbasefields\models\Address;
+use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\models\Globals;
+use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\schema\ContactPointSchema;
 use barrelstrength\sproutseo\schema\GeoSchema;
 use barrelstrength\sproutseo\schema\ImageObjectSchema;
 use barrelstrength\sproutseo\schema\MainEntityOfPageSchema;
 use barrelstrength\sproutseo\schema\PostalAddressSchema;
-use barrelstrength\sproutseo\models\Globals;
-use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
-
-use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
+use Craft;
+use craft\base\Element;
 use craft\helpers\Template as TemplateHelper;
 use craft\helpers\UrlHelper;
 use DateTime;
-use Craft;
-use craft\base\Element;
 
 /**
  * Class Schema
@@ -53,13 +52,6 @@ abstract class Schema
     public $structuredData = [];
 
     /**
-     * Defines our Schema's '@type' property
-     *
-     * @var string
-     */
-    protected $type;
-
-    /**
      * The Global Metadata values available to use when building the Structured Data
      *
      * @var Globals
@@ -79,6 +71,13 @@ abstract class Schema
      * @var Metadata
      */
     public $prioritizedMetadataModel;
+
+    /**
+     * Defines our Schema's '@type' property
+     *
+     * @var string
+     */
+    protected $type;
 
     /**
      * @return string
@@ -115,10 +114,10 @@ abstract class Schema
     /**
      * Determine if the Schema should be listed in the Main Entity dropdown.
      *
+     * @return bool
      * @example Some schema, such as a PostalAddress may not ever be used as the Main Entity
      *          of the page, but are still be helpful to define to be used within other schema.
      *
-     * @return bool
      */
     public function isUnlistedSchemaType()
     {
@@ -394,7 +393,7 @@ abstract class Schema
                 'width' => $meta->ogImageWidth,
                 'height' => $meta->ogImageHeight
             ];
-        } else if(is_numeric($imageId)) {
+        } else if (is_numeric($imageId)) {
 
             $imageAsset = Craft::$app->assets->getAssetById($imageId);
 

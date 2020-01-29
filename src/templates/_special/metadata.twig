@@ -4,27 +4,27 @@
 
 <!-- This site is optimized with the Sprout SEO plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/seo -->
 {% for name, value in meta.search -%}
-{% switch name -%}
-{% case "title" -%}
-    <title>{{ value }}</title>
-{% case "author" -%}
-    <link href="{{ value }}" rel="author">
-{% case "publisher" -%}
-    <link href="{{ value }}" rel="publisher">
-{% default -%}
-    <meta name="{{ name }}" content="{{ value }}">
-{% endswitch %}
+    {% switch name -%}
+    {% case "title" -%}
+        <title>{{ value }}</title>
+    {% case "author" -%}
+        <link href="{{ value }}" rel="author">
+    {% case "publisher" -%}
+        <link href="{{ value }}" rel="publisher">
+    {% default -%}
+        <meta name="{{ name }}" content="{{ value }}">
+    {% endswitch %}
 {% endfor %}
 {% if meta.googlePlus is defined and meta.googlePlus -%}
     <link rel="publisher" href="{{ meta.googlePlus }}">
 {% endif %}
 {% for name, value in meta.robots -%}
-{% switch name -%}
-{% case "canonical" -%}
-    <link rel="canonical" href="{{ value }}">
-{% default %}
-    <meta name="{{ name }}" content="{{ value }}">
-{% endswitch %}
+    {% switch name -%}
+    {% case "canonical" -%}
+        <link rel="canonical" href="{{ value }}">
+    {% default %}
+        <meta name="{{ name }}" content="{{ value }}">
+    {% endswitch %}
 {% endfor %}
 {% for name, value in meta.geo -%}
     <meta name="{{ name }}" content="{{ value }}">

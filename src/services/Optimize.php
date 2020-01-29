@@ -8,26 +8,23 @@
 namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutseo\enums\MetadataLevels;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\models\Globals;
+use barrelstrength\sproutseo\models\Metadata;
+use barrelstrength\sproutseo\models\Metadata as MetadataModel;
+use barrelstrength\sproutseo\models\Settings;
+use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
-use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
-use barrelstrength\sproutseo\enums\MetadataLevels;
-use barrelstrength\sproutseo\models\Globals;
-use barrelstrength\sproutseo\models\Metadata as MetadataModel;
-use craft\base\ElementInterface;
-
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
-use barrelstrength\sproutseo\models\Metadata;
-
 use barrelstrength\sproutseo\SproutSeo;
-use barrelstrength\sproutseo\models\Settings;
+use Craft;
 use craft\base\Element;
-
+use craft\base\ElementInterface;
 use craft\errors\SiteNotFoundException;
 use craft\models\Site;
 use DateTime;
-use Craft;
 use Throwable;
 use Twig_Error_Loader;
 use yii\base\Component;
@@ -37,6 +34,11 @@ use yii\web\ServerErrorHttpException;
 
 class Optimize extends Component
 {
+    /**
+     * @var ElementInterface
+     */
+    public static $matchedElement;
+
     /**
      * Sprout SEO Globals data
      *
@@ -60,11 +62,6 @@ class Optimize extends Component
      * @var MetadataModel $templateMetadata
      */
     public $templateMetadata = [];
-
-    /**
-     * @var ElementInterface
-     */
-    public static $matchedElement;
 
     /**
      * Add values to the master $this->templateMetadata array
@@ -234,51 +231,50 @@ class Optimize extends Component
 
             switch ($level) {
                 case MetadataLevels::GlobalMetadata:
-                    {
-                        $overrideInfo = $this->globals->meta;
-                        break;
-                    }
+                {
+                    $overrideInfo = $this->globals->meta;
+                    break;
+                }
                 case MetadataLevels::ElementMetadata:
-                    {
-                        if ($this->elementMetadata) {
+                {
+                    if ($this->elementMetadata) {
 
-                            // Default to the current URL, if no overrides exist
-                            $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                            $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                            $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                        // Default to the current URL, if no overrides exist
+                        $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                        $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                        $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
 
-                            $overrideInfo = $this->elementMetadata->getAttributes();
-                        }
-
-                        break;
+                        $overrideInfo = $this->elementMetadata->getAttributes();
                     }
+
+                    break;
+                }
                 case MetadataLevels::TemplateMetadata:
-                    {
-                        $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+                {
+                    $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
 
-                        // Only allow Template Overrides if using Pro Edition
-                        if (!$isPro) {
-                            break;
-                        }
-
-                        $overrideInfo = $this->templateMetadata;
-
-                        // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
-                        // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
-                        // Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
-                        if (isset($overrideInfo['elementId']))
-                        {
-                            $elementOverride = Craft::$app->elements->getElementById($overrideInfo['elementId']);
-                            $overrideInfo = SproutSeo::$app->elementMetadata->getElementMetadata($elementOverride);
-                        }
-
-                        // Assume our canonical URL is the current URL unless there is a codeOverride
-                        $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                        $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                        $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-
+                    // Only allow Template Overrides if using Pro Edition
+                    if (!$isPro) {
                         break;
                     }
+
+                    $overrideInfo = $this->templateMetadata;
+
+                    // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
+                    // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
+                    // Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
+                    if (isset($overrideInfo['elementId'])) {
+                        $elementOverride = Craft::$app->elements->getElementById($overrideInfo['elementId']);
+                        $overrideInfo = SproutSeo::$app->elementMetadata->getElementMetadata($elementOverride);
+                    }
+
+                    // Assume our canonical URL is the current URL unless there is a codeOverride
+                    $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                    $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                    $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+
+                    break;
+                }
             }
 
             $metadataModel = new Metadata($overrideInfo);
@@ -297,13 +293,12 @@ class Optimize extends Component
             $prioritizedMetadataModel->ogExpiryDate = null;
 
             // @todo - refactor
-            if ($element !== null)
-            {
-                if (isset($element->postDate)){
+            if ($element !== null) {
+                if (isset($element->postDate)) {
                     if ($element->postDate !== null && $element->postDate) {
                         $prioritizedMetadataModel->ogDateCreated = $element->postDate->format(DateTime::ISO8601);
                     }
-                }else{
+                } else {
                     if ($element->dateCreated !== null && $element->dateCreated) {
                         $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
                     }
@@ -405,8 +400,7 @@ class Optimize extends Component
             $schema['place'] = $placeSchema;
         }
 
-        if ($element !== null)
-        {
+        if ($element !== null) {
             $schema['mainEntity'] = $this->getMainEntityStructuredData($element);
         }
 

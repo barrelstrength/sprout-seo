@@ -3,8 +3,8 @@
 namespace barrelstrength\sproutseo\migrations;
 
 use barrelstrength\sproutseo\SproutSeo;
-use craft\db\Migration;
 use Craft;
+use craft\db\Migration;
 use craft\errors\InvalidPluginException;
 use Throwable;
 
@@ -41,6 +41,7 @@ class m190701_000000_update_to_support_editions extends Migration
     public function safeDown(): bool
     {
         echo "m190701_000000_update_to_support_editions cannot be reverted.\n";
+
         return false;
     }
 }

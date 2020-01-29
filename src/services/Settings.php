@@ -7,12 +7,11 @@
 
 namespace barrelstrength\sproutseo\services;
 
+use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings as PluginSettings;
+use Craft;
 use craft\db\Query;
 use yii\base\Component;
-
-use Craft;
-use barrelstrength\sproutseo\fields\ElementMetadata;
 
 /**
  *

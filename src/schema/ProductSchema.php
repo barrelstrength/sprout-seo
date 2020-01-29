@@ -7,8 +7,8 @@
 
 namespace barrelstrength\sproutseo\schema;
 
-use craft\commerce\Plugin as Commerce;
 use craft\commerce\elements\Product;
+use craft\commerce\Plugin as Commerce;
 
 
 class ProductSchema extends ThingSchema

@@ -8,12 +8,12 @@
 namespace barrelstrength\sproutseo\services;
 
 
-use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\migrations\InsertDefaultGlobalsBySite;
+use barrelstrength\sproutseo\models\Globals;
+use Craft;
 use craft\base\Component;
 use craft\db\Query;
 use craft\helpers\Json;
-use Craft;
 use craft\models\Site;
 
 /**

@@ -8,8 +8,9 @@
 namespace barrelstrength\sproutseo\web\twig;
 
 use barrelstrength\sproutseo\web\twig\tokenparsers\SproutSeoTokenParser;
+use Twig_Extension;
 
-class Extension extends \Twig_Extension
+class Extension extends Twig_Extension
 {
     /**
      * Returns the name of the extension.

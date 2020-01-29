@@ -24,8 +24,7 @@ class m190222_000000_remove_slashes extends Migration
             ->from(['{{%sproutseo_redirects}} redirects'])
             ->all();
 
-        foreach ($results as $result)
-        {
+        foreach ($results as $result) {
             $this->db->createCommand()->update('{{%sproutseo_redirects}}', [
                 // Remove any initial slashes from old and new redirects
                 'oldUrl' => $this->removeSlash($result['oldUrl']),
@@ -57,6 +56,7 @@ class m190222_000000_remove_slashes extends Migration
     public function safeDown(): bool
     {
         echo "m190222_000000_remove_slashes cannot be reverted.\n";
+
         return false;
     }
 }

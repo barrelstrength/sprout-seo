@@ -10,7 +10,7 @@ class MetaDetailsToggle {
 
     this.fieldHandle = props.fieldHandle;
     this.selectFieldId = props.selectFieldId;
-    let openGraphTypeInputClass = '#fields-'+this.fieldHandle+'-meta-details-body ' + this.selectFieldId;
+    let openGraphTypeInputClass = '#fields-' + this.fieldHandle + '-meta-details-body ' + this.selectFieldId;
 
     let openGraphTypeDropdown = document.querySelector(openGraphTypeInputClass);
     let selectedDropdownOption = openGraphTypeDropdown.options[openGraphTypeDropdown.selectedIndex].value;

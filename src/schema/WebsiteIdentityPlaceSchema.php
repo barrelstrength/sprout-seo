@@ -63,7 +63,7 @@ class WebsiteIdentityPlaceSchema extends Schema
             $this->addGeo('geo', $schema['latitude'], $schema['longitude']);
         }
 
-        if (is_array($socialProfiles)){
+        if (is_array($socialProfiles)) {
             if (count($socialProfiles)) {
                 $urls = array_column($socialProfiles, 'url');
                 $this->addSameAs($urls);

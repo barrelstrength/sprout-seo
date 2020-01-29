@@ -5,8 +5,8 @@ namespace barrelstrength\sproutseo\migrations;
 use barrelstrength\sproutbasesitemaps\migrations\Install as SproutBaseSitemapsInstall;
 use barrelstrength\sproutbasesitemaps\models\Settings as SproutSitemapSettings;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
-use craft\db\Migration;
 use Craft;
+use craft\db\Migration;
 
 /**
  * m190415_000001_adds_sprout_sitemaps_migration migration.
@@ -36,6 +36,16 @@ class m190415_000001_adds_sprout_sitemaps_migration extends Migration
     }
 
     /**
+     * @inheritdoc
+     */
+    public function safeDown(): bool
+    {
+        echo "m190415_000001_adds_sprout_sitemaps_migration cannot be reverted.\n";
+
+        return false;
+    }
+
+    /**
      * @return SproutSitemapSettings
      * @throws \craft\errors\SiteNotFoundException
      */
@@ -59,6 +69,7 @@ class m190415_000001_adds_sprout_sitemaps_migration extends Migration
             $settings->enableMultilingualSitemaps = $sproutBaseSitemapSettings['enableMultilingualSitemaps'];
             $settings->totalElementsPerSitemap = $sproutBaseSitemapSettings['totalElementsPerSitemap'];
             $settings->siteSettings = $sproutBaseSitemapSettings['siteSettings'];
+
             return $settings;
         }
 
@@ -76,18 +87,10 @@ class m190415_000001_adds_sprout_sitemaps_migration extends Migration
             $settings->enableMultilingualSitemaps = $sproutSeoSettings['enableMultilingualSitemaps'] ?? null;
             $settings->totalElementsPerSitemap = $sproutSeoSettings['totalElementsPerSitemap'] ?? null;
             $settings->siteSettings = $sproutSeoSettings['siteSettings'] ?? null;
+
             return $settings;
         }
 
         return $settings;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown(): bool
-    {
-        echo "m190415_000001_adds_sprout_sitemaps_migration cannot be reverted.\n";
-        return false;
     }
 }

@@ -8,13 +8,12 @@
 
 namespace barrelstrength\sproutseo\helpers;
 
+use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
+use Craft;
 use craft\elements\Asset;
 use craft\helpers\UrlHelper;
-use Craft;
 use yii\base\Exception;
-use yii\web\ServerErrorHttpException;
-use barrelstrength\sproutseo\models\Metadata;
 
 class OptimizeHelper
 {
@@ -98,7 +97,7 @@ class OptimizeHelper
      */
     public static function prepareRobotsMetadataForSettings($robotsValues)
     {
-        if (is_string($robotsValues)){
+        if (is_string($robotsValues)) {
             $robotsArray = explode(',', $robotsValues);
 
             $robotsSettings = [];
@@ -106,7 +105,7 @@ class OptimizeHelper
             foreach ($robotsArray as $key => $value) {
                 $robotsSettings[$value] = 1;
             }
-        }else{
+        } else {
             // Value from content table
             $robotsSettings = $robotsValues;
         }
@@ -280,6 +279,7 @@ class OptimizeHelper
 
     /**
      * @param $image
+     *
      * @return mixed
      */
     public static function getImageId($image)

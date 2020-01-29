@@ -33,7 +33,7 @@
     <form method="post" accept-charset="UTF-8" data-saveshortcut>
         {{ csrfInput() }}
         <input type="hidden" name="action"
-               value="sprout-seo/global-metadata/save-global-metadata">
+            value="sprout-seo/global-metadata/save-global-metadata">
         <input type="hidden" name="globalKeys" value="meta,identity">
 
         <input type="hidden" name="siteId" value="{{ globals.siteId }}">
@@ -60,8 +60,8 @@
         }) }}
 
         <div id="toggle-alternate"
-             class="{{ (websiteIdentity['alternateName'] is defined and websiteIdentity.alternateName ?:
-             'hidden' ) }}">
+            class="{{ (websiteIdentity['alternateName'] is defined and websiteIdentity.alternateName ?:
+            'hidden' ) }}">
             {{ forms.textField({
                 label: "Alternate Name"|t('sprout-seo') ~ sprout.infoIcon({
                     label: "Alternate Name"|t('sprout-seo'),
@@ -254,7 +254,7 @@
                 </div>
 
                 <div id="organization"
-                     class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
+                    class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
 
                     <div class="identitytype-dropdown organizationinfo-dropdown">
                         {{ forms.selectField({
@@ -319,7 +319,7 @@
 
             {# These fields should only display when 'Organization => LocalBusiness' is selected #}
             <div id="localbusiness"
-                 {% if not globals.isLocalBusiness() %}class="hidden"{% endif %}>
+                {% if not globals.isLocalBusiness() %}class="hidden"{% endif %}>
 
                 {% set priceRangeOptions = craft.sproutSeo.getPriceRangeOptions(currentSite) %}
 
@@ -430,15 +430,15 @@
     Craft.SproutFields.initFields($("#content"));
 
     new SproutSeoWebsiteIdentity({
-        items: {{ organizationItems|json_encode|raw }},
-        websiteIdentity: {{ websiteIdentity|json_encode|raw }},
-        firstDropdownId: '#main-entity-first-dropdown',
-        secondDropdownId: '#main-entity-second-dropdown',
-        thirdDropdownId: '#main-entity-third-dropdown',
+    items: {{ organizationItems|json_encode|raw }},
+    websiteIdentity: {{ websiteIdentity|json_encode|raw }},
+    firstDropdownId: '#main-entity-first-dropdown',
+    secondDropdownId: '#main-entity-second-dropdown',
+    thirdDropdownId: '#main-entity-third-dropdown',
     });
 
     new SproutSeoKeywordsField({
-        keywordsFieldId: '#keywords-field'
+    keywordsFieldId: '#keywords-field'
     });
 {% endjs %}
 

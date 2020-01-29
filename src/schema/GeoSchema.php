@@ -12,6 +12,7 @@ use barrelstrength\sproutseo\base\Schema;
 class GeoSchema extends Schema
 {
     public $latitude;
+
     public $longitude;
 
     /**

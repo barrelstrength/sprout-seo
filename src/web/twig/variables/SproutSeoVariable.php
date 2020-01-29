@@ -16,12 +16,11 @@ use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\Model;
 use craft\elements\Asset;
-
 use craft\errors\SiteNotFoundException;
+use craft\fields\Assets;
+use craft\fields\PlainText;
 use craft\models\Site;
 use DateTime;
-use craft\fields\PlainText;
-use craft\fields\Assets;
 use DateTimeZone;
 use yii\base\Exception;
 
@@ -775,6 +774,7 @@ class SproutSeoVariable
         if ($plugin->is(SproutSeo::EDITION_PRO)) {
             return true;
         }
+
         return false;
     }
 

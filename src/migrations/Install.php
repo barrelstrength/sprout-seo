@@ -7,13 +7,12 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use Craft;
-
-use craft\db\Migration;
+use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirectsInstall;
 use barrelstrength\sproutbasesitemaps\migrations\Install as SproutBaseSitemapsInstall;
-use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
+use Craft;
+use craft\db\Migration;
 
 class Install extends Migration
 {

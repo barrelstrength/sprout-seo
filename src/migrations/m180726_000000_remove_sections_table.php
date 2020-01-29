@@ -27,6 +27,7 @@ class m180726_000000_remove_sections_table extends Migration
     public function safeDown()
     {
         echo "m180726_000000_remove_sections_table cannot be reverted.\n";
+
         return false;
     }
 }

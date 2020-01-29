@@ -22,14 +22,14 @@ use barrelstrength\sproutseo\schema\PlaceSchema;
 use barrelstrength\sproutseo\schema\PostalAddressSchema;
 use barrelstrength\sproutseo\schema\ProductSchema;
 use barrelstrength\sproutseo\schema\ThingSchema;
+use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
-use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\SproutSeo;
-use yii\base\Component;
-use craft\helpers\Json;
 use Craft;
+use craft\helpers\Json;
+use yii\base\Component;
 
 /**
  *
@@ -39,6 +39,14 @@ use Craft;
 class Schema extends Component
 {
     const EVENT_REGISTER_SCHEMAS = 'registerSchemasEvent';
+
+    /**
+     * Full schema.org core and extended vocabulary as described on schema.org
+     * http://schema.org/docs/full.html
+     *
+     * @var array
+     */
+    public $vocabularies = [];
 
     /**
      * All registered Schema Types
@@ -53,14 +61,6 @@ class Schema extends Component
      * @var BaseSchema[]
      */
     protected $schemas = [];
-
-    /**
-     * Full schema.org core and extended vocabulary as described on schema.org
-     * http://schema.org/docs/full.html
-     *
-     * @var array
-     */
-    public $vocabularies = [];
 
     /**
      * @return array
@@ -230,52 +230,6 @@ class Schema extends Component
     }
 
     /**
-     * @param $type
-     *
-     * @return array
-     */
-    private function getSchemaChildren($type)
-    {
-        $tree = SproutSeo::$app->schema->getVocabularies($type);
-
-        /**
-         * @var array $children
-         */
-        $children = $tree['children'] ?? [];
-
-        // let's assume 3 levels
-        if (count($children)) {
-            foreach ($children as $key => $level1) {
-                $children[$key] = [];
-
-                /**
-                 * @var array $level1children
-                 */
-                $level1children = $level1['children'] ?? [];
-
-                if (count($level1children)) {
-                    foreach ($level1children as $key2 => $level2) {
-                        $children[$key][$key2] = [];
-
-                        /**
-                         * @var array $level2children
-                         */
-                        $level2children = $level2['children'] ?? [];
-
-                        if (count($level2children)) {
-                            foreach ($level2children as $key3 => $level3) {
-                                $children[$key][$key2][] = $key3;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $children;
-    }
-
-    /**
      * Returns a schema map instance (based on $uniqueKey) or $default
      *
      * @param string $uniqueKey
@@ -286,8 +240,10 @@ class Schema extends Component
     public function getSchemaByUniqueKey($uniqueKey, $default = null)
     {
         $this->getSchemas();
+
         return array_key_exists($uniqueKey, $this->schemas) ? $this->schemas[$uniqueKey] : $default;
     }
+
     /**
      * Returns an array of vocabularies based on the path provided
      * SproutSeo::$app->schema->getVocabularies('Organization.LocalBusiness.AutomotiveBusiness');
@@ -359,5 +315,51 @@ class Schema extends Component
         }
 
         return $newArray;
+    }
+
+    /**
+     * @param $type
+     *
+     * @return array
+     */
+    private function getSchemaChildren($type)
+    {
+        $tree = SproutSeo::$app->schema->getVocabularies($type);
+
+        /**
+         * @var array $children
+         */
+        $children = $tree['children'] ?? [];
+
+        // let's assume 3 levels
+        if (count($children)) {
+            foreach ($children as $key => $level1) {
+                $children[$key] = [];
+
+                /**
+                 * @var array $level1children
+                 */
+                $level1children = $level1['children'] ?? [];
+
+                if (count($level1children)) {
+                    foreach ($level1children as $key2 => $level2) {
+                        $children[$key][$key2] = [];
+
+                        /**
+                         * @var array $level2children
+                         */
+                        $level2children = $level2['children'] ?? [];
+
+                        if (count($level2children)) {
+                            foreach ($level2children as $key3 => $level3) {
+                                $children[$key][$key2][] = $key3;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $children;
     }
 }

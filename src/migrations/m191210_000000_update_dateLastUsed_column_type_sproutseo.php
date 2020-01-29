@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutbaseredirects\migrations\m191109_000001_update_field_regex_to_matchStrategy;
 use barrelstrength\sproutbaseredirects\migrations\m191210_000000_update_dateLastUsed_column_type;
 use craft\db\Migration;
 use Throwable;
@@ -35,6 +34,7 @@ class m191210_000000_update_dateLastUsed_column_type_sproutseo extends Migration
     public function safeDown(): bool
     {
         echo "m191210_000000_update_dateLastUsed_column_type_sproutseo cannot be reverted.\n";
+
         return false;
     }
 }

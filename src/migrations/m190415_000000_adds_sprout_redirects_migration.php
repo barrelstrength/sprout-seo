@@ -5,9 +5,9 @@ namespace barrelstrength\sproutseo\migrations;
 use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirectsInstall;
 use barrelstrength\sproutbaseredirects\models\Settings as SproutRedirectsSettings;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use Craft;
 
 /**
  * m190415_000000_adds_sprout_redirects_migration migration.
@@ -49,6 +49,16 @@ class m190415_000000_adds_sprout_redirects_migration extends Migration
     }
 
     /**
+     * @inheritdoc
+     */
+    public function safeDown(): bool
+    {
+        echo "m190415_000000_adds_sprout_redirects_migration cannot be reverted.\n";
+
+        return false;
+    }
+
+    /**
      * @return SproutRedirectsSettings
      * @throws \craft\errors\StructureNotFoundException
      */
@@ -68,6 +78,7 @@ class m190415_000000_adds_sprout_redirects_migration extends Migration
             $settings->structureId = $sproutBaseRedirectSettings['structureId'];
             $settings->enable404RedirectLog = $sproutBaseRedirectSettings['enable404RedirectLog'] ?? null;
             $settings->total404Redirects = $sproutBaseRedirectSettings['total404Redirects'] ?? null;
+
             return $settings;
         }
 
@@ -83,18 +94,10 @@ class m190415_000000_adds_sprout_redirects_migration extends Migration
             $settings->structureId = $sproutSeoSettings['structureId'];
             $settings->enable404RedirectLog = $sproutSeoSettings['enable404RedirectLog'] ?? null;
             $settings->total404Redirects = $sproutSeoSettings['total404Redirects'] ?? null;
+
             return $settings;
         }
 
         return $settings;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown(): bool
-    {
-        echo "m190415_000000_adds_sprout_redirects_migration cannot be reverted.\n";
-        return false;
     }
 }

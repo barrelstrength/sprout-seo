@@ -9,21 +9,21 @@
 
     <div class="sprout-landing">
 
-    {{ parent() }}
+        {{ parent() }}
 
-    {{ sprout.featureHeader({
-        heading: "Smart, content-driven SEO"|t('sprout-seo'),
-        message: "Sprout SEO makes it seamless to manage metadata for Search, Structured Data, and Social Sharing to ensure your content is findable and sharable."|t('sprout-seo'),
-        primaryButtonText: "Get Started"|t('sprout-seo'),
-        primaryButtonLink: cpUrl('sprout-seo/globals'),
-        secondaryButtonText: "Read the Docs"|t('sprout-seo'),
-        secondaryButtonLink: "https://sprout.barrelstrengthdesign.com/docs/seo"
-    }) }}
+        {{ sprout.featureHeader({
+            heading: "Smart, content-driven SEO"|t('sprout-seo'),
+            message: "Sprout SEO makes it seamless to manage metadata for Search, Structured Data, and Social Sharing to ensure your content is findable and sharable."|t('sprout-seo'),
+            primaryButtonText: "Get Started"|t('sprout-seo'),
+            primaryButtonLink: cpUrl('sprout-seo/globals'),
+            secondaryButtonText: "Read the Docs"|t('sprout-seo'),
+            secondaryButtonLink: "https://sprout.barrelstrengthdesign.com/docs/seo"
+        }) }}
 
-    {{ sprout.featureImage({
-        imageUrl: assetUrl ~ '/images/sproutseo-feature.png',
-        altText: 'Content-focused SEO for Craft CMS'|t('sprout-seo')
-    }) }}
+        {{ sprout.featureImage({
+            imageUrl: assetUrl ~ '/images/sproutseo-feature.png',
+            altText: 'Content-focused SEO for Craft CMS'|t('sprout-seo')
+        }) }}
 
     </div>
 

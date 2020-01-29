@@ -9,16 +9,16 @@
 
 .sproutseo-icon {
     display: inline-block;
-    text-decoration: inherit;
-    width: 1em;
     margin-right: .2em;
     text-align: center;
+    text-decoration: inherit;
+    width: 1em;
 }
 
 .sproutseo-icon svg {
     height: 14px;
-    width: 14px;
     margin-bottom: -2px;
+    width: 14px;
 }
 
 .sprout-metadata-status svg path {
@@ -55,11 +55,11 @@
     background: #ebedef;
     border-radius: 3px;
     color: #8f98a3;
+    line-height: 18px;
     margin-left: 5px;
     margin-right: -3px;
     padding: 0 5px;
     width: auto;
-    line-height: 18px;
 }
 
 .sproutseo-info:not(.warning):before {
@@ -68,12 +68,12 @@
     content: "seo";
     font-family: HelveticaNeue, sans-serif;
     font-size: 11px;
+    -webkit-font-smoothing: subpixel-antialiased;
     font-weight: bold;
     height: 100%;
-    vertical-align: middle;
     speak: none;
-    -webkit-font-smoothing: subpixel-antialiased;
     -webkit-user-select: text;
+    vertical-align: middle;
 }
 
 .info.sproutseo-info:hover,
@@ -108,15 +108,15 @@ ul.sproutseo-metalevel-list li {
 }
 
 .sproutseo-metalevel-number {
-    display: inline-block;
-    margin-right: 2px;
-
-    border-radius: 50%;
-    color: #8f98a3;
     background-color: #ebedef;
+    border-radius: 50%;
+
+    color: #8f98a3;
+    display: inline-block;
+    font-size: 10px;
     font-weight: bold;
 
-    font-size: 10px;
+    margin-right: 2px;
 }
 
 .sproutseo-metalevel-number:before,
@@ -125,8 +125,8 @@ ul.sproutseo-metalevel-list li {
     display: inline-block;
     line-height: 0;
 
-    padding-top: 20%;
     padding-bottom: 20%;
+    padding-top: 20%;
 }
 
 .sproutseo-metalevel-number:before {
@@ -145,9 +145,9 @@ ul.sproutseo-metalevel-list li {
 /* Sections & Sitemap
 ------------------------------------------------------------ */
 .btn .disabled {
-    cursor: none;
-    color: black;
     background-color: grey;
+    color: black;
+    cursor: none;
 }
 
 .no-link {
@@ -156,18 +156,18 @@ ul.sproutseo-metalevel-list li {
 
 .sitemap-custom-url:focus {
     border: 1px solid rgba(0, 0, 0, 0.15);
-    padding: 6px 4px;
     outline: none;
+    padding: 6px 4px;
 }
 
 .sitemap-custom-url {
+    background: #fff;
+    border: none;
     display: inline-block;
     margin-left: -4px;
-    width: 85%;
-    border: none;
-    padding: 7px 5px;
-    background: #fff;
     overflow: hidden;
+    padding: 7px 5px;
+    width: 85%;
 }
 
 .sitemap-settings {
@@ -184,8 +184,8 @@ ul.sproutseo-metalevel-list li {
 
 /* Optimized Meta Icons */
 .sprout-metadata-status {
-    position: relative;
     margin-top: -7px;
+    position: relative;
 }
 
 .sprout-metadata-status span {
@@ -219,12 +219,12 @@ ul.sproutseo-metalevel-list li {
 
 .sproutseo-section-header {
     background-color: #ccc;
-    margin: -24px -24px 20px;
-    padding: 24px;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f9fafa));
     background-image: linear-gradient(#fff, #f9fafa);
     -webkit-box-shadow: 0 2px 1px -2px rgba(0, 0, 0, 0.2);
     box-shadow: 0 2px 1px -2px rgba(0, 0, 0, 0.2);
+    margin: -24px -24px 20px;
+    padding: 24px;
 }
 
 /*.sitemap-custom-url:focus {*/
@@ -286,25 +286,29 @@ ul.sproutseo-metalevel-list li {
     background-color: transparent;
     color: #9aa5b1;
 }
+
 .sproutseo-advancedoption-btns div:not(.active) .sproutseo-icon {
     opacity: .2;
 }
+
 .sproutseo-advancedoption-btns div.active {
     //opacity: .65;
-    border-radius: 4px 4px 0 0 !important;
+    background-color: #f3f7fc;
     //border-bottom-left-radius: 0;
     //border-bottom-right-radius: 0;
-    background-color: #f3f7fc;
+    border-radius: 4px 4px 0 0 !important;
     //border-top: 1px solid rgba(51, 64, 77, 0.1);
     //border-bottom: 0;
     //border-left: 1px solid rgba(51, 64, 77, 0.1);
     //border-right: 1px solid rgba(51, 64, 77, 0.1);
 }
+
 .sproutseo-advancedoption-btns div:hover {
     background-color: #f3f7fc;
     border-radius: 4px 4px 0 0 !important;
     color: black;
 }
+
 .sproutseo-advancedoption-btns div:hover .sproutseo-icon {
     opacity: 1;
 }
@@ -323,14 +327,14 @@ ul.sproutseo-metalevel-list li {
 
 div.inline-item {
     display: inline-block;
-    vertical-align: middle;
     margin: 0;
+    vertical-align: middle;
 }
 
 .inline-item > div > label {
     display: inline-block;
-    vertical-align: middle;
     margin: 0;
+    vertical-align: middle;
 }
 
 /* Override default a tag fieldtoggle behavior to play more nicely with instructions text */
@@ -397,18 +401,18 @@ a.fieldtoggle.instructionstoggle {
 
 /* SITES CSS*/
 span.draft {
-    margin-top: -4px;
-    display: inline-block;
     border: 2px solid #bbb;
     border-radius: 4px;
-    padding: 0 4px;
-    height: 16px;
-    vertical-align: middle;
-    font-size: 11px;
-    line-height: 16px;
-    text-transform: uppercase;
-    font-weight: bold;
     color: #29323d;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: bold;
+    height: 16px;
+    line-height: 16px;
+    margin-top: -4px;
+    padding: 0 4px;
+    text-transform: uppercase;
+    vertical-align: middle;
 }
 
 h1 span.draft span {
@@ -444,32 +448,32 @@ body.rtl #sites li {
 }
 
 #sites li.sel:before {
-    font-size: 11px;
+    content: 'check';
+    direction: ltr;
+    display: inline-block;
     font-family: 'Craft';
-    speak: none;
-    -webkit-font-feature-settings: "liga", "dlig";
     -moz-font-feature-settings: "liga=1, dlig=1";
     -moz-font-feature-settings: "liga", "dlig";
     -ms-font-feature-settings: "liga", "dlig";
     -o-font-feature-settings: "liga", "dlig";
+    -webkit-font-feature-settings: "liga", "dlig";
     font-feature-settings: "liga", "dlig";
-    text-rendering: optimizeLegibility;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    direction: ltr;
+    font-size: 11px;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    display: inline-block;
-    text-align: center;
     font-style: normal;
-    vertical-align: middle;
-    word-wrap: normal !important;
-    -webkit-user-select: none;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    -moz-osx-font-smoothing: grayscale;
+    speak: none;
+    text-align: center;
+    text-rendering: optimizeLegibility;
+    text-transform: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    content: 'check';
+    -webkit-user-select: none;
+    vertical-align: middle;
+    word-wrap: normal !important;
 }
 
 body.ltr #sites li.sel:before {
@@ -498,9 +502,9 @@ body.rtl #sites li.sel:before {
 }
 
 #sites li .lightswitch {
+    margin-top: -9px;
     position: absolute;
     top: 50%;
-    margin-top: -9px;
 }
 
 body.ltr #sites li .lightswitch {
@@ -513,9 +517,9 @@ body.rtl #sites li .lightswitch {
 
 #sites li .status {
     display: block;
+    margin: -5px 0 0;
     position: absolute;
     top: 50%;
-    margin: -5px 0 0;
 }
 
 body.ltr #sites li .status {

@@ -13,7 +13,7 @@
     <form method="post" accept-charset="UTF-8" data-saveshortcut>
         {{ csrfInput() }}
         <input type="hidden" name="action"
-               value="sprout-seo/global-metadata/save-global-metadata">
+            value="sprout-seo/global-metadata/save-global-metadata">
         <input type="hidden" name="globalKeys" value="settings,meta">
         <input type="hidden" name="siteId" value="{{ globals.siteId }}">
 
@@ -30,12 +30,12 @@
                 {
                     label: 'Common Dividers'|t('sprout-seo'),
                     data: [
-                        { hint: 'Dash'|t('sprout-seo'), name: '-' },
-                        { hint: 'Bullet'|t('sprout-seo'), name: '•' },
-                        { hint: 'Pipe'|t('sprout-seo'), name: '|' },
-                        { hint: 'Forward Slash'|t('sprout-seo'), name: '/' },
-                        { hint: 'Colon'|t('sprout-seo'), name: ':' }
-                    ]
+                    { hint: 'Dash'|t('sprout-seo'), name: '-' },
+                    { hint: 'Bullet'|t('sprout-seo'), name: '•' },
+                    { hint: 'Pipe'|t('sprout-seo'), name: '|' },
+                    { hint: 'Forward Slash'|t('sprout-seo'), name: '/' },
+                    { hint: 'Colon'|t('sprout-seo'), name: ':' }
+                ]
                 }
             ],
             value: settings.seoDivider ?? '-',
@@ -54,8 +54,8 @@
                 {
                     label: 'Default Options'|t('sprout-seo'),
                     data: [
-                        { hint: 'Site Name'|t('sprout-seo'), name: '{siteName}' }
-                    ]
+                    { hint: 'Site Name'|t('sprout-seo'), name: '{siteName}' }
+                ]
                 }
             ],
             value: settings.appendTitleValue is defined ? settings.appendTitleValue : null,

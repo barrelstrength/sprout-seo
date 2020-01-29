@@ -11,38 +11,33 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
+use barrelstrength\sproutbaseredirects\models\Settings as RedirectsSettingsModel;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirectsHelper;
-use barrelstrength\sproutbasereports\SproutBaseReports;
+use barrelstrength\sproutbasesitemaps\models\Settings as SitemapsSettingsModel;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemapsHelper;
 use barrelstrength\sproutbaseuris\SproutBaseUrisHelper;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\SubmissionLogDataSource;
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\services\App;
-use barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable;
 use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
-use barrelstrength\sproutbaseredirects\models\Settings as RedirectsSettingsModel;
-use barrelstrength\sproutbasesitemaps\models\Settings as SitemapsSettingsModel;
-
+use barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable;
 use Craft;
 use craft\base\Plugin;
+use craft\events\ExceptionEvent;
 use craft\events\FieldLayoutEvent;
-
+use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
-use craft\events\RegisterComponentTypesEvent;
-use craft\events\RegisterUrlRulesEvent;
-use craft\services\Plugins;
 use craft\services\UserPermissions;
+use craft\web\ErrorHandler;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use yii\base\Event;
-use craft\web\ErrorHandler;
-use craft\events\ExceptionEvent;
 use yii\base\InvalidConfigException;
 
 /**
@@ -56,6 +51,10 @@ use yii\base\InvalidConfigException;
 class SproutSeo extends Plugin
 {
     use BaseSproutTrait;
+
+    const EDITION_LITE = 'lite';
+
+    const EDITION_PRO = 'pro';
 
     /**
      * Enable use of SproutSeo::$app-> in place of Craft::$app->
@@ -85,9 +84,6 @@ class SproutSeo extends Plugin
      * @var string
      */
     public $minVersionRequired = '3.4.2';
-
-    const EDITION_LITE = 'lite';
-    const EDITION_PRO = 'pro';
 
     /**
      * @inheritdoc
@@ -216,11 +212,42 @@ class SproutSeo extends Plugin
     }
 
     /**
+     * @return array
+     */
+    public function getUserPermissions(): array
+    {
+        return [
+            'sproutSeo-editGlobals' => [
+                'label' => Craft::t('sprout-seo', 'Edit Globals')
+            ],
+            'sproutSeo-editRedirects' => [
+                'label' => Craft::t('sprout-seo', 'Edit Redirects')
+            ],
+            'sproutSeo-editSitemaps' => [
+                'label' => Craft::t('sprout-seo', 'Edit Sitemaps')
+            ],
+        ];
+    }
+
+    /**
      * @return Settings
      */
     protected function createSettingsModel(): Settings
     {
         return new Settings();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function afterInstall()
+    {
+        // Redirect to welcome page
+        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
+            return;
+        }
+
+        Craft::$app->controller->redirect(UrlHelper::cpUrl('sprout-seo/welcome'))->send();
     }
 
     /**
@@ -330,36 +357,5 @@ class SproutSeo extends Plugin
         }
 
         return [];
-    }
-
-    /**
-     * @return array
-     */
-    public function getUserPermissions(): array
-    {
-        return [
-            'sproutSeo-editGlobals' => [
-                'label' => Craft::t('sprout-seo', 'Edit Globals')
-            ],
-            'sproutSeo-editRedirects' => [
-                'label' => Craft::t('sprout-seo', 'Edit Redirects')
-            ],
-            'sproutSeo-editSitemaps' => [
-                'label' => Craft::t('sprout-seo', 'Edit Sitemaps')
-            ],
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function afterInstall()
-    {
-        // Redirect to welcome page
-        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
-            return;
-        }
-
-        Craft::$app->controller->redirect(UrlHelper::cpUrl('sprout-seo/welcome'))->send();
     }
 }

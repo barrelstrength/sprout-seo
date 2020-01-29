@@ -14,10 +14,10 @@ class SproutSeoMetadataField {
     let self = this;
 
     let metaDetailsTabsId = 'fields-' + this.fieldHandle + '-meta-details-tabs';
-    this.metaDetailsTabs = document.querySelectorAll('#'+metaDetailsTabsId+' div.btn');
+    this.metaDetailsTabs = document.querySelectorAll('#' + metaDetailsTabsId + ' div.btn');
 
     let metaDetailsBodyContainerId = 'fields-' + this.fieldHandle + '-meta-details-body';
-    this.metaDetailsBodyContainers = document.querySelectorAll('#'+metaDetailsBodyContainerId+' div.matrixblock');
+    this.metaDetailsBodyContainers = document.querySelectorAll('#' + metaDetailsBodyContainerId + ' div.matrixblock');
 
     for (let seoTab of this.metaDetailsTabs) {
       seoTab.addEventListener('click', function(event) {
@@ -65,7 +65,7 @@ class SproutSeoMetadataField {
       let fieldHandle = this.seoBadgeInfo[key]['handle'];
       let badgeClass = this.seoBadgeInfo[key]['badgeClass'];
 
-      let seoButton = $('div.'+badgeClass).html();
+      let seoButton = $('div.' + badgeClass).html();
 
       let metaLabelId = '#fields-' + fieldHandle + '-label';
       let metaInputId = '#fields-' + fieldHandle + '-field input';
@@ -91,7 +91,7 @@ class SproutSeoMetadataField {
         metaTextarea.attr('maxlength', self.maxDescriptionLength);
 
         // triggers Double instantiating console error
-        new Garnish.NiceText(metaTextarea, { showCharsLeft: true });
+        new Garnish.NiceText(metaTextarea, {showCharsLeft: true});
       }
     }
   }
