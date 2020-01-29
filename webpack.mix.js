@@ -6,6 +6,7 @@ mix
     'src/web/assets/seo/dist/css/sproutseo.css',
   )
   .js([
+    'src/web/assets/seo/src/js/editable-table.js',
     'src/web/assets/seo/src/js/general.js',
     'src/web/assets/seo/src/js/meta-details-toggle.js',
     'src/web/assets/seo/src/js/schema.js',
