@@ -20,7 +20,6 @@ use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\mysql\Schema;
 use craft\elements\Asset;
-use craft\errors\SiteNotFoundException;
 use craft\fields\Assets;
 use PhpScience\TextRank\TextRankFacade;
 use PhpScience\TextRank\Tool\StopWords\English;
@@ -119,7 +118,6 @@ class ElementMetadata extends Field
      * @param ElementInterface|null $element
      *
      * @return array|mixed|null
-     * @throws Exception
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -155,7 +153,9 @@ class ElementMetadata extends Field
      * @param ElementInterface|null $element
      *
      * @return array|mixed|null|string
-     * @throws Exception
+     * @throws \Throwable
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
@@ -366,7 +366,7 @@ class ElementMetadata extends Field
     /**
      * @param bool $isNew
      *
-     * @throws SiteNotFoundException
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function afterSave(bool $isNew)
     {
@@ -781,16 +781,13 @@ class ElementMetadata extends Field
                     } else {
                         $value = $_POST['fields'][$field->handle];
                     }
-                } else {
-                    // Resave elements scenario
-                    if (isset($element->{$field->handle})) {
-                        $elementValue = $element->{$field->handle};
+                } else if (isset($element->{$field->handle})) {
+                    $elementValue = $element->{$field->handle};
 
-                        if (get_class($field) === Assets::class) {
-                            $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
-                        } else {
-                            $value = $elementValue;
-                        }
+                    if (get_class($field) === Assets::class) {
+                        $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
+                    } else {
+                        $value = $elementValue;
                     }
                 }
             }

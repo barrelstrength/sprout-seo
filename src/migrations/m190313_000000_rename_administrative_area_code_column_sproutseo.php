@@ -16,7 +16,8 @@ use craft\db\Migration;
 class m190313_000000_rename_administrative_area_code_column_sproutseo extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp(): bool
     {

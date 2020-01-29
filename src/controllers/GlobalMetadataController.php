@@ -31,7 +31,6 @@ use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use yii\web\ServerErrorHttpException;
 
 class GlobalMetadataController extends Controller
 {
@@ -131,7 +130,6 @@ class GlobalMetadataController extends Controller
      * @throws Throwable
      * @throws Exception
      * @throws \yii\db\Exception
-     * @throws ServerErrorHttpException
      */
     public function actionSaveGlobalMetadata()
     {
@@ -245,7 +243,6 @@ class GlobalMetadataController extends Controller
      *
      * @return Metadata
      * @throws Exception
-     * @throws ServerErrorHttpException
      */
     public function populateGlobalMetadata($postData)
     {
@@ -300,9 +297,9 @@ class GlobalMetadataController extends Controller
             $globalMetadata->robots = $robotsMetaValue;
 
             // @todo - Add location info
-            $globalMetadata->region = "";
-            $globalMetadata->placename = "";
-            $globalMetadata->position = "";
+            $globalMetadata->region = '';
+            $globalMetadata->placename = '';
+            $globalMetadata->position = '';
             $globalMetadata->latitude = $postData['identity']['latitude'] ?? '';
             $globalMetadata->longitude = $postData['identity']['longitude'] ?? '';
 
@@ -310,7 +307,6 @@ class GlobalMetadataController extends Controller
             $globalMetadata->ogSiteName = $identity['name'] ?? null;
             $globalMetadata->ogTitle = $optimizedTitle;
             $globalMetadata->ogDescription = $optimizedDescription;
-            $globalMetadata->ogImage = $optimizedImage;
             $globalMetadata->ogImage = $optimizedImage;
             $globalMetadata->ogTransform = $identity['ogTransform'] ?? null;
             $globalMetadata->ogLocale = null;

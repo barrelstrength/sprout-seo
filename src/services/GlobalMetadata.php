@@ -20,6 +20,8 @@ use craft\models\Site;
  * Class SproutSeo_GlobalMetadataService
  *
  * @package Craft
+ *
+ * @property array $transforms
  */
 class GlobalMetadata extends Component
 {

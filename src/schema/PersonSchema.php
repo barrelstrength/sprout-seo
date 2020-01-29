@@ -41,12 +41,8 @@ class PersonSchema extends ThingSchema
      */
     public function addProperties()
     {
-        if ($this->element !== null) {
-            if (get_class($this->element) === User::class) {
-                $this->addUserElementProperties();
-            } else {
-                parent::addProperties();
-            }
+        if (($this->element !== null) && get_class($this->element) === User::class) {
+            $this->addUserElementProperties();
         } else {
             parent::addProperties();
         }

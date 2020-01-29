@@ -71,10 +71,8 @@ class ElementMetadata extends Component
          * @var Field $field
          */
         foreach ($fields as $field) {
-            if (get_class($field) == ElementMetadataField::class) {
-                if (isset($element->{$field->handle})) {
-                    return $field->handle;
-                }
+            if ((get_class($field) == ElementMetadataField::class) && isset($element->{$field->handle})) {
+                return $field->handle;
             }
         }
 
@@ -285,7 +283,6 @@ class ElementMetadata extends Component
      *
      * @return bool
      * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\ExitException
      */
     protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false, FieldLayout $fieldLayout = null)
     {
@@ -301,7 +298,7 @@ class ElementMetadata extends Component
 
         if ($urlEnabledSectionType) {
             foreach ($urlEnabledSectionType->urlEnabledSections as $urlEnabledSection) {
-                if ($afterFieldLayout && !is_null($fieldLayout)) {
+                if ($afterFieldLayout && $fieldLayout !== null) {
                     if ($urlEnabledSection->hasFieldLayoutId($fieldLayout->id)) {
                         // Need to figure out where to grab sectionId, entryTypeId, categoryGroupId, etc.
                         $elementGroupId = $urlEnabledSection->id;
@@ -309,12 +306,9 @@ class ElementMetadata extends Component
 
                         break;
                     }
-                } else {
-                    // Check and confirm Element Metadata field is the same as the Field Layout
-                    if ($urlEnabledSection->hasElementMetadataField(false)) {
-                        $elementGroupId = $urlEnabledSection->id;
-                        $urlEnabledSectionType->resaveElements($elementGroupId);
-                    }
+                } else if ($urlEnabledSection->hasElementMetadataField(false)) {
+                    $elementGroupId = $urlEnabledSection->id;
+                    $urlEnabledSectionType->resaveElements($elementGroupId);
                 }
             }
         }

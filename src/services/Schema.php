@@ -65,7 +65,7 @@ class Schema extends Component
     /**
      * @return array
      */
-    public function getSchemasTypes()
+    public function getSchemasTypes(): array
     {
         $schemas = [
             WebsiteIdentityOrganizationSchema::class,
@@ -94,7 +94,7 @@ class Schema extends Component
             'schemas' => $schemas
         ]);
 
-        $this->trigger(Schema::EVENT_REGISTER_SCHEMAS, $event);
+        $this->trigger(self::EVENT_REGISTER_SCHEMAS, $event);
 
         foreach ($event->schemas as $schema) {
             $this->schemaTypes[] = $schema;
@@ -106,7 +106,7 @@ class Schema extends Component
     /**
      * @return BaseSchema[]
      */
-    public function getSchemas()
+    public function getSchemas(): array
     {
         $schemaTypes = $this->getSchemasTypes();
 
@@ -115,7 +115,7 @@ class Schema extends Component
             $this->schemas[$schemaClass] = $schema;
         }
 
-        uasort($this->schemas, function($a, $b) {
+        uasort($this->schemas, static static function($a, $b) {
             /**
              * @var $a BaseSchema
              * @var $b BaseSchema
@@ -131,7 +131,7 @@ class Schema extends Component
      *
      * @return array
      */
-    public function getSchemaOptions()
+    public function getSchemaOptions(): array
     {
         $schemas = $this->getSchemas();
 
@@ -142,7 +142,7 @@ class Schema extends Component
         }
 
         // Get a filtered list of our default Sprout SEO schema
-        $defaultSchema = array_filter($schemas, function($map) {
+        $defaultSchema = array_filter($schemas, static function($map) {
             /**
              * @var Schema $map
              */
@@ -150,7 +150,7 @@ class Schema extends Component
         });
 
         // Get a filtered list of of any custom schema
-        $customSchema = array_filter($schemas, function($map) {
+        $customSchema = array_filter($schemas, static function($map) {
             /**
              * @var Schema $map
              */
@@ -165,7 +165,7 @@ class Schema extends Component
         ];
 
 
-        $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
+        $schemaOptions = array_merge($schemaOptions, array_map(static function($schema) {
             /**
              * @var BaseSchema $schema
              */
@@ -179,7 +179,7 @@ class Schema extends Component
         if (count($customSchema)) {
             $schemaOptions[] = ['optgroup' => Craft::t('sprout-seo', 'Custom Types')];
 
-            $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
+            $schemaOptions = array_merge($schemaOptions, array_map(static function($schema) {
                 /**
                  * @var BaseSchema $schema
                  */
@@ -202,7 +202,7 @@ class Schema extends Component
      *
      * @return array[][]
      */
-    public function getSchemaSubtypes($schemas)
+    public function getSchemaSubtypes($schemas): array
     {
         $values = null;
 

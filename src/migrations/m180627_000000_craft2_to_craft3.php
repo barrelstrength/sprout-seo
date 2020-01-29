@@ -19,7 +19,11 @@ use craft\services\Plugins;
 class m180627_000000_craft2_to_craft3 extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\NotSupportedException
+     * @throws \yii\web\ServerErrorHttpException
      */
     public function safeUp()
     {

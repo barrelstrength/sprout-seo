@@ -138,10 +138,8 @@ class OptimizeHelper
     public static function prepareAssetUrls(Metadata $model)
     {
         // If a code override for ogImageSecure is provided, make sure it's an absolute URL
-        if (!empty($model->ogImageSecure)) {
-            if (0 !== mb_strpos($model->ogImageSecure, 'https')) {
-                throw new Exception('Open Graph Secure Image override value "'.$model->ogImageSecure.'" must be a secure, absolute url.');
-            }
+        if (!empty($model->ogImageSecure) && 0 !== mb_strpos($model->ogImageSecure, 'https')) {
+            throw new Exception('Open Graph Secure Image override value "'.$model->ogImageSecure.'" must be a secure, absolute url.');
         }
 
         // If the siteUrl is https or the current request is https, use it.
@@ -153,7 +151,7 @@ class OptimizeHelper
         // Modify our Assets to reference their URLs
         if (!empty($model->ogImage)) {
             if ($model->ogTransform) {
-                $ogTransform = OptimizeHelper::getSelectedTransform($model->ogTransform);
+                $ogTransform = self::getSelectedTransform($model->ogTransform);
             }
 
             // If ogImage starts with "http", roll with it
@@ -203,7 +201,7 @@ class OptimizeHelper
 
         if (!empty($model->twitterImage)) {
             if ($model->twitterTransform) {
-                $twitterTransform = OptimizeHelper::getSelectedTransform($model->twitterTransform);
+                $twitterTransform = self::getSelectedTransform($model->twitterTransform);
             }
 
             // If twitterImage starts with "http", roll with it
@@ -241,38 +239,36 @@ class OptimizeHelper
             }
         }
 
-        if (!empty($model->optimizedImage)) {
-            // If twitterImage starts with "http", roll with it
-            // If not, then process what we have to try to extract the URL
-            if (0 !== mb_strpos($model->optimizedImage, 'http')) {
-                if (!is_numeric($model->optimizedImage)) {
-                    throw new Exception('Meta Image override value "'.$model->optimizedImage.'" must be an	absolute url.');
-                }
+        // If twitterImage starts with "http", roll with it
+        // If not, then process what we have to try to extract the URL
+        if (!empty($model->optimizedImage) && 0 !== mb_strpos($model->optimizedImage, 'http')) {
+            if (!is_numeric($model->optimizedImage)) {
+                throw new Exception('Meta Image override value "'.$model->optimizedImage.'" must be an	absolute url.');
+            }
 
-                /**
-                 * @var Asset $optimizedImage
-                 */
-                $optimizedImage = Craft::$app->elements->getElementById($model->optimizedImage);
+            /**
+             * @var Asset $optimizedImage
+             */
+            $optimizedImage = Craft::$app->elements->getElementById($model->optimizedImage);
 
-                if ($optimizedImage !== null && $optimizedImage->getUrl()) {
-                    $imageUrl = (string)$optimizedImage->getUrl();
-                    // check to se	e if Asset already has full Site Url in folder Url
-                    if (UrlHelper::isAbsoluteUrl($imageUrl)) {
-                        $model->optimizedImage = $optimizedImage->url;
-                    } elseif (UrlHelper::isProtocolRelativeUrl($imageUrl)) {
-                        $model->optimizedImage = $scheme.':'.$imageUrl;
-                    } else {
-                        $model->optimizedImage = UrlHelper::siteUrl($optimizedImage->url);
-                    }
-
-                    if (Craft::$app->request->getIsSecureConnection()) {
-                        $secureUrl = preg_replace('/^http:/i', 'https:', $model->optimizedImage);
-                        $model->optimizedImage = $secureUrl;
-                    }
+            if ($optimizedImage !== null && $optimizedImage->getUrl()) {
+                $imageUrl = (string)$optimizedImage->getUrl();
+                // check to se	e if Asset already has full Site Url in folder Url
+                if (UrlHelper::isAbsoluteUrl($imageUrl)) {
+                    $model->optimizedImage = $optimizedImage->url;
+                } elseif (UrlHelper::isProtocolRelativeUrl($imageUrl)) {
+                    $model->optimizedImage = $scheme.':'.$imageUrl;
                 } else {
-                    // If our selected asset was deleted, make sure it is null
-                    $model->optimizedImage = null;
+                    $model->optimizedImage = UrlHelper::siteUrl($optimizedImage->url);
                 }
+
+                if (Craft::$app->request->getIsSecureConnection()) {
+                    $secureUrl = preg_replace('/^http:/i', 'https:', $model->optimizedImage);
+                    $model->optimizedImage = $secureUrl;
+                }
+            } else {
+                // If our selected asset was deleted, make sure it is null
+                $model->optimizedImage = null;
             }
         }
     }
@@ -316,7 +312,7 @@ class OptimizeHelper
             $asset = Craft::$app->elements->getElementById($id);
 
             if ($asset !== null) {
-                $transform = OptimizeHelper::getSelectedTransform($transform);
+                $transform = self::getSelectedTransform($transform);
 
                 $imageUrl = Craft::$app->getAssets()->getAssetUrl($asset, $transform);
 
@@ -369,11 +365,7 @@ class OptimizeHelper
             ]
         ];
 
-        if (isset($defaultTransforms[$transformHandle])) {
-            return $defaultTransforms[$transformHandle];
-        }
-
-        return $transformHandle == '' ? null : $transformHandle;
+        return $defaultTransforms[$transformHandle] ?? ($transformHandle == '' ? null : $transformHandle);
     }
 
     /**
@@ -584,22 +576,22 @@ class OptimizeHelper
 
         // Set any values that don't yet exist to the optimized values
         // -------------------------------------------------------------
-        $model->title = $model->title !== null ? $model->title : $optimizedTitle;
-        $model->ogTitle = $model->ogTitle !== null ? $model->ogTitle : $optimizedTitle;
-        $model->twitterTitle = $model->twitterTitle !== null ? $model->twitterTitle : $optimizedTitle;
+        $model->title = $model->title ?? $optimizedTitle;
+        $model->ogTitle = $model->ogTitle ?? $optimizedTitle;
+        $model->twitterTitle = $model->twitterTitle ?? $optimizedTitle;
 
-        $model->description = $model->description !== null ? $model->description : $optimizedDescription;
-        $model->ogDescription = $model->ogDescription !== null ? $model->ogDescription : $optimizedDescription;
-        $model->twitterDescription = $model->twitterDescription !== null ? $model->twitterDescription : $optimizedDescription;
+        $model->description = $model->description ?? $optimizedDescription;
+        $model->ogDescription = $model->ogDescription ?? $optimizedDescription;
+        $model->twitterDescription = $model->twitterDescription ?? $optimizedDescription;
 
-        $model->ogImage = $model->ogImage !== null ? $model->ogImage : $optimizedImage;
-        $model->twitterImage = $model->twitterImage !== null ? $model->twitterImage : $optimizedImage;
+        $model->ogImage = $model->ogImage ?? $optimizedImage;
+        $model->twitterImage = $model->twitterImage ?? $optimizedImage;
 
         $defaultOgType = $globalSettings['defaultOgType'] ?? null;
         $defaultTwitterCard = $globalSettings['defaultTwitterCard'] ?? null;
 
-        $model->ogType = $model->ogType !== null ? $model->ogType : $defaultOgType;
-        $model->twitterCard = $model->twitterCard !== null ? $model->twitterCard : $defaultTwitterCard;
+        $model->ogType = $model->ogType ?? $defaultOgType;
+        $model->twitterCard = $model->twitterCard ?? $defaultTwitterCard;
 
         return $model;
     }

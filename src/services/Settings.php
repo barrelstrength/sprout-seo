@@ -15,7 +15,8 @@ use yii\base\Component;
 
 /**
  *
- * @property int $descriptionLength
+ * @property string|int $metadataFieldCount
+ * @property int        $descriptionLength
  */
 class Settings extends Component
 {
@@ -26,7 +27,7 @@ class Settings extends Component
          */
         $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
         $descriptionLength = $pluginSettings->maxMetaDescriptionLength;
-        $descriptionLength = $descriptionLength ? $descriptionLength : 160;
+        $descriptionLength = $descriptionLength ?: 160;
 
         return $descriptionLength;
     }

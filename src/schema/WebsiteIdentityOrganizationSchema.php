@@ -91,11 +91,9 @@ class WebsiteIdentityOrganizationSchema extends Schema
             $this->addText('priceRange', $schema['priceRange']);
         }
 
-        if (is_array($socialProfiles)) {
-            if (count($socialProfiles)) {
-                $urls = array_column($socialProfiles, 'url');
-                $this->addSameAs($urls);
-            }
+        if (is_array($socialProfiles) && count($socialProfiles)) {
+            $urls = array_column($socialProfiles, 'url');
+            $this->addSameAs($urls);
         }
     }
 

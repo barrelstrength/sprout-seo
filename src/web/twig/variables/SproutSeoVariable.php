@@ -424,11 +424,7 @@ class SproutSeoVariable
 
         $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
 
-        $priceRange = null;
-
-        if (isset($schemaGlobals[$schemaType]['priceRange'])) {
-            $priceRange = $schemaGlobals[$schemaType]['priceRange'];
-        }
+        $priceRange = $schemaGlobals[$schemaType]['priceRange'] ?? null;
 
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
 

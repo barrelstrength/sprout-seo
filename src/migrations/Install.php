@@ -24,9 +24,6 @@ class Install extends Migration
     /**
      * @return bool
      * @throws \Throwable
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \craft\errors\StructureNotFoundException
-     * @throws \yii\db\Exception
      */
     public function safeUp()
     {
@@ -37,6 +34,10 @@ class Install extends Migration
         return true;
     }
 
+    /**
+     * @throws \Throwable
+     * @throws \craft\errors\SiteNotFoundException
+     */
     protected function createTables()
     {
         $migration = new SproutBaseInstall();

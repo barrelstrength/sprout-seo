@@ -16,11 +16,15 @@ use craft\db\Query;
 
 /**
  * m190415_000000_adds_sprout_redirects_migration migration.
+ *
+ * @property \barrelstrength\sproutbaseredirects\models\Settings $sproutRedirectsSettingsModel
  */
 class m190415_000000_adds_sprout_redirects_migration extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \Throwable
+     * @throws \yii\db\Exception
      */
     public function safeUp(): bool
     {
@@ -65,7 +69,6 @@ class m190415_000000_adds_sprout_redirects_migration extends Migration
 
     /**
      * @return SproutRedirectsSettings
-     * @throws \craft\errors\StructureNotFoundException
      */
     private function getSproutRedirectsSettingsModel(): SproutRedirectsSettings
     {

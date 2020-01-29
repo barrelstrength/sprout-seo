@@ -181,7 +181,6 @@ class Globals extends Model
         $contactPoints = [];
 
         if (is_array($contacts)) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($contacts as $contact) {
                 $contactPoints[] = [
                     '@type' => 'ContactPoint',
@@ -205,7 +204,6 @@ class Globals extends Model
         $profileLinks = [];
 
         if (is_array($profiles)) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($profiles as $profile) {
                 $profileLinks[] = [
                     'profileName' => $profile['profileName'] ?? $profile[0],

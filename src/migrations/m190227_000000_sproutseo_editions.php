@@ -39,6 +39,8 @@ class m190227_000000_sproutseo_editions extends Migration
 
     protected function updateOldSitemaps()
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $types = [
             0 => [
                 'oldType' => 'barrelstrength\sproutseo\sectiontypes\Entry',
@@ -67,6 +69,7 @@ class m190227_000000_sproutseo_editions extends Migration
 
     protected function updateOldRedirectElements()
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $types = [
             0 => [
                 'oldType' => 'barrelstrength\sproutseo\elements\Redirect',

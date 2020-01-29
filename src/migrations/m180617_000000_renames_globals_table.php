@@ -17,7 +17,6 @@ class m180617_000000_renames_globals_table extends Migration
     /**
      * @inheritdoc
      *
-     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

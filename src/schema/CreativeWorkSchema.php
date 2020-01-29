@@ -57,6 +57,9 @@ class CreativeWorkSchema extends ThingSchema
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function addEntryElementProperties()
     {
         $identity = $this->globals['identity'];

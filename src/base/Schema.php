@@ -297,6 +297,8 @@ abstract class Schema
      *
      * @param string           $propertyName
      * @param string|\DateTime $date
+     *
+     * @throws \Exception
      */
     public function addDate($propertyName, $date)
     {
@@ -593,7 +595,7 @@ abstract class Schema
     {
         $string = mb_convert_encoding($string, 'UTF-32', 'UTF-8');
         $t = unpack('N*', $string);
-        $t = array_map(function($n) {
+        $t = array_map(static static function($n) {
             return "&#$n;";
         }, $t);
 

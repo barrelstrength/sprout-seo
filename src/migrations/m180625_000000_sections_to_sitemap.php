@@ -19,7 +19,8 @@ use craft\db\Query;
 class m180625_000000_sections_to_sitemap extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

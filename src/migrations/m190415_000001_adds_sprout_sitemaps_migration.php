@@ -15,11 +15,16 @@ use craft\db\Migration;
 
 /**
  * m190415_000001_adds_sprout_sitemaps_migration migration.
+ *
+ * @property \barrelstrength\sproutbasesitemaps\models\Settings $sproutSitemapSettingsModel
  */
 class m190415_000001_adds_sprout_sitemaps_migration extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \Throwable
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\db\Exception
      */
     public function safeUp(): bool
     {
@@ -52,7 +57,6 @@ class m190415_000001_adds_sprout_sitemaps_migration extends Migration
 
     /**
      * @return SproutSitemapSettings
-     * @throws \craft\errors\SiteNotFoundException
      */
     private function getSproutSitemapSettingsModel(): SproutSitemapSettings
     {

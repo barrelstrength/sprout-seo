@@ -22,16 +22,18 @@ use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
-use craft\errors\SiteNotFoundException;
 use craft\models\Site;
 use DateTime;
 use Throwable;
-use Twig_Error_Loader;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
-use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * @property string             $uri
+ * @property \craft\models\Site $matchedSite
+ */
 class Optimize extends Component
 {
     /**
@@ -83,10 +85,13 @@ class Optimize extends Component
      * @param $context
      *
      * @return array|null|string
-     * @throws Twig_Error_Loader
-     * @throws SiteNotFoundException
-     * @throws Exception
-     * @throws ServerErrorHttpException
+     * @throws \Throwable
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function getMetadataViaContext(&$context)
     {
@@ -150,18 +155,21 @@ class Optimize extends Component
     }
 
     /**
-     * @param      $element
-     * @param      $site
-     * @param bool $render
-     * @param bool $context
+     * @param \craft\base\Element $element
+     * @param                     $site
+     * @param bool                $render
+     * @param bool                $context
      *
      * @return array|null|string
-     * @throws Twig_Error_Loader
-     * @throws SiteNotFoundException
-     * @throws Exception
-     * @throws ServerErrorHttpException
+     * @throws \Throwable
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
-    public function getMetadata(Element $element = null, $site, $render = true, &$context = null)
+    public function getMetadata(Element $element, $site, $render = true, &$context = null)
     {
         /**
          * @var Settings $settings
@@ -298,10 +306,8 @@ class Optimize extends Component
                     if ($element->postDate !== null && $element->postDate) {
                         $prioritizedMetadataModel->ogDateCreated = $element->postDate->format(DateTime::ISO8601);
                     }
-                } else {
-                    if ($element->dateCreated !== null && $element->dateCreated) {
-                        $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
-                    }
+                } else if ($element->dateCreated !== null && $element->dateCreated) {
+                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
                 }
 
                 if ($element->dateUpdated !== null && $element->dateUpdated) {
@@ -439,8 +445,10 @@ class Optimize extends Component
      * @param $metadata
      *
      * @return string
-     * @throws Twig_Error_Loader
-     * @throws Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\Exception
      */
     public function renderMetadata($metadata)
     {
