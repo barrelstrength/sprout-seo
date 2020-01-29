@@ -24,7 +24,7 @@ class m180620_000001_element_metadata_field extends Migration
      * @throws \craft\errors\ElementNotFoundException
      * @throws \yii\base\Exception
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $fields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -87,7 +87,7 @@ class m180620_000001_element_metadata_field extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180620_000001_element_metadata_field cannot be reverted.\n";
 

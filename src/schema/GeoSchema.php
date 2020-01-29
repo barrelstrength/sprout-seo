@@ -18,7 +18,7 @@ class GeoSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Geo';
     }
@@ -26,7 +26,7 @@ class GeoSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'GeoCoordinates';
     }
@@ -34,7 +34,7 @@ class GeoSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }

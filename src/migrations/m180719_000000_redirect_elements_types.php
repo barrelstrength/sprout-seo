@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
+
 /**
  * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
@@ -7,7 +8,8 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutseo\elements\Redirect;
+use /** @noinspection PhpUndefinedNamespaceInspection */
+    barrelstrength\sproutseo\elements\Redirect;
 use craft\db\Migration;
 
 /**
@@ -18,7 +20,7 @@ class m180719_000000_redirect_elements_types extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $types = [
             0 => [
@@ -39,7 +41,7 @@ class m180719_000000_redirect_elements_types extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180719_000000_redirect_elements_types cannot be reverted.\n";
 

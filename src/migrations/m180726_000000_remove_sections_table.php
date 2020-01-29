@@ -17,7 +17,7 @@ class m180726_000000_remove_sections_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $table = "{{%sproutseo_metadata_sections}}";
 
@@ -29,7 +29,7 @@ class m180726_000000_remove_sections_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180726_000000_remove_sections_table cannot be reverted.\n";
 

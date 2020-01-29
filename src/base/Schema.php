@@ -92,7 +92,7 @@ abstract class Schema
      *
      * @return string
      */
-    final public function getContext()
+    final public function getContext(): string
     {
         return 'http://schema.org/';
     }
@@ -102,14 +102,14 @@ abstract class Schema
      *
      * @return string
      */
-    abstract public function getName();
+    abstract public function getName(): string;
 
     /**
      * Schema.org data type: http://schema.org/docs/full.html
      *
      * @return string
      */
-    abstract public function getType();
+    abstract public function getType(): string;
 
     /**
      * Determine if the Schema should be listed in the Main Entity dropdown.
@@ -117,9 +117,8 @@ abstract class Schema
      * @return bool
      * @example Some schema, such as a PostalAddress may not ever be used as the Main Entity
      *          of the page, but are still be helpful to define to be used within other schema.
-     *
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return false;
     }
@@ -199,7 +198,7 @@ abstract class Schema
      *
      * @return string
      */
-    public function getSchemaOverrideType()
+    public function getSchemaOverrideType(): string
     {
         if (isset($this->prioritizedMetadataModel) &&
             $this->prioritizedMetadataModel->schemaOverrideTypeId !== null &&
@@ -591,11 +590,11 @@ abstract class Schema
      *
      * @return string Returns a string converted to html entities
      */
-    public function encodeHtmlEntities($string)
+    public function encodeHtmlEntities($string): string
     {
         $string = mb_convert_encoding($string, 'UTF-32', 'UTF-8');
         $t = unpack('N*', $string);
-        $t = array_map(static static function($n) {
+        $t = array_map(static function($n) {
             return "&#$n;";
         }, $t);
 

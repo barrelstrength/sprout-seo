@@ -18,7 +18,7 @@ class m180617_000000_renames_globals_table extends Migration
      * @inheritdoc
      *
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $oldTable = '{{%sproutseo_metadata_globals}}';
         $newTable = '{{%sproutseo_globals}}';
@@ -33,7 +33,7 @@ class m180617_000000_renames_globals_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180617_000000_renames_globals_table cannot be reverted.\n";
 

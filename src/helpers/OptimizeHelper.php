@@ -26,7 +26,7 @@ class OptimizeHelper
      * @throws Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public static function prepareCanonical($metadataModel)
+    public static function prepareCanonical($metadataModel): string
     {
         $canonical = UrlHelper::siteUrl(Craft::$app->request->getPathInfo());
 
@@ -44,7 +44,7 @@ class OptimizeHelper
      *
      * @return string
      */
-    public static function prepareGeoPosition($model)
+    public static function prepareGeoPosition($model): string
     {
         if ($model->latitude && $model->longitude) {
             return $model->latitude.';'.$model->longitude;
@@ -95,7 +95,7 @@ class OptimizeHelper
      *
      * @return array
      */
-    public static function prepareRobotsMetadataForSettings($robotsValues)
+    public static function prepareRobotsMetadataForSettings($robotsValues): array
     {
         if (is_string($robotsValues)) {
             $robotsArray = explode(',', $robotsValues);
@@ -473,7 +473,7 @@ class OptimizeHelper
     public static function prepareAppendedTitleValue(
         $prioritizedMetadataModel,
         $globals
-    ) {
+    ): string {
         $settings = $globals->settings;
 
         $globalAppendTitleValue = null;
@@ -603,7 +603,7 @@ class OptimizeHelper
      *
      * @return array
      */
-    public static function getDefaultFieldTypeSettings()
+    public static function getDefaultFieldTypeSettings(): array
     {
         return [
             'optimizedTitleField' => 'manually',

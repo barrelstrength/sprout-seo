@@ -16,7 +16,7 @@ class CreativeWorkSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Creative Work';
     }
@@ -24,7 +24,7 @@ class CreativeWorkSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'CreativeWork';
     }
@@ -32,7 +32,7 @@ class CreativeWorkSchema extends ThingSchema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return false;
     }

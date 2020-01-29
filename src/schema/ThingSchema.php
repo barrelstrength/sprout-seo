@@ -14,7 +14,7 @@ class ThingSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Thing';
     }
@@ -22,7 +22,7 @@ class ThingSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'Thing';
     }
@@ -30,7 +30,7 @@ class ThingSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }

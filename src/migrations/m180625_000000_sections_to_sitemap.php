@@ -22,7 +22,7 @@ class m180625_000000_sections_to_sitemap extends Migration
      * @return bool
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $table = '{{%sproutseo_sitemaps}}';
 
@@ -101,7 +101,7 @@ class m180625_000000_sections_to_sitemap extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180625_000000_sections_to_sitemap cannot be reverted.\n";
 

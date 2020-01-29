@@ -8,21 +8,21 @@
 namespace barrelstrength\sproutseo\web\twig;
 
 use barrelstrength\sproutseo\web\twig\tokenparsers\SproutSeoTokenParser;
-use Twig_Extension;
+use Twig\Extension\AbstractExtension;
 
-class Extension extends Twig_Extension
+class Extension extends AbstractExtension
 {
     /**
      * Returns the name of the extension.
      *
      * @return string The extension name
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Sprout SEO Optimize';
     }
 
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [
             new SproutSeoTokenParser()

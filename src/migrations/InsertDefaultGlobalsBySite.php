@@ -51,7 +51,7 @@ class InsertDefaultGlobalsBySite extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         return false;
     }

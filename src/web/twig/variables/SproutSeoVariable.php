@@ -60,7 +60,7 @@ class SproutSeoVariable
      * @return string
      * @throws Exception
      */
-    public function getDivider()
+    public function getDivider(): string
     {
         $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
         $divider = '';
@@ -84,7 +84,7 @@ class SproutSeoVariable
      * @return Globals
      * @throws Exception
      */
-    public function getGlobalMetadata()
+    public function getGlobalMetadata(): Globals
     {
         return SproutSeo::$app->globalMetadata->getGlobalMetadata();
     }
@@ -112,7 +112,7 @@ class SproutSeoVariable
     /**
      * @return array
      */
-    public function getOrganizationOptions()
+    public function getOrganizationOptions(): array
     {
         $jsonLdFile = Craft::getAlias('@sproutseolib/jsonld/tree.jsonld');
         $tree = file_get_contents($jsonLdFile);
@@ -178,7 +178,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getGlobalOptions($schemaType)
+    public function getGlobalOptions($schemaType): array
     {
         $options = [];
 
@@ -346,7 +346,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getFinalOptions($schemaType, $handle, $schemaGlobals)
+    public function getFinalOptions($schemaType, $handle, $schemaGlobals): array
     {
         $options = $this->getGlobalOptions($schemaType);
 
@@ -375,7 +375,7 @@ class SproutSeoVariable
      *
      * @return bool
      */
-    public function isCustomValue($schemaType, $value)
+    public function isCustomValue($schemaType, $value): bool
     {
         $options = $this->getGlobalOptions($schemaType);
 
@@ -395,7 +395,7 @@ class SproutSeoVariable
      * @throws SiteNotFoundException
      * @throws Exception
      */
-    public function getPriceRangeOptions(Site $site)
+    public function getPriceRangeOptions(Site $site): array
     {
         $schemaType = 'identity';
 
@@ -444,7 +444,7 @@ class SproutSeoVariable
      * @throws SiteNotFoundException
      * @throws Exception
      */
-    public function getGenderOptions(Site $site)
+    public function getGenderOptions(Site $site): array
     {
         $schemaType = 'identity';
         $options = [
@@ -485,7 +485,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getOptimizedOptions($type = PlainText::class, $handle = null, $settings = null)
+    public function getOptimizedOptions($type = PlainText::class, $handle = null, $settings = null): array
     {
         $options = [];
         $fields = Craft::$app->fields->getAllFields();
@@ -546,7 +546,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getKeywordsOptions($type = PlainText::class)
+    public function getKeywordsOptions($type = PlainText::class): array
     {
         $options = [];
         $fields = Craft::$app->fields->getAllFields();
@@ -589,7 +589,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getOptimizedTitleOptions($settings)
+    public function getOptimizedTitleOptions($settings): array
     {
         return $this->getOptimizedOptions(PlainText::class, 'optimizedTitleField', $settings);
     }
@@ -601,7 +601,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getOptimizedDescriptionOptions($settings)
+    public function getOptimizedDescriptionOptions($settings): array
     {
         return $this->getOptimizedOptions(PlainText::class, 'optimizedDescriptionField', $settings);
     }
@@ -613,7 +613,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getOptimizedAssetsOptions($settings)
+    public function getOptimizedAssetsOptions($settings): array
     {
         return $this->getOptimizedOptions(Assets::class, 'optimizedImageField', $settings);
     }
@@ -627,7 +627,7 @@ class SproutSeoVariable
      * @throws SiteNotFoundException
      * @throws Exception
      */
-    public function getGlobalRobots($siteId)
+    public function getGlobalRobots($siteId): array
     {
         $currentSite = Craft::$app->sites->getSiteById($siteId);
 
@@ -642,7 +642,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getSchemas()
+    public function getSchemas(): array
     {
         return SproutSeo::$app->schema->getSchemas();
     }
@@ -653,7 +653,7 @@ class SproutSeoVariable
      * @return array
      * @throws Exception
      */
-    public function getContacts()
+    public function getContacts(): array
     {
         $contacts = SproutSeo::$app->globalMetadata->getGlobalMetadata()->contacts;
 
@@ -673,7 +673,7 @@ class SproutSeoVariable
      * @return array
      * @throws Exception
      */
-    public function getSocialProfiles()
+    public function getSocialProfiles(): array
     {
         $socials = SproutSeo::$app->globalMetadata->getGlobalMetadata()->social;
 
@@ -692,7 +692,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getTransforms()
+    public function getTransforms(): array
     {
         return SproutSeo::$app->globalMetadata->getTransforms();
     }
@@ -703,7 +703,7 @@ class SproutSeoVariable
      *
      * @return bool
      */
-    public function hasActiveMetadata($type, $metadataModel)
+    public function hasActiveMetadata($type, $metadataModel): bool
     {
         switch ($type) {
             case 'search':
@@ -745,7 +745,7 @@ class SproutSeoVariable
     /**
      * @return int
      */
-    public function getDescriptionLength()
+    public function getDescriptionLength(): int
     {
         return SproutSeo::$app->settings->getDescriptionLength();
     }
@@ -763,7 +763,7 @@ class SproutSeoVariable
     /**
      * @return bool
      */
-    public function getIsPro()
+    public function getIsPro(): bool
     {
         $plugin = SproutSeo::getInstance();
 
@@ -779,7 +779,7 @@ class SproutSeoVariable
      *
      * @return bool
      */
-    public function uriHasTags($uri = null)
+    public function uriHasTags($uri = null): bool
     {
         if (strstr($uri, '{{')) {
             return true;

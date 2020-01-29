@@ -379,7 +379,7 @@ class Metadata extends Model
      * @return array
      * @throws \yii\base\Exception
      */
-    public function getMetaTagData()
+    public function getMetaTagData(): array
     {
         $metaTagData = [];
 
@@ -407,7 +407,7 @@ class Metadata extends Model
      *
      * @return bool
      */
-    public function beforeValidate()
+    public function beforeValidate(): bool
     {
         $this->uri = SproutSeo::$app->xmlSitemap->removeSlash($this->uri);
 
@@ -417,7 +417,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getSearchMetaTagData()
+    protected function getSearchMetaTagData(): array
     {
         $tagData = [];
 
@@ -434,7 +434,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getRobotsMetaTagData()
+    protected function getRobotsMetaTagData(): array
     {
         $tagData = [];
 
@@ -456,7 +456,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getGeographicMetaTagData()
+    protected function getGeographicMetaTagData(): array
     {
         $tagData = [];
 
@@ -482,7 +482,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getOpenGraphMetaTagData()
+    protected function getOpenGraphMetaTagData(): array
     {
         $tagData = [];
 
@@ -499,7 +499,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getTwitterCardMetaTagData()
+    protected function getTwitterCardMetaTagData(): array
     {
         $tagData = [];
 

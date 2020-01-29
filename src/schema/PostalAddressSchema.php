@@ -24,7 +24,7 @@ class PostalAddressSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Postal Address';
     }
@@ -32,7 +32,7 @@ class PostalAddressSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'PostalAddress';
     }
@@ -40,7 +40,7 @@ class PostalAddressSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }

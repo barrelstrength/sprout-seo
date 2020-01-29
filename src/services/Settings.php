@@ -20,7 +20,7 @@ use yii\base\Component;
  */
 class Settings extends Component
 {
-    public function getDescriptionLength()
+    public function getDescriptionLength(): int
     {
         /**
          * @var PluginSettings $pluginSettings

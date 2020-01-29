@@ -12,7 +12,7 @@ class IntangibleSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Intangible';
     }
@@ -20,7 +20,7 @@ class IntangibleSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'Intangible';
     }
@@ -28,7 +28,7 @@ class IntangibleSchema extends ThingSchema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return false;
     }

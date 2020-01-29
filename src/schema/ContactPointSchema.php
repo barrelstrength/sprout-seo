@@ -16,7 +16,7 @@ class ContactPointSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Contact Point';
     }
@@ -24,7 +24,7 @@ class ContactPointSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'ContactPoint';
     }
@@ -32,7 +32,7 @@ class ContactPointSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }

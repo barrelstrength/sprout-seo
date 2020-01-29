@@ -25,7 +25,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
      * @throws \yii\base\NotSupportedException
      * @throws \yii\web\ServerErrorHttpException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $plugin = SproutSeo::getInstance();
 
@@ -86,7 +86,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180627_000000_craft2_to_craft3 cannot be reverted.\n";
 

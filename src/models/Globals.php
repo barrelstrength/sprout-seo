@@ -85,7 +85,7 @@ class Globals extends Model
     /**
      * @var Address|null
      */
-    public $addressModel = null;
+    public $addressModel;
 
     public function init()
     {
@@ -155,7 +155,7 @@ class Globals extends Model
     /**
      * @return array
      */
-    protected function getMeta()
+    protected function getMeta(): array
     {
         return $this->meta;
     }
@@ -165,7 +165,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getIdentity()
+    protected function getIdentity(): array
     {
         return $this->{$this->globalKey};
     }
@@ -175,7 +175,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getContacts()
+    protected function getContacts(): array
     {
         $contacts = $this->{$this->globalKey};
         $contactPoints = [];
@@ -198,7 +198,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getSocial()
+    protected function getSocial(): array
     {
         $profiles = $this->{$this->globalKey};
         $profileLinks = [];
@@ -220,7 +220,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getOwnership()
+    protected function getOwnership(): array
     {
         return $this->{$this->globalKey};
     }
@@ -230,7 +230,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getRobots()
+    protected function getRobots(): array
     {
         return $this->{$this->globalKey};
     }
@@ -240,7 +240,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getSettings()
+    protected function getSettings(): array
     {
         return $this->{$this->globalKey};
     }

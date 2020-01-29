@@ -23,7 +23,7 @@ class m180702_000000_add_unique_key_column extends Migration
      * @throws \yii\base\Exception
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $table = '{{%sproutseo_sitemaps}}';
 
@@ -47,7 +47,7 @@ class m180702_000000_add_unique_key_column extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180702_000000_add_unique_key_column cannot be reverted.\n";
 

@@ -284,7 +284,7 @@ class ElementMetadata extends Component
      * @return bool
      * @throws \craft\errors\SiteNotFoundException
      */
-    protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false, FieldLayout $fieldLayout = null)
+    protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false, FieldLayout $fieldLayout = null): bool
     {
         $urlEnabledSectionType = SproutBaseUris::$app->urlEnabledSections->getUrlEnabledSectionTypeByElementType($elementType);
 

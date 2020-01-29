@@ -20,7 +20,7 @@ class WebsiteIdentityOrganizationSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Organization';
     }
@@ -28,7 +28,7 @@ class WebsiteIdentityOrganizationSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -36,7 +36,7 @@ class WebsiteIdentityOrganizationSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }

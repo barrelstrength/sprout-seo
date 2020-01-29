@@ -25,7 +25,7 @@ class Install extends Migration
      * @return bool
      * @throws \Throwable
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $this->createTables();
         $this->insertDefaultGlobalMetadata();

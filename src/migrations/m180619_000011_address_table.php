@@ -21,7 +21,7 @@ class m180619_000011_address_table extends Migration
      *
      * @throws \Throwable
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $plugin = (new Query())
             ->select(['*'])
@@ -93,7 +93,7 @@ class m180619_000011_address_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180619_000011_address_table cannot be reverted.\n";
 

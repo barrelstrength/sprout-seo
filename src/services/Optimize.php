@@ -111,7 +111,7 @@ class Optimize extends Component
     /**
      * @return string
      */
-    public function getUri()
+    public function getUri(): string
     {
         $request = Craft::$app->getRequest();
         $uri = '/';
@@ -346,7 +346,7 @@ class Optimize extends Component
         return $prioritizedMetadataModel;
     }
 
-    public function getStructuredData($element = null)
+    public function getStructuredData($element = null): array
     {
         $schema = [];
         $websiteIdentity = [
@@ -450,7 +450,7 @@ class Optimize extends Component
      * @throws \Twig\Error\SyntaxError
      * @throws \yii\base\Exception
      */
-    public function renderMetadata($metadata)
+    public function renderMetadata($metadata): string
     {
         $sproutSeoTemplatesPath = Craft::getAlias('@sproutseo/');
 

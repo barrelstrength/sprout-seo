@@ -199,7 +199,7 @@ class GlobalMetadataController extends Controller
      * @throws Throwable
      * @throws \yii\db\Exception
      */
-    public function actionSaveVerifyOwnership()
+    public function actionSaveVerifyOwnership(): Response
     {
         $this->requirePostRequest();
 
@@ -244,7 +244,7 @@ class GlobalMetadataController extends Controller
      * @return Metadata
      * @throws Exception
      */
-    public function populateGlobalMetadata($postData)
+    public function populateGlobalMetadata($postData): Metadata
     {
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
         $site = Craft::$app->getSites()->getSiteById($siteId);

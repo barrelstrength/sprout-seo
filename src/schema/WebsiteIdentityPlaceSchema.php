@@ -14,7 +14,7 @@ class WebsiteIdentityPlaceSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Place';
     }
@@ -22,7 +22,7 @@ class WebsiteIdentityPlaceSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'Place';
     }
@@ -30,7 +30,7 @@ class WebsiteIdentityPlaceSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }

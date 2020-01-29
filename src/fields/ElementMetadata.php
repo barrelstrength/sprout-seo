@@ -664,7 +664,7 @@ class ElementMetadata extends Field
      * @throws InvalidConfigException
      * @throws Throwable
      */
-    protected function getMetadataFieldValues($fields, $element)
+    protected function getMetadataFieldValues($fields, $element): array
     {
         $settings = $this->getAttributes();
 

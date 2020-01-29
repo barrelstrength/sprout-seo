@@ -115,7 +115,7 @@ class Schema extends Component
             $this->schemas[$schemaClass] = $schema;
         }
 
-        uasort($this->schemas, static static function($a, $b) {
+        uasort($this->schemas, static function($a, $b) {
             /**
              * @var $a BaseSchema
              * @var $b BaseSchema
@@ -298,7 +298,7 @@ class Schema extends Component
      *
      * @return array
      */
-    protected function updateArrayKeys(array $oldArray, $replaceKey)
+    protected function updateArrayKeys(array $oldArray, $replaceKey): array
     {
         $newArray = [];
 
@@ -322,7 +322,7 @@ class Schema extends Component
      *
      * @return array
      */
-    private function getSchemaChildren($type)
+    private function getSchemaChildren($type): array
     {
         $tree = SproutSeo::$app->schema->getVocabularies($type);
 

@@ -19,7 +19,7 @@ class MainEntityOfPageSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Main Entity Of Page';
     }
@@ -27,7 +27,7 @@ class MainEntityOfPageSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'WebPage';
     }
@@ -35,7 +35,7 @@ class MainEntityOfPageSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }
