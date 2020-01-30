@@ -44,7 +44,7 @@ class OptimizeHelper
      *
      * @return string|null
      */
-    public static function prepareGeoPosition($model): string
+    public static function prepareGeoPosition($model)
     {
         if ($model->latitude && $model->longitude) {
             return $model->latitude.';'.$model->longitude;
