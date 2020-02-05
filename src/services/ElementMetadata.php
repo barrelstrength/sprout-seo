@@ -25,16 +25,20 @@ class ElementMetadata extends Component
     /**
      * Returns the metadata for an Element's Element Metadata as a Metadata model
      *
-     * @param Element|null $element
+     * @param Element|\craft\base\ElementInterface|null $element
      *
      * @return Metadata|null
      */
     public function getElementMetadata(Element $element = null)
     {
+        if (!$element) {
+            return null;
+        }
+
         $fieldHandle = $this->getElementMetadataFieldHandle($element);
 
-        if ($element && isset($element->{$fieldHandle})) {
-            $metadata = $element->{$fieldHandle};
+        if ($element->getFieldValue($fieldHandle)) {
+            $metadata = $element->getFieldValue($fieldHandle);
 
             // Support Live Preview (where image IDs still need to be converted from arrays)
             if (isset($metadata['ogImage'])) {
