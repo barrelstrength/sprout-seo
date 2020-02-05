@@ -5,7 +5,7 @@
  * @license https://craftcms.github.io/license
  */
 
-namespace barrelstrength\sproutfields\migrations;
+namespace barrelstrength\sproutseo\migrations;
 
 use craft\db\Migration;
 
