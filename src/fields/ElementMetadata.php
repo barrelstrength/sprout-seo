@@ -21,6 +21,7 @@ use craft\base\Field;
 use craft\db\mysql\Schema;
 use craft\elements\Asset;
 use craft\fields\Assets;
+use craft\helpers\Json;
 use PhpScience\TextRank\TextRankFacade;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\StopWords\French;
@@ -109,7 +110,13 @@ class ElementMetadata extends Field
      */
     public function isValueEmpty($value, ElementInterface $element): bool
     {
-        return count($value) === 0;
+        if (!$value instanceof Metadata) {
+            return true;
+        }
+
+        $attributes = array_filter($value->getAttributes());
+
+        return count($attributes) === 0;
     }
 
     /**
@@ -120,29 +127,39 @@ class ElementMetadata extends Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        $metadata = [];
+        $metadata = null;
+        $metadataArray = null;
+
+        // On page load and the resave element task the $value comes from the content table as json
+        if (is_string($value)) {
+            $metadataArray = Json::decode($value);
+        }
 
         // when is resaving on all sites comes into array
         if (is_array($value)) {
-            $metadata = $value;
+            $metadataArray = $value;
         }
+
         // When is a post request the metadata values comes into the metadata key
         if (isset($value['metadata'])) {
-            $metadata = $value['metadata'];
-        }
-        // On the resave element task the $value comes from the content table as json
-        if (is_string($value)) {
-            $metadata = json_decode($value, true);
+            $metadataArray = $value['metadata'];
         }
 
-        if (isset($metadata['sproutSeoSettings'])) {
+        if (isset($metadataArray['sproutSeoSettings'])) {
             // removes json value from livepreview
-            unset($metadata['sproutSeoSettings']);
+            unset($metadataArray['sproutSeoSettings']);
         }
 
-        $this->values = $metadata;
+        if (isset($metadataArray)) {
+            $metadata = new Metadata();
+            $metadata->setAttributes($metadataArray, false);
 
-        return $this->values;
+            $this->values = $metadata;
+            return $metadata;
+        }
+
+        $this->values = $value;
+        return $value;
     }
 
     /**
@@ -166,7 +183,7 @@ class ElementMetadata extends Field
         if (is_array($value)) {
             $value = $this->getMetadataFieldValues($value, $element);
 
-            return json_encode($value);
+            return Json::encode($value);
         }
 
         // For the CP, return a Metadata
