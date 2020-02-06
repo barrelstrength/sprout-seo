@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.3.0 - 2020-02-05
+
+### Added
+- Added autofocus to Custom Pages URI input field
+- Added `sproutbaseredirects/elements/Redirect::pluralDisplayName()`
+
+### Changed
+- Updated Element Metadata field to use Tabs layout instead of Matrix-block style layout
+- Updated Redirect Element Index to support Craft 3.4
+- Updated models to use `defineRules()` method
+- Refactored asset management and in-template javascript into assets files
+- Updated `barrelstrength/sprout-base-fields` to v1.3.0
+- Updated `barrelstrength/sprout-base-redirects` to v1.3.0
+- Updated `barrelstrength/sprout-base-sitemaps` to v1.2.0
+
 ## 4.2.11 - 2020-01-18
 
 ### Changed
