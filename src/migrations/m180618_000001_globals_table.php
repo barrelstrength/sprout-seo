@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutseo\migrations;
 
@@ -16,7 +21,7 @@ class m180618_000001_globals_table extends Migration
      *
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $table = '{{%sproutseo_globals}}';
         $isNew = false;
@@ -61,9 +66,10 @@ class m180618_000001_globals_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180618_000001_globals_table cannot be reverted.\n";
+
         return false;
     }
 }

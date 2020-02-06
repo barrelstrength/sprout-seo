@@ -1,12 +1,17 @@
 <?php
+/**
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutseo\migrations;
 
+use barrelstrength\sproutbaseuris\sectiontypes\Category;
+use barrelstrength\sproutbaseuris\sectiontypes\Entry;
+use barrelstrength\sproutbaseuris\sectiontypes\Product;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutbaseuris\sectiontypes\Entry;
-use barrelstrength\sproutbaseuris\sectiontypes\Category;
-use barrelstrength\sproutbaseuris\sectiontypes\Product;
 
 /**
  * m180625_000000_sections_to_sitemap migration.
@@ -14,9 +19,10 @@ use barrelstrength\sproutbaseuris\sectiontypes\Product;
 class m180625_000000_sections_to_sitemap extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $table = '{{%sproutseo_sitemaps}}';
 
@@ -37,14 +43,14 @@ class m180625_000000_sections_to_sitemap extends Migration
                 'uid' => $this->uid(),
             ]);
 
-            $this->createIndex(null, $table, ['siteId'], false);
+            $this->createIndex(null, $table, ['siteId']);
             $this->addForeignKey(null, $table, ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
         }
 
         if (!$this->db->columnExists($table, 'uri')) {
             $this->addColumn($table, 'uri', $this->string()->after('type'));
         }
-        
+
         $primarySite = (new Query())
             ->select(['id'])
             ->from(['{{%sites}}'])
@@ -54,7 +60,7 @@ class m180625_000000_sections_to_sitemap extends Migration
         $primarySiteId = $primarySite['id'];
 
         $sections = [];
-        if ($this->db->tableExists('{{%sproutseo_metadata_sections}}')){
+        if ($this->db->tableExists('{{%sproutseo_metadata_sections}}')) {
             $sections = (new Query())
                 ->select(['*'])
                 ->from(['{{%sproutseo_metadata_sections}}'])
@@ -95,9 +101,10 @@ class m180625_000000_sections_to_sitemap extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180625_000000_sections_to_sitemap cannot be reverted.\n";
+
         return false;
     }
 }

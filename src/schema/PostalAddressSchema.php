@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
@@ -12,15 +12,19 @@ use barrelstrength\sproutseo\base\Schema;
 class PostalAddressSchema extends Schema
 {
     public $addressCountry;
+
     public $addressLocality;
+
     public $addressRegion;
+
     public $postalCode;
+
     public $streetAddress;
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Postal Address';
     }
@@ -28,7 +32,7 @@ class PostalAddressSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'PostalAddress';
     }
@@ -36,7 +40,7 @@ class PostalAddressSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }

@@ -1,23 +1,28 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\web\twig\variables;
 
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
+use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\base\Model;
 use craft\elements\Asset;
-
+use craft\errors\SiteNotFoundException;
+use craft\fields\Assets;
+use craft\fields\PlainText;
 use craft\models\Site;
 use DateTime;
-use craft\fields\PlainText;
-use craft\fields\Assets;
+use DateTimeZone;
+use yii\base\Exception;
 
 /**
  * Class SproutSeoVariable
@@ -53,9 +58,9 @@ class SproutSeoVariable
 
     /**
      * @return string
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
-    public function getDivider()
+    public function getDivider(): string
     {
         $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
         $divider = '';
@@ -68,18 +73,18 @@ class SproutSeoVariable
     }
 
     /**
-     * @return \craft\base\Model|null
+     * @return Model|null
      */
     public function getSettings()
     {
-        return Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        return $this->plugin->getSettings();
     }
 
     /**
-     * @return \barrelstrength\sproutseo\models\Globals
-     * @throws \yii\base\Exception
+     * @return Globals
+     * @throws Exception
      */
-    public function getGlobalMetadata()
+    public function getGlobalMetadata(): Globals
     {
         return SproutSeo::$app->globalMetadata->getGlobalMetadata();
     }
@@ -95,7 +100,7 @@ class SproutSeoVariable
     /**
      * @param $id
      *
-     * @return \craft\base\ElementInterface|null
+     * @return ElementInterface|null
      */
     public function getElementById($id)
     {
@@ -107,7 +112,7 @@ class SproutSeoVariable
     /**
      * @return array
      */
-    public function getOrganizationOptions()
+    public function getOrganizationOptions(): array
     {
         $jsonLdFile = Craft::getAlias('@sproutseolib/jsonld/tree.jsonld');
         $tree = file_get_contents($jsonLdFile);
@@ -147,7 +152,7 @@ class SproutSeoVariable
      */
     public function getDate($string): DateTime
     {
-        return new DateTime($string['date'], new \DateTimeZone(Craft::$app->getTimeZone()));
+        return new DateTime($string['date'], new DateTimeZone(Craft::$app->getTimeZone()));
     }
 
     /**
@@ -173,7 +178,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getGlobalOptions($schemaType)
+    public function getGlobalOptions($schemaType): array
     {
         $options = [];
 
@@ -341,7 +346,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getFinalOptions($schemaType, $handle, $schemaGlobals)
+    public function getFinalOptions($schemaType, $handle, $schemaGlobals): array
     {
         $options = $this->getGlobalOptions($schemaType);
 
@@ -370,7 +375,7 @@ class SproutSeoVariable
      *
      * @return bool
      */
-    public function isCustomValue($schemaType, $value)
+    public function isCustomValue($schemaType, $value): bool
     {
         $options = $this->getGlobalOptions($schemaType);
 
@@ -387,10 +392,10 @@ class SproutSeoVariable
      * @param Site $site
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
-    public function getPriceRangeOptions(Site $site)
+    public function getPriceRangeOptions(Site $site): array
     {
         $schemaType = 'identity';
 
@@ -419,11 +424,7 @@ class SproutSeoVariable
 
         $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
 
-        $priceRange = null;
-
-        if (isset($schemaGlobals[$schemaType]['priceRange'])) {
-            $priceRange = $schemaGlobals[$schemaType]['priceRange'];
-        }
+        $priceRange = $schemaGlobals[$schemaType]['priceRange'] ?? null;
 
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
 
@@ -440,10 +441,10 @@ class SproutSeoVariable
      * @param Site $site
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
-    public function getGenderOptions(Site $site)
+    public function getGenderOptions(Site $site): array
     {
         $schemaType = 'identity';
         $options = [
@@ -476,89 +477,6 @@ class SproutSeoVariable
     }
 
     /**
-     * @param null $site
-     *
-     * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     */
-    public function getAppendMetaTitleOptions($site = null)
-    {
-        $options = [
-            [
-                'label' => Craft::t('sprout-seo', 'None'),
-                'value' => ''
-            ],
-            [
-                'label' => Craft::t('sprout-seo', 'Site Name'),
-                'value' => 'sitename'
-            ]
-        ];
-
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-
-        if (isset($schemaGlobals['settings']['appendTitleValue'])) {
-            $appendTitleValue = $schemaGlobals['settings']['appendTitleValue'];
-
-            $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
-
-            if (!array_key_exists($appendTitleValue, ['sitename' => 0]) && $appendTitleValue != '') {
-                $options[] = ['label' => $appendTitleValue, 'value' => $appendTitleValue];
-            }
-        }
-
-        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
-
-        return $options;
-    }
-
-    /**
-     * @return array
-     * @throws \yii\base\Exception
-     */
-    public function getSeoDividerOptions(Site $site)
-    {
-        $options = [
-            [
-                'label' => '-',
-                'value' => '-'
-            ],
-            [
-                'label' => '•',
-                'value' => '•'
-            ],
-            [
-                'label' => '|',
-                'value' => '|'
-            ],
-            [
-                'label' => '/',
-                'value' => '/'
-            ],
-            [
-                'label' => ':',
-                'value' => ':'
-            ],
-        ];
-
-        $schemaGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-
-        if (isset($schemaGlobals['settings']['seoDivider'])) {
-            $seoDivider = $schemaGlobals['settings']['seoDivider'];
-
-            $options[] = ['optgroup' => Craft::t('sprout-seo', 'Custom')];
-
-            if (!array_key_exists($seoDivider, ['-' => 0, '•' => 1, '|' => 2, '/' => 3, ':' => 4]) && $seoDivider != '') {
-                $options[] = ['label' => $seoDivider, 'value' => $seoDivider];
-            }
-        }
-
-        $options[] = ['label' => Craft::t('sprout-seo', 'Add Custom'), 'value' => 'custom'];
-
-        return $options;
-    }
-
-    /**
      * Returns all plain fields available given a type
      *
      * @param string $type
@@ -567,7 +485,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getOptimizedOptions($type = PlainText::class, $handle = null, $settings = null)
+    public function getOptimizedOptions($type = PlainText::class, $handle = null, $settings = null): array
     {
         $options = [];
         $fields = Craft::$app->fields->getAllFields();
@@ -575,7 +493,7 @@ class SproutSeoVariable
         /**
          * @var Settings $pluginSettings
          */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        $pluginSettings = $this->plugin->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
 
@@ -590,9 +508,6 @@ class SproutSeoVariable
          */
         foreach ($fields as $key => $field) {
             if (get_class($field) === $type) {
-                $context = explode(':', $field->context);
-                $context = $context[0] ?? 'global';
-
                 if ($pluginSettings->displayFieldHandles) {
                     $options[$field->id] = $field->name.' – {'.$field->handle.'}';
                 } else {
@@ -612,7 +527,9 @@ class SproutSeoVariable
         $needPro = $this->getIsPro() ? '' : '(Pro)';
         $options[] = [
             'value' => 'custom',
-            'label' => Craft::t('sprout-seo', 'Add Custom Format {needPro}', ['needPro' => $needPro]),
+            'label' => Craft::t('sprout-seo', 'Add Custom Format {needPro}', [
+                'needPro' => $needPro
+            ]),
             'disabled' => !$this->getIsPro()
         ];
 
@@ -626,7 +543,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getKeywordsOptions($type = PlainText::class)
+    public function getKeywordsOptions($type = PlainText::class): array
     {
         $options = [];
         $fields = Craft::$app->fields->getAllFields();
@@ -634,19 +551,14 @@ class SproutSeoVariable
         /**
          * @var Settings $pluginSettings
          */
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        $pluginSettings = $this->plugin->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field')];
 
-        /**
-         * @var Field $field
-         */
+        /** @var Field $field */
         foreach ($fields as $key => $field) {
             if (get_class($field) == $type) {
-                $context = explode(':', $field->context);
-                $context = $context[0] ?? 'global';
-
                 if ($pluginSettings->displayFieldHandles) {
                     $options[$field->id] = $field->name.' – {'.$field->handle.'}';
                 } else {
@@ -669,7 +581,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getOptimizedTitleOptions($settings)
+    public function getOptimizedTitleOptions($settings): array
     {
         return $this->getOptimizedOptions(PlainText::class, 'optimizedTitleField', $settings);
     }
@@ -681,7 +593,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getOptimizedDescriptionOptions($settings)
+    public function getOptimizedDescriptionOptions($settings): array
     {
         return $this->getOptimizedOptions(PlainText::class, 'optimizedDescriptionField', $settings);
     }
@@ -693,38 +605,9 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getOptimizedAssetsOptions($settings)
+    public function getOptimizedAssetsOptions($settings): array
     {
         return $this->getOptimizedOptions(Assets::class, 'optimizedImageField', $settings);
-    }
-
-    /**
-     * @param $value
-     *
-     * @return array|null
-     */
-    public function getCustomSettingFieldHandles($value)
-    {
-        // If there are no dynamic tags, just return the template
-        if (strpos($value, '{') === false) {
-            return null;
-        }
-
-        /**
-         *  {           - our pattern starts with an open bracket
-         *  <space>?    - zero or one space
-         *  (object\.)? - zero or one characters that spell "object."
-         *  (?<handles> - begin capture pattern and name it 'handles'
-         *  [a-zA-Z_]*  - any number of characters in Craft field handles
-         *  )           - end capture pattern named 'handles'
-         */
-        preg_match_all('/{ ?(object\.)?(?<handles>[a-zA-Z_]*)/', $value, $matches);
-
-        if (count($matches['handles'])) {
-            return array_unique($matches['handles']);
-        }
-
-        return null;
     }
 
     /**
@@ -733,10 +616,10 @@ class SproutSeoVariable
      * @param $siteId
      *
      * @return array
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
-    public function getGlobalRobots($siteId)
+    public function getGlobalRobots($siteId): array
     {
         $currentSite = Craft::$app->sites->getSiteById($siteId);
 
@@ -751,7 +634,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getSchemas()
+    public function getSchemas(): array
     {
         return SproutSeo::$app->schema->getSchemas();
     }
@@ -760,9 +643,9 @@ class SproutSeoVariable
      * Returns global contacts
      *
      * @return array
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
-    public function getContacts()
+    public function getContacts(): array
     {
         $contacts = SproutSeo::$app->globalMetadata->getGlobalMetadata()->contacts;
 
@@ -780,9 +663,9 @@ class SproutSeoVariable
      * Returns global social profiles
      *
      * @return array
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
-    public function getSocialProfiles()
+    public function getSocialProfiles(): array
     {
         $socials = SproutSeo::$app->globalMetadata->getGlobalMetadata()->social;
 
@@ -801,7 +684,7 @@ class SproutSeoVariable
      *
      * @return array
      */
-    public function getTransforms()
+    public function getTransforms(): array
     {
         return SproutSeo::$app->globalMetadata->getTransforms();
     }
@@ -812,7 +695,7 @@ class SproutSeoVariable
      *
      * @return bool
      */
-    public function hasActiveMetadata($type, $metadataModel)
+    public function hasActiveMetadata($type, $metadataModel): bool
     {
         switch ($type) {
             case 'search':
@@ -854,31 +737,23 @@ class SproutSeoVariable
     /**
      * @return int
      */
-    public function getDescriptionLength()
+    public function getDescriptionLength(): int
     {
         return SproutSeo::$app->settings->getDescriptionLength();
     }
 
     /**
-     * @return mixed
-     */
-    public function getSiteIds()
-    {
-        $sites = Craft::$app->getSites()->getAllSites();
-
-        return $sites;
-    }
-
-    /**
      * @return bool
      */
-    public function getIsPro()
+    public function getIsPro(): bool
     {
+        /** @var SproutSeo $plugin */
         $plugin = SproutSeo::getInstance();
 
-        if ($plugin->is(SproutSeo::EDITION_PRO)){
+        if ($plugin->is(SproutSeo::EDITION_PRO)) {
             return true;
         }
+
         return false;
     }
 
@@ -887,13 +762,13 @@ class SproutSeoVariable
      *
      * @return bool
      */
-    public function uriHasTags($uri = null)
+    public function uriHasTags($uri = null): bool
     {
-        if (strstr($uri, '{{')) {
+        if (strpos($uri, '{{') !== false) {
             return true;
         }
 
-        if (strstr($uri, '{%')) {
+        if (strpos($uri, '{%') !== false) {
             return true;
         }
 

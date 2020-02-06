@@ -1,28 +1,28 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\base;
 
+use barrelstrength\sproutbasefields\models\Address;
+use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\models\Globals;
+use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\schema\ContactPointSchema;
 use barrelstrength\sproutseo\schema\GeoSchema;
 use barrelstrength\sproutseo\schema\ImageObjectSchema;
 use barrelstrength\sproutseo\schema\MainEntityOfPageSchema;
 use barrelstrength\sproutseo\schema\PostalAddressSchema;
-use barrelstrength\sproutseo\models\Globals;
-use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
-
-use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
+use Craft;
+use craft\base\Element;
 use craft\helpers\Template as TemplateHelper;
 use craft\helpers\UrlHelper;
 use DateTime;
-use Craft;
-use craft\base\Element;
 
 /**
  * Class Schema
@@ -52,13 +52,6 @@ abstract class Schema
     public $structuredData = [];
 
     /**
-     * Defines our Schema's '@type' property
-     *
-     * @var string
-     */
-    protected $type;
-
-    /**
      * The Global Metadata values available to use when building the Structured Data
      *
      * @var Globals
@@ -80,6 +73,13 @@ abstract class Schema
     public $prioritizedMetadataModel;
 
     /**
+     * Defines our Schema's '@type' property
+     *
+     * @var string
+     */
+    protected $type;
+
+    /**
      * @return string
      */
     public function __toString()
@@ -92,7 +92,7 @@ abstract class Schema
      *
      * @return string
      */
-    final public function getContext()
+    final public function getContext(): string
     {
         return 'http://schema.org/';
     }
@@ -102,24 +102,23 @@ abstract class Schema
      *
      * @return string
      */
-    abstract public function getName();
+    abstract public function getName(): string;
 
     /**
      * Schema.org data type: http://schema.org/docs/full.html
      *
      * @return string
      */
-    abstract public function getType();
+    abstract public function getType(): string;
 
     /**
      * Determine if the Schema should be listed in the Main Entity dropdown.
      *
+     * @return bool
      * @example Some schema, such as a PostalAddress may not ever be used as the Main Entity
      *          of the page, but are still be helpful to define to be used within other schema.
-     *
-     * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return false;
     }
@@ -188,10 +187,10 @@ abstract class Schema
 </script>';
 
             return TemplateHelper::raw($output);
-        } else {
-            // If context has already been established, just return the data
-            return $schema;
         }
+
+        // If context has already been established, just return the data
+        return $schema;
     }
 
     /**
@@ -199,7 +198,7 @@ abstract class Schema
      *
      * @return string
      */
-    public function getSchemaOverrideType()
+    public function getSchemaOverrideType(): string
     {
         if (isset($this->prioritizedMetadataModel) &&
             $this->prioritizedMetadataModel->schemaOverrideTypeId !== null &&
@@ -222,9 +221,6 @@ abstract class Schema
     {
         return null;
     }
-
-    // Helper Methods
-    // =========================================================================
 
     /**
      * Add a property to our Structured Data array
@@ -300,6 +296,8 @@ abstract class Schema
      *
      * @param string           $propertyName
      * @param string|\DateTime $date
+     *
+     * @throws \Exception
      */
     public function addDate($propertyName, $date)
     {
@@ -338,9 +336,11 @@ abstract class Schema
      */
     public function addTelephone($propertyName, $phone)
     {
-        if (isset($phone['phone']) && isset($phone['country']) && !empty($phone['phone'])) {
-            $phoneModel = new PhoneModel($phone['phone'], $phone['country']);
-            $this->structuredData[$propertyName] = $phoneModel->international;
+        if (isset($phone['phone'], $phone['country']) && !empty($phone['phone'])) {
+            $phoneModel = new PhoneModel();
+            $phoneModel->country = $phone['country'];
+            $phoneModel->phone = $phone['phone'];
+            $this->structuredData[$propertyName] = $phoneModel->getInternational();
         } else {
             SproutSeo::info('Schema unable to add value. Value is not a valid Phone.');
         }
@@ -394,7 +394,7 @@ abstract class Schema
                 'width' => $meta->ogImageWidth,
                 'height' => $meta->ogImageHeight
             ];
-        } else if(is_numeric($imageId)) {
+        } else if (is_numeric($imageId)) {
 
             $imageAsset = Craft::$app->assets->getAssetById($imageId);
 
@@ -472,21 +472,20 @@ abstract class Schema
      * If the address ID is not found in our Globals, don't add it.
      *
      * @param $propertyName
-     * @param $addressId
      *
      * @return null
      */
-    public function addAddress($propertyName, $addressId)
+    public function addAddress($propertyName)
     {
         $addressModel = $this->globals->addressModel;
 
-        if (!$addressId || $addressModel === null) {
+        if ($addressModel === null) {
             return null;
         }
 
         $address = new PostalAddressSchema();
 
-        if ($addressModel->id) {
+        if ($addressModel instanceof Address) {
             $address->addressCountry = $addressModel->countryCode;
             $address->addressLocality = $addressModel->locality;
             $address->addressRegion = $addressModel->administrativeAreaCode;
@@ -591,11 +590,11 @@ abstract class Schema
      *
      * @return string Returns a string converted to html entities
      */
-    public function encodeHtmlEntities($string)
+    public function encodeHtmlEntities($string): string
     {
         $string = mb_convert_encoding($string, 'UTF-32', 'UTF-8');
         $t = unpack('N*', $string);
-        $t = array_map(function($n) {
+        $t = array_map(static function($n) {
             return "&#$n;";
         }, $t);
 

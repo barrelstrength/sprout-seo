@@ -1,11 +1,16 @@
 <?php
+/**
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutseo\migrations;
 
 
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use Craft;
 
 /**
  * m180619_000001_add_field_column_to_contents_table migration.
@@ -17,9 +22,9 @@ class m180619_000001_add_field_column_to_contents_table extends Migration
      *
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
-        if ($this->db->tableExists('{{%sproutseo_metadata_elements}}')){
+        if ($this->db->tableExists('{{%sproutseo_metadata_elements}}')) {
             $metadataElements = (new Query())
                 ->select(['*'])
                 ->from(['{{%sproutseo_metadata_elements}}'])
@@ -53,9 +58,10 @@ class m180619_000001_add_field_column_to_contents_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180619_000001_add_field_column_to_contents_table cannot be reverted.\n";
+
         return false;
     }
 }

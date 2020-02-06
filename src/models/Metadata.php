@@ -1,16 +1,15 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\models;
 
 
+use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
-use barrelstrength\sproutseo\SproutSeo;
-
 use craft\base\Model;
 
 
@@ -28,31 +27,6 @@ use craft\base\Model;
  */
 class Metadata extends Model
 {
-    /**
-     * @var array
-     */
-    protected $searchMeta = [];
-
-    /**
-     * @var array
-     */
-    protected $robotsMeta = [];
-
-    /**
-     * @var array
-     */
-    protected $geographicMeta = [];
-
-    /**
-     * @var array
-     */
-    protected $openGraphMeta = [];
-
-    /**
-     * @var array
-     */
-    protected $twitterCardsMeta = [];
-
     /**
      * @var string
      */
@@ -83,8 +57,6 @@ class Metadata extends Model
      */
     public $twitterTransform;
 
-    //MetaTags
-
     /**
      * @var string
      */
@@ -110,6 +82,8 @@ class Metadata extends Model
      */
     public $enableMetaDetailsSearch;
 
+    //MetaTags
+
     /**
      * @var bool
      */
@@ -130,8 +104,6 @@ class Metadata extends Model
      */
     public $enableMetaDetailsRobots;
 
-    //searchMeta
-
     /**
      * @var string
      */
@@ -147,8 +119,6 @@ class Metadata extends Model
      */
     public $keywords;
 
-    //robotsMeta
-
     /**
      * @var
      */
@@ -159,7 +129,7 @@ class Metadata extends Model
      */
     public $canonical;
 
-    //geographicMeta
+    //searchMeta
 
     /**
      * @var string
@@ -176,6 +146,8 @@ class Metadata extends Model
      */
     public $position;
 
+    //robotsMeta
+
     /**
      * @var string
      */
@@ -186,7 +158,7 @@ class Metadata extends Model
      */
     public $longitude;
 
-    //openGraphMeta
+    //geographicMeta
 
     /**
      * @var string
@@ -212,6 +184,8 @@ class Metadata extends Model
      * @var string
      */
     public $ogUrl;
+
+    //openGraphMeta
 
     /**
      * @var string
@@ -268,8 +242,6 @@ class Metadata extends Model
      */
     public $ogExpiryDate;
 
-    //twitterCardsMeta
-
     /**
      * @var string
      */
@@ -295,6 +267,8 @@ class Metadata extends Model
      */
     public $twitterTitle;
 
+    //twitterCardsMeta
+
     /**
      * @var string
      */
@@ -319,6 +293,31 @@ class Metadata extends Model
      * @var int
      */
     public $uid;
+
+    /**
+     * @var array
+     */
+    protected $searchMeta = [];
+
+    /**
+     * @var array
+     */
+    protected $robotsMeta = [];
+
+    /**
+     * @var array
+     */
+    protected $geographicMeta = [];
+
+    /**
+     * @var array
+     */
+    protected $openGraphMeta = [];
+
+    /**
+     * @var array
+     */
+    protected $twitterCardsMeta = [];
 
     /**
      * @inheritdoc
@@ -380,7 +379,7 @@ class Metadata extends Model
      * @return array
      * @throws \yii\base\Exception
      */
-    public function getMetaTagData()
+    public function getMetaTagData(): array
     {
         $metaTagData = [];
 
@@ -395,9 +394,30 @@ class Metadata extends Model
     }
 
     /**
+     * @return null
+     * @throws \yii\base\Exception
+     */
+    public function getGooglePlusMetaTagData()
+    {
+        return OptimizeHelper::getGooglePlusPage();
+    }
+
+    /**
+     * Updates "uri" to starts without a "/"
+     *
+     * @return bool
+     */
+    public function beforeValidate(): bool
+    {
+        $this->uri = SproutBaseRedirects::$app->redirects->removeSlash($this->uri);
+
+        return true;
+    }
+
+    /**
      * @return array
      */
-    protected function getSearchMetaTagData()
+    protected function getSearchMetaTagData(): array
     {
         $tagData = [];
 
@@ -414,7 +434,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getRobotsMetaTagData()
+    protected function getRobotsMetaTagData(): array
     {
         $tagData = [];
 
@@ -436,7 +456,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getGeographicMetaTagData()
+    protected function getGeographicMetaTagData(): array
     {
         $tagData = [];
 
@@ -462,7 +482,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getOpenGraphMetaTagData()
+    protected function getOpenGraphMetaTagData(): array
     {
         $tagData = [];
 
@@ -479,7 +499,7 @@ class Metadata extends Model
     /**
      * @return array
      */
-    protected function getTwitterCardMetaTagData()
+    protected function getTwitterCardMetaTagData(): array
     {
         $tagData = [];
 
@@ -491,15 +511,6 @@ class Metadata extends Model
         }
 
         return $tagData;
-    }
-
-    /**
-     * @return null
-     * @throws \yii\base\Exception
-     */
-    public function getGooglePlusMetaTagData()
-    {
-        return OptimizeHelper::getGooglePlusPage();
     }
 
     /**
@@ -546,17 +557,5 @@ class Metadata extends Model
         ];
 
         return $tagNames[$handle];
-    }
-
-    /**
-     * Updates "uri" to starts without a "/"
-     *
-     * @return bool
-     */
-    public function beforeValidate()
-    {
-        $this->uri = SproutSeo::$app->xmlSitemap->removeSlash($this->uri);
-
-        return true;
     }
 }

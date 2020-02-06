@@ -1,6 +1,210 @@
 # Changelog
 
-## 4.1.1 - UNRELEASED
+## 4.3.0 - 2020-02-05
+
+### Added
+- Added autofocus to Custom Pages URI input field
+- Added `sproutbaseredirects/elements/Redirect::pluralDisplayName()`
+
+### Changed
+- Updated Element Metadata field to use Tabs layout instead of Matrix-block style layout
+- Updated Redirect Element Index to support Craft 3.4
+- Updated models to use `defineRules()` method
+- Refactored asset management and in-template javascript into assets files
+- Updated `barrelstrength/sprout-base-fields` to v1.3.0
+- Updated `barrelstrength/sprout-base-redirects` to v1.3.0
+- Updated `barrelstrength/sprout-base-sitemaps` to v1.2.0
+
+## 4.2.11 - 2020-01-18
+
+### Changed
+- Updated `barrelstrength/sprout-base-sitemaps` requirement v1.1.3
+
+### Fixed
+- Fixed minutes value in XML Sitemap output
+
+## 4.2.10 - 2020-01-16
+
+### Updated
+- Updated `barrelstrength/sprout-base-fields` to v1.2.2
+
+### Fixed 
+- Fixed error in address table migration ([#182])
+
+[#182]: https://github.com/barrelstrength/craft-sprout-seo/issues/182
+
+## 4.2.9 - 2020-01-09
+
+### Updated
+- Updated Title Character setting to use auto-suggest field
+- Updated Append Title Value setting to use auto-suggest field
+- Updated how Website Identity address to be stored as `identity.address`
+- Updated Website Identity Address to not use `sproutfields_addresses` table
+- Updated address to use `sprout-base-fields/_components/fields/formfields/address/input`
+- Updated `barrelstrength\sproutfields\fields\Address::hasContentColumn` to return false. Addresses are now stored only in the `sproutfields_adddresses` table.
+- Added `barrelstrength\sproutbasefields\models\Address::getCountryCode()`
+- Updated `barrelstrength\sproutbasefields\services\Address::deleteAddressById()` to require address ID
+- Improved fallbacks for Address Field's default country and language
+- Moved methods from `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\Address`
+- Updated `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\AddressFormatter`
+- Added property `barrelstrength\sproutbasefields\events\OnSaveAddressEvent::$address`
+- Deprecated property `barrelstrength\sproutbasefields\events\OnSaveAddressEvent::$model`
+- Renamed `barrelstrength\sproutbasefields\services\Address::getAddress()` => `getAddressFromElement()`
+- Renamed data attribute `addressid` => `address-id`
+- Renamed data attribute `defaultcountrycode` => `default-country-code`
+- Renamed data attribute `showcountrydropdown` => `show-country-dropdown`
+- Updated and standardized shared logic, validation, and response for fields Email, Phone, and Url 
+- Updated dynamic email validation to exclude check for unique email setting
+- Updated `barrelstrength/sprout-base-fields` to v1.2.0
+- Updated `commerceguys/addressing` to v1.0.6
+- Updated `giggsey/libphonenumber-for-php` to v8.11.1
+
+### Fixed
+- Fixed display issue with Gibraltar addresses
+- Fixed bug where Address input fields did not display in edit modal after Address was cleared
+
+### Removed
+- Removed `identity.addressId`
+- Removed Address asset bundle from GlobalsAsset, it is included in the Address template
+- Removed `barrelstrength\sproutfields\fields\Address::serializeValue()`
+- Removed `barrelstrength\sproutbasefields\helpers\AddressHelper`
+- Removed `barrelstrength\sproutbasefields\controllers\actionDeleteAddress()`
+- Removed `commerceguys/intl`
+
+## 4.2.8 - 2019-12-18
+
+### Changed
+- Ensure Sitemap sections default to false when initially created
+- Improved error messages when XML Sitemaps are not enabled
+- Reorganized assets and build script to support ES6
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.1.2
+
+### Fixed
+- Fixed bug when updating a Sitemap
+- Fixed broken link on plugin settings page ([#11][11-sprout-sitemaps])
+
+[11-sprout-sitemaps]: https://github.com/barrelstrength/craft-sprout-sitemaps/issues/11
+
+## 4.2.7.1 - 2019-12-10
+
+### Changed
+- Added method heading in Redirect sources sidebar 
+- Updated barrelstrength/sprout-base-redirects requirement to v1.2.2
+
+### Fixed
+- Added missing columns to Install migration [#19]
+- Fixed `dateLastUsed` column type
+- Fixed database prefix errors [#1][1pull-sprout-base-redirects]
+
+[#19]: https://github.com/barrelstrength/craft-sprout-redirects/issues/19
+[1pull-sprout-base-redirects]: https://github.com/barrelstrength/craft-sprout-base-redirects/pull/1
+
+## 4.2.6 - 2019-11-22
+
+### Fixed
+- Fixed bug where database migrations did not get triggered
+
+## 4.2.5 - 2019-11-22
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement to v1.2.1
+
+### Fixed
+- Fixed support for database prefixes when finding URLs [#18][18-sprout-base-redirects]
+
+[18-sprout-base-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/18
+
+## 4.2.4 - 2019-11-18
+
+> {tip} This release is a recommended upgrade. Updates include improvements to the redirect workflow including how query strings are handled, managing excluded URLs from tracking, performance improvements around finding and cleaning up 404 Redirects, and several bug fixes include a potential security issue.
+
+### Added
+- Added 'Redirect Match Strategy' setting to control how query strings are handled when matching incoming redirects ([#6][6-sprout-redirects], [#16][16-sprout-redirects])
+- Added 'Query String Strategy' setting to control if a query string is appended or removed when redirecting to a new URL ([#6][6-sprout-redirects], [#16][16-sprout-redirects])
+- Added 'Clean Up Probability' setting to control the frequency that 404 Redirect cleanup tasks are triggered
+- Added Last Remote IP Address, Last Referrer, Last User Agent, and Date Last Used fields to Redirect Elements ([#7][7-sprout-redirects], [#10][10-sprout-redirects])
+- Added 'Track Remote IP' setting to enable/disable whether IP Address is stored in the database
+- Added 'Excluded URL Patterns' setting to filter URL patterns you don't wish to log as 404 Redirects
+- Added 'Add to Excluded URLs' Element Action to quickly add one or more 404 Redirects to the 'Excluded URL Patterns' setting
+
+### Changed
+- Improved performance when finding a match for an incoming URL
+- Added the Redirect 'Data Last Used' field as default table attribute on the Element Index page ([#7sproutredirects])
+- Updated Redirect 'RegEx' field to be named 'Match Strategy' with the strategies `Exact Match` and `Regular Expression`
+- Improved validation when saving New URLs to avoid an edge case
+- Updated barrelstrength/sprout-base-redirects requirement to v1.2.0
+- Updated barrelstrength/sprout-base requirement to v5.0.8
+
+### Fixed
+- Fixed open redirect vulnerability (thanks to Liam Stein) ([#176])
+- Fixes bug where 404s could be matched before active redirects when matching regex URL patterns
+
+[6-sprout-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/6
+[7-sprout-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/7
+[10-sprout-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/10
+[16-sprout-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/16
+[#176]: https://github.com/barrelstrength/craft-sprout-seo/issues/176
+
+## 4.2.3 - 2019-09-23
+
+### Changed
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.1.1
+
+### Fixed
+- Updated `published_time` to use postDate instead of dateCreated ([#169])
+- Fixed bug where user may be unable to create new SEO Metadata field using Free Edition ([#172])
+- Fixed error for multilingual setups when no groups are activated ([#1][1-pull-sprout-base-sitemaps])
+
+[#169]: https://github.com/barrelstrength/craft-sprout-seo/issues/169 
+[#172]: https://github.com/barrelstrength/craft-sprout-seo/issues/172
+[1-pull-sprout-base-sitemaps]: https://github.com/barrelstrength/craft-sprout-base-sitemaps/pull/1/files
+
+## 4.2.2 - 2019-08-16
+
+### Changed
+- Updated barrelstrength/sprout-base requirement v5.0.7
+- Updated barrelstrength/sprout-base-sitemaps requirement v1.1.0
+
+## 4.2.1 - 2019-08-14
+
+### Changed
+- Updated barrelstrength/sprout-base-redirects requirement v1.1.2
+
+### Fixed
+- Fixed bug where Redirects could be assigned incorrect structureId during migration
+- Fixed bug where migration could fail if sproutseo_globals table already exists
+- Fixed js console warning when Craft is only configured with a single Site
+- Fixed bug where incorrect return type hint was used
+
+## 4.2.0 - 2019-08-06
+
+### Added
+- Added ability to sort Redirects by Count
+- Added hard delete support for Redirect Elements
+- Added logging for Redirects that fail to save
+
+### Changed
+- Updated 'All Redirects' Element index listing to only show 301 and 302 Redirects, and exclude 404 Redirects
+- Improved performance of Delete 404 task during large cleanup tasks 
+- Updated barrelstrength/sprout-base-redirects requirement v1.1.1
+
+### Fixed
+- Fixed bug where 404 Redirect cleanup job was not working
+- Fixed redirect behavior after deleting Redirect from edit page
+
+## 4.1.3 - 2019-08-07
+
+### Fixed
+- Fixed CHANGELOG syntax
+
+## 4.1.2 - 2019-08-07
+
+### Fixed
+- Fixed message category bug ([#170])
+
+[#170]: https://github.com/barrelstrength/craft-sprout-seo/issues/170
+
+## 4.1.1 - 2019-07-14
 
 ### Changed
 - Updated barrelstrength/sprout-base-fields requirement v1.0.9
@@ -135,9 +339,9 @@
 - Updated barrelstrength/sprout-base-fields requirement v1.0.3
 
 ### Fixed
-- Fixed bug where Administrative Area Input was not populated correctly ([#85][#85fields])
+- Fixed bug where Administrative Area Input was not populated correctly ([#85][85-sprout-fields])
 
-[#85fields]: https://github.com/barrelstrength/craft-sprout-fields/issues/85
+[85-sprout-fields]: https://github.com/barrelstrength/craft-sprout-fields/issues/85
 
 ## 4.0.0-beta.29 - 2019-03-01
 

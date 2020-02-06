@@ -3,7 +3,7 @@
 {% import "sprout-base-fields/_includes/forms" as sproutFields %}
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\globals\\GlobalsAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\seo\\SproutSeoAsset") %}
 
 {% set socialProfileOptions = craft.sproutSeo.getFinalOptions('social', 'profileName', globals) %}
 
@@ -23,30 +23,30 @@
 
     <div class="field" style="margin-bottom:0;">
         <div class="heading">
-            <label>{{ "Social Profiles"|t }} {{ sprout.infoIcon({
-                    label: "Social Profiles"|t,
+            <label>{{ "Social Profiles"|t('sprout-seo') }} {{ sprout.infoIcon({
+                    label: "Social Profiles"|t('sprout-seo'),
                     search: true,
                     structured: true,
                     openGraph: true,
                     twitterCard: true,
                     priority: 'globals'
                 }) }}</label>
-            <p class="instructions">{{ "Adding <a href='https://developers.google.com/structured-data/customize/social-profiles' target='_blank'>Social Profile Links</a> helps establish a relationship between your website and your related online profiles. Supported social profiles can be prominently displayed in your Google Knowledge panel, however, it's encouraged to add any other social profiles you have as well."|t|raw }}</p>
+            <p class="instructions">{{ "Manage Social Profiles for your website. <a href='https://developers.google.com/search/docs/data-types/social-profile' target='_blank'>Social Profile</a> metadata is automatically detected and displayed in the Google Knowledge panel."|t('sprout-seo')|raw }}</p>
         </div>
     </div>
 
     <form method="post" accept-charset="UTF-8" data-saveshortcut>
         {{ csrfInput() }}
         <input type="hidden" name="action"
-               value="sprout-seo/global-metadata/save-global-metadata">
+            value="sprout-seo/global-metadata/save-global-metadata">
         <input type="hidden" name="globalKeys" value="meta,social">
         <input type="hidden" name="siteId" value="{{ globals.siteId }}">
 
         <table id="sproutseo-schema-social" class="data fullwidth collapsible">
             <thead>
             <tr>
-                <th scope="col">{{ "Profile"|t }}</th>
-                <th scope="col">{{ "URL"|t }}</th>
+                <th scope="col">{{ "Profile"|t('sprout-seo') }}</th>
+                <th scope="col">{{ "URL"|t('sprout-seo') }}</th>
                 <th class="thin"></th>
                 <th class="thin"></th>
             </tr>
@@ -62,7 +62,7 @@
                                 name: 'sproutseo[globals][social][' ~ loop.index ~ '][0]',
                                 options: socialProfileOptions,
                                 value: socialProfile.profileName,
-                                otherPlaceholderText: 'Custom Profile'|t
+                                otherPlaceholderText: 'Custom Profile'|t('sprout-seo')
                             }) }}
                         </div>
                     </td>
@@ -73,10 +73,12 @@
                             errors: ''
                         }) }}
                     </td>
-                    <td class="thin action"><a class="move icon"
-                                               title="Reorder"></a></td>
-                    <td class="thin action"><a class="delete icon"
-                                               title="Delete"></a></td>
+                    <td class="thin action">
+                        <a class="move icon" title="{{ 'Reorder'|t('sprout-seo') }}"></a>
+                    </td>
+                    <td class="thin action">
+                        <a class="delete icon" title="{{ 'Delete'|t('sprout-seo') }}"></a>
+                    </td>
                 </tr>
 
             {% endfor %}
@@ -85,15 +87,15 @@
         </table>
 
         <div class="buttons">
-            <div id="addSocial" class="btn add icon small" tabindex="0">Add a
-                Profile
+            <div id="addSocial" class="btn add icon small" tabindex="0">
+                {{ "Add a Profile"|t('sprout-seo') }}
             </div>
         </div>
 
         <hr>
 
         <div class="buttons">
-            <input type="submit" class="btn submit" value="Save"/>
+            <input type="submit" class="btn submit" value="{{ 'Save'|t('sprout-seo') }}"/>
         </div>
 
     </form>

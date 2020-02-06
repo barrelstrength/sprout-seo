@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
@@ -14,7 +14,7 @@ class WebsiteIdentityPlaceSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Place';
     }
@@ -22,7 +22,7 @@ class WebsiteIdentityPlaceSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'Place';
     }
@@ -30,7 +30,7 @@ class WebsiteIdentityPlaceSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }
@@ -55,19 +55,17 @@ class WebsiteIdentityPlaceSchema extends Schema
 
         $this->addTelephone('telephone', $schema['telephone']);
 
-        if (isset($schema['addressId']) && $schema['addressId']) {
-            $this->addAddress('address', $schema['addressId']);
+        if (isset($schema['address']) && $schema['address']) {
+            $this->addAddress('address');
         }
 
-        if ((isset($schema['latitude']) && $schema['latitude']) && (isset($schema['longitude']) && $schema['longitude'])) {
+        if (isset($schema['latitude'], $schema['longitude']) && $schema['latitude'] && $schema['longitude']) {
             $this->addGeo('geo', $schema['latitude'], $schema['longitude']);
         }
 
-        if (is_array($socialProfiles)){
-            if (count($socialProfiles)) {
-                $urls = array_column($socialProfiles, 'url');
-                $this->addSameAs($urls);
-            }
+        if (is_array($socialProfiles) && count($socialProfiles)) {
+            $urls = array_column($socialProfiles, 'url');
+            $this->addSameAs($urls);
         }
     }
 }

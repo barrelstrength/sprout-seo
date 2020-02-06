@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutseo\migrations;
 
@@ -6,16 +11,10 @@ use craft\db\Migration;
 
 class InsertDefaultGlobalsBySite extends Migration
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var int|null The Site Id
      */
     public $siteId;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc
@@ -52,7 +51,7 @@ class InsertDefaultGlobalsBySite extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         return false;
     }

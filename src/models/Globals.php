@@ -1,14 +1,13 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\models;
 
 use barrelstrength\sproutbasefields\models\Address;
-use barrelstrength\sproutbasefields\SproutBaseFields;
 use craft\base\Model;
 use craft\helpers\Json;
 
@@ -86,14 +85,17 @@ class Globals extends Model
     /**
      * @var Address|null
      */
-    public $addressModel = null;
+    public $addressModel;
 
     public function init()
     {
-        if (isset($this->identity['addressId']) && $this->addressModel === null) {
-            $this->addressModel = SproutBaseFields::$app->addressField->getAddressById($this->identity['addressId']);
+        if (isset($this->identity['address']) && $this->addressModel === null) {
+            $addressModel = new Address();
+            $addressModel->setAttributes($this->identity['address'], false);
+            $this->addressModel = $addressModel;
         }
     }
+
     /**
      * Factory to return schema of any type
      *
@@ -135,9 +137,21 @@ class Globals extends Model
     }
 
     /**
+     * Determine if the selected Website Identity Schema Type is a Local Business
+     *
+     * @return null|string
+     */
+    public function isLocalBusiness()
+    {
+        $this->getGlobalByKey('identity');
+
+        return isset($this->identity['organizationSubTypes'][0]) && $this->identity['organizationSubTypes'][0] === 'LocalBusiness';
+    }
+
+    /**
      * @return array
      */
-    protected function getMeta()
+    protected function getMeta(): array
     {
         return $this->meta;
     }
@@ -147,7 +161,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getIdentity()
+    protected function getIdentity(): array
     {
         return $this->{$this->globalKey};
     }
@@ -157,13 +171,12 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getContacts()
+    protected function getContacts(): array
     {
         $contacts = $this->{$this->globalKey};
         $contactPoints = [];
 
         if (is_array($contacts)) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($contacts as $contact) {
                 $contactPoints[] = [
                     '@type' => 'ContactPoint',
@@ -181,13 +194,12 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getSocial()
+    protected function getSocial(): array
     {
         $profiles = $this->{$this->globalKey};
         $profileLinks = [];
 
         if (is_array($profiles)) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($profiles as $profile) {
                 $profileLinks[] = [
                     'profileName' => $profile['profileName'] ?? $profile[0],
@@ -204,7 +216,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getOwnership()
+    protected function getOwnership(): array
     {
         return $this->{$this->globalKey};
     }
@@ -214,7 +226,7 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getRobots()
+    protected function getRobots(): array
     {
         return $this->{$this->globalKey};
     }
@@ -224,24 +236,8 @@ class Globals extends Model
      *
      * @return array
      */
-    protected function getSettings()
+    protected function getSettings(): array
     {
         return $this->{$this->globalKey};
-    }
-
-    /**
-     * Determine if the selected Website Identity Schema Type is a Local Business
-     *
-     * @return null|string
-     */
-    public function isLocalBusiness()
-    {
-        $this->getGlobalByKey('identity');
-
-        if (isset($this->identity['organizationSubTypes'][0]) && $this->identity['organizationSubTypes'][0] === 'LocalBusiness') {
-            return true;
-        }
-
-        return false;
     }
 }

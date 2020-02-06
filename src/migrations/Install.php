@@ -1,41 +1,31 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
 
-use Craft;
-
-use craft\db\Migration;
+use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirectsInstall;
 use barrelstrength\sproutbasesitemaps\migrations\Install as SproutBaseSitemapsInstall;
-use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
+use Craft;
+use craft\db\Migration;
 
 class Install extends Migration
 {
-    // Public Properties
-    // =========================================================================
-
     /**
      * @var string The database driver to use
      */
     public $driver;
 
-    // Public Methods
-    // =========================================================================
-
     /**
      * @return bool
      * @throws \Throwable
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \craft\errors\StructureNotFoundException
-     * @throws \yii\db\Exception
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $this->createTables();
         $this->insertDefaultGlobalMetadata();
@@ -44,9 +34,10 @@ class Install extends Migration
         return true;
     }
 
-    // Protected Methods
-    // =========================================================================
-
+    /**
+     * @throws \Throwable
+     * @throws \craft\errors\SiteNotFoundException
+     */
     protected function createTables()
     {
         $migration = new SproutBaseInstall();

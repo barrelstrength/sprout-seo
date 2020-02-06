@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
@@ -14,7 +14,7 @@ class PersonSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Person';
     }
@@ -22,7 +22,7 @@ class PersonSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'Person';
     }
@@ -30,7 +30,7 @@ class PersonSchema extends ThingSchema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return false;
     }
@@ -41,12 +41,8 @@ class PersonSchema extends ThingSchema
      */
     public function addProperties()
     {
-        if ($this->element !== null) {
-            if (get_class($this->element) === User::class) {
-                $this->addUserElementProperties();
-            } else {
-                parent::addProperties();
-            }
+        if (($this->element !== null) && get_class($this->element) === User::class) {
+            $this->addUserElementProperties();
         } else {
             parent::addProperties();
         }

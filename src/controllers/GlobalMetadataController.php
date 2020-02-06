@@ -1,31 +1,35 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\controllers;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbasefields\helpers\AddressHelper;
+use barrelstrength\sproutbasefields\models\Address;
+use barrelstrength\sproutbasefields\models\Address as AddressModel;
+use barrelstrength\sproutbasefields\services\AddressFormatter;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
+use Craft;
 use craft\errors\SiteNotFoundException;
+use craft\helpers\DateTimeHelper;
+use craft\helpers\Json;
 use craft\helpers\Template;
 use craft\web\Controller;
-use Craft;
-use craft\helpers\DateTimeHelper;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
-use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class GlobalMetadataController extends Controller
@@ -83,22 +87,27 @@ class GlobalMetadataController extends Controller
             $globals->siteId = $currentSite->id;
         }
 
-        $addressId = $globals->identity['addressId'] ?? null;
+        $address = $globals->identity['address'] ?? null;
+        $addressDisplayHtml = '';
 
-        $addressModel = SproutBaseFields::$app->addressField->getAddressById($addressId);
+        $addressModel = new Address();
+        $addressFormatter = new AddressFormatter();
 
-        $countryCode = $addressModel->countryCode;
+        if ($address) {
+            $addressModel->setAttributes($address, false);
 
-        $addressHelper = new AddressHelper();
-        $addressHelper->setNamespace('address');
-        $addressHelper->setCountryCode($countryCode);
-        $addressHelper->setAddressModel($addressModel);
+            $addressFormatter->setCountryCode($addressModel->countryCode);
+            $addressFormatter->setAddressModel($addressModel);
 
-        $addressDisplayHtml = $addressId ? $addressHelper->getAddressDisplayHtml($addressModel) : '';
-        $countryInputHtml = $addressHelper->getCountryInputHtml();
-        $addressFormHtml = $addressHelper->getAddressFormHtml();
+            $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel);
+        }
+
+        $countryInputHtml = $addressFormatter->getCountryInputHtml();
+        $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+
+        $addressJson = $address ? Json::encode($address) : null;
 
         // Render the template!
         return $this->renderTemplate('sprout-seo/globals/'.$selectedTabHandle, [
@@ -108,6 +117,7 @@ class GlobalMetadataController extends Controller
             'addressDisplayHtml' => Template::raw($addressDisplayHtml),
             'countryInputHtml' => Template::raw($countryInputHtml),
             'addressFormHtml' => Template::raw($addressFormHtml),
+            'addressJson' => $addressJson,
             'isPro' => $isPro
         ]);
     }
@@ -117,10 +127,9 @@ class GlobalMetadataController extends Controller
      *
      * @return null|Response
      * @throws BadRequestHttpException
-     * @throws \Throwable
+     * @throws Throwable
      * @throws Exception
      * @throws \yii\db\Exception
-     * @throws \yii\web\ServerErrorHttpException
      */
     public function actionSaveGlobalMetadata()
     {
@@ -130,10 +139,19 @@ class GlobalMetadataController extends Controller
         $globalKeys = Craft::$app->getRequest()->getBodyParam('globalKeys');
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
-        $addressInfoId = SproutBaseFields::$app->addressField->saveAddressByPost();
+        $address = Craft::$app->getRequest()->getBodyParam('address');
 
-        if ($addressInfoId) {
-            $postData['identity']['addressId'] = $addressInfoId;
+        if ($address) {
+            if (isset($address['delete']) && $address['delete']) {
+                $postData['identity']['address'] = null;
+            } else {
+                unset(
+                    $address['id'],
+                    $address['fieldId'],
+                    $address['delete']
+                );
+                $postData['identity']['address'] = $address;
+            }
         }
 
         $globalKeys = explode(',', $globalKeys);
@@ -178,10 +196,10 @@ class GlobalMetadataController extends Controller
      *
      * @return Response
      * @throws BadRequestHttpException
-     * @throws \Throwable
+     * @throws Throwable
      * @throws \yii\db\Exception
      */
-    public function actionSaveVerifyOwnership()
+    public function actionSaveVerifyOwnership(): Response
     {
         $this->requirePostRequest();
 
@@ -225,9 +243,8 @@ class GlobalMetadataController extends Controller
      *
      * @return Metadata
      * @throws Exception
-     * @throws \yii\web\ServerErrorHttpException
      */
-    public function populateGlobalMetadata($postData)
+    public function populateGlobalMetadata($postData): Metadata
     {
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
         $site = Craft::$app->getSites()->getSiteById($siteId);
@@ -280,9 +297,9 @@ class GlobalMetadataController extends Controller
             $globalMetadata->robots = $robotsMetaValue;
 
             // @todo - Add location info
-            $globalMetadata->region = "";
-            $globalMetadata->placename = "";
-            $globalMetadata->position = "";
+            $globalMetadata->region = '';
+            $globalMetadata->placename = '';
+            $globalMetadata->position = '';
             $globalMetadata->latitude = $postData['identity']['latitude'] ?? '';
             $globalMetadata->longitude = $postData['identity']['longitude'] ?? '';
 
@@ -290,7 +307,6 @@ class GlobalMetadataController extends Controller
             $globalMetadata->ogSiteName = $identity['name'] ?? null;
             $globalMetadata->ogTitle = $optimizedTitle;
             $globalMetadata->ogDescription = $optimizedDescription;
-            $globalMetadata->ogImage = $optimizedImage;
             $globalMetadata->ogImage = $optimizedImage;
             $globalMetadata->ogTransform = $identity['ogTransform'] ?? null;
             $globalMetadata->ogLocale = null;
@@ -305,5 +321,35 @@ class GlobalMetadataController extends Controller
         }
 
         return $globalMetadata;
+    }
+
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     * @throws \Exception
+     */
+    public function actionGetAddressFormFieldsHtml(): Response
+    {
+        $this->requireAcceptsJson();
+        $this->requirePostRequest();
+
+        $addressFormatter = SproutBaseFields::$app->addressFormatter;
+
+        $addressArray = Craft::$app->getRequest()->getBodyParam('addressJson');
+
+        $address = new AddressModel();
+
+        if ($addressArray) {
+            $address->setAttributes($addressArray, false);
+
+            // @todo - this won't populate correctly
+            $address->siteId = $addressArray['siteId'] ?? null;
+        }
+
+        $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($address);
+
+        return $this->asJson([
+            'html' => $addressDisplayHtml
+        ]);
     }
 }

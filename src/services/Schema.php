@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
@@ -22,14 +22,14 @@ use barrelstrength\sproutseo\schema\PlaceSchema;
 use barrelstrength\sproutseo\schema\PostalAddressSchema;
 use barrelstrength\sproutseo\schema\ProductSchema;
 use barrelstrength\sproutseo\schema\ThingSchema;
+use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
-use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\SproutSeo;
-use yii\base\Component;
-use craft\helpers\Json;
 use Craft;
+use craft\helpers\Json;
+use yii\base\Component;
 
 /**
  *
@@ -39,6 +39,14 @@ use Craft;
 class Schema extends Component
 {
     const EVENT_REGISTER_SCHEMAS = 'registerSchemasEvent';
+
+    /**
+     * Full schema.org core and extended vocabulary as described on schema.org
+     * http://schema.org/docs/full.html
+     *
+     * @var array
+     */
+    public $vocabularies = [];
 
     /**
      * All registered Schema Types
@@ -55,17 +63,9 @@ class Schema extends Component
     protected $schemas = [];
 
     /**
-     * Full schema.org core and extended vocabulary as described on schema.org
-     * http://schema.org/docs/full.html
-     *
-     * @var array
-     */
-    public $vocabularies = [];
-
-    /**
      * @return array
      */
-    public function getSchemasTypes()
+    public function getSchemasTypes(): array
     {
         $schemas = [
             WebsiteIdentityOrganizationSchema::class,
@@ -94,7 +94,7 @@ class Schema extends Component
             'schemas' => $schemas
         ]);
 
-        $this->trigger(Schema::EVENT_REGISTER_SCHEMAS, $event);
+        $this->trigger(self::EVENT_REGISTER_SCHEMAS, $event);
 
         foreach ($event->schemas as $schema) {
             $this->schemaTypes[] = $schema;
@@ -106,7 +106,7 @@ class Schema extends Component
     /**
      * @return BaseSchema[]
      */
-    public function getSchemas()
+    public function getSchemas(): array
     {
         $schemaTypes = $this->getSchemasTypes();
 
@@ -115,7 +115,7 @@ class Schema extends Component
             $this->schemas[$schemaClass] = $schema;
         }
 
-        uasort($this->schemas, function($a, $b) {
+        uasort($this->schemas, static function($a, $b) {
             /**
              * @var $a BaseSchema
              * @var $b BaseSchema
@@ -131,7 +131,7 @@ class Schema extends Component
      *
      * @return array
      */
-    public function getSchemaOptions()
+    public function getSchemaOptions(): array
     {
         $schemas = $this->getSchemas();
 
@@ -142,7 +142,7 @@ class Schema extends Component
         }
 
         // Get a filtered list of our default Sprout SEO schema
-        $defaultSchema = array_filter($schemas, function($map) {
+        $defaultSchema = array_filter($schemas, static function($map) {
             /**
              * @var Schema $map
              */
@@ -150,7 +150,7 @@ class Schema extends Component
         });
 
         // Get a filtered list of of any custom schema
-        $customSchema = array_filter($schemas, function($map) {
+        $customSchema = array_filter($schemas, static function($map) {
             /**
              * @var Schema $map
              */
@@ -165,7 +165,7 @@ class Schema extends Component
         ];
 
 
-        $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
+        $schemaOptions = array_merge($schemaOptions, array_map(static function($schema) {
             /**
              * @var BaseSchema $schema
              */
@@ -179,7 +179,7 @@ class Schema extends Component
         if (count($customSchema)) {
             $schemaOptions[] = ['optgroup' => Craft::t('sprout-seo', 'Custom Types')];
 
-            $schemaOptions = array_merge($schemaOptions, array_map(function($schema) {
+            $schemaOptions = array_merge($schemaOptions, array_map(static function($schema) {
                 /**
                  * @var BaseSchema $schema
                  */
@@ -202,7 +202,7 @@ class Schema extends Component
      *
      * @return array[][]
      */
-    public function getSchemaSubtypes($schemas)
+    public function getSchemaSubtypes($schemas): array
     {
         $values = null;
 
@@ -230,11 +230,99 @@ class Schema extends Component
     }
 
     /**
+     * Returns a schema map instance (based on $uniqueKey) or $default
+     *
+     * @param string $uniqueKey
+     * @param null   $default
+     *
+     * @return mixed|null
+     */
+    public function getSchemaByUniqueKey($uniqueKey, $default = null)
+    {
+        $this->getSchemas();
+
+        return array_key_exists($uniqueKey, $this->schemas) ? $this->schemas[$uniqueKey] : $default;
+    }
+
+    /**
+     * Returns an array of vocabularies based on the path provided
+     * SproutSeo::$app->schema->getVocabularies('Organization.LocalBusiness.AutomotiveBusiness');
+     *
+     * @param null $path
+     *
+     * @return array
+     */
+    public function getVocabularies($path = null): array
+    {
+        $jsonLdTreePath = Craft::getAlias('@sproutseolib/jsonld/tree.jsonld');
+
+        $allVocabularies = Json::decode(file_get_contents($jsonLdTreePath));
+
+        $this->vocabularies = $this->updateArrayKeys($allVocabularies['children'], 'name');
+
+        if ($path) {
+            return $this->getArrayByPath($this->vocabularies, $path);
+        }
+
+        return $this->vocabularies;
+    }
+
+    /**
+     * @param        $array
+     * @param        $path
+     * @param string $separator
+     *
+     * @return mixed
+     */
+    protected function getArrayByPath($array, $path, $separator = '.')
+    {
+        $keys = explode($separator, $path);
+
+        $level = 1;
+        foreach ($keys as $key) {
+            if ($level == 1) {
+                $array = $array[$key];
+            } else {
+                $array = $array['children'][$key];
+            }
+
+            $level++;
+        }
+
+        return $array;
+    }
+
+    /**
+     * @param array $oldArray
+     * @param       $replaceKey
+     *
+     * @return array
+     */
+    protected function updateArrayKeys(array $oldArray, $replaceKey): array
+    {
+        $newArray = [];
+
+        foreach ($oldArray as $key => $value) {
+            if (isset($value[$replaceKey])) {
+                $key = $value[$replaceKey];
+            }
+
+            if (is_array($value)) {
+                $value = $this->updateArrayKeys($value, $replaceKey);
+            }
+
+            $newArray[$key] = $value;
+        }
+
+        return $newArray;
+    }
+
+    /**
      * @param $type
      *
      * @return array
      */
-    private function getSchemaChildren($type)
+    private function getSchemaChildren($type): array
     {
         $tree = SproutSeo::$app->schema->getVocabularies($type);
 
@@ -273,91 +361,5 @@ class Schema extends Component
         }
 
         return $children;
-    }
-
-    /**
-     * Returns a schema map instance (based on $uniqueKey) or $default
-     *
-     * @param string $uniqueKey
-     * @param null   $default
-     *
-     * @return mixed|null
-     */
-    public function getSchemaByUniqueKey($uniqueKey, $default = null)
-    {
-        $this->getSchemas();
-        return array_key_exists($uniqueKey, $this->schemas) ? $this->schemas[$uniqueKey] : $default;
-    }
-    /**
-     * Returns an array of vocabularies based on the path provided
-     * SproutSeo::$app->schema->getVocabularies('Organization.LocalBusiness.AutomotiveBusiness');
-     *
-     * @param null $path
-     *
-     * @return array
-     */
-    public function getVocabularies($path = null)
-    {
-        $jsonLdTreePath = Craft::getAlias('@sproutseolib/jsonld/tree.jsonld');
-
-        $allVocabularies = Json::decode(file_get_contents($jsonLdTreePath));
-
-        $this->vocabularies = $this->updateArrayKeys($allVocabularies['children'], 'name');
-
-        if ($path) {
-            return $this->getArrayByPath($this->vocabularies, $path);
-        } else {
-            return $this->vocabularies;
-        }
-    }
-
-    /**
-     * @param        $array
-     * @param        $path
-     * @param string $separator
-     *
-     * @return mixed
-     */
-    protected function getArrayByPath($array, $path, $separator = '.')
-    {
-        $keys = explode($separator, $path);
-
-        $level = 1;
-        foreach ($keys as $key) {
-            if ($level == 1) {
-                $array = $array[$key];
-            } else {
-                $array = $array['children'][$key];
-            }
-
-            $level++;
-        }
-
-        return $array;
-    }
-
-    /**
-     * @param array $oldArray
-     * @param       $replaceKey
-     *
-     * @return array
-     */
-    protected function updateArrayKeys(array $oldArray, $replaceKey)
-    {
-        $newArray = [];
-
-        foreach ($oldArray as $key => $value) {
-            if (isset($value[$replaceKey])) {
-                $key = $value[$replaceKey];
-            }
-
-            if (is_array($value)) {
-                $value = $this->updateArrayKeys($value, $replaceKey);
-            }
-
-            $newArray[$key] = $value;
-        }
-
-        return $newArray;
     }
 }

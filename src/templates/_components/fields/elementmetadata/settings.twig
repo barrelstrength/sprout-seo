@@ -10,7 +10,7 @@
 
 {% if isPro or noMetadataFieldsExist or thisIsTheOneMetadataField %}
 
-    {% if not isPro %}
+    {% if not isPro and not(noMetadataFieldsExist or thisIsTheOneMetadataField) %}
         {{ sprout.upgradeToProCallout({
             message: '<a href="'~cpUrl('sprout-seo/upgrade')~'">Upgrade to PRO</a> to enable multiple Metadata field mappings, manage redirects, and generate sitemaps.'
         }) }}
@@ -20,26 +20,19 @@
     {% set optimizedTitleOptions = craft.sproutSeo.getOptimizedTitleOptions(settings) %}
     {% set mainEntityValues = {'schemaTypeId': settings.schemaTypeId, 'schemaOverrideTypeId': settings.schemaOverrideTypeId} %}
 
-    <div class="field">
-        <div class="heading">
-            <label for="siteOwnerType">{{ "Meta Title"|t('sprout-seo') }}</label>
-            <p class="instructions">
-                {{ "Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select
-'   Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t('sprout-seo') }}
-            </p>
-        </div>
-        <div class="input">
-            <div class="field sprout-selectother">
-                {{ sproutFields.selectOther({
-                    name: 'optimizedTitleField',
-                    id: 'optimizedTitleField',
-                    options: optimizedTitleOptions ,
-                    value: settings.optimizedTitleField is defined ? settings.optimizedTitleField : null,
-                    otherPlaceholderText: 'Custom title pattern. Twig code allowed, i.e. {title} - {customField}'|t('sprout-seo')
-                }) }}
-            </div>
-        </div>
-    </div>
+
+    {{ forms.field({
+        label: 'Meta Title'|t('sprout-seo'),
+        instructions: "Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select 'Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t('sprout-seo'),
+        first: true,
+        errors: field.getErrors('optimizedTitleField'),
+    }, sproutFields.selectOther({
+        name: 'optimizedTitleField',
+        id: 'optimizedTitleField',
+        options: optimizedTitleOptions ,
+        value: field.optimizedTitleField is defined ? settings.optimizedTitleField : null,
+        otherPlaceholderText: 'Custom title pattern. Twig code allowed, i.e. {title} - {customField}'|t('sprout-seo')
+    })) }}
 
     {% set optimizedDescriptionOptions = craft.sproutSeo.getOptimizedDescriptionOptions(settings) %}
 
@@ -134,7 +127,7 @@
     }) }}
 
     <div id="settings-enablemetadadetails"
-         class="{% if not settings.enableMetaDetailsFields %} hidden {% endif %}">
+        class="{% if not settings.enableMetaDetailsFields %} hidden {% endif %}">
 
         {% set advancedInput %}
             <table class="data" style="width: auto;">
@@ -232,32 +225,13 @@
         disabled: not isPro
     }) }}
 
-    {% js %}
-        var items = {{ schemaSubtypes|json_encode|raw }};
-        var entryValues = {{ mainEntityValues|json_encode|raw }};
+    {% js on ready %}
 
-        $(document).ready(function() {
         Craft.SproutFields.initFields($("#content"));
 
-        //Main entity dropdowns
-        $('.mainentity-firstdropdown select').change(function() {
-        if(this.value === 'barrelstrength-sproutseo-schema-personschema'){
-        $('.mainentity-seconddropdown select').addClass('hidden');
-        }else{
-        $('.mainentity-seconddropdown select').removeClass('hidden');
-        }
-        });
-
-        // check if we need load depending dropdowns
-        if (entryValues){
-        if (entryValues.hasOwnProperty('schemaTypeId') && entryValues.schemaTypeId){
-        $('.mainentity-firstdropdown select').val(entryValues.schemaTypeId).change();
-        }
-        if (entryValues.hasOwnProperty('schemaOverrideTypeId') && entryValues.schemaOverrideTypeId){
-        $('.mainentity-seconddropdown select').val(entryValues.schemaOverrideTypeId).change();
-        }
-        }
-
+        new SproutSeoWebsiteIdentitySettings({
+        items: {{ schemaSubtypes|json_encode|raw }},
+        mainEntityValues: {{ mainEntityValues|json_encode|raw }}
         });
 
     {% endjs %}

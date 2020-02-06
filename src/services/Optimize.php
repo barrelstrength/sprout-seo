@@ -1,37 +1,46 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutseo\enums\MetadataLevels;
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\models\Globals;
+use barrelstrength\sproutseo\models\Metadata;
+use barrelstrength\sproutseo\models\Metadata as MetadataModel;
+use barrelstrength\sproutseo\models\Settings;
+use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityWebsiteSchema;
-use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
-use barrelstrength\sproutseo\enums\MetadataLevels;
-use barrelstrength\sproutseo\models\Globals;
-use barrelstrength\sproutseo\models\Metadata as MetadataModel;
-use craft\base\ElementInterface;
-
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
-use barrelstrength\sproutseo\models\Metadata;
-
 use barrelstrength\sproutseo\SproutSeo;
-use barrelstrength\sproutseo\models\Settings;
+use Craft;
 use craft\base\Element;
-
+use craft\base\ElementInterface;
 use craft\models\Site;
 use DateTime;
-use Craft;
+use Throwable;
 use yii\base\Component;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
+/**
+ *
+ * @property string             $uri
+ * @property \craft\models\Site $matchedSite
+ */
 class Optimize extends Component
 {
+    /**
+     * @var ElementInterface
+     */
+    public static $matchedElement;
+
     /**
      * Sprout SEO Globals data
      *
@@ -57,11 +66,6 @@ class Optimize extends Component
     public $templateMetadata = [];
 
     /**
-     * @var ElementInterface
-     */
-    public static $matchedElement;
-
-    /**
      * Add values to the master $this->templateMetadata array
      *
      * @param array $meta
@@ -81,10 +85,13 @@ class Optimize extends Component
      * @param $context
      *
      * @return array|null|string
-     * @throws \Twig_Error_Loader
+     * @throws \Throwable
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function getMetadataViaContext(&$context)
     {
@@ -104,7 +111,7 @@ class Optimize extends Component
     /**
      * @return string
      */
-    public function getUri()
+    public function getUri(): string
     {
         $request = Craft::$app->getRequest();
         $uri = '/';
@@ -141,30 +148,33 @@ class Optimize extends Component
         self::$matchedElement = null;
         $uri = trim($uri, '/');
         /** @var Element $element */
-        $element = Craft::$app->getElements()->getElementByUri($uri, $siteId, false);
+        $element = Craft::$app->getElements()->getElementByUri($uri, $siteId);
         if ($element && ($element->uri !== null)) {
             self::$matchedElement = $element;
         }
     }
 
     /**
-     * @param      $element
-     * @param      $site
-     * @param bool $render
-     * @param bool $context
+     * @param \craft\base\Element $element
+     * @param                     $site
+     * @param bool                $render
+     * @param bool                $context
      *
      * @return array|null|string
-     * @throws \Twig_Error_Loader
+     * @throws \Throwable
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws \yii\base\InvalidConfigException
      */
-    public function getMetadata(Element $element = null, $site, $render = true, &$context = null)
+    public function getMetadata(Element $element = null, $site = null, $render = true, &$context = null)
     {
-        /**
-         * @var Settings $settings
-         */
-        $settings = Craft::$app->plugins->getPlugin('sprout-seo')->getSettings();
+        /** @var SproutSeo $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
         $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($element, $site);
@@ -209,9 +219,9 @@ class Optimize extends Component
      * @param Site $site
      *
      * @return Metadata|mixed
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
      */
     public function getPrioritizedMetadataModel($element, $site = null)
     {
@@ -229,51 +239,51 @@ class Optimize extends Component
 
             switch ($level) {
                 case MetadataLevels::GlobalMetadata:
-                    {
-                        $overrideInfo = $this->globals->meta;
-                        break;
-                    }
+                {
+                    $overrideInfo = $this->globals->meta;
+                    break;
+                }
                 case MetadataLevels::ElementMetadata:
-                    {
-                        if ($this->elementMetadata) {
+                {
+                    if ($this->elementMetadata) {
 
-                            // Default to the current URL, if no overrides exist
-                            $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                            $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                            $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                        // Default to the current URL, if no overrides exist
+                        $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                        $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
+                        $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
 
-                            $overrideInfo = $this->elementMetadata->getAttributes();
-                        }
-
-                        break;
+                        $overrideInfo = $this->elementMetadata->getAttributes();
                     }
+
+                    break;
+                }
                 case MetadataLevels::TemplateMetadata:
-                    {
-                        $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+                {
+                    $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
 
-                        // Only allow Template Overrides if using Pro Edition
-                        if (!$isPro) {
-                            break;
-                        }
-
-                        $overrideInfo = $this->templateMetadata;
-
-                        // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
-                        // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
-                        // Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
-                        if (isset($overrideInfo['elementId']))
-                        {
-                            $elementOverride = Craft::$app->elements->getElementById($overrideInfo['elementId']);
-                            $overrideInfo = SproutSeo::$app->elementMetadata->getElementMetadata($elementOverride);
-                        }
-
-                        // Assume our canonical URL is the current URL unless there is a codeOverride
-                        $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                        $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                        $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-
+                    // Only allow Template Overrides if using Pro Edition
+                    if (!$isPro) {
                         break;
                     }
+
+                    $overrideInfo = $this->templateMetadata;
+
+                    // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
+                    // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
+                    // Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
+                    if (isset($overrideInfo['elementId'])) {
+                        /** @var \craft\base\Element $elementOverride */
+                        $elementOverride = Craft::$app->elements->getElementById($overrideInfo['elementId']);
+                        $overrideInfo = SproutSeo::$app->elementMetadata->getElementMetadata($elementOverride);
+                    }
+
+                    // Assume our canonical URL is the current URL unless there is a codeOverride
+                    $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                    $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+                    $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
+
+                    break;
+                }
             }
 
             $metadataModel = new Metadata($overrideInfo);
@@ -283,7 +293,7 @@ class Optimize extends Component
         }
 
         // Remove the ogAuthor value if we don't have an article
-        if ($prioritizedMetadataModel->ogType != 'article') {
+        if ($prioritizedMetadataModel->ogType !== 'article') {
             $prioritizedMetadataModel->ogAuthor = null;
             $prioritizedMetadataModel->ogPublisher = null;
         } else {
@@ -292,21 +302,24 @@ class Optimize extends Component
             $prioritizedMetadataModel->ogExpiryDate = null;
 
             // @todo - refactor
-            if ($element !== null)
-            {
-                if ($element->dateCreated !== null && $element->dateCreated) {
-                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ISO8601);
+            if ($element !== null) {
+                if (isset($element->postDate)) {
+                    if ($element->postDate !== null && $element->postDate) {
+                        $prioritizedMetadataModel->ogDateCreated = $element->postDate->format(DateTime::ATOM);
+                    }
+                } else if ($element->dateCreated !== null && $element->dateCreated) {
+                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ATOM);
                 }
 
                 if ($element->dateUpdated !== null && $element->dateUpdated) {
-                    $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ISO8601);
+                    $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ATOM);
                 }
 
                 /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
                 /** @noinspection PhpUndefinedFieldInspection */
                 if (isset($element->expiryDate) && $element->expiryDate !== null && $element->expiryDate) {
                     /** @noinspection PhpUndefinedFieldInspection */
-                    $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ISO8601);
+                    $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ATOM);
                 }
             }
         }
@@ -334,7 +347,7 @@ class Optimize extends Component
         return $prioritizedMetadataModel;
     }
 
-    public function getStructuredData($element = null)
+    public function getStructuredData($element = null): array
     {
         $schema = [];
         $websiteIdentity = [
@@ -380,7 +393,7 @@ class Optimize extends Component
         $identity = $this->globals->identity;
 
         // Website Identity Place
-        if (isset($identity['addressId']) && $identity['addressId']) {
+        if (isset($identity['address']) && $identity['address']) {
             $placeSchema = new WebsiteIdentityPlaceSchema();
             $placeSchema->addContext = true;
 
@@ -394,8 +407,7 @@ class Optimize extends Component
             $schema['place'] = $placeSchema;
         }
 
-        if ($element !== null)
-        {
+        if ($element !== null) {
             $schema['mainEntity'] = $this->getMainEntityStructuredData($element);
         }
 
@@ -434,10 +446,12 @@ class Optimize extends Component
      * @param $metadata
      *
      * @return string
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\base\Exception
      */
-    public function renderMetadata($metadata)
+    public function renderMetadata($metadata): string
     {
         $sproutSeoTemplatesPath = Craft::getAlias('@sproutseo/');
 

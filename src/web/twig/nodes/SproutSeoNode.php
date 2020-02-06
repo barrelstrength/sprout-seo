@@ -1,22 +1,24 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\web\twig\nodes;
 
 use barrelstrength\sproutseo\SproutSeo;
+use Twig\Compiler;
+use Twig\Node\Node as TwigNode;
 
-class SproutSeoNode extends \Twig_Node
+class SproutSeoNode extends TwigNode
 {
     /**
      * Compiles a Optimize_Node into PHP.
      *
-     * @param \Twig_Compiler $compiler
+     * @param \Twig\Compiler $compiler
      */
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $action = $this->getNode('action')->getAttribute('value');
 

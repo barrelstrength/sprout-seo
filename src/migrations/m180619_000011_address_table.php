@@ -1,10 +1,15 @@
 <?php
+/**
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutseo\migrations;
 
+use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 
 /**
  * m180619_000011_address_table migration.
@@ -16,12 +21,12 @@ class m180619_000011_address_table extends Migration
      *
      * @throws \Throwable
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $plugin = (new Query())
             ->select(['*'])
             ->from(['{{%plugins}}'])
-            ->where(['handle' => 'sprout-seo'] )
+            ->where(['handle' => 'sprout-seo'])
             ->one();
 
         $migration = (new Query())
@@ -32,7 +37,7 @@ class m180619_000011_address_table extends Migration
 
         $this->createAddressTable();
 
-        if ($migration || !$this->db->tableExists('{{%sproutseo_addresses}}')){
+        if ($migration || !$this->db->tableExists('{{%sproutseo_addresses}}')) {
             // this migration was already executed by old name or sproutseo_addresses does not exists
             return true;
         }
@@ -65,7 +70,7 @@ class m180619_000011_address_table extends Migration
                 'address2' => $address['address2'],
             ];
 
-            $this->insert('{{%sproutfields_addresses}}', $addressData);
+            $this->insert('{{%sprout_addresses}}', $addressData);
             $addressId = $this->db->getLastInsertID();
 
             $globals = (new Query())
@@ -73,7 +78,7 @@ class m180619_000011_address_table extends Migration
                 ->from(['{{%sproutseo_globals}}'])
                 ->one();
 
-            if (isset($globals['identity']) && isset($globals['id'])) {
+            if (isset($globals['identity'], $globals['id'])) {
                 $identity = json_decode($globals['identity'], true);
                 if (isset($identity['addressId'])) {
                     $identity['addressId'] = $addressId;
@@ -86,6 +91,16 @@ class m180619_000011_address_table extends Migration
     }
 
     /**
+     * @inheritdoc
+     */
+    public function safeDown(): bool
+    {
+        echo "m180619_000011_address_table cannot be reverted.\n";
+
+        return false;
+    }
+
+    /**
      * @throws \Throwable
      */
     protected function createAddressTable()
@@ -95,14 +110,5 @@ class m180619_000011_address_table extends Migration
         ob_start();
         $migration->up();
         ob_end_clean();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown()
-    {
-        echo "m180619_000011_address_table cannot be reverted.\n";
-        return false;
     }
 }

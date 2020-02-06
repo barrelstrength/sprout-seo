@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
@@ -19,7 +19,7 @@ class MainEntityOfPageSchema extends Schema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Main Entity Of Page';
     }
@@ -27,7 +27,7 @@ class MainEntityOfPageSchema extends Schema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'WebPage';
     }
@@ -35,7 +35,7 @@ class MainEntityOfPageSchema extends Schema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return true;
     }

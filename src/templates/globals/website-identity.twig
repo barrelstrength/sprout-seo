@@ -33,7 +33,7 @@
     <form method="post" accept-charset="UTF-8" data-saveshortcut>
         {{ csrfInput() }}
         <input type="hidden" name="action"
-               value="sprout-seo/global-metadata/save-global-metadata">
+            value="sprout-seo/global-metadata/save-global-metadata">
         <input type="hidden" name="globalKeys" value="meta,identity">
 
         <input type="hidden" name="siteId" value="{{ globals.siteId }}">
@@ -60,8 +60,8 @@
         }) }}
 
         <div id="toggle-alternate"
-             class="{{ (websiteIdentity['alternateName'] is defined and websiteIdentity.alternateName ?:
-             'hidden' ) }}">
+            class="{{ (websiteIdentity['alternateName'] is defined and websiteIdentity.alternateName ?:
+            'hidden' ) }}">
             {{ forms.textField({
                 label: "Alternate Name"|t('sprout-seo') ~ sprout.infoIcon({
                     label: "Alternate Name"|t('sprout-seo'),
@@ -167,38 +167,23 @@
             name: 'sproutseo[globals][identity][telephone]',
             value: websiteIdentity['telephone']['phone'] is defined ? websiteIdentity.telephone.phone : null,
             errors: '',
-            limitToSingleCountry: false,
+            field: {
+                limitToSingleCountry: false
+            },
             country: websiteIdentity['telephone']['country'] is defined ? websiteIdentity.telephone.country : 'US',
             countryId: 'phoneCountry',
             namespaceCountryId: 'phoneCountry'
         }) }}
 
         {% set addressInput %}
-            <div class="sproutaddressinfo-box"
-                    {% if websiteIdentity.addressId is defined %}
-                        data-addressinfoid='{{ websiteIdentity.addressId }}'
-                    {% endif %}
-                    data-defaultcountrycode='US'
-            >
-                <div class='address-add-button hidden'>
-                    <a class='btn add icon dashed sprout-address-edit'
-                       href='#'>{{ "Add Address"|t('sprout-seo') }}</a>
-                </div>
-                <div class='address-edit-buttons hidden'>
-                    <a class='small btn right icon sprout-address-edit clear-button'
-                       href='#'>{{ "Clear"|t('sprout-seo') }}</a>
-                    <a class='small btn right icon sprout-address-edit update-button'
-                       href='#'>{{ "Edit"|t('sprout-seo') }}</a>
-                </div>
-                <div class='address-format hidden'>
-                      {{ addressDisplayHtml }}
-                </div>
-                <div class='sproutfields-address-formfields hidden'>
-                    <input type="hidden" name="address[delete]" />
-                    {{ countryInputHtml }}
-                    {{ addressFormHtml }}
-                </div>
-            </div>
+            {% include "sprout-base-fields/_components/fields/formfields/address/input" with {
+                showAddressOnInitialLoad: addressDisplayHtml is not empty ? true : false,
+                formFieldHtmlActionUrl: 'sprout-seo/global-metadata/get-address-form-fields-html',
+                addressJson: addressJson,
+                addressDisplayHtml: addressDisplayHtml,
+                countryInputHtml: countryInputHtml,
+                addressFormHtml: addressFormHtml
+            } %}
         {% endset %}
 
         {{ forms.field({
@@ -269,11 +254,11 @@
                 </div>
 
                 <div id="organization"
-                     class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
+                    class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
 
                     <div class="identitytype-dropdown organizationinfo-dropdown">
                         {{ forms.selectField({
-                            id: 'first',
+                            id: 'main-entity-first-dropdown',
                             role: 'listbox',
                             name: 'sproutseo[globals][identity][organizationSubTypes][0]',
                             options: websiteIdentityOptions,
@@ -285,7 +270,7 @@
 
                     <div class="identitytype-dropdown organizationinfo-dropdown hidden">
                         {{ forms.selectField({
-                            id: 'second',
+                            id: 'main-entity-second-dropdown',
                             role: 'listbox',
                             name: 'sproutseo[globals][identity][organizationSubTypes][1]',
                             options: {'':''},
@@ -297,7 +282,7 @@
 
                     <div class="identitytype-dropdown organizationinfo-dropdown hidden">
                         {{ forms.selectField({
-                            id: 'third',
+                            id: 'main-entity-third-dropdown',
                             role: 'listbox',
                             name: 'sproutseo[globals][identity][organizationSubTypes][2]',
                             options: {'':''},
@@ -334,7 +319,7 @@
 
             {# These fields should only display when 'Organization => LocalBusiness' is selected #}
             <div id="localbusiness"
-                 {% if not globals.isLocalBusiness() %}class="hidden"{% endif %}>
+                {% if not globals.isLocalBusiness() %}class="hidden"{% endif %}>
 
                 {% set priceRangeOptions = craft.sproutSeo.getPriceRangeOptions(currentSite) %}
 
@@ -439,83 +424,21 @@
 
 {% endblock %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\globals\\GlobalsAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\seo\\SproutSeoAsset") %}
 
-{% js %}
-
-    var items = {{ organizationItems|json_encode|raw }};
-    var websiteIdentity = {{ websiteIdentity|json_encode|raw }};
-
-    $(document).ready(function() {
+{% js on ready %}
     Craft.SproutFields.initFields($("#content"));
 
-    $('#keywords-field input').tagEditor({
-    animateDelete: 20
+    new SproutSeoWebsiteIdentity({
+    items: {{ organizationItems|json_encode|raw }},
+    websiteIdentity: {{ websiteIdentity|json_encode|raw }},
+    firstDropdownId: '#main-entity-first-dropdown',
+    secondDropdownId: '#main-entity-second-dropdown',
+    thirdDropdownId: '#main-entity-third-dropdown',
     });
 
-    // check if we need load depending dropdowns
-    if (websiteIdentity)
-    {
-    if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[0])
-    {
-    $('#first').val(websiteIdentity.organizationSubTypes[0]).change();
-    }
-    if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[1])
-    {
-    $('#second').val(websiteIdentity.organizationSubTypes[1]).change();
-    }
-    if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[2])
-    {
-    $('#third').val(websiteIdentity.organizationSubTypes[2]).change();
-    }
-    }
-
-    $( "#identityType" ).change(function() {
-    if(this.value === 'Person')
-    {
-    $( ".person-info" ).removeClass('hidden');
-    $( ".organization-info" ).addClass('hidden');
-    }
-    else
-    {
-    $( ".person-info" ).addClass('hidden');
-    $( ".organization-info" ).removeClass('hidden');
-    }
-
-    if(this.value === 'Organization')
-    {
-    $( ".organization-info" ).removeClass('hidden');
-    $( ".person-info" ).addClass('hidden');
-
-    if ($( "#first" ).val() == 'LocalBusiness')
-    {
-    $( "#localbusiness" ).removeClass('hidden');
-    }
-    }
-    else
-    {
-    $( ".organization-info" ).addClass('hidden');
-    $( ".person-info" ).removeClass('hidden');
-    }
+    new SproutSeoKeywordsField({
+    keywordsFieldId: '#keywords-field'
     });
-
-    $( "#first" ).change(function() {
-    console.log(this.value);
-    if(this.value === 'LocalBusiness')
-    {
-    $( "#localbusiness" ).removeClass('hidden');
-    }
-    else
-    {
-    $( "#localbusiness" ).addClass('hidden');
-    }
-    });
-
-        new Craft.SproutBase.AddressBox($('.sproutaddressinfo-box'), {
-            source: 'websiteIdentity',
-            namespace: 'address'
-        })
-    });
-
 {% endjs %}
 

@@ -1,25 +1,27 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
 
 
-use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\migrations\InsertDefaultGlobalsBySite;
+use barrelstrength\sproutseo\models\Globals;
+use Craft;
 use craft\base\Component;
 use craft\db\Query;
 use craft\helpers\Json;
-use Craft;
 use craft\models\Site;
 
 /**
  * Class SproutSeo_GlobalMetadataService
  *
  * @package Craft
+ *
+ * @property array $transforms
  */
 class GlobalMetadata extends Component
 {
@@ -32,7 +34,7 @@ class GlobalMetadata extends Component
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      */
-    public function getGlobalMetadata($site = null)
+    public function getGlobalMetadata($site = null): Globals
     {
         $siteId = $site->id ?? null;
 
@@ -88,7 +90,7 @@ class GlobalMetadata extends Component
      * @throws \Throwable
      * @throws \yii\db\Exception
      */
-    public function saveGlobalMetadata($globalKeys, $globals)
+    public function saveGlobalMetadata($globalKeys, $globals): bool
     {
         if (!is_array($globalKeys)) {
             [$globalKeys];
@@ -127,7 +129,7 @@ class GlobalMetadata extends Component
     /**
      * @return array
      */
-    public function getTransforms()
+    public function getTransforms(): array
     {
         $options = [
             '' => Craft::t('sprout-seo', 'None')

@@ -1,14 +1,14 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
 
-use craft\commerce\Plugin as Commerce;
 use craft\commerce\elements\Product;
+use craft\commerce\Plugin as Commerce;
 
 
 class ProductSchema extends ThingSchema
@@ -16,7 +16,7 @@ class ProductSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Product';
     }
@@ -24,7 +24,7 @@ class ProductSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'Product';
     }
@@ -32,7 +32,7 @@ class ProductSchema extends ThingSchema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return false;
     }
@@ -68,7 +68,9 @@ class ProductSchema extends ThingSchema
             'Organization' => WebsiteIdentityOrganizationSchema::class
         ];
 
-        $primaryCurrencyIso = Commerce::getInstance()->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
+        /** @var Commerce $commerce */
+        $commerce = Commerce::getInstance();
+        $primaryCurrencyIso = $commerce->getPaymentCurrencies()->getPrimaryPaymentCurrencyIso();
 
         $offers = [];
         $identityType = $identity['@type'];

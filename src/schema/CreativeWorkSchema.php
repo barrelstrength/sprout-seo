@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
@@ -16,7 +16,7 @@ class CreativeWorkSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Creative Work';
     }
@@ -24,7 +24,7 @@ class CreativeWorkSchema extends ThingSchema
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'CreativeWork';
     }
@@ -32,7 +32,7 @@ class CreativeWorkSchema extends ThingSchema
     /**
      * @return bool
      */
-    public function isUnlistedSchemaType()
+    public function isUnlistedSchemaType(): bool
     {
         return false;
     }
@@ -57,6 +57,9 @@ class CreativeWorkSchema extends ThingSchema
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function addEntryElementProperties()
     {
         $identity = $this->globals['identity'];

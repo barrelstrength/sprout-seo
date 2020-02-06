@@ -1,9 +1,14 @@
 <?php
+/**
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutseo\migrations;
 
-use craft\db\Migration;
 use barrelstrength\sproutbasefields\migrations\m190313_000000_add_administrativeareacode_column;
+use craft\db\Migration;
 
 /**
  * m190313_000000_rename_administrative_area_code_column_sproutseo migration.
@@ -11,7 +16,8 @@ use barrelstrength\sproutbasefields\migrations\m190313_000000_add_administrative
 class m190313_000000_rename_administrative_area_code_column_sproutseo extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp(): bool
     {
@@ -30,6 +36,7 @@ class m190313_000000_rename_administrative_area_code_column_sproutseo extends Mi
     public function safeDown(): bool
     {
         echo "m190313_000000_rename_administrative_area_code_column_sproutseo cannot be reverted.\n";
+
         return false;
     }
 }

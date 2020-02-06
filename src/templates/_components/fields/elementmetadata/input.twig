@@ -1,6 +1,8 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
+{% set sproutApp = craft.app.getModule('sprout-seo').app %}
+
 {% set pluginSettings   = craft.sproutSeo.getSettings() %}
 
 {% set displayMetadataField = false %}
@@ -9,7 +11,7 @@
 {# Prepare our SEO badge info icons #}
 <div class="sproutseo-metatitle-info hidden">
     {{- sprout.infoIcon({
-        label: "Meta Title"|t,
+        label: "Meta Title"|t('sprout-seo'),
         search: true,
         openGraph: true,
         twitterCard: true,
@@ -19,7 +21,7 @@
 
 <div class="sproutseo-metadescription-info hidden">
     {{- sprout.infoIcon({
-        label: "Meta Description"|t,
+        label: "Meta Description"|t('sprout-seo'),
         search: true,
         openGraph: true,
         twitterCard: true,
@@ -29,7 +31,7 @@
 
 <div class="sproutseo-metaimage-info hidden">
     {{- sprout.infoIcon({
-        label: "Meta Image"|t,
+        label: "Meta Image"|t('sprout-seo'),
         search: true,
         openGraph: true,
         twitterCard: true,
@@ -40,24 +42,24 @@
 <div>
     <div class="sproutseo-box-optimized">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsSearch]' }}"
-               value="{{ values.enableMetaDetailsSearch }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsSearch]' }}"
+            value="{{ values.enableMetaDetailsSearch }}">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsOpenGraph]' }}"
-               value="{{ values.enableMetaDetailsOpenGraph }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsOpenGraph]' }}"
+            value="{{ values.enableMetaDetailsOpenGraph }}">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsTwitterCard]' }}"
-               value="{{ values.enableMetaDetailsTwitterCard }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsTwitterCard]' }}"
+            value="{{ values.enableMetaDetailsTwitterCard }}">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsGeo]' }}"
-               value="{{ values.enableMetaDetailsGeo }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsGeo]' }}"
+            value="{{ values.enableMetaDetailsGeo }}">
         <input type="hidden"
-               name="{{ field.handle~'[metadata][enableMetaDetailsRobots]' }}"
-               value="{{ values.enableMetaDetailsRobots }}">
+            name="{{ field.handle~'[metadata][enableMetaDetailsRobots]' }}"
+            value="{{ values.enableMetaDetailsRobots }}">
         {% if settings is defined %}
             <input type="hidden" class="field"
-                   name="{{ field.handle~'[metadata][sproutSeoSettings]' }}"
-                   value="{{ settings|json_encode }}">
+                name="{{ field.handle~'[metadata][sproutSeoSettings]' }}"
+                value="{{ settings|json_encode }}">
         {% endif %}
 
         {% if settings.optimizedTitleField == 'manually' %}
@@ -65,13 +67,13 @@
             {% set displayMetadataField = true %}
 
             {{ forms.textField({
-                label: 'Meta Title'|t ~ sprout.infoIcon({
-                    label: "Meta Title"|t,
+                label: 'Meta Title'|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Meta Title"|t('sprout-seo'),
                     search: true,
                     openGraph: true,
                     twitterCard: true
                 }),
-                instructions: "The Title of your content which will appear in search results and social sharing."|t,
+                instructions: "The Title of your content which will appear in search results and social sharing."|t('sprout-seo'),
                 name: field.handle~'[metadata][optimizedTitle]',
                 id: 'sproutseo-optimizedtitle',
                 maxlength: 60,
@@ -90,13 +92,13 @@
             {% set displayMetadataField = true %}
 
             {{ forms.textareaField({
-                label: 'Meta Description'|t ~ sprout.infoIcon({
-                    label: "Meta Description"|t,
+                label: 'Meta Description'|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Meta Description"|t('sprout-seo'),
                     search: true,
                     openGraph: true,
                     twitterCard: true
                 }),
-                instructions: "A description of your content which will appear in search results and social sharing."|t,
+                instructions: "A description of your content which will appear in search results and social sharing."|t('sprout-seo'),
                 name: field.handle~'[metadata][optimizedDescription]',
                 maxlength: maxDescriptionLength,
                 showCharsLeft: true,
@@ -111,12 +113,12 @@
             {% set displayMetadataField = true %}
 
             {{ forms.field({
-                label: 'Meta Image'|t ~ sprout.infoIcon({
-                    label: "Meta Image"|t,
+                label: 'Meta Image'|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Meta Image"|t('sprout-seo'),
                     openGraph: true,
                     twitterCard: true
                 }),
-                instructions: 'A featured image that represents your content that will display in social sharing.'|t,
+                instructions: 'A featured image that represents your content that will display in social sharing.'|t('sprout-seo'),
                 id: 'sproutseo-optimizedimage',
             }, forms.elementSelect({
                 elements: metaImageElements,
@@ -126,7 +128,7 @@
                 id: 'optimizedImage',
                 name: field.handle~'[metadata][optimizedImage]',
                 jsClass: 'Craft.AssetSelectInput',
-                addButtonLabel: 'Select Image'|t,
+                addButtonLabel: 'Select Image'|t('sprout-seo'),
                 limit: 1,
                 criteria: {kind: ['image'], siteId : null}
             })) }}
@@ -138,14 +140,14 @@
             {% set displayMetadataField = true %}
 
             {{ forms.textField({
-                label: "Canonical URL"|t ~ sprout.infoIcon({
-                    label: "Canonical URL"|t,
+                label: "Canonical URL"|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Canonical URL"|t('sprout-seo'),
                     search: true,
                     structured: true,
                     openGraph: true,
                     twitterCard: true
                 }),
-                instructions: "The Canonical URL of your webpage"|t,
+                instructions: "The Canonical URL of your webpage"|t('sprout-seo'),
                 id: 'sproutseo-canonical',
                 name: field.handle~'[metadata][canonical]',
                 value: values.canonical
@@ -160,11 +162,11 @@
             {% set keywordsValue = values['keywords'] is defined ? values.keywords : null %}
 
             {{ forms.textField({
-                label: "Meta Keywords"|t ~ sprout.infoIcon({
-                    label: "Meta Keywords"|t,
+                label: "Meta Keywords"|t('sprout-seo') ~ sprout.infoIcon({
+                    label: "Meta Keywords"|t('sprout-seo'),
                     search: true
                 }),
-                instructions: "The primary keywords or phrases that describe your website."|t,
+                instructions: "The primary keywords or phrases that describe your website."|t('sprout-seo'),
                 id: 'sproutseo-optimizedkeywords',
                 name: field.handle~'[metadata][optimizedKeywords]',
                 value: values.optimizedKeywords
@@ -180,8 +182,7 @@
         {% if settings.showSearchMeta or settings.showGeo or settings.showRobots or settings.showOpenGraph or settings.showTwitter %}
             {% set advancedSeoButtons %}
                 <div class="buttons">
-                    <div id="btngroup"
-                         class="btngroup sproutseo-advancedoption-btns">
+                    <div id="{{ field.handle }}-meta-details-tabs" class="btngroup sproutseo-advancedoption-btns">
 
                         {% if settings.showSearchMeta %}
                             <div class="btn" id="btn-Search" data-type="Search">
@@ -192,7 +193,7 @@
 
                         {% if settings.showOpenGraph %}
                             <div class="btn" id="btn-OpenGraph"
-                                 data-type="OpenGraph">
+                                data-type="OpenGraph">
                                 <i class="sproutseo-icon icon-facebook">
                                     {{ svg('@sproutbaseicons/facebook-f.svg') }}
                                 </i> {{ "Open Graph"|t('sprout-seo') }}</div>
@@ -200,7 +201,7 @@
 
                         {% if settings.showTwitter %}
                             <div class="btn" id="btn-TwitterCard"
-                                 data-type="TwitterCard">
+                                data-type="TwitterCard">
                                 <i class="sproutseo-icon icon-twitter">
                                     {{ svg('@sproutbaseicons/twitter.svg') }}
                                 </i> {{ "Twitter Card"|t('sprout-seo') }}</div>
@@ -226,123 +227,58 @@
             {% endset %}
 
             {{ forms.field({
-                label: 'Meta Details'|t,
-                instructions: 'Fine-tune your metadata to your specific SEO needs.'|t,
+                label: 'Meta Details'|t('sprout-seo'),
+                instructions: 'Fine-tune your metadata to your specific SEO needs. Meta Details values will take priority when displaying metadata for this page.'|t('sprout-seo'),
                 id: 'sproutseo-advancedcustomizationfields',
             }, advancedSeoButtons) }}
         {% endif %}
 
-        <div class="matrix matrix-field sproutseo-matrixfields"
-             style="position: relative;">
+        <div id="{{ field.handle }}-meta-details-body" class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
 
-            <div class="blocks">
+            <div class="matrixblock fields-Search"
+                {% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
+            >
 
-                <div class="matrixblock fields-Search"
-                        {% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
-                >
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/input" %}
 
-                    <div class="titlebar">
-                        <div class="blocktype">
-                            <i class="sproutseo-icon icon-search">
-                                {{ svg('@sproutbaseicons/search.svg') }}
-                            </i> {{ "Search Meta"|t }} {{ sprout.infoIcon({
-                                label: "Search Meta"|t,
-                                search: true,
-                                message: 'All fields in this block take priority for the Search metadata at this priority level.'|t
-                            }) }}</div>
-                    </div>
+            </div>
 
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/input" %}
+            <div class="matrixblock fields-OpenGraph"
+                {% if values.enableMetaDetailsOpenGraph == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
+            >
 
-                </div>
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/open-graph" %}
 
-                <div class="matrixblock fields-OpenGraph"
-                        {% if values.enableMetaDetailsOpenGraph == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
-                >
+            </div>
 
-                    <div class="titlebar">
-                        <div class="blocktype"><i
-                                    class="sproutseo-icon icon-facebook">
-                                {{ svg('@sproutbaseicons/facebook-f.svg') }}
-                            </i> {{ "Open Graph"|t }} {{ sprout.infoIcon({
-                                label: "Open Graph"|t,
-                                openGraph: true,
-                                message: 'All fields in this block take priority for the Open Graph metadata at this priority level.'|t
-                            }) }}
-                        </div>
-                    </div>
+            <div class="matrixblock fields-TwitterCard"
+                {% if values.enableMetaDetailsTwitterCard == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
+            >
 
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/open-graph" %}
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/twitter-card" %}
 
-                </div>
+            </div>
+            <div class="matrixblock fields-Geo"
+                {% if values.enableMetaDetailsGeo == 0 or not settings.showGeo %} style="display:none;" {% endif %}
+            >
 
-                <div class="matrixblock fields-TwitterCard"
-                        {% if values.enableMetaDetailsTwitterCard == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
-                >
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/geo" %}
 
-                    <div class="titlebar">
-                        <div class="blocktype"><i
-                                    class="sproutseo-icon icon-twitter">
-                                {{ svg('@sproutbaseicons/twitter.svg') }}
-                            </i> {{ "Twitter Card"|t }} {{ sprout.infoIcon({
-                                label: "Twitter Card"|t,
-                                twitterCard: true,
-                                message: 'All fields in this block take priority for the Twitter Card metadata at this priority level.'|t
-                            }) }}</div>
-                    </div>
+            </div>
 
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/twitter-card" %}
+            <div class="matrixblock fields-Robots"
+                {% if values.enableMetaDetailsRobots == 0 or not settings.showRobots %} style="display:none;" {% endif %}
+            >
 
-                </div>
-                <div class="matrixblock fields-Geo"
-                        {% if values.enableMetaDetailsGeo == 0 or not settings.showGeo %} style="display:none;" {% endif %}
-                >
-
-                    <div class="titlebar">
-                        <div class="blocktype"><i
-                                    class="sproutseo-icon icon-location">
-                                {{ svg('@sproutbaseicons/map-marker-alt.svg') }}
-                            </i> {{ "Geo"|t }} {{ sprout.infoIcon({
-                                label: "Geo"|t,
-                                geo: true,
-                                message: 'All fields in this block take priority for the Geographic metadata at this priority level.'|t
-                            }) }}</div>
-                        <div class="preview"></div>
-                    </div>
-
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/geo" %}
-
-                </div>
-
-                <div class="matrixblock fields-Robots"
-                        {% if values.enableMetaDetailsRobots == 0 or not settings.showRobots %} style="display:none;" {% endif %}
-                >
-
-                    <div class="titlebar">
-                        <div class="blocktype"><i
-                                    class="sproutseo-icon icon-robots">
-                                {{ svg('@sproutbaseicons/search-minus.svg') }}
-                            </i> {{ "Robots"|t }} {{ sprout.infoIcon({
-                                label: "Robots"|t,
-                                robots: true,
-                                message: 'All fields in this block take priority for the Robots metadata at this priority level.'|t
-                            }) }}</div>
-                    </div>
-
-                    {% set robotsNamespace = field.handle ~ '[metadata][robots]' %}
-                    {% include "sprout-seo/_components/fields/elementmetadata/blocks/robots" %}
-
-                </div>
+                {% set robotsNamespace = field.handle ~ '[metadata][robots]' %}
+                {% include "sprout-seo/_components/fields/elementmetadata/blocks/robots" %}
 
             </div>
 
         </div>
 
     {% endif %}
-
 </div>
-
-
 
 {% css %}
     {# Hide the Heading of our Field so all our grouped sub-fields
@@ -350,257 +286,36 @@ feel like they are part of the natural flow of fields #}
     {% if fieldId is defined %}
         #{{ fieldId }} > .heading:first-of-type { display: none; }
     {% endif %}
-
-    {#{% if fieldId is defined and not displayMetadataField %}#}
-        {##{{ fieldId }} { display: none; }#}
-    {#{% endif %}#}
 {% endcss %}
 
-{% js %}
+{% js on ready %}
 
-    $( document ).ready(function() {
+    {% set seoBadgeInfo = sproutApp.elementMetadata.getSeoBadgeInfo(settings) %}
 
-    function getCustomizationSettings(customKey)
-    {
-        var name = '{{ field.handle|raw }}';
-        return $("input[name='fields["+name+"][metadata]["+customKey+"]']");
-    }
-
-    function toggleActive(div, divId)
-    {
-        //enableMetaDetailsSearch
-        var customKey = "enableMetaDetails"+divId;
-
-        var customizationSettings = getCustomizationSettings(customKey);
-
-        if (div.hasClass("active"))
-        {
-            div.removeClass("active");
-            customizationSettings.val(0);
-        }
-        else
-        {
-            div.addClass("active");
-            customizationSettings.val(1);
-        }
-    }
-
-    $(".sproutseo-advancedoption-btns div").click(function()
-    {
-        var divId = $(this).attr("data-type");
-        $(".fields-"+divId).toggle();
-
-        // Sitemap Settings
-        var btn = $("#btn-"+divId);
-        if (btn.length)
-        {
-            toggleActive(btn, divId);
-        }
-
-        // Optimize Field Settings
-        var fieldsBtn = $("#fields-btn-"+divId);
-        if (fieldsBtn.length)
-        {
-            toggleActive(fieldsBtn, divId);
-        }
-
-        return false; // avoid parents divs if you have nested divs
+    new SproutSeoMetadataField({
+    fieldHandle: '{{ field.handle }}',
+    seoBadgeInfo: {{ seoBadgeInfo|json_encode|raw }},
+    maxDescriptionLength: '{{ maxDescriptionLength }}'
     });
 
-    // Checking active class
-    var fields = ["Search","OpenGraph","Geo","Robots","TwitterCard"];
+    new MetaDetailsToggle({
+    fieldHandle: '{{ field.handle }}',
+    selectFieldId: '#fields-open-graph select'
+    });
 
-    for (var i = 0; i < fields.length; i++)
-    {
-        var customKey = "enableMetaDetails"+fields[i];
-        var customizationSettings = getCustomizationSettings(customKey);
-        if(customizationSettings.val()==1)
-        {
-            $("#btn-"+fields[i]).addClass("active");
-            // Optimize Field Settings
-            $("#fields-btn-"+fields[i]).addClass("active");
-        }
-    }
+    new MetaDetailsToggle({
+    fieldHandle: '{{ field.handle }}',
+    selectFieldId: '#fields-twitter-card select'
+    });
 
-    function appendSeoBadge(targetLabelId, seoButton)
-    {
-        if ($(targetLabelId).find('.sproutseo-info').length === 0)
-        {
-            $(targetLabelId).append(seoButton).removeClass('hidden');
-        }
-    }
+    new SproutSeoKeywordsField({
+    keywordsFieldId: '#fields-sproutseo-searchKeywords-field'
+    });
 
     {% if settings.optimizedKeywordsField == 'manually' %}
-        $('#fields-sproutseo-optimizedkeywords-field input').tagEditor({
-            animateDelete: 20
+        new SproutSeoKeywordsField({
+        keywordsFieldId: '#fields-sproutseo-optimizedkeywords-field'
         });
     {% endif %}
 
-    $('#fields-sproutseo-searchKeywords-field input').tagEditor({
-        animateDelete: 20
-    });
-
-    {% if settings.optimizedTitleField == 'elementTitle' %}
-
-        var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
-        var metaTitleLabelId = '#title-label';
-        appendSeoBadge(metaTitleLabelId, metaTitleSeoButton);
-        Craft.initUiElements($(metaTitleLabelId));
-
-        var metaTitleInput = $('#title');
-        metaTitleInput.addClass('nicetext');
-        metaTitleInput.data('show-chars-left', true);
-        metaTitleInput.attr('maxlength', 60);
-        new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
-
-    {% endif %}
-
-    {% if settings.optimizedTitleField matches '/^\\d+$/' %}
-        {% set optimizedTitleFieldModel = craft.app.fields.getFieldById(settings.optimizedTitleField) %}
-        {% if optimizedTitleFieldModel %}
-
-            var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
-            var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';
-
-            appendSeoBadge(metaTitleLabelId, metaTitleSeoButton);
-            Craft.initUiElements($(metaTitleLabelId));
-            var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');
-            metaTitleInput.attr('maxlength', 60);
-            new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
-
-        {% endif %}
-    {% endif %}
-
-    {% set optimizedTitleFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedTitleField) %}
-
-    {% if optimizedTitleFieldHandles %}
-        var metaTitleSeoButton = $('div.sproutseo-metatitle-info').html();
-
-        {% for titleFieldHandle in optimizedTitleFieldHandles %}
-
-            {% if titleFieldHandle == 'title' %}
-
-                var metaTitleLabelId = '#title-label';
-                appendSeoBadge(metaTitleLabelId, metaTitleSeoButton);
-
-                Craft.initUiElements($(metaTitleLabelId));
-
-                var metaTitleInput = $('#title-field input');
-                metaTitleInput.attr('maxlength', 60);
-                new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
-
-            {% else %}
-                {% set optimizedTitleFieldModel = craft.app.fields.getFieldByHandle(titleFieldHandle) %}
-                {% if optimizedTitleFieldModel %}
-
-                    var metaTitleLabelId = '#fields-{{ optimizedTitleFieldModel.handle }}-label';
-
-                    appendSeoBadge(metaTitleLabelId, metaTitleSeoButton);
-                    Craft.initUiElements($(metaTitleLabelId));
-
-                    var metaTitleInput = $('#fields-{{ optimizedTitleFieldModel.handle }}-field input');
-                    metaTitleInput.attr('maxlength', 60);
-                    new Garnish.NiceText(metaTitleInput, { showCharsLeft: true });
-
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-
-    {% if settings.optimizedDescriptionField matches '/^\\d+$/' %}
-        {% set optimizedDescriptionFieldModel = craft.app.fields.getFieldById(settings.optimizedDescriptionField) %}
-        {% if optimizedDescriptionFieldModel %}
-
-            var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();
-            var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';
-            appendSeoBadge(metaDescriptionLabelId, metaDescriptionSeoButton);
-            Craft.initUiElements($(metaDescriptionLabelId));
-
-            var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
-            metaDescriptionInput.attr('maxlength', {{ maxDescriptionLength }});
-
-            {# @todo - Can we improve this?
-            This triggers a double-instantiating console error #}
-            new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
-
-        {% endif %}
-    {% endif %}
-
-    {% set optimizedDescriptionFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedDescriptionField) %}
-
-    {% if optimizedDescriptionFieldHandles %}
-        {% for descriptionFieldHandle in optimizedDescriptionFieldHandles %}
-
-            var metaDescriptionSeoButton = $('div.sproutseo-metadescription-info').html();
-
-            {% if descriptionFieldHandle == 'title' %}
-
-                var metaDescriptionLabelId = '#title-label';
-                appendSeoBadge(metaDescriptionLabelId, metaDescriptionSeoButton);
-                Craft.initUiElements($(metaDescriptionLabelId));
-
-            {% else %}
-
-                {% set optimizedDescriptionFieldModel = craft.app.fields.getFieldByHandle(descriptionFieldHandle) %}
-                {% if optimizedDescriptionFieldModel %}
-
-                    var metaDescriptionLabelId = '#fields-{{ optimizedDescriptionFieldModel.handle }}-label';
-                    appendSeoBadge(metaDescriptionLabelId, metaDescriptionSeoButton);
-                    Craft.initUiElements($(metaDescriptionLabelId));
-
-                    var metaDescriptionInput = $('#fields-{{ optimizedDescriptionFieldModel.handle }}-field textarea');
-                    metaDescriptionInput.attr('maxlength', {{ maxDescriptionLength }});
-
-                    {# @todo - Can we improve this?
-                    This triggers a double-instantiating console error #}
-                    new Garnish.NiceText(metaDescriptionInput, { showCharsLeft: true });
-
-                {% endif %}
-
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-
-    {% set optimizedImageFieldHandles = craft.sproutSeo.getCustomSettingFieldHandles(settings.optimizedImageField) %}
-
-    {% if optimizedImageFieldHandles %}
-        {% for imageFieldHandle in optimizedImageFieldHandles %}
-
-            var metaImageSeoButton = $('div.sproutseo-metaimage-info').html();
-
-            {% set optimizedImageFieldModel = craft.app.fields.getFieldByHandle(imageFieldHandle) %}
-            {% if optimizedImageFieldModel %}
-
-                var metaImageLabelId = '#fields-{{ optimizedImageFieldModel.handle }}-label';
-                appendSeoBadge(metaImageLabelId, metaImageSeoButton);
-                Craft.initUiElements($(metaImageLabelId));
-
-                var metaImageInput = $('#fields-{{ optimizedImageFieldModel.handle }}-field input');
-                metaImageInput.attr('maxlength', 160);
-
-                {# @todo - Can we improve this?
-                This triggers a double-instantiating console error #}
-                new Garnish.NiceText(metaImageInput, { showCharsLeft: true });
-
-
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-
-    {% if settings.optimizedImageField matches '/^\\d+$/' %}
-        {% set optimizedImageFieldModel = craft.app.fields.getFieldById(settings.optimizedImageField) %}
-        {% if optimizedImageFieldModel %}
-
-            var metaImageSeoButton = $('div.sproutseo-metaimage-info').html();
-            var metaImageLabelId = '#fields-{{ optimizedImageFieldModel.handle }}-label';
-            appendSeoBadge(metaImageLabelId, metaImageSeoButton);
-
-            Craft.initUiElements($(metaImageLabelId));
-
-        {% endif %}
-    {% endif %}
-
-    new Craft.SproutSeoOpenGraph();
-    new Craft.SproutSeoTwitterCard();
-    });
 {% endjs %}

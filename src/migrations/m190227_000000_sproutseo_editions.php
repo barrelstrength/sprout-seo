@@ -1,9 +1,13 @@
 <?php
+/**
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutseo\migrations;
 
 use craft\db\Migration;
-use yii\db\Query;
 
 /**
  * m190227_000000_sproutseo_editions migration.
@@ -19,11 +23,24 @@ class m190227_000000_sproutseo_editions extends Migration
     {
         $this->updateOldRedirectElements();
         $this->updateOldSitemaps();
+
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown(): bool
+    {
+        echo "m190227_000000_sproutseo_editions cannot be reverted.\n";
+
+        return false;
     }
 
     protected function updateOldSitemaps()
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $types = [
             0 => [
                 'oldType' => 'barrelstrength\sproutseo\sectiontypes\Entry',
@@ -52,6 +69,7 @@ class m190227_000000_sproutseo_editions extends Migration
 
     protected function updateOldRedirectElements()
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $types = [
             0 => [
                 'oldType' => 'barrelstrength\sproutseo\elements\Redirect',
@@ -64,14 +82,5 @@ class m190227_000000_sproutseo_editions extends Migration
                 'type' => $type['newType']
             ], ['type' => $type['oldType']], [], false);
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown(): bool
-    {
-        echo "m190227_000000_sproutseo_editions cannot be reverted.\n";
-        return false;
     }
 }

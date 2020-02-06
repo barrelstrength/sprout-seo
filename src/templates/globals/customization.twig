@@ -3,7 +3,7 @@
 {% import "sprout-base-fields/_includes/forms" as sproutFields %}
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\globals\\GlobalsAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutseo\\web\\assets\\seo\\SproutSeoAsset") %}
 
 {% set settings         = globals.settings %}
 {% set transformOptions = craft.sproutSeo.getTransforms() %}
@@ -13,43 +13,54 @@
     <form method="post" accept-charset="UTF-8" data-saveshortcut>
         {{ csrfInput() }}
         <input type="hidden" name="action"
-               value="sprout-seo/global-metadata/save-global-metadata">
+            value="sprout-seo/global-metadata/save-global-metadata">
         <input type="hidden" name="globalKeys" value="settings,meta">
         <input type="hidden" name="siteId" value="{{ globals.siteId }}">
 
-        {% set dividerOptions = craft.sproutSeo.getSeoDividerOptions(currentSite) %}
-
-        {{ forms.field({
-            label: 'Select the character that will be used between Title segments'|t('sprout-seo') ~ sprout.infoIcon({
-                label: "Character"|t('sprout-seo'),
+        {{ forms.autosuggestField({
+            label: 'Character used between Title segments'|t('sprout-seo') ~ sprout.infoIcon({
+                label: 'Character'|t('sprout-seo'),
                 search: true,
                 priority: 'globals'
             }),
-            instructions: "This character will be used in between your title segments, i.e. Blog Post Title – {sitename}"|t('sprout-seo', { 'sitename': siteName }),
+            instructions: 'This character will be used in between your meta title segments (i.e. Article Title – {siteName}). A dash is used by default.'|t('sprout-seo', { 'siteName': siteName }),
             first: true,
-        }, sproutFields.selectOther({
             name: 'sproutseo[globals][settings][seoDivider]',
-            options: dividerOptions ,
-            value: settings.seoDivider is defined ? settings.seoDivider : '-',
-            otherPlaceholderText: 'Custom Divider'|t('sprout-seo')
-        })) }}
+            suggestions: [
+                {
+                    label: 'Common Dividers'|t('sprout-seo'),
+                    data: [
+                    { hint: 'Dash'|t('sprout-seo'), name: '-' },
+                    { hint: 'Bullet'|t('sprout-seo'), name: '•' },
+                    { hint: 'Pipe'|t('sprout-seo'), name: '|' },
+                    { hint: 'Forward Slash'|t('sprout-seo'), name: '/' },
+                    { hint: 'Colon'|t('sprout-seo'), name: ':' }
+                ]
+                }
+            ],
+            value: settings.seoDivider ?? '-',
+            placeholder: '-'|t('sprout-seo')
+        }) }}
 
-        {% set titleOptions = craft.sproutSeo.getAppendMetaTitleOptions(currentSite) %}
-
-        {{ forms.field({
+        {{ forms.autosuggestField({
             label: 'Append value to all Meta Titles'|t('sprout-seo') ~ sprout.infoIcon({
                 label: "Append value"|t('sprout-seo'),
                 search: true,
                 priority: 'globals'
             }),
-            instructions: "Append your website name or a custom value at the end of all of your Meta Titles, i.e. Article Title - {sitename}"|t('sprout-seo', { 'sitename': siteName }),
-            first: true,
-        }, sproutFields.selectOther({
+            instructions: 'Append the website name or a custom value at the end of all Meta Titles (i.e. Article Title - {siteName}). Defaults to blank.'|t('sprout-seo', { 'siteName': siteName }),
             name: 'sproutseo[globals][settings][appendTitleValue]',
-            options: titleOptions ,
+            suggestions: [
+                {
+                    label: 'Default Options'|t('sprout-seo'),
+                    data: [
+                    { hint: 'Site Name'|t('sprout-seo'), name: '{siteName}' }
+                ]
+                }
+            ],
             value: settings.appendTitleValue is defined ? settings.appendTitleValue : null,
-            otherPlaceholderText: 'Custom Value'|t('sprout-seo')
-        })) }}
+            placeholder: '{siteName}'|t('sprout-seo')
+        }) }}
 
         {{ forms.lightswitchField({
             label: "Display Append Meta Title Value on Homepage"|t('sprout-seo'),

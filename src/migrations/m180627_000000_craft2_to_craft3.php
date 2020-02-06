@@ -1,12 +1,16 @@
 <?php
+/**
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutseo\migrations;
 
 use barrelstrength\sproutseo\SproutSeo;
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-
-use Craft;
 use craft\services\Plugins;
 
 /**
@@ -15,13 +19,18 @@ use craft\services\Plugins;
 class m180627_000000_craft2_to_craft3 extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\NotSupportedException
+     * @throws \yii\web\ServerErrorHttpException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
+        /** @var SproutSeo $plugin */
         $plugin = SproutSeo::getInstance();
-
-        $settings = $plugin->getSettings()->getAttributes();
+        $pluginSettings = $plugin->getSettings();
+        $settings = $pluginSettings->getAttributes();
 
         if (isset($settings['toggleLocaleOverride']) && $settings['toggleLocaleOverride']) {
             $groups = Craft::$app->getSites()->getAllGroups();
@@ -34,7 +43,7 @@ class m180627_000000_craft2_to_craft3 extends Migration
         } else {
             $sites = Craft::$app->getSites()->getAllSites();
             $sitesArray = [];
-            $settings['enableMultilingualSitemaps'] = "";
+            $settings['enableMultilingualSitemaps'] = '';
             foreach ($sites as $site) {
                 $sitesArray[$site->id] = $site->id;
             }
@@ -43,26 +52,26 @@ class m180627_000000_craft2_to_craft3 extends Migration
 
         $pluginHandle = 'sprout-seo';
         $projectConfig = Craft::$app->getProjectConfig();
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings', $settings);
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings);
 
         $globals = (new Query())
             ->select(['id', 'meta', 'identity'])
             ->from(['{{%sproutseo_globals}}'])
             ->one();
 
-        if ($globals){
-            if (isset($globals['meta'])){
+        if ($globals) {
+            if (isset($globals['meta'])) {
                 $meta = json_decode($globals['meta'], true);
-                if ($meta){
+                if ($meta) {
                     $metaAsJson = $this->getMetadataAsJson($meta);
                     $this->update('{{%sproutseo_globals}}', ['meta' => $metaAsJson], ['id' => $globals['id']], [], false);
                 }
             }
 
-            if (isset($globals['identity'])){
+            if (isset($globals['identity'])) {
                 $identity = json_decode($globals['identity'], true);
 
-                if ($identity){
+                if ($identity) {
                     $identityAsJson = $this->getIdentityAsJson($identity);
                     $this->update('{{%sproutseo_globals}}', ['identity' => $identityAsJson], ['id' => $globals['id']], [], false);
                 }
@@ -73,6 +82,16 @@ class m180627_000000_craft2_to_craft3 extends Migration
         $this->alterColumn('{{%sproutseo_redirects}}', 'newUrl', $this->string());
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown(): bool
+    {
+        echo "m180627_000000_craft2_to_craft3 cannot be reverted.\n";
+
+        return false;
     }
 
     private function getIdentityAsJson($identity)
@@ -114,14 +133,5 @@ class m180627_000000_craft2_to_craft3 extends Migration
         );
 
         return json_encode($meta);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown()
-    {
-        echo "m180627_000000_craft2_to_craft3 cannot be reverted.\n";
-        return false;
     }
 }
