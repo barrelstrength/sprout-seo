@@ -37,8 +37,8 @@ class ElementMetadata extends Component
 
         $fieldHandle = $this->getElementMetadataFieldHandle($element);
 
-        if ($element->getFieldValue($fieldHandle)) {
-            $metadata = $element->getFieldValue($fieldHandle);
+        if (isset($element->{$fieldHandle})) {
+            $metadata = $element->{$fieldHandle};
 
             // Support Live Preview (where image IDs still need to be converted from arrays)
             if (isset($metadata['ogImage'])) {

@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.3.2 - 2020-02-07
+
+### Fixed
+- Fixed error when loading metadata ([#186])
+
+[#186]: https://github.com/barrelstrength/craft-sprout-seo/issues/186
+
 ## 4.3.1 - 2020-02-07
 
 ### Added
