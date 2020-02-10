@@ -151,7 +151,7 @@ class Globals extends Model
     /**
      * @return array
      */
-    protected function getMeta(): array
+    protected function getMeta(): Metadata
     {
         return $this->meta;
     }
