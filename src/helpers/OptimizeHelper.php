@@ -482,7 +482,7 @@ class OptimizeHelper
         if ($appendTitleValueOnHomepage || Craft::$app->request->getPathInfo()) {
             $globalAppendTitleValue = $settings['appendTitleValue'];
 
-            // @todo - update this switch statement to use renderString and process globals like {siteName}
+            // @todo - migrate this to just use the {siteName} global that is supported below
             if ($globalAppendTitleValue === 'sitename') {
                 $globalAppendTitleValue = Craft::$app->getSystemName();
             }
@@ -501,10 +501,11 @@ class OptimizeHelper
                 'divider' => $seoDivider
             ]);
 
-            return $prioritizedMetadataModel->title.' '.$seoDivider.' '.$appendTitleValue;
+            $finalAppendTitleValue = $prioritizedMetadataModel->title.' '.$seoDivider.' '.$appendTitleValue;
+            return $finalAppendTitleValue ?? '';
         }
 
-        return $prioritizedMetadataModel->title;
+        return $prioritizedMetadataModel->title ?? '';
     }
 
     /**
