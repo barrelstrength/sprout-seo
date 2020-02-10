@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.3.3 - 2020-02-10
+
+### Fixed
+- Fixed bug where incorrect type existed when retrieving metadata ([#187])
+- Fixed bug where appended title value could return null instead of string ([#187])
+- Fixed bug where Editable Field did not process address ID value correctly
+
+[#187]: https://github.com/barrelstrength/craft-sprout-seo/issues/187
+
 ## 4.3.2 - 2020-02-07
 
 ### Fixed
