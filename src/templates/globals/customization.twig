@@ -48,13 +48,14 @@
                 search: true,
                 priority: 'globals'
             }),
-            instructions: 'Append the website name or a custom value at the end of all Meta Titles (i.e. Article Title - {siteName}). Defaults to blank.'|t('sprout-seo', { 'siteName': siteName }),
+            instructions: 'Append the website name or a custom value at the end of all Meta Titles (i.e. Article Title - {actualSiteName}). Supports variables `{siteName}` and `{divider}`. Defaults to blank.'|t('sprout-seo', { 'actualSiteName': siteName }),
             name: 'sproutseo[globals][settings][appendTitleValue]',
             suggestions: [
                 {
-                    label: 'Default Options'|t('sprout-seo'),
+                    label: 'Available Variables'|t('sprout-seo'),
                     data: [
-                    { hint: 'Site Name'|t('sprout-seo'), name: '{siteName}' }
+                    { hint: 'Site Name'|t('sprout-seo'), name: '{siteName}' },
+                    { hint: 'Divider'|t('sprout-seo'), name: '{divider}' }
                 ]
                 }
             ],
