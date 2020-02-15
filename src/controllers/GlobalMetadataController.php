@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\controllers;
@@ -136,11 +136,12 @@ class GlobalMetadataController extends Controller
         $this->requirePostRequest();
 
         $postData = Craft::$app->getRequest()->getBodyParam('sproutseo.globals');
-        $globalKeys = Craft::$app->getRequest()->getBodyParam('globalKeys');
-        $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
+        $globalColumn = Craft::$app->getRequest()->getBodyParam('globalColumn');
 
+        $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
         $address = Craft::$app->getRequest()->getBodyParam('address');
 
+        // Adjust Address Field post data
         if ($address) {
             if (isset($address['delete']) && $address['delete']) {
                 $postData['identity']['address'] = null;
@@ -154,29 +155,21 @@ class GlobalMetadataController extends Controller
             }
         }
 
-        $globalKeys = explode(',', $globalKeys);
-
+        // Adjust Founding Date post data
         if (isset($postData['identity']['foundingDate'])) {
             $postData['identity']['foundingDate'] = DateTimeHelper::toDateTime($postData['identity']['foundingDate']);
+        }
+
+        // Adjust Schema Organization post data
+        if (isset($postData['identity']['@type']) && $postData['identity']['@type'] === 'Person') {
+            // Clean up our organization subtypes when the Person type is selected
+            unset($postData['identity']['organizationSubTypes']);
         }
 
         $globals = new Globals($postData);
         $globals->siteId = $siteId;
 
-        $globalMetadata = $this->populateGlobalMetadata($postData);
-
-        $globals->meta = $globalMetadata;
-
-        $identity = $globals->identity;
-
-        if (isset($identity['@type']) && $identity['@type'] === 'Person') {
-            // Clean up our organization subtypes when the Person type is selected
-            unset($identity['organizationSubTypes']);
-
-            $globals->identity = $identity;
-        }
-
-        if (!SproutSeo::$app->globalMetadata->saveGlobalMetadata($globalKeys, $globals)) {
+        if (!SproutSeo::$app->globalMetadata->saveGlobalMetadata($globalColumn, $globals)) {
             Craft::$app->getSession()->setError(Craft::t('sprout-seo', 'Unable to save globals.'));
 
             Craft::$app->getUrlManager()->setRouteParams([
@@ -204,7 +197,7 @@ class GlobalMetadataController extends Controller
         $this->requirePostRequest();
 
         $ownershipMeta = Craft::$app->getRequest()->getBodyParam('sproutseo.meta.ownership');
-        $globalKeys = 'ownership';
+        $globalColumn = 'ownership';
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
         // Remove empty items from multi-dimensional array
@@ -220,10 +213,12 @@ class GlobalMetadataController extends Controller
             }
         }
 
-        $globals = new Globals([$globalKeys => $ownershipMetaWithKeys]);
+        $config[$globalColumn] = $ownershipMetaWithKeys;
+
+        $globals = new Globals($config);
         $globals->siteId = $siteId;
 
-        if (!SproutSeo::$app->globalMetadata->saveGlobalMetadata([$globalKeys], $globals)) {
+        if (!SproutSeo::$app->globalMetadata->saveGlobalMetadata($globalColumn, $globals)) {
             Craft::$app->getSession()->setError(Craft::t('sprout-seo', 'Unable to save globals.'));
 
             Craft::$app->getUrlManager()->setRouteParams([
@@ -236,91 +231,6 @@ class GlobalMetadataController extends Controller
         Craft::$app->getSession()->setNotice(Craft::t('sprout-seo', 'Globals saved.'));
 
         return $this->redirectToPostedUrl($globals);
-    }
-
-    /**
-     * @param $postData
-     *
-     * @return Metadata
-     * @throws Exception
-     */
-    public function populateGlobalMetadata($postData): Metadata
-    {
-        $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
-        $site = Craft::$app->getSites()->getSiteById($siteId);
-
-        $oldGlobals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-        $oldIdentity = $oldGlobals->identity ?? null;
-        $identity = $postData['identity'] ?? $oldIdentity;
-        $oldSocialProfiles = $oldGlobals !== null ? $oldGlobals->social : [];
-
-        if (isset($postData['settings']['ogTransform'])) {
-            $identity['ogTransform'] = $postData['settings']['ogTransform'];
-        }
-
-        if (isset($postData['settings']['twitterTransform'])) {
-            $identity['twitterTransform'] = $postData['settings']['twitterTransform'];
-        }
-
-        $globalMetadata = new Metadata();
-
-        $socialProfiles = $postData['social'] ?? $oldSocialProfiles ?? [];
-        $twitterProfileName = OptimizeHelper::getTwitterProfileName($socialProfiles);
-
-        $twitterCard = (isset($postData['settings']['defaultTwitterCard']) && $postData['settings']['defaultTwitterCard']) ? $postData['settings']['defaultTwitterCard'] : 'summary';
-
-        $ogType = (isset($postData['settings']['defaultOgType']) && $postData['settings']['defaultOgType']) ? $postData['settings']['defaultOgType'] : 'article';
-
-        $robots = $postData['robots'] ?? $oldGlobals->robots ?? [];
-        $robotsMetaValue = OptimizeHelper::prepareRobotsMetadataValue($robots);
-
-        $facebookPage = OptimizeHelper::getFacebookPage($socialProfiles);
-
-        if ($facebookPage) {
-            $globalMetadata->ogPublisher = $facebookPage;
-        }
-
-        if ($identity) {
-            $identityName = $identity['name'] ?? null;
-            $optimizedTitle = $identityName;
-            $optimizedDescription = $identity['description'] ?? null;
-            $optimizedImage = $identity['image'][0] ?? null;
-
-            $globalMetadata->optimizedTitle = $optimizedTitle;
-            $globalMetadata->optimizedDescription = $optimizedDescription;
-            $globalMetadata->optimizedImage = $optimizedImage;
-
-            $globalMetadata->title = $optimizedTitle;
-            $globalMetadata->description = $optimizedDescription;
-            $globalMetadata->keywords = $identity['keywords'] ?? null;
-
-            $globalMetadata->robots = $robotsMetaValue;
-
-            // @todo - Add location info
-            $globalMetadata->region = '';
-            $globalMetadata->placename = '';
-            $globalMetadata->position = '';
-            $globalMetadata->latitude = $postData['identity']['latitude'] ?? '';
-            $globalMetadata->longitude = $postData['identity']['longitude'] ?? '';
-
-            $globalMetadata->ogType = $ogType;
-            $globalMetadata->ogSiteName = $identity['name'] ?? null;
-            $globalMetadata->ogTitle = $optimizedTitle;
-            $globalMetadata->ogDescription = $optimizedDescription;
-            $globalMetadata->ogImage = $optimizedImage;
-            $globalMetadata->ogTransform = $identity['ogTransform'] ?? null;
-            $globalMetadata->ogLocale = null;
-
-            $globalMetadata->twitterCard = $twitterCard;
-            $globalMetadata->twitterSite = $twitterProfileName;
-            $globalMetadata->twitterCreator = $twitterProfileName;
-            $globalMetadata->twitterTitle = $optimizedTitle;
-            $globalMetadata->twitterDescription = $optimizedDescription;
-            $globalMetadata->twitterImage = $optimizedImage;
-            $globalMetadata->twitterTransform = $identity['twitterTransform'] ?? null;
-        }
-
-        return $globalMetadata;
     }
 
     /**

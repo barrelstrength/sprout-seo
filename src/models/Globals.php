@@ -78,11 +78,6 @@ class Globals extends Model
     public $uid;
 
     /**
-     * @var string
-     */
-    public $globalKey;
-
-    /**
      * @var Address|null
      */
     public $addressModel;
@@ -106,8 +101,8 @@ class Globals extends Model
      */
     public function getGlobalByKey($target, $format = 'array')
     {
-        if ($target) {
-            $this->globalKey = $target;
+        if (!$target) {
+            return null;
         }
 
         $targetMethod = 'get'.ucfirst($target);
@@ -163,7 +158,7 @@ class Globals extends Model
      */
     protected function getIdentity(): array
     {
-        return $this->{$this->globalKey};
+        return $this->identity;
     }
 
     /**
@@ -173,7 +168,7 @@ class Globals extends Model
      */
     protected function getContacts(): array
     {
-        $contacts = $this->{$this->globalKey};
+        $contacts = $this->contacts;
         $contactPoints = [];
 
         if (is_array($contacts)) {
@@ -196,7 +191,8 @@ class Globals extends Model
      */
     protected function getSocial(): array
     {
-        $profiles = $this->{$this->globalKey};
+        $profiles = $this->social;
+
         $profileLinks = [];
 
         if (is_array($profiles)) {
@@ -218,7 +214,7 @@ class Globals extends Model
      */
     protected function getOwnership(): array
     {
-        return $this->{$this->globalKey};
+        return $this->ownership;
     }
 
     /**
@@ -228,7 +224,7 @@ class Globals extends Model
      */
     protected function getRobots(): array
     {
-        return $this->{$this->globalKey};
+        return $this->robots;
     }
 
     /**
@@ -238,6 +234,6 @@ class Globals extends Model
      */
     protected function getSettings(): array
     {
-        return $this->{$this->globalKey};
+        return $this->settings;
     }
 }
