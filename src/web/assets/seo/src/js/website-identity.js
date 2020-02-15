@@ -110,13 +110,14 @@ class SproutSeoWebsiteIdentity {
     // check if we need load depending dropdowns
     if (websiteIdentity) {
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[0]) {
-        $('#first').val(websiteIdentity.organizationSubTypes[0]).change();
+        console.log(websiteIdentity.organizationSubTypes[0]);
+        $('#main-entity-first-dropdown').val(websiteIdentity.organizationSubTypes[0]).trigger('change');
       }
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[1]) {
-        $('#second').val(websiteIdentity.organizationSubTypes[1]).change();
+        $('#main-entity-second-dropdown').val(websiteIdentity.organizationSubTypes[1]).trigger('change');
       }
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[2]) {
-        $('#third').val(websiteIdentity.organizationSubTypes[2]).change();
+        $('#main-entity-second-dropdown').val(websiteIdentity.organizationSubTypes[2]).trigger('change');
       }
     }
 
