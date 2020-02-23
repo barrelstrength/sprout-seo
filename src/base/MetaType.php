@@ -234,10 +234,7 @@ abstract class MetaType extends Component
     protected function getMetaTagName($handle)
     {
         $tagNames = $this->getAttributesMapping();
-
-        $keys = array_keys($tagNames);
-        $tagNames = array_combine($keys, $keys);
-
+        
         return $tagNames[$handle] ?? null;
     }
 }
