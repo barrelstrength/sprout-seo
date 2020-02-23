@@ -12,10 +12,13 @@ use barrelstrength\sproutbaseuris\SproutBaseUris;
 use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
+use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Element;
+use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
+use craft\errors\SiteNotFoundException;
 use craft\events\FieldLayoutEvent;
 use craft\models\FieldLayout;
 use yii\base\Component;
@@ -25,26 +28,26 @@ class ElementMetadata extends Component
     /**
      * Returns the metadata for an Element's Element Metadata as a Metadata model
      *
-     * @param Element|\craft\base\ElementInterface|null $element
+     * @param Element|ElementInterface|null $element
      *
-     * @return Metadata|null
+     * @return array
      */
-    public function getElementMetadata(Element $element = null)
+    public function getRawMetadataFromElement(Element $element = null): array
     {
         if (!$element) {
-            return null;
+            return [];
         }
 
         $fieldHandle = $this->getElementMetadataFieldHandle($element);
 
         if (isset($element->{$fieldHandle})) {
+            /** @var Metadata $metadata */
             $metadata = $element->{$fieldHandle};
 
-
-            return new Metadata($metadata);
+            return $metadata->getRawData();
         }
 
-        return null;
+        return [];
     }
 
     /**

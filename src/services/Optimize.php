@@ -8,11 +8,9 @@
 namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutseo\enums\MetadataLevels;
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutseo\models\Metadata as MetadataModel;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
@@ -37,11 +35,6 @@ use yii\base\InvalidConfigException;
 class Optimize extends Component
 {
     /**
-     * @var ElementInterface
-     */
-    public static $matchedElement;
-
-    /**
      * Sprout SEO Globals data
      *
      * @var Globals $globals
@@ -49,19 +42,24 @@ class Optimize extends Component
     public $globals;
 
     /**
-     * The first Element Metadata field Metadata from the context
-     *
-     * @var Metadata $elementMetadata
+     * @var ElementInterface|Element
      */
-    public $elementMetadata;
+    public $element;
 
     /**
-     * @var MetadataModel $prioritizedMetadataModel
+     * The first Element Metadata field Metadata from the context
+     *
+     * @var ElementMetadata $elementMetadataField
+     */
+    public $elementMetadataField;
+
+    /**
+     * @var Metadata $prioritizedMetadataModel
      */
     public $prioritizedMetadataModel;
 
     /**
-     * @var MetadataModel $templateMetadata
+     * @var array $templateMetadata
      */
     public $templateMetadata = [];
 
@@ -98,14 +96,8 @@ class Optimize extends Component
         $uri = $this->getUri();
         $site = $this->getMatchedSite();
         $this->setMatchedElement($uri, $site->id);
-        /** @var Element $element */
-        $element = self::$matchedElement;
 
-        if ($element !== null) {
-            $this->elementMetadata = SproutSeo::$app->elementMetadata->getElementMetadata($element);
-        }
-
-        return $this->getMetadata($element, $site, true, $context);
+        return $this->getMetadata($site, true, $context);
     }
 
     /**
@@ -145,12 +137,12 @@ class Optimize extends Component
      */
     public function setMatchedElement(string $uri, int $siteId = null)
     {
-        self::$matchedElement = null;
+        $this->element = null;
         $uri = trim($uri, '/');
         /** @var Element $element */
         $element = Craft::$app->getElements()->getElementByUri($uri, $siteId);
         if ($element && ($element->uri !== null)) {
-            self::$matchedElement = $element;
+            $this->element = $element;
         }
     }
 
@@ -166,7 +158,7 @@ class Optimize extends Component
      * @throws SyntaxError
      * @throws Exception
      */
-    public function getMetadata(Element $element = null, $site = null, $render = true, &$context = null)
+    public function getMetadata($site = null, $render = true, &$context = null)
     {
         /** @var SproutSeo $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
@@ -174,14 +166,14 @@ class Optimize extends Component
         $settings = $plugin->getSettings();
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($element, $site);
+        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($this->element, $site);
 
         $output = null;
 
         $metadata = [
             'globals' => $this->globals,
             'meta' => $this->prioritizedMetadataModel->getMetaTagData(),
-            'schema' => $this->getStructuredData($element)
+            'schema' => $this->getStructuredData($this->element)
         ];
 
         if ($render === false) {
@@ -210,133 +202,45 @@ class Optimize extends Component
      * @throws InvalidConfigException
      * @throws Throwable
      */
-    public function getPrioritizedMetadataModel($element, $site = null)
+    public function getPrioritizedMetadataModel($element, $site = null): Metadata
     {
-        $metaLevels = [
-            MetadataLevels::GlobalMetadata,
-            MetadataLevels::ElementMetadata,
-            MetadataLevels::TemplateMetadata
-        ];
+        $elementMetadataAttributes = [];
 
-        $prioritizedMetadataModel = new Metadata();
-
-        foreach ($metaLevels as $level) {
-
-            $overrideInfo = [];
-
-            switch ($level) {
-                case MetadataLevels::GlobalMetadata:
-                {
-                    $overrideInfo = $this->globals->meta;
-                    break;
-                }
-                case MetadataLevels::ElementMetadata:
-                {
-                    if ($this->elementMetadata) {
-
-                        // Default to the current URL, if no overrides exist
-                        $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                        $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                        $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
-
-                        $overrideInfo = $this->elementMetadata->getAttributes();
-                    }
-
-                    break;
-                }
-                case MetadataLevels::TemplateMetadata:
-                {
-                    $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
-
-                    // Only allow Template Overrides if using Pro Edition
-                    if (!$isPro) {
-                        break;
-                    }
-
-                    $overrideInfo = $this->templateMetadata;
-
-                    // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
-                    // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
-                    // Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
-                    if (isset($overrideInfo['elementId'])) {
-                        /** @var \craft\base\Element $elementOverride */
-                        $elementOverride = Craft::$app->elements->getElementById($overrideInfo['elementId']);
-                        $overrideInfo = SproutSeo::$app->elementMetadata->getElementMetadata($elementOverride);
-                    }
-
-                    // Assume our canonical URL is the current URL unless there is a codeOverride
-                    $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                    $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                    $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-
-                    break;
-                }
-            }
-
-            $metadataModel = new Metadata($overrideInfo);
-            $metadataModel->keywords = $metadataModel->optimizedKeywords ?? $metadataModel->keywords;
-
-            $prioritizedMetadataModel = $this->getPrioritizedValues($prioritizedMetadataModel, $metadataModel);
+        if ($element !== null) {
+            $elementMetadataAttributes = SproutSeo::$app->elementMetadata->getRawMetadataFromElement($element);
         }
 
-        // Remove the ogAuthor value if we don't have an article
-        if ($prioritizedMetadataModel->ogType !== 'article') {
-            $prioritizedMetadataModel->ogAuthor = null;
-            $prioritizedMetadataModel->ogPublisher = null;
+        $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
+
+        // Only allow Template Overrides if using Pro Edition
+        if ($isPro && $this->templateMetadata && isset($this->templateMetadata['elementId'])) {
+            /**
+             * If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field
+             * associated with that Element ID This adds support for using Element Metadata fields on non URL-enabled
+             * Elements such as Users and Tags
+             *
+             * Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
+             */
+            $elementOverride = Craft::$app->elements->getElementById($this->templateMetadata['elementId']);
+
+            // Overwrite the Element Attributes if the template override Element ID returns an element
+            if ($elementOverride) {
+                $elementMetadataAttributes = SproutSeo::$app->elementMetadata->getRawMetadataFromElement($elementOverride);
+            }
+
+            // Merge our attributes overriding the Element attributes with Template overrides
+            $attributes = array_filter(array_merge($elementMetadataAttributes, $this->templateMetadata));
         } else {
-            $prioritizedMetadataModel->ogDateCreated = null;
-            $prioritizedMetadataModel->ogDateUpdated = null;
-            $prioritizedMetadataModel->ogExpiryDate = null;
-
-            // @todo - refactor
-            if ($element !== null) {
-                if (isset($element->postDate)) {
-                    if ($element->postDate !== null && $element->postDate) {
-                        $prioritizedMetadataModel->ogDateCreated = $element->postDate->format(DateTime::ATOM);
-                    }
-                } else if ($element->dateCreated !== null && $element->dateCreated) {
-                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ATOM);
-                }
-
-                if ($element->dateUpdated !== null && $element->dateUpdated) {
-                    $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ATOM);
-                }
-
-                /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
-                /** @noinspection PhpUndefinedFieldInspection */
-                if (isset($element->expiryDate) && $element->expiryDate !== null && $element->expiryDate) {
-                    /** @noinspection PhpUndefinedFieldInspection */
-                    $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ATOM);
-                }
-            }
+            $attributes = array_filter($elementMetadataAttributes);
         }
 
-        $prioritizedMetadataModel->title = OptimizeHelper::prepareAppendedTitleValue(
-            $prioritizedMetadataModel,
-            $this->globals
-        );
-
-        $prioritizedMetadataModel->robots = OptimizeHelper::prepareRobotsMetadataValue($prioritizedMetadataModel->robots);
-
-        // let's just prepare assets for final metadatamodel
-        OptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
-
-        // Trim descriptions to maxMetaDescriptionLength or 160 characters
-        $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
-
-        $prioritizedMetadataModel->optimizedDescription = mb_substr($prioritizedMetadataModel->optimizedDescription, 0, $descriptionLength);
-        $prioritizedMetadataModel->description = mb_substr($prioritizedMetadataModel->description, 0, $descriptionLength);
-        $prioritizedMetadataModel->ogDescription = mb_substr($prioritizedMetadataModel->ogDescription, 0, $descriptionLength);
-        $prioritizedMetadataModel->twitterDescription = mb_substr($prioritizedMetadataModel->twitterDescription, 0, $descriptionLength);
-
-        $prioritizedMetadataModel->ogLocale = $site->language ?? null;
-
-        return $prioritizedMetadataModel;
+        return new Metadata($attributes);
     }
 
     public function getStructuredData($element = null): array
     {
         $schema = [];
+
         $websiteIdentity = [
             'Person' => WebsiteIdentityPersonSchema::class,
             'Organization' => WebsiteIdentityOrganizationSchema::class
@@ -411,7 +315,7 @@ class Optimize extends Component
         $schema = null;
 
         if ($this->prioritizedMetadataModel) {
-            $schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
+            $schemaUniqueKey = $this->prioritizedMetadataModel->getSchemaTypeId();
             if ($schemaUniqueKey && $element !== null) {
                 $schema = SproutSeo::$app->schema->getSchemaByUniqueKey($schemaUniqueKey);
                 $schema->attributes = $this->prioritizedMetadataModel->getAttributes();
