@@ -18,9 +18,14 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\mysql\Schema;
-use craft\elements\Asset;
-use craft\fields\Assets;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\Json;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  *
@@ -36,15 +41,6 @@ class ElementMetadata extends Field
      * @var Metadata
      */
     public $metadata;
-
-    /**
-     * An array of our metadata values to use for processing, validation, and handing
-     * off to the db. We store these separately from the supported $value parameter because
-     * the $value parameter helps managed handing back values after failed validation scenarios
-     *
-     * @var array()
-     */
-    public $values;
 
     public $optimizedTitleField;
 
@@ -139,16 +135,18 @@ class ElementMetadata extends Field
             unset($metadataArray['sproutSeoSettings']);
         }
 
-        if (isset($metadataArray)) {
-            $metadata = new Metadata($metadataArray, $this, $element);
+        /** @var Element $element */
+        $site = isset($element)
+            ? Craft::$app->sites->getSiteById($element->siteId)
+            : Craft::$app->sites->getPrimarySite();
 
-            $this->values = $metadata;
-            return $metadata;
-        }
+        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
 
-        $this->values = $value;
+        SproutSeo::$app->optimize->globals = $globals;
+        SproutSeo::$app->optimize->element = $element;
+        SproutSeo::$app->optimize->elementMetadataField = $this;
 
-        return $value;
+        return new Metadata($metadataArray ?? []);
     }
 
     /**
@@ -160,7 +158,8 @@ class ElementMetadata extends Field
     public function serializeValue($value, ElementInterface $element = null)
     {
         if ($value instanceof Metadata) {
-            return Json::encode($value->getAttributes());
+//            \Craft::dd($value->getRawData());
+            return Json::encode($value->getRawData());
         }
 
         return $value;
@@ -187,8 +186,8 @@ class ElementMetadata extends Field
         return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/settings', [
             'fieldId' => $this->id,
             'settings' => $this->getAttributes(),
-            'schemas' => $schemas,
             'field' => $this,
+            'schemas' => $schemas,
             'schemaSubtypes' => $schemaSubtypes,
             'isPro' => $isPro
         ]);
@@ -203,6 +202,7 @@ class ElementMetadata extends Field
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws Exception
+     * @throws InvalidConfigException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -210,32 +210,6 @@ class ElementMetadata extends Field
         $inputId = Craft::$app->view->formatInputId($name);
         $namespaceInputName = Craft::$app->view->namespaceInputName($inputId);
         $namespaceInputId = Craft::$app->view->namespaceInputId($inputId);
-
-        $ogImageElements = [];
-        $metaImageElements = [];
-        $twitterImageElements = [];
-
-        // Set up our asset fields
-        if ($value->optimizedImage) {
-            // If validation fails, we need to make sure our asset is just an ID
-            $value->optimizedImage = OptimizeHelper::getImageId($value->optimizedImage);
-            $asset = Craft::$app->elements->getElementById($value->optimizedImage);
-            $metaImageElements = [$asset];
-        }
-
-        if ($value->ogImage) {
-            $value->ogImage = OptimizeHelper::getImageId($value->ogImage);
-            $asset = Craft::$app->elements->getElementById($value->ogImage);
-            $ogImageElements = [$asset];
-        }
-
-        if ($value->twitterImage) {
-            $value->twitterImage = OptimizeHelper::getImageId($value->twitterImage);
-            $asset = Craft::$app->elements->getElementById($value->twitterImage);
-            $twitterImageElements = [$asset];
-        }
-
-        $value['robots'] = OptimizeHelper::prepareRobotsMetadataForSettings($value->robots);
 
         // Cleanup the namespace around the $name handle
         $name = str_replace('fields[', '', $name);
@@ -255,11 +229,8 @@ class ElementMetadata extends Field
             'name' => $name,
             'namespaceInputName' => $namespaceInputName,
             'namespaceInputId' => $namespaceInputId,
-            'values' => $value,
-            'ogImageElements' => $ogImageElements,
-            'twitterImageElements' => $twitterImageElements,
-            'metaImageElements' => $metaImageElements,
-            'assetElementClassName' => Asset::class,
+            'metaTypes' => $value->metaTypes,
+            'values' => $value->getRawData(),
             'fieldId' => $fieldId,
             'settings' => $settings
         ]);
