@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
@@ -31,8 +31,8 @@ use yii\base\InvalidConfigException;
 
 /**
  *
- * @property string             $uri
- * @property \craft\models\Site $matchedSite
+ * @property string $uri
+ * @property Site   $matchedSite
  */
 class Optimize extends Component
 {
@@ -85,13 +85,13 @@ class Optimize extends Component
      * @param $context
      *
      * @return array|null|string
-     * @throws \Throwable
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws Throwable
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws SiteNotFoundException
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function getMetadataViaContext(&$context)
     {
@@ -155,19 +155,16 @@ class Optimize extends Component
     }
 
     /**
-     * @param \craft\base\Element $element
      * @param                     $site
      * @param bool                $render
      * @param bool                $context
      *
      * @return array|null|string
-     * @throws \Throwable
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws Throwable
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
     public function getMetadata(Element $element = null, $site = null, $render = true, &$context = null)
     {
@@ -205,20 +202,10 @@ class Optimize extends Component
     }
 
     /**
-     * Prioritize our meta data
-     * ------------------------------------------------------------
-     *
-     * Loop through and select the highest ranking value for each attribute in our Metadata
-     *
-     * 4) Blank
-     * 3) Global Metadata
-     * 2) Element Metadata
-     * 1) Template Metadata
-     *
      * @param      $element
-     * @param Site $site
+     * @param null $site
      *
-     * @return Metadata|mixed
+     * @return Metadata
      * @throws Exception
      * @throws InvalidConfigException
      * @throws Throwable
@@ -446,10 +433,10 @@ class Optimize extends Component
      * @param $metadata
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
     public function renderMetadata($metadata): string
     {

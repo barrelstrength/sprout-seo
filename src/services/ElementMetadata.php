@@ -97,7 +97,7 @@ class ElementMetadata extends Component
      *
      * @param FieldLayoutEvent $event
      *
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function resaveElementsAfterFieldLayoutIsSaved(FieldLayoutEvent $event)
     {
@@ -127,7 +127,7 @@ class ElementMetadata extends Component
     /**
      * @param $fieldId
      *
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function resaveElementsIfUsingElementMetadataField($fieldId)
     {
@@ -291,7 +291,7 @@ class ElementMetadata extends Component
      * @param FieldLayout|null $fieldLayout
      *
      * @return bool
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false, FieldLayout $fieldLayout = null): bool
     {

@@ -34,7 +34,7 @@ class GlobalMetadata extends Component
      * @param Site|null $site
      *
      * @return Globals
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      * @throws \yii\base\Exception
      */
     public function getGlobalMetadata($site = null): Globals
@@ -90,14 +90,14 @@ class GlobalMetadata extends Component
      * @param Globals $globals
      *
      * @return bool
-     * @throws \Throwable
-     * @throws \yii\db\Exception
+     * @throws Throwable
+     * @throws Exception
      */
     public function saveGlobalMetadata($globalColumn, $globals): bool
     {
         $values[$globalColumn] = $globals->getGlobalByKey($globalColumn, 'json');
-
         $values['siteId'] = $globals->siteId;
+
         // new site?
         $results = (new Query())
             ->select('*')

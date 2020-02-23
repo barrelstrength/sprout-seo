@@ -106,10 +106,14 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @param                       $value
+     * @param mixed                 $value
      * @param ElementInterface|null $element
      *
-     * @return array|mixed|null
+     * @return Metadata|mixed
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws SiteNotFoundException
+     * @throws Throwable
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -149,8 +153,8 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @param mixed                             $value
-     * @param \craft\base\ElementInterface|null $element
+     * @param mixed                 $value
+     * @param ElementInterface|null $element
      *
      * @return array|mixed|string|null
      */
@@ -165,11 +169,11 @@ class ElementMetadata extends Field
 
     /**
      * @return string|null
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function getSettingsHtml()
     {
@@ -192,15 +196,14 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @param mixed                             $value
-     * @param \craft\base\ElementInterface|null $element
+     * @param mixed                 $value
+     * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -295,7 +298,6 @@ class ElementMetadata extends Field
      * Validates our fields submitted value beyond the checks
      * that were assumed based on the content attribute.
      *
-     *
      * @param Element $element
      *
      * @return void
@@ -331,7 +333,7 @@ class ElementMetadata extends Field
     /**
      * @param bool $isNew
      *
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function afterSave(bool $isNew)
     {

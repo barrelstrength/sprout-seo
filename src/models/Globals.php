@@ -218,9 +218,7 @@ class Globals extends Model
     }
 
     /**
-     * Get the values associated with the Robots column in the database
-     *
-     * @return array
+     * @return
      */
     protected function getRobots(): array
     {
