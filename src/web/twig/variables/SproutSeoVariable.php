@@ -611,25 +611,6 @@ class SproutSeoVariable
     }
 
     /**
-     * Returns all plain fields available given a type
-     *
-     * @param $siteId
-     *
-     * @return array
-     * @throws SiteNotFoundException
-     * @throws Exception
-     */
-    public function getGlobalRobots($siteId): array
-    {
-        $currentSite = Craft::$app->sites->getSiteById($siteId);
-
-        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite);
-        $robots = OptimizeHelper::prepareRobotsMetadataValue($globals->robots);
-
-        return OptimizeHelper::prepareRobotsMetadataForSettings($robots);
-    }
-
-    /**
      * Returns registerSproutSeoSchemas hook
      *
      * @return array
