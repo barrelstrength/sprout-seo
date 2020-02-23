@@ -396,42 +396,4 @@ class ElementMetadata extends Field
         return $attributes;
     }
 
-    /**
-     * @param $fieldId
-     * @param $element
-     *
-     * @return null
-     */
-    private function getSelectedFieldForOptimizedMetadata($fieldId, $element)
-    {
-        $value = null;
-
-        if (is_numeric($fieldId)) {
-            /**
-             * @var Field $field
-             */
-            $field = Craft::$app->fields->getFieldById($fieldId);
-
-            // Does the field exist on the element?
-            if ($field) {
-                if (isset($_POST['fields'][$field->handle])) {
-                    if (get_class($field) === Assets::class) {
-                        $value = (!empty($_POST['fields'][$field->handle]) ? $_POST['fields'][$field->handle][0] : null);
-                    } else {
-                        $value = $_POST['fields'][$field->handle];
-                    }
-                } else if (isset($element->{$field->handle})) {
-                    $elementValue = $element->{$field->handle};
-
-                    if (get_class($field) === Assets::class) {
-                        $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
-                    } else {
-                        $value = $elementValue;
-                    }
-                }
-            }
-        }
-
-        return $value;
-    }
 }

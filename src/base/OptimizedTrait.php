@@ -7,6 +7,11 @@
 
 namespace barrelstrength\sproutseo\base;
 
+use barrelstrength\sproutseo\SproutSeo;
+use Craft;
+use craft\base\Field;
+use craft\fields\Assets;
+
 trait OptimizedTrait
 {
     /**
@@ -38,4 +43,35 @@ trait OptimizedTrait
      * @var string|null
      */
     protected $canonical;
+
+    /**
+     * @param $fieldId
+     *
+     * @return null
+     */
+    public function getSelectedFieldForOptimizedMetadata($fieldId)
+    {
+        $value = null;
+
+        $element = SproutSeo::$app->optimize->element;
+
+        if (is_numeric($fieldId)) {
+            /**
+             * @var Field $field
+             */
+            $field = Craft::$app->fields->getFieldById($fieldId);
+
+            // Does the field exist on the element?
+            if ($field && isset($element->{$field->handle})) {
+                $elementValue = $element->{$field->handle};
+                if (get_class($field) === Assets::class) {
+                    $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
+                } else {
+                    $value = $elementValue;
+                }
+            }
+        }
+
+        return $value;
+    }
 }

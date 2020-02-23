@@ -9,10 +9,8 @@ namespace barrelstrength\sproutseo\base;
 
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
-use craft\base\Field;
 use craft\elements\Asset;
 use craft\errors\SiteNotFoundException;
-use craft\fields\Assets;
 use craft\helpers\UrlHelper;
 use Throwable;
 use yii\base\Exception;
@@ -57,37 +55,6 @@ trait MetaImageTrait
     }
 
     /**
-     * @param $fieldId
-     *
-     * @return null
-     */
-    public function getSelectedFieldForOptimizedMetadata($fieldId)
-    {
-        $value = null;
-
-        $element = SproutSeo::$app->optimize->element;
-
-        if (is_numeric($fieldId)) {
-            /**
-             * @var Field $field
-             */
-            $field = Craft::$app->fields->getFieldById($fieldId);
-
-            // Does the field exist on the element?
-            if ($field && isset($element->{$field->handle})) {
-                $elementValue = $element->{$field->handle};
-                if (get_class($field) === Assets::class) {
-                    $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
-                } else {
-                    $value = $elementValue;
-                }
-            }
-        }
-
-        return $value;
-    }
-
-    /**
      * Can be used to prepare the asset metadata for front-end use.
      * Depending on the scenario this method can return just the URL or
      * a list of image attributes. If returning all data, the return value
@@ -109,6 +76,7 @@ trait MetaImageTrait
 
         if (!is_numeric($image)) {
             SproutSeo::warning('Meta image value "'.$image.'" cannot be identified. Must be an absolute URL or an Asset ID.');
+
             return null;
         }
 
