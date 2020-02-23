@@ -274,6 +274,7 @@ class ElementMetadata extends Field
      */
     public function validateElementMetadata(Element $element)
     {
+        $value = $element->getFieldValue($this->handle);
         $isRequired = $this->required;
 
         if ($isRequired) {
@@ -283,14 +284,14 @@ class ElementMetadata extends Field
             if ($optimizedTitle === 'manually' &&
                 $optimizedDescription === 'manually'
             ) {
-                if ($optimizedTitle === 'manually' && empty($this->values['optimizedTitle'])) {
+                if ($optimizedTitle === 'manually' && empty($value['optimizedTitle'])) {
                     $element->addError(
                         $this->handle,
                         Craft::t('sprout-seo', 'Meta Title field cannot be blank.')
                     );
                 }
 
-                if ($optimizedDescription === 'manually' && empty($this->values['optimizedDescription'])) {
+                if ($optimizedDescription === 'manually' && empty($value['optimizedDescription'])) {
                     $element->addError(
                         $this->handle,
                         Craft::t('sprout-seo', 'Meta Description field cannot be blank.')
