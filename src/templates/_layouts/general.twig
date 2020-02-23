@@ -4,7 +4,7 @@
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
 
 {% if title is not defined %}
-    {% set title = "Global Metadata"|t %}
+    {% set title = "Global Metadata"|t('sprout-seo') %}
 {% endif %}
 
 {% set fullPageForm = true %}
@@ -19,17 +19,17 @@
 {% endblock %}
 
 {% set navItems = {
-    'identity-heading': { heading: "Knowledge Graph"|t },
-    'website-identity': { title: "Website Identity"|t },
-    'contacts': { title: "Contacts"|t },
-    'social': { title: "Social Profiles"|t },
+    'identity-heading': { heading: "Knowledge Graph"|t('sprout-seo') },
+    'website-identity': { title: "Website Identity"|t('sprout-seo') },
+    'contacts': { title: "Contacts"|t('sprout-seo') },
+    'social': { title: "Social Profiles"|t('sprout-seo') },
 
-    'ownership-heading': { heading: "Ownership"|t },
-    'verify-ownership': { title: "Verify Ownership"|t },
+    'ownership-heading': { heading: "Ownership"|t('sprout-seo') },
+    'verify-ownership': { title: "Verify Ownership"|t('sprout-seo') },
 
-    'preferences': { heading: "Preferences"|t },
-    'customization': { title: "Customization"|t },
-    'robots': { title: "Robots"|t },
+    'preferences': { heading: "Preferences"|t('sprout-seo') },
+    'customization': { title: "Customization"|t('sprout-seo') },
+    'robots': { title: "Robots"|t('sprout-seo') },
 } %}
 
 {% set docTitle = navItems[selectedTabHandle].title~' - '~title %}

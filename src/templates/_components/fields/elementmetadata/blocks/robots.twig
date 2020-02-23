@@ -8,8 +8,8 @@
     <table class="data" style="width: auto;">
         <thead>
         <tr>
-            <th scope="col">{{ "Enable?"|t }}</th>
-            <th scope="col">{{ "Description"|t }}</th>
+            <th scope="col">{{ "Enable?"|t('sprout-seo') }}</th>
+            <th scope="col">{{ "Description"|t('sprout-seo') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -18,14 +18,14 @@
                 <div>
                     {{ forms.lightswitch({
                         name: robotsNamespace ~ '[noindex]',
-                        on:   values.robots.noindex
+                        on:   robots.noindex ?? false
                     }) }}
                 </div>
             </td>
             <td>
                 <label for="showGeo">
                     <code>noindex</code>
-                    - {{ "search engines should not index this page"|t }}
+                    - {{ "search engines should not index this page"|t('sprout-seo') }}
                 </label>
             </td>
         </tr>
@@ -34,14 +34,14 @@
                 <div>
                     {{ forms.lightswitch({
                         name: robotsNamespace ~ '[nofollow]',
-                        on:   values.robots.nofollow
+                        on:   robots.nofollow ?? false
                     }) }}
                 </div>
             </td>
             <td>
                 <label for="showRobots">
                     <code>nofollow</code>
-                    - {{ "search engines should not follow links on this page"|t }}
+                    - {{ "search engines should not follow links on this page"|t('sprout-seo') }}
                 </label>
             </td>
         </tr>
@@ -50,14 +50,14 @@
                 <div>
                     {{ forms.lightswitch({
                         name: robotsNamespace ~ '[noarchive]',
-                        on:   values.robots.noarchive
+                        on:   robots.noarchive ?? false
                     }) }}
                 </div>
             </td>
             <td>
                 <label for="showOpenGraph">
                     <code>noarchive</code>
-                    - {{ "search engines should not provide archived versions of this page"|t }}
+                    - {{ "search engines should not provide archived versions of this page"|t('sprout-seo') }}
                 </label>
             </td>
         </tr>
@@ -66,14 +66,14 @@
                 <div>
                     {{ forms.lightswitch({
                         name: robotsNamespace ~ '[noimageindex]',
-                        on:   values.robots.noimageindex
+                        on:   robots.noimageindex ?? false
                     }) }}
                 </div>
             </td>
             <td>
                 <label for="showTwitter">
                     <code>noimageindex</code>
-                    - {{ "search engines should not index images on this page"|t }}
+                    - {{ "search engines should not index images on this page"|t('sprout-seo') }}
                 </label>
             </td>
         </tr>
@@ -82,7 +82,7 @@
                 <div>
                     {{ forms.lightswitch({
                         name: robotsNamespace ~ '[noodp]',
-                        on:   values.robots.noodp
+                        on:   robots.noodp ?? false
                     }) }}
                 </div>
             </td>
@@ -99,7 +99,7 @@
                 <div>
                     {{ forms.lightswitch({
                         name: robotsNamespace ~ '[noydir]',
-                        on:   values.robots.noydir
+                        on:   robots.noydir ?? false
                     }) }}
                 </div>
             </td>
@@ -118,8 +118,8 @@
 
 {% if robotsContext is defined and robotsContext == 'globals' %}
     {{ forms.field({
-        label: "Robots"|t ~ sprout.infoIcon({
-            label: "Robots"|t,
+        label: "Robots"|t('sprout-seo') ~ sprout.infoIcon({
+            label: "Robots"|t('sprout-seo'),
             search: true,
             priority: 'globals'
         }),

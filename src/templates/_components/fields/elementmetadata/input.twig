@@ -1,9 +1,9 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
-{% set sproutApp = craft.app.getModule('sprout-seo').app %}
+{% set sproutSeoApp = craft.app.getModule('sprout-seo').app %}
 
-{% set pluginSettings   = craft.sproutSeo.getSettings() %}
+{% set pluginSettings = craft.sproutSeo.getSettings() %}
 
 {% set displayMetadataField = false %}
 {% set maxDescriptionLength = craft.sproutSeo.getDescriptionLength() %}
@@ -41,21 +41,6 @@
 
 <div>
     <div class="sproutseo-box-optimized">
-        <input type="hidden"
-            name="{{ field.handle~'[metadata][enableMetaDetailsSearch]' }}"
-            value="{{ values.enableMetaDetailsSearch }}">
-        <input type="hidden"
-            name="{{ field.handle~'[metadata][enableMetaDetailsOpenGraph]' }}"
-            value="{{ values.enableMetaDetailsOpenGraph }}">
-        <input type="hidden"
-            name="{{ field.handle~'[metadata][enableMetaDetailsTwitterCard]' }}"
-            value="{{ values.enableMetaDetailsTwitterCard }}">
-        <input type="hidden"
-            name="{{ field.handle~'[metadata][enableMetaDetailsGeo]' }}"
-            value="{{ values.enableMetaDetailsGeo }}">
-        <input type="hidden"
-            name="{{ field.handle~'[metadata][enableMetaDetailsRobots]' }}"
-            value="{{ values.enableMetaDetailsRobots }}">
         {% if settings is defined %}
             <input type="hidden" class="field"
                 name="{{ field.handle~'[metadata][sproutSeoSettings]' }}"
@@ -112,6 +97,13 @@
 
             {% set displayMetadataField = true %}
 
+            {% set optimizedImageId = sproutSeoApp.optimize.getImageId(values.optimizedImage ?? null) %}
+            {% if optimizedImageId %}
+                {% set optimizedImageElement = [craft.app.elements.getElementById(optimizedImageId)] %}
+            {% else %}
+                {% set optimizedImageElement = [] %}
+            {% endif %}
+
             {{ forms.field({
                 label: 'Meta Image'|t('sprout-seo') ~ sprout.infoIcon({
                     label: "Meta Image"|t('sprout-seo'),
@@ -121,9 +113,9 @@
                 instructions: 'A featured image that represents your content that will display in social sharing.'|t('sprout-seo'),
                 id: 'sproutseo-optimizedimage',
             }, forms.elementSelect({
-                elements: metaImageElements,
+                elements: optimizedImageElement,
                 sourceElementId: [values.optimizedImage],
-                elementType: assetElementClassName,
+                elementType: 'craft\\elements\\Asset',
                 sources: '*',
                 id: 'optimizedImage',
                 name: field.handle~'[metadata][optimizedImage]',
@@ -183,46 +175,13 @@
             {% set advancedSeoButtons %}
                 <div class="buttons">
                     <div id="{{ field.handle }}-meta-details-tabs" class="btngroup sproutseo-advancedoption-btns">
-
-                        {% if settings.showSearchMeta %}
-                            <div class="btn" id="btn-Search" data-type="Search">
-                                <i class="sproutseo-icon icon-search">
-                                    {{ svg('@sproutbaseicons/search.svg') }}
-                                </i> {{ "Search Meta"|t('sprout-seo') }}</div>
-                        {% endif %}
-
-                        {% if settings.showOpenGraph %}
-                            <div class="btn" id="btn-OpenGraph"
-                                data-type="OpenGraph">
-                                <i class="sproutseo-icon icon-facebook">
-                                    {{ svg('@sproutbaseicons/facebook-f.svg') }}
-                                </i> {{ "Open Graph"|t('sprout-seo') }}</div>
-                        {% endif %}
-
-                        {% if settings.showTwitter %}
-                            <div class="btn" id="btn-TwitterCard"
-                                data-type="TwitterCard">
-                                <i class="sproutseo-icon icon-twitter">
-                                    {{ svg('@sproutbaseicons/twitter.svg') }}
-                                </i> {{ "Twitter Card"|t('sprout-seo') }}</div>
-                        {% endif %}
-
-                        {% if settings.showGeo %}
-                            <div class="btn" id="btn-Geo" data-type="Geo">
-                                <i class="sproutseo-icon icon-location">
-                                    {{ svg('@sproutbaseicons/map-marker-alt.svg') }}
-                                </i> {{ "Geo"|t('sprout-seo') }}</div>
-                        {% endif %}
-
-                        {% if settings.showRobots %}
-                            <div class="btn" id="btn-Robots" data-type="Robots">
-                                <i class="sproutseo-icon icon-robots">
-                                    {{ svg('@sproutbaseicons/search-minus.svg') }}
-                                </i> {{ "Robots"|t('sprout-seo') }}</div>
-                        {% endif %}
-
+                        {% for metaType in metaTypes if metaType.hasMetaDetails() and metaType.showMetaDetailsTab() %}
+                            <div class="btn" id="btn-{{ metaType.handle }}" data-type="{{ metaType.handle }}">
+                                <i class="sproutseo-icon icon-{{ metaType.handle }}">
+                                    {{ svg(metaType.getIconPath()) }}
+                                </i> {{ metaType.displayName }}</div>
+                        {% endfor %}
                     </div>
-                    <div class="btn add icon menubtn hidden">{{ "Add a block"|t('sprout-seo') }}</div>
                 </div>
             {% endset %}
 
@@ -234,47 +193,11 @@
         {% endif %}
 
         <div id="{{ field.handle }}-meta-details-body" class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
-
-            <div class="matrixblock fields-Search"
-                {% if (values.enableMetaDetailsSearch is defined and values.enableMetaDetailsSearch == 0) or not settings.showSearchMeta %} style="display:none;" {% endif %}
-            >
-
-                {% include "sprout-seo/_components/fields/elementmetadata/blocks/input" %}
-
-            </div>
-
-            <div class="matrixblock fields-OpenGraph"
-                {% if values.enableMetaDetailsOpenGraph == 0 or not settings.showOpenGraph %} style="display:none;" {% endif %}
-            >
-
-                {% include "sprout-seo/_components/fields/elementmetadata/blocks/open-graph" %}
-
-            </div>
-
-            <div class="matrixblock fields-TwitterCard"
-                {% if values.enableMetaDetailsTwitterCard == 0 or not settings.showTwitter %} style="display:none;" {% endif %}
-            >
-
-                {% include "sprout-seo/_components/fields/elementmetadata/blocks/twitter-card" %}
-
-            </div>
-            <div class="matrixblock fields-Geo"
-                {% if values.enableMetaDetailsGeo == 0 or not settings.showGeo %} style="display:none;" {% endif %}
-            >
-
-                {% include "sprout-seo/_components/fields/elementmetadata/blocks/geo" %}
-
-            </div>
-
-            <div class="matrixblock fields-Robots"
-                {% if values.enableMetaDetailsRobots == 0 or not settings.showRobots %} style="display:none;" {% endif %}
-            >
-
-                {% set robotsNamespace = field.handle ~ '[metadata][robots]' %}
-                {% include "sprout-seo/_components/fields/elementmetadata/blocks/robots" %}
-
-            </div>
-
+            {% for metaType in metaTypes if metaType.hasMetaDetails() %}
+                <div class="matrixblock fields-{{ metaType.handle }}" style="display:none;">
+                    {{ metaType.getSettingsHtml(field)|raw }}<br>
+                </div>
+            {% endfor %}
         </div>
 
     {% endif %}
@@ -290,7 +213,7 @@ feel like they are part of the natural flow of fields #}
 
 {% js on ready %}
 
-    {% set seoBadgeInfo = sproutApp.elementMetadata.getSeoBadgeInfo(settings) %}
+    {% set seoBadgeInfo = sproutSeoApp.elementMetadata.getSeoBadgeInfo(settings) %}
 
     new SproutSeoMetadataField({
     fieldHandle: '{{ field.handle }}',

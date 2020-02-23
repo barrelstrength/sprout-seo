@@ -24,14 +24,14 @@
 
     <div class="field" style="margin-bottom:0;">
         <div class="heading">
-            <label>{{ "Verify Ownership"|t }} {{ sprout.infoIcon({
-                    label: "Verify Ownership"|t,
+            <label>{{ "Verify Ownership"|t('sprout-seo') }} {{ sprout.infoIcon({
+                    label: "Verify Ownership"|t('sprout-seo'),
                     search: true,
                     openGraph: true,
                     twitterCard: true,
                     priority: 'globals'
                 }) }}</label>
-            <p class="instructions">{{ 'Verify your site or app ownership for enhanced integration with several services. Each service you verify will add a meta tag to the &lt;head&gt; of your home page template. View instructions on where to find your verification code for <a href="http://www.bing.com/webmaster/?rfp=1#/Dashboard/?url={siteUrl}">Bing Webmaster Tools</a>, <a href="https://www.google.com/webmasters/verification/verification?hl=en&siteUrl={siteUrl}/">Google Search Console</a>, <a href="http://help.yandex.com/webmaster/service/rights.xml#how-to">Yandex Webmaster Tools</a>, <a href="https://developers.facebook.com/docs/apps/register">Facebook App ID</a>, and <a href="https://help.pinterest.com/en/articles/confirm-your-website#html_file">Pinterest</a>. Select `Custom` if you wish to add a verification meta tag for additional services.'|t({
+            <p class="instructions">{{ 'Verify your site or app ownership for enhanced integration with several services. Each service you verify will add a meta tag to the &lt;head&gt; of your home page template. View instructions on where to find your verification code for <a href="http://www.bing.com/webmaster/?rfp=1#/Dashboard/?url={siteUrl}">Bing Webmaster Tools</a>, <a href="https://www.google.com/webmasters/verification/verification?hl=en&siteUrl={siteUrl}/">Google Search Console</a>, <a href="http://help.yandex.com/webmaster/service/rights.xml#how-to">Yandex Webmaster Tools</a>, <a href="https://developers.facebook.com/docs/apps/register">Facebook App ID</a>, and <a href="https://help.pinterest.com/en/articles/confirm-your-website#html_file">Pinterest</a>. Select `Custom` if you wish to add a verification meta tag for additional services.'|t('sprout-seo', {
                     siteUrl: siteUrl|url_encode
                 })|raw }}</p>
         </div>

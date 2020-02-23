@@ -2,8 +2,10 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
+{% set sproutSeoApp = craft.app.getModule('sprout-seo').app %}
 {% set settings = craft.sproutSeo.getSettings() %}
-{% set values = { robots : craft.sproutSeo.getGlobalRobots(globals.siteId) } %}
+
+{% set robots = sproutSeoApp.optimize.prepareRobotsMetadataForSettings(globals.robots) %}
 
 {% block content %}
 

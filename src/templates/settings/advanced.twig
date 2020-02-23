@@ -7,20 +7,20 @@
 
 {{ forms.lightswitchField({
     label: "Automatically render metadata"|t('sprout-seo') ~ isProBadge,
-    instructions: "Sprout SEO prepares and outputs all of your metadata in your template. If you'd like to manage this output manually, you can disable this setting and enable the 'Enable custom metadata variable' setting below."|t,
+    instructions: "Sprout SEO prepares and outputs all of your metadata in your template. If you'd like to manage this output manually, you can disable this setting and enable the 'Enable custom metadata variable' setting below."|t('sprout-seo'),
     name: 'enableMetadataRendering',
     on: not isPro ? true : (settings.enableMetadataRendering is empty ? false : true),
-    onLabel: "Enable"|t,
+    onLabel: "Enable"|t('sprout-seo'),
     disabled: not isPro
 }) }}
 
 {{ forms.lightswitchField({
     label: "Enable custom metadata variable"|t('sprout-seo') ~ isProBadge,
-    instructions: "Make a global `metadata` variable available to all of your templates. The `metadata` variable will contain page-specific Prioritized Metadata and Structured Data, and all of your Globals. Ensure the {% sproutseo 'optimize' %} tag is in your template to generate the `metadata` variable. If you plan to handle the `metadata` variable on your own, you may also want to disable the 'Automatically render metadata' setting above, to ensure you don't output your metadata twice."|t,
+    instructions: "Make a global `metadata` variable available to all of your templates. The `metadata` variable will contain page-specific Prioritized Metadata and Structured Data, and all of your Globals. Ensure the {% sproutseo 'optimize' %} tag is in your template to generate the `metadata` variable. If you plan to handle the `metadata` variable on your own, you may also want to disable the 'Automatically render metadata' setting above, to ensure you don't output your metadata twice."|t('sprout-seo'),
     name: 'toggleMetadataVariable',
     toggle: 'settings-enablemetadatavariable',
     on: not isPro ? false : settings.toggleMetadataVariable,
-    onLabel: "Enable"|t,
+    onLabel: "Enable"|t('sprout-seo'),
     disabled: not isPro
 }) }}
 
@@ -29,7 +29,7 @@
 
     {{ forms.textField({
         label: "Custom metadata variable name"|t('sprout-seo'),
-        instructions: "Give your global `metadata` variable a name. You will use this variable name to access your metadata in your templates."|t,
+        instructions: "Give your global `metadata` variable a name. You will use this variable name to access your metadata in your templates."|t('sprout-seo'),
         name: 'metadataVariable',
         placeholder: 'metadata',
         value: settings.metadataVariable,
