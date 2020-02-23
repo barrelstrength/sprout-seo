@@ -7,8 +7,29 @@
 
 namespace barrelstrength\sproutseo\models;
 
-
+use barrelstrength\sproutseo\base\MetaImageTrait;
+use barrelstrength\sproutseo\base\MetaType;
+use barrelstrength\sproutseo\base\OptimizedTrait;
+use barrelstrength\sproutseo\meta\GeoMetaType;
+use barrelstrength\sproutseo\meta\OpenGraphMetaType;
+use barrelstrength\sproutseo\meta\RobotsMetaType;
+use barrelstrength\sproutseo\meta\SchemaMetaType;
+use barrelstrength\sproutseo\meta\SearchMetaType;
+use barrelstrength\sproutseo\meta\TwitterMetaType;
+use barrelstrength\sproutseo\SproutSeo;
+use Craft;
 use craft\base\Model;
+use PhpScience\TextRank\TextRankFacade;
+use PhpScience\TextRank\Tool\StopWords\English;
+use PhpScience\TextRank\Tool\StopWords\French;
+use PhpScience\TextRank\Tool\StopWords\German;
+use PhpScience\TextRank\Tool\StopWords\Italian;
+use PhpScience\TextRank\Tool\StopWords\Norwegian;
+use PhpScience\TextRank\Tool\StopWords\Spanish;
+use RuntimeException;
+use Throwable;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * Class Metadata
@@ -24,535 +45,370 @@ use craft\base\Model;
  */
 class Metadata extends Model
 {
-    /**
-     * @var string
-     */
-    public $appendTitleValue;
+    use OptimizedTrait;
+    use MetaImageTrait;
 
     /**
-     * @var int
+     * @var MetaType[]
      */
-    public $schemaTypeId;
+    protected $metaTypes = [];
 
     /**
-     * @var int
+     * Metadata constructor.
+     *
+     * @param array $config
+     *
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
      */
-    public $schemaOverrideTypeId;
+        // Populate the Optimized variables and unset them from the config
+        $this->setOptimizedProperties($config);
 
-    /**
-     * @var string
-     */
-    public $ogTransform;
+        // Populate the MetaType models and unset any attributes that get assigned
+        $this->setMetaTypes($config);
 
-    /**
-     * @var int
-     */
-    public $elementId;
+        parent::__construct($config);
+//        $this->createComputedMetadata();
+    }
 
-    /**
-     * @var string
-     */
-    public $twitterTransform;
-
-    /**
-     * @var string
-     */
-    public $optimizedTitle;
-
-    /**
-     * @var string
-     */
-    public $optimizedDescription;
-
-    /**
-     * @var int
-     */
-    public $optimizedImage;
-
-    /**
-     * @var string
-     */
-    public $optimizedKeywords;
-
-    /**
-     * @var bool
-     */
-    public $enableMetaDetailsSearch;
-
-    //MetaTags
-
-    /**
-     * @var bool
-     */
-    public $enableMetaDetailsOpenGraph;
-
-    /**
-     * @var bool
-     */
-    public $enableMetaDetailsTwitterCard;
-
-    /**
-     * @var bool
-     */
-    public $enableMetaDetailsGeo;
-
-    /**
-     * @var bool
-     */
-    public $enableMetaDetailsRobots;
-
-    /**
-     * @var string
-     */
-    public $title;
-
-    /**
-     * @var string
-     */
-    public $description;
-
-    /**
-     * @var string
-     */
-    public $keywords;
-
-    /**
-     * @var
-     */
-    public $robots;
-
-    /**
-     * @var string
-     */
-    public $canonical;
-
-    //searchMeta
-
-    /**
-     * @var string
-     */
-    public $region;
-
-    /**
-     * @var string
-     */
-    public $placename;
-
-    /**
-     * @var string
-     */
-    public $position;
-
-    //robotsMeta
-
-    /**
-     * @var string
-     */
-    public $latitude;
-
-    /**
-     * @var string
-     */
-    public $longitude;
-
-    //geographicMeta
-
-    /**
-     * @var string
-     */
-    public $ogType;
-
-    /**
-     * @var string
-     */
-    public $ogSiteName;
-
-    /**
-     * @var string
-     */
-    public $ogAuthor;
-
-    /**
-     * @var string
-     */
-    public $ogPublisher;
-
-    /**
-     * @var string
-     */
-    public $ogUrl;
-
-    //openGraphMeta
-
-    /**
-     * @var string
-     */
-    public $ogTitle;
-
-    /**
-     * @var string
-     */
-    public $ogDescription;
-
-    /**
-     * @var string
-     */
-    public $ogImage;
-
-    /**
-     * @var string
-     */
-    public $ogImageSecure;
-
-    /**
-     * @var int
-     */
-    public $ogImageWidth;
-
-    /**
-     * @var int
-     */
-    public $ogImageHeight;
-
-    /**
-     * @var string
-     */
-    public $ogImageType;
-
-    /**
-     * @var string
-     */
-    public $ogLocale;
-
-    /**
-     * @var \DateTime
-     */
-    public $ogDateUpdated;
-
-    /**
-     * @var \DateTime
-     */
-    public $ogDateCreated;
-
-    /**
-     * @var \DateTime
-     */
-    public $ogExpiryDate;
-
-    /**
-     * @var string
-     */
-    public $twitterCard;
-
-    /**
-     * @var string
-     */
-    public $twitterSite;
-
-    /**
-     * @var string
-     */
-    public $twitterCreator;
-
-    /**
-     * @var string
-     */
-    public $twitterUrl;
-
-    /**
-     * @var string
-     */
-    public $twitterTitle;
-
-    //twitterCardsMeta
-
-    /**
-     * @var string
-     */
-    public $twitterDescription;
-
-    /**
-     * @var string
-     */
-    public $twitterImage;
-
-    /**
-     * @var \DateTime
-     */
-    public $dateCreated;
-
-    /**
-     * @var \DateTime
-     */
-    public $dateUpdated;
-
-    /**
-     * @var int
-     */
-    public $uid;
-
-    /**
-     * @var array
-     */
-    protected $searchMeta = [];
-
-    /**
-     * @var array
-     */
-    protected $robotsMeta = [];
-
-    /**
-     * @var array
-     */
-    protected $geographicMeta = [];
-
-    /**
-     * @var array
-     */
-    protected $openGraphMeta = [];
-
-    /**
-     * @var array
-     */
-    protected $twitterCardsMeta = [];
-
-    /**
-     * @inheritdoc
-     */
-    public function init()
+    public function attributes(): array
     {
-        parent::init();
+        $attributes = parent::attributes();
+        $attributes[] = 'optimizedTitle';
+        $attributes[] = 'optimizedDescription';
+        $attributes[] = 'optimizedImage';
+        $attributes[] = 'optimizedKeywords';
+        $attributes[] = 'canonical';
 
-        $this->searchMeta = [
-            'title' => $this->title,
-            'description' => $this->description,
-            'keywords' => $this->keywords,
-        ];
-
-        $this->robotsMeta = [
-            'robots' => $this->robots,
-            'canonical' => $this->canonical,
-        ];
-
-        $this->geographicMeta = [
-            'region' => $this->region,
-            'placename' => $this->placename,
-            'position' => $this->position,
-            'latitude' => $this->latitude,
-            'longitude' => $this->longitude,
-        ];
-
-        $this->openGraphMeta = [
-            'ogType' => $this->ogType,
-            'ogSiteName' => $this->ogSiteName,
-            'ogAuthor' => $this->ogAuthor,
-            'ogPublisher' => $this->ogPublisher,
-            'ogUrl' => $this->ogUrl,
-            'ogTitle' => $this->ogTitle,
-            'ogDescription' => $this->ogDescription,
-            'ogImage' => $this->ogImage,
-            'ogImageSecure' => $this->ogImageSecure,
-            'ogImageWidth' => $this->ogImageWidth,
-            'ogImageHeight' => $this->ogImageHeight,
-            'ogImageType' => $this->ogImageType,
-            'ogLocale' => $this->ogLocale,
-            'ogDateUpdated' => $this->ogDateUpdated,
-            'ogDateCreated' => $this->ogDateCreated,
-            'ogExpiryDate' => $this->ogExpiryDate,
-        ];
-
-        $this->twitterCardsMeta = [
-            'twitterCard' => $this->twitterCard,
-            'twitterSite' => $this->twitterSite,
-            'twitterCreator' => $this->twitterCreator,
-            'twitterUrl' => $this->twitterUrl,
-            'twitterTitle' => $this->twitterTitle,
-            'twitterDescription' => $this->twitterDescription,
-            'twitterImage' => $this->twitterImage
-        ];
+        return $attributes;
     }
 
     /**
+     * @return string|null
+     */
+    public function getOptimizedTitle()
+    {
+        return $this->optimizedTitle;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function setOptimizedTitle(string $value)
+    {
+        $element = SproutSeo::$app->optimize->element;
+        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
+
+        $optimizedTitleFieldSetting = $elementMetadataField->optimizedTitleField ?? 'manually';
+
+        switch (true) {
+            // Element Title
+            case ($optimizedTitleFieldSetting === 'elementTitle'):
+
+                $title = $element->title;
+
+                break;
+
+            // Manual Title
+            case ($optimizedTitleFieldSetting === 'manually'):
+
+                $title = $value;
+
+                break;
+
+            // Custom Field
+            case (is_numeric($optimizedTitleFieldSetting)):
+
+                $title = $this->getSelectedFieldForOptimizedMetadata($optimizedTitleFieldSetting);
+                break;
+
+            // Custom Value
+            default:
+                $title = Craft::$app->view->renderObjectTemplate($optimizedTitleFieldSetting, $element);
+
+                break;
+        }
+
+        $this->optimizedTitle = $title;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOptimizedDescription()
+    {
+        $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
+
+        return mb_substr($this->optimizedDescription, 0, $descriptionLength);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @throws Throwable
+     * @throws Exception
+     */
+    public function setOptimizedDescription(string $value)
+    {
+        $element = SproutSeo::$app->optimize->element;
+        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
+
+        $optimizedDescriptionFieldSetting = $elementMetadataField->optimizedDescriptionField ?? 'manually';
+
+        switch (true) {
+            // Manual Description
+            case ($optimizedDescriptionFieldSetting === 'manually'):
+
+                $description = $value ?? null;
+
+                break;
+
+            // Custom Description
+            case (is_numeric($optimizedDescriptionFieldSetting)):
+
+                $description = $this->getSelectedFieldForOptimizedMetadata($optimizedDescriptionFieldSetting);
+
+                break;
+
+            // Custom Value
+            default:
+
+                $description = Craft::$app->view->renderObjectTemplate($optimizedDescriptionFieldSetting, $element);
+
+                break;
+        }
+
+        // Just save the first 255 characters (we only output 160...)
+        $description = mb_substr(trim($description), 0, 255);
+
+        $this->optimizedDescription = $description;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOptimizedImage()
+    {
+        return $this->optimizedImage;
+    }
+
+    /**
+     * @param $value
+     *
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function setOptimizedImage($value)
+    {
+        $this->optimizedImage = $this->normalizeImageValue($value);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOptimizedKeywords()
+    {
+        return $this->optimizedKeywords;
+    }
+
+    /**
+     * @param null $value
+     *
+     * @throws InvalidConfigException
+     */
+    public function setOptimizedKeywords($value = null)
+    {
+        $keywords = $value;
+
+        $element = SproutSeo::$app->optimize->element;
+        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
+
+        $optimizedKeywordsFieldSetting = $elementMetadataField->optimizedKeywordsField ?? 'manually';
+
+        switch (true) {
+            // Manual Keywords
+            case ($optimizedKeywordsFieldSetting === 'manually'):
+
+                $keywords = $value ?? null;
+
+                break;
+
+            // Auto-generate keywords from target field
+            case (is_numeric($optimizedKeywordsFieldSetting)):
+
+                $bigKeywords = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
+                $keywords = null;
+
+                if ($bigKeywords) {
+
+                    $textRankApi = new TextRankFacade();
+
+                    $stopWordsMap = [
+                        'en' => English::class,
+                        'fr' => French::class,
+                        'de' => German::class,
+                        'it' => Italian::class,
+                        'nn' => Norwegian::class,
+                        'es' => Spanish::class
+                    ];
+
+                    $language = $element->getSite()->language;
+                    $languagePrefixArray = explode('-', $language);
+
+                    $stopWordsClass = $stopWordsMap['en'];
+
+                    if (count($languagePrefixArray) > 0) {
+                        $languagePrefix = $languagePrefixArray[0];
+
+                        if (isset($stopWordsMap[$languagePrefix])) {
+                            $stopWordsClass = $stopWordsMap[$languagePrefix];
+                        }
+                    }
+
+                    $stopWords = new $stopWordsClass();
+
+                    try {
+                        $textRankApi->setStopWords($stopWords);
+
+                        $rankedKeywords = $textRankApi->getOnlyKeyWords($bigKeywords);
+                        $fiveKeywords = array_keys(array_slice($rankedKeywords, 0, 5));
+                        $keywords = implode(',', $fiveKeywords);
+                    } catch (RuntimeException $e) {
+                        // Cannot detect the language of the text, maybe to short.
+                        $keywords = null;
+                    }
+                }
+
+                break;
+        }
+
+        $this->optimizedKeywords = $keywords;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setCanonical($value)
+    {
+        $this->canonical = $value;
+    }
+
+    /**
+     * @param array $config
+     *
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
+     */
+    public function setOptimizedProperties(array &$config = [])
+    {
+        // Ensure we set all optimized values even if no value is received
+        // when configuring the Metadata model. Configuration may happen on the field type
+        foreach ($this->getAttributes() as $key => $value) {
+            $setter = 'set'.ucfirst($key);
+            $optimizedSettingValue = $config[$key] ?? null;
+            if ($optimizedSettingValue) {
+                $this->{$setter}($optimizedSettingValue);
+            }
+            unset($config[$key]);
+        }
+    }
+
+    /**
+     * @return MetaType[]
+     */
+    public function getMetaTypes(): array
+    {
+        return $this->metaTypes;
+    }
+
+    /**
+     * @param array $config
+     */
+    protected function setMetaTypes(array &$config = [])
+    {
+        $metaTypes = [
+            new SearchMetaType(),
+            new OpenGraphMetaType(),
+            new TwitterMetaType(),
+            new GeoMetaType(),
+            new RobotsMetaType(),
+            new SchemaMetaType()
+        ];
+
+        foreach ($metaTypes as $metaType) {
+            $this->populateMetaType($config, $metaType);
+        }
+    }
+
+    /**
+     * Returns metadata as a flat array of the base values stored on the model.
+     * The raw data is stored in the database and used when submitting related forms.
+     * This method does not return any calculated values.
+     *
      * @return array
-     * @throws \yii\base\Exception
+     */
+    public function getRawData(): array
+    {
+        $metaForDb = [];
+
+        foreach ($this->metaTypes as $metaType) {
+            $staticAttributes = $metaType->getRawData();
+
+            foreach ($staticAttributes as $key => $attribute) {
+                $metaForDb[$attribute] = $metaType[$attribute];
+            }
+        }
+
+        // Merge Optimized Values and Meta Type values
+        return array_merge($this->getAttributes(), $metaForDb);
+    }
+
+    /**
+     * Returns the calculated values for the metadata used in the front-end meta tags.
+     *
+     * @return array
      */
     public function getMetaTagData(): array
     {
         $metaTagData = [];
 
-        $metaTagData['search'] = $this->getSearchMetaTagData();
-        $metaTagData['robots'] = $this->getRobotsMetaTagData();
-        $metaTagData['geo'] = $this->getGeographicMetaTagData();
-        $metaTagData['openGraph'] = $this->getOpenGraphMetaTagData();
-        $metaTagData['twitterCard'] = $this->getTwitterCardMetaTagData();
-        $metaTagData['googlePlus'] = $this->getGooglePlusMetaTagData();
+        foreach ($this->metaTypes as $metaType) {
+            $metaTagData[$metaType->getHandle()] = $metaType->getMetaTagData();
+        }
 
         return $metaTagData;
     }
 
     /**
-     * @return null
-     * @throws \yii\base\Exception
+     * @param array    $config
+     * @param MetaType $metaType
      */
-    public function getGooglePlusMetaTagData()
+    protected function populateMetaType(array &$config, MetaType $metaType)
     {
-        return OptimizeHelper::getGooglePlusPage();
-    }
+        // Match the values being populated to a given Meta Type model
+        $metaAttributes = array_intersect_key($config, $metaType->getAttributes());
 
-    /**
-     * Updates "uri" to starts without a "/"
-     *
-     * @return bool
-     */
-    public function beforeValidate(): bool
-    {
-        $this->uri = SproutBaseRedirects::$app->redirects->removeSlash($this->uri);
+        // Assign the Metadata Optimized variables to the Meta Type classes so they can be used as fallbacks
+        $metaType->optimizedTitle = $this->optimizedTitle;
+        $metaType->optimizedDescription = $this->optimizedDescription;
+        $metaType->optimizedImage = $this->optimizedImage;
+        $metaType->optimizedKeywords = $this->optimizedKeywords;
+        $metaType->canonical = $this->canonical;
 
-        return true;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getSearchMetaTagData(): array
-    {
-        $tagData = [];
-
-        foreach ($this->searchMeta as $key => $value) {
-            if ($this->{$key}) {
-                $value = $this->{$key};
-                $tagData[$key] = $value;
-            }
-        }
-
-        return $tagData;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getRobotsMetaTagData(): array
-    {
-        $tagData = [];
-
-        foreach ($this->robotsMeta as $key => $value) {
-            if ($this->{$key}) {
-                $value = $this->{$key};
-
-                if ($key == 'robots') {
-                    $value = $this->robots;
-                }
-
-                $tagData[$key] = $value;
-            }
-        }
-
-        return $tagData;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getGeographicMetaTagData(): array
-    {
-        $tagData = [];
-
-        foreach ($this->geographicMeta as $key => $value) {
-            if ($key === 'latitude' or $key === 'longitude') {
-                break;
-            }
-
-            $value = $this->{$key};
-
-            if ($key === 'position') {
-                $value = OptimizeHelper::prepareGeoPosition($this);
-            }
-
+        foreach ($metaAttributes as $key => $value) {
+            // Build the setter name dynamically: i.e. ogTitle => setOgTitle()
+            $setter = 'set'.ucfirst($key);
             if ($value) {
-                $tagData[$this->getMetaTagName($key)] = $value;
+                $metaType->{$setter}($value);
             }
+            unset($config[$key]);
         }
 
-        return $tagData;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getOpenGraphMetaTagData(): array
-    {
-        $tagData = [];
-
-        foreach ($this->openGraphMeta as $key => $value) {
-            if ($this->{$key}) {
-                $value = $this->{$key};
-                $tagData[$this->getMetaTagName($key)] = $value;
-            }
-        }
-
-        return $tagData;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getTwitterCardMetaTagData(): array
-    {
-        $tagData = [];
-
-        foreach ($this->twitterCardsMeta as $key => $value) {
-            if ($this->{$key}) {
-                $value = $this->{$key};
-                $tagData[$this->getMetaTagName($key)] = $value;
-            }
-        }
-
-        return $tagData;
-    }
-
-    /**
-     * @param $handle
-     *
-     * @return mixed
-     */
-    protected function getMetaTagName($handle)
-    {
-        // Map tag names to their handles
-        $tagNames = [
-
-            // Geographic
-            'region' => 'geo.region',
-            'placename' => 'geo.placename',
-            'position' => 'geo.position',
-
-            // Open Graph
-            'ogType' => 'og:type',
-            'ogSiteName' => 'og:site_name',
-            'ogPublisher' => 'article:publisher',
-            'ogAuthor' => 'og:author',
-            'ogUrl' => 'og:url',
-            'ogTitle' => 'og:title',
-            'ogDescription' => 'og:description',
-            'ogImage' => 'og:image',
-            'ogImageSecure' => 'og:image:secure_url',
-            'ogImageWidth' => 'og:image:width',
-            'ogImageHeight' => 'og:image:height',
-            'ogImageType' => 'og:image:type',
-            'ogLocale' => 'og:locale',
-            'ogDateCreated' => 'article:published_time',
-            'ogDateUpdated' => 'article:modified_time',
-            'ogExpiryDate' => 'article:expiration_time',
-
-            // Twitter Cards
-            'twitterCard' => 'twitter:card',
-            'twitterSite' => 'twitter:site',
-            'twitterCreator' => 'twitter:creator',
-            'twitterTitle' => 'twitter:title',
-            'twitterDescription' => 'twitter:description',
-            'twitterUrl' => 'twitter:url',
-            'twitterImage' => 'twitter:image'
-        ];
-
-        return $tagNames[$handle];
+        $this->metaTypes[$metaType->handle] = $metaType;
     }
 }
