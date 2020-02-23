@@ -59,8 +59,7 @@ class GlobalMetadata extends Component
         }
 
         $results = $query->one();
-
-        $results['meta'] = isset($results['meta']) ? Json::decode($results['meta']) : null;
+        
         $results['identity'] = isset($results['identity']) ? Json::decode($results['identity']) : null;
         $results['contacts'] = isset($results['contacts']) ? Json::decode($results['contacts']) : null;
         $results['ownership'] = isset($results['ownership']) ? Json::decode($results['ownership']) : null;
@@ -121,97 +120,7 @@ class GlobalMetadata extends Component
             ['siteId' => $globals->siteId]
         )->execute();
 
-        $this->refreshMetaColumn($globals->siteId);
-
         return true;
-    }
-
-    /**
-     * @param $siteId
-     *
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\db\Exception
-     */
-    public function refreshMetaColumn($siteId)
-    {
-        $site = Craft::$app->getSites()->getSiteById($siteId);
-        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-
-        $metadataArray = $this->prepareMetaColumnValues($globals);
-        $metadata = new Metadata($metadataArray);
-        $meta = Json::encode($metadata->getAttributes());
-
-        Craft::$app->db->createCommand()->update('{{%sproutseo_globals}}', [
-            'meta' => $meta
-        ], [
-            'siteId' => $globals->siteId
-        ])->execute();
-    }
-
-    public function prepareMetaColumnValues(Globals $globals): array
-    {
-        $meta = $globals->meta;
-
-        $identity = $globals->identity;
-        $social = $globals->social;
-        $robots = $globals->robots;
-        $settings = $globals->settings;
-
-        $optimizedTitle = $identity['name'] ?? null;
-        $optimizedDescription = $identity['description'] ?? null;
-        $optimizedImage = $identity['image'] ?? null;
-
-        $meta['optimizedTitle'] = $optimizedTitle;
-        $meta['optimizedDescription'] = $optimizedDescription;
-        $meta['optimizedImage'] = $optimizedImage;
-
-        $meta['title'] = $optimizedTitle;
-        $meta['description'] = $optimizedDescription;
-        $meta['keywords'] = $identity['keywords'] ?? null;
-        $meta['robots'] = OptimizeHelper::prepareRobotsMetadataValue($robots);
-
-        // @todo - Add location info
-        $meta['region'] = '';
-        $meta['placename'] = '';
-        $meta['position'] = '';
-
-        $meta['latitude'] = $identity['latitude'] ?? '';
-        $meta['longitude'] = $identity['longitude'] ?? '';
-
-        $meta['ogType'] = $settings['defaultOgType'] ?? 'article';
-        $meta['ogSiteName'] = $identity['name'] ?? null;
-        $meta['ogTitle'] = $optimizedTitle;
-        $meta['ogDescription'] = $optimizedDescription;
-        $meta['ogImage'] = $optimizedImage;
-        $meta['ogLocale'] = null;
-        $meta['ogPublisher'] = OptimizeHelper::getFacebookPage($social);
-
-        $meta['twitterCard'] = $settings['defaultTwitterCard'] ?? 'summary';;
-        $meta['twitterTitle'] = $optimizedTitle;
-        $meta['twitterDescription'] = $optimizedDescription;
-        $meta['twitterImage'] = $optimizedImage;
-
-        $twitterProfileName = OptimizeHelper::getTwitterProfileName($social);
-        $meta['twitterSite'] = $twitterProfileName;
-        $meta['twitterCreator'] = $twitterProfileName;
-
-        if (isset($settings['ogTransform'])) {
-            $meta['ogTransform'] = $settings['ogTransform'];
-        }
-
-        if (isset($settings['twitterTransform'])) {
-            $meta['twitterTransform'] = $settings['twitterTransform'];
-        }
-
-        $meta['ogType']  = (isset($settings['defaultOgType']) && $settings['defaultOgType'])
-            ? $settings['defaultOgType']
-            : 'article';
-        $meta['twitterCard'] = (isset($settings['defaultTwitterCard']) && $settings['defaultTwitterCard'])
-            ? $settings['defaultTwitterCard']
-            : 'summary';
-
-        return $meta;
     }
 
     /**
