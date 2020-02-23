@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutseo\meta;
 
 use barrelstrength\sproutseo\base\MetaType;
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use yii\base\Exception;

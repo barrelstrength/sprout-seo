@@ -10,7 +10,6 @@ namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutbaseuris\SproutBaseUris;
 use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;

@@ -7,12 +7,8 @@
 
 namespace barrelstrength\sproutseo\services;
 
-
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\migrations\InsertDefaultGlobalsBySite;
 use barrelstrength\sproutseo\models\Globals;
-use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Component;
 use craft\db\Query;

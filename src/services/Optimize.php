@@ -20,11 +20,17 @@ use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\elements\Asset;
+use craft\errors\SiteNotFoundException;
+use craft\helpers\UrlHelper;
 use craft\models\Site;
-use DateTime;
 use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\base\ExitException;
 use yii\base\InvalidConfigException;
 
 /**
@@ -358,35 +364,128 @@ class Optimize extends Component
     }
 
     /**
-     * @param $prioritizedMetadataModel
-     * @param $metadataModel
+     * Return a comma delimited string of robots meta settings
      *
-     * @return mixed
+     * @param array|string|null $robots
+     *
+     * @return string|null
      */
-    protected function getPrioritizedValues(Metadata $prioritizedMetadataModel, $metadataModel)
+    public function prepareRobotsMetadataValue($robots = null)
     {
-        foreach ($prioritizedMetadataModel->getAttributes() as $attribute => $value) {
-            // Test for a value on each of our models in their order of priority
-            if ($metadataModel->{$attribute}) {
-                $prioritizedMetadataModel->{$attribute} = $metadataModel->{$attribute};
-            }
-            // Make sure our schema type and override are all or nothing
-            // if we find the $metadataModel doesn't have a value for schemaOverrideTypeId
-            // then we should make sure the $prioritizedMetadataModel also has a null value
-            // otherwise we still keep our lower level value
-            if ($attribute === 'schemaOverrideTypeId' &&
-                $metadataModel->schemaTypeId != null &&
-                $metadataModel->{$attribute} == null
-            ) {
-                $prioritizedMetadataModel->{$attribute} = null;
+        if ($robots === null) {
+            return null;
+        }
+
+        if (is_string($robots)) {
+            return $robots;
+        }
+
+        $robotsMetaValue = '';
+
+        foreach ($robots as $key => $value) {
+            if ($value == '') {
+                continue;
             }
 
-            // Make sure all our strings are trimmed
-            if (is_string($prioritizedMetadataModel->{$attribute})) {
-                $prioritizedMetadataModel->{$attribute} = trim($prioritizedMetadataModel->{$attribute});
+            if ($robotsMetaValue == '') {
+                $robotsMetaValue .= $key;
+            } else {
+                $robotsMetaValue .= ','.$key;
             }
         }
 
-        return $prioritizedMetadataModel;
+        return !empty($robotsMetaValue) ? $robotsMetaValue : null;
+    }
+
+    /**
+     * Return an array of all robots settings set to their boolean value of on or off
+     *
+     * @param $robotsValues
+     *
+     * @return array
+     */
+    public function prepareRobotsMetadataForSettings($robotsValues): array
+    {
+        if (is_string($robotsValues)) {
+            $robotsArray = explode(',', $robotsValues);
+
+            $robotsSettings = [];
+
+            foreach ($robotsArray as $key => $value) {
+                $robotsSettings[$value] = 1;
+            }
+        } else {
+            // Value from content table
+            $robotsSettings = $robotsValues;
+        }
+
+        $robots = [
+            'noindex' => 0,
+            'nofollow' => 0,
+            'noarchive' => 0,
+            'noimageindex' => 0,
+            'noodp' => 0,
+            'noydir' => 0,
+        ];
+
+        foreach ($robots as $key => $value) {
+            if (isset($robotsSettings[$key]) && $robotsSettings[$key]) {
+                $robots[$key] = 1;
+            }
+        }
+
+        return $robots;
+    }
+
+    /**
+     * @param $image
+     *
+     * @return mixed
+     */
+    public function getImageId($image)
+    {
+        $imageId = $image;
+
+        if (is_array($image)) {
+            $imageId = $image[0];
+        }
+
+        return $imageId ?? null;
+    }
+
+    /**
+     * Return pre-defined transform settings or the selected transform handle
+     *
+     * @param $transformHandle
+     *
+     * @return mixed
+     */
+    public function getSelectedTransform($transformHandle)
+    {
+        $defaultTransforms = [
+            'sproutSeo-socialSquare' => [
+                'mode' => 'crop',
+                'width' => 400,
+                'height' => 400,
+                'quality' => 82,
+                'position' => 'center-center'
+            ],
+            'sproutSeo-ogRectangle' => [
+                'mode' => 'crop',
+                'width' => 1200,
+                'height' => 630,
+                'quality' => 82,
+                'position' => 'center-center'
+            ],
+            'sproutSeo-twitterRectangle' => [
+                'mode' => 'crop',
+                'width' => 1024,
+                'height' => 512,
+                'quality' => 82,
+                'position' => 'center-center'
+            ]
+        ];
+
+        return $defaultTransforms[$transformHandle] ?? ($transformHandle == '' ? null : $transformHandle);
     }
 }

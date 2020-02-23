@@ -9,7 +9,6 @@ namespace barrelstrength\sproutseo\fields;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasefields\web\assets\selectother\SelectOtherFieldAsset;
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\SproutSeo;
 use barrelstrength\sproutseo\web\assets\seo\SproutSeoAsset;

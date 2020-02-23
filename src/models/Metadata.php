@@ -8,10 +8,7 @@
 namespace barrelstrength\sproutseo\models;
 
 
-use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use craft\base\Model;
-
 
 /**
  * Class Metadata
