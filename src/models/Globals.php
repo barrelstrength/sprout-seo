@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutseo\models;
 
 use barrelstrength\sproutbasefields\models\Address;
+use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use craft\helpers\Json;
 
@@ -109,7 +110,7 @@ class Globals extends Model
 
         $schema = $this->{$targetMethod}();
 
-        if ($format === 'json') {
+        if ($schema && $format === 'json') {
             return Json::encode($schema);
         }
 
@@ -220,9 +221,15 @@ class Globals extends Model
     /**
      * @return
      */
-    protected function getRobots(): array
+    protected function getRobots()
     {
-        return $this->robots;
+        $robots = SproutSeo::$app->optimize->prepareRobotsMetadataValue($this->robots);
+
+        if ($robots === null) {
+            return null;
+        }
+
+        return $robots;
     }
 
     /**
