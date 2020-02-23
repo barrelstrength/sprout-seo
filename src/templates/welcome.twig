@@ -2,7 +2,7 @@
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
 {% set title = "Welcome to Sprout SEO"|t('sprout-seo') %}
-
+{% set bodyClass = 'sprout-landing-page' %}
 {% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutseo/web/assets/base/dist', true) -%}
 
 {% block content %}
