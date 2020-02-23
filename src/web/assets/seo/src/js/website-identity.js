@@ -110,7 +110,6 @@ class SproutSeoWebsiteIdentity {
     // check if we need load depending dropdowns
     if (websiteIdentity) {
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[0]) {
-        console.log(websiteIdentity.organizationSubTypes[0]);
         $('#main-entity-first-dropdown').val(websiteIdentity.organizationSubTypes[0]).trigger('change');
       }
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[1]) {
