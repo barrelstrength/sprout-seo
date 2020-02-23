@@ -40,16 +40,6 @@ class ElementMetadata extends Component
         if (isset($element->{$fieldHandle})) {
             $metadata = $element->{$fieldHandle};
 
-            // Support Live Preview (where image IDs still need to be converted from arrays)
-            if (isset($metadata['optimizedImage'])) {
-                $metadata['optimizedImage'] = OptimizeHelper::getImageId($metadata['optimizedImage']);
-            }
-            if (isset($metadata['ogImage'])) {
-                $metadata['ogImage'] = OptimizeHelper::getImageId($metadata['ogImage']);
-            }
-            if (isset($metadata['twitterImage'])) {
-                $metadata['twitterImage'] = OptimizeHelper::getImageId($metadata['twitterImage']);
-            }
 
             return new Metadata($metadata);
         }

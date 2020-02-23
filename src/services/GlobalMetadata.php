@@ -16,8 +16,11 @@ use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Component;
 use craft\db\Query;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\Json;
 use craft\models\Site;
+use Throwable;
+use yii\db\Exception;
 
 /**
  * Class SproutSeo_GlobalMetadataService
@@ -59,25 +62,13 @@ class GlobalMetadata extends Component
         }
 
         $results = $query->one();
-        
+
         $results['identity'] = isset($results['identity']) ? Json::decode($results['identity']) : null;
         $results['contacts'] = isset($results['contacts']) ? Json::decode($results['contacts']) : null;
         $results['ownership'] = isset($results['ownership']) ? Json::decode($results['ownership']) : null;
         $results['social'] = isset($results['social']) ? Json::decode($results['social']) : null;
         $results['robots'] = isset($results['robots']) ? Json::decode($results['robots']) : null;
         $results['settings'] = isset($results['settings']) ? Json::decode($results['settings']) : null;
-
-        if (!isset($results['identity']['url'])) {
-            $results['identity']['url'] = $currentSite->baseUrl;
-        }
-
-        if (isset($results['settings']['ogTransform'])) {
-            $results['meta']['ogTransform'] = $results['settings']['ogTransform'];
-        }
-
-        if (isset($results['settings']['twitterTransform'])) {
-            $results['meta']['twitterTransform'] = $results['settings']['twitterTransform'];
-        }
 
         return new Globals($results);
     }
