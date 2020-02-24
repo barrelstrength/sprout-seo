@@ -46,7 +46,7 @@ class RobotsMetaType extends MetaType
             return $this->robots;
         }
 
-        return SproutSeo::$app->optimize->globals->meta['robots'] ?? [];
+        return SproutSeo::$app->optimize->globals->meta['robots'] ?? null;
     }
 
     public function setRobots($value)
