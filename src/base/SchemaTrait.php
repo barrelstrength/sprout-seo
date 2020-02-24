@@ -7,11 +7,6 @@
 
 namespace barrelstrength\sproutseo\base;
 
-use barrelstrength\sproutseo\SproutSeo;
-use Craft;
-use craft\base\Field;
-use craft\fields\Assets;
-
 trait SchemaTrait
 {
     /**

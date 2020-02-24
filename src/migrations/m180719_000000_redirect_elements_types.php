@@ -1,15 +1,14 @@
 <?php /** @noinspection PhpUndefinedClassInspection */
 
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
 
-use /** @noinspection PhpUndefinedNamespaceInspection */
-    barrelstrength\sproutseo\elements\Redirect;
+use barrelstrength\sproutseo\elements\Redirect;
 use craft\db\Migration;
 
 /**

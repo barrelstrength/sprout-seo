@@ -25,6 +25,11 @@ class SchemaMetaType extends MetaType
      */
     protected $schemaOverrideTypeId;
 
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-seo', 'Schema');
+    }
+
     public function attributes(): array
     {
         $attributes = parent::attributes();
@@ -32,11 +37,6 @@ class SchemaMetaType extends MetaType
         $attributes[] = 'schemaOverrideTypeId';
 
         return $attributes;
-    }
-
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-seo', 'Schema');
     }
 
     public function getHandle(): string

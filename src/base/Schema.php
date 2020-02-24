@@ -298,8 +298,8 @@ abstract class Schema
      * https://schema.org/Date
      * https://en.wikipedia.org/wiki/ISO_8601
      *
-     * @param string           $propertyName
-     * @param string|\DateTime $date
+     * @param string          $propertyName
+     * @param string|DateTime $date
      *
      * @throws \Exception
      */

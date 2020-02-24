@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
@@ -13,6 +13,8 @@ use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirects
 use barrelstrength\sproutbasesitemaps\migrations\Install as SproutBaseSitemapsInstall;
 use Craft;
 use craft\db\Migration;
+use craft\errors\SiteNotFoundException;
+use Throwable;
 
 class Install extends Migration
 {
@@ -23,7 +25,7 @@ class Install extends Migration
 
     /**
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function safeUp(): bool
     {
@@ -35,8 +37,8 @@ class Install extends Migration
     }
 
     /**
-     * @throws \Throwable
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws Throwable
+     * @throws SiteNotFoundException
      */
     protected function createTables()
     {
@@ -90,7 +92,7 @@ class Install extends Migration
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function insertDefaultGlobalMetadata()
     {
@@ -106,7 +108,7 @@ class Install extends Migration
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function createAddressTable()
     {

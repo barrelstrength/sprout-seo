@@ -38,6 +38,11 @@ class SearchMetaType extends MetaType
      */
     protected $keywords;
 
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-seo', 'Search');
+    }
+
     public function attributes(): array
     {
         $attributes = parent::attributes();
@@ -164,11 +169,6 @@ class SearchMetaType extends MetaType
     public function setKeywords($value)
     {
         $this->keywords = $value;
-    }
-
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-seo', 'Search');
     }
 
     public function getHandle(): string

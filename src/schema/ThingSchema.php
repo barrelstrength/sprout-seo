@@ -1,15 +1,15 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
 
 use barrelstrength\sproutseo\base\Schema;
-use Exception;
 use Throwable;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
 class ThingSchema extends Schema
@@ -41,7 +41,7 @@ class ThingSchema extends Schema
     /**
      * @return void|null
      * @throws Throwable
-     * @throws \yii\base\Exception
+     * @throws Exception
      * @throws InvalidConfigException
      */
     public function addProperties()

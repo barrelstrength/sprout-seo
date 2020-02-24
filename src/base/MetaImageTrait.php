@@ -63,6 +63,8 @@ trait MetaImageTrait
      * @param      $image
      * @param null $transform
      *
+     * @param bool $urlOnly
+     *
      * @return Asset|string|string[]|null
      * @throws Exception
      * @throws SiteNotFoundException

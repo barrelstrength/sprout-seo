@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
@@ -10,6 +10,8 @@ namespace barrelstrength\sproutseo\migrations;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use craft\db\Migration;
 use craft\db\Query;
+use yii\base\Exception;
+use yii\base\NotSupportedException;
 
 /**
  * m180702_000000_add_unique_key_column migration.
@@ -20,8 +22,8 @@ class m180702_000000_add_unique_key_column extends Migration
      * @inheritdoc
      *
      * @return bool
-     * @throws \yii\base\Exception
-     * @throws \yii\base\NotSupportedException
+     * @throws Exception
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

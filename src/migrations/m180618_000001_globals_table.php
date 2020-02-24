@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\migrations;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\MigrationHelper;
+use yii\base\NotSupportedException;
 
 /**
  * m180618_000001_globals_table migration.
@@ -19,7 +20,7 @@ class m180618_000001_globals_table extends Migration
     /**
      * @inheritdoc
      *
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

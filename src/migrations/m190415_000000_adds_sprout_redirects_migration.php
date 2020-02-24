@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
@@ -13,18 +13,20 @@ use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
+use Throwable;
+use yii\db\Exception;
 
 /**
  * m190415_000000_adds_sprout_redirects_migration migration.
  *
- * @property \barrelstrength\sproutbaseredirects\models\Settings $sproutRedirectsSettingsModel
+ * @property SproutRedirectsSettings $sproutRedirectsSettingsModel
  */
 class m190415_000000_adds_sprout_redirects_migration extends Migration
 {
     /**
      * @return bool
-     * @throws \Throwable
-     * @throws \yii\db\Exception
+     * @throws Throwable
+     * @throws Exception
      */
     public function safeUp(): bool
     {

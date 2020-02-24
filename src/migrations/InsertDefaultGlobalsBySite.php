@@ -1,13 +1,14 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
 
 use craft\db\Migration;
+use yii\db\Exception;
 
 class InsertDefaultGlobalsBySite extends Migration
 {
@@ -20,7 +21,7 @@ class InsertDefaultGlobalsBySite extends Migration
      * @inheritdoc
      *
      * @return bool|void
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function safeUp()
     {

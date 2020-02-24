@@ -21,9 +21,7 @@ use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
-use craft\elements\Asset;
 use craft\errors\SiteNotFoundException;
-use craft\helpers\UrlHelper;
 use craft\models\Site;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -31,7 +29,6 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Component;
 use yii\base\Exception;
-use yii\base\ExitException;
 use yii\base\InvalidConfigException;
 
 /**
@@ -94,9 +91,7 @@ class Optimize extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws SiteNotFoundException
      * @throws Exception
-     * @throws InvalidConfigException
      */
     public function getMetadataViaContext(&$context)
     {

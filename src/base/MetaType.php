@@ -7,12 +7,8 @@
 
 namespace barrelstrength\sproutseo\base;
 
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use craft\base\Component;
 use craft\base\Field;
-use craft\helpers\UrlHelper;
-use Craft;
-use yii\base\Exception;
 
 /**
  * @property string $handle
@@ -214,7 +210,7 @@ abstract class MetaType extends Component
     protected function getMetaTagName($handle)
     {
         $tagNames = $this->getAttributesMapping();
-        
+
         return $tagNames[$handle] ?? null;
     }
 }

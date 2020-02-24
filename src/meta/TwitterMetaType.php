@@ -18,7 +18,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
 
 /**
  * Implements all attributes used in search metadata
@@ -171,7 +170,6 @@ class TwitterMetaType extends MetaType
     /**
      * @return string|null
      * @throws Exception
-     * @throws InvalidConfigException
      */
     public function getTwitterUrl()
     {

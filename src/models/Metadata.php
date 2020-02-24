@@ -61,10 +61,24 @@ class Metadata extends Model
      *
      * @param array $config
      *
-     * @throws Exception
-     * @throws InvalidConfigException
      * @throws Throwable
      */
+    public function __construct($config = [])
+    {
+        // @todo - clean this up in a migration
+        unset($config['enableMetaDetailsSearch']);
+        unset($config['enableMetaDetailsOpenGraph']);
+        unset($config['enableMetaDetailsTwitterCard']);
+        unset($config['enableMetaDetailsGeo']);
+        unset($config['enableMetaDetailsRobots']);
+        unset($config['dateCreated']);
+        unset($config['dateUpdated']);
+        unset($config['uid']);
+        unset($config['elementId']);
+
+        // Remove any null or empty string values from the provided configuration
+        $config = array_filter($config);
+
         // Populate the Optimized variables and unset them from the config
         $this->setOptimizedProperties($config);
 
@@ -75,7 +89,8 @@ class Metadata extends Model
         $this->setSchemaProperties();
 
         parent::__construct($config);
-//        $this->createComputedMetadata();
+        //        $this->createComputedMetadata();
+
     }
 
     public function attributes(): array

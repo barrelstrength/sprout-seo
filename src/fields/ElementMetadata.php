@@ -149,7 +149,6 @@ class ElementMetadata extends Field
     public function serializeValue($value, ElementInterface $element = null)
     {
         if ($value instanceof Metadata) {
-//            \Craft::dd($value->getRawData());
             return Json::encode($value->getRawData());
         }
 

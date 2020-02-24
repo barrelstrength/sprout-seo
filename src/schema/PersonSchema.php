@@ -1,13 +1,14 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
 
 use craft\elements\User;
+use Exception;
 
 class PersonSchema extends ThingSchema
 {
@@ -37,7 +38,8 @@ class PersonSchema extends ThingSchema
 
     /**
      * @return array|null|void
-     * @throws \Exception
+     * @throws Exception
+     * @throws \Throwable
      */
     public function addProperties()
     {

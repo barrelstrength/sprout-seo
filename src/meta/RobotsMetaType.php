@@ -31,6 +31,11 @@ class RobotsMetaType extends MetaType
      */
     protected $robots;
 
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-seo', 'Robots');
+    }
+
     public function attributes(): array
     {
         $attributes = parent::attributes();
@@ -52,11 +57,6 @@ class RobotsMetaType extends MetaType
     public function setRobots($value)
     {
         $this->robots = SproutSeo::$app->optimize->prepareRobotsMetadataValue($value);
-    }
-
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-seo', 'Robots');
     }
 
     public function getHandle(): string

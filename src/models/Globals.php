@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\models;
@@ -11,6 +11,7 @@ use barrelstrength\sproutbasefields\models\Address;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use craft\helpers\Json;
+use DateTime;
 
 /**
  *
@@ -64,12 +65,12 @@ class Globals extends Model
     public $settings;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $dateCreated;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $dateUpdated;
 
@@ -145,7 +146,7 @@ class Globals extends Model
     }
 
     /**
-     * @return array
+     * @return Metadata
      */
     protected function getMeta(): Metadata
     {
@@ -219,7 +220,7 @@ class Globals extends Model
     }
 
     /**
-     * @return
+     * @return string|null
      */
     protected function getRobots()
     {

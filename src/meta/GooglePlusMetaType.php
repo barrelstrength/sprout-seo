@@ -10,7 +10,6 @@ namespace barrelstrength\sproutseo\meta;
 use barrelstrength\sproutseo\base\MetaType;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
-use yii\base\Exception;
 
 /**
  * Implements all attributes used in Google Plus metadata
