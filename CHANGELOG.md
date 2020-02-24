@@ -1,5 +1,68 @@
 # Changelog
 
+## UNRELEASED
+
+### Added
+- Added Meta Types to handle setting and getting all meta attributes 
+- Added `barrelstrength\sproutseo\base\MetaType`
+- Added `barrelstrength\sproutseo\base\OptimizedTrait`
+- Added `barrelstrength\sproutseo\base\MetaImageTrait`
+- Added `barrelstrength\sproutseo\base\SchemaTrait`
+- Added `barrelstrength\sproutseo\meta\GeoMetaType`
+- Added `barrelstrength\sproutseo\meta\GooglePlusMetaType`
+- Added `barrelstrength\sproutseo\meta\OpenGraphMetaType`
+- Added `barrelstrength\sproutseo\meta\RobotsMetaType`
+- Added `barrelstrength\sproutseo\meta\SchemaMetaType`
+- Added `barrelstrength\sproutseo\meta\TwitterMetaType`
+- Added `barrelstrength\sproutseo\services\ElementMetadata::getRawMetadataFromElement()`
+- Added `barrelstrength\sproutseo\models\Metadata::setOptimizedProperties()`
+- Added `barrelstrength\sproutseo\models\Metadata::getMetaTypes()`
+- Added `barrelstrength\sproutseo\models\Metadata::setMetaTypes()`
+- Added `barrelstrength\sproutseo\models\Metadata::getRawData()`
+
+### Changed
+- Updated Element Metadata field to always normalize data and return a Metadata model
+- Updated Metadata model to delegate responsibility of specific Metadata Types to Meta Type subclasses
+- Updated Meta Details field to use Metadata model and Meta Type classes to handle assignment and retrieval of metadata properties as well as several settings
+- Updated logical flow of `barrelstrength\sproutseo\services\Optimize::getPrioritizedMetadataModel()`
+- Updated Globals to save data directly without additionally processing `sproutseo_globals.meta` column
+- Moved logic for Meta Image Relation fields into templates  
+- Renamed `barrelstrength\sproutseo\services\Optimize::$elementMetadata` => `barrelstrength\sproutseo\services\Optimize::$elementMetadataField`
+- Updated method signature of `barrelstrength\sproutseo\services\Optimize::getMetadata()`
+- Updated landing page styles to support Craft 3.4
+- Improved support for translations in templates
+- Updated `barrelstrength/sprout-base` to require v5.1.2
+- Moved `barrelstrength\sproutseo\models\Metadata::getMetaTagName()` to specific Meta Type classes
+
+### Removed
+- Removed database column `sproutseo_globals.meta`, this value is now calculated from raw settings
+- Removed `barrelstrength\sproutseo\controllers\GlobalMetadata::populateGlobalMetadata()`
+- Removed `barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable\getGlobalRobots()`
+- Removed `barrelstrength\sproutseo\services\Optimize::$matchedElement` in favor of `barrelstrength\sproutseo\services\Optimize::$element`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareCanonical()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareGeoPosition()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareRobotsMetaValue()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareRobotsMetadataForSettings()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareAssetUrls()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::getImageId()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::getSelectedTransform()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::getTwitterProfileName()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::getFacebookPage()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::getGooglePlusPage()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareAppendedTitleValue()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::updateOptimizedAndAdvancedMetaValues()`
+- Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::getDefaultFieldTypeSettings()`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$values`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsSearch`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsOpenGraph`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsTwitterCard`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsGeo`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsRobots`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::getSelectedFieldForOptimizedMetadata()`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::setMetaDetailsValues()`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::prepareExistingValuesForPage()`
+- Removed `barrelstrength\sproutseo\services\ElementMetadata::getElementMetadata()`
+
 ## 4.3.3 - 2020-02-10
 
 ### Fixed
