@@ -10,10 +10,10 @@ namespace barrelstrength\sproutseo\models;
 use barrelstrength\sproutseo\base\MetaImageTrait;
 use barrelstrength\sproutseo\base\MetaType;
 use barrelstrength\sproutseo\base\OptimizedTrait;
+use barrelstrength\sproutseo\base\SchemaTrait;
 use barrelstrength\sproutseo\meta\GeoMetaType;
 use barrelstrength\sproutseo\meta\OpenGraphMetaType;
 use barrelstrength\sproutseo\meta\RobotsMetaType;
-use barrelstrength\sproutseo\meta\SchemaMetaType;
 use barrelstrength\sproutseo\meta\SearchMetaType;
 use barrelstrength\sproutseo\meta\TwitterMetaType;
 use barrelstrength\sproutseo\SproutSeo;
@@ -41,12 +41,15 @@ use yii\base\InvalidConfigException;
  * @property array  $geographicMetaTagData
  * @property array  $metaTagData
  * @property array  $openGraphMetaTagData
+ * @property array  $rawData
+ * @property array  $optimizedProperties
  * @property string uri
  */
 class Metadata extends Model
 {
     use OptimizedTrait;
     use MetaImageTrait;
+    use SchemaTrait;
 
     /**
      * @var MetaType[]
@@ -319,6 +322,46 @@ class Metadata extends Model
     }
 
     /**
+     * Determines the schema settings from the Global and Element Metadata field settings
+     */
+    public function setSchemaProperties()
+    {
+        $identity = SproutSeo::$app->optimize->globals['identity'] ?? null;
+        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField ?? null;
+
+        $globalSchemaTypeId = null;
+        $globalSchemaOverrideTypeId = null;
+        $elementMetadataFieldSchemaTypeId = null;
+        $elementMetadataFieldSchemaOverrideTypeId = null;
+
+        if (isset($identity['@type']) && $identity['@type']) {
+            $globalSchemaTypeId = $identity['@type'];
+        }
+
+        if (isset($identity['organizationSubTypes']) && count($identity['organizationSubTypes'])) {
+            $schemaSubTypes = array_filter($identity['organizationSubTypes']);
+            // Get most specific override value
+            $schemaOverrideTypeId = end($schemaSubTypes);
+            $globalSchemaOverrideTypeId = $schemaOverrideTypeId;
+        }
+
+        if ($elementMetadataField) {
+            if (!empty($elementMetadataField['schemaTypeId'])) {
+                $elementMetadataFieldSchemaTypeId = $elementMetadataField['schemaTypeId'];
+            }
+            if (!empty($elementMetadataField['schemaOverrideTypeId'])) {
+                $elementMetadataFieldSchemaOverrideTypeId = $elementMetadataField['schemaOverrideTypeId'];
+            }
+        }
+
+        $schemaTypeId = $elementMetadataFieldSchemaTypeId ?? $globalSchemaTypeId ?? null;
+        $schemaOverrideTypeId = $elementMetadataFieldSchemaOverrideTypeId ?? $globalSchemaOverrideTypeId ?? null;
+
+        $this->setSchemaTypeId($schemaTypeId);
+        $this->setSchemaOverrideTypeId($schemaOverrideTypeId);
+    }
+
+    /**
      * @return MetaType[]
      */
     public function getMetaTypes(): array
@@ -336,8 +379,7 @@ class Metadata extends Model
             new OpenGraphMetaType(),
             new TwitterMetaType(),
             new GeoMetaType(),
-            new RobotsMetaType(),
-            new SchemaMetaType()
+            new RobotsMetaType()
         ];
 
         foreach ($metaTypes as $metaType) {

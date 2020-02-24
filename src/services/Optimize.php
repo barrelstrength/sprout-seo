@@ -9,6 +9,7 @@ namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutseo\fields\ElementMetadata;
+use barrelstrength\sproutseo\meta\SchemaMetaType;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\models\Settings;
@@ -320,18 +321,21 @@ class Optimize extends Component
     {
         $schema = null;
 
-        if ($this->prioritizedMetadataModel) {
-            $schemaUniqueKey = $this->prioritizedMetadataModel->getSchemaTypeId();
-            if ($schemaUniqueKey && $element !== null) {
-                $schema = SproutSeo::$app->schema->getSchemaByUniqueKey($schemaUniqueKey);
-                $schema->attributes = $this->prioritizedMetadataModel->getAttributes();
-                $schema->addContext = true;
-                $schema->isMainEntity = true;
+        /** @var SchemaMetaType $schemaMetaType */
+        $schemaTypeId = $this->prioritizedMetadataModel->getSchemaTypeId();
 
-                $schema->globals = $this->globals;
-                $schema->element = $element;
-                $schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
-            }
+        if (!$schemaTypeId) {
+            return null;
+        }
+
+        if ($schemaTypeId && $element !== null) {
+            $schema = SproutSeo::$app->schema->getSchemaByUniqueKey($schemaTypeId);
+            $schema->addContext = true;
+            $schema->isMainEntity = true;
+
+            $schema->globals = $this->globals;
+            $schema->element = $element;
+            $schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
         }
 
         return $schema;

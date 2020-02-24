@@ -235,7 +235,7 @@ class Schema extends Component
      * @param string $uniqueKey
      * @param null   $default
      *
-     * @return mixed|null
+     * @return BaseSchema|null
      */
     public function getSchemaByUniqueKey($uniqueKey, $default = null)
     {

@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\base;
 use barrelstrength\sproutbasefields\models\Address;
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\meta\SchemaMetaType;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\schema\ContactPointSchema;
@@ -200,11 +201,13 @@ abstract class Schema
      */
     public function getSchemaOverrideType(): string
     {
-        if (isset($this->prioritizedMetadataModel) &&
-            $this->prioritizedMetadataModel->schemaOverrideTypeId !== null &&
-            $this->prioritizedMetadataModel->schemaTypeId === get_class($this)
+        /** @var SchemaMetaType $schemaMetaType */
+        $schemaMetaType = $this->prioritizedMetadataModel['schema'] ?? null;
+        if ($schemaMetaType &&
+            $schemaMetaType->getSchemaOverrideTypeId() !== null &&
+            $schemaMetaType->getSchemaTypeId() === get_class($this)
         ) {
-            $this->type = $this->prioritizedMetadataModel->schemaOverrideTypeId;
+            $this->type = $schemaMetaType->getSchemaOverrideTypeId();
 
             return $this->type;
         }
