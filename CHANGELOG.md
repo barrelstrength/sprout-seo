@@ -52,12 +52,9 @@
 - Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareAppendedTitleValue()`
 - Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::updateOptimizedAndAdvancedMetaValues()`
 - Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::getDefaultFieldTypeSettings()`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$metadata`
+- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$showMainEntity`
 - Removed `barrelstrength\sproutseo\fields\ElementMetadata::$values`
-- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsSearch`
-- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsOpenGraph`
-- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsTwitterCard`
-- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsGeo`
-- Removed `barrelstrength\sproutseo\fields\ElementMetadata::$enableMetaDetailsRobots`
 - Removed `barrelstrength\sproutseo\fields\ElementMetadata::getSelectedFieldForOptimizedMetadata()`
 - Removed `barrelstrength\sproutseo\fields\ElementMetadata::setMetaDetailsValues()`
 - Removed `barrelstrength\sproutseo\fields\ElementMetadata::prepareExistingValuesForPage()`

@@ -304,7 +304,7 @@ class Optimize extends Component
             $schema['place'] = $placeSchema;
         }
 
-        if ($element !== null) {
+        if ($element !== null && isset($this->elementMetadataField) && $this->elementMetadataField->schemaTypeId) {
             $schema['mainEntity'] = $this->getMainEntityStructuredData($element);
         }
 

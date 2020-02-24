@@ -35,13 +35,6 @@ use yii\base\InvalidConfigException;
  */
 class ElementMetadata extends Field
 {
-    /**
-     * The active metadata
-     *
-     * @var Metadata
-     */
-    public $metadata;
-
     public $optimizedTitleField;
 
     public $optimizedDescriptionField;
@@ -50,7 +43,13 @@ class ElementMetadata extends Field
 
     public $optimizedKeywordsField;
 
-    public $showMainEntity;
+    public $schemaTypeId;
+
+    public $schemaOverrideTypeId;
+
+    public $editCanonical = false;
+
+    public $enableMetaDetailsFields = false;
 
     public $showSearchMeta = false;
 
@@ -61,14 +60,6 @@ class ElementMetadata extends Field
     public $showGeo = false;
 
     public $showRobots = false;
-
-    public $editCanonical = false;
-
-    public $schemaOverrideTypeId;
-
-    public $schemaTypeId;
-
-    public $enableMetaDetailsFields = false;
 
     /**
      * @return string
