@@ -92,10 +92,24 @@ class Metadata extends Model
 
     /**
      * @return string|null
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
      */
     public function getOptimizedTitle()
     {
-        return $this->optimizedTitle;
+        if ($this->optimizedTitle) {
+            return $this->optimizedTitle;
+        }
+
+        /** @var SearchMetaType $search */
+        $search = $this->getMetaTypes('search');
+
+        if ($search) {
+            return $search->getTitle();
+        }
+
+        return null;
     }
 
     /**
@@ -149,7 +163,18 @@ class Metadata extends Model
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        return mb_substr($this->optimizedDescription, 0, $descriptionLength);
+        if ($this->optimizedDescription) {
+            return mb_substr($this->optimizedDescription, 0, $descriptionLength);
+        }
+
+        /** @var SearchMetaType $search */
+        $search = $this->getMetaTypes('search');
+
+        if ($search) {
+            return mb_substr($search->getDescription(), 0, $descriptionLength);
+        }
+
+        return null;
     }
 
     /**
@@ -365,10 +390,16 @@ class Metadata extends Model
     }
 
     /**
-     * @return MetaType[]
+     * @param string|null $handle
+     *
+     * @return MetaType|MetaType[]
      */
-    public function getMetaTypes(): array
+    public function getMetaTypes(string $handle = null)
     {
+        if ($handle) {
+            return $this->metaTypes[$handle] ?? null;
+        }
+
         return $this->metaTypes;
     }
 
