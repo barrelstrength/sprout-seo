@@ -71,6 +71,9 @@ class Metadata extends Model
         // Populate the MetaType models and unset any attributes that get assigned
         $this->setMetaTypes($config);
 
+        // Schema properties will be derived from global and field settings
+        $this->setSchemaProperties();
+
         parent::__construct($config);
 //        $this->createComputedMetadata();
     }
