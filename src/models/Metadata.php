@@ -420,7 +420,10 @@ class Metadata extends Model
         $metaTagData = [];
 
         foreach ($this->metaTypes as $metaType) {
-            $metaTagData[$metaType->getHandle()] = $metaType->getMetaTagData();
+            $metaTagByType = $metaType->getMetaTagData();
+
+            // Remove blank or null values
+            $metaTagData[$metaType->getHandle()] = array_filter($metaTagByType);
         }
 
         return $metaTagData;
