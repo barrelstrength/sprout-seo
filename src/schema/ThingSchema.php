@@ -8,6 +8,9 @@
 namespace barrelstrength\sproutseo\schema;
 
 use barrelstrength\sproutseo\base\Schema;
+use Exception;
+use Throwable;
+use yii\base\InvalidConfigException;
 
 class ThingSchema extends Schema
 {
@@ -36,8 +39,10 @@ class ThingSchema extends Schema
     }
 
     /**
-     * @return null|void
-     * @throws \Exception
+     * @return void|null
+     * @throws Throwable
+     * @throws \yii\base\Exception
+     * @throws InvalidConfigException
      */
     public function addProperties()
     {
@@ -46,9 +51,9 @@ class ThingSchema extends Schema
             $this->addMainEntityOfPage();
         }
 
-        $this->addText('name', $metadata->optimizedTitle);
-        $this->addText('description', $metadata->optimizedDescription);
-        $this->addImage('image', $metadata->optimizedImage);
+        $this->addText('name', $metadata->getOptimizedTitle());
+        $this->addText('description', $metadata->getOptimizedDescription());
+        $this->addImage('image', $metadata->getOptimizedImage());
         $this->addUrl('url', $metadata->getCanonical());
     }
 }

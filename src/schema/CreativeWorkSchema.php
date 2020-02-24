@@ -10,6 +10,8 @@ namespace barrelstrength\sproutseo\schema;
 
 use barrelstrength\sproutseo\base\Schema;
 use craft\elements\Entry;
+use Exception;
+use Throwable;
 
 class CreativeWorkSchema extends ThingSchema
 {
@@ -39,7 +41,8 @@ class CreativeWorkSchema extends ThingSchema
 
     /**
      * @return array|null|void
-     * @throws \Exception
+     * @throws Exception
+     * @throws Throwable
      */
     public function addProperties()
     {
@@ -47,8 +50,8 @@ class CreativeWorkSchema extends ThingSchema
 
         $this->removeProperty('name');
 
-        $this->addText('headline', $this->prioritizedMetadataModel->optimizedTitle);
-        $this->addText('keywords', $this->prioritizedMetadataModel->optimizedKeywords);
+        $this->addText('headline', $this->prioritizedMetadataModel->getOptimizedTitle());
+        $this->addText('keywords', $this->prioritizedMetadataModel->getOptimizedKeywords());
         $this->addDate('dateCreated', $this->element->dateCreated);
         $this->addDate('dateModified', $this->element->dateUpdated);
 
@@ -58,7 +61,7 @@ class CreativeWorkSchema extends ThingSchema
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function addEntryElementProperties()
     {
