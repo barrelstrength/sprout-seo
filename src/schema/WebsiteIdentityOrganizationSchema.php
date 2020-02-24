@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\schema;
 
 use barrelstrength\sproutseo\base\Schema;
-
+use Craft;
 
 class WebsiteIdentityOrganizationSchema extends Schema
 {
@@ -61,7 +61,7 @@ class WebsiteIdentityOrganizationSchema extends Schema
         $this->addText('name', $schema['name']);
         $this->addText('alternateName', $schema['alternateName']);
         $this->addText('description', $schema['description']);
-        $this->addUrl('url', $schema['url']);
+        $this->addUrl('url', Craft::$app->sites->getCurrentSite()->getBaseUrl());
         $this->addTelephone('telephone', $schema['telephone']);
         $this->addEmail('email', $schema['email']);
 
