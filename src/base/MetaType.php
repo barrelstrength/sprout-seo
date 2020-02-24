@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\base;
 
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use craft\base\Component;
 use craft\base\Field;
 use craft\helpers\UrlHelper;
@@ -104,27 +105,6 @@ abstract class MetaType extends Component
     public function setOptimizedKeywords($value)
     {
         $this->optimizedKeywords = $value;
-    }
-
-    /**
-     * @return string|null
-     * @throws Exception
-     */
-    public function getCanonical()
-    {
-        if ($this->canonical) {
-            return $this->canonical;
-        }
-
-        return $this->canonical = UrlHelper::siteUrl(Craft::$app->request->getPathInfo());
-    }
-
-    /**
-     * @param $value
-     */
-    public function setCanonical($value)
-    {
-        $this->canonical = $value;
     }
 
     /**

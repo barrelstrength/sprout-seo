@@ -12,9 +12,26 @@ use Craft;
 use craft\elements\Asset;
 use craft\helpers\UrlHelper;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 class OptimizeHelper
 {
+    /**
+     * @param null $value
+     *
+     * @return string|null
+     * @throws Exception
+     * @throws InvalidConfigException
+     */
+    public static function getCanonical($value = null)
+    {
+        if ($value) {
+            return $value;
+        }
+
+        return UrlHelper::siteUrl(Craft::$app->request->getPathInfo());
+    }
+
     /**
      * @param      $id
      * @param null $transform

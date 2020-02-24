@@ -24,6 +24,7 @@ use craft\base\Element;
 use craft\helpers\Template as TemplateHelper;
 use craft\helpers\UrlHelper;
 use DateTime;
+use yii\base\Exception;
 
 /**
  * Class Schema
@@ -571,6 +572,8 @@ abstract class Schema
     /**
      * Add a Main Entity of Page to our Structured Data array of
      * type WebPage using the canonical URL.
+     *
+     * @throws Exception
      */
     public function addMainEntityOfPage()
     {
@@ -578,7 +581,7 @@ abstract class Schema
 
         $mainEntity = new MainEntityOfPageSchema();
         $mainEntity->type = 'WebPage';
-        $mainEntity->id = $meta->canonical;
+        $mainEntity->id = $meta->getCanonical();
 
         $mainEntity->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 

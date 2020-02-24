@@ -49,6 +49,6 @@ class ThingSchema extends Schema
         $this->addText('name', $metadata->optimizedTitle);
         $this->addText('description', $metadata->optimizedDescription);
         $this->addImage('image', $metadata->optimizedImage);
-        $this->addUrl('url', $metadata->canonical);
+        $this->addUrl('url', $metadata->getCanonical());
     }
 }

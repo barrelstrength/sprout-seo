@@ -7,10 +7,12 @@
 
 namespace barrelstrength\sproutseo\base;
 
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Field;
 use craft\fields\Assets;
+use yii\base\Exception;
 
 trait OptimizedTrait
 {
@@ -43,6 +45,23 @@ trait OptimizedTrait
      * @var string|null
      */
     protected $canonical;
+
+    /**
+     * @return string|null
+     * @throws Exception
+     */
+    public function getCanonical()
+    {
+        return OptimizeHelper::getCanonical($this->canonical);
+    }
+
+    /**
+     * @param $value
+     */
+    public function setCanonical($value)
+    {
+        $this->canonical = $value;
+    }
 
     /**
      * @param $fieldId

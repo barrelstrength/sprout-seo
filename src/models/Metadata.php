@@ -321,18 +321,8 @@ class Metadata extends Model
     }
 
     /**
-     * @param $value
-     */
-    public function setCanonical($value)
-    {
-        $this->canonical = $value;
-    }
-
-    /**
      * @param array $config
      *
-     * @throws Exception
-     * @throws InvalidConfigException
      * @throws Throwable
      */
     public function setOptimizedProperties(array &$config = [])
