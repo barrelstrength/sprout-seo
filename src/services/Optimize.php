@@ -218,7 +218,7 @@ class Optimize extends Component
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
 
         // Only allow Template Overrides if using Pro Edition
-        if ($isPro && $this->templateMetadata && isset($this->templateMetadata['elementId'])) {
+        if ($isPro && $this->templateMetadata) {
             /**
              * If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field
              * associated with that Element ID This adds support for using Element Metadata fields on non URL-enabled
@@ -226,15 +226,18 @@ class Optimize extends Component
              *
              * Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
              */
-            $elementOverride = Craft::$app->elements->getElementById($this->templateMetadata['elementId']);
+            if (isset($this->templateMetadata['elementId'])) {
+                $elementOverride = Craft::$app->elements->getElementById($this->templateMetadata['elementId']);
 
-            // Overwrite the Element Attributes if the template override Element ID returns an element
-            if ($elementOverride) {
-                $elementMetadataAttributes = SproutSeo::$app->elementMetadata->getRawMetadataFromElement($elementOverride);
-            }
+                // Overwrite the Element Attributes if the template override Element ID returns an element
+                if ($elementOverride) {
+                    $elementMetadataAttributes = SproutSeo::$app->elementMetadata->getRawMetadataFromElement($elementOverride);
+                }
+             }
 
             // Merge our attributes overriding the Element attributes with Template overrides
             $attributes = array_filter(array_merge($elementMetadataAttributes, $this->templateMetadata));
+        
         } else {
             $attributes = array_filter($elementMetadataAttributes);
         }
