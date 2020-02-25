@@ -65,16 +65,9 @@ class Metadata extends Model
      */
     public function __construct($config = [])
     {
-        // @todo - clean this up in a migration
-        unset($config['enableMetaDetailsSearch']);
-        unset($config['enableMetaDetailsOpenGraph']);
-        unset($config['enableMetaDetailsTwitterCard']);
-        unset($config['enableMetaDetailsGeo']);
-        unset($config['enableMetaDetailsRobots']);
-        unset($config['dateCreated']);
-        unset($config['dateUpdated']);
-        unset($config['uid']);
-        unset($config['elementId']);
+        // Unset any deprecated properties
+        // @todo - deprecate variables in 5.x
+        unset($config['enableMetaDetailsSearch'], $config['enableMetaDetailsOpenGraph'], $config['enableMetaDetailsTwitterCard'], $config['enableMetaDetailsGeo'], $config['enableMetaDetailsRobots'], $config['dateCreated'], $config['dateUpdated'], $config['uid'], $config['elementId']);
 
         // Remove any null or empty string values from the provided configuration
         $config = array_filter($config);
