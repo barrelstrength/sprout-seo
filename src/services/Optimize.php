@@ -21,7 +21,6 @@ use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
-use craft\errors\SiteNotFoundException;
 use craft\models\Site;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -46,6 +45,8 @@ class Optimize extends Component
     public $globals;
 
     /**
+     * The Element that contains the Element Metadata field for the metadata
+     *
      * @var ElementInterface|Element
      */
     public $element;
@@ -58,11 +59,16 @@ class Optimize extends Component
     public $elementMetadataField;
 
     /**
+     * Represents the raw and final versions of the metadata being processed
+     *
      * @var Metadata $prioritizedMetadataModel
      */
     public $prioritizedMetadataModel;
 
     /**
+     * Any values provided via {% do craft.sproutSeo.meta({}) %} that will take
+     * priority over metadata defined in globals or field settings
+     *
      * @var array $templateMetadata
      */
     public $templateMetadata = [];
@@ -168,7 +174,7 @@ class Optimize extends Component
         $settings = $plugin->getSettings();
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($this->element, $site);
+        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($site);
 
         $output = null;
 
@@ -196,20 +202,17 @@ class Optimize extends Component
     }
 
     /**
-     * @param      $element
      * @param null $site
      *
      * @return Metadata
-     * @throws Exception
-     * @throws InvalidConfigException
      * @throws Throwable
      */
-    public function getPrioritizedMetadataModel($element, $site = null): Metadata
+    public function getPrioritizedMetadataModel($site = null): Metadata
     {
         $elementMetadataAttributes = [];
 
-        if ($element !== null) {
-            $elementMetadataAttributes = SproutSeo::$app->elementMetadata->getRawMetadataFromElement($element);
+        if ($this->element !== null) {
+            $elementMetadataAttributes = SproutSeo::$app->elementMetadata->getRawMetadataFromElement($this->element);
         }
 
         $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);

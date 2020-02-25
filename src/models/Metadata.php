@@ -379,11 +379,11 @@ class Metadata extends Model
         }
 
         if ($elementMetadataField) {
-            if (!empty($elementMetadataField['schemaTypeId'])) {
-                $elementMetadataFieldSchemaTypeId = $elementMetadataField['schemaTypeId'];
+            if (!empty($elementMetadataField->schemaTypeId)) {
+                $elementMetadataFieldSchemaTypeId = $elementMetadataField->schemaTypeId;
             }
-            if (!empty($elementMetadataField['schemaOverrideTypeId'])) {
-                $elementMetadataFieldSchemaOverrideTypeId = $elementMetadataField['schemaOverrideTypeId'];
+            if (!empty($elementMetadataField->schemaOverrideTypeId)) {
+                $elementMetadataFieldSchemaOverrideTypeId = $elementMetadataField->schemaOverrideTypeId;
             }
         }
 
