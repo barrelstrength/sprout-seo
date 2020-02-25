@@ -21,6 +21,8 @@ use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\db\Query;
+use craft\errors\SiteNotFoundException;
 use craft\models\Site;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -146,9 +148,9 @@ class Optimize extends Component
     public function setMatchedElement(string $uri, int $siteId = null)
     {
         $this->element = null;
-        $uri = trim($uri, '/');
+        $path = Craft::$app->getRequest()->getPathInfo();
         /** @var Element $element */
-        $element = Craft::$app->getElements()->getElementByUri($uri, $siteId);
+        $element = $this->getElementByUri($path, $siteId, true);
         if ($element && ($element->uri !== null)) {
             $this->element = $element;
         }
@@ -492,5 +494,78 @@ class Optimize extends Component
         ];
 
         return $defaultTransforms[$transformHandle] ?? ($transformHandle == '' ? null : $transformHandle);
+    }
+
+    /**
+     * Copies Craft's getElementByUri() method with minor adjustments
+     *
+     * @param string   $uri
+     * @param int|null $siteId
+     * @param bool     $enabledOnly
+     *
+     * @return ElementInterface|null
+     * @throws SiteNotFoundException
+     */
+    public function getElementByUri(string $uri, int $siteId = null, bool $enabledOnly = false)
+    {
+        if ($uri === '') {
+            $uri = Element::HOMEPAGE_URI;
+        }
+
+        if ($siteId === null) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $siteId = Craft::$app->getSites()->getCurrentSite()->id;
+        }
+
+        // @todo - replace with Craft::$app->getElements()->getElementByUri()
+        //     Currently, the _placeholderUris code can lead to scenarios where
+        //     the incorrect Element is returned to a logged in user on the front-end.
+        // See if we already have a placeholder for this element URI
+        //if (isset($this->_placeholderUris[$uri][$siteId])) {
+        //    return $this->_placeholderUris[$uri][$siteId];
+        //}
+
+        // First get the element ID and type
+        $query = (new Query())
+            ->select(['elements.id', 'elements.type'])
+            ->from(['{{%elements}} elements'])
+            ->innerJoin('{{%elements_sites}} elements_sites', '[[elements_sites.elementId]] = [[elements.id]]')
+            ->where([
+                'elements_sites.siteId' => $siteId,
+            ]);
+
+        // todo: remove schema version conditions after next beakpoint
+        $schemaVersion = Craft::$app->getInstalledSchemaVersion();
+        if (version_compare($schemaVersion, '3.1.0', '>=')) {
+            $query->andWhere(['elements.dateDeleted' => null]);
+        }
+        if (version_compare($schemaVersion, '3.2.6', '>=')) {
+            $query->andWhere([
+                'elements.draftId' => null,
+                'elements.revisionId' => null,
+            ]);
+        }
+
+        if (Craft::$app->getDb()->getIsMysql()) {
+            $query->andWhere([
+                'elements_sites.uri' => $uri,
+            ]);
+        } else {
+            $query->andWhere([
+                'lower([[elements_sites.uri]])' => mb_strtolower($uri),
+            ]);
+        }
+
+        if ($enabledOnly) {
+            $query->andWhere([
+                'elements_sites.enabled' => true,
+                'elements.enabled' => true,
+                'elements.archived' => false,
+            ]);
+        }
+
+        $result = $query->one();
+
+        return $result ? Craft::$app->elements->getElementById($result['id'], $result['type'], $siteId) : null;
     }
 }
