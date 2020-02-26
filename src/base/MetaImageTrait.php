@@ -75,7 +75,7 @@ trait MetaImageTrait
         if (0 === mb_strpos($image, 'http')) {
             return $image;
         }
-
+        
         if (!is_numeric($image)) {
             SproutSeo::warning('Meta image value "'.$image.'" cannot be identified. Must be an absolute URL or an Asset ID.');
 
@@ -109,6 +109,10 @@ trait MetaImageTrait
         } else {
             $absoluteUrl = UrlHelper::siteUrl($imageUrl);
         }
+
+        $imageWidth = null;
+        $imageHeight = null;
+        $imageType = null;
 
         if (!$urlOnly) {
             $imageWidth = $asset->width ?? null;

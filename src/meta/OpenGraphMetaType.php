@@ -366,7 +366,11 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImage()
     {
-        return $this->ogImage;
+        if ($this->ogImage) {
+            return $this->ogImage;
+        }
+
+        return $this->optimizedImage;
     }
 
     /**
@@ -567,16 +571,16 @@ class OpenGraphMetaType extends MetaType
     public function getMetaTagData(): array
     {
         $tagData = parent::getMetaTagData();
-
-        if (isset($tagData['ogImage'])) {
+        \Craft::dd($tagData);
+        if (isset($tagData['og:image'])) {
             list(
-                $tagData['ogImage'],
-                $tagData['ogImageWidth'],
-                $tagData['ogImageHeight'],
-                $tagData['ogImageType']
-                ) = $this->prepareAssetMetaData($tagData['ogImage'], $this->ogTransform, false);
+                $tagData['og:image'],
+                $tagData['og:image:width'],
+                $tagData['og:image:height'],
+                $tagData['og:image:type']
+                ) = $this->prepareAssetMetaData($tagData['og:image'], $this->ogTransform, false);
 
-            $tagData['ogImageSecure'] = $tagData['ogImage'];
+            $tagData['og:image:secure'] = $tagData['og:image'];
         }
 
         return array_filter($tagData);
