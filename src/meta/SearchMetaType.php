@@ -69,15 +69,13 @@ class SearchMetaType extends MetaType
             $appendTitleString = ' '.$this->getAppendTitleValue();
         }
 
-        if ($this->title) {
+        // In the CP we only save the raw data
+        if ($this->title || Craft::$app->getRequest()->getIsCpRequest()) {
             return trim($this->title.$appendTitleString);
         }
 
-        if ($this->optimizedTitle) {
-            return trim($this->optimizedTitle.$appendTitleString);
-        }
-
-        return '';
+        // On the front-end, fall back to optimized values
+        return trim($this->optimizedTitle.$appendTitleString);
     }
 
     /**
@@ -143,13 +141,13 @@ class SearchMetaType extends MetaType
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        if ($this->description) {
-            $description = $this->description;
-        } else {
-            $description = $this->optimizedDescription;
+        // In the CP we only save the raw data
+        if ($this->description || Craft::$app->getRequest()->getIsCpRequest()) {
+            return mb_substr($this->description, 0, $descriptionLength);
         }
 
-        return mb_substr($description, 0, $descriptionLength);
+        // On the front-end, fall back to optimized values
+        return mb_substr($this->optimizedDescription, 0, $descriptionLength);
     }
 
     public function setDescription($value)
@@ -159,10 +157,12 @@ class SearchMetaType extends MetaType
 
     public function getKeywords()
     {
-        if ($this->keywords) {
+        // In the CP we only save the raw data
+        if ($this->keywords || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->keywords;
         }
 
+        // On the front-end, fall back to optimized values
         return $this->optimizedKeywords;
     }
 
