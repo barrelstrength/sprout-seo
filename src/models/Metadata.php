@@ -19,6 +19,8 @@ use barrelstrength\sproutseo\meta\TwitterMetaType;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Model;
+use craft\errors\SiteNotFoundException;
+use craft\web\View;
 use PhpScience\TextRank\TextRankFacade;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\StopWords\French;
@@ -115,8 +117,37 @@ class Metadata extends Model
      */
     public function getOptimizedTitle()
     {
-        if ($this->optimizedTitle) {
-            return $this->optimizedTitle;
+        $element = SproutSeo::$app->optimize->element;
+        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
+
+        $optimizedTitleFieldSetting = $elementMetadataField->optimizedTitleField ?? 'manually';
+
+        $title = null;
+
+        switch (true) {
+            // Element Title
+            case ($optimizedTitleFieldSetting === 'elementTitle'):
+                $title = $element->title;
+                break;
+
+            // Manual Title
+            case ($optimizedTitleFieldSetting === 'manually'):
+                $title = $this->optimizedTitle;
+                break;
+
+            // Custom Field
+            case (is_numeric($optimizedTitleFieldSetting)):
+                $title = $this->getSelectedFieldForOptimizedMetadata($optimizedTitleFieldSetting);
+                break;
+
+            // Custom Value
+            default:
+                $title = Craft::$app->getView()->renderObjectTemplate($optimizedTitleFieldSetting, $element);
+                break;
+        }
+
+        if ($title) {
+            return $title;
         }
 
         /** @var SearchMetaType $search */
@@ -130,58 +161,52 @@ class Metadata extends Model
     }
 
     /**
-     * @param string $value
+     * @param $value
      *
-     * @throws Exception
      * @throws Throwable
      */
-    public function setOptimizedTitle(string $value)
+    public function setOptimizedTitle($value)
     {
-        $element = SproutSeo::$app->optimize->element;
-        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
-
-        $optimizedTitleFieldSetting = $elementMetadataField->optimizedTitleField ?? 'manually';
-
-        switch (true) {
-            // Element Title
-            case ($optimizedTitleFieldSetting === 'elementTitle'):
-
-                $title = $element->title;
-
-                break;
-
-            // Manual Title
-            case ($optimizedTitleFieldSetting === 'manually'):
-
-                $title = $value;
-
-                break;
-
-            // Custom Field
-            case (is_numeric($optimizedTitleFieldSetting)):
-
-                $title = $this->getSelectedFieldForOptimizedMetadata($optimizedTitleFieldSetting);
-                break;
-
-            // Custom Value
-            default:
-                $title = Craft::$app->view->renderObjectTemplate($optimizedTitleFieldSetting, $element);
-
-                break;
-        }
-
-        $this->optimizedTitle = $title;
+        $this->optimizedTitle = $value;
     }
 
     /**
      * @return string|null
+     * @throws Exception
+     * @throws Throwable
      */
     public function getOptimizedDescription()
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
+        $description = null;
 
-        if ($this->optimizedDescription) {
-            return mb_substr($this->optimizedDescription, 0, $descriptionLength);
+        $element = SproutSeo::$app->optimize->element;
+        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
+
+        $optimizedDescriptionFieldSetting = $elementMetadataField->optimizedDescriptionField ?? 'manually';
+
+        switch (true) {
+            // Manual Description
+            case ($optimizedDescriptionFieldSetting === 'manually'):
+                $description = $this->optimizedDescription ?? null;
+                break;
+
+            // Custom Description
+            case (is_numeric($optimizedDescriptionFieldSetting)):
+                $description = $this->getSelectedFieldForOptimizedMetadata($optimizedDescriptionFieldSetting);
+                break;
+
+            // Custom Value
+            default:
+                $description = Craft::$app->view->renderObjectTemplate($optimizedDescriptionFieldSetting, $element);
+                break;
+        }
+
+        // Just save the first 255 characters (we only output 160...)
+        $description = mb_substr(trim($description), 0, 255);
+
+        if ($description) {
+            return mb_substr($description, 0, $descriptionLength);
         }
 
         /** @var SearchMetaType $search */
@@ -195,82 +220,42 @@ class Metadata extends Model
     }
 
     /**
-     * @param string $value
-     *
-     * @throws Throwable
-     * @throws Exception
+     * @param $value
      */
-    public function setOptimizedDescription(string $value)
+    public function setOptimizedDescription($value)
     {
-        $element = SproutSeo::$app->optimize->element;
-        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
-
-        $optimizedDescriptionFieldSetting = $elementMetadataField->optimizedDescriptionField ?? 'manually';
-
-        switch (true) {
-            // Manual Description
-            case ($optimizedDescriptionFieldSetting === 'manually'):
-
-                $description = $value ?? null;
-
-                break;
-
-            // Custom Description
-            case (is_numeric($optimizedDescriptionFieldSetting)):
-
-                $description = $this->getSelectedFieldForOptimizedMetadata($optimizedDescriptionFieldSetting);
-
-                break;
-
-            // Custom Value
-            default:
-
-                $description = Craft::$app->view->renderObjectTemplate($optimizedDescriptionFieldSetting, $element);
-
-                break;
-        }
-
-        // Just save the first 255 characters (we only output 160...)
-        $description = mb_substr(trim($description), 0, 255);
-
-        $this->optimizedDescription = $description;
+        $this->optimizedDescription = $value;
     }
 
     /**
-     * @return int|null
+     * @return mixed|string|null
+     * @throws Exception
+     * @throws Throwable
      */
     public function getOptimizedImage()
     {
-        return $this->optimizedImage;
+        return $this->normalizeImageValue($this->optimizedImage);
     }
 
     /**
      * @param $value
-     *
-     * @throws Exception
-     * @throws Throwable
      */
     public function setOptimizedImage($value)
     {
-        $this->optimizedImage = $this->normalizeImageValue($value);
+        if (is_array($value)) {
+            $this->optimizedImage = $value[0] ?? null;
+        } else {
+            $this->optimizedImage = $value;
+        }
     }
 
     /**
      * @return string|null
+     * @throws InvalidConfigException
      */
     public function getOptimizedKeywords()
     {
-        return $this->optimizedKeywords;
-    }
-
-    /**
-     * @param null $value
-     *
-     * @throws InvalidConfigException
-     */
-    public function setOptimizedKeywords($value = null)
-    {
-        $keywords = $value;
+        $keywords = $this->optimizedKeywords;
 
         $element = SproutSeo::$app->optimize->element;
         $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
@@ -280,19 +265,15 @@ class Metadata extends Model
         switch (true) {
             // Manual Keywords
             case ($optimizedKeywordsFieldSetting === 'manually'):
-
-                $keywords = $value ?? null;
-
+                $keywords = $this->optimizedKeywords ?? null;
                 break;
 
             // Auto-generate keywords from target field
             case (is_numeric($optimizedKeywordsFieldSetting)):
-
                 $bigKeywords = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
                 $keywords = null;
 
                 if ($bigKeywords) {
-
                     $textRankApi = new TextRankFacade();
 
                     $stopWordsMap = [
@@ -334,7 +315,15 @@ class Metadata extends Model
                 break;
         }
 
-        $this->optimizedKeywords = $keywords;
+        return $keywords;
+    }
+
+    /**
+     * @param null $value
+     */
+    public function setOptimizedKeywords($value = null)
+    {
+        $this->optimizedKeywords = $value;
     }
 
     /**
