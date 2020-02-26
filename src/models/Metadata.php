@@ -65,6 +65,16 @@ class Metadata extends Model
      */
     public function __construct($config = [])
     {
+
+//        $element = SproutSeo::$app->optimize->element;
+//        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
+//        \Craft::dd($element->hasProperty($elementMetadataField->handle));
+
+//        if (!$element->hasProperty($elementMetadataField->handle)) {
+//            die('Shaszam!');
+//            $this->setIsDefinedElementMetadataField(false);
+//        }
+
         // Unset any deprecated properties
         // @todo - deprecate variables in 5.x
         unset($config['enableMetaDetailsSearch'], $config['enableMetaDetailsOpenGraph'], $config['enableMetaDetailsTwitterCard'], $config['enableMetaDetailsGeo'], $config['enableMetaDetailsRobots'], $config['dateCreated'], $config['dateUpdated'], $config['uid'], $config['elementId']);
@@ -83,7 +93,6 @@ class Metadata extends Model
 
         parent::__construct($config);
         //        $this->createComputedMetadata();
-
     }
 
     public function attributes(): array
@@ -425,10 +434,19 @@ class Metadata extends Model
      * This method does not return any calculated values.
      *
      * @return array
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
      */
     public function getRawData(): array
     {
         $metaForDb = [];
+
+        $metaForDb['optimizedTitle'] = $this->getOptimizedTitle();
+        $metaForDb['optimizedDescription'] = $this->getOptimizedDescription();
+        $metaForDb['optimizedImage'] = $this->getOptimizedImage();
+        $metaForDb['optimizedKeywords'] = $this->getOptimizedKeywords();
+        $metaForDb['canonical'] = $this->getCanonical();
 
         foreach ($this->metaTypes as $metaType) {
             $staticAttributes = $metaType->getRawData();
@@ -438,14 +456,15 @@ class Metadata extends Model
             }
         }
 
-        // Merge Optimized Values and Meta Type values
-        return array_merge($this->getAttributes(), $metaForDb);
+        return $metaForDb;
     }
 
     /**
      * Returns the calculated values for the metadata used in the front-end meta tags.
      *
      * @return array
+     * @throws Exception
+     * @throws SiteNotFoundException
      */
     public function getMetaTagData(): array
     {
