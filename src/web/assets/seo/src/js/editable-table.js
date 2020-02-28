@@ -5,6 +5,7 @@
  */
 
 /* global Craft */
+/* global Garnish */
 
 if (typeof Craft.SproutSeo === typeof undefined) {
   Craft.SproutSeo = {};

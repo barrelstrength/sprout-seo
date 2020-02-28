@@ -19,8 +19,6 @@ use barrelstrength\sproutseo\meta\TwitterMetaType;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Model;
-use craft\errors\SiteNotFoundException;
-use craft\web\View;
 use PhpScience\TextRank\TextRankFacade;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\StopWords\French;
@@ -442,8 +440,6 @@ class Metadata extends Model
      * Returns the calculated values for the metadata used in the front-end meta tags.
      *
      * @return array
-     * @throws Exception
-     * @throws SiteNotFoundException
      */
     public function getMetaTagData(): array
     {

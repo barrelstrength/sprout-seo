@@ -13,7 +13,6 @@ use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
 use barrelstrength\sproutseo\models\Metadata;
 use Craft;
 use craft\base\Element;
-use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
 use craft\errors\SiteNotFoundException;

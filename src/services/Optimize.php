@@ -210,6 +210,7 @@ class Optimize extends Component
              * Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
              */
             if (isset($this->templateMetadata['elementId'])) {
+                /** @var Element $elementOverride */
                 $elementOverride = Craft::$app->elements->getElementById($this->templateMetadata['elementId']);
 
                 // Overwrite the Element Attributes if the template override Element ID returns an element

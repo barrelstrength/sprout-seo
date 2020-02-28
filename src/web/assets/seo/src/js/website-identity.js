@@ -134,7 +134,7 @@ class SproutSeoWebsiteIdentity {
         $(".organization-info").removeClass('hidden');
         $(".person-info").addClass('hidden');
 
-        if ($("#first").val() == 'LocalBusiness') {
+        if ($("#first").val() === 'LocalBusiness') {
           $("#localbusiness").removeClass('hidden');
         }
       } else {

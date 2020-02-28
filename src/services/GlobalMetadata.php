@@ -40,12 +40,6 @@ class GlobalMetadata extends Component
     {
         $siteId = $site->id ?? null;
 
-        if ($siteId) {
-            $currentSite = Craft::$app->getSites()->getSiteById($siteId);
-        } else {
-            $currentSite = Craft::$app->getSites()->getCurrentSite();
-        }
-
         $query = (new Query())
             ->select('*')
             ->from(['{{%sproutseo_globals}}']);
