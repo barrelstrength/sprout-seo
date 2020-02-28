@@ -193,7 +193,7 @@
         {% endif %}
 
         <div id="{{ field.handle }}-meta-details-body" class="matrix matrix-field sproutseo-matrixfields" style="position: relative;">
-            {% for metaType in metaTypes if metaType.hasMetaDetails() %}
+            {% for metaType in metaTypes if metaType.hasMetaDetails() and metaType.showMetaDetailsTab() %}
                 <div class="matrixblock fields-{{ metaType.handle }}" style="display:none;">
                     {{ metaType.getSettingsHtml(field)|raw }}<br>
                 </div>
