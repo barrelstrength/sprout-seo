@@ -32,11 +32,6 @@ class Globals extends Model
     /**
      * @var array
      */
-    public $meta;
-
-    /**
-     * @var array
-     */
     public $identity;
 
     /**
@@ -143,14 +138,6 @@ class Globals extends Model
         $this->getGlobalByKey('identity');
 
         return isset($this->identity['organizationSubTypes'][0]) && $this->identity['organizationSubTypes'][0] === 'LocalBusiness';
-    }
-
-    /**
-     * @return Metadata
-     */
-    protected function getMeta(): Metadata
-    {
-        return $this->meta;
     }
 
     /**
