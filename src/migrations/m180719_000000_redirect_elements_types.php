@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUndefinedClassInspection */
+<?php
 
 /**
  * @link      https://sprout.barrelstrengthdesign.com
@@ -8,7 +8,6 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutseo\elements\Redirect;
 use craft\db\Migration;
 
 /**
@@ -24,7 +23,7 @@ class m180719_000000_redirect_elements_types extends Migration
         $types = [
             0 => [
                 'oldType' => 'SproutSeo_Redirect',
-                'newType' => Redirect::class
+                'newType' => 'barrelstrength\sproutseo\elements\Redirect'
             ]
         ];
 
