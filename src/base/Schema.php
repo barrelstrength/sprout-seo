@@ -10,7 +10,6 @@ namespace barrelstrength\sproutseo\base;
 use barrelstrength\sproutbasefields\models\Address;
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
-use barrelstrength\sproutseo\meta\SchemaMetaType;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\schema\ContactPointSchema;

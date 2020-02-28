@@ -571,7 +571,7 @@ class OpenGraphMetaType extends MetaType
     public function getMetaTagData(): array
     {
         $tagData = parent::getMetaTagData();
-        \Craft::dd($tagData);
+
         if (isset($tagData['og:image'])) {
             list(
                 $tagData['og:image'],

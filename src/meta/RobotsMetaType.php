@@ -50,7 +50,7 @@ class RobotsMetaType extends MetaType
         if ($this->robots) {
             return $this->robots;
         }
-        
+
         return SproutSeo::$app->optimize->globals['robots'] ?? null;
     }
 

@@ -21,8 +21,6 @@ use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
-use craft\db\Query;
-use craft\errors\SiteNotFoundException;
 use craft\models\Site;
 use Throwable;
 use Twig\Error\LoaderError;

@@ -9,6 +9,7 @@ namespace barrelstrength\sproutseo\schema;
 
 use craft\elements\User;
 use Exception;
+use Throwable;
 
 class PersonSchema extends ThingSchema
 {
@@ -39,7 +40,7 @@ class PersonSchema extends ThingSchema
     /**
      * @return array|null|void
      * @throws Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function addProperties()
     {

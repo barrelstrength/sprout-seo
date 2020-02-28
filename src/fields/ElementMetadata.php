@@ -97,7 +97,6 @@ class ElementMetadata extends Field
      *
      * @return Metadata|mixed
      * @throws Exception
-     * @throws InvalidConfigException
      * @throws SiteNotFoundException
      * @throws Throwable
      */
@@ -145,6 +144,9 @@ class ElementMetadata extends Field
      * @param ElementInterface|null $element
      *
      * @return array|mixed|string|null
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
      */
     public function serializeValue($value, ElementInterface $element = null)
     {

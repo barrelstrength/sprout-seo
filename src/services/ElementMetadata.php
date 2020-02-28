@@ -19,16 +19,22 @@ use craft\db\Query;
 use craft\errors\SiteNotFoundException;
 use craft\events\FieldLayoutEvent;
 use craft\models\FieldLayout;
+use Throwable;
 use yii\base\Component;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 class ElementMetadata extends Component
 {
     /**
      * Returns the metadata for an Element's Element Metadata as a Metadata model
      *
-     * @param Element|ElementInterface|null $element
+     * @param Element|null $element
      *
      * @return array
+     * @throws Throwable
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function getRawMetadataFromElement(Element $element = null): array
     {

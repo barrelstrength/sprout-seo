@@ -32,7 +32,7 @@ class m200224_000002_update_globals_robots_column_settings extends Migration
             if ($robots !== null && is_array($robots)) {
                 $enabledRobotsSettings = array_filter($robots);
                 $robotsValues = array_keys($enabledRobotsSettings);
-                $robotsAsString = implode(',',$robotsValues);
+                $robotsAsString = implode(',', $robotsValues);
             }
 
             if (isset($robotsAsString) && $robotsAsString !== null) {

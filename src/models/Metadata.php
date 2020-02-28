@@ -67,16 +67,6 @@ class Metadata extends Model
      */
     public function __construct($config = [])
     {
-
-//        $element = SproutSeo::$app->optimize->element;
-//        $elementMetadataField = SproutSeo::$app->optimize->elementMetadataField;
-//        \Craft::dd($element->hasProperty($elementMetadataField->handle));
-
-//        if (!$element->hasProperty($elementMetadataField->handle)) {
-//            die('Shaszam!');
-//            $this->setIsDefinedElementMetadataField(false);
-//        }
-
         // Unset any deprecated properties
         // @todo - deprecate variables in 5.x
         unset($config['enableMetaDetailsSearch'], $config['enableMetaDetailsOpenGraph'], $config['enableMetaDetailsTwitterCard'], $config['enableMetaDetailsGeo'], $config['enableMetaDetailsRobots'], $config['dateCreated'], $config['dateUpdated'], $config['uid'], $config['elementId']);

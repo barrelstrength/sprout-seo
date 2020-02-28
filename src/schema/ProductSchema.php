@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\schema;
 use craft\commerce\elements\Product;
 use craft\commerce\Plugin as Commerce;
 use Exception;
+use Throwable;
 use yii\base\InvalidConfigException;
 
 
@@ -42,7 +43,7 @@ class ProductSchema extends ThingSchema
     /**
      * @return array|null|void
      * @throws Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function addProperties()
     {
