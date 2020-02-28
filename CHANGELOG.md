@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.2.12 - 2020-02-28
+
+### Updated
+- Updated composer version constraints to improve Craft 3.3 compatibility
+
 ## 4.2.11 - 2020-01-18
 
 ### Changed
