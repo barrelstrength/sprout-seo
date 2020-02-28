@@ -101,29 +101,10 @@ class Optimize extends Component
      */
     public function getMetadataViaContext(&$context)
     {
-        $uri = $this->getUri();
         $site = $this->getMatchedSite();
-        $this->setMatchedElement($uri, $site->id);
+        $this->setMatchedElement($site->id);
 
         return $this->getMetadata($site, true, $context);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUri(): string
-    {
-        $request = Craft::$app->getRequest();
-        $uri = '/';
-        if (!$request->getIsConsoleRequest()) {
-            try {
-                $uri = $request->getPathInfo();
-            } catch (InvalidConfigException $e) {
-                Craft::error($e->getMessage(), __METHOD__);
-            }
-        }
-
-        return $uri;
     }
 
     /**
