@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\base;
 use barrelstrength\sproutbasefields\models\Address;
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\meta\OpenGraphMetaType;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\schema\ContactPointSchema;
@@ -335,7 +336,7 @@ abstract class Schema
      * If the property is not a string, don't add it.
      *
      * @param string $propertyName
-     * @param string $phone
+     * @param array $phone
      */
     public function addTelephone($propertyName, $phone)
     {
@@ -393,10 +394,15 @@ abstract class Schema
             $meta = $this->prioritizedMetadataModel;
 
             $image = [
-                'url' => $imageId,
-                'width' => $meta->ogImageWidth,
-                'height' => $meta->ogImageHeight
+                'url' => $imageId
             ];
+
+            $openGraphMeta = $meta->getMetaTypes('openGraph');
+
+            if ($openGraphMeta instanceof OpenGraphMetaType) {
+                $image['width'] = $openGraphMeta->getOgImageWidth();
+                $image['height'] = $openGraphMeta->getOgImageHeight();
+            }
         } else if (is_numeric($imageId)) {
 
             $imageAsset = Craft::$app->assets->getAssetById($imageId);
