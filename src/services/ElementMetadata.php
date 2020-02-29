@@ -183,7 +183,7 @@ class ElementMetadata extends Component
 
             $handles = $this->getFieldHandles($targetSetting['value']);
 
-            if (is_iterable($handles)) {
+            if (is_array( $handles ) || ( is_object( $handles ) && ( $handles instanceof \Traversable ) )) {
                 foreach ($handles as $handle) {
                     if (isset($seoFieldHandles[$handle])) {
                         continue;
