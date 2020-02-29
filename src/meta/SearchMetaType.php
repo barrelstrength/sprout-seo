@@ -56,12 +56,12 @@ class SearchMetaType extends MetaType
     /**
      * @param bool $appendTitle
      *
-     * @return string
+     * @return string|null
      * @throws Exception
      * @throws InvalidConfigException
      * @throws Throwable
      */
-    public function getTitle($appendTitle = true): string
+    public function getTitle($appendTitle = true)
     {
         $appendTitleString = '';
 
@@ -71,11 +71,11 @@ class SearchMetaType extends MetaType
 
         // In the CP we only save the raw data
         if ($this->title || Craft::$app->getRequest()->getIsCpRequest()) {
-            return trim($this->title.$appendTitleString);
+            return trim($this->title.$appendTitleString) ?: null;
         }
 
         // On the front-end, fall back to optimized values
-        return trim($this->optimizedTitle.$appendTitleString);
+        return trim($this->optimizedTitle.$appendTitleString) ?: null;
     }
 
     /**
@@ -94,7 +94,7 @@ class SearchMetaType extends MetaType
      */
     public function getAppendTitleValue()
     {
-        if ($this->appendTitleValue) {
+        if ($this->appendTitleValue || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->appendTitleValue;
         }
 
@@ -143,11 +143,11 @@ class SearchMetaType extends MetaType
 
         // In the CP we only save the raw data
         if ($this->description || Craft::$app->getRequest()->getIsCpRequest()) {
-            return mb_substr($this->description, 0, $descriptionLength);
+            return mb_substr($this->description, 0, $descriptionLength) ?: null;
         }
 
         // On the front-end, fall back to optimized values
-        return mb_substr($this->optimizedDescription, 0, $descriptionLength);
+        return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
     }
 
     public function setDescription($value)

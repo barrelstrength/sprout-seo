@@ -112,7 +112,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterCard()
     {
-        if ($this->twitterCard) {
+        if ($this->twitterCard || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->twitterCard;
         }
 
@@ -132,7 +132,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterSite()
     {
-        if ($this->twitterCreator) {
+        if ($this->twitterCreator || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->twitterSite;
         }
 
@@ -152,7 +152,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterCreator()
     {
-        if ($this->twitterCreator) {
+        if ($this->twitterCreator || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->twitterCreator;
         }
 
@@ -173,7 +173,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterUrl()
     {
-        if ($this->twitterUrl) {
+        if ($this->twitterUrl || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->twitterUrl;
         }
 
@@ -193,7 +193,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterTitle()
     {
-        if ($this->twitterTitle) {
+        if ($this->twitterTitle || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->twitterTitle;
         }
 
@@ -215,13 +215,11 @@ class TwitterMetaType extends MetaType
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        if ($this->twitterDescription) {
-            $description = $this->twitterDescription;
-        } else {
-            $description = $this->optimizedDescription;
+        if ($this->twitterDescription || Craft::$app->getRequest()->getIsCpRequest()) {
+            return mb_substr($this->twitterDescription, 0, $descriptionLength) ?: null;
         }
 
-        return mb_substr($description, 0, $descriptionLength);
+        return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
     }
 
     /**
@@ -234,7 +232,7 @@ class TwitterMetaType extends MetaType
 
     public function getTwitterImage()
     {
-        if ($this->twitterImage) {
+        if ($this->twitterImage || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->twitterImage;
         }
 
@@ -257,7 +255,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterTransform()
     {
-        if ($this->twitterTransform) {
+        if ($this->twitterTransform || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->twitterTransform;
         }
 

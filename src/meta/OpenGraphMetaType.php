@@ -203,7 +203,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgType()
     {
-        if ($this->ogType) {
+        if ($this->ogType || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->ogType;
         }
 
@@ -223,7 +223,11 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgSiteName()
     {
-        return $this->ogSiteName;
+        if ($this->ogSiteName || Craft::$app->getRequest()->getIsCpRequest()) {
+            return $this->ogSiteName;
+        }
+
+        return SproutSeo::$app->optimize->globals->identity['name'] ?? Craft::$app->getSystemName();
     }
 
     /**
@@ -239,8 +243,8 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgAuthor()
     {
-        if ($this->ogType !== 'article') {
-            return '';
+        if ($this->ogType !== 'article' || Craft::$app->getRequest()->getIsCpRequest()) {
+            return null;
         }
 
         return $this->ogAuthor;
@@ -259,8 +263,8 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgPublisher()
     {
-        if ($this->ogType !== 'article') {
-            return '';
+        if ($this->ogType !== 'article' || Craft::$app->getRequest()->getIsCpRequest()) {
+            return null;
         }
 
         if ($this->ogPublisher) {
@@ -286,7 +290,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgUrl()
     {
-        if ($this->ogUrl) {
+        if ($this->ogUrl || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->ogUrl;
         }
 
@@ -306,7 +310,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgTitle()
     {
-        if ($this->ogTitle) {
+        if ($this->ogTitle || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->ogTitle;
         }
 
@@ -328,13 +332,11 @@ class OpenGraphMetaType extends MetaType
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        if ($this->ogDescription) {
-            $description = $this->ogDescription;
-        } else {
-            $description = $this->optimizedDescription;
+        if ($this->ogDescription || Craft::$app->getRequest()->getIsCpRequest()) {
+            return mb_substr($this->ogDescription, 0, $descriptionLength) ?: null;
         }
 
-        return mb_substr($description, 0, $descriptionLength);
+        return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
     }
 
     /**
@@ -350,6 +352,10 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImageSecure()
     {
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
+            return null;
+        }
+
         return $this->ogImageSecure;
     }
 
@@ -366,7 +372,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImage()
     {
-        if ($this->ogImage) {
+        if ($this->ogImage || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->ogImage;
         }
 
@@ -421,11 +427,11 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImageType()
     {
-        if ($this->ogImageType) {
+        if ($this->ogImageType || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->ogImageType;
         }
 
-        return $this->optimizedImage;
+        return null;
     }
 
     /**
@@ -439,9 +445,9 @@ class OpenGraphMetaType extends MetaType
     /**
      * @return string|null
      */
-    public function getOgTransform(): string
+    public function getOgTransform()
     {
-        if ($this->ogTransform) {
+        if ($this->ogTransform || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->ogTransform;
         }
 
@@ -457,12 +463,12 @@ class OpenGraphMetaType extends MetaType
     }
 
     /**
-     * @return string
+     * @return string|null
      * @throws SiteNotFoundException
      */
-    public function getOgLocale(): string
+    public function getOgLocale()
     {
-        if ($this->ogLocale) {
+        if ($this->ogLocale || Craft::$app->getRequest()->getIsCpRequest()) {
             return $this->ogLocale;
         }
 
@@ -484,6 +490,10 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgDateUpdated()
     {
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
+            return null;
+        }
+
         $element = SproutSeo::$app->optimize->element;
 
         if ($element) {
@@ -510,6 +520,10 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgDateCreated()
     {
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
+            return null;
+        }
+
         $element = SproutSeo::$app->optimize->element;
 
         if ($element) {
@@ -542,6 +556,10 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgExpiryDate()
     {
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
+            return null;
+        }
+
         $element = SproutSeo::$app->optimize->element;
 
         if ($element) {

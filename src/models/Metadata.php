@@ -135,7 +135,7 @@ class Metadata extends Model
         }
 
         if ($title) {
-            return $title;
+            return $title ?: null;
         }
 
         /** @var SearchMetaType $search */
@@ -194,14 +194,14 @@ class Metadata extends Model
         $description = mb_substr(trim($description), 0, 255);
 
         if ($description) {
-            return mb_substr($description, 0, $descriptionLength);
+            return mb_substr($description, 0, $descriptionLength) ?: null;
         }
 
         /** @var SearchMetaType $search */
         $search = $this->getMetaTypes('search');
 
         if ($search) {
-            return mb_substr($search->getDescription(), 0, $descriptionLength);
+            return mb_substr($search->getDescription(), 0, $descriptionLength) ?: null;
         }
 
         return null;
@@ -429,7 +429,11 @@ class Metadata extends Model
             $staticAttributes = $metaType->getRawData();
 
             foreach ($staticAttributes as $key => $attribute) {
-                $metaForDb[$attribute] = $metaType[$attribute];
+                $getter = 'get'.ucfirst($attribute);
+                if (method_exists($metaType, $getter)) {
+                    $value = $metaType->{$getter}();
+                    $metaForDb[$attribute] = $value;
+                }
             }
         }
 
