@@ -336,7 +336,7 @@ abstract class Schema
      * If the property is not a string, don't add it.
      *
      * @param string $propertyName
-     * @param array $phone
+     * @param array  $phone
      */
     public function addTelephone($propertyName, $phone)
     {

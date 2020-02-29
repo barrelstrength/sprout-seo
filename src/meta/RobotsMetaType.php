@@ -21,11 +21,6 @@ use yii\base\Exception;
  */
 class RobotsMetaType extends MetaType
 {
-//    /**
-//     * @var string|null
-//     */
-//    protected $canonical;
-
     /**
      * @var string|null
      */
