@@ -7,7 +7,7 @@
     <div class="sproutseo-fields" id="twitter-card">
 
         {% set twitterCardOptions = {
-            '' : 'Select Twitter Card Type...'|t('sprout-seo'),
+            '' : 'Select...'|t('sprout-seo'),
             'summary' : 'Summary Card'|t('sprout-seo'),
             'summary_large_image' : 'Summary Card with Large Image'|t('sprout-seo'),
         } %}
@@ -17,7 +17,7 @@
             instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t('sprout-seo'),
             name: field.handle~'[metadata][twitterCard]',
             options: twitterCardOptions,
-            value: meta.twitterCard ?? 'summary',
+            value: meta.twitterCard,
             errors: "",
             required: false
         }) }}

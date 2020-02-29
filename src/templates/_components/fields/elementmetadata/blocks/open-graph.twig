@@ -10,7 +10,7 @@
     <div class="sproutseo-fields" id="open-graph">
 
         {% set ogTypesOptions = {
-            '' : 'Select Open Graph Type...'|t('sprout-seo'),
+            '' : 'Select...'|t('sprout-seo'),
             'article' : 'Article'|t('sprout-seo'),
             'website' : 'Website'|t('sprout-seo'),
         } %}
@@ -20,7 +20,7 @@
             instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type" target="_blank">How Open Graph Stories work.</a>'|t('sprout-seo'),
             name: field.handle~'[metadata][ogType]',
             options: ogTypesOptions,
-            value: meta.ogType ?? 'article',
+            value: meta.ogType,
             errors: "",
             required: false
         }) }}
