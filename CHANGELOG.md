@@ -34,6 +34,9 @@
 - Updated `barrelstrength/sprout-base` to require v5.1.2
 - Moved `barrelstrength\sproutseo\models\Metadata::getMetaTagName()` to specific Meta Type classes
 
+### Fixed
+- Improve compatibility with PHP 7.0 ([#191]) 
+
 ### Removed
 - Removed database column `sproutseo_globals.meta`, this value is now calculated from raw settings
 - Removed `barrelstrength\sproutseo\controllers\GlobalMetadata::populateGlobalMetadata()`
@@ -59,6 +62,8 @@
 - Removed `barrelstrength\sproutseo\fields\ElementMetadata::setMetaDetailsValues()`
 - Removed `barrelstrength\sproutseo\fields\ElementMetadata::prepareExistingValuesForPage()`
 - Removed `barrelstrength\sproutseo\services\ElementMetadata::getElementMetadata()`
+
+[#191]: https://github.com/barrelstrength/craft-sprout-seo/issues/191
 
 ## 4.3.3 - 2020-02-10
 
