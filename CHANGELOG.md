@@ -19,6 +19,8 @@
 - Added `barrelstrength\sproutseo\models\Metadata::getMetaTypes()`
 - Added `barrelstrength\sproutseo\models\Metadata::setMetaTypes()`
 - Added `barrelstrength\sproutseo\models\Metadata::getRawData()`
+- Added multi-site support for `craft.sproutSeo.getGlobalMetadata()`
+- Added multi-site support for `craft.sproutSeo.getSocialProfiles()`
 
 ### Changed
 - Updated Element Metadata field to always normalize data and return a Metadata model

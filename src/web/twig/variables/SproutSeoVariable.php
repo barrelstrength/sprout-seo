@@ -622,12 +622,15 @@ class SproutSeoVariable
     /**
      * Returns global contacts
      *
+     * @param Site|null $currentSite
+     *
      * @return array
      * @throws Exception
+     * @throws SiteNotFoundException
      */
-    public function getContacts(): array
+    public function getContacts(Site $currentSite = null): array
     {
-        $contacts = SproutSeo::$app->globalMetadata->getGlobalMetadata()->contacts;
+        $contacts = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite)->contacts;
 
         $contacts = $contacts ?: [];
 
@@ -642,12 +645,15 @@ class SproutSeoVariable
     /**
      * Returns global social profiles
      *
+     * @param Site|null $currentSite
+     *
      * @return array
      * @throws Exception
+     * @throws SiteNotFoundException
      */
-    public function getSocialProfiles(): array
+    public function getSocialProfiles(Site $currentSite = null): array
     {
-        $socials = SproutSeo::$app->globalMetadata->getGlobalMetadata()->social;
+        $socials = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite)->social;
 
         $socials = $socials ?: [];
 
