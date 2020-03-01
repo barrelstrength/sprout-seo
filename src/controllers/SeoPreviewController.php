@@ -25,7 +25,7 @@ class SeoPreviewController extends Controller
     public function actionPreview(int $elementId, int $siteId): Response
     {
         // Protect the preview target from public access:
-        $this->requireAuthorization('customAuthorizationKey:' . $elementId);
+        $this->requireAuthorization('sproutSeoPreviewAuthorizationKey:' . $elementId);
 
         /** @var Element $element */
         $element = Craft::$app->getElements()->getElementById($elementId, null, $siteId);

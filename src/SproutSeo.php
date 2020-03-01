@@ -28,9 +28,8 @@ use craft\base\Element;
 use craft\base\Plugin;
 use craft\events\ExceptionEvent;
 use craft\events\FieldLayoutEvent;
-
-use craft\events\RegisterPreviewTargetsEvent;
 use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterPreviewTargetsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
@@ -40,8 +39,6 @@ use craft\web\ErrorHandler;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use yii\base\Event;
-use craft\web\ErrorHandler;
-use craft\events\ExceptionEvent;
 use yii\base\InvalidConfigException;
 
 /**
