@@ -42,7 +42,7 @@ class RobotsMetaType extends MetaType
 
     public function getRobots()
     {
-        if ($this->robots || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->robots || $this->rawDataOnly) {
             return $this->robots;
         }
 

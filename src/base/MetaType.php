@@ -23,6 +23,8 @@ abstract class MetaType extends Component
 {
     use OptimizedTrait;
 
+    public $rawDataOnly = false;
+
     /**
      * By default, expect metadata attributes to be matched to their exact name
      *
@@ -160,6 +162,8 @@ abstract class MetaType extends Component
     public function getRawData(): array
     {
         $attributes = [];
+
+        $this->rawDataOnly = true;
 
         foreach ($this->getAttributes() as $key => $attribute) {
             $attributes[] = $key;

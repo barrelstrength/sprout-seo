@@ -70,7 +70,7 @@ class SearchMetaType extends MetaType
         }
 
         // In the CP we only save the raw data
-        if ($this->title || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->title || $this->rawDataOnly) {
             return trim($this->title.$appendTitleString) ?: null;
         }
 
@@ -94,7 +94,7 @@ class SearchMetaType extends MetaType
      */
     public function getAppendTitleValue()
     {
-        if ($this->appendTitleValue || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->appendTitleValue || $this->rawDataOnly) {
             return $this->appendTitleValue;
         }
 
@@ -113,12 +113,10 @@ class SearchMetaType extends MetaType
             $globalAppendTitleValue = $settings['appendTitleValue'];
 
             // @todo - migrate this to just use the {siteName} global that is supported below
-            if ($globalAppendTitleValue === 'sitename') {
-                $globalAppendTitleValue = Craft::$app->getSystemName();
-            }
-        }
+//            if ($globalAppendTitleValue === 'sitename') {
+//                $globalAppendTitleValue = Craft::$app->getSystemName();
+//            }
 
-        if ($globalAppendTitleValue) {
             // Add support for using {divider} and {siteName} in the Sitemap 'Append Meta Title' setting
             $appendTitleValue = Craft::$app->view->renderObjectTemplate($globalAppendTitleValue, [
                 'siteName' => Craft::$app->getSystemName(),
@@ -146,7 +144,7 @@ class SearchMetaType extends MetaType
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
         // In the CP we only save the raw data
-        if ($this->description || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->description || $this->rawDataOnly) {
             return mb_substr($this->description, 0, $descriptionLength) ?: null;
         }
 
@@ -162,7 +160,7 @@ class SearchMetaType extends MetaType
     public function getKeywords()
     {
         // In the CP we only save the raw data
-        if ($this->keywords || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->keywords || $this->rawDataOnly) {
             return $this->keywords;
         }
 

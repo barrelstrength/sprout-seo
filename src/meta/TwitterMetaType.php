@@ -112,7 +112,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterCard()
     {
-        if ($this->twitterCard || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->twitterCard || $this->rawDataOnly) {
             return $this->twitterCard;
         }
 
@@ -132,7 +132,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterSite()
     {
-        if ($this->twitterCreator || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->twitterCreator || $this->rawDataOnly) {
             return $this->twitterSite;
         }
 
@@ -152,7 +152,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterCreator()
     {
-        if ($this->twitterCreator || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->twitterCreator || $this->rawDataOnly) {
             return $this->twitterCreator;
         }
 
@@ -173,7 +173,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterUrl()
     {
-        if ($this->twitterUrl || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->twitterUrl || $this->rawDataOnly) {
             return $this->twitterUrl;
         }
 
@@ -193,7 +193,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterTitle()
     {
-        if ($this->twitterTitle || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->twitterTitle || $this->rawDataOnly) {
             return $this->twitterTitle;
         }
 
@@ -215,7 +215,7 @@ class TwitterMetaType extends MetaType
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        if ($this->twitterDescription || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->twitterDescription || $this->rawDataOnly) {
             return mb_substr($this->twitterDescription, 0, $descriptionLength) ?: null;
         }
 
@@ -232,7 +232,7 @@ class TwitterMetaType extends MetaType
 
     public function getTwitterImage()
     {
-        if ($this->twitterImage || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->twitterImage || $this->rawDataOnly) {
             return $this->twitterImage;
         }
 
@@ -255,7 +255,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterTransform()
     {
-        if ($this->twitterTransform || Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->twitterTransform || $this->rawDataOnly) {
             return $this->twitterTransform;
         }
 
