@@ -101,21 +101,10 @@ class Optimize extends Component
      */
     public function getMetadataViaContext(&$context)
     {
-        $site = $this->getMatchedSite();
+        $site = Craft::$app->getSites()->getCurrentSite();
         $this->setMatchedElement($site->id);
 
         return $this->getMetadata($site, true, $context);
-    }
-
-    /**
-     * @return Site
-     */
-    public function getMatchedSite(): Site
-    {
-        $site = Craft::$app->getSites()->currentSite
-            ?? Craft::$app->getSites()->primarySite;
-
-        return $site;
     }
 
     /**
