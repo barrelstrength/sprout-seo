@@ -168,7 +168,7 @@ class SproutSeo extends Plugin
             ];
 
             // Protect the preview target from public access:
-            Craft::$app->getSession()->authorize('customAuthorizationKey:' . $element->id);
+            Craft::$app->getSession()->authorize('sproutSeoPreviewAuthorizationKey:'.$element->id);
         });
     }
 
