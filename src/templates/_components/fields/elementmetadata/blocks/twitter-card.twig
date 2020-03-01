@@ -7,56 +7,59 @@
     <div class="sproutseo-fields" id="twitter-card">
 
         {% set twitterCardOptions = {
-            '' : 'Select Twitter Card Type...'|t,
-            'summary' : 'Summary Card'|t,
-            'summary_large_image' : 'Summary Card with Large Image'|t,
+            '' : 'Select...'|t('sprout-seo'),
+            'summary' : 'Summary Card'|t('sprout-seo'),
+            'summary_large_image' : 'Summary Card with Large Image'|t('sprout-seo'),
         } %}
 
         {{ forms.selectField({
-            label: 'Twitter Card Type'|t,
-            instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t,
+            label: 'Twitter Card Type'|t('sprout-seo'),
+            instructions: 'First, select your Twitter Card Type. Learn more about <a href="https://dev.twitter.com/docs/cards" target="_blank">How Twitter Cards work</a>.'|t('sprout-seo'),
             name: field.handle~'[metadata][twitterCard]',
             options: twitterCardOptions,
-            value: values.twitterCard ?? 'summary',
+            value: meta.twitterCard,
             errors: "",
             required: false
         }) }}
 
         {{ forms.textField({
-            label: "Title"|t,
+            label: "Title"|t('sprout-seo'),
+            instructions: 'The Title of your content which will appear in Twitter Card metadata.'|t('sprout-seo'),
             name: field.handle~"[metadata][twitterTitle]",
-            instructions: 'The Title of your content which will appear in Twitter Card metadata.'|t,
-            value: values.twitterTitle
+            value: meta.twitterTitle
         }) }}
 
         {{ forms.textareaField({
-            label: "Description"|t,
+            label: "Description"|t('sprout-seo'),
+            instructions: 'A description of your content which will appear in Twitter Card metadata.'|t('sprout-seo'),
             name: field.handle~"[metadata][twitterDescription]",
-            instructions: 'A description of your content which will appear in Twitter Card metadata.'|t,
-            value: values.twitterDescription
+            value: meta.twitterDescription
         }) }}
 
+        {% set twitterImageId = meta.getTwitterImage() %}
+        {% set twitterImageElement = twitterImageId ? craft.app.elements.getElementById(twitterImageId) : null %}
+
         {{ forms.field({
-            label: 'Image'|t,
-            instructions: 'An image that represents your content that will display in Twitter Card metadata.'|t,
+            label: 'Image'|t('sprout-seo'),
+            instructions: 'An image that represents your content that will display in Twitter Card metadata.'|t('sprout-seo'),
         }, forms.elementSelect({
-            elements: twitterImageElements,
-            sourceElementId: [values.twitterImage],
-            elementType: assetElementClassName,
+            elements: [twitterImageElement],
+            sourceElementId: [twitterImageId],
+            elementType: 'craft\\elements\\Asset',
             sources: '*',
             id: 'metaDetailsTwitterImage',
             name: field.handle~'[metadata][twitterImage]',
             jsClass: 'Craft.AssetSelectInput',
-            addButtonLabel: 'Select Image'|t,
+            addButtonLabel: 'Select Image'|t('sprout-seo'),
             limit: 1,
             criteria: {kind: ['image'], siteId : null}
         })) }}
 
         {{ forms.textField({
-            label: "Creator"|t,
-            instructions: "If the content of this card was authored by someone, include their Twitter username here."|t,
+            label: "Creator"|t('sprout-seo'),
+            instructions: "If the content of this card was authored by someone, include their Twitter username here."|t('sprout-seo'),
             name: field.handle~'[metadata][twitterCreator]',
-            value: values.twitterCreator,
+            value: meta.twitterCreator,
             errors: "",
             required: false,
             placeholder: '@ContentAuthor'

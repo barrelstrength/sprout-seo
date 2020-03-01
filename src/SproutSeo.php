@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo;
@@ -82,7 +82,7 @@ class SproutSeo extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '4.3.0';
+    public $schemaVersion = '4.3.0.7';
 
     /**
      * @var string
@@ -122,8 +122,6 @@ class SproutSeo extends Plugin
         self::$app = $this->get('app');
 
         Craft::setAlias('@sproutseo', $this->getBasePath());
-
-        /** @noinspection CascadingDirnameCallsInspection */
         Craft::setAlias('@sproutseolib', dirname(__DIR__).'/lib');
 
         // Add Twig Extensions

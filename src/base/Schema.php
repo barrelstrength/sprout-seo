@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\base;
@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\base;
 use barrelstrength\sproutbasefields\models\Address;
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\meta\OpenGraphMetaType;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\schema\ContactPointSchema;
@@ -23,6 +24,7 @@ use craft\base\Element;
 use craft\helpers\Template as TemplateHelper;
 use craft\helpers\UrlHelper;
 use DateTime;
+use yii\base\Exception;
 
 /**
  * Class Schema
@@ -200,11 +202,13 @@ abstract class Schema
      */
     public function getSchemaOverrideType(): string
     {
-        if (isset($this->prioritizedMetadataModel) &&
-            $this->prioritizedMetadataModel->schemaOverrideTypeId !== null &&
-            $this->prioritizedMetadataModel->schemaTypeId === get_class($this)
+        $prioritizedMetadataModel = $this->prioritizedMetadataModel;
+
+        if ($prioritizedMetadataModel &&
+            $prioritizedMetadataModel->getSchemaOverrideTypeId() !== null &&
+            $prioritizedMetadataModel->getSchemaTypeId() === get_class($this)
         ) {
-            $this->type = $this->prioritizedMetadataModel->schemaOverrideTypeId;
+            $this->type = $prioritizedMetadataModel->getSchemaOverrideTypeId();
 
             return $this->type;
         }
@@ -294,8 +298,8 @@ abstract class Schema
      * https://schema.org/Date
      * https://en.wikipedia.org/wiki/ISO_8601
      *
-     * @param string           $propertyName
-     * @param string|\DateTime $date
+     * @param string          $propertyName
+     * @param string|DateTime $date
      *
      * @throws \Exception
      */
@@ -332,7 +336,7 @@ abstract class Schema
      * If the property is not a string, don't add it.
      *
      * @param string $propertyName
-     * @param string $phone
+     * @param array  $phone
      */
     public function addTelephone($propertyName, $phone)
     {
@@ -390,10 +394,15 @@ abstract class Schema
             $meta = $this->prioritizedMetadataModel;
 
             $image = [
-                'url' => $imageId,
-                'width' => $meta->ogImageWidth,
-                'height' => $meta->ogImageHeight
+                'url' => $imageId
             ];
+
+            $openGraphMeta = $meta->getMetaTypes('openGraph');
+
+            if ($openGraphMeta instanceof OpenGraphMetaType) {
+                $image['width'] = $openGraphMeta->getOgImageWidth();
+                $image['height'] = $openGraphMeta->getOgImageHeight();
+            }
         } else if (is_numeric($imageId)) {
 
             $imageAsset = Craft::$app->assets->getAssetById($imageId);
@@ -568,6 +577,8 @@ abstract class Schema
     /**
      * Add a Main Entity of Page to our Structured Data array of
      * type WebPage using the canonical URL.
+     *
+     * @throws Exception
      */
     public function addMainEntityOfPage()
     {
@@ -575,7 +586,7 @@ abstract class Schema
 
         $mainEntity = new MainEntityOfPageSchema();
         $mainEntity->type = 'WebPage';
-        $mainEntity->id = $meta->canonical;
+        $mainEntity->id = $meta->getCanonical();
 
         $mainEntity->prioritizedMetadataModel = $this->prioritizedMetadataModel;
 

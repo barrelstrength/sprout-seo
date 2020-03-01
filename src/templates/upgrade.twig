@@ -2,7 +2,7 @@
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
 {% set title = "Upgrade to Sprout SEO PRO"|t('sprout-seo') %}
-
+{% set bodyClass = 'sprout-landing-page' %}
 {% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutseo/web/assets/base/dist', true) -%}
 {% set pluginStoreLink = currentUser.admin ? cpUrl('plugin-store/sprout-seo') : 'https://plugins.craftcms.com/sprout-seo' %}
 

@@ -1,14 +1,17 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
 
 use craft\commerce\elements\Product;
 use craft\commerce\Plugin as Commerce;
+use Exception;
+use Throwable;
+use yii\base\InvalidConfigException;
 
 
 class ProductSchema extends ThingSchema
@@ -39,7 +42,8 @@ class ProductSchema extends ThingSchema
 
     /**
      * @return array|null|void
-     * @throws \Exception
+     * @throws Exception
+     * @throws Throwable
      */
     public function addProperties()
     {
@@ -51,7 +55,7 @@ class ProductSchema extends ThingSchema
     }
 
     /**
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function addProductProperties()
     {

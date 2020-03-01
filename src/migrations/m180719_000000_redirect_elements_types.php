@@ -1,15 +1,13 @@
-<?php /** @noinspection PhpUndefinedClassInspection */
+<?php
 
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
 
-use /** @noinspection PhpUndefinedNamespaceInspection */
-    barrelstrength\sproutseo\elements\Redirect;
 use craft\db\Migration;
 
 /**
@@ -25,7 +23,7 @@ class m180719_000000_redirect_elements_types extends Migration
         $types = [
             0 => [
                 'oldType' => 'SproutSeo_Redirect',
-                'newType' => Redirect::class
+                'newType' => 'barrelstrength\sproutseo\elements\Redirect'
             ]
         ];
 

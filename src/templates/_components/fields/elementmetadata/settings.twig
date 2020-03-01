@@ -20,7 +20,6 @@
     {% set optimizedTitleOptions = craft.sproutSeo.getOptimizedTitleOptions(settings) %}
     {% set mainEntityValues = {'schemaTypeId': settings.schemaTypeId, 'schemaOverrideTypeId': settings.schemaOverrideTypeId} %}
 
-
     {{ forms.field({
         label: 'Meta Title'|t('sprout-seo'),
         instructions: "Select the field to use for your basic, Open Graph, and Twitter Card meta tag titles. Select 'Manually' if you want the Optimize field to display a custom Title Field for your content editors to manage."|t('sprout-seo'),
@@ -212,7 +211,7 @@
             errors: ''
         }, advancedInput) }}
 
-    </div> {# End meta details div #}
+    </div>
 
     <hr>
 

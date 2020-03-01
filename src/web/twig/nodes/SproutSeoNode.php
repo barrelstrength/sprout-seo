@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\web\twig\nodes;
@@ -16,7 +16,7 @@ class SproutSeoNode extends TwigNode
     /**
      * Compiles a Optimize_Node into PHP.
      *
-     * @param \Twig\Compiler $compiler
+     * @param Compiler $compiler
      */
     public function compile(Compiler $compiler)
     {

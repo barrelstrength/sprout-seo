@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
@@ -10,6 +10,7 @@ namespace barrelstrength\sproutseo\migrations;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use craft\db\Migration;
 use craft\db\Query;
+use Throwable;
 
 /**
  * m180619_000011_address_table migration.
@@ -19,7 +20,7 @@ class m180619_000011_address_table extends Migration
     /**
      * @inheritdoc
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function safeUp(): bool
     {
@@ -101,7 +102,7 @@ class m180619_000011_address_table extends Migration
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     protected function createAddressTable()
     {

@@ -1,6 +1,8 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
+{% set sproutSeoApp = craft.app.getModule('sprout-seo').app %}
+
 {% set transformOptions = craft.sproutSeo.getTransforms() %}
 
 <div class="sproutseo-box-opengraph">
@@ -8,47 +10,54 @@
     <div class="sproutseo-fields" id="open-graph">
 
         {% set ogTypesOptions = {
-            '' : 'Select Open Graph Type...'|t,
-            'article' : 'Article'|t,
-            'website' : 'Website'|t,
+            '' : 'Select...'|t('sprout-seo'),
+            'article' : 'Article'|t('sprout-seo'),
+            'website' : 'Website'|t('sprout-seo'),
         } %}
 
         {{ forms.selectField({
-            label: 'Open Graph Type'|t,
-            instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type" target="_blank">How Open Graph Stories work.</a>'|t,
+            label: 'Open Graph Type'|t('sprout-seo'),
+            instructions: 'First, select your Open Graph Type. Learn more about <a href="https://developers.facebook.com/docs/reference/opengraph#object-type" target="_blank">How Open Graph Stories work.</a>'|t('sprout-seo'),
             name: field.handle~'[metadata][ogType]',
             options: ogTypesOptions,
-            value: values.ogType ?? 'article',
+            value: meta.ogType,
             errors: "",
             required: false
         }) }}
 
         {{ forms.textField({
-            label: "Title"|t,
+            label: "Title"|t('sprout-seo'),
+            instructions: 'The Title of your content which will appear in Open Graph metadata.'|t('sprout-seo'),
             name: field.handle~"[metadata][ogTitle]",
-            instructions: 'The Title of your content which will appear in Open Graph metadata.'|t,
-            value: values.ogTitle
+            value: meta.ogTitle
         }) }}
 
         {{ forms.textareaField({
-            label: "Description"|t,
+            label: "Description"|t('sprout-seo'),
+            instructions: 'A description of your content which will appear in Open Graph metadata.'|t('sprout-seo'),
             name: field.handle~"[metadata][ogDescription]",
-            instructions: 'A description of your content which will appear in Open Graph metadata.'|t,
-            value: values.ogDescription
+            value: meta.ogDescription
         }) }}
 
+        {% set ogImageId = sproutSeoApp.optimize.getImageId(meta.ogImage ?? null) %}
+        {% if ogImageId %}
+            {% set ogImageElement = [craft.app.elements.getElementById(ogImageId)] %}
+        {% else %}
+            {% set ogImageElement = [] %}
+        {% endif %}
+
         {{ forms.field({
-            label: 'Image'|t,
-            instructions: 'An image that represents your content that will display in Open Graph metadata.'|t,
+            label: 'Image'|t('sprout-seo'),
+            instructions: 'An image that represents your content that will display in Open Graph metadata.'|t('sprout-seo'),
         }, forms.elementSelect({
-            elements: ogImageElements,
-            sourceElementId: [values.ogImage],
-            elementType: assetElementClassName,
+            elements: ogImageElement,
+            sourceElementId: [meta.ogImage],
+            elementType: 'craft\\elements\\Asset',
             sources: '*',
             id: 'metaDetailsOgImage',
             name: field.handle~'[metadata][ogImage]',
             jsClass: 'Craft.AssetSelectInput',
-            addButtonLabel: 'Select Image'|t,
+            addButtonLabel: 'Select Image'|t('sprout-forms'),
             limit: 1,
             criteria: {kind: ['image'], siteId : null}
         })) }}

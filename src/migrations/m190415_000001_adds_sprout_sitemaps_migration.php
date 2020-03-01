@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
@@ -12,19 +12,22 @@ use barrelstrength\sproutbasesitemaps\models\Settings as SproutSitemapSettings;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use Craft;
 use craft\db\Migration;
+use craft\errors\SiteNotFoundException;
+use Throwable;
+use yii\db\Exception;
 
 /**
  * m190415_000001_adds_sprout_sitemaps_migration migration.
  *
- * @property \barrelstrength\sproutbasesitemaps\models\Settings $sproutSitemapSettingsModel
+ * @property SproutSitemapSettings $sproutSitemapSettingsModel
  */
 class m190415_000001_adds_sprout_sitemaps_migration extends Migration
 {
     /**
      * @return bool
-     * @throws \Throwable
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\db\Exception
+     * @throws Throwable
+     * @throws SiteNotFoundException
+     * @throws Exception
      */
     public function safeUp(): bool
     {

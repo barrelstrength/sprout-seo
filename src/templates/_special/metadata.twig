@@ -22,7 +22,7 @@
     {% switch name -%}
     {% case "canonical" -%}
         <link rel="canonical" href="{{ value }}">
-    {% default %}
+    {% default -%}
         <meta name="{{ name }}" content="{{ value }}">
     {% endswitch %}
 {% endfor %}

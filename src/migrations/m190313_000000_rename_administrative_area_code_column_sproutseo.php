@@ -1,14 +1,15 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
 
 use barrelstrength\sproutbasefields\migrations\m190313_000000_add_administrativeareacode_column;
 use craft\db\Migration;
+use yii\base\NotSupportedException;
 
 /**
  * m190313_000000_rename_administrative_area_code_column_sproutseo migration.
@@ -17,7 +18,7 @@ class m190313_000000_rename_administrative_area_code_column_sproutseo extends Mi
 {
     /**
      * @return bool
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

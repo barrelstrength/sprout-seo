@@ -4,31 +4,31 @@
 <div class="sproutseo-box">
 
     {{ forms.textField({
-        label: "Title"|t,
-        instructions: "The Title of your content which will appear in search results"|t,
+        label: "Title"|t('sprout-seo'),
+        instructions: "The Title of your content which will appear in search results"|t('sprout-seo'),
         name: field.handle~'[metadata][title]',
         showCharsLeft: true,
-        value: values.title,
+        value: meta.title,
         errors: "",
         required: false,
     }) }}
 
     {{ forms.textField({
-        label: "Description"|t,
-        instructions: "A description of your content which will appear in search results."|t,
+        label: "Description"|t('sprout-seo'),
+        instructions: "A description of your content which will appear in search results."|t('sprout-seo'),
         name: field.handle~'[metadata][description]',
         showCharsLeft: true,
-        value: values.description,
+        value: meta.description,
         errors: "",
         required: false,
     }) }}
 
     {{ forms.textField({
-        label: "Keywords"|t,
+        label: "Keywords"|t('sprout-seo'),
         id: 'sproutseo-searchKeywords',
-        instructions: "A list of keywords that describe your content"|t,
+        instructions: "A list of keywords that describe your content"|t('sprout-seo'),
         name: field.handle~'[metadata][keywords]',
-        value: values.keywords,
+        value: meta.keywords,
         errors: "",
         required: false
     }) }}

@@ -1,15 +1,17 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\models;
 
 use barrelstrength\sproutbasefields\models\Address;
+use barrelstrength\sproutseo\SproutSeo;
 use craft\base\Model;
 use craft\helpers\Json;
+use DateTime;
 
 /**
  *
@@ -26,11 +28,6 @@ class Globals extends Model
      * @var int
      */
     public $siteId;
-
-    /**
-     * @var array
-     */
-    public $meta;
 
     /**
      * @var array
@@ -63,12 +60,12 @@ class Globals extends Model
     public $settings;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $dateCreated;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     public $dateUpdated;
 
@@ -76,11 +73,6 @@ class Globals extends Model
      * @var int
      */
     public $uid;
-
-    /**
-     * @var string
-     */
-    public $globalKey;
 
     /**
      * @var Address|null
@@ -106,15 +98,15 @@ class Globals extends Model
      */
     public function getGlobalByKey($target, $format = 'array')
     {
-        if ($target) {
-            $this->globalKey = $target;
+        if (!$target) {
+            return null;
         }
 
         $targetMethod = 'get'.ucfirst($target);
 
         $schema = $this->{$targetMethod}();
 
-        if ($format === 'json') {
+        if ($schema && $format === 'json') {
             return Json::encode($schema);
         }
 
@@ -149,21 +141,13 @@ class Globals extends Model
     }
 
     /**
-     * @return array
-     */
-    protected function getMeta(): array
-    {
-        return $this->meta;
-    }
-
-    /**
      * Get the values associated with the Identity column in the database
      *
      * @return array
      */
     protected function getIdentity(): array
     {
-        return $this->{$this->globalKey};
+        return $this->identity;
     }
 
     /**
@@ -173,7 +157,7 @@ class Globals extends Model
      */
     protected function getContacts(): array
     {
-        $contacts = $this->{$this->globalKey};
+        $contacts = $this->contacts;
         $contactPoints = [];
 
         if (is_array($contacts)) {
@@ -196,7 +180,8 @@ class Globals extends Model
      */
     protected function getSocial(): array
     {
-        $profiles = $this->{$this->globalKey};
+        $profiles = $this->social;
+
         $profileLinks = [];
 
         if (is_array($profiles)) {
@@ -218,17 +203,21 @@ class Globals extends Model
      */
     protected function getOwnership(): array
     {
-        return $this->{$this->globalKey};
+        return $this->ownership;
     }
 
     /**
-     * Get the values associated with the Robots column in the database
-     *
-     * @return array
+     * @return string|null
      */
-    protected function getRobots(): array
+    protected function getRobots()
     {
-        return $this->{$this->globalKey};
+        $robots = SproutSeo::$app->optimize->prepareRobotsMetadataValue($this->robots);
+
+        if ($robots === null) {
+            return null;
+        }
+
+        return $robots;
     }
 
     /**
@@ -238,6 +227,6 @@ class Globals extends Model
      */
     protected function getSettings(): array
     {
-        return $this->{$this->globalKey};
+        return $this->settings;
     }
 }

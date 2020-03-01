@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
@@ -12,6 +12,7 @@ use barrelstrength\sproutbaseuris\sectiontypes\Entry;
 use barrelstrength\sproutbaseuris\sectiontypes\Product;
 use craft\db\Migration;
 use craft\db\Query;
+use yii\base\NotSupportedException;
 
 /**
  * m180625_000000_sections_to_sitemap migration.
@@ -20,7 +21,7 @@ class m180625_000000_sections_to_sitemap extends Migration
 {
     /**
      * @return bool
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

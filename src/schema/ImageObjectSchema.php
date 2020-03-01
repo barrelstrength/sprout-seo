@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
@@ -50,22 +50,23 @@ class ImageObjectSchema extends Schema
         $this->addNumber('height', $height);
         $this->addNumber('width', $width);
 
-        // let's check for any imageTransform
-
         $prioritizedMetadataModel = $this->prioritizedMetadataModel;
 
-        /** @noinspection UnSafeIsSetOverArrayInspection */
-        if (isset($prioritizedMetadataModel->ogTransform) && $prioritizedMetadataModel->ogTransform) {
-            if ($prioritizedMetadataModel->ogImage) {
-                $this->addUrl('url', $prioritizedMetadataModel->ogImage);
-            }
+        if (isset($prioritizedMetadataModel)) {
+            $openGraphMetaType = $prioritizedMetadataModel->getMetaTypes('openGraph');
 
-            if ($prioritizedMetadataModel->ogImageHeight) {
-                $this->addNumber('height', $prioritizedMetadataModel->ogImageHeight);
-            }
+            if (isset($openGraphMetaType)) {
+                if ($openGraphMetaType->getOgImage()) {
+                    $this->addUrl('url', $openGraphMetaType->getOgImage());
+                }
 
-            if ($prioritizedMetadataModel->ogImageWidth) {
-                $this->addNumber('width', $prioritizedMetadataModel->ogImageWidth);
+                if ($openGraphMetaType->getOgImageHeight()) {
+                    $this->addNumber('height', $openGraphMetaType->getOgImageHeight());
+                }
+
+                if ($openGraphMetaType->getOgImageWidth()) {
+                    $this->addNumber('width', $openGraphMetaType->getOgImageWidth());
+                }
             }
         }
     }

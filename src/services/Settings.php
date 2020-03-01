@@ -1,14 +1,15 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings as PluginSettings;
+use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\db\Query;
 use yii\base\Component;
@@ -22,7 +23,7 @@ class Settings extends Component
 {
     public function getDescriptionLength(): int
     {
-        /** @var \barrelstrength\sproutseo\SproutSeo $plugin */
+        /** @var SproutSeo $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
         /** @var PluginSettings $pluginSettings */
         $pluginSettings = $plugin->getSettings();

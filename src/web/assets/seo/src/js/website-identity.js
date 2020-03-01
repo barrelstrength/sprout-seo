@@ -110,13 +110,13 @@ class SproutSeoWebsiteIdentity {
     // check if we need load depending dropdowns
     if (websiteIdentity) {
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[0]) {
-        $('#first').val(websiteIdentity.organizationSubTypes[0]).change();
+        $('#main-entity-first-dropdown').val(websiteIdentity.organizationSubTypes[0]).trigger('change');
       }
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[1]) {
-        $('#second').val(websiteIdentity.organizationSubTypes[1]).change();
+        $('#main-entity-second-dropdown').val(websiteIdentity.organizationSubTypes[1]).trigger('change');
       }
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[2]) {
-        $('#third').val(websiteIdentity.organizationSubTypes[2]).change();
+        $('#main-entity-second-dropdown').val(websiteIdentity.organizationSubTypes[2]).trigger('change');
       }
     }
 
@@ -134,7 +134,7 @@ class SproutSeoWebsiteIdentity {
         $(".organization-info").removeClass('hidden');
         $(".person-info").addClass('hidden');
 
-        if ($("#first").val() == 'LocalBusiness') {
+        if ($("#first").val() === 'LocalBusiness') {
           $("#localbusiness").removeClass('hidden');
         }
       } else {

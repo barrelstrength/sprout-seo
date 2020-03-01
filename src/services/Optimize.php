@@ -1,18 +1,17 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutseo\enums\MetadataLevels;
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
+use barrelstrength\sproutseo\fields\ElementMetadata;
+use barrelstrength\sproutseo\meta\SchemaMetaType;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutseo\models\Metadata as MetadataModel;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
@@ -23,24 +22,21 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\models\Site;
-use DateTime;
 use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
 /**
  *
- * @property string             $uri
- * @property \craft\models\Site $matchedSite
+ * @property string $uri
+ * @property Site   $matchedSite
  */
 class Optimize extends Component
 {
-    /**
-     * @var ElementInterface
-     */
-    public static $matchedElement;
-
     /**
      * Sprout SEO Globals data
      *
@@ -49,19 +45,31 @@ class Optimize extends Component
     public $globals;
 
     /**
-     * The first Element Metadata field Metadata from the context
+     * The Element that contains the Element Metadata field for the metadata
      *
-     * @var Metadata $elementMetadata
+     * @var ElementInterface|Element
      */
-    public $elementMetadata;
+    public $element;
 
     /**
-     * @var MetadataModel $prioritizedMetadataModel
+     * The first Element Metadata field Metadata from the context
+     *
+     * @var ElementMetadata $elementMetadataField
+     */
+    public $elementMetadataField;
+
+    /**
+     * Represents the raw and final versions of the metadata being processed
+     *
+     * @var Metadata $prioritizedMetadataModel
      */
     public $prioritizedMetadataModel;
 
     /**
-     * @var MetadataModel $templateMetadata
+     * Any values provided via {% do craft.sproutSeo.meta({}) %} that will take
+     * priority over metadata defined in globals or field settings
+     *
+     * @var array $templateMetadata
      */
     public $templateMetadata = [];
 
@@ -85,45 +93,18 @@ class Optimize extends Component
      * @param $context
      *
      * @return array|null|string
-     * @throws \Throwable
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws Throwable
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
     public function getMetadataViaContext(&$context)
     {
-        $uri = $this->getUri();
         $site = $this->getMatchedSite();
-        $this->setMatchedElement($uri, $site->id);
-        /** @var Element $element */
-        $element = self::$matchedElement;
+        $this->setMatchedElement($site->id);
 
-        if ($element !== null) {
-            $this->elementMetadata = SproutSeo::$app->elementMetadata->getElementMetadata($element);
-        }
-
-        return $this->getMetadata($element, $site, true, $context);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUri(): string
-    {
-        $request = Craft::$app->getRequest();
-        $uri = '/';
-        if (!$request->getIsConsoleRequest()) {
-            try {
-                $uri = $request->getPathInfo();
-            } catch (InvalidConfigException $e) {
-                Craft::error($e->getMessage(), __METHOD__);
-            }
-        }
-
-        return $uri;
+        return $this->getMetadata($site, true, $context);
     }
 
     /**
@@ -142,34 +123,33 @@ class Optimize extends Component
      *
      * @param string   $uri
      * @param int|null $siteId
+     *
+     * @throws InvalidConfigException
      */
     public function setMatchedElement(string $uri, int $siteId = null)
     {
-        self::$matchedElement = null;
-        $uri = trim($uri, '/');
+        $this->element = null;
+        $path = Craft::$app->getRequest()->getPathInfo();
         /** @var Element $element */
-        $element = Craft::$app->getElements()->getElementByUri($uri, $siteId);
+        $element = Craft::$app->elements->getElementByUri($path, $siteId, true);
         if ($element && ($element->uri !== null)) {
-            self::$matchedElement = $element;
+            $this->element = $element;
         }
     }
 
     /**
-     * @param \craft\base\Element $element
      * @param                     $site
      * @param bool                $render
      * @param bool                $context
      *
      * @return array|null|string
-     * @throws \Throwable
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws Throwable
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
-    public function getMetadata(Element $element = null, $site = null, $render = true, &$context = null)
+    public function getMetadata($site = null, $render = true, &$context = null)
     {
         /** @var SproutSeo $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
@@ -177,14 +157,14 @@ class Optimize extends Component
         $settings = $plugin->getSettings();
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($element, $site);
+        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($site);
 
         $output = null;
 
         $metadata = [
             'globals' => $this->globals,
             'meta' => $this->prioritizedMetadataModel->getMetaTagData(),
-            'schema' => $this->getStructuredData($element)
+            'schema' => $this->getStructuredData($this->element)
         ];
 
         if ($render === false) {
@@ -205,151 +185,53 @@ class Optimize extends Component
     }
 
     /**
-     * Prioritize our meta data
-     * ------------------------------------------------------------
+     * @param null $site
      *
-     * Loop through and select the highest ranking value for each attribute in our Metadata
-     *
-     * 4) Blank
-     * 3) Global Metadata
-     * 2) Element Metadata
-     * 1) Template Metadata
-     *
-     * @param      $element
-     * @param Site $site
-     *
-     * @return Metadata|mixed
-     * @throws Exception
-     * @throws InvalidConfigException
+     * @return Metadata
      * @throws Throwable
      */
-    public function getPrioritizedMetadataModel($element, $site = null)
+    public function getPrioritizedMetadataModel($site = null): Metadata
     {
-        $metaLevels = [
-            MetadataLevels::GlobalMetadata,
-            MetadataLevels::ElementMetadata,
-            MetadataLevels::TemplateMetadata
-        ];
+        $elementMetadataAttributes = [];
 
-        $prioritizedMetadataModel = new Metadata();
+        if ($this->element !== null) {
+            $elementMetadataAttributes = SproutSeo::$app->elementMetadata->getRawMetadataFromElement($this->element);
+        }
 
-        foreach ($metaLevels as $level) {
+        $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
 
-            $overrideInfo = [];
+        // Only allow Template Overrides if using Pro Edition
+        if ($isPro && $this->templateMetadata) {
+            /**
+             * If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field
+             * associated with that Element ID This adds support for using Element Metadata fields on non URL-enabled
+             * Elements such as Users and Tags
+             *
+             * Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
+             */
+            if (isset($this->templateMetadata['elementId'])) {
+                /** @var Element $elementOverride */
+                $elementOverride = Craft::$app->elements->getElementById($this->templateMetadata['elementId']);
 
-            switch ($level) {
-                case MetadataLevels::GlobalMetadata:
-                {
-                    $overrideInfo = $this->globals->meta;
-                    break;
-                }
-                case MetadataLevels::ElementMetadata:
-                {
-                    if ($this->elementMetadata) {
-
-                        // Default to the current URL, if no overrides exist
-                        $this->elementMetadata->canonical = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                        $this->elementMetadata->ogUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
-                        $this->elementMetadata->twitterUrl = OptimizeHelper::prepareCanonical($this->elementMetadata);
-
-                        $overrideInfo = $this->elementMetadata->getAttributes();
-                    }
-
-                    break;
-                }
-                case MetadataLevels::TemplateMetadata:
-                {
-                    $isPro = SproutBase::$app->settings->isEdition('sprout-seo', SproutSeo::EDITION_PRO);
-
-                    // Only allow Template Overrides if using Pro Edition
-                    if (!$isPro) {
-                        break;
-                    }
-
-                    $overrideInfo = $this->templateMetadata;
-
-                    // If an Element ID is provided as an Override, get our Metadata from the Element Metadata Field associated with that Element ID
-                    // This adds support for using Element Metadata fields on non Url-enabled Elements such as Users and Tags
-                    // Non URL-Enabled Elements don't resave metadata on their own. That will need to be done manually.
-                    if (isset($overrideInfo['elementId'])) {
-                        /** @var \craft\base\Element $elementOverride */
-                        $elementOverride = Craft::$app->elements->getElementById($overrideInfo['elementId']);
-                        $overrideInfo = SproutSeo::$app->elementMetadata->getElementMetadata($elementOverride);
-                    }
-
-                    // Assume our canonical URL is the current URL unless there is a codeOverride
-                    $prioritizedMetadataModel->canonical = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                    $prioritizedMetadataModel->ogUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-                    $prioritizedMetadataModel->twitterUrl = OptimizeHelper::prepareCanonical($prioritizedMetadataModel);
-
-                    break;
+                // Overwrite the Element Attributes if the template override Element ID returns an element
+                if ($elementOverride) {
+                    $elementMetadataAttributes = SproutSeo::$app->elementMetadata->getRawMetadataFromElement($elementOverride);
                 }
             }
 
-            $metadataModel = new Metadata($overrideInfo);
-            $metadataModel->keywords = $metadataModel->optimizedKeywords ?? $metadataModel->keywords;
-
-            $prioritizedMetadataModel = $this->getPrioritizedValues($prioritizedMetadataModel, $metadataModel);
-        }
-
-        // Remove the ogAuthor value if we don't have an article
-        if ($prioritizedMetadataModel->ogType !== 'article') {
-            $prioritizedMetadataModel->ogAuthor = null;
-            $prioritizedMetadataModel->ogPublisher = null;
+            // Merge our attributes overriding the Element attributes with Template overrides
+            $attributes = array_filter(array_merge($elementMetadataAttributes, $this->templateMetadata));
         } else {
-            $prioritizedMetadataModel->ogDateCreated = null;
-            $prioritizedMetadataModel->ogDateUpdated = null;
-            $prioritizedMetadataModel->ogExpiryDate = null;
-
-            // @todo - refactor
-            if ($element !== null) {
-                if (isset($element->postDate)) {
-                    if ($element->postDate !== null && $element->postDate) {
-                        $prioritizedMetadataModel->ogDateCreated = $element->postDate->format(DateTime::ATOM);
-                    }
-                } else if ($element->dateCreated !== null && $element->dateCreated) {
-                    $prioritizedMetadataModel->ogDateCreated = $element->dateCreated->format(DateTime::ATOM);
-                }
-
-                if ($element->dateUpdated !== null && $element->dateUpdated) {
-                    $prioritizedMetadataModel->ogDateUpdated = $element->dateUpdated->format(DateTime::ATOM);
-                }
-
-                /** @todo - this should be delegated to the Url-Enabled Element integration. It's not common to all elements. */
-                /** @noinspection PhpUndefinedFieldInspection */
-                if (isset($element->expiryDate) && $element->expiryDate !== null && $element->expiryDate) {
-                    /** @noinspection PhpUndefinedFieldInspection */
-                    $prioritizedMetadataModel->ogExpiryDate = $element->expiryDate->format(DateTime::ATOM);
-                }
-            }
+            $attributes = array_filter($elementMetadataAttributes);
         }
 
-        $prioritizedMetadataModel->title = OptimizeHelper::prepareAppendedTitleValue(
-            $prioritizedMetadataModel,
-            $this->globals
-        );
-
-        $prioritizedMetadataModel->robots = OptimizeHelper::prepareRobotsMetadataValue($prioritizedMetadataModel->robots);
-
-        // let's just prepare assets for final metadatamodel
-        OptimizeHelper::prepareAssetUrls($prioritizedMetadataModel);
-
-        // Trim descriptions to maxMetaDescriptionLength or 160 characters
-        $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
-
-        $prioritizedMetadataModel->optimizedDescription = mb_substr($prioritizedMetadataModel->optimizedDescription, 0, $descriptionLength);
-        $prioritizedMetadataModel->description = mb_substr($prioritizedMetadataModel->description, 0, $descriptionLength);
-        $prioritizedMetadataModel->ogDescription = mb_substr($prioritizedMetadataModel->ogDescription, 0, $descriptionLength);
-        $prioritizedMetadataModel->twitterDescription = mb_substr($prioritizedMetadataModel->twitterDescription, 0, $descriptionLength);
-
-        $prioritizedMetadataModel->ogLocale = $site->language ?? null;
-
-        return $prioritizedMetadataModel;
+        return new Metadata($attributes);
     }
 
     public function getStructuredData($element = null): array
     {
         $schema = [];
+
         $websiteIdentity = [
             'Person' => WebsiteIdentityPersonSchema::class,
             'Organization' => WebsiteIdentityOrganizationSchema::class
@@ -407,7 +289,7 @@ class Optimize extends Component
             $schema['place'] = $placeSchema;
         }
 
-        if ($element !== null) {
+        if ($element !== null && isset($this->elementMetadataField) && $this->elementMetadataField->schemaTypeId) {
             $schema['mainEntity'] = $this->getMainEntityStructuredData($element);
         }
 
@@ -423,18 +305,21 @@ class Optimize extends Component
     {
         $schema = null;
 
-        if ($this->prioritizedMetadataModel) {
-            $schemaUniqueKey = $this->prioritizedMetadataModel->schemaTypeId;
-            if ($schemaUniqueKey && $element !== null) {
-                $schema = SproutSeo::$app->schema->getSchemaByUniqueKey($schemaUniqueKey);
-                $schema->attributes = $this->prioritizedMetadataModel->getAttributes();
-                $schema->addContext = true;
-                $schema->isMainEntity = true;
+        /** @var SchemaMetaType $schemaMetaType */
+        $schemaTypeId = $this->prioritizedMetadataModel->getSchemaTypeId();
 
-                $schema->globals = $this->globals;
-                $schema->element = $element;
-                $schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
-            }
+        if (!$schemaTypeId) {
+            return null;
+        }
+
+        if ($schemaTypeId && $element !== null) {
+            $schema = SproutSeo::$app->schema->getSchemaByUniqueKey($schemaTypeId);
+            $schema->addContext = true;
+            $schema->isMainEntity = true;
+
+            $schema->globals = $this->globals;
+            $schema->element = $element;
+            $schema->prioritizedMetadataModel = $this->prioritizedMetadataModel;
         }
 
         return $schema;
@@ -446,10 +331,10 @@ class Optimize extends Component
      * @param $metadata
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
     public function renderMetadata($metadata): string
     {
@@ -467,35 +352,128 @@ class Optimize extends Component
     }
 
     /**
-     * @param $prioritizedMetadataModel
-     * @param $metadataModel
+     * Return a comma delimited string of robots meta settings
      *
-     * @return mixed
+     * @param array|string|null $robots
+     *
+     * @return string|null
      */
-    protected function getPrioritizedValues(Metadata $prioritizedMetadataModel, $metadataModel)
+    public function prepareRobotsMetadataValue($robots = null)
     {
-        foreach ($prioritizedMetadataModel->getAttributes() as $attribute => $value) {
-            // Test for a value on each of our models in their order of priority
-            if ($metadataModel->{$attribute}) {
-                $prioritizedMetadataModel->{$attribute} = $metadataModel->{$attribute};
-            }
-            // Make sure our schema type and override are all or nothing
-            // if we find the $metadataModel doesn't have a value for schemaOverrideTypeId
-            // then we should make sure the $prioritizedMetadataModel also has a null value
-            // otherwise we still keep our lower level value
-            if ($attribute === 'schemaOverrideTypeId' &&
-                $metadataModel->schemaTypeId != null &&
-                $metadataModel->{$attribute} == null
-            ) {
-                $prioritizedMetadataModel->{$attribute} = null;
+        if ($robots === null) {
+            return null;
+        }
+
+        if (is_string($robots)) {
+            return $robots;
+        }
+
+        $robotsMetaValue = '';
+
+        foreach ($robots as $key => $value) {
+            if ($value == '') {
+                continue;
             }
 
-            // Make sure all our strings are trimmed
-            if (is_string($prioritizedMetadataModel->{$attribute})) {
-                $prioritizedMetadataModel->{$attribute} = trim($prioritizedMetadataModel->{$attribute});
+            if ($robotsMetaValue == '') {
+                $robotsMetaValue .= $key;
+            } else {
+                $robotsMetaValue .= ','.$key;
             }
         }
 
-        return $prioritizedMetadataModel;
+        return !empty($robotsMetaValue) ? $robotsMetaValue : null;
+    }
+
+    /**
+     * Return an array of all robots settings set to their boolean value of on or off
+     *
+     * @param $robotsValues
+     *
+     * @return array
+     */
+    public function prepareRobotsMetadataForSettings($robotsValues): array
+    {
+        if (is_string($robotsValues)) {
+            $robotsArray = explode(',', $robotsValues);
+
+            $robotsSettings = [];
+
+            foreach ($robotsArray as $key => $value) {
+                $robotsSettings[$value] = 1;
+            }
+        } else {
+            // Value from content table
+            $robotsSettings = $robotsValues;
+        }
+
+        $robots = [
+            'noindex' => 0,
+            'nofollow' => 0,
+            'noarchive' => 0,
+            'noimageindex' => 0,
+            'noodp' => 0,
+            'noydir' => 0,
+        ];
+
+        foreach ($robots as $key => $value) {
+            if (isset($robotsSettings[$key]) && $robotsSettings[$key]) {
+                $robots[$key] = 1;
+            }
+        }
+
+        return $robots;
+    }
+
+    /**
+     * @param $image
+     *
+     * @return mixed
+     */
+    public function getImageId($image)
+    {
+        $imageId = $image;
+
+        if (is_array($image)) {
+            $imageId = $image[0];
+        }
+
+        return $imageId ?? null;
+    }
+
+    /**
+     * Return pre-defined transform settings or the selected transform handle
+     *
+     * @param $transformHandle
+     *
+     * @return mixed
+     */
+    public function getSelectedTransform($transformHandle)
+    {
+        $defaultTransforms = [
+            'sproutSeo-socialSquare' => [
+                'mode' => 'crop',
+                'width' => 400,
+                'height' => 400,
+                'quality' => 82,
+                'position' => 'center-center'
+            ],
+            'sproutSeo-ogRectangle' => [
+                'mode' => 'crop',
+                'width' => 1200,
+                'height' => 630,
+                'quality' => 82,
+                'position' => 'center-center'
+            ],
+            'sproutSeo-twitterRectangle' => [
+                'mode' => 'crop',
+                'width' => 1024,
+                'height' => 512,
+                'quality' => 82,
+                'position' => 'center-center'
+            ]
+        ];
+
+        return $defaultTransforms[$transformHandle] ?? ($transformHandle == '' ? null : $transformHandle);
     }
 }

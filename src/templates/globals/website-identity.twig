@@ -34,7 +34,7 @@
         {{ csrfInput() }}
         <input type="hidden" name="action"
             value="sprout-seo/global-metadata/save-global-metadata">
-        <input type="hidden" name="globalKeys" value="meta,identity">
+        <input type="hidden" name="globalColumn" value="identity">
 
         <input type="hidden" name="siteId" value="{{ globals.siteId }}">
 
@@ -253,8 +253,7 @@
                     }) }}
                 </div>
 
-                <div id="organization"
-                    class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
+                <div id="organization" class="organization-info {% if globals.getWebsiteIdentityType() == 'Person' %}hidden{% endif %}">
 
                     <div class="identitytype-dropdown organizationinfo-dropdown">
                         {{ forms.selectField({
@@ -385,7 +384,6 @@
                     value: websiteIdentity['priceRange'] is defined ? websiteIdentity.priceRange : null,
                     otherPlaceholderText: 'Custom Price Range'|t('sprout-seo')
                 })) }}
-
 
                 <hr>
 

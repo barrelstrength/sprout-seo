@@ -1,14 +1,15 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
 
 use barrelstrength\sproutseo\base\Schema;
-
+use Craft;
+use Exception;
 
 class WebsiteIdentityOrganizationSchema extends Schema
 {
@@ -49,7 +50,7 @@ class WebsiteIdentityOrganizationSchema extends Schema
      * Do we really need the @methodName syntax? or do we just write this in PHP?
      *
      * @return null|void
-     * @throws \Exception
+     * @throws Exception
      */
     public function addProperties()
     {
@@ -61,7 +62,7 @@ class WebsiteIdentityOrganizationSchema extends Schema
         $this->addText('name', $schema['name']);
         $this->addText('alternateName', $schema['alternateName']);
         $this->addText('description', $schema['description']);
-        $this->addUrl('url', $schema['url']);
+        $this->addUrl('url', Craft::$app->sites->getCurrentSite()->getBaseUrl());
         $this->addTelephone('telephone', $schema['telephone']);
         $this->addEmail('email', $schema['email']);
 

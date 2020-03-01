@@ -1,13 +1,12 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\web\twig\variables;
 
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
@@ -611,25 +610,6 @@ class SproutSeoVariable
     }
 
     /**
-     * Returns all plain fields available given a type
-     *
-     * @param $siteId
-     *
-     * @return array
-     * @throws SiteNotFoundException
-     * @throws Exception
-     */
-    public function getGlobalRobots($siteId): array
-    {
-        $currentSite = Craft::$app->sites->getSiteById($siteId);
-
-        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite);
-        $robots = OptimizeHelper::prepareRobotsMetadataValue($globals->robots);
-
-        return OptimizeHelper::prepareRobotsMetadataForSettings($robots);
-    }
-
-    /**
      * Returns registerSproutSeoSchemas hook
      *
      * @return array
@@ -642,12 +622,15 @@ class SproutSeoVariable
     /**
      * Returns global contacts
      *
+     * @param Site|null $currentSite
+     *
      * @return array
      * @throws Exception
+     * @throws SiteNotFoundException
      */
-    public function getContacts(): array
+    public function getContacts(Site $currentSite = null): array
     {
-        $contacts = SproutSeo::$app->globalMetadata->getGlobalMetadata()->contacts;
+        $contacts = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite)->contacts;
 
         $contacts = $contacts ?: [];
 
@@ -662,12 +645,15 @@ class SproutSeoVariable
     /**
      * Returns global social profiles
      *
+     * @param Site|null $currentSite
+     *
      * @return array
      * @throws Exception
+     * @throws SiteNotFoundException
      */
-    public function getSocialProfiles(): array
+    public function getSocialProfiles(Site $currentSite = null): array
     {
-        $socials = SproutSeo::$app->globalMetadata->getGlobalMetadata()->social;
+        $socials = SproutSeo::$app->globalMetadata->getGlobalMetadata($currentSite)->social;
 
         $socials = $socials ?: [];
 

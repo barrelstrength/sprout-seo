@@ -45,7 +45,8 @@ class SproutSeoWebsiteIdentitySettings {
 
     // Method to generate and append options
     let generateOptions = function(element, children) {
-      let options, name = '';
+      let options = '';
+      let name = '';
 
       $.each(children, function(index, value) {
         // insert space before capital letters

@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\migrations;
@@ -11,6 +11,9 @@ use barrelstrength\sproutseo\fields\ElementMetadata;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
+use craft\errors\ElementNotFoundException;
+use Throwable;
+use yii\base\Exception;
 
 /**
  * m180620_000001_element_metadata_field migration.
@@ -20,9 +23,9 @@ class m180620_000001_element_metadata_field extends Migration
     /**
      * @inheritdoc
      *
-     * @throws \Throwable
-     * @throws \craft\errors\ElementNotFoundException
-     * @throws \yii\base\Exception
+     * @throws Throwable
+     * @throws ElementNotFoundException
+     * @throws Exception
      */
     public function safeUp(): bool
     {

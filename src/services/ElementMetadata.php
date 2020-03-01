@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
@@ -10,48 +10,47 @@ namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutbaseuris\SproutBaseUris;
 use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
-use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\models\Metadata;
 use Craft;
 use craft\base\Element;
 use craft\base\Field;
 use craft\db\Query;
+use craft\errors\SiteNotFoundException;
 use craft\events\FieldLayoutEvent;
 use craft\models\FieldLayout;
+use Throwable;
 use yii\base\Component;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 class ElementMetadata extends Component
 {
     /**
      * Returns the metadata for an Element's Element Metadata as a Metadata model
      *
-     * @param Element|\craft\base\ElementInterface|null $element
+     * @param Element|null $element
      *
-     * @return Metadata|null
+     * @return array
+     * @throws Throwable
+     * @throws Exception
+     * @throws InvalidConfigException
      */
-    public function getElementMetadata(Element $element = null)
+    public function getRawMetadataFromElement(Element $element = null): array
     {
         if (!$element) {
-            return null;
+            return [];
         }
 
         $fieldHandle = $this->getElementMetadataFieldHandle($element);
 
-        if ($element->getFieldValue($fieldHandle)) {
-            $metadata = $element->getFieldValue($fieldHandle);
+        if (isset($element->{$fieldHandle})) {
+            /** @var Metadata $metadata */
+            $metadata = $element->{$fieldHandle};
 
-            // Support Live Preview (where image IDs still need to be converted from arrays)
-            if (isset($metadata['ogImage'])) {
-                $metadata['ogImage'] = OptimizeHelper::getImageId($metadata['ogImage']);
-            }
-            if (isset($metadata['twitterImage'])) {
-                $metadata['twitterImage'] = OptimizeHelper::getImageId($metadata['twitterImage']);
-            }
-
-            return new Metadata($metadata);
+            return $metadata->getRawData();
         }
 
-        return null;
+        return [];
     }
 
     /**
@@ -94,7 +93,7 @@ class ElementMetadata extends Component
      *
      * @param FieldLayoutEvent $event
      *
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function resaveElementsAfterFieldLayoutIsSaved(FieldLayoutEvent $event)
     {
@@ -124,7 +123,7 @@ class ElementMetadata extends Component
     /**
      * @param $fieldId
      *
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     public function resaveElementsIfUsingElementMetadataField($fieldId)
     {
@@ -180,7 +179,7 @@ class ElementMetadata extends Component
 
             $handles = $this->getFieldHandles($targetSetting['value']);
 
-            if (is_iterable($handles)) {
+            if (is_array($handles)) {
                 foreach ($handles as $handle) {
                     if (isset($seoFieldHandles[$handle])) {
                         continue;
@@ -288,7 +287,7 @@ class ElementMetadata extends Component
      * @param FieldLayout|null $fieldLayout
      *
      * @return bool
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      */
     protected function resaveElementsByUrlEnabledSection($elementType, $afterFieldLayout = false, FieldLayout $fieldLayout = null): bool
     {

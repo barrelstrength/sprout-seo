@@ -1,20 +1,22 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
-
 
 use barrelstrength\sproutseo\migrations\InsertDefaultGlobalsBySite;
 use barrelstrength\sproutseo\models\Globals;
 use Craft;
 use craft\base\Component;
 use craft\db\Query;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\Json;
 use craft\models\Site;
+use Throwable;
+use yii\db\Exception;
 
 /**
  * Class SproutSeo_GlobalMetadataService
@@ -31,18 +33,12 @@ class GlobalMetadata extends Component
      * @param Site|null $site
      *
      * @return Globals
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      * @throws \yii\base\Exception
      */
     public function getGlobalMetadata($site = null): Globals
     {
         $siteId = $site->id ?? null;
-
-        if ($siteId) {
-            $currentSite = Craft::$app->getSites()->getSiteById($siteId);
-        } else {
-            $currentSite = Craft::$app->getSites()->getCurrentSite();
-        }
 
         $query = (new Query())
             ->select('*')
@@ -57,7 +53,6 @@ class GlobalMetadata extends Component
 
         $results = $query->one();
 
-        $results['meta'] = isset($results['meta']) ? Json::decode($results['meta']) : null;
         $results['identity'] = isset($results['identity']) ? Json::decode($results['identity']) : null;
         $results['contacts'] = isset($results['contacts']) ? Json::decode($results['contacts']) : null;
         $results['ownership'] = isset($results['ownership']) ? Json::decode($results['ownership']) : null;
@@ -65,41 +60,24 @@ class GlobalMetadata extends Component
         $results['robots'] = isset($results['robots']) ? Json::decode($results['robots']) : null;
         $results['settings'] = isset($results['settings']) ? Json::decode($results['settings']) : null;
 
-        if (!isset($results['identity']['url'])) {
-            $results['identity']['url'] = $currentSite->baseUrl;
-        }
-
-        if (isset($results['settings']['ogTransform'])) {
-            $results['meta']['ogTransform'] = $results['settings']['ogTransform'];
-        }
-
-        if (isset($results['settings']['twitterTransform'])) {
-            $results['meta']['twitterTransform'] = $results['settings']['twitterTransform'];
-        }
-
         return new Globals($results);
     }
 
     /**
      * Save Global Metadata to database
      *
-     * @param array   $globalKeys
+     * @param string  $globalColumn
      * @param Globals $globals
      *
      * @return bool
-     * @throws \Throwable
-     * @throws \yii\db\Exception
+     * @throws Throwable
+     * @throws Exception
      */
-    public function saveGlobalMetadata($globalKeys, $globals): bool
+    public function saveGlobalMetadata($globalColumn, $globals): bool
     {
-        if (!is_array($globalKeys)) {
-            [$globalKeys];
-        }
-
-        foreach ($globalKeys as $globalKey) {
-            $values[$globalKey] = $globals->getGlobalByKey($globalKey, 'json');
-        }
+        $values[$globalColumn] = $globals->getGlobalByKey($globalColumn, 'json');
         $values['siteId'] = $globals->siteId;
+
         // new site?
         $results = (new Query())
             ->select('*')

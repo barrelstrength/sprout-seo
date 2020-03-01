@@ -1,8 +1,8 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\services;
@@ -235,7 +235,7 @@ class Schema extends Component
      * @param string $uniqueKey
      * @param null   $default
      *
-     * @return mixed|null
+     * @return BaseSchema|null
      */
     public function getSchemaByUniqueKey($uniqueKey, $default = null)
     {

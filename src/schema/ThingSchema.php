@@ -1,13 +1,16 @@
 <?php
 /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutseo\schema;
 
 use barrelstrength\sproutseo\base\Schema;
+use Throwable;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 class ThingSchema extends Schema
 {
@@ -36,8 +39,10 @@ class ThingSchema extends Schema
     }
 
     /**
-     * @return null|void
-     * @throws \Exception
+     * @return void|null
+     * @throws Throwable
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function addProperties()
     {
@@ -46,9 +51,9 @@ class ThingSchema extends Schema
             $this->addMainEntityOfPage();
         }
 
-        $this->addText('name', $metadata->optimizedTitle);
-        $this->addText('description', $metadata->optimizedDescription);
-        $this->addImage('image', $metadata->optimizedImage);
-        $this->addUrl('url', $metadata->canonical);
+        $this->addText('name', $metadata->getOptimizedTitle());
+        $this->addText('description', $metadata->getOptimizedDescription());
+        $this->addImage('image', $metadata->getOptimizedImage());
+        $this->addUrl('url', $metadata->getCanonical());
     }
 }
