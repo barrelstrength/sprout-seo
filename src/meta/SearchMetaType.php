@@ -100,6 +100,10 @@ class SearchMetaType extends MetaType
 
         $settings = SproutSeo::$app->optimize->globals->settings;
 
+        if ($settings === null) {
+            return null;
+        }
+
         $appendTitleValue = null;
         $globalAppendTitleValue = null;
         $appendTitleValueOnHomepage = $settings['appendTitleValueOnHomepage'];

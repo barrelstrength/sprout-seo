@@ -271,7 +271,8 @@ class OpenGraphMetaType extends MetaType
             return $this->ogPublisher;
         }
 
-        $facebookPage = $this->getFacebookPage(SproutSeo::$app->optimize->globals->social);
+        $socialSettings = SproutSeo::$app->optimize->globals->social;
+        $facebookPage = $this->getFacebookPage($socialSettings);
 
         return $facebookPage ?? null;
     }
@@ -611,7 +612,7 @@ class OpenGraphMetaType extends MetaType
      *
      * @return null|string
      */
-    public function getFacebookPage(array $socialProfiles = [])
+    public function getFacebookPage($socialProfiles = null)
     {
         if ($socialProfiles === null) {
             return null;
