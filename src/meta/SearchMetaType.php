@@ -112,14 +112,11 @@ class SearchMetaType extends MetaType
         if ($appendTitleValueOnHomepage || Craft::$app->request->getPathInfo()) {
             $globalAppendTitleValue = $settings['appendTitleValue'];
 
-            // @todo - migrate this to just use the {siteName} global that is supported below
-//            if ($globalAppendTitleValue === 'sitename') {
-//                $globalAppendTitleValue = Craft::$app->getSystemName();
-//            }
+            $currentSite = Craft::$app->getSites()->getCurrentSite();
 
             // Add support for using {divider} and {siteName} in the Sitemap 'Append Meta Title' setting
             $appendTitleValue = Craft::$app->view->renderObjectTemplate($globalAppendTitleValue, [
-                'siteName' => Craft::$app->getSystemName(),
+                'siteName' => $currentSite->name,
                 'divider' => $seoDivider
             ]);
 
