@@ -67,6 +67,7 @@ class Metadata extends Model
     {
         // Unset any deprecated properties
         // @todo - deprecate variables in 5.x
+        // Need to be removed by resaving all Elements with updated Metadata Model
         unset($config['enableMetaDetailsSearch'], $config['enableMetaDetailsOpenGraph'], $config['enableMetaDetailsTwitterCard'], $config['enableMetaDetailsGeo'], $config['enableMetaDetailsRobots'], $config['dateCreated'], $config['dateUpdated'], $config['uid'], $config['elementId']);
 
         // Remove any null or empty string values from the provided configuration

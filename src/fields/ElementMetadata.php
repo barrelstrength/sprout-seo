@@ -61,6 +61,16 @@ class ElementMetadata extends Field
 
     public $showRobots = false;
 
+    public function __construct($config = [])
+    {
+        // Make sure we don't try to assign removed properties
+        // @todo - deprecate variables in 5.x
+        // Already removed in migration: m200224_000001_update_element_metadata_field_settings
+        unset($config['metadata'], $config['values'], $config['showMainEntity']);
+
+        parent::__construct($config);
+    }
+
     /**
      * @return string
      */
