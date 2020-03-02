@@ -387,7 +387,11 @@ class OpenGraphMetaType extends MetaType
             return $this->ogImage;
         }
 
-        return $this->optimizedImage;
+        if ($this->optimizedImage) {
+            return $this->optimizedImage;
+        }
+
+        return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
     }
 
     /**

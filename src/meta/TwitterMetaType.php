@@ -246,7 +246,11 @@ class TwitterMetaType extends MetaType
             return $this->twitterImage;
         }
 
-        return $this->optimizedImage;
+        if ($this->optimizedImage) {
+            return $this->optimizedImage;
+        }
+
+        return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
     }
 
     /**
