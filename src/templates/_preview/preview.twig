@@ -1,0 +1,111 @@
+{% extends "_layouts/base" %}
+
+{% set title = "SEO Preview"|t('sprout-seo') %}
+{% import "_includes/forms" as forms -%}
+{% do view.registerAssetBundle('craft\\web\\assets\\cp\\CpAsset') -%}
+
+{% block body %}
+
+{#<html lang="{{ currentSite.language }}">#}
+{#<head>#}
+{#    <title>{{ "SEO Preview"|t('sprout-seo') }}</title>#}
+{#</head>#}
+{#<body>#}
+<div id="main" class="preview-visual-wrapper">
+
+    {{ forms.select({
+        name: '',
+        options: [
+            {
+                label: 'Waa',
+                value: 'waa'
+            },
+            {
+                label: 'Waa2',
+                value: 'waa2'
+            }
+        ],
+        value: '',
+        errors: ""
+    }) }}
+
+
+    {# Warn that this data may not reflect template overrides #}
+
+    {# Display them all as a dropdown that swaps out a primary preview item #}
+
+    {# Facebook Small Image #}
+    {# Facebook Large Image #}
+    {# Twitter Card #}
+    {# Twitter Card w/ Large Image #}
+    
+
+    <div class="preview-visual-box">
+    {% include 'sprout-seo/_preview/opengraph' with {
+        globals: metadata.globals,
+        meta: metadata.meta
+    } %}
+    </div>
+
+</div>
+
+<div class="preview-details-wrapper">
+    <table>
+        <tr>
+            <th colspan="2">
+                All Meta Attributes
+            </th>
+        </tr>
+        {% for metaType in metadata.meta %}
+            {% for key, value in metaType %}
+                <tr>
+                    <td><code>{{ key }}</code></td>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+</div>
+
+<style>
+    body {
+        margin: 0;
+    }
+    .preview-visual-wrapper {
+        background-color: #f5f6f7;
+        padding: 100px 40px;
+        text-align: center;
+    }
+    .preview-visual-box {
+        display: inline-block;
+    }
+
+    .preview-details-wrapper {
+        margin: 20px 20px 40px;
+    }
+
+    table {
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+        font-family: arial, sans-serif;
+        font-size: 14px;
+    }
+
+    table tr th {
+        background: #333;
+        color: #fff;
+        text-transform: uppercase;
+        text-align: left;
+        padding: 7px;
+    }
+
+    table td {
+        padding: 7px;
+        border-bottom: 1px solid #ccc;
+    }
+</style>
+{#</body>#}
+{#</html>#}
+
+{% endblock %}
+
