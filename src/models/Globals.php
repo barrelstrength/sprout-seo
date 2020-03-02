@@ -79,6 +79,16 @@ class Globals extends Model
      */
     public $addressModel;
 
+    public function __construct($config = [])
+    {
+        // Unset any deprecated properties
+        // @todo - deprecate variables in 5.x
+        // Craft's m190913_152146_update_preview_targets migration triggered error looking for this
+        unset($config['meta']);
+
+        parent::__construct($config);
+    }
+
     public function init()
     {
         if (isset($this->identity['address']) && $this->addressModel === null) {
