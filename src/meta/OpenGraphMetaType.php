@@ -614,7 +614,7 @@ class OpenGraphMetaType extends MetaType
                 $tagData['og:image:type']
                 ) = $this->prepareAssetMetaData($tagData['og:image'], $this->getOgTransform(), false);
 
-            $tagData['og:image:secure'] = $tagData['og:image'];
+            $tagData['og:image:secure_url'] = $tagData['og:image'];
         }
 
         return array_filter($tagData);
