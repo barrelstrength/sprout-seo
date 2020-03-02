@@ -223,7 +223,13 @@ class Metadata extends Model
      */
     public function getOptimizedImage()
     {
-        return $this->normalizeImageValue($this->optimizedImage);
+        $optimizedImageId = $this->normalizeImageValue($this->optimizedImage);
+
+        if ($optimizedImageId) {
+            return $optimizedImageId;
+        }
+
+        return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
     }
 
     /**
