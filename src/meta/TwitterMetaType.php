@@ -240,28 +240,34 @@ class TwitterMetaType extends MetaType
         $this->twitterDescription = $value;
     }
 
+    /**
+     * @return mixed|string|null
+     * @throws Exception
+     * @throws Throwable
+     */
     public function getTwitterImage()
     {
         if ($this->twitterImage || $this->rawDataOnly) {
-            return $this->twitterImage;
+            return $this->normalizeImageValue($this->twitterImage);
         }
 
         if ($this->optimizedImage) {
-            return $this->optimizedImage;
+            return $this->normalizeImageValue($this->optimizedImage);
         }
 
-        return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
+        $globalImage = SproutSeo::$app->optimize->globals->identity['image'] ?? null;
+
+        return $this->normalizeImageValue($globalImage);
     }
 
     /**
      * @param $value
      *
      * @throws Throwable
-     * @throws Exception
      */
     public function setTwitterImage($value)
     {
-        $this->twitterImage = $this->normalizeImageValue($value);
+        $this->twitterImage = $value;
     }
 
     /**

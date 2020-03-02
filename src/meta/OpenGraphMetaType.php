@@ -379,30 +379,33 @@ class OpenGraphMetaType extends MetaType
     }
 
     /**
-     * @return string|null
+     * @return mixed|string|null
+     * @throws Exception
+     * @throws Throwable
      */
     public function getOgImage()
     {
         if ($this->ogImage || $this->rawDataOnly) {
-            return $this->ogImage;
+            return $this->normalizeImageValue($this->ogImage);
         }
 
         if ($this->optimizedImage) {
-            return $this->optimizedImage;
+            return $this->normalizeImageValue($this->optimizedImage);
         }
 
-        return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
+        $globalImage = SproutSeo::$app->optimize->globals->identity['image'] ?? null;
+
+        return $this->normalizeImageValue($globalImage);
     }
 
     /**
      * @param $value
      *
      * @throws Throwable
-     * @throws Exception
      */
     public function setOgImage($value)
     {
-        $this->ogImage = $this->normalizeImageValue($value);
+        $this->ogImage = $value;
     }
 
     /**
