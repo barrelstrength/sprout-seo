@@ -394,10 +394,10 @@ class Metadata extends Model
     {
         $metaTypes = [
             new SearchMetaType(),
+            new RobotsMetaType(),
             new OpenGraphMetaType(),
             new TwitterMetaType(),
-            new GeoMetaType(),
-            new RobotsMetaType()
+            new GeoMetaType()
         ];
 
         foreach ($metaTypes as $metaType) {
