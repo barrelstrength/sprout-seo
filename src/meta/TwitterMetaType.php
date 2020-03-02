@@ -265,7 +265,11 @@ class TwitterMetaType extends MetaType
      */
     public function setTwitterImage($value)
     {
-        $this->twitterImage = $value;
+        if (is_array($value)) {
+            $this->twitterImage = $value[0] ?? null;
+        } else {
+            $this->twitterImage = $value;
+        }
     }
 
     /**

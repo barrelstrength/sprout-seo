@@ -403,7 +403,11 @@ class OpenGraphMetaType extends MetaType
      */
     public function setOgImage($value)
     {
-        $this->ogImage = $value;
+        if (is_array($value)) {
+            $this->ogImage = $value[0] ?? null;
+        } else {
+            $this->ogImage = $value;
+        }
     }
 
     /**
