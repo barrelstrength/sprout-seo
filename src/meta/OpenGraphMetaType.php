@@ -612,7 +612,7 @@ class OpenGraphMetaType extends MetaType
                 $tagData['og:image:width'],
                 $tagData['og:image:height'],
                 $tagData['og:image:type']
-                ) = $this->prepareAssetMetaData($tagData['og:image'], $this->ogTransform, false);
+                ) = $this->prepareAssetMetaData($tagData['og:image'], $this->getOgTransform(), false);
 
             $tagData['og:image:secure'] = $tagData['og:image'];
         }

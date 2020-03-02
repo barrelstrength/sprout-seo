@@ -330,7 +330,7 @@ class TwitterMetaType extends MetaType
         $tagData = parent::getMetaTagData();
 
         if (isset($tagData['twitter:image'])) {
-            $tagData['twitter:image'] = $this->prepareAssetMetaData($tagData['twitter:image'], $this->twitterTransform);
+            $tagData['twitter:image'] = $this->prepareAssetMetaData($tagData['twitter:image'], $this->getTwitterTransform());
         }
 
         return $tagData;
