@@ -248,7 +248,7 @@ class TwitterMetaType extends MetaType
     public function getTwitterImage()
     {
         if ($this->twitterImage || $this->rawDataOnly) {
-            return $this->normalizeImageValue($this->twitterImage);
+            return $this->twitterImage;
         }
 
         if ($this->optimizedImage) {

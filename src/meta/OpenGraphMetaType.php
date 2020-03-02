@@ -386,7 +386,7 @@ class OpenGraphMetaType extends MetaType
     public function getOgImage()
     {
         if ($this->ogImage || $this->rawDataOnly) {
-            return $this->normalizeImageValue($this->ogImage);
+            return $this->ogImage;
         }
 
         if ($this->optimizedImage) {
