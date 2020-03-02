@@ -75,7 +75,11 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        return trim($this->optimizedTitle.$appendTitleString) ?: null;
+        if ($this->optimizedTitle) {
+            return trim($this->optimizedTitle.$appendTitleString) ?: null;
+        }
+
+        return trim(SproutSeo::$app->optimize->globals->identity['name']);
     }
 
     /**
@@ -146,7 +150,13 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        if ($this->optimizedDescription) {
+            return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        }
+
+        $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
+
+        return mb_substr($globalDescription, 0, $descriptionLength) ?: null;
     }
 
     public function setDescription($value)
@@ -162,7 +172,11 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        return $this->optimizedKeywords;
+        if ($this->optimizedKeywords) {
+            return $this->optimizedKeywords;
+        }
+
+        return SproutSeo::$app->optimize->globals->identity['keywords'] ?? null;
     }
 
     public function setKeywords($value)

@@ -207,7 +207,7 @@ class OpenGraphMetaType extends MetaType
             return $this->ogType;
         }
 
-        return SproutSeo::$app->optimize->globals->settings['defaultOgType'] ?? 'article';
+        return SproutSeo::$app->optimize->globals->settings['defaultOgType'] ?? 'website';
     }
 
     /**
@@ -312,10 +312,14 @@ class OpenGraphMetaType extends MetaType
     public function getOgTitle()
     {
         if ($this->ogTitle || $this->rawDataOnly) {
-            return $this->ogTitle;
+            return trim($this->ogTitle);
         }
 
-        return $this->optimizedTitle;
+        if ($this->optimizedTitle) {
+            return trim($this->optimizedTitle) ?: null;
+        }
+
+        return trim(SproutSeo::$app->optimize->globals->identity['name']);
     }
 
     /**
@@ -337,7 +341,13 @@ class OpenGraphMetaType extends MetaType
             return mb_substr($this->ogDescription, 0, $descriptionLength) ?: null;
         }
 
-        return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        if ($this->optimizedDescription) {
+            return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        }
+
+        $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
+
+        return mb_substr($globalDescription, 0, $descriptionLength) ?: null;
     }
 
     /**
