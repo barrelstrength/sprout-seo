@@ -42,7 +42,7 @@ class RobotsMetaType extends MetaType
 
     public function getRobots()
     {
-        if ($this->robots || $this->rawDataOnly) {
+        if ($this->robots || $this->getRawDataOnly()) {
             return $this->robots;
         }
 

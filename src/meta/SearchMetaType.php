@@ -70,7 +70,7 @@ class SearchMetaType extends MetaType
         }
 
         // In the CP we only save the raw data
-        if ($this->title || $this->rawDataOnly) {
+        if ($this->title || $this->getRawDataOnly()) {
             return trim($this->title.$appendTitleString) ?: null;
         }
 
@@ -98,7 +98,7 @@ class SearchMetaType extends MetaType
      */
     public function getAppendTitleValue()
     {
-        if ($this->appendTitleValue || $this->rawDataOnly) {
+        if ($this->appendTitleValue || $this->getRawDataOnly()) {
             return $this->appendTitleValue;
         }
 
@@ -145,7 +145,7 @@ class SearchMetaType extends MetaType
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
         // In the CP we only save the raw data
-        if ($this->description || $this->rawDataOnly) {
+        if ($this->description || $this->getRawDataOnly()) {
             return mb_substr($this->description, 0, $descriptionLength) ?: null;
         }
 
@@ -167,7 +167,7 @@ class SearchMetaType extends MetaType
     public function getKeywords()
     {
         // In the CP we only save the raw data
-        if ($this->keywords || $this->rawDataOnly) {
+        if ($this->keywords || $this->getRawDataOnly()) {
             return $this->keywords;
         }
 
