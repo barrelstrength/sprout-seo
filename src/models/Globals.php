@@ -147,6 +147,10 @@ class Globals extends Model
      */
     protected function getIdentity(): array
     {
+        if (isset($this->identity['image']) && is_array($this->identity['image'])) {
+            $this->identity['image'] = $this->identity['image'][0] ?? null;
+        }
+
         return $this->identity;
     }
 
