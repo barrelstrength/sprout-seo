@@ -255,9 +255,7 @@ class TwitterMetaType extends MetaType
             return $this->normalizeImageValue($this->optimizedImage);
         }
 
-        $globalImage = SproutSeo::$app->optimize->globals->identity['image'] ?? null;
-
-        return $this->normalizeImageValue($globalImage);
+        return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
     }
 
     /**
