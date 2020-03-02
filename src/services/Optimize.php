@@ -102,29 +102,19 @@ class Optimize extends Component
     public function getMetadataViaContext(&$context)
     {
         $site = Craft::$app->getSites()->getCurrentSite();
-        $this->setMatchedElement($site->id);
-
-        return $this->getMetadata($site, true, $context);
-    }
-
-    /**
-     * Set the element that matches the $uri
-     *
-     * @param int|null $siteId
-     *
-     * @throws InvalidConfigException
-     */
-    public function setMatchedElement(int $siteId = null)
-    {
-        $this->element = null;
         $path = Craft::$app->getRequest()->getPathInfo();
 
-        /** @var Element $element */
-        $element = Craft::$app->elements->getElementByUri($path, $siteId, true);
+        // Start fresh
+        $this->element = null;
 
-        if ($element && ($element->uri !== null)) {
+        /** @var Element $element */
+        $element = Craft::$app->elements->getElementByUri($path, $site->id, true);
+
+        if ($element) {
             $this->element = $element;
         }
+
+        return $this->getMetadata($site, true, $context);
     }
 
     /**
