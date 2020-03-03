@@ -153,9 +153,9 @@ class Globals extends Model
     /**
      * Get the values associated with the Identity column in the database
      *
-     * @return array
+     * @return array|null
      */
-    protected function getIdentity(): array
+    protected function getIdentity()
     {
         if (isset($this->identity['image']) && is_array($this->identity['image'])) {
             $this->identity['image'] = $this->identity['image'][0] ?? null;
@@ -167,9 +167,9 @@ class Globals extends Model
     /**
      * Get the values associated with the Contacts column in the database
      *
-     * @return array
+     * @return array|null
      */
-    protected function getContacts(): array
+    protected function getContacts()
     {
         $contacts = $this->contacts;
         $contactPoints = [];
@@ -190,9 +190,9 @@ class Globals extends Model
     /**
      * Get the values associated with the Social column in the database
      *
-     * @return array
+     * @return array|null
      */
-    protected function getSocial(): array
+    protected function getSocial()
     {
         $profiles = $this->social;
 
@@ -213,9 +213,9 @@ class Globals extends Model
     /**
      * Get the values associated with the Ownership column in the database
      *
-     * @return array
+     * @return array|null
      */
-    protected function getOwnership(): array
+    protected function getOwnership()
     {
         return $this->ownership;
     }
@@ -237,9 +237,9 @@ class Globals extends Model
     /**
      * Get the values associated with the Settings column in the database
      *
-     * @return array
+     * @return array|null
      */
-    protected function getSettings(): array
+    protected function getSettings()
     {
         return $this->settings;
     }
