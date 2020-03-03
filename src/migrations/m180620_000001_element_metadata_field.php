@@ -9,6 +9,7 @@ namespace barrelstrength\sproutseo\migrations;
 
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use Craft;
+use craft\base\Element;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\errors\ElementNotFoundException;
@@ -72,13 +73,24 @@ class m180620_000001_element_metadata_field extends Migration
 
             foreach ($metadataElements as $metadataElement) {
                 $siteId = $siteIdsByLocale[$metadataElement['locale']] ?? $primarySiteId;
+                /** @var Element $element */
                 $element = Craft::$app->getElements()->getElementById($metadataElement['elementId'], null, $siteId);
+
                 if ($element) {
+                    $contentTable = $element->getContentTable();
+                    $columnPrefix = $element->getFieldColumnPrefix();
+                    $fieldName = $columnPrefix.$fieldHandle;
+
                     $metadataAsJson = $this->getMetadataAsJson($metadataElement);
 
                     if (isset($element->{$fieldHandle})) {
-                        $element->{$fieldHandle} = $metadataAsJson;
-                        Craft::$app->getElements()->saveElement($element);
+                        $this->update($contentTable, [
+                            $fieldName => $metadataAsJson
+                        ], [
+                            'and',
+                            ['elementId' => $element->id],
+                            ['siteId' => $element->siteId],
+                        ], [], false);
                     }
                 }
             }
