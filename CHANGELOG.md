@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.4.1.1 - 2020-03-03
+
+### Fixed
+- Fixed bug where Globals image migration could fail if no image was present ([#193])
+- Improved performance of Craft 2 to Craft 3 Element Metadata migration
+
+[#193]: https://github.com/barrelstrength/craft-sprout-seo/issues/193
+
 ## 4.4.1 - 2020-03-03
 
 > {warning} Custom Schema integrations will require additional updates in how they access and retrieve metadata. See [Updating to Sprout SEO v4.4.0](https://sprout.barrelstrengthdesign.com/docs/seo/installing-and-updating-craft-3.html#upgrading-to-sprout-seo-4-4) for details.
