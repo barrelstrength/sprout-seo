@@ -59,9 +59,9 @@ class SproutSeoVariable
      * @return string
      * @throws Exception
      */
-    public function getDivider(): string
+    public function getDivider($site = null): string
     {
-        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata();
+        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
         $divider = '';
 
         if (isset($globals['settings']['seoDivider'])) {
@@ -80,12 +80,15 @@ class SproutSeoVariable
     }
 
     /**
+     * @param Site|null $site
+     *
      * @return Globals
      * @throws Exception
+     * @throws SiteNotFoundException
      */
-    public function getGlobalMetadata(): Globals
+    public function getGlobalMetadata(Site $site = null): Globals
     {
-        return SproutSeo::$app->globalMetadata->getGlobalMetadata();
+        return SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
     }
 
     /**
