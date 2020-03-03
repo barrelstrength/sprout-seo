@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.4.0 - 2020-03-03
+## 4.4.1 - 2020-03-03
 
 > {warning} Custom Schema integrations will require additional updates in how they access and retrieve metadata. See [Updating to Sprout SEO v4.4.0](https://sprout.barrelstrengthdesign.com/docs/seo/installing-and-updating-craft-3.html#upgrading-to-sprout-seo-4-4) for details.
 
