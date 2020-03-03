@@ -47,7 +47,9 @@ class ElementMetadata extends Component
             /** @var Metadata $metadata */
             $metadata = $element->{$fieldHandle};
 
-            return $metadata->getRawData();
+            if ($metadata) {
+                return $metadata->getRawData();
+            }
         }
 
         return [];
