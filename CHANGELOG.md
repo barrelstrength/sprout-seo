@@ -1,9 +1,13 @@
 # Changelog
 
-## UNRELEASED
+## 4.4.0 - 2020-03-03
+
+> {warning} Custom Schema integrations will require additional updates in how they access and retrieve metadata. See [Updating to Sprout SEO v4.4.0](https://sprout.barrelstrengthdesign.com/docs/seo/installing-and-updating-craft-3.html#upgrading-to-sprout-seo-4-4) for details.
 
 ### Added
-- Added Meta Types to handle setting and getting all meta attributes 
+- Added Meta Types to handle setting and getting all meta attributes
+- Added multi-site support for `craft.sproutSeo.getGlobalMetadata()` ([#184])
+- Added multi-site support for `craft.sproutSeo.getSocialProfiles()` ([#184])
 - Added `barrelstrength\sproutseo\base\MetaType`
 - Added `barrelstrength\sproutseo\base\OptimizedTrait`
 - Added `barrelstrength\sproutseo\base\MetaImageTrait`
@@ -19,31 +23,34 @@
 - Added `barrelstrength\sproutseo\models\Metadata::getMetaTypes()`
 - Added `barrelstrength\sproutseo\models\Metadata::setMetaTypes()`
 - Added `barrelstrength\sproutseo\models\Metadata::getRawData()`
-- Added multi-site support for `craft.sproutSeo.getGlobalMetadata()`
-- Added multi-site support for `craft.sproutSeo.getSocialProfiles()`
 
 ### Changed
-- Updated Element Metadata field to always normalize data and return a Metadata model
-- Updated Metadata model to delegate responsibility of specific Metadata Types to Meta Type subclasses
-- Updated Meta Details field to use Metadata model and Meta Type classes to handle assignment and retrieval of metadata properties as well as several settings
+- Updated Element Metadata field to always normalize data and return a Metadata model ([#192])
+- Updated Metadata model to delegate responsibility of specific Metadata Types to Meta Type subclasses ([#192])
+- Updated Meta Details field to use Metadata model and Meta Type classes to handle assignment and retrieval of metadata properties as well as several settings ([#192])
 - Updated logical flow of `barrelstrength\sproutseo\services\Optimize::getPrioritizedMetadataModel()`
-- Updated Globals to save data directly without additionally processing `sproutseo_globals.meta` column
+- Updated Template Overrides to now support `optimizedTitle`, `optimizedDescription`, and `optimizedImage` config settings ([#92])
+- Updated Globals to save data directly without additionally processing `sproutseo_globals.meta` column ([#93])
+- Moved `barrelstrength\sproutseo\models\Metadata::getMetaTagName()` to specific Meta Type classes
 - Moved logic for Meta Image Relation fields into templates  
 - Renamed `barrelstrength\sproutseo\services\Optimize::$elementMetadata` => `barrelstrength\sproutseo\services\Optimize::$elementMetadataField`
 - Updated method signature of `barrelstrength\sproutseo\services\Optimize::getMetadata()`
+- Updated `appendTitleValue` behavior to no longer parse the token `sitename` ([#180])
 - Updated landing page styles to support Craft 3.4
 - Improved support for translations in templates
+- Updated `barrelstrength/sprout-base-fields` to require v1.3.3
 - Updated `barrelstrength/sprout-base` to require v5.1.2
-- Moved `barrelstrength\sproutseo\models\Metadata::getMetaTagName()` to specific Meta Type classes
 
 ### Fixed
-- Improve compatibility with PHP 7.0 ([#191]) 
+- Improved compatibility with PHP 7.0 ([#189], [#191]) 
+- Improved managing Global and Element metadata for multi-site ([#193])
 
 ### Removed
 - Removed database column `sproutseo_globals.meta`, this value is now calculated from raw settings
 - Removed `barrelstrength\sproutseo\controllers\GlobalMetadata::populateGlobalMetadata()`
 - Removed `barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable\getGlobalRobots()`
 - Removed `barrelstrength\sproutseo\services\Optimize::$matchedElement` in favor of `barrelstrength\sproutseo\services\Optimize::$element`
+- Removed `barrelstrength\sproutseo\services\Optimize::getUri()`
 - Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareCanonical()`
 - Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareGeoPosition()`
 - Removed `barrelstrength\sproutseo\helpers\OptimizeHelper::prepareRobotsMetaValue()`
@@ -65,7 +72,14 @@
 - Removed `barrelstrength\sproutseo\fields\ElementMetadata::prepareExistingValuesForPage()`
 - Removed `barrelstrength\sproutseo\services\ElementMetadata::getElementMetadata()`
 
+[#92]: https://github.com/barrelstrength/craft-sprout-seo/issues/92
+[#93]: https://github.com/barrelstrength/craft-sprout-seo/issues/93
+[#180]: https://github.com/barrelstrength/craft-sprout-seo/issues/180
+[#184]: https://github.com/barrelstrength/craft-sprout-seo/issues/184
+[#189]: https://github.com/barrelstrength/craft-sprout-seo/issues/189
 [#191]: https://github.com/barrelstrength/craft-sprout-seo/issues/191
+[#192]: https://github.com/barrelstrength/craft-sprout-seo/issues/192
+[#193]: https://github.com/barrelstrength/craft-sprout-seo/issues/193
 
 ## 4.3.3 - 2020-02-10
 
