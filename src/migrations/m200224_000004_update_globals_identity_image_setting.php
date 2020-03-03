@@ -39,6 +39,10 @@ class m200224_000004_update_globals_identity_image_setting extends Migration
                 }
             }
 
+            if ($newImageValue === null) {
+                return true;
+            }
+
             $this->update($globalsTable, [
                 'identity' => $newIdentity
             ], [
