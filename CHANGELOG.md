@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.4.1.2 - 2020-03-03
+
+###
+- Fixed bug where Metadata model could not exist on new entries
+- Fixed bug where `getRawData` could be called on Metadata model if it did not exists
+
 ## 4.4.1.1 - 2020-03-03
 
 ### Fixed
