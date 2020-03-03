@@ -23,10 +23,8 @@
 {% endfor %}
 
 {% if websiteIdentity.image is defined and websiteIdentity.image %}
-    {% for id in websiteIdentity.image %}
-        {% set image = craft.sproutSeo.getElementById(id) %}
-        {% set imageElement = image %}
-    {% endfor %}
+    {% set image = craft.sproutSeo.getElementById(websiteIdentity.image) %}
+    {% set imageElement = image %}
 {% endif %}
 
 {% block content %}

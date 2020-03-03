@@ -31,27 +31,34 @@ trait MetaImageTrait
 
         $optimizedImageFieldSetting = $elementMetadataField->optimizedImageField ?? 'manually';
 
+        $imageId = null;
+
         switch (true) {
+            case (is_numeric($image)):
+                // Image ID is already available and ready
+                $imageId = $image;
+                break;
+
             // Manual Image
             case ($optimizedImageFieldSetting === 'manually'):
                 // ElementMetadata Field post data: If we have an array grab the first item, if not, just leave the $image value as is
                 if (is_array($image)) {
-                    $image = $image[0] ?? null;
+                    $imageId = $image[0] ?? null;
                 }
                 break;
 
             // Custom Image Field
             case (is_numeric($optimizedImageFieldSetting)):
-                $image = $this->getSelectedFieldForOptimizedMetadata($elementMetadataField->id);
+                $imageId = $this->getSelectedFieldForOptimizedMetadata($elementMetadataField->id);
                 break;
 
             // Custom Value
             default:
-                $image = Craft::$app->view->renderObjectTemplate($optimizedImageFieldSetting, $element);
+                $imageId = Craft::$app->view->renderObjectTemplate($optimizedImageFieldSetting, $element);
                 break;
         }
 
-        return $image;
+        return $imageId;
     }
 
     /**

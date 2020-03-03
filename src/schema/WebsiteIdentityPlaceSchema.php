@@ -51,8 +51,8 @@ class WebsiteIdentityPlaceSchema extends Schema
         $this->addText('description', $schema['description']);
         $this->addUrl('url', Craft::$app->sites->getCurrentSite()->getBaseUrl());
 
-        if (isset($schema['image'][0])) {
-            $this->addImage('image', $schema['image'][0]);
+        if (isset($schema['image'])) {
+            $this->addImage('image', $schema['image']);
         }
 
         $this->addTelephone('telephone', $schema['telephone']);

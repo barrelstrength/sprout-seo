@@ -390,7 +390,7 @@ abstract class Schema
 
         $image = [];
 
-        if (UrlHelper::isFullUrl($imageId)) {
+        if (is_string($imageId) && UrlHelper::isFullUrl($imageId)) {
             $meta = $this->prioritizedMetadataModel;
 
             $image = [
@@ -404,21 +404,22 @@ abstract class Schema
                 $image['height'] = $openGraphMeta->getOgImageHeight();
             }
         } else if (is_numeric($imageId)) {
-
             $imageAsset = Craft::$app->assets->getAssetById($imageId);
 
-            if ($imageAsset !== null && $imageAsset->getUrl()) {
-
-                $transform = $this->globals->settings['ogTransform'];
-
-                $image = [
-                    'url' => OptimizeHelper::getAssetUrl($imageAsset->id, $transform),
-                    'width' => $imageAsset->getWidth(),
-                    'height' => $imageAsset->getHeight()
-                ];
-            } else {
+            if ($imageAsset === null || !$imageAsset->getUrl()) {
                 return null;
             }
+
+            $transformSetting = $this->globals->settings['ogTransform'];
+            $transform = SproutSeo::$app->optimize->getSelectedTransform($transformSetting);
+
+            $image = [
+                'url' => OptimizeHelper::getAssetUrl($imageAsset->id, $transformSetting),
+                'width' => $imageAsset->getWidth($transform),
+                'height' => $imageAsset->getHeight($transform)
+            ];
+        } else {
+            return null;
         }
 
         if (count($image)) {

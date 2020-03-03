@@ -63,7 +63,7 @@ class SproutSeoWebsiteIdentity {
     // Selection handler for second level dropdown
     secondDropDown.on('change', function() {
 
-      firstSelection = $('#first').val();
+      firstSelection = $('#main-entity-first-dropdown').val();
       secondSelection = secondDropDown.val();
 
       // Clear all dropdowns down to the hierarchy
@@ -134,7 +134,7 @@ class SproutSeoWebsiteIdentity {
         $(".organization-info").removeClass('hidden');
         $(".person-info").addClass('hidden');
 
-        if ($("#first").val() === 'LocalBusiness') {
+        if ($("#main-entity-first-dropdown").val() === 'LocalBusiness') {
           $("#localbusiness").removeClass('hidden');
         }
       } else {
@@ -143,7 +143,7 @@ class SproutSeoWebsiteIdentity {
       }
     });
 
-    $("#first").change(function() {
+    $("#main-entity-first-dropdown").change(function() {
       if (this.value === 'LocalBusiness') {
         $("#localbusiness").removeClass('hidden');
       } else {

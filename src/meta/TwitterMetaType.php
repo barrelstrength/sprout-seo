@@ -112,7 +112,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterCard()
     {
-        if ($this->twitterCard || $this->rawDataOnly) {
+        if ($this->twitterCard || $this->getRawDataOnly()) {
             return $this->twitterCard;
         }
 
@@ -132,7 +132,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterSite()
     {
-        if ($this->twitterCreator || $this->rawDataOnly) {
+        if ($this->twitterCreator || $this->getRawDataOnly()) {
             return $this->twitterSite;
         }
 
@@ -152,7 +152,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterCreator()
     {
-        if ($this->twitterCreator || $this->rawDataOnly) {
+        if ($this->twitterCreator || $this->getRawDataOnly()) {
             return $this->twitterCreator;
         }
 
@@ -173,7 +173,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterUrl()
     {
-        if ($this->twitterUrl || $this->rawDataOnly) {
+        if ($this->twitterUrl || $this->getRawDataOnly()) {
             return $this->twitterUrl;
         }
 
@@ -193,11 +193,15 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterTitle()
     {
-        if ($this->twitterTitle || $this->rawDataOnly) {
+        if ($this->twitterTitle || $this->getRawDataOnly()) {
             return $this->twitterTitle;
         }
 
-        return $this->optimizedTitle;
+        if ($this->optimizedTitle) {
+            return trim($this->optimizedTitle) ?: null;
+        }
+
+        return trim(SproutSeo::$app->optimize->globals->identity['name']);
     }
 
     /**
@@ -215,11 +219,17 @@ class TwitterMetaType extends MetaType
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        if ($this->twitterDescription || $this->rawDataOnly) {
+        if ($this->twitterDescription || $this->getRawDataOnly()) {
             return mb_substr($this->twitterDescription, 0, $descriptionLength) ?: null;
         }
 
-        return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        if ($this->optimizedDescription) {
+            return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        }
+
+        $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
+
+        return mb_substr($globalDescription, 0, $descriptionLength) ?: null;
     }
 
     /**
@@ -230,24 +240,36 @@ class TwitterMetaType extends MetaType
         $this->twitterDescription = $value;
     }
 
+    /**
+     * @return mixed|string|null
+     * @throws Exception
+     * @throws Throwable
+     */
     public function getTwitterImage()
     {
-        if ($this->twitterImage || $this->rawDataOnly) {
+        if ($this->twitterImage || $this->getRawDataOnly()) {
             return $this->twitterImage;
         }
 
-        return $this->optimizedImage;
+        if ($this->optimizedImage) {
+            return $this->normalizeImageValue($this->optimizedImage);
+        }
+
+        return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
     }
 
     /**
      * @param $value
      *
      * @throws Throwable
-     * @throws Exception
      */
     public function setTwitterImage($value)
     {
-        $this->twitterImage = $this->normalizeImageValue($value);
+        if (is_array($value)) {
+            $this->twitterImage = $value[0] ?? null;
+        } else {
+            $this->twitterImage = $value;
+        }
     }
 
     /**
@@ -255,7 +277,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterTransform()
     {
-        if ($this->twitterTransform || $this->rawDataOnly) {
+        if ($this->twitterTransform || $this->getRawDataOnly()) {
             return $this->twitterTransform;
         }
 
@@ -312,7 +334,7 @@ class TwitterMetaType extends MetaType
         $tagData = parent::getMetaTagData();
 
         if (isset($tagData['twitter:image'])) {
-            $tagData['twitter:image'] = $this->prepareAssetMetaData($tagData['twitter:image'], $this->twitterTransform);
+            $tagData['twitter:image'] = $this->prepareAssetMetaData($tagData['twitter:image'], $this->getTwitterTransform());
         }
 
         return $tagData;

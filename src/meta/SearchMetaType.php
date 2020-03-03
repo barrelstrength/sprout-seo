@@ -70,12 +70,16 @@ class SearchMetaType extends MetaType
         }
 
         // In the CP we only save the raw data
-        if ($this->title || $this->rawDataOnly) {
+        if ($this->title || $this->getRawDataOnly()) {
             return trim($this->title.$appendTitleString) ?: null;
         }
 
         // On the front-end, fall back to optimized values
-        return trim($this->optimizedTitle.$appendTitleString) ?: null;
+        if ($this->optimizedTitle) {
+            return trim($this->optimizedTitle.$appendTitleString) ?: null;
+        }
+
+        return trim(SproutSeo::$app->optimize->globals->identity['name']);
     }
 
     /**
@@ -94,7 +98,7 @@ class SearchMetaType extends MetaType
      */
     public function getAppendTitleValue()
     {
-        if ($this->appendTitleValue || $this->rawDataOnly) {
+        if ($this->appendTitleValue || $this->getRawDataOnly()) {
             return $this->appendTitleValue;
         }
 
@@ -141,12 +145,18 @@ class SearchMetaType extends MetaType
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
         // In the CP we only save the raw data
-        if ($this->description || $this->rawDataOnly) {
+        if ($this->description || $this->getRawDataOnly()) {
             return mb_substr($this->description, 0, $descriptionLength) ?: null;
         }
 
         // On the front-end, fall back to optimized values
-        return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        if ($this->optimizedDescription) {
+            return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        }
+
+        $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
+
+        return mb_substr($globalDescription, 0, $descriptionLength) ?: null;
     }
 
     public function setDescription($value)
@@ -157,12 +167,16 @@ class SearchMetaType extends MetaType
     public function getKeywords()
     {
         // In the CP we only save the raw data
-        if ($this->keywords || $this->rawDataOnly) {
+        if ($this->keywords || $this->getRawDataOnly()) {
             return $this->keywords;
         }
 
         // On the front-end, fall back to optimized values
-        return $this->optimizedKeywords;
+        if ($this->optimizedKeywords) {
+            return $this->optimizedKeywords;
+        }
+
+        return SproutSeo::$app->optimize->globals->identity['keywords'] ?? null;
     }
 
     public function setKeywords($value)

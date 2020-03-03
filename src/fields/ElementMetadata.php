@@ -61,6 +61,16 @@ class ElementMetadata extends Field
 
     public $showRobots = false;
 
+    public function __construct($config = [])
+    {
+        // Make sure we don't try to assign removed properties
+        // @todo - deprecate variables in 5.x
+        // Already removed in migration: m200224_000001_update_element_metadata_field_settings
+        unset($config['metadata'], $config['values'], $config['showMainEntity']);
+
+        parent::__construct($config);
+    }
+
     /**
      * @return string
      */
@@ -104,6 +114,10 @@ class ElementMetadata extends Field
     {
         $metadata = null;
         $metadataArray = null;
+
+        if ($value === null) {
+            return $value;
+        }
 
         // On page load and the resave element task the $value comes from the content table as json
         if (is_string($value)) {
@@ -158,23 +172,25 @@ class ElementMetadata extends Field
         /** @var Element $element */
         $value = $element->getFieldValue($this->handle);
 
-        $metadataJson = null;
+        if ($value !== null) {
+            $metadataJson = null;
 
-        if ($value instanceof Metadata) {
-            $metadataJson = Json::encode($value->getRawData());
+            if ($value instanceof Metadata) {
+                $metadataJson = Json::encode($value->getRawData());
+            }
+
+            $contentTable = Craft::$app->getContent()->contentTable;
+            $fieldColumnPrefix = Craft::$app->getContent()->fieldColumnPrefix;
+            $fieldName = $fieldColumnPrefix.$this->handle;
+
+            Craft::$app->db->createCommand()->update($contentTable, [
+                $fieldName => $metadataJson
+            ], [
+                'and',
+                ['elementId' => $element->id],
+                ['siteId' => $element->siteId],
+            ], [], false)->execute();
         }
-
-        $contentTable = Craft::$app->getContent()->contentTable;
-        $fieldColumnPrefix = Craft::$app->getContent()->fieldColumnPrefix;
-        $fieldName = $fieldColumnPrefix.$this->handle;
-
-        Craft::$app->db->createCommand()->update($contentTable, [
-            $fieldName => $metadataJson
-        ], [
-            'and',
-            ['elementId' => $element->id],
-            ['siteId' => $element->siteId],
-        ], [], false)->execute();
 
         parent::afterElementSave($element, $isNew);
     }

@@ -58,8 +58,8 @@ class WebsiteIdentityWebsiteSchema extends Schema
         $this->addText('keywords', $schema['keywords']);
         $this->addUrl('url', Craft::$app->sites->getCurrentSite()->getBaseUrl());
 
-        if (isset($schema['image'][0])) {
-            $this->addImage('image', $schema['image'][0]);
+        if (isset($schema['image'])) {
+            $this->addImage('image', $schema['image']);
         }
 
         $identityType = $schema['@type'];

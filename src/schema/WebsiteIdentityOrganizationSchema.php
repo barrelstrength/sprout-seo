@@ -66,8 +66,8 @@ class WebsiteIdentityOrganizationSchema extends Schema
         $this->addTelephone('telephone', $schema['telephone']);
         $this->addEmail('email', $schema['email']);
 
-        if (isset($schema['image'][0])) {
-            $this->addImage('image', $schema['image'][0]);
+        if (isset($schema['image'])) {
+            $this->addImage('image', $schema['image']);
         }
 
         // Add Corporate Contacts

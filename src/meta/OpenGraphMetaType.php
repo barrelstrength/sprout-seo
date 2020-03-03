@@ -203,11 +203,11 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgType()
     {
-        if ($this->ogType || $this->rawDataOnly) {
+        if ($this->ogType || $this->getRawDataOnly()) {
             return $this->ogType;
         }
 
-        return SproutSeo::$app->optimize->globals->settings['defaultOgType'] ?? 'article';
+        return SproutSeo::$app->optimize->globals->settings['defaultOgType'] ?? 'website';
     }
 
     /**
@@ -223,7 +223,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgSiteName()
     {
-        if ($this->ogSiteName || $this->rawDataOnly) {
+        if ($this->ogSiteName || $this->getRawDataOnly()) {
             return $this->ogSiteName;
         }
 
@@ -243,7 +243,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgAuthor()
     {
-        if ($this->ogType !== 'article' || $this->rawDataOnly) {
+        if ($this->getOgType() !== 'article' || $this->getRawDataOnly()) {
             return null;
         }
 
@@ -263,7 +263,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgPublisher()
     {
-        if ($this->ogType !== 'article' || $this->rawDataOnly) {
+        if ($this->getOgType() !== 'article' || $this->getRawDataOnly()) {
             return null;
         }
 
@@ -291,7 +291,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgUrl()
     {
-        if ($this->ogUrl || $this->rawDataOnly) {
+        if ($this->ogUrl || $this->getRawDataOnly()) {
             return $this->ogUrl;
         }
 
@@ -312,10 +312,14 @@ class OpenGraphMetaType extends MetaType
     public function getOgTitle()
     {
         if ($this->ogTitle || $this->rawDataOnly) {
-            return $this->ogTitle;
+            return trim($this->ogTitle);
         }
 
-        return $this->optimizedTitle;
+        if ($this->optimizedTitle) {
+            return trim($this->optimizedTitle) ?: null;
+        }
+
+        return trim(SproutSeo::$app->optimize->globals->identity['name']);
     }
 
     /**
@@ -333,11 +337,17 @@ class OpenGraphMetaType extends MetaType
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        if ($this->ogDescription || $this->rawDataOnly) {
+        if ($this->ogDescription || $this->getRawDataOnly()) {
             return mb_substr($this->ogDescription, 0, $descriptionLength) ?: null;
         }
 
-        return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        if ($this->optimizedDescription) {
+            return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        }
+
+        $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
+
+        return mb_substr($globalDescription, 0, $descriptionLength) ?: null;
     }
 
     /**
@@ -353,7 +363,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImageSecure()
     {
-        if ($this->rawDataOnly) {
+        if ($this->getRawDataOnly()) {
             return null;
         }
 
@@ -369,26 +379,35 @@ class OpenGraphMetaType extends MetaType
     }
 
     /**
-     * @return string|null
+     * @return mixed|string|null
+     * @throws Exception
+     * @throws Throwable
      */
     public function getOgImage()
     {
-        if ($this->ogImage || $this->rawDataOnly) {
+        if ($this->ogImage || $this->getRawDataOnly()) {
             return $this->ogImage;
         }
 
-        return $this->optimizedImage;
+        if ($this->optimizedImage) {
+            return $this->normalizeImageValue($this->optimizedImage);
+        }
+
+        return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
     }
 
     /**
      * @param $value
      *
      * @throws Throwable
-     * @throws Exception
      */
     public function setOgImage($value)
     {
-        $this->ogImage = $this->normalizeImageValue($value);
+        if (is_array($value)) {
+            $this->ogImage = $value[0] ?? null;
+        } else {
+            $this->ogImage = $value;
+        }
     }
 
     /**
@@ -428,7 +447,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImageType()
     {
-        if ($this->ogImageType || $this->rawDataOnly) {
+        if ($this->ogImageType || $this->getRawDataOnly()) {
             return $this->ogImageType;
         }
 
@@ -448,7 +467,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgTransform()
     {
-        if ($this->ogTransform || $this->rawDataOnly) {
+        if ($this->ogTransform || $this->getRawDataOnly()) {
             return $this->ogTransform;
         }
 
@@ -469,7 +488,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgLocale()
     {
-        if ($this->ogLocale || $this->rawDataOnly) {
+        if ($this->ogLocale || $this->getRawDataOnly()) {
             return $this->ogLocale;
         }
 
@@ -491,7 +510,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgDateUpdated()
     {
-        if ($this->rawDataOnly) {
+        if ($this->getRawDataOnly()) {
             return null;
         }
 
@@ -521,7 +540,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgDateCreated()
     {
-        if ($this->rawDataOnly) {
+        if ($this->getRawDataOnly()) {
             return null;
         }
 
@@ -557,7 +576,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgExpiryDate()
     {
-        if ($this->rawDataOnly) {
+        if ($this->getRawDataOnly()) {
             return null;
         }
 
@@ -597,9 +616,9 @@ class OpenGraphMetaType extends MetaType
                 $tagData['og:image:width'],
                 $tagData['og:image:height'],
                 $tagData['og:image:type']
-                ) = $this->prepareAssetMetaData($tagData['og:image'], $this->ogTransform, false);
+                ) = $this->prepareAssetMetaData($tagData['og:image'], $this->getOgTransform(), false);
 
-            $tagData['og:image:secure'] = $tagData['og:image'];
+            $tagData['og:image:secure_url'] = $tagData['og:image'];
         }
 
         return array_filter($tagData);

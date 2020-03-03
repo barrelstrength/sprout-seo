@@ -57,8 +57,8 @@ class WebsiteIdentityPersonSchema extends Schema
             $this->addAddress('address');
         }
 
-        if (isset($schema['image'][0])) {
-            $this->addImage('image', $schema['image'][0]);
+        if (isset($schema['image'])) {
+            $this->addImage('image', $schema['image']);
         }
 
         $contacts = $this->globals['contacts'];
