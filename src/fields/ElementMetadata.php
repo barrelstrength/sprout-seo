@@ -245,12 +245,18 @@ class ElementMetadata extends Field
         Craft::$app->getView()->registerAssetBundle(SproutSeoAsset::class);
         Craft::$app->getView()->registerAssetBundle(TagEditorAsset::class);
 
+        // Make sure we have a metadata object for new entries
+        if ($value === null) {
+            $value = new Metadata();
+            $this->populateOptimizeServiceValues($element);
+        }
+
         return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/input', [
             'field' => $this,
             'name' => $name,
             'namespaceInputName' => $namespaceInputName,
             'namespaceInputId' => $namespaceInputId,
-            'metaTypes' => $value->metaTypes,
+            'metaTypes' => $value->getMetaTypes(),
             'values' => $value->getRawData(),
             'fieldId' => $fieldId,
             'settings' => $settings
