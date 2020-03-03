@@ -139,16 +139,7 @@ class ElementMetadata extends Field
             unset($metadataArray['sproutSeoSettings']);
         }
 
-        /** @var Element $element */
-        $site = isset($element)
-            ? Craft::$app->sites->getSiteById($element->siteId)
-            : Craft::$app->sites->getPrimarySite();
-
-        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-
-        SproutSeo::$app->optimize->globals = $globals;
-        SproutSeo::$app->optimize->element = $element;
-        SproutSeo::$app->optimize->elementMetadataField = $this;
+        $this->populateOptimizeServiceValues($element);
 
         return new Metadata($metadataArray ?? []);
     }
@@ -341,5 +332,25 @@ class ElementMetadata extends Field
         SproutSeo::$app->elementMetadata->resaveElementsIfUsingElementMetadataField($this->id);
 
         parent::afterSave($isNew);
+    }
+
+    /**
+     * @param ElementInterface $element
+     *
+     * @throws Exception
+     * @throws SiteNotFoundException
+     */
+    protected function populateOptimizeServiceValues(ElementInterface $element = null)
+    {
+        /** @var Element $element */
+        $site = isset($element)
+            ? Craft::$app->sites->getSiteById($element->siteId)
+            : Craft::$app->sites->getPrimarySite();
+
+        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
+
+        SproutSeo::$app->optimize->globals = $globals;
+        SproutSeo::$app->optimize->element = $element;
+        SproutSeo::$app->optimize->elementMetadataField = $this;
     }
 }
