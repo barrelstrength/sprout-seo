@@ -139,16 +139,7 @@ class ElementMetadata extends Field
             unset($metadataArray['sproutSeoSettings']);
         }
 
-        /** @var Element $element */
-        $site = isset($element)
-            ? Craft::$app->sites->getSiteById($element->siteId)
-            : Craft::$app->sites->getPrimarySite();
-
-        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-
-        SproutSeo::$app->optimize->globals = $globals;
-        SproutSeo::$app->optimize->element = $element;
-        SproutSeo::$app->optimize->elementMetadataField = $this;
+        $this->populateOptimizeServiceValues($element);
 
         return new Metadata($metadataArray ?? []);
     }
@@ -254,12 +245,18 @@ class ElementMetadata extends Field
         Craft::$app->getView()->registerAssetBundle(SproutSeoAsset::class);
         Craft::$app->getView()->registerAssetBundle(TagEditorAsset::class);
 
+        // Make sure we have a metadata object for new entries
+        if ($value === null) {
+            $value = new Metadata();
+            $this->populateOptimizeServiceValues($element);
+        }
+
         return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/input', [
             'field' => $this,
             'name' => $name,
             'namespaceInputName' => $namespaceInputName,
             'namespaceInputId' => $namespaceInputId,
-            'metaTypes' => $value->metaTypes,
+            'metaTypes' => $value->getMetaTypes(),
             'values' => $value->getRawData(),
             'fieldId' => $fieldId,
             'settings' => $settings
@@ -341,5 +338,25 @@ class ElementMetadata extends Field
         SproutSeo::$app->elementMetadata->resaveElementsIfUsingElementMetadataField($this->id);
 
         parent::afterSave($isNew);
+    }
+
+    /**
+     * @param ElementInterface $element
+     *
+     * @throws Exception
+     * @throws SiteNotFoundException
+     */
+    protected function populateOptimizeServiceValues(ElementInterface $element = null)
+    {
+        /** @var Element $element */
+        $site = isset($element)
+            ? Craft::$app->sites->getSiteById($element->siteId)
+            : Craft::$app->sites->getPrimarySite();
+
+        $globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
+
+        SproutSeo::$app->optimize->globals = $globals;
+        SproutSeo::$app->optimize->element = $element;
+        SproutSeo::$app->optimize->elementMetadataField = $this;
     }
 }
