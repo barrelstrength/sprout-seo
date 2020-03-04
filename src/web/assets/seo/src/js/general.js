@@ -25,6 +25,10 @@ class SproutSeoMetadataField {
     let metaDetailsBodyContainerId = 'fields-' + this.fieldHandle + '-meta-details-body';
     this.metaDetailsBodyContainers = document.querySelectorAll('#' + metaDetailsBodyContainerId + ' div.matrixblock');
 
+    if (this.metaDetailsBodyContainers.length < 1) {
+      return;
+    }
+
     for (let seoTab of this.metaDetailsTabs) {
       seoTab.addEventListener('click', function(event) {
         let $tab = $(event.target);

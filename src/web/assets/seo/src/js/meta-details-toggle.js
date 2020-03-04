@@ -19,18 +19,21 @@ class MetaDetailsToggle {
     let openGraphTypeInputClass = '#fields-' + this.fieldHandle + '-meta-details-body ' + this.selectFieldId;
 
     let openGraphTypeDropdown = document.querySelector(openGraphTypeInputClass);
-    let selectedDropdownOption = openGraphTypeDropdown.options[openGraphTypeDropdown.selectedIndex].value;
 
-    this.currentContainerId = this.getTargetContainerId(selectedDropdownOption);
-    this.currentContainer = document.getElementById(this.currentContainerId);
+    if (openGraphTypeDropdown !== null) {
+      let selectedDropdownOption = openGraphTypeDropdown.options[openGraphTypeDropdown.selectedIndex].value;
 
-    if (this.currentContainer) {
-      this.currentContainer.classList.remove('hidden');
+      this.currentContainerId = this.getTargetContainerId(selectedDropdownOption);
+      this.currentContainer = document.getElementById(this.currentContainerId);
+
+      if (this.currentContainer) {
+        this.currentContainer.classList.remove('hidden');
+      }
+
+      openGraphTypeDropdown.addEventListener('change', function(event) {
+        self.toggleOpenGraphFieldContainer(event, self);
+      });
     }
-
-    openGraphTypeDropdown.addEventListener('change', function(event) {
-      self.toggleOpenGraphFieldContainer(event, self);
-    });
   }
 
   toggleOpenGraphFieldContainer(event, self) {
