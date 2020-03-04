@@ -315,8 +315,8 @@ class OpenGraphMetaType extends MetaType
             return trim($this->ogTitle);
         }
 
-        if ($this->optimizedTitle) {
-            return trim($this->optimizedTitle) ?: null;
+        if ($this->getOptimizedTitle()) {
+            return trim($this->getOptimizedTitle()) ?: null;
         }
 
         return trim(SproutSeo::$app->optimize->globals->identity['name']);
@@ -341,8 +341,8 @@ class OpenGraphMetaType extends MetaType
             return mb_substr($this->ogDescription, 0, $descriptionLength) ?: null;
         }
 
-        if ($this->optimizedDescription) {
-            return mb_substr($this->optimizedDescription, 0, $descriptionLength) ?: null;
+        if ($this->getOptimizedDescription()) {
+            return mb_substr($this->getOptimizedDescription(), 0, $descriptionLength) ?: null;
         }
 
         $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
@@ -389,8 +389,8 @@ class OpenGraphMetaType extends MetaType
             return $this->ogImage;
         }
 
-        if ($this->optimizedImage) {
-            return $this->normalizeImageValue($this->optimizedImage);
+        if ($this->getOptimizedImage()) {
+            return $this->normalizeImageValue($this->getOptimizedImage());
         }
 
         return SproutSeo::$app->optimize->globals->identity['image'] ?? null;

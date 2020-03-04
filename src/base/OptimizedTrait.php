@@ -147,7 +147,7 @@ trait OptimizedTrait
                 $description = Craft::$app->view->renderObjectTemplate($optimizedDescriptionFieldSetting, $element);
                 break;
         }
-        
+
         // Just save the first 255 characters (we only output 160...)
         $description = mb_substr(trim($description), 0, 255);
 
