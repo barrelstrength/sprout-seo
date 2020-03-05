@@ -113,7 +113,7 @@ class ElementMetadata extends Field
     public function normalizeValue($value, ElementInterface $element = null)
     {
         $metadata = null;
-        $metadataArray = null;
+        $metadataArray = [];
 
         // On page load and the resave element task the $value comes from the content table as json
         if (is_string($value)) {
@@ -137,7 +137,7 @@ class ElementMetadata extends Field
 
         $this->populateOptimizeServiceValues($element);
 
-        return new Metadata($metadataArray ?? []);
+        return new Metadata($metadataArray, true);
     }
 
     public function serializeValue($value, ElementInterface $element = null)
@@ -210,7 +210,7 @@ class ElementMetadata extends Field
 
         Craft::$app->getView()->registerAssetBundle(SproutSeoAsset::class);
         Craft::$app->getView()->registerAssetBundle(TagEditorAsset::class);
-        
+
         return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/input', [
             'field' => $this,
             'name' => $name,

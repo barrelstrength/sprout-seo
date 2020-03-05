@@ -56,7 +56,7 @@ class Metadata extends Model
      *
      * @throws Throwable
      */
-    public function __construct($config = [])
+    public function __construct($config = [], $rawDataOnly = false)
     {
         // Unset any deprecated properties
         // @todo - deprecate variables in 5.x
@@ -65,6 +65,8 @@ class Metadata extends Model
 
         // Remove any null or empty string values from the provided configuration
         $config = array_filter($config);
+
+        $this->setRawDataOnly($rawDataOnly);
 
         // Populate the Optimized variables and unset them from the config
         $this->setOptimizedProperties($config);
@@ -205,7 +207,6 @@ class Metadata extends Model
     {
         $metaForDb = [];
 
-        $this->setRawDataOnly(true);
         $metaForDb['optimizedTitle'] = $this->getOptimizedTitle();
         $metaForDb['optimizedDescription'] = $this->getOptimizedDescription();
         $metaForDb['optimizedImage'] = $this->getOptimizedImage();
@@ -250,11 +251,17 @@ class Metadata extends Model
     /**
      * @param array    $config
      * @param MetaType $metaType
+     *
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     protected function populateMetaType(array &$config, MetaType $metaType)
     {
         // Match the values being populated to a given Meta Type model
         $metaAttributes = array_intersect_key($config, $metaType->getAttributes());
+
+        // DISABLE for backend when raw. ENABLE for front-end when MetaTags.
+        $metaType->setRawDataOnly($this->getRawDataOnly());
 
         // Assign the Metadata Optimized variables to the Meta Type classes so they can be used as fallbacks
         $metaType->setOptimizedTitle($this->getOptimizedTitle());
