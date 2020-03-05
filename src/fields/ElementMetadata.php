@@ -115,10 +115,6 @@ class ElementMetadata extends Field
         $metadata = null;
         $metadataArray = null;
 
-        if ($value === null) {
-            return $value;
-        }
-
         // On page load and the resave element task the $value comes from the content table as json
         if (is_string($value)) {
             $metadataArray = Json::decode($value);
@@ -244,13 +240,7 @@ class ElementMetadata extends Field
 
         Craft::$app->getView()->registerAssetBundle(SproutSeoAsset::class);
         Craft::$app->getView()->registerAssetBundle(TagEditorAsset::class);
-
-        // Make sure we have a metadata object for new entries
-        if ($value === null) {
-            $value = new Metadata();
-            $this->populateOptimizeServiceValues($element);
-        }
-
+        
         return Craft::$app->view->renderTemplate('sprout-seo/_components/fields/elementmetadata/input', [
             'field' => $this,
             'name' => $name,
