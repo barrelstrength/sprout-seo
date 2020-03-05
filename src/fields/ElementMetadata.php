@@ -140,46 +140,16 @@ class ElementMetadata extends Field
         return new Metadata($metadataArray ?? []);
     }
 
-    /**
-     * We use afterElementSave instead of serializeValue because serializeValue doesn't get called if
-     * the field is not dirty and since the Element Metadata field watches other fields to determine
-     * optimized values, it may not be dirty even if calculated values have changed.
-     *
-     * @param ElementInterface $element
-     * @param bool             $isNew
-     *
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws Throwable
-     * @throws \yii\db\Exception
-     */
-    public function afterElementSave(ElementInterface $element, bool $isNew)
+    public function serializeValue($value, ElementInterface $element = null)
     {
-        /** @var Metadata $value */
-        /** @var Element $element */
-        $value = $element->getFieldValue($this->handle);
-
-        if ($value !== null) {
-            $metadataJson = null;
-
-            if ($value instanceof Metadata) {
-                $metadataJson = Json::encode($value->getRawData());
+        if ($value instanceof Metadata && $element) {
+            $isEmpty = $this->isValueEmpty($value, $element);
+            if (!$isEmpty) {
+                return $value->getRawData();
             }
-
-            $contentTable = Craft::$app->getContent()->contentTable;
-            $fieldColumnPrefix = Craft::$app->getContent()->fieldColumnPrefix;
-            $fieldName = $fieldColumnPrefix.$this->handle;
-
-            Craft::$app->db->createCommand()->update($contentTable, [
-                $fieldName => $metadataJson
-            ], [
-                'and',
-                ['elementId' => $element->id],
-                ['siteId' => $element->siteId],
-            ], [], false)->execute();
         }
 
-        parent::afterElementSave($element, $isNew);
+        return null;
     }
 
     /**
