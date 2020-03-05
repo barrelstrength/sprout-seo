@@ -266,11 +266,11 @@ class Metadata extends Model
         $metaAttributes = array_intersect_key($config, $metaType->getAttributes());
 
         // Assign the Metadata Optimized variables to the Meta Type classes so they can be used as fallbacks
-        $metaType->optimizedTitle = $this->getOptimizedTitle();
-        $metaType->optimizedDescription = $this->getOptimizedDescription();
-        $metaType->optimizedImage = $this->getOptimizedImage();
-        $metaType->optimizedKeywords = $this->getOptimizedKeywords();
-        $metaType->canonical = $this->getCanonical();
+        $metaType->setOptimizedTitle($this->getOptimizedTitle());
+        $metaType->setOptimizedDescription($this->getOptimizedDescription());
+        $metaType->setOptimizedImage($this->getOptimizedImage());
+        $metaType->setOptimizedKeywords($this->getOptimizedKeywords());
+        $metaType->setCanonical($this->getCanonical());
 
         foreach ($metaAttributes as $key => $value) {
             // Build the setter name dynamically: i.e. ogTitle => setOgTitle()
