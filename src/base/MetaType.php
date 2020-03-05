@@ -23,9 +23,10 @@ abstract class MetaType extends Component
 {
     use OptimizedTrait;
 
-    private $rawDataOnly = false;
+    protected $rawDataOnly = false;
 
-    public function getRawDataOnly() {
+    public function getRawDataOnly(): bool
+    {
         return $this->rawDataOnly;
     }
 
@@ -107,8 +108,6 @@ abstract class MetaType extends Component
     public function getRawData(): array
     {
         $attributes = [];
-
-        $this->setRawDataOnly(true);
 
         foreach ($this->getAttributes() as $key => $attribute) {
             $attributes[] = $key;

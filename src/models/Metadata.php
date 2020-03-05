@@ -56,6 +56,8 @@ class Metadata extends Model
      */
     protected $metaTypes = [];
 
+    protected $rawDataOnly = false;
+
     /**
      * Metadata constructor.
      *
@@ -83,7 +85,16 @@ class Metadata extends Model
         $this->setSchemaProperties();
 
         parent::__construct($config);
-        //        $this->createComputedMetadata();
+    }
+
+    public function getRawDataOnly(): bool
+    {
+        return $this->rawDataOnly;
+    }
+
+    public function setRawDataOnly(bool $value)
+    {
+        $this->rawDataOnly = $value;
     }
 
     public function attributes(): array
@@ -203,6 +214,7 @@ class Metadata extends Model
     {
         $metaForDb = [];
 
+        $this->setRawDataOnly(true);
         $metaForDb['optimizedTitle'] = $this->getOptimizedTitle();
         $metaForDb['optimizedDescription'] = $this->getOptimizedDescription();
         $metaForDb['optimizedImage'] = $this->getOptimizedImage();
@@ -210,6 +222,7 @@ class Metadata extends Model
         $metaForDb['canonical'] = $this->getCanonical();
 
         foreach ($this->metaTypes as $metaType) {
+            $metaType->setRawDataOnly(true);
             $staticAttributes = $metaType->getRawData();
 
             foreach ($staticAttributes as $key => $attribute) {
@@ -251,7 +264,7 @@ class Metadata extends Model
     {
         // Match the values being populated to a given Meta Type model
         $metaAttributes = array_intersect_key($config, $metaType->getAttributes());
-        
+
         // Assign the Metadata Optimized variables to the Meta Type classes so they can be used as fallbacks
         $metaType->optimizedTitle = $this->getOptimizedTitle();
         $metaType->optimizedDescription = $this->getOptimizedDescription();
