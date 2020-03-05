@@ -96,7 +96,7 @@ class ElementMetadata extends Field
             return true;
         }
 
-        $attributes = array_filter($value->getAttributes());
+        $attributes = array_filter($value->getRawData());
 
         return count($attributes) === 0;
     }
