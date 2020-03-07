@@ -27,11 +27,6 @@ class Settings extends Model implements SproutSettingsInterface
     /**
      * @var bool
      */
-    public $enableRedirects = true;
-
-    /**
-     * @var bool
-     */
     public $enableSitemaps = true;
 
     /**
@@ -93,7 +88,7 @@ class Settings extends Model implements SproutSettingsInterface
             'template' => 'sprout-seo/settings/general'
         ];
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') && $settings->enableRedirects && $isPro) {
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') && $isPro) {
             $navItems['redirects'] = [
                 'label' => Craft::t('sprout-seo', 'Redirects'),
                 'url' => 'sprout-seo/settings/redirects',

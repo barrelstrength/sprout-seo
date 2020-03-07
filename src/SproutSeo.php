@@ -77,7 +77,7 @@ class SproutSeo extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '4.3.1.3';
+    public $schemaVersion = '4.3.1.6';
 
     /**
      * @var string
@@ -172,7 +172,10 @@ class SproutSeo extends Plugin
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') && $settings->enableRedirects && $isPro) {
+        /** @var RedirectsSettingsModel $redirectSettings */
+        $redirectSettings = SproutBase::$app->settings->getBaseSettings(RedirectsSettingsModel::class);
+
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') && $redirectSettings->enableRedirects && $isPro) {
             $parent['subnav']['redirects'] = [
                 'label' => Craft::t('sprout-seo', 'Redirects'),
                 'url' => 'sprout-seo/redirects'

@@ -10,7 +10,7 @@ namespace barrelstrength\sproutseo\migrations;
 use Craft;
 use craft\db\Migration;
 
-class m200307_000000_removes_enable_globals_setting extends Migration
+class m200307_000000_removes_sproutseo_enable_redirects_setting extends Migration
 {
     /**
      * @return bool
@@ -25,7 +25,7 @@ class m200307_000000_removes_enable_globals_setting extends Migration
             return true;
         }
 
-        $projectConfig->remove('plugins.sprout-seo.settings.enableGlobals');
+        $projectConfig->remove('plugins.sprout-seo.settings.enableRedirects');
 
         return true;
     }
@@ -35,7 +35,7 @@ class m200307_000000_removes_enable_globals_setting extends Migration
      */
     public function safeDown(): bool
     {
-        echo "m200307_000000_removes_enable_globals_setting cannot be reverted.\n";
+        echo "m200307_000000_removes_sproutseo_enable_redirects_setting cannot be reverted.\n";
 
         return false;
     }

@@ -25,20 +25,6 @@
         <tbody>
         <tr>
             <td>
-                <label for="enableRedirects">{{ "Enable Redirects"|t('sprout-seo') }}{% if not isPro %} <span class="sprout-pro">PRO</span>{% endif %}</label>
-            </td>
-            <td class="centeralign">
-                <div>
-                    {{ forms.lightswitch({
-                        name: 'enableRedirects',
-                        on: not isPro ? false : settings.enableRedirects,
-                        disabled: not isPro
-                    }) }}
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <label for="enableSitemaps">{{ "Enable Sitemaps"|t('sprout-seo') }}{% if not isPro %} <span class="sprout-pro">PRO</span>{% endif %}</label>
             </td>
             <td class="centeralign">

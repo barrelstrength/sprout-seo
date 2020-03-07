@@ -1,5 +1,25 @@
 # Changelog
 
+## UNRELEASED
+
+### Added
+- Added Enable Redirects setting to turn Redirect behavior on or off ([#20][#20-sproutredirects])
+
+### Changed
+- Improved handling of calculated Metadata when saving Element Metadata field ([#194])
+- Updated Metadata Model to support a `$rawDataOnly` argument
+- Removed 'Enable Globals' setting. Use Sprout Redirects and Sprout Sitemaps if limited features are needed.
+
+### Fixed
+- Fixed issue where canonical and other optimized fields were getting saved when they shouldn't have been ([#194])
+- Fixed javascript error in Element Metadata Field when Meta Details settings are not enabled ([#194])
+- Fixed bug where secondary sites redirected back to the main site ([#24][#24-sproutbaseredirects])
+- Fixed 404 Redirect priority when matching a redirect
+
+[#24-sproutbaseredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/24
+[#20-sproutredirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/20
+[#194]: https://github.com/barrelstrength/craft-sprout-seo/issues/194
+
 ## 4.4.1.2 - 2020-03-03
 
 ###
