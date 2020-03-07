@@ -77,7 +77,7 @@ class SproutSeo extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '4.3.1.6';
+    public $schemaVersion = '4.3.1.7';
 
     /**
      * @var string
@@ -182,7 +182,10 @@ class SproutSeo extends Plugin
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') && $settings->enableSitemaps && $isPro) {
+        /** @var SitemapsSettingsModel $sitemapSettings */
+        $sitemapSettings = SproutBase::$app->settings->getBaseSettings(SitemapsSettingsModel::class);
+
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') && $sitemapSettings->enableDynamicSitemaps && $isPro) {
             $parent['subnav']['sitemaps'] = [
                 'label' => Craft::t('sprout-seo', 'Sitemaps'),
                 'url' => 'sprout-seo/sitemaps'

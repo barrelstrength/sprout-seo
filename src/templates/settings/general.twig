@@ -14,41 +14,6 @@
     errors: ''
 }) }}
 
-{% set advancedInput %}
-    <table class="data" style="width: auto;">
-        <thead>
-        <tr>
-            <th scope="col">{{ "Feature"|t('sprout-seo') }}</th>
-            <th scope="col">{{ "Enabled?"|t('sprout-seo') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>
-                <label for="enableSitemaps">{{ "Enable Sitemaps"|t('sprout-seo') }}{% if not isPro %} <span class="sprout-pro">PRO</span>{% endif %}</label>
-            </td>
-            <td class="centeralign">
-                <div>
-                    {{ forms.lightswitch({
-                        name: 'enableSitemaps',
-                        on: not isPro ? false : settings.enableSitemaps,
-                        disabled: not isPro
-                    }) }}
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-{% endset %}
-
-{{ forms.field({
-    label: "Choose which features to enable"|t('sprout-seo'),
-    instructions: "Disabled items will be removed from the sidebar navigation and no longer accessible in the Control Panel."|t('sprout-seo')
-}, advancedInput) }}
-
-<hr>
-
 {{ forms.textField({
     label: "Meta Description Length"|t('sprout-seo'),
     instructions: "The maximum number of characters to allow for Meta Description fields."|t('sprout-seo'),

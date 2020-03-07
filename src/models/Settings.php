@@ -27,11 +27,6 @@ class Settings extends Model implements SproutSettingsInterface
     /**
      * @var bool
      */
-    public $enableSitemaps = true;
-
-    /**
-     * @var bool
-     */
     public $appendTitleValue;
 
     /**
@@ -97,7 +92,7 @@ class Settings extends Model implements SproutSettingsInterface
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') && $settings->enableSitemaps && $isPro) {
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') && $isPro) {
             $navItems['sitemaps'] = [
                 'label' => Craft::t('sprout-seo', 'Sitemaps'),
                 'url' => 'sprout-seo/settings/sitemaps',
