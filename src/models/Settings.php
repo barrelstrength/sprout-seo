@@ -27,11 +27,6 @@ class Settings extends Model implements SproutSettingsInterface
     /**
      * @var bool
      */
-    public $enableGlobals = true;
-
-    /**
-     * @var bool
-     */
     public $enableRedirects = true;
 
     /**

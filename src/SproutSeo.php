@@ -77,7 +77,7 @@ class SproutSeo extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '4.3.0.15';
+    public $schemaVersion = '4.3.1.3';
 
     /**
      * @var string
@@ -165,7 +165,7 @@ class SproutSeo extends Plugin
             $parent['label'] = $this->getSettings()->pluginNameOverride;
         }
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editGlobals') && $settings->enableGlobals) {
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editGlobals')) {
             $parent['subnav']['globals'] = [
                 'label' => Craft::t('sprout-seo', 'Globals'),
                 'url' => 'sprout-seo/globals'

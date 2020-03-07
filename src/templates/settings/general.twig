@@ -25,19 +25,6 @@
         <tbody>
         <tr>
             <td>
-                <label for="enableGlobals">{{ "Enable Globals"|t('sprout-seo') }}</label>
-            </td>
-            <td class="centeralign">
-                <div>
-                    {{ forms.lightswitch({
-                        name: 'enableGlobals',
-                        on: settings.enableGlobals
-                    }) }}
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <label for="enableRedirects">{{ "Enable Redirects"|t('sprout-seo') }}{% if not isPro %} <span class="sprout-pro">PRO</span>{% endif %}</label>
             </td>
             <td class="centeralign">
