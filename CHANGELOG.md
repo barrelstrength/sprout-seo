@@ -6,9 +6,10 @@
 - Added Enable Redirects setting to turn Redirect behavior on or off ([#20][#20-sproutredirects])
 
 ### Changed
+- Updated Redirects and Sitemaps sidebar navs to display or hide based on the their respective enabled/disabled setting
 - Improved handling of calculated Metadata when saving Element Metadata field ([#194])
 - Updated Metadata Model to support a `$rawDataOnly` argument
-- Removed 'Enable Globals' setting. Use Sprout Redirects and Sprout Sitemaps if limited features are needed.
+- Removed 'Enable Globals' setting. Use Sprout Redirects and Sprout Sitemaps if limited features are needed. 
 
 ### Fixed
 - Fixed issue where canonical and other optimized fields were getting saved when they shouldn't have been ([#194])
