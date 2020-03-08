@@ -172,7 +172,7 @@ class Globals extends Model
     protected function getContacts()
     {
         $contacts = $this->contacts;
-        $contactPoints = [];
+        $contactPoints = null;
 
         if (is_array($contacts)) {
             foreach ($contacts as $contact) {
@@ -196,7 +196,7 @@ class Globals extends Model
     {
         $profiles = $this->social;
 
-        $profileLinks = [];
+        $profileLinks = null;
 
         if (is_array($profiles)) {
             foreach ($profiles as $profile) {

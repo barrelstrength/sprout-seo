@@ -198,16 +198,18 @@ class GlobalMetadataController extends Controller
         $globalColumn = 'ownership';
         $siteId = Craft::$app->getRequest()->getBodyParam('siteId');
 
+        $ownershipMetaWithKeys = null;
+
         // Remove empty items from multi-dimensional array
-        $ownershipMeta = array_filter(array_map('array_filter', $ownershipMeta));
+        if ($ownershipMeta) {
+            $ownershipMeta = array_filter(array_map('array_filter', $ownershipMeta));
 
-        $ownershipMetaWithKeys = [];
-
-        foreach ($ownershipMeta as $key => $meta) {
-            if (count($meta) === 3) {
-                $ownershipMetaWithKeys[$key]['service'] = $meta[0];
-                $ownershipMetaWithKeys[$key]['metaTag'] = $meta[1];
-                $ownershipMetaWithKeys[$key]['verificationCode'] = $meta[2];
+            foreach ($ownershipMeta as $key => $meta) {
+                if (count($meta) === 3) {
+                    $ownershipMetaWithKeys[$key]['service'] = $meta[0];
+                    $ownershipMetaWithKeys[$key]['metaTag'] = $meta[1];
+                    $ownershipMetaWithKeys[$key]['verificationCode'] = $meta[2];
+                }
             }
         }
 
