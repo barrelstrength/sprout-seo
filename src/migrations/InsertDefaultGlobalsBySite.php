@@ -29,7 +29,7 @@ class InsertDefaultGlobalsBySite extends Migration
 
         $defaultSettings = '{
             "seoDivider":"-",
-            "defaultOgType":"",
+            "defaultOgType":"website",
             "ogTransform":"sproutSeo-socialSquare",
             "twitterTransform":"sproutSeo-socialSquare",
             "defaultTwitterCard":"summary",
