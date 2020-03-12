@@ -87,7 +87,7 @@ trait OptimizedTrait
 
             // Custom Field
             case (is_numeric($optimizedTitleFieldSetting)):
-                $title = $this->getSelectedFieldForOptimizedMetadata($optimizedTitleFieldSetting);
+                $title = OptimizedTrait::getSelectedFieldForOptimizedMetadata($optimizedTitleFieldSetting);
                 break;
 
             // Custom Value
@@ -139,7 +139,7 @@ trait OptimizedTrait
 
             // Custom Description
             case (is_numeric($optimizedDescriptionFieldSetting)):
-                $description = $this->getSelectedFieldForOptimizedMetadata($optimizedDescriptionFieldSetting);
+                $description = OptimizedTrait::getSelectedFieldForOptimizedMetadata($optimizedDescriptionFieldSetting);
                 break;
 
             // Custom Value
@@ -227,7 +227,7 @@ trait OptimizedTrait
 
             // Auto-generate keywords from target field
             case (is_numeric($optimizedKeywordsFieldSetting)):
-                $bigKeywords = $this->getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
+                $bigKeywords = OptimizedTrait::getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
                 $keywords = null;
 
                 if ($bigKeywords) {
@@ -308,7 +308,7 @@ trait OptimizedTrait
      *
      * @return null
      */
-    public function getSelectedFieldForOptimizedMetadata($fieldId)
+    public static function getSelectedFieldForOptimizedMetadata($fieldId)
     {
         $value = null;
 
