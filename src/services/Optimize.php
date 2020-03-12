@@ -121,12 +121,11 @@ class Optimize extends Component
     /**
      * Set the element that matches the $uri
      *
-     * @param string   $uri
      * @param int|null $siteId
      *
      * @throws InvalidConfigException
      */
-    public function setMatchedElement(string $uri, int $siteId = null)
+    public function setMatchedElement(int $siteId = null)
     {
         $this->element = null;
         $path = Craft::$app->getRequest()->getPathInfo();
