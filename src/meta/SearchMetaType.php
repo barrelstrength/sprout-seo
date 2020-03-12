@@ -80,8 +80,8 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        if ($this->metadata->getOptimizedTitle()) {
-            return trim($this->metadata->getOptimizedTitle().$appendTitleString) ?: null;
+        if ($optimizedTitle = $this->metadata->getOptimizedTitle()) {
+            return trim($optimizedTitle.$appendTitleString) ?: null;
         }
 
         return trim(SproutSeo::$app->optimize->globals->identity['name']);
@@ -155,8 +155,8 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        if ($this->metadata->getOptimizedDescription()) {
-            return mb_substr($this->metadata->getOptimizedDescription(), 0, $descriptionLength) ?: null;
+        if ($optimizedDescription = $this->metadata->getOptimizedDescription()) {
+            return mb_substr($optimizedDescription, 0, $descriptionLength) ?: null;
         }
 
         $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
@@ -169,6 +169,10 @@ class SearchMetaType extends MetaType
         $this->description = $value;
     }
 
+    /**
+     * @return mixed|string|null
+     * @throws InvalidConfigException
+     */
     public function getKeywords()
     {
         // In the CP we only save the raw data
@@ -177,8 +181,8 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        if ($this->metadata->getOptimizedKeywords()) {
-            return $this->metadata->getOptimizedKeywords();
+        if ($optimizedKeywords = $this->metadata->getOptimizedKeywords()) {
+            return $optimizedKeywords;
         }
 
         return SproutSeo::$app->optimize->globals->identity['keywords'] ?? null;

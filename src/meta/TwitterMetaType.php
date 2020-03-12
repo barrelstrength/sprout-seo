@@ -18,6 +18,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * Implements all attributes used in search metadata
@@ -190,6 +191,8 @@ class TwitterMetaType extends MetaType
 
     /**
      * @return string|null
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function getTwitterTitle()
     {
@@ -197,8 +200,8 @@ class TwitterMetaType extends MetaType
             return $this->twitterTitle;
         }
 
-        if ($this->metadata->getOptimizedTitle()) {
-            return trim($this->metadata->getOptimizedTitle()) ?: null;
+        if ($optimizedTitle = $this->metadata->getOptimizedTitle()) {
+            return trim($optimizedTitle) ?: null;
         }
 
         return trim(SproutSeo::$app->optimize->globals->identity['name']);
@@ -223,8 +226,8 @@ class TwitterMetaType extends MetaType
             return mb_substr($this->twitterDescription, 0, $descriptionLength) ?: null;
         }
 
-        if ($this->metadata->getOptimizedDescription()) {
-            return mb_substr($this->metadata->getOptimizedDescription(), 0, $descriptionLength) ?: null;
+        if ($optimizedDescription = $this->metadata->getOptimizedDescription()) {
+            return mb_substr($optimizedDescription, 0, $descriptionLength) ?: null;
         }
 
         $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
@@ -251,8 +254,8 @@ class TwitterMetaType extends MetaType
             return $this->twitterImage;
         }
 
-        if ($this->metadata->getOptimizedImage()) {
-            return $this->normalizeImageValue($this->metadata->getOptimizedImage());
+        if ($optimizedImage = $this->metadata->getOptimizedImage()) {
+            return $this->normalizeImageValue($optimizedImage);
         }
 
         return SproutSeo::$app->optimize->globals->identity['image'] ?? null;
