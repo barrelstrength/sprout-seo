@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\base;
 
+use barrelstrength\sproutseo\models\Metadata;
 use craft\base\Component;
 use craft\base\Field;
 
@@ -22,8 +23,23 @@ use craft\base\Field;
 abstract class MetaType extends Component
 {
     use OptimizedTrait;
+    /**
+     * The current Metadata model
+     *
+     * @var Metadata
+     */
+    protected $metadata;
 
+    /**
+     * @var bool
+     */
     protected $rawDataOnly = false;
+
+    public function __construct($config = [], Metadata $metadata = null)
+    {
+        $this->metadata = $metadata;
+        parent::__construct($config);
+    }
 
     public function getRawDataOnly(): bool
     {

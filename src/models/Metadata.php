@@ -181,11 +181,11 @@ class Metadata extends Model
     protected function setMetaTypes(array &$config = [])
     {
         $metaTypes = [
-            new SearchMetaType(),
-            new OpenGraphMetaType(),
-            new TwitterMetaType(),
-            new GeoMetaType(),
-            new RobotsMetaType(),
+            new SearchMetaType([], $this),
+            new OpenGraphMetaType([], $this),
+            new TwitterMetaType([], $this),
+            new GeoMetaType([], $this),
+            new RobotsMetaType([], $this),
         ];
 
         foreach ($metaTypes as $metaType) {
