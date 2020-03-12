@@ -30,11 +30,6 @@ trait OptimizedTrait
     /**
      * @var string|null
      */
-    protected $appendTitleValue;
-
-    /**
-     * @var string|null
-     */
     protected $optimizedDescription;
 
     /**

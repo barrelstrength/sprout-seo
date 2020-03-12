@@ -24,6 +24,11 @@ class RobotsMetaType extends MetaType
     /**
      * @var string|null
      */
+    protected $canonical;
+
+    /**
+     * @var string|null
+     */
     protected $robots;
 
     public static function displayName(): string

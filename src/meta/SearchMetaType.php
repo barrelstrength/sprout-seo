@@ -31,6 +31,11 @@ class SearchMetaType extends MetaType
     /**
      * @var string|null
      */
+    protected $appendTitleValue;
+
+    /**
+     * @var string|null
+     */
     protected $description;
 
     /**
@@ -75,8 +80,8 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        if ($this->getOptimizedTitle()) {
-            return trim($this->getOptimizedTitle().$appendTitleString) ?: null;
+        if ($this->metadata->getOptimizedTitle()) {
+            return trim($this->metadata->getOptimizedTitle().$appendTitleString) ?: null;
         }
 
         return trim(SproutSeo::$app->optimize->globals->identity['name']);
@@ -150,8 +155,8 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        if ($this->getOptimizedDescription()) {
-            return mb_substr($this->getOptimizedDescription(), 0, $descriptionLength) ?: null;
+        if ($this->metadata->getOptimizedDescription()) {
+            return mb_substr($this->metadata->getOptimizedDescription(), 0, $descriptionLength) ?: null;
         }
 
         $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
@@ -172,8 +177,8 @@ class SearchMetaType extends MetaType
         }
 
         // On the front-end, fall back to optimized values
-        if ($this->getOptimizedKeywords()) {
-            return $this->getOptimizedKeywords();
+        if ($this->metadata->getOptimizedKeywords()) {
+            return $this->metadata->getOptimizedKeywords();
         }
 
         return SproutSeo::$app->optimize->globals->identity['keywords'] ?? null;

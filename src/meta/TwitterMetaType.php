@@ -177,7 +177,7 @@ class TwitterMetaType extends MetaType
             return $this->twitterUrl;
         }
 
-        return $this->getCanonical();
+        return $this->metadata->getCanonical();
     }
 
     /**
@@ -197,8 +197,8 @@ class TwitterMetaType extends MetaType
             return $this->twitterTitle;
         }
 
-        if ($this->getOptimizedTitle()) {
-            return trim($this->getOptimizedTitle()) ?: null;
+        if ($this->metadata->getOptimizedTitle()) {
+            return trim($this->metadata->getOptimizedTitle()) ?: null;
         }
 
         return trim(SproutSeo::$app->optimize->globals->identity['name']);
@@ -223,8 +223,8 @@ class TwitterMetaType extends MetaType
             return mb_substr($this->twitterDescription, 0, $descriptionLength) ?: null;
         }
 
-        if ($this->getOptimizedDescription()) {
-            return mb_substr($this->getOptimizedDescription(), 0, $descriptionLength) ?: null;
+        if ($this->metadata->getOptimizedDescription()) {
+            return mb_substr($this->metadata->getOptimizedDescription(), 0, $descriptionLength) ?: null;
         }
 
         $globalDescription = SproutSeo::$app->optimize->globals->identity['description'] ?? null;
@@ -251,8 +251,8 @@ class TwitterMetaType extends MetaType
             return $this->twitterImage;
         }
 
-        if ($this->getOptimizedImage()) {
-            return $this->normalizeImageValue($this->getOptimizedImage());
+        if ($this->metadata->getOptimizedImage()) {
+            return $this->normalizeImageValue($this->metadata->getOptimizedImage());
         }
 
         return SproutSeo::$app->optimize->globals->identity['image'] ?? null;

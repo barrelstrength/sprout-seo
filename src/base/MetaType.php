@@ -22,7 +22,6 @@ use craft\base\Field;
  */
 abstract class MetaType extends Component
 {
-    use OptimizedTrait;
     /**
      * The current Metadata model
      *
