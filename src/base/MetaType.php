@@ -29,25 +29,10 @@ abstract class MetaType extends Component
      */
     protected $metadata;
 
-    /**
-     * @var bool
-     */
-    protected $rawDataOnly = false;
-
     public function __construct($config = [], Metadata $metadata = null)
     {
         $this->metadata = $metadata;
         parent::__construct($config);
-    }
-
-    public function getRawDataOnly(): bool
-    {
-        return $this->rawDataOnly;
-    }
-
-    public function setRawDataOnly(bool $value)
-    {
-        $this->rawDataOnly = $value;
     }
 
     /**

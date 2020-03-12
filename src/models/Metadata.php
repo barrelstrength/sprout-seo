@@ -47,6 +47,11 @@ class Metadata extends Model
      */
     protected $metaTypes = [];
 
+    /**
+     * DISABLE for backend when raw. ENABLE for front-end when MetaTags.
+     *
+     * @var bool
+     */
     protected $rawDataOnly = false;
 
     /**
@@ -216,7 +221,6 @@ class Metadata extends Model
         $metaForDb['canonical'] = $this->getCanonical();
 
         foreach ($this->metaTypes as $metaType) {
-            $metaType->setRawDataOnly(true);
             $staticAttributes = $metaType->getRawData();
 
             foreach ($staticAttributes as $key => $attribute) {
@@ -258,9 +262,6 @@ class Metadata extends Model
     {
         // Match the values being populated to a given Meta Type model
         $metaAttributes = array_intersect_key($config, $metaType->getAttributes());
-
-        // DISABLE for backend when raw. ENABLE for front-end when MetaTags.
-        $metaType->setRawDataOnly($this->getRawDataOnly());
 
         foreach ($metaAttributes as $key => $value) {
             // Build the setter name dynamically: i.e. ogTitle => setOgTitle()

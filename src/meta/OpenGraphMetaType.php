@@ -203,7 +203,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgType()
     {
-        if ($this->ogType || $this->getRawDataOnly()) {
+        if ($this->ogType || $this->metadata->getRawDataOnly()) {
             return $this->ogType;
         }
 
@@ -223,7 +223,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgSiteName()
     {
-        if ($this->ogSiteName || $this->getRawDataOnly()) {
+        if ($this->ogSiteName || $this->metadata->getRawDataOnly()) {
             return $this->ogSiteName;
         }
 
@@ -243,7 +243,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgAuthor()
     {
-        if ($this->getOgType() !== 'article' || $this->getRawDataOnly()) {
+        if ($this->getOgType() !== 'article' || $this->metadata->getRawDataOnly()) {
             return null;
         }
 
@@ -263,7 +263,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgPublisher()
     {
-        if ($this->getOgType() !== 'article' || $this->getRawDataOnly()) {
+        if ($this->getOgType() !== 'article' || $this->metadata->getRawDataOnly()) {
             return null;
         }
 
@@ -291,7 +291,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgUrl()
     {
-        if ($this->ogUrl || $this->getRawDataOnly()) {
+        if ($this->ogUrl || $this->metadata->getRawDataOnly()) {
             return $this->ogUrl;
         }
 
@@ -341,7 +341,7 @@ class OpenGraphMetaType extends MetaType
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        if ($this->ogDescription || $this->getRawDataOnly()) {
+        if ($this->ogDescription || $this->metadata->getRawDataOnly()) {
             return mb_substr($this->ogDescription, 0, $descriptionLength) ?: null;
         }
 
@@ -367,7 +367,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImageSecure()
     {
-        if ($this->getRawDataOnly()) {
+        if ($this->metadata->getRawDataOnly()) {
             return null;
         }
 
@@ -389,7 +389,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImage()
     {
-        if ($this->ogImage || $this->getRawDataOnly()) {
+        if ($this->ogImage || $this->metadata->getRawDataOnly()) {
             return $this->ogImage;
         }
 
@@ -451,7 +451,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgImageType()
     {
-        if ($this->ogImageType || $this->getRawDataOnly()) {
+        if ($this->ogImageType || $this->metadata->getRawDataOnly()) {
             return $this->ogImageType;
         }
 
@@ -471,7 +471,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgTransform()
     {
-        if ($this->ogTransform || $this->getRawDataOnly()) {
+        if ($this->ogTransform || $this->metadata->getRawDataOnly()) {
             return $this->ogTransform;
         }
 
@@ -492,7 +492,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgLocale()
     {
-        if ($this->ogLocale || $this->getRawDataOnly()) {
+        if ($this->ogLocale || $this->metadata->getRawDataOnly()) {
             return $this->ogLocale;
         }
 
@@ -514,7 +514,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgDateUpdated()
     {
-        if ($this->getRawDataOnly()) {
+        if ($this->metadata->getRawDataOnly()) {
             return null;
         }
 
@@ -544,7 +544,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgDateCreated()
     {
-        if ($this->getRawDataOnly()) {
+        if ($this->metadata->getRawDataOnly()) {
             return null;
         }
 
@@ -580,7 +580,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgExpiryDate()
     {
-        if ($this->getRawDataOnly()) {
+        if ($this->metadata->getRawDataOnly()) {
             return null;
         }
 

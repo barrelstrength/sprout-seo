@@ -112,7 +112,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterCard()
     {
-        if ($this->twitterCard || $this->getRawDataOnly()) {
+        if ($this->twitterCard || $this->metadata->getRawDataOnly()) {
             return $this->twitterCard;
         }
 
@@ -132,7 +132,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterSite()
     {
-        if ($this->twitterCreator || $this->getRawDataOnly()) {
+        if ($this->twitterCreator || $this->metadata->getRawDataOnly()) {
             return $this->twitterSite;
         }
 
@@ -152,7 +152,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterCreator()
     {
-        if ($this->twitterCreator || $this->getRawDataOnly()) {
+        if ($this->twitterCreator || $this->metadata->getRawDataOnly()) {
             return $this->twitterCreator;
         }
 
@@ -173,7 +173,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterUrl()
     {
-        if ($this->twitterUrl || $this->getRawDataOnly()) {
+        if ($this->twitterUrl || $this->metadata->getRawDataOnly()) {
             return $this->twitterUrl;
         }
 
@@ -195,7 +195,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterTitle()
     {
-        if ($this->twitterTitle || $this->getRawDataOnly()) {
+        if ($this->twitterTitle || $this->metadata->getRawDataOnly()) {
             return $this->twitterTitle;
         }
 
@@ -223,7 +223,7 @@ class TwitterMetaType extends MetaType
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();
 
-        if ($this->twitterDescription || $this->getRawDataOnly()) {
+        if ($this->twitterDescription || $this->metadata->getRawDataOnly()) {
             return mb_substr($this->twitterDescription, 0, $descriptionLength) ?: null;
         }
 
@@ -251,7 +251,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterImage()
     {
-        if ($this->twitterImage || $this->getRawDataOnly()) {
+        if ($this->twitterImage || $this->metadata->getRawDataOnly()) {
             return $this->twitterImage;
         }
 
@@ -281,7 +281,7 @@ class TwitterMetaType extends MetaType
      */
     public function getTwitterTransform()
     {
-        if ($this->twitterTransform || $this->getRawDataOnly()) {
+        if ($this->twitterTransform || $this->metadata->getRawDataOnly()) {
             return $this->twitterTransform;
         }
 
