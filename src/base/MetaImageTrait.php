@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\base;
 
+use barrelstrength\sproutseo\helpers\OptimizeHelper;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\elements\Asset;
@@ -49,7 +50,7 @@ trait MetaImageTrait
 
             // Custom Image Field
             case (is_numeric($optimizedImageFieldSetting)):
-                $imageId = OptimizedTrait::getSelectedFieldForOptimizedMetadata($elementMetadataField->id);
+                $imageId = OptimizeHelper::getSelectedFieldForOptimizedMetadata($elementMetadataField->id);
                 break;
 
             // Custom Value

@@ -9,7 +9,9 @@ namespace barrelstrength\sproutseo\helpers;
 
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
+use craft\base\Field;
 use craft\elements\Asset;
+use craft\fields\Assets;
 use craft\helpers\UrlHelper;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
@@ -73,5 +75,36 @@ class OptimizeHelper
         }
 
         return $url;
+    }
+
+    /**
+     * @param $fieldId
+     *
+     * @return null
+     */
+    public static function getSelectedFieldForOptimizedMetadata($fieldId)
+    {
+        $value = null;
+
+        $element = SproutSeo::$app->optimize->element;
+
+        if (is_numeric($fieldId)) {
+            /**
+             * @var Field $field
+             */
+            $field = Craft::$app->fields->getFieldById($fieldId);
+
+            // Does the field exist on the element?
+            if ($field && isset($element->{$field->handle})) {
+                $elementValue = $element->{$field->handle};
+                if (get_class($field) === Assets::class) {
+                    $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
+                } else {
+                    $value = $elementValue;
+                }
+            }
+        }
+
+        return $value;
     }
 }

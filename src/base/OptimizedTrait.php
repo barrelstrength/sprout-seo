@@ -8,11 +8,8 @@
 namespace barrelstrength\sproutseo\base;
 
 use barrelstrength\sproutseo\helpers\OptimizeHelper;
-use barrelstrength\sproutseo\meta\SearchMetaType;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
-use craft\base\Field;
-use craft\fields\Assets;
 use PhpScience\TextRank\TextRankFacade;
 use PhpScience\TextRank\Tool\StopWords\English;
 use PhpScience\TextRank\Tool\StopWords\French;
@@ -87,7 +84,7 @@ trait OptimizedTrait
 
             // Custom Field
             case (is_numeric($optimizedTitleFieldSetting)):
-                $title = OptimizedTrait::getSelectedFieldForOptimizedMetadata($optimizedTitleFieldSetting);
+                $title = OptimizeHelper::getSelectedFieldForOptimizedMetadata($optimizedTitleFieldSetting);
                 break;
 
             // Custom Value
@@ -139,7 +136,7 @@ trait OptimizedTrait
 
             // Custom Description
             case (is_numeric($optimizedDescriptionFieldSetting)):
-                $description = OptimizedTrait::getSelectedFieldForOptimizedMetadata($optimizedDescriptionFieldSetting);
+                $description = OptimizeHelper::getSelectedFieldForOptimizedMetadata($optimizedDescriptionFieldSetting);
                 break;
 
             // Custom Value
@@ -227,7 +224,7 @@ trait OptimizedTrait
 
             // Auto-generate keywords from target field
             case (is_numeric($optimizedKeywordsFieldSetting)):
-                $bigKeywords = OptimizedTrait::getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
+                $bigKeywords = OptimizeHelper::getSelectedFieldForOptimizedMetadata($optimizedKeywordsFieldSetting);
                 $keywords = null;
 
                 if ($bigKeywords) {
@@ -303,34 +300,4 @@ trait OptimizedTrait
         $this->canonical = $value;
     }
 
-    /**
-     * @param $fieldId
-     *
-     * @return null
-     */
-    public static function getSelectedFieldForOptimizedMetadata($fieldId)
-    {
-        $value = null;
-
-        $element = SproutSeo::$app->optimize->element;
-
-        if (is_numeric($fieldId)) {
-            /**
-             * @var Field $field
-             */
-            $field = Craft::$app->fields->getFieldById($fieldId);
-
-            // Does the field exist on the element?
-            if ($field && isset($element->{$field->handle})) {
-                $elementValue = $element->{$field->handle};
-                if (get_class($field) === Assets::class) {
-                    $value = isset($elementValue[0]) ? $elementValue[0]->id : null;
-                } else {
-                    $value = $elementValue;
-                }
-            }
-        }
-
-        return $value;
-    }
 }
