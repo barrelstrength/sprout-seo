@@ -388,8 +388,6 @@ abstract class Schema
             return null;
         }
 
-        $image = [];
-
         if (is_string($imageId) && UrlHelper::isFullUrl($imageId)) {
             $meta = $this->prioritizedMetadataModel;
 

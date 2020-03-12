@@ -10,7 +10,6 @@ namespace barrelstrength\sproutseo\schema;
 use barrelstrength\sproutseo\base\Schema;
 use Throwable;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
 
 class ThingSchema extends Schema
 {
@@ -42,7 +41,6 @@ class ThingSchema extends Schema
      * @return void|null
      * @throws Throwable
      * @throws Exception
-     * @throws InvalidConfigException
      */
     public function addProperties()
     {

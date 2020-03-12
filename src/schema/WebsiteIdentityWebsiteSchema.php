@@ -40,7 +40,6 @@ class WebsiteIdentityWebsiteSchema extends Schema
     /**
      * @return null|void
      * @throws Exception
-     * @noinspection DuplicatedCode
      */
     public function addProperties()
     {

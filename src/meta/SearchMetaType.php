@@ -145,6 +145,11 @@ class SearchMetaType extends MetaType
         $this->appendTitleValue = $value;
     }
 
+    /**
+     * @return string|null
+     * @throws Exception
+     * @throws Throwable
+     */
     public function getDescription()
     {
         $descriptionLength = SproutSeo::$app->settings->getDescriptionLength();

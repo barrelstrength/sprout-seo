@@ -37,7 +37,7 @@ class m200224_000003_update_sitename_setting extends Migration
             }
 
             $this->update($globalsTable, [
-                'settings' =>  json_encode($newSettings)
+                'settings' => json_encode($newSettings)
             ], [
                 'id' => $globalSetting['id']
             ], [], false);

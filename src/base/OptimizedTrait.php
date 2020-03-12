@@ -17,6 +17,8 @@ use PhpScience\TextRank\Tool\StopWords\German;
 use PhpScience\TextRank\Tool\StopWords\Italian;
 use PhpScience\TextRank\Tool\StopWords\Norwegian;
 use PhpScience\TextRank\Tool\StopWords\Spanish;
+use RuntimeException;
+use Throwable;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
@@ -50,7 +52,6 @@ trait OptimizedTrait
     /**
      * @return string|null
      * @throws Exception
-     * @throws InvalidConfigException
      * @throws Throwable
      */
     public function getOptimizedTitle()
@@ -94,6 +95,7 @@ trait OptimizedTrait
 
         return null;
     }
+
     /**
      * @param $value
      *
@@ -160,7 +162,6 @@ trait OptimizedTrait
 
     /**
      * @return mixed|string|null
-     * @throws Exception
      * @throws Throwable
      */
     public function getOptimizedImage()
@@ -170,6 +171,7 @@ trait OptimizedTrait
             if (is_array($this->optimizedImage)) {
                 $imageId = $this->optimizedImage[0] ?? null;
             }
+
             return $imageId;
         }
 
@@ -255,7 +257,7 @@ trait OptimizedTrait
                         $rankedKeywords = $textRankApi->getOnlyKeyWords($bigKeywords);
                         $fiveKeywords = array_keys(array_slice($rankedKeywords, 0, 5));
                         $keywords = implode(',', $fiveKeywords);
-                    } catch (\RuntimeException $e) {
+                    } catch (RuntimeException $e) {
                         // Cannot detect the language of the text, maybe to short.
                         $keywords = null;
                     }
@@ -266,6 +268,7 @@ trait OptimizedTrait
 
         return $keywords;
     }
+
     /**
      * @param null $value
      */

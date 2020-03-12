@@ -8,14 +8,15 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use Craft;
 
 class m200307_000000_cleanup_optimized_entryelement_metadata_values extends Migration
 {
     /**
      * @return bool
+     * @noinspection ClassConstantCanBeUsedInspection
      */
     public function safeUp(): bool
     {
@@ -28,6 +29,7 @@ class m200307_000000_cleanup_optimized_entryelement_metadata_values extends Migr
             $incorrectBaseEntryUrl = $baseUrl.'/entries';
             // Remove double slash if baseUrl has slash (i.e. //entries)
             $incorrectBaseEntryUrl = str_replace('//entries', '/entries', $incorrectBaseEntryUrl);
+
             return Craft::getAlias($incorrectBaseEntryUrl);
         }, $baseUrlSites);
 

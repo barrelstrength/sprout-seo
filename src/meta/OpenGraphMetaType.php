@@ -19,7 +19,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
 
 /**
  * Implements all attributes used in search metadata
@@ -310,7 +309,7 @@ class OpenGraphMetaType extends MetaType
     /**
      * @return string|null
      * @throws Exception
-     * @throws InvalidConfigException
+     * @throws Throwable
      */
     public function getOgTitle()
     {
@@ -335,6 +334,8 @@ class OpenGraphMetaType extends MetaType
 
     /**
      * @return string|null
+     * @throws Exception
+     * @throws Throwable
      */
     public function getOgDescription()
     {

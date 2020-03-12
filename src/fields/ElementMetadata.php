@@ -88,7 +88,13 @@ class ElementMetadata extends Field
     }
 
     /**
-     * @inheritdoc
+     * @param mixed            $value
+     * @param ElementInterface $element
+     *
+     * @return bool
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
      */
     public function isValueEmpty($value, ElementInterface $element): bool
     {
@@ -140,6 +146,15 @@ class ElementMetadata extends Field
         return new Metadata($metadataArray, true);
     }
 
+    /**
+     * @param mixed                 $value
+     * @param ElementInterface|null $element
+     *
+     * @return array|mixed|string|null
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
+     */
     public function serializeValue($value, ElementInterface $element = null)
     {
         if ($value instanceof Metadata && $element) {

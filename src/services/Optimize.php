@@ -9,7 +9,6 @@ namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutseo\fields\ElementMetadata;
-use barrelstrength\sproutseo\meta\SchemaMetaType;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
 use barrelstrength\sproutseo\models\Settings;
@@ -32,8 +31,9 @@ use yii\base\InvalidConfigException;
 
 /**
  *
- * @property string $uri
- * @property Site   $matchedSite
+ * @property string   $uri
+ * @property null|int $matchedElement
+ * @property Site     $matchedSite
  */
 class Optimize extends Component
 {
@@ -157,7 +157,7 @@ class Optimize extends Component
         $settings = $plugin->getSettings();
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
-        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel($site);
+        $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel();
 
         $output = null;
 
@@ -185,12 +185,10 @@ class Optimize extends Component
     }
 
     /**
-     * @param null $site
-     *
      * @return Metadata
      * @throws Throwable
      */
-    public function getPrioritizedMetadataModel($site = null): Metadata
+    public function getPrioritizedMetadataModel(): Metadata
     {
         $elementMetadataAttributes = [];
 
@@ -305,7 +303,6 @@ class Optimize extends Component
     {
         $schema = null;
 
-        /** @var SchemaMetaType $schemaMetaType */
         $schemaTypeId = $this->prioritizedMetadataModel->getSchemaTypeId();
 
         if (!$schemaTypeId) {

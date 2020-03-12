@@ -95,7 +95,7 @@ class GlobalMetadata extends Component
             $migration->up();
             ob_end_clean();
         }
-        
+
         Craft::$app->db->createCommand()->update('{{%sproutseo_globals}}',
             $values,
             ['siteId' => $globals->siteId]

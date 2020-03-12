@@ -72,8 +72,6 @@ class Settings extends Model implements SproutSettingsInterface
     {
         /** @var SproutSeo $plugin */
         $plugin = SproutSeo::getInstance();
-        $settings = $plugin->getSettings();
-
         $isPro = $plugin->is(SproutSeo::EDITION_PRO);
 
         $navItems['general'] = [

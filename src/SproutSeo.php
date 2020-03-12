@@ -161,8 +161,8 @@ class SproutSeo extends Plugin
         $isPro = $this->is(self::EDITION_PRO);
 
         // Allow user to override plugin name in sidebar
-        if ($this->getSettings()->pluginNameOverride) {
-            $parent['label'] = $this->getSettings()->pluginNameOverride;
+        if ($settings->pluginNameOverride) {
+            $parent['label'] = $settings->pluginNameOverride;
         }
 
         if (Craft::$app->getUser()->checkPermission('sproutSeo-editGlobals')) {

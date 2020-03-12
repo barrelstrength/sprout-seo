@@ -54,6 +54,8 @@ class Metadata extends Model
      *
      * @param array $config
      *
+     * @param bool  $rawDataOnly
+     *
      * @throws Throwable
      */
     public function __construct($config = [], $rawDataOnly = false)

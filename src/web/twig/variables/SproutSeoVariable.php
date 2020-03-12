@@ -56,8 +56,11 @@ class SproutSeoVariable
     }
 
     /**
+     * @param null $site
+     *
      * @return string
      * @throws Exception
+     * @throws SiteNotFoundException
      */
     public function getDivider($site = null): string
     {

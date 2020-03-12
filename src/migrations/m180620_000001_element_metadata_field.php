@@ -12,9 +12,7 @@ use Craft;
 use craft\base\Element;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\errors\ElementNotFoundException;
 use Throwable;
-use yii\base\Exception;
 
 /**
  * m180620_000001_element_metadata_field migration.
@@ -25,8 +23,6 @@ class m180620_000001_element_metadata_field extends Migration
      * @inheritdoc
      *
      * @throws Throwable
-     * @throws ElementNotFoundException
-     * @throws Exception
      */
     public function safeUp(): bool
     {
