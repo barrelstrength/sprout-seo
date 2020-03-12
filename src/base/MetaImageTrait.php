@@ -50,7 +50,7 @@ trait MetaImageTrait
 
             // Custom Image Field
             case (is_numeric($optimizedImageFieldSetting)):
-                $imageId = OptimizeHelper::getSelectedFieldForOptimizedMetadata($elementMetadataField->id);
+                $imageId = OptimizeHelper::getSelectedFieldForOptimizedMetadata($optimizedImageFieldSetting);
                 break;
 
             // Custom Value
