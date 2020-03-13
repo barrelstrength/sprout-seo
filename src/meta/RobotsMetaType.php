@@ -45,6 +45,27 @@ class RobotsMetaType extends MetaType
         return $attributes;
     }
 
+    /**
+     * @return string|null
+     * @throws Exception
+     */
+    public function getCanonical()
+    {
+        if ($this->canonical || $this->metadata->getRawDataOnly()) {
+            return $this->canonical;
+        }
+
+        return $this->metadata->getCanonical();
+    }
+
+    /**
+     * @param $value
+     */
+    public function setCanonical($value)
+    {
+        $this->canonical = $value;
+    }
+
     public function getRobots()
     {
         if ($this->robots || $this->metadata->getRawDataOnly()) {
