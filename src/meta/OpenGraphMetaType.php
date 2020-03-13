@@ -313,7 +313,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgTitle()
     {
-        if ($this->ogTitle || $this->rawDataOnly) {
+        if ($this->ogTitle || $this->getRawDataOnly()) {
             return trim($this->ogTitle);
         }
 
