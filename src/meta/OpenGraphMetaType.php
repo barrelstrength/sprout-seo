@@ -514,7 +514,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgDateUpdated()
     {
-        if ($this->metadata->getRawDataOnly()) {
+        if ($this->getOgType() !== 'article' || $this->metadata->getRawDataOnly()) {
             return null;
         }
 
@@ -544,7 +544,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgDateCreated()
     {
-        if ($this->metadata->getRawDataOnly()) {
+        if ($this->getOgType() !== 'article' || $this->metadata->getRawDataOnly()) {
             return null;
         }
 
@@ -580,7 +580,7 @@ class OpenGraphMetaType extends MetaType
      */
     public function getOgExpiryDate()
     {
-        if ($this->metadata->getRawDataOnly()) {
+        if ($this->getOgType() !== 'article' || $this->metadata->getRawDataOnly()) {
             return null;
         }
 
