@@ -1,5 +1,27 @@
 # Changelog
 
+## 4.4.3 - 2020-03-14
+
+### Changed
+- Updated reference to optimized values on MetaType classes to use Metadata model
+- Added `barrelstrength\sproutseo\base\MetaType::$metadata`
+- Added `barrelstrength\sproutseo\helpers\OptimizeHelper::getSelectedFieldForOptimizedMetadata()`
+- Added `barrelstrength\sproutseo\meta\SearchMetaType::$appendTitleValue`
+- Added `barrelstrength\sproutseo\meta\RobotsMetaType::$canonical`
+
+### Fixed
+- Fixed bug where an Element Metadata field Meta Image mapped to an existing field was set to the Element Metadata field ID instead of the respective Field ID ([#194])
+- Fixed issue where Open Graph article meta tags could be set for non-article Open Graph Types
+- Fixed `siteId` argument when setting matched element
+
+### Removed
+- Removed use of `OptimizedTrait` in `barrelstrength\sproutseo\base\MetaType`
+- Removed `barrelstrength\sproutseo\base\MetaType::$rawDataOnly`
+- Removed `barrelstrength\sproutseo\base\OptimizedTrait::$appendTitleValue`
+- Removed `barrelstrength\sproutseo\base\OptimizedTrait::getSelectedFieldForOptimizedMetadata()`
+
+[#194]: https://github.com/barrelstrength/craft-sprout-seo/issues/194
+
 ## 4.4.2 - 2020-03-08
 
 ### Added
