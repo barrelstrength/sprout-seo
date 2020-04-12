@@ -11,8 +11,10 @@ use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirectsInstall;
 use barrelstrength\sproutbasesitemaps\migrations\Install as SproutBaseSitemapsInstall;
+use barrelstrength\sproutseo\records\GlobalMetadata as GlobalMetadataRecord;
 use Craft;
 use craft\db\Migration;
+use craft\db\Table;
 use craft\errors\SiteNotFoundException;
 use Throwable;
 
@@ -31,7 +33,6 @@ class Install extends Migration
     {
         $this->createTables();
         $this->insertDefaultGlobalMetadata();
-        $this->createAddressTable();
 
         return true;
     }
@@ -47,10 +48,8 @@ class Install extends Migration
         $migration->safeUp();
         ob_end_clean();
 
-        $globalsTable = '{{%sproutseo_globals}}';
-
-        if (!$this->db->tableExists($globalsTable)) {
-            $this->createTable($globalsTable, [
+        if (!$this->db->tableExists(GlobalMetadataRecord::tableName())) {
+            $this->createTable(GlobalMetadataRecord::tableName(), [
                 'id' => $this->primaryKey(),
                 'siteId' => $this->integer()->notNull(),
                 'meta' => $this->text(),
@@ -78,17 +77,22 @@ class Install extends Migration
         ob_start();
         $migration->safeUp();
         ob_end_clean();
+
+        $migration = new SproutBaseFieldsInstall();
+        ob_start();
+        $migration->up();
+        ob_end_clean();
     }
 
     protected function createIndexes()
     {
-        $this->createIndex(null, '{{%sproutseo_globals}}', 'id, siteId', true);
-        $this->createIndex(null, '{{%sproutseo_globals}}', ['siteId'], true);
+        $this->createIndex(null, GlobalMetadataRecord::tableName(), 'id, siteId', true);
+        $this->createIndex(null, GlobalMetadataRecord::tableName(), ['siteId'], true);
     }
 
     protected function addForeignKeys()
     {
-        $this->addForeignKey(null, '{{%sproutseo_globals}}', ['siteId'], '{{%sites}}', ['id'], 'CASCADE', 'CASCADE');
+        $this->addForeignKey(null, GlobalMetadataRecord::tableName(), ['siteId'], Table::SITES, ['id'], 'CASCADE', 'CASCADE');
     }
 
     /**
@@ -101,18 +105,6 @@ class Install extends Migration
         $migration = new InsertDefaultGlobalsBySite([
             'siteId' => $siteId,
         ]);
-
-        ob_start();
-        $migration->up();
-        ob_end_clean();
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function createAddressTable()
-    {
-        $migration = new SproutBaseFieldsInstall();
 
         ob_start();
         $migration->up();

@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
+use barrelstrength\sproutbase\records\Settings as SproutBaseSettingsRecord;
 use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirectsInstall;
 use barrelstrength\sproutbaseredirects\models\Settings as SproutRedirectsSettings;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
@@ -38,7 +39,7 @@ class m190415_000000_adds_sprout_redirects_migration extends Migration
 
         $settingsRow = (new Query())
             ->select(['*'])
-            ->from(['{{%sprout_settings}}'])
+            ->from([SproutBaseSettingsRecord::tableName()])
             ->where(['model' => SproutRedirectsSettings::class])
             ->one();
 

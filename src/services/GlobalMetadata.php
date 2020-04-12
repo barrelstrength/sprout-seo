@@ -9,6 +9,7 @@ namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutseo\migrations\InsertDefaultGlobalsBySite;
 use barrelstrength\sproutseo\models\Globals;
+use barrelstrength\sproutseo\records\GlobalMetadata as GlobalMetadataRecord;
 use Craft;
 use craft\base\Component;
 use craft\db\Query;
@@ -42,7 +43,7 @@ class GlobalMetadata extends Component
 
         $query = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_globals}}']);
+            ->from([GlobalMetadataRecord::tableName()]);
 
         if ($siteId) {
             $query->where(['siteId' => $siteId]);
@@ -81,7 +82,7 @@ class GlobalMetadata extends Component
         // new site?
         $results = (new Query())
             ->select('*')
-            ->from(['{{%sproutseo_globals}}'])
+            ->from([GlobalMetadataRecord::tableName()])
             ->where(['[[siteId]]' => $globals->siteId])
             ->one();
 
@@ -96,7 +97,7 @@ class GlobalMetadata extends Component
             ob_end_clean();
         }
 
-        Craft::$app->db->createCommand()->update('{{%sproutseo_globals}}',
+        Craft::$app->db->createCommand()->update(GlobalMetadataRecord::tableName(),
             $values,
             ['siteId' => $globals->siteId]
         )->execute();

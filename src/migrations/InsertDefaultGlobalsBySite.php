@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
+use barrelstrength\sproutseo\records\GlobalMetadata as GlobalMetadataRecord;
 use craft\db\Migration;
 use yii\db\Exception;
 
@@ -25,8 +26,6 @@ class InsertDefaultGlobalsBySite extends Migration
      */
     public function safeUp()
     {
-        $tableName = '{{%sproutseo_globals}}';
-
         $defaultSettings = '{
             "seoDivider":"-",
             "defaultOgType":"website",
@@ -37,7 +36,7 @@ class InsertDefaultGlobalsBySite extends Migration
             "appendTitleValue": ""}
         ';
 
-        $this->db->createCommand()->insert($tableName, [
+        $this->db->createCommand()->insert(GlobalMetadataRecord::tableName(), [
                 'siteId' => $this->siteId,
                 'identity' => null,
                 'ownership' => null,
