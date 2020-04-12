@@ -85,7 +85,7 @@ trait MetaImageTrait
         }
 
         if (!is_numeric($image)) {
-            SproutSeo::warning('Meta image value "'.$image.'" cannot be identified. Must be an absolute URL or an Asset ID.');
+            Craft::warning('Meta image value ['.$image.'] cannot be identified. Must be an absolute URL or an Asset ID.', __METHOD__);
 
             return null;
         }

@@ -327,7 +327,7 @@ abstract class Schema
             // Valid URL
             $this->structuredData[$propertyName] = $url;
         } else {
-            SproutSeo::info('Schema unable to add value. Value is not a valid URL.');
+            Craft::info('Schema unable to add value. Value is not a valid URL.', __METHOD__);
         }
     }
 
@@ -346,7 +346,7 @@ abstract class Schema
             $phoneModel->phone = $phone['phone'];
             $this->structuredData[$propertyName] = $phoneModel->getInternational();
         } else {
-            SproutSeo::info('Schema unable to add value. Value is not a valid Phone.');
+            Craft::info('Schema unable to add value. Value is not a valid Phone.', __METHOD__);
         }
     }
 
@@ -368,7 +368,7 @@ abstract class Schema
             // Valid Email
             $this->structuredData[$propertyName] = $emailString;
         } else {
-            SproutSeo::info('Schema unable to add value. Value is not a valid Email.');
+            Craft::info('Schema unable to add value. Value is not a valid Email.', __METHOD__);
         }
     }
 

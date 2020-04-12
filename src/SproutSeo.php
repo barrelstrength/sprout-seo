@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutseo;
 
-use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
@@ -49,7 +48,6 @@ use yii\base\InvalidConfigException;
  */
 class SproutSeo extends Plugin
 {
-    use BaseSproutTrait;
 
     const EDITION_LITE = 'lite';
 
@@ -61,13 +59,6 @@ class SproutSeo extends Plugin
      * @var App
      */
     public static $app;
-
-    /**
-     * Identify our plugin for BaseSproutTrait
-     *
-     * @var string
-     */
-    public static $pluginHandle = 'sprout-seo';
 
     /**
      * @var bool
