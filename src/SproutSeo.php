@@ -20,7 +20,7 @@ use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemapsHelper;
 use barrelstrength\sproutbaseuris\SproutBaseUrisHelper;
 use barrelstrength\sproutseo\fields\ElementMetadata;
-use barrelstrength\sproutseo\models\Settings;
+use barrelstrength\sproutseo\models\Settings as SproutSeoSettings;
 use barrelstrength\sproutseo\services\App;
 use barrelstrength\sproutseo\web\twig\Extension as SproutSeoTwigExtension;
 use barrelstrength\sproutseo\web\twig\variables\SproutSeoVariable;
@@ -41,11 +41,14 @@ use yii\base\Event;
 use yii\base\InvalidConfigException;
 
 /**
+ * Class SproutSeo
+ *
+ * @package barrelstrength\sproutseo
  *
  * @property mixed $cpNavItem
  * @property array $cpUrlRules
- * @property array $userPermissions
  * @property null  $upgradeUrl
+ * @property array $userPermissions
  * @property array $sproutDependencies
  * @property array $siteUrlRules
  */
@@ -228,7 +231,6 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
     }
 
     /**
-     * @return Settings
      * @return array
      */
     public function getSproutDependencies(): array
@@ -243,10 +245,12 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
         ];
     }
 
+    /**
+     * @return SproutSeoSettings
      */
-    protected function createSettingsModel(): Settings
+    protected function createSettingsModel(): SproutSeoSettings
     {
-        return new Settings();
+        return new SproutSeoSettings();
     }
 
     /**

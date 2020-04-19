@@ -110,6 +110,7 @@ class GlobalMetadataController extends Controller
         // Render the template!
         return $this->renderTemplate('sprout-seo/globals/'.$selectedTabHandle, [
             'globals' => $globals,
+            'settings' => SproutSeo::$app->settings->getSettings(),
             'currentSite' => $currentSite,
             'selectedTabHandle' => $selectedTabHandle,
             'addressDisplayHtml' => Template::raw($addressDisplayHtml),

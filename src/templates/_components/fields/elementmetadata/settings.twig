@@ -16,7 +16,6 @@
         }) }}
     {% endif %}
 
-    {% set pluginSettings = craft.sproutSeo.getSettings() %}
     {% set optimizedTitleOptions = craft.sproutSeo.getOptimizedTitleOptions(settings) %}
     {% set mainEntityValues = {'schemaTypeId': settings.schemaTypeId, 'schemaOverrideTypeId': settings.schemaOverrideTypeId} %}
 

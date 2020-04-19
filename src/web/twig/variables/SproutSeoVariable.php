@@ -23,26 +23,8 @@ use DateTime;
 use DateTimeZone;
 use yii\base\Exception;
 
-/**
- * Class SproutSeoVariable
- *
- * @package Craft
- */
 class SproutSeoVariable
 {
-    /**
-     * @var SproutSeo
-     */
-    protected $plugin;
-
-    /**
-     * SproutSeoVariable constructor.
-     */
-    public function __construct()
-    {
-        $this->plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-    }
-
     /**
      * Sets SEO metadata in templates
      *
@@ -72,14 +54,6 @@ class SproutSeoVariable
         }
 
         return $divider;
-    }
-
-    /**
-     * @return Model|null
-     */
-    public function getSettings()
-    {
-        return $this->plugin->getSettings();
     }
 
     /**
@@ -495,10 +469,7 @@ class SproutSeoVariable
         $options = [];
         $fields = Craft::$app->fields->getAllFields();
 
-        /**
-         * @var Settings $pluginSettings
-         */
-        $pluginSettings = $this->plugin->getSettings();
+        $pluginSettings = SproutSeo::$app->settings->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
 
@@ -553,10 +524,7 @@ class SproutSeoVariable
         $options = [];
         $fields = Craft::$app->fields->getAllFields();
 
-        /**
-         * @var Settings $pluginSettings
-         */
-        $pluginSettings = $this->plugin->getSettings();
+        $pluginSettings = SproutSeo::$app->settings->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
         $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field')];

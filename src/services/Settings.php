@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutseo\services;
 
 use barrelstrength\sproutseo\fields\ElementMetadata;
-use barrelstrength\sproutseo\models\Settings as PluginSettings;
+use barrelstrength\sproutseo\models\Settings as SproutSeoSettings;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\db\Query;
@@ -16,21 +16,34 @@ use yii\base\Component;
 
 /**
  *
- * @property string|int $metadataFieldCount
- * @property int        $descriptionLength
+ * @property string|int        $metadataFieldCount
+ * @property SproutSeoSettings $settings
+ * @property int               $descriptionLength
  */
 class Settings extends Component
 {
-    public function getDescriptionLength(): int
+    /**
+     * Returns plugin settings model.
+     *
+     * This method helps explicitly define what we're getting back so we can
+     * avoid NullReferenceException warnings
+     *
+     * @return SproutSeoSettings
+     */
+    public function getSettings(): SproutSeoSettings
     {
         /** @var SproutSeo $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-        /** @var PluginSettings $pluginSettings */
-        $pluginSettings = $plugin->getSettings();
-        $descriptionLength = $pluginSettings->maxMetaDescriptionLength;
-        $descriptionLength = $descriptionLength ?: 160;
+        $plugin = SproutSeo::getInstance();
 
-        return $descriptionLength;
+        /** @var SproutSeoSettings $settings */
+        $settings = $plugin->getSettings();
+
+        return $settings;
+    }
+
+    public function getDescriptionLength(): int
+    {
+        return $this->getSettings()->maxMetaDescriptionLength ?: 160;
     }
 
     /**

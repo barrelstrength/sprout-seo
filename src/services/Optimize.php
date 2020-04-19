@@ -150,10 +150,7 @@ class Optimize extends Component
      */
     public function getMetadata($site = null, $render = true, &$context = null)
     {
-        /** @var SproutSeo $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-seo');
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutSeo::$app->settings->getSettings();
 
         $this->globals = SproutSeo::$app->globalMetadata->getGlobalMetadata($site);
         $this->prioritizedMetadataModel = $this->getPrioritizedMetadataModel();

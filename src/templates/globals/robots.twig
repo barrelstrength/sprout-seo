@@ -3,7 +3,6 @@
 {% import "sprout-seo/_includes/sproutseo" as sprout %}
 
 {% set sproutSeoApp = craft.app.getModule('sprout-seo').app %}
-{% set settings = craft.sproutSeo.getSettings() %}
 
 {% set robots = sproutSeoApp.optimize.prepareRobotsMetadataForSettings(globals.robots) %}
 
