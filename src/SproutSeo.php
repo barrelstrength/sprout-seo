@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutseo;
 
+use barrelstrength\sproutbase\base\SproutDependencyInterface;
+use barrelstrength\sproutbase\base\SproutDependencyTrait;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
@@ -44,10 +46,12 @@ use yii\base\InvalidConfigException;
  * @property array $cpUrlRules
  * @property array $userPermissions
  * @property null  $upgradeUrl
+ * @property array $sproutDependencies
  * @property array $siteUrlRules
  */
-class SproutSeo extends Plugin
+class SproutSeo extends Plugin implements SproutDependencyInterface
 {
+    use SproutDependencyTrait;
 
     const EDITION_LITE = 'lite';
 
@@ -225,6 +229,20 @@ class SproutSeo extends Plugin
 
     /**
      * @return Settings
+     * @return array
+     */
+    public function getSproutDependencies(): array
+    {
+        return [
+            SproutDependencyInterface::SPROUT_BASE,
+            SproutDependencyInterface::SPROUT_BASE_FIELDS,
+            SproutDependencyInterface::SPROUT_BASE_IMPORT,
+            SproutDependencyInterface::SPROUT_BASE_REDIRECTS,
+            SproutDependencyInterface::SPROUT_BASE_SITEMAPS,
+            SproutDependencyInterface::SPROUT_BASE_URIS
+        ];
+    }
+
      */
     protected function createSettingsModel(): Settings
     {
