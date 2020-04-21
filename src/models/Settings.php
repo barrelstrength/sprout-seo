@@ -27,27 +27,22 @@ class Settings extends Model implements SproutSettingsInterface
     /**
      * @var bool
      */
-    public $appendTitleValue;
-
-    /**
-     * @var bool
-     */
     public $displayFieldHandles = false;
 
     /**
      * @var bool
      */
-    public $enableMetadataRendering = true;
+    public $enableRenderMetadata = true;
 
     /**
      * @var bool
      */
-    public $toggleMetadataVariable = false;
+    public $useMetadataVariable = false;
 
     /**
      * @var string
      */
-    public $metadataVariable = 'metadata';
+    public $metadataVariableName = 'metadata';
 
     /**
      * @var int
@@ -75,7 +70,7 @@ class Settings extends Model implements SproutSettingsInterface
         $isPro = $plugin->is(SproutSeo::EDITION_PRO);
 
         $navItems['general'] = [
-            'label' => Craft::t('sprout-seo', 'General'),
+            'label' => Craft::t('sprout-seo', 'Metadata'),
             'url' => 'sprout-seo/settings/general',
             'selected' => 'general',
             'template' => 'sprout-seo/settings/general'
@@ -98,13 +93,6 @@ class Settings extends Model implements SproutSettingsInterface
                 'template' => 'sprout-base-sitemaps/settings/sitemaps'
             ];
         }
-
-        $navItems['advanced'] = [
-            'label' => Craft::t('sprout-seo', 'Advanced'),
-            'url' => 'sprout-seo/settings/advanced',
-            'selected' => 'advanced',
-            'template' => 'sprout-seo/settings/advanced',
-        ];
 
         if (!$isPro) {
             $navItems['upgrade'] = [

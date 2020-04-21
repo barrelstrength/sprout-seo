@@ -168,13 +168,13 @@ class Optimize extends Component
         }
 
         // Output metadata
-        if ($settings->enableMetadataRendering) {
+        if ($settings->enableRenderMetadata) {
             $output = $this->renderMetadata($metadata);
         }
 
         // Add metadata variable to Twig context
-        if ($settings->toggleMetadataVariable && $context) {
-            $context[$settings->metadataVariable] = $metadata;
+        if ($settings->useMetadataVariable && $context) {
+            $context[$settings->metadataVariableName] = $metadata;
         }
 
         return $output;
