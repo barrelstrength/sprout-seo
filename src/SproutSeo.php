@@ -12,10 +12,10 @@ use barrelstrength\sproutbase\base\SproutDependencyTrait;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
-use barrelstrength\sproutbaseredirects\models\Settings as RedirectsSettingsModel;
+use barrelstrength\sproutbaseredirects\models\Settings as SproutBaseRedirectsSettings;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirects;
 use barrelstrength\sproutbaseredirects\SproutBaseRedirectsHelper;
-use barrelstrength\sproutbasesitemaps\models\Settings as SitemapsSettingsModel;
+use barrelstrength\sproutbasesitemaps\models\Settings as SproutBaseSitemapsSettings;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemaps;
 use barrelstrength\sproutbasesitemaps\SproutBaseSitemapsHelper;
 use barrelstrength\sproutbaseuris\SproutBaseUrisHelper;
@@ -170,8 +170,7 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
             ];
         }
 
-        /** @var RedirectsSettingsModel $redirectSettings */
-        $redirectSettings = SproutBase::$app->settings->getBaseSettings(RedirectsSettingsModel::class);
+        $redirectSettings = SproutBaseRedirects::$app->settings->getRedirectsSettings();
 
         if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') && $redirectSettings->enableRedirects && $isPro) {
             $parent['subnav']['redirects'] = [
@@ -180,8 +179,7 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
             ];
         }
 
-        /** @var SitemapsSettingsModel $sitemapSettings */
-        $sitemapSettings = SproutBase::$app->settings->getBaseSettings(SitemapsSettingsModel::class);
+        $sitemapSettings = SproutBaseSitemaps::$app->settings->getSitemapsSettings();
 
         if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') && $sitemapSettings->enableDynamicSitemaps && $isPro) {
             $parent['subnav']['sitemaps'] = [
@@ -316,13 +314,13 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
                 'sprout-seo/settings/redirects' => [
                     'route' => 'sprout/settings/edit-settings',
                     'params' => [
-                        'sproutBaseSettingsType' => RedirectsSettingsModel::class
+                        'sproutBaseSettingsType' => SproutBaseRedirectsSettings::class
                     ]
                 ],
                 'sprout-seo/settings/sitemaps' => [
                     'route' => 'sprout/settings/edit-settings',
                     'params' => [
-                        'sproutBaseSettingsType' => SitemapsSettingsModel::class
+                        'sproutBaseSettingsType' => SproutBaseSitemapsSettings::class
                     ]
                 ]
             ]);
@@ -361,7 +359,7 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
     private function getSiteUrlRules(): array
     {
         if ($this->is(self::EDITION_PRO)) {
-            $settings = SproutBaseSitemaps::$app->sitemaps->getSitemapsSettings();
+            $settings = SproutBaseSitemaps::$app->settings->getSitemapsSettings();
             if ($settings->enableDynamicSitemaps) {
                 return [
                     'sitemap-<sitemapKey:.*>-<pageNumber:\d+>.xml' =>

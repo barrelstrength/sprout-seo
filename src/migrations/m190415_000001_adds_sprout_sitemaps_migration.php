@@ -42,7 +42,7 @@ class m190415_000001_adds_sprout_sitemaps_migration extends Migration
 
         if (is_array($settings->siteSettings)) {
             // Add our default plugin settings
-            SproutBaseSitemaps::$app->sitemaps->saveSitemapsSettings($settings->toArray());
+            SproutBaseSitemaps::$app->settings->saveSitemapsSettings($settings->toArray());
         }
 
         return true;
