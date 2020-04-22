@@ -7,11 +7,13 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
+use barrelstrength\sproutbase\base\SproutDependencyInterface;
 use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbaseredirects\migrations\Install as SproutBaseRedirectsInstall;
 use barrelstrength\sproutbasesitemaps\migrations\Install as SproutBaseSitemapsInstall;
 use barrelstrength\sproutseo\records\GlobalMetadata as GlobalMetadataRecord;
+use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\db\Migration;
 use craft\db\Table;
@@ -33,6 +35,58 @@ class Install extends Migration
     {
         $this->createTables();
         $this->insertDefaultGlobalMetadata();
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @throws Throwable
+     */
+    public function safeDown(): bool
+    {
+        /** @var SproutSeo $plugin */
+        $plugin = SproutSeo::getInstance();
+
+        $sproutBaseRedirectsInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_REDIRECTS);
+        $sproutBaseSitemapsInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_SITEMAPS);
+        $sproutBaseFieldsInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_FIELDS);
+        $sproutBaseInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE);
+
+        if (!$sproutBaseRedirectsInUse) {
+            $migration = new SproutBaseRedirectsInstall();
+
+            ob_start();
+            $migration->safeDown();
+            ob_end_clean();
+        }
+
+        if (!$sproutBaseSitemapsInUse) {
+            $migration = new SproutBaseSitemapsInstall();
+
+            ob_start();
+            $migration->safeDown();
+            ob_end_clean();
+        }
+
+        if (!$sproutBaseFieldsInUse) {
+            $migration = new SproutBaseFieldsInstall();
+
+            ob_start();
+            $migration->safeDown();
+            ob_end_clean();
+        }
+
+        if (!$sproutBaseInUse) {
+            $migration = new SproutBaseInstall();
+
+            ob_start();
+            $migration->safeDown();
+            ob_end_clean();
+        }
+
+        // Delete Global Metadata Table
+        $this->dropTableIfExists(GlobalMetadataRecord::tableName());
 
         return true;
     }
