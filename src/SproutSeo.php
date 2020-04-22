@@ -236,7 +236,6 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
         return [
             SproutDependencyInterface::SPROUT_BASE,
             SproutDependencyInterface::SPROUT_BASE_FIELDS,
-            SproutDependencyInterface::SPROUT_BASE_IMPORT,
             SproutDependencyInterface::SPROUT_BASE_REDIRECTS,
             SproutDependencyInterface::SPROUT_BASE_SITEMAPS,
             SproutDependencyInterface::SPROUT_BASE_URIS
