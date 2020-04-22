@@ -11,7 +11,6 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Globals;
 use barrelstrength\sproutseo\models\Metadata;
-use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\schema\WebsiteIdentityOrganizationSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPersonSchema;
 use barrelstrength\sproutseo\schema\WebsiteIdentityPlaceSchema;

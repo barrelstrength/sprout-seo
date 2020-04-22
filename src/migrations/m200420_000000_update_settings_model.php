@@ -1,15 +1,16 @@
 <?php /**
- * @link https://sprout.barrelstrengthdesign.com
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
- */ /** @noinspection ClassConstantCanBeUsedInspection */
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutbaseemail\migrations\m200219_000000_clean_up_cc_bcc_emailList_fields;
+use Craft;
 use craft\db\Migration;
 use craft\services\Plugins;
-use Craft;
 use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\base\NotSupportedException;

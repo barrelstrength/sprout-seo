@@ -8,12 +8,10 @@
 namespace barrelstrength\sproutseo\web\twig\variables;
 
 use barrelstrength\sproutseo\models\Globals;
-use barrelstrength\sproutseo\models\Settings;
 use barrelstrength\sproutseo\SproutSeo;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
-use craft\base\Model;
 use craft\elements\Asset;
 use craft\errors\SiteNotFoundException;
 use craft\fields\Assets;

@@ -10,7 +10,6 @@ namespace barrelstrength\sproutseo\services;
 use barrelstrength\sproutseo\fields\ElementMetadata;
 use barrelstrength\sproutseo\models\Settings as SproutSeoSettings;
 use barrelstrength\sproutseo\SproutSeo;
-use Craft;
 use craft\db\Query;
 use yii\base\Component;
 
