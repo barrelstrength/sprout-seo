@@ -75,7 +75,7 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
     /**
      * @var string
      */
-    public $schemaVersion = '4.4.2';
+    public $schemaVersion = '4.5.0';
 
     /**
      * @var string
