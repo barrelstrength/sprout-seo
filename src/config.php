@@ -30,6 +30,7 @@ return [
     // The name of the metadata variable available to your templates
     // 'metadataVariable' => 'metadata'
 
-    // Display field handle next to the field name in your Element Metadata field settings
+    // Display field handle next to the field name in your Element Metadata
+    // field settings
     'displayFieldHandles' => false
 ];
