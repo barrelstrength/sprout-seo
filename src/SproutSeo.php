@@ -269,17 +269,22 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
     private function getCpUrlRules(): array
     {
         $rules = [
-            'sprout-seo' => [
-                'template' => 'sprout-seo/index'
-            ],
-
             // Globals
             'sprout-seo/globals/<selectedTabHandle:.*>/<siteHandle:.*>' =>
                 'sprout-seo/global-metadata/edit-global-metadata',
             'sprout-seo/globals/<selectedTabHandle:.*>' =>
                 'sprout-seo/global-metadata/edit-global-metadata',
             'sprout-seo/globals' => [
-                'template' => 'sprout-seo/globals/index'
+                'route' => 'sprout-seo/global-metadata/edit-global-metadata',
+                'params' => [
+                    'selectedTabHandle' => 'website-identity'
+                ]
+            ],
+            'sprout-seo' => [
+                'route' => 'sprout-seo/global-metadata/edit-global-metadata',
+                'params' => [
+                    'selectedTabHandle' => 'website-identity'
+                ]
             ],
         ];
 
