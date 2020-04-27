@@ -18,6 +18,9 @@
 - Updated `barrelstrength/sprout-base-sitemaps` requirement v1.3.0
 - Updated `barrelstrength/sprout-base-uris` requirement v1.1.0
 
+### Fixed
+- Fixed bug in migration when using alias in Site settings
+
 ### Removed
 - Removed `barrelstrength\sproutbaseredirects\services\getPluginSettings()`
 - Removed `barrelstrength\sproutbase\services\Settings::getPluginSettings()`
