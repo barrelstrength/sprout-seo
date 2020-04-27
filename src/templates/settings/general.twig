@@ -1,5 +1,13 @@
 {% import "_includes/forms" as forms %}
 
+{% macro configWarning(setting) -%}
+    {{ "This is being overridden by the {setting} config setting."|t('sprout-forms-google-recaptcha', {
+        setting: setting
+    })|raw }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
+
 {% set isPro = plugin.is('pro') %}
 {% set isProBadge = not isPro ? ' <span class="sprout-pro">PRO</span>' : '' %}
 
@@ -12,7 +20,8 @@
     placeholder: 'Sprout SEO',
     autofocus: true,
     first: true,
-    errors: ''
+    errors: '',
+    warning: config.pluginNameOverride is defined ? configWarning('pluginNameOverride')
 }) }}
 
 {{ forms.textField({
@@ -22,7 +31,8 @@
     placeholder: '160',
     size:'10',
     value: settings.maxMetaDescriptionLength,
-    errors: ''
+    errors: '',
+    warning: config.maxMetaDescriptionLength is defined ? configWarning('maxMetaDescriptionLength')
 }) }}
 
 {{ forms.lightswitchField({
@@ -31,7 +41,8 @@
     name: 'enableRenderMetadata',
     on: not isPro ? true : (settings.enableRenderMetadata is empty ? false : true),
     onLabel: "Enable"|t('sprout-seo'),
-    disabled: not isPro
+    disabled: not isPro,
+    warning: config.enableRenderMetadata is defined ? configWarning('enableRenderMetadata')
 }) }}
 
 {{ forms.lightswitchField({
@@ -41,7 +52,8 @@
     toggle: 'settings-enablemetadatavariable',
     on: not isPro ? false : settings.useMetadataVariable,
     onLabel: "Enable"|t('sprout-seo'),
-    disabled: not isPro
+    disabled: not isPro,
+    warning: config.useMetadataVariable is defined ? configWarning('useMetadataVariable')
 }) }}
 
 <div id="settings-enablemetadatavariable"
@@ -53,7 +65,8 @@
         name: 'metadataVariableName',
         placeholder: 'metadata',
         value: settings.metadataVariableName,
-        errors: ''
+        errors: '',
+        warning: config.metadataVariableName is defined ? configWarning('metadataVariableName')
     }) }}
 
 </div>
@@ -63,7 +76,8 @@
     instructions: "Enable this setting to display field handle next to the field name in your Element Metadata field settings."|t('sprout-seo'),
     name: 'displayFieldHandles',
     on: settings.displayFieldHandles ? true : false,
-    onLabel: "Enable"|t
+    onLabel: "Enable"|t,
+    warning: config.displayFieldHandles is defined ? configWarning('displayFieldHandles')
 }) }}
 
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
