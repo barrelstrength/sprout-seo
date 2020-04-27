@@ -191,7 +191,7 @@ class GlobalMetadataController extends Controller
      * @throws Throwable
      * @throws \yii\db\Exception
      */
-    public function actionSaveVerifyOwnership(): Response
+    public function actionSaveVerifyOwnership()
     {
         $this->requirePostRequest();
 
