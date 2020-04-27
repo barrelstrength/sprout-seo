@@ -37,8 +37,10 @@ class m200420_000000_update_settings_model extends Migration
 
         $pluginSettings = Craft::$app->getProjectConfig()->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
 
+        $useMetadataVariableFallback = $pluginSettings['metadataVariable'] ? true : false;
+
         // Update settings to new names
-        $pluginSettings['useMetadataVariable'] = $pluginSettings['toggleMetadataVariable'];
+        $pluginSettings['useMetadataVariable'] = $pluginSettings['toggleMetadataVariable'] ?? $useMetadataVariableFallback;
         $pluginSettings['enableRenderMetadata'] = $pluginSettings['enableMetadataRendering'];
         $pluginSettings['metadataVariableName'] = $pluginSettings['metadataVariable'];
 
