@@ -20,19 +20,6 @@ class m200307_000000_cleanup_optimized_entryelement_metadata_values extends Migr
      */
     public function safeUp(): bool
     {
-        $baseUrlSites = (new Query())
-            ->select(['baseUrl'])
-            ->from('{{%sites}}')
-            ->column();
-
-        $incorrectUrls = array_map(static function($baseUrl) {
-            $incorrectBaseEntryUrl = $baseUrl.'/entries';
-            // Remove double slash if baseUrl has slash (i.e. //entries)
-            $incorrectBaseEntryUrl = str_replace('//entries', '/entries', $incorrectBaseEntryUrl);
-
-            return Craft::getAlias($incorrectBaseEntryUrl);
-        }, $baseUrlSites);
-
         $elementMetadataFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from('{{%fields}} as fields')
@@ -131,13 +118,6 @@ class m200307_000000_cleanup_optimized_entryelement_metadata_values extends Migr
                         // Remove canonical values that include an action URL
                         if (strpos($newFieldSettings['canonical'], 'actions/queue/run') !== false) {
                             $newFieldSettings['canonical'] = null;
-                        }
-                        // Remove canonical values that match a base URL + /entries
-                        foreach ($incorrectUrls as $incorrectUrl) {
-                            if (strpos($newFieldSettings['canonical'], $incorrectUrl) !== false) {
-                                $newFieldSettings['canonical'] = null;
-                                break;
-                            }
                         }
                     }
 
