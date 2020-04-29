@@ -7,6 +7,9 @@
 
 ### Fixed
 - Fixed migration issue when multiple Sprout plugins are installed
+- Fixed fallback scenario when migrating settings
+
+[#203]: https://github.com/barrelstrength/craft-sprout-seo/issues/203
 
 ## 4.5.0 - 2020-04-27
 
