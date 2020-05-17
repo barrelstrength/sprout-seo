@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.6.1 - 2020-05-16
+
+### Changed
+- Improved saving of new Redirects if matching 404 exists ([#26][#26-redirects])
+- Improved display of Base URL on Redirect edit page
+- Updated `barrelstrength/sprout-base-redirects` requirement v1.5.1
+
+### Fixed
+- Fixed address field spacing ([#181])
+- Fixed Website Identity settings display bug ([#198])
+
+[#26-redirects]: https://github.com/barrelstrength/craft-sprout-redirects/issues/26
+[#181]: https://github.com/barrelstrength/craft-sprout-seo/issues/181
+[#198]: https://github.com/barrelstrength/craft-sprout-seo/issues/198
+
 ## 4.6.0 - 2020-04-28
 
 ### Changed
