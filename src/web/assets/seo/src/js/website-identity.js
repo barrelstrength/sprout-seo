@@ -1,9 +1,3 @@
-/*
- * @link https://sprout.barrelstrengthdesign.com
- * @copyright Copyright (c) Barrel Strength Design LLC
- * @license https://craftcms.github.io/license
- */
-
 class SproutSeoWebsiteIdentity {
   constructor(props) {
     this.items = props.items;
