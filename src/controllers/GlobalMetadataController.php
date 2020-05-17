@@ -150,7 +150,7 @@ class GlobalMetadataController extends Controller
                     $address['fieldId'],
                     $address['delete']
                 );
-                $postData['identity']['address'] = $address;
+                $postData['identity']['address'] = array_map('trim', $address);
             }
         }
 

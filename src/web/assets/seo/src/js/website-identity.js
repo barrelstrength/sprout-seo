@@ -1,4 +1,5 @@
 class SproutSeoWebsiteIdentity {
+
   constructor(props) {
     this.items = props.items;
     this.websiteIdentity = props.websiteIdentity;
@@ -89,13 +90,6 @@ class SproutSeoWebsiteIdentity {
       }
 
     });
-
-    // Selection handler for third level dropdown
-    thirdDropDown.on('change', function() {
-      thirdSelection = thirdDropDown.val();
-      // Final work goes here
-
-    });
   }
 
   moreWebsiteIdentityStuff() {
@@ -110,7 +104,7 @@ class SproutSeoWebsiteIdentity {
         $('#main-entity-second-dropdown').val(websiteIdentity.organizationSubTypes[1]).trigger('change');
       }
       if (websiteIdentity.hasOwnProperty('organizationSubTypes') && websiteIdentity.organizationSubTypes[2]) {
-        $('#main-entity-second-dropdown').val(websiteIdentity.organizationSubTypes[2]).trigger('change');
+        $('#main-entity-third-dropdown').val(websiteIdentity.organizationSubTypes[2]).trigger('change');
       }
     }
 
