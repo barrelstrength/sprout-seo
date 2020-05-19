@@ -170,21 +170,41 @@ class SproutSeo extends Plugin implements SproutDependencyInterface
             ];
         }
 
+        $sproutRedirectsIsEnabled = Craft::$app->getPlugins()->isPluginEnabled('sprout-redirects');
+        $redirectsNavLabel = Craft::t('sprout-seo', 'Redirects');
         $redirectSettings = SproutBaseRedirects::$app->settings->getRedirectsSettings();
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects') && $redirectSettings->enableRedirects && $isPro) {
+        if ($sproutRedirectsIsEnabled) {
+            SproutBase::$app->utilities->addSubNavIcon('sprout-seo', $redirectsNavLabel);
+        }
+
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editRedirects')
+            && $redirectSettings->enableRedirects
+            && $isPro) {
             $parent['subnav']['redirects'] = [
-                'label' => Craft::t('sprout-seo', 'Redirects'),
-                'url' => 'sprout-seo/redirects'
+                'label' => $redirectsNavLabel,
+                'url' => $sproutRedirectsIsEnabled
+                    ? 'sprout-redirects/redirects'
+                    : 'sprout-seo/redirects'
             ];
         }
 
+        $sproutSitemapsIsEnabled = Craft::$app->getPlugins()->isPluginEnabled('sprout-sitemaps');
+        $sitemapsNavLabel = Craft::t('sprout-seo', 'Sitemaps');
         $sitemapSettings = SproutBaseSitemaps::$app->settings->getSitemapsSettings();
 
-        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps') && $sitemapSettings->enableDynamicSitemaps && $isPro) {
+        if ($sproutSitemapsIsEnabled) {
+            SproutBase::$app->utilities->addSubNavIcon('sprout-seo', $sitemapsNavLabel);
+        }
+
+        if (Craft::$app->getUser()->checkPermission('sproutSeo-editSitemaps')
+            && $sitemapSettings->enableDynamicSitemaps
+            && $isPro) {
             $parent['subnav']['sitemaps'] = [
-                'label' => Craft::t('sprout-seo', 'Sitemaps'),
-                'url' => 'sprout-seo/sitemaps'
+                'label' => $sitemapsNavLabel,
+                'url' => $sproutSitemapsIsEnabled
+                    ? 'sprout-sitemaps/sitemaps'
+                    : 'sprout-seo/sitemaps'
             ];
         }
 
