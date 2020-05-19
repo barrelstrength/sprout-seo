@@ -471,7 +471,7 @@ class SproutSeoVariable
 
         $options[''] = Craft::t('sprout-seo', 'None');
 
-        $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field')];
+        $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field (Recommended)')];
 
         if ($handle == 'optimizedTitleField') {
             $options['elementTitle'] = Craft::t('sprout-seo', 'Title');
@@ -525,7 +525,7 @@ class SproutSeoVariable
         $pluginSettings = SproutSeo::$app->settings->getSettings();
 
         $options[''] = Craft::t('sprout-seo', 'None');
-        $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field')];
+        $options[] = ['optgroup' => Craft::t('sprout-seo', 'Use Existing Field (Recommended)')];
 
         /** @var Field $field */
         foreach ($fields as $key => $field) {
