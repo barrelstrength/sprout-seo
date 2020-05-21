@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.6.2 - 2020-05-21
+
+### Added
+- Added placeholder value to '404 Redirect Limit' setting
+
+### Changed
+- Added minimum column width for Old URL on Redirect Element Index page
+- Minor updates to primary and Element Metadata nav components
+- Updated `barrelstrength/sprout-base-redirects` requirement v1.5.2
+- Updated `barrelstrength/sprout-base-fields` requirement to v1.4.2
+- Updated `giggsey/libphonenumber-for-php` requirement to v8.12.4
+
 ## 4.6.1 - 2020-05-16
 
 ### Changed
