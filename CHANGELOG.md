@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.6.3 - 2020-05-21
+
+### Changed
+- Updated `barrelstrength/sprout-base-uris` requirement v1.2.1
+
+### Fixed
+- Fixed bug where URL Enabled Sections could throw an error if any Section existed without a Field Layout ([#210], [#213])
+
+[#210]: https://github.com/barrelstrength/craft-sprout-seo/issues/210
+[#213]: https://github.com/barrelstrength/craft-sprout-seo/issues/213
+
 ## 4.6.2 - 2020-05-21
 
 ### Added
