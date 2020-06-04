@@ -287,7 +287,7 @@
 - Updated how Website Identity address to be stored as `identity.address`
 - Updated Website Identity Address to not use `sproutfields_addresses` table
 - Updated address to use `sprout-base-fields/_components/fields/formfields/address/input`
-- Updated `barrelstrength\sproutfields\fields\Address::hasContentColumn` to return false. Addresses are now stored only in the `sproutfields_adddresses` table.
+- Updated `barrelstrength\sproutbase\app\fields\Address::hasContentColumn` to return false. Addresses are now stored only in the `sproutfields_adddresses` table.
 - Added `barrelstrength\sproutbasefields\models\Address::getCountryCode()`
 - Updated `barrelstrength\sproutbasefields\services\Address::deleteAddressById()` to require address ID
 - Improved fallbacks for Address Field's default country and language
@@ -312,7 +312,7 @@
 ### Removed
 - Removed `identity.addressId`
 - Removed Address asset bundle from GlobalsAsset, it is included in the Address template
-- Removed `barrelstrength\sproutfields\fields\Address::serializeValue()`
+- Removed `barrelstrength\sproutbase\app\fields\Address::serializeValue()`
 - Removed `barrelstrength\sproutbasefields\helpers\AddressHelper`
 - Removed `barrelstrength\sproutbasefields\controllers\actionDeleteAddress()`
 - Removed `commerceguys/intl`

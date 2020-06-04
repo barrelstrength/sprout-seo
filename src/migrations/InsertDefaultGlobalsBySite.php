@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\migrations;
 
-use barrelstrength\sproutseo\records\GlobalMetadata as GlobalMetadataRecord;
+use barrelstrength\sproutbase\app\metadata\records\GlobalMetadata as GlobalMetadataRecord;
 use craft\db\Migration;
 use yii\db\Exception;
 
