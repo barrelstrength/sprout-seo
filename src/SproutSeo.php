@@ -8,38 +8,20 @@
 namespace barrelstrength\sproutseo;
 
 use barrelstrength\sproutbase\app\seo\fields\ElementMetadata;
-use barrelstrength\sproutbase\app\seo\web\twig\variables\SproutSeoVariable;
 use barrelstrength\sproutbase\config\base\SproutBasePlugin;
-use barrelstrength\sproutbase\config\configs\ControlPanelConfig;
 use barrelstrength\sproutbase\config\configs\FieldsConfig;
-use barrelstrength\sproutbase\config\configs\SeoConfig;
 use barrelstrength\sproutbase\config\configs\RedirectsConfig;
+use barrelstrength\sproutbase\config\configs\SeoConfig;
 use barrelstrength\sproutbase\config\configs\SitemapsConfig;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use Craft;
-use craft\events\ExceptionEvent;
-use craft\events\FieldLayoutEvent;
 use craft\events\RegisterComponentTypesEvent;
-use craft\events\SiteEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\services\Sites;
-use craft\web\ErrorHandler;
 use yii\base\Event;
 
-/**
- * Class SproutSeo
- *
- * @package barrelstrength\sproutseo
- *
- * @property mixed $cpNavItem
- * @property array $cpUrlRules
- * @property null $upgradeUrl
- * @property array $userPermissions
- * @property array $sproutDependencies
- * @property array $siteUrlRules
- */
 class SproutSeo extends SproutBasePlugin
 {
     const EDITION_LITE = 'lite';
@@ -69,7 +51,7 @@ class SproutSeo extends SproutBasePlugin
             SeoConfig::class,
             FieldsConfig::class,
             RedirectsConfig::class,
-            SitemapsConfig::class
+            SitemapsConfig::class,
         ];
     }
 
@@ -79,22 +61,21 @@ class SproutSeo extends SproutBasePlugin
 
         SproutBaseHelper::registerModule();
 
-        // Add Twig Extensions
-//        Craft::$app->view->registerTwigExtension(new SproutSeoTwigExtension());
-
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = ElementMetadata::class;
         });
 
-        Event::on(Fields::class, Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT, static function(FieldLayoutEvent $event) {
-            SproutBase::$app->elementMetadata->resaveElementsAfterFieldLayoutIsSaved($event);
-        });
+        Event::on(
+            Fields::class,
+            Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT, [
+            SproutBase::$app->elementMetadata, 'resaveElementsAfterFieldLayoutIsSaved',
+        ]);
 
-        Event::on(Sites::class, Sites::EVENT_AFTER_SAVE_SITE, static function(SiteEvent $event) {
-            if ($event->isNew) {
-                SproutBase::$app->globalMetadata->insertDefaultGlobalMetadata($event->site->id);
-            }
-        });
+        Event::on(
+            Sites::class,
+            Sites::EVENT_AFTER_SAVE_SITE, [
+            SproutBase::$app->globalMetadata, 'handleDefaultSiteMetadata',
+        ]);
     }
 
     protected function afterInstall()
