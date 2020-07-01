@@ -16,7 +16,9 @@ use barrelstrength\sproutbase\config\configs\SitemapsConfig;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\SproutBaseHelper;
 use Craft;
+use craft\events\FieldLayoutEvent;
 use craft\events\RegisterComponentTypesEvent;
+use craft\events\SiteEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
 use craft\services\Sites;
@@ -65,17 +67,13 @@ class SproutSeo extends SproutBasePlugin
             $event->types[] = ElementMetadata::class;
         });
 
-        Event::on(
-            Fields::class,
-            Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT, [
-            SproutBase::$app->elementMetadata, 'resaveElementsAfterFieldLayoutIsSaved',
-        ]);
+        Event::on(Fields::class, Fields::EVENT_AFTER_SAVE_FIELD_LAYOUT, static function(FieldLayoutEvent $event) {
+            SproutBase::$app->elementMetadata->handleResaveElementsAfterFieldLayoutIsSaved($event);
+        });
 
-        Event::on(
-            Sites::class,
-            Sites::EVENT_AFTER_SAVE_SITE, [
-            SproutBase::$app->globalMetadata, 'handleDefaultSiteMetadata',
-        ]);
+        Event::on(Sites::class, Sites::EVENT_AFTER_SAVE_SITE, static function(SiteEvent $event) {
+            SproutBase::$app->globalMetadata->handleDefaultSiteMetadata($event);
+        });
     }
 
     protected function afterInstall()
