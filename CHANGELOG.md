@@ -1,5 +1,12 @@
 # Changelog
 
+## UNRELEASED
+
+### Fixed
+- Fixed 'Undefined index: metadataVariable' migration error [#217]
+
+[#217]: https://github.com/barrelstrength/craft-sprout-seo/issues/217
+
 ## 4.6.3 - 2020-05-21
 
 ### Changed
