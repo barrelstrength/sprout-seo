@@ -614,7 +614,10 @@ class OpenGraphMetaType extends MetaType
     {
         $tagData = parent::getMetaTagData();
 
-        if (isset($tagData['og:image'])) {
+        // If the value that exists is not a URL, we need to process it
+        if (isset($tagData['og:image']) &&
+            0 !== mb_strpos($tagData['og:image'], 'http')) {
+
             list(
                 $tagData['og:image'],
                 $tagData['og:image:width'],
