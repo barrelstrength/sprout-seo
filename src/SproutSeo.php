@@ -51,7 +51,6 @@ class SproutSeo extends SproutBasePlugin
     {
         return [
             SeoConfig::class,
-            FieldsConfig::class,
             RedirectsConfig::class,
             SitemapsConfig::class,
         ];
