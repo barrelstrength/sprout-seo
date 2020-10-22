@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutseo\services;
 
-
 use barrelstrength\sproutbaseuris\SproutBaseUris;
 use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
 use barrelstrength\sproutseo\models\Metadata;

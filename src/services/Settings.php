@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutseo\services;
 
-use barrelstrength\sproutseo\fields\ElementMetadata;
+use barrelstrength\sproutseo\fields\ElementMetadata as ElementMetadataField;
 use barrelstrength\sproutseo\models\Settings as SproutSeoSettings;
 use barrelstrength\sproutseo\SproutSeo;
 use craft\db\Query;
@@ -53,7 +53,7 @@ class Settings extends Component
         $totalFields = (new Query())
             ->select(['id'])
             ->from(['{{%fields}}'])
-            ->where(['type' => ElementMetadata::class])
+            ->where(['type' => ElementMetadataField::class])
             ->count();
 
         return $totalFields;
