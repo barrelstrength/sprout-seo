@@ -1,11 +1,21 @@
 # Changelog
 
-## UNRELEASED
+## 4.6.4 - 2020-10-22
+
+### Changed
+- Updated `barrelstrength/sprout-base-fields` requirement to v1.4.5
 
 ### Fixed
 - Fixed 'Undefined index: metadataVariable' migration error [#217]
+- Fixed condition where open graph URL overrides may not get processed correctly [#218]
+- Improved namespace support ([#222], [#223])
+- Fixed settings page rendering error introduced in Craft 3.5 [#221]
 
 [#217]: https://github.com/barrelstrength/craft-sprout-seo/issues/217
+[#218]: https://github.com/barrelstrength/craft-sprout-seo/issues/218
+[#221]: https://github.com/barrelstrength/craft-sprout-seo/issues/221
+[#222]: https://github.com/barrelstrength/craft-sprout-seo/issues/222
+[#223]: https://github.com/barrelstrength/craft-sprout-seo/issues/223
 
 ## 4.6.3 - 2020-05-21
 
