@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.6. - 2020-11-16
+
+### Changed
+- Updated `barrelstrength/sprout-base-redirects` requirement to v1.5.3
+
+### Fixed
+- Fixed redirect permissions issue ([#226])
+
+[#226]: https://github.com/barrelstrength/craft-sprout-seo/issues/226
+
 ## 4.6.4 - 2020-10-22
 
 ### Changed
