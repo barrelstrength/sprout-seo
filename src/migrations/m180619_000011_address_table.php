@@ -30,11 +30,29 @@ class m180619_000011_address_table extends Migration
             ->where(['handle' => 'sprout-seo'])
             ->one();
 
-        $migration = (new Query())
-            ->select(['*'])
-            ->from(['{{%migrations}}'])
-            ->where(['pluginId' => $plugin['id'], 'type' => 'plugin', 'name' => 'm180625_000001_address_table'])
-            ->one();
+        // Craft changed the schema of the migrations table so check for both
+        if ($this->db->columnExists('{{%migrations}}', 'pluginId')) {
+            // Old Craft schema
+            $migration = (new Query())
+                ->select(['*'])
+                ->from(['{{%migrations}}'])
+                ->where([
+                    'pluginId' => $plugin['id'],
+                    'type' => 'plugin',
+                    'name' => 'm180625_000001_address_table'
+                ])
+                ->one();
+        } else {
+            // New craft schema
+            $migration = (new Query())
+                ->select(['*'])
+                ->from(['{{%migrations}}'])
+                ->where([
+                    'track' => 'plugin:'.$plugin['handle'],
+                    'name' => 'm180625_000001_address_table'
+                ])
+                ->one();
+        }
 
         $this->createAddressTable();
 
