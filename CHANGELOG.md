@@ -1,6 +1,11 @@
 # Changelog
 
-## 4.6. - 2020-11-16
+## 4.6.6 - 2021-02-10
+
+### Fixed
+- Fixed migration check for migrations table pluginId and pluginHandle columns
+
+## 4.6.5 - 2020-11-16
 
 ### Changed
 - Updated `barrelstrength/sprout-base-redirects` requirement to v1.5.3
