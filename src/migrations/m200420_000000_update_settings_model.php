@@ -39,10 +39,11 @@ class m200420_000000_update_settings_model extends Migration
 
         $metadataVariable = $pluginSettings['metadataVariable'] ?? false;
         $useMetadataVariableFallback = $metadataVariable ? true : false;
+        $enableRenderMetadata = $pluginSettings['enableMetadataRendering'] ?? false;
 
         // Update settings to new names
         $pluginSettings['useMetadataVariable'] = $pluginSettings['toggleMetadataVariable'] ?? $useMetadataVariableFallback;
-        $pluginSettings['enableRenderMetadata'] = $pluginSettings['enableMetadataRendering'] ?? false;
+        $pluginSettings['enableRenderMetadata'] = $enableRenderMetadata ? true : false;
         $pluginSettings['metadataVariableName'] = $pluginSettings['metadataVariable'] ?? 'metadata';
 
         // Remove old settings

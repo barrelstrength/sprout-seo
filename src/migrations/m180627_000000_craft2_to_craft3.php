@@ -31,10 +31,18 @@ class m180627_000000_craft2_to_craft3 extends Migration
      */
     public function safeUp(): bool
     {
-        /** @var SproutSeo $plugin */
-        $plugin = SproutSeo::getInstance();
-        $pluginSettings = $plugin->getSettings();
-        $settings = $pluginSettings->getAttributes();
+        // Get the settings using Project Config if upgrading to
+        // a Craft version after it has been added
+        // https://github.com/craftcms/cms/blob/develop/CHANGELOG.md#310---2019-01-15
+        if (version_compare(Craft::$app->getInfo()->version, '3.1.0', '>=')) {
+            $projectConfig = Craft::$app->getProjectConfig();
+            $settings = $projectConfig->get('plugins.sprout-seo.settings');
+        } else {
+            /** @var SproutSeo $plugin */
+            $plugin = SproutSeo::getInstance();
+            $pluginSettings = $plugin->getSettings();
+            $settings = $pluginSettings->getAttributes();
+        }
 
         if (isset($settings['toggleLocaleOverride']) && $settings['toggleLocaleOverride']) {
             $groups = Craft::$app->getSites()->getAllGroups();
