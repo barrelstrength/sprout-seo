@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.6.8 - 2021-03-29
+
+### Fixed
+- Fixed Project Config support in settings migration ([#227], [#229])
+
+[#227]: https://github.com/barrelstrength/craft-sprout-seo/issues/227
+[#229]: https://github.com/barrelstrength/craft-sprout-seo/issues/229
+
 ## 4.6.7 - 2021-02-11
 
 ### Changed
