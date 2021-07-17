@@ -118,7 +118,10 @@ class ElementMetadata extends Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        $metadata = null;
+        if ($value instanceof Metadata) {
+            return $value;
+        }
+
         $metadataArray = [];
 
         // On page load and the resave element task the $value comes from the content table as json
