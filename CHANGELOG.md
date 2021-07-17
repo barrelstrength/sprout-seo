@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.6.9 - 2021-07-17
+
+### Fixed
+- Fixed Element Metadata save behavior when drafts are saved ([#241])
+
+[#241]: https://github.com/barrelstrength/craft-sprout-seo/issues/241
+
 ## 4.6.8 - 2021-03-29
 
 ### Fixed
