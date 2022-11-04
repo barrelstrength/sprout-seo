@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.6.10 - 2022-11-04
+
+### Fixed
+- Fixes error when processing Address subdivision ([#263], [#123][#123-base-fields])
+
+[#263]: https://github.com/barrelstrength/craft-sprout-seo/issues/263
+[#123-base-fields]: https://github.com/barrelstrength/craft-sprout-fields/issues/123
+
 ## 4.6.9 - 2021-07-17
 
 ### Fixed
