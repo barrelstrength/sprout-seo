@@ -2,7 +2,7 @@
 
 namespace BarrelStrength\SproutSeo;
 
-use BarrelStrength\Sprout\core\db\InstallHelper;
+use BarrelStrength\Sprout\core\db\MigrationHelper;
 use BarrelStrength\Sprout\core\db\SproutPluginMigrationInterface;
 use BarrelStrength\Sprout\core\db\SproutPluginMigrator;
 use BarrelStrength\Sprout\core\editions\Edition;
@@ -47,7 +47,6 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
             MetaModule::class,
             RedirectsModule::class,
             SitemapsModule::class,
-            FieldsModule::class,
             UrisModule::class,
         ];
     }
@@ -67,7 +66,7 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
         Event::on(
             Modules::class,
             Modules::EVENT_REGISTER_SPROUT_AVAILABLE_MODULES,
-            static function(RegisterComponentTypesEvent $event) {
+            static function (RegisterComponentTypesEvent $event) {
                 $event->types[] = MetaModule::class;
                 $event->types[] = RedirectsModule::class;
                 $event->types[] = SitemapsModule::class;
@@ -99,7 +98,7 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
      */
     protected function afterInstall(): void
     {
-        InstallHelper::runInstallMigrations($this);
+        MigrationHelper::runMigrations($this);
 
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
             return;
@@ -119,6 +118,6 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
      */
     protected function beforeUninstall(): void
     {
-        InstallHelper::runUninstallMigrations($this);
+        MigrationHelper::runUninstallMigrations($this);
     }
 }
