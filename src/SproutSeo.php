@@ -23,9 +23,6 @@ use yii\base\InvalidConfigException;
 
 class SproutSeo extends Plugin implements SproutPluginMigrationInterface
 {
-    public const EDITION_LITE = 'lite';
-    public const EDITION_PRO = 'pro';
-
     public string $minVersionRequired = '4.6.8';
 
     public string $schemaVersion = '0.0.1';
@@ -36,8 +33,8 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
     public static function editions(): array
     {
         return [
-            self::EDITION_LITE,
-            self::EDITION_PRO,
+            Edition::LITE,
+            Edition::PRO,
         ];
     }
 
@@ -86,7 +83,7 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
 
     protected function grantModuleEditions(): void
     {
-        if ($this->edition === self::EDITION_PRO) {
+        if ($this->edition === Edition::PRO) {
             MetaModule::isEnabled() && MetaModule::getInstance()->grantEdition(Edition::PRO);
             RedirectsModule::isEnabled() && RedirectsModule::getInstance()->grantEdition(Edition::PRO);
 //            SitemapsModule::isEnabled() && SitemapsModule::getInstance()->grantEdition(Edition::PRO);
