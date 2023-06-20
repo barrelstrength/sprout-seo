@@ -1,22 +1,24 @@
 {
-	"name": "barrelstrength/sprout-seo",
-	"type": "craft-plugin",
-	"version": "0.0.1",
-	"require": {
-		"barrelstrength/sprout": "^0"
-	},
-	"autoload": {
-		"psr-4": {
-			"BarrelStrength\\SproutSeo\\": "src/"
-		}
-	},
-	"extra": {
-		"name": "Sprout SEO",
-		"handle": "sprout-seo",
-		"developer": "Barrel Strength Design",
-		"developerUrl": "https://barrelstrengthdesign.com",
-		"developerEmail": "support@barrelstrengthdesign.com",
-		"documentationUrl": "https://barrelstrengthdesign.com",
-		"class": "BarrelStrength\\SproutSeo\\SproutSeo"
-	}
+    "name": "barrelstrength/sprout-seo",
+    "type": "craft-plugin",
+    "version": "4.44.444",
+    "license": "proprietary",
+    "require": {
+        "barrelstrength/sprout": "^4.0.0",
+        "craftcms/cms": "^4.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "BarrelStrength\\SproutSeo\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Sprout SEO",
+        "handle": "sprout-seo",
+        "developer": "Barrel Strength Design",
+        "developerUrl": "https://barrelstrengthdesign.com",
+        "developerEmail": "support@barrelstrengthdesign.com",
+        "documentationUrl": "https://barrelstrengthdesign.com",
+        "class": "BarrelStrength\\SproutSeo\\SproutSeo"
+    }
 }
