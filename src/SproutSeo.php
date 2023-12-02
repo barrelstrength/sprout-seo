@@ -53,7 +53,7 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
 
         Event::on(
             Modules::class,
-            Modules::EVENT_REGISTER_SPROUT_AVAILABLE_MODULES,
+            Modules::INTERNAL_SPROUT_EVENT_REGISTER_AVAILABLE_MODULES,
             static function(RegisterComponentTypesEvent $event) {
                 $event->types[] = MetaModule::class;
                 $event->types[] = RedirectsModule::class;
