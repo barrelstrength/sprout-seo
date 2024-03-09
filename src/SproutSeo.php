@@ -10,7 +10,7 @@ use BarrelStrength\Sprout\core\modules\Modules;
 use BarrelStrength\Sprout\meta\MetaModule;
 use BarrelStrength\Sprout\redirects\RedirectsModule;
 use BarrelStrength\Sprout\sitemaps\SitemapsModule;
-use BarrelStrength\Sprout\uris\FieldsModule;
+use BarrelStrength\Sprout\fields\FieldsModule;
 use Craft;
 use craft\base\Plugin;
 use craft\db\MigrationManager;
