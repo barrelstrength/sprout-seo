@@ -10,7 +10,7 @@ use BarrelStrength\Sprout\core\modules\Modules;
 use BarrelStrength\Sprout\meta\MetaModule;
 use BarrelStrength\Sprout\redirects\RedirectsModule;
 use BarrelStrength\Sprout\sitemaps\SitemapsModule;
-use BarrelStrength\Sprout\uris\UrisModule;
+use BarrelStrength\Sprout\uris\FieldsModule;
 use Craft;
 use craft\base\Plugin;
 use craft\db\MigrationManager;
@@ -38,7 +38,7 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
             MetaModule::class,
             RedirectsModule::class,
             SitemapsModule::class,
-            UrisModule::class,
+            FieldsModule::class,
         ];
     }
 
