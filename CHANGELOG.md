@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.44.444-beta.4 - 2024-05-18
+
+- Requires `barrelstrength/sprout:4.2.5`
+- See Meta Module [release notes][#425meta]
+- See Sitemaps Module [release notes][#425sitemaps]
+
+[#425meta]: https://github.com/barrelstrength/craft-sprout/blob/4.2.5/CHANGELOG/CHANGELOG-META.md
+[#425sitemaps]: https://github.com/barrelstrength/craft-sprout/blob/4.2.5/CHANGELOG/CHANGELOG-SITEMAPS.md
+
 ## 4.44.444-beta.3 - 2024-05-18
 
 - Requires `barrelstrength/sprout:4.2.4`
