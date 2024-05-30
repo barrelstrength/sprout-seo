@@ -1,10 +1,10 @@
 {
     "name": "barrelstrength/sprout-seo",
     "type": "craft-plugin",
-    "version": "4.44.444-beta.5",
+    "version": "4.45.0",
     "license": "proprietary",
     "require": {
-        "barrelstrength/sprout": "^4.2.6",
+        "barrelstrength/sprout": "^4.2.7",
         "craftcms/cms": "^4.3.0"
     },
     "autoload": {
