@@ -22,7 +22,7 @@ class SproutSeo extends Plugin implements SproutPluginMigrationInterface
 {
     public string $minVersionRequired = '4.6.8';
 
-    public string $schemaVersion = '4.44.444';
+    public string $schemaVersion = '4.45.1';
 
     public static function editions(): array
     {
