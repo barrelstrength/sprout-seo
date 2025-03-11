@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.0.0-beta.3 - 2025-03-10
+
+- Requires `barrelstrength/sprout:5.0.5`
+- See Meta Module [release notes][#505meta]
+
+[#505meta]: https://github.com/barrelstrength/craft-sprout/blob/5.0.5/CHANGELOG/CHANGELOG-META.md
+
 ## 5.0.0-beta.2 - 2025-03-07
 
 - Requires `barrelstrength/sprout:5.0.3`
