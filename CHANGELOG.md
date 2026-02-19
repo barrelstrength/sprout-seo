@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.0.0-beta.10 - 2026-02-18
+
+- Requires `barrelstrength/sprout:5.0.13`
+- See Sitemaps Module [release notes][#5013sitemaps]
+
+[#5013sitemaps]: https://github.com/barrelstrength/craft-sprout/blob/5.0.13/CHANGELOG/CHANGELOG-SITEMAPS.md
+
 ## 5.0.0-beta.9 - 2026-02-18
 
 - Requires `barrelstrength/sprout:5.0.12`
